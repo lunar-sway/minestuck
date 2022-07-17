@@ -3,8 +3,8 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,14 +43,16 @@ public class ModusTypes
 	
 	@SubscribeEvent
 	@SuppressWarnings("unchecked")
-	public static void onRegistryNewRegistry(final RegistryEvent.NewRegistry event)
+	public static void onRegistryNewRegistry(final NewRegistryEvent event)
 	{
-		REGISTRY = new RegistryBuilder<ModusType<?>>()
-				.setName(new ResourceLocation(Minestuck.MOD_ID, "modus_type"))
-				.setType((Class<ModusType<?>>) (Class<?>) ModusType.class)
-				.addCallback(ModusCallbacks.INSTANCE)
-				.create();
-		itemToModusMap = REGISTRY.getSlaveMap(ITEM_TO_MODUS, Map.class);
+		event.create(new RegistryBuilder<ModusType<?>>()
+						.setName(new ResourceLocation(Minestuck.MOD_ID, "modus_type"))
+						.setType((Class<ModusType<?>>) (Class<?>) ModusType.class)
+						.addCallback(ModusCallbacks.INSTANCE),
+				registry -> {
+					REGISTRY = registry;
+					itemToModusMap = REGISTRY.getSlaveMap(ITEM_TO_MODUS, Map.class);
+				});
 	}
 	
 	@SubscribeEvent

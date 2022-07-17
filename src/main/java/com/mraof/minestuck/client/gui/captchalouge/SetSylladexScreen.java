@@ -1,8 +1,8 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.ItemStack;
 
 public class SetSylladexScreen extends SylladexScreen
 {

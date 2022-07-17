@@ -4,12 +4,12 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.Util;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -31,7 +31,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size)
 	{
 		list = NonNullList.create();
 		if(prev != null)
@@ -49,7 +49,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundNBT nbt)
+	public void readFromNBT(CompoundTag nbt)
 	{
 		int size = nbt.getInt("size");
 		ejectByChat = nbt.getBoolean("ejectByChat");
@@ -68,7 +68,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt)
 	{
 		nbt.putInt("size", list.size());
 		nbt.putBoolean("ejectByChat", ejectByChat);
@@ -77,13 +77,13 @@ public class HashMapModus extends Modus
 		{
 			ItemStack stack = iterator.next();
 			if(!stack.isEmpty())
-				nbt.put("item"+i, stack.save(new CompoundNBT()));
+				nbt.put("item"+i, stack.save(new CompoundTag()));
 		}
 		return nbt;
 	}
 	
 	@Override
-	public boolean putItemStack(ServerPlayerEntity player, ItemStack item)
+	public boolean putItemStack(ServerPlayer player, ItemStack item)
 	{
 		if(list.size() == 0 || item.isEmpty())
 			return false;
@@ -111,7 +111,7 @@ public class HashMapModus extends Modus
 		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
-			player.sendMessage(new TranslationTextComponent(MESSAGE, item.getDisplayName(), getSize(), index), Util.NIL_UUID);
+			player.sendMessage(new TranslatableComponent(MESSAGE, item.getDisplayName(), getSize(), index), Util.NIL_UUID);
 		
 		return true;
 	}
@@ -140,7 +140,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize(ServerPlayerEntity player)
+	public boolean increaseSize(ServerPlayer player)
 	{
 		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && list.size() >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
@@ -151,7 +151,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayer player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
@@ -205,7 +205,7 @@ public class HashMapModus extends Modus
 	}
 	
 	@Override
-	public void setValue(ServerPlayerEntity player, byte type, int value)
+	public void setValue(ServerPlayer player, byte type, int value)
 	{
 		if(ejectByChat != value > 0)
 		{
@@ -214,7 +214,7 @@ public class HashMapModus extends Modus
 		}
 	}
 	
-	public void onChatMessage(ServerPlayerEntity player, String str)
+	public void onChatMessage(ServerPlayer player, String str)
 	{
 		if(!ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.ON || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.OFF)
 			return;
@@ -248,7 +248,7 @@ public class HashMapModus extends Modus
 		checkAndResend(player);
 	}
 	
-	private void handleNumber(ServerPlayerEntity player, String str)
+	private void handleNumber(ServerPlayer player, String str)
 	{
 		int i;
 		
@@ -265,11 +265,11 @@ public class HashMapModus extends Modus
 		if(stack == null)
 			return;
 		
-		if(player.inventory.getSelected().isEmpty())
-			player.inventory.setItem(player.inventory.selected, stack);
+		if(player.getInventory().getSelected().isEmpty())
+			player.getInventory().setItem(player.getInventory().selected, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendMessage(new TranslationTextComponent("message.hash_map", i, getSize(), index, stack.getDisplayName()), Util.NIL_UUID);
+		player.sendMessage(new TranslatableComponent("message.hash_map", i, getSize(), index, stack.getDisplayName()), Util.NIL_UUID);
 	}
 	
 }

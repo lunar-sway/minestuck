@@ -4,10 +4,10 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Iterator;
@@ -28,7 +28,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		list = NonNullList.create();
@@ -47,7 +47,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public void readFromNBT(CompoundNBT nbt)
+	public void readFromNBT(CompoundTag nbt)
 	{
 		size = nbt.getInt("size");
 		list = NonNullList.create();
@@ -65,20 +65,20 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt)
 	{
 		nbt.putInt("size", size);
 		Iterator<ItemStack> iter = list.iterator();
 		for(int i = 0; i < list.size(); i++)
 		{
 			ItemStack stack = iter.next();
-			nbt.put("item"+i, stack.save(new CompoundNBT()));
+			nbt.put("item"+i, stack.save(new CompoundTag()));
 		}
 		return nbt;
 	}
 	
 	@Override
-	public boolean putItemStack(ServerPlayerEntity player, ItemStack item)
+	public boolean putItemStack(ServerPlayer player, ItemStack item)
 	{
 		if(size <= list.size() || item.isEmpty())
 			return false;
@@ -132,7 +132,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize(ServerPlayerEntity player)
+	public boolean increaseSize(ServerPlayer player)
 	{
 		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
@@ -144,7 +144,7 @@ public class SetModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayer player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{

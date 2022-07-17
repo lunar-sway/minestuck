@@ -5,11 +5,11 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
@@ -28,14 +28,14 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size)
+	public void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size)
 	{
 		this.size = size;
 		node = null; //TODO Handle potential prev list instead
 	}
 	
 	@Override
-	public void readFromNBT(CompoundNBT nbt)
+	public void readFromNBT(CompoundTag nbt)
 	{
 		size = nbt.getInt("size");
 		autoBalance = nbt.getBoolean("auto_balance");
@@ -44,7 +44,7 @@ public class TreeModus extends Modus
 			autoBalance();
 	}
 	
-	private TreeNode readNode(CompoundNBT nbt, int currentIndex, int level)
+	private static TreeNode readNode(CompoundTag nbt, int currentIndex, int level)
 	{
 		if(nbt.contains("node"+currentIndex))
 		{
@@ -58,9 +58,9 @@ public class TreeModus extends Modus
 		} else return null;
 	}
 	
-	private void saveNode(CompoundNBT nbt, TreeNode node, int currentIndex, int level)
+	private static void saveNode(CompoundTag nbt, TreeNode node, int currentIndex, int level)
 	{
-		nbt.put("node"+currentIndex, node.stack.save(new CompoundNBT()));
+		nbt.put("node"+currentIndex, node.stack.save(new CompoundTag()));
 		if(node.node1 != null)
 			saveNode(nbt, node.node1, currentIndex + (int) Math.pow(2, level), level + 1);
 		if(node.node2 != null)
@@ -68,7 +68,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public CompoundNBT writeToNBT(CompoundNBT nbt)
+	public CompoundTag writeToNBT(CompoundTag nbt)
 	{
 		nbt.putInt("size", size);
 		nbt.putBoolean("auto_balance", autoBalance);
@@ -79,7 +79,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public boolean putItemStack(ServerPlayerEntity player, ItemStack item)
+	public boolean putItemStack(ServerPlayer player, ItemStack item)
 	{
 		int currentSize = node == null ? 0 : node.getSize();
 		if(item.isEmpty() || currentSize >= size)
@@ -110,7 +110,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public boolean increaseSize(ServerPlayerEntity player)
+	public boolean increaseSize(ServerPlayer player)
 	{
 		if(MinestuckConfig.SERVER.modusMaxSize.get() > 0 && size >= MinestuckConfig.SERVER.modusMaxSize.get())
 			return false;
@@ -121,7 +121,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayer player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
@@ -178,7 +178,7 @@ public class TreeModus extends Modus
 	}
 	
 	@Override
-	public void setValue(ServerPlayerEntity player, byte type, int value)
+	public void setValue(ServerPlayer player, byte type, int value)
 	{
 		if(autoBalance != value > 0)
 		{

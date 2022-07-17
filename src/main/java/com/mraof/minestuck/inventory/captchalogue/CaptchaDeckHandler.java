@@ -13,17 +13,17 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.GameRules;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -37,12 +37,12 @@ public class CaptchaDeckHandler
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	
-	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(!event.getEntity().level.isClientSide && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY) && event.getEntity() instanceof ServerPlayerEntity)
+		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
 		{
-			dropSylladex((ServerPlayerEntity) event.getEntity());
+			dropSylladex(player);
 		}
 	}
 	
@@ -58,7 +58,7 @@ public class CaptchaDeckHandler
 		return type != null ? type.createServerSide(savedData) : null;
 	}
 	
-	public static void launchItem(ServerPlayerEntity player, ItemStack item)
+	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
 		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.hasDecodedItem(item))
 			while(item.getCount() > 0)
@@ -71,7 +71,7 @@ public class CaptchaDeckHandler
 			launchAnyItem(player, item);
 	}
 	
-	public static void launchAnyItem(PlayerEntity player, ItemStack item)
+	public static void launchAnyItem(Player player, ItemStack item)
 	{
 		ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY()+1, player.getZ(), item);
 		entity.setDeltaMovement(player.level.random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level.random.nextDouble() - 0.5);
@@ -79,21 +79,20 @@ public class CaptchaDeckHandler
 		player.level.addFreshEntity(entity);
 	}
 	
-	public static void useItem(ServerPlayerEntity player)
+	public static void useItem(ServerPlayer player)
 	{
-		if(!(player.containerMenu instanceof CaptchaDeckContainer) || !canPlayerUseModus(player))
+		if(!(player.containerMenu instanceof CaptchaDeckContainer container) || !canPlayerUseModus(player))
 			 return;
-		CaptchaDeckContainer container = (CaptchaDeckContainer) player.containerMenu;
-		if(container.inventory.getItem(0).isEmpty())
+		ItemStack stack = container.getContainerItem();
+		if(stack.isEmpty())
 			return;
-		ItemStack stack = container.inventory.getItem(0);
 		Modus modus = getModus(player);
 		
 		ModusType<?> type = ModusTypes.getTypeFromItem(stack.getItem());
 		if(type != null)
 		{
 			ItemStack newItem = changeModus(player, stack, modus, type);
-			container.inventory.setItem(0, newItem);
+			container.setContainerItem(newItem);
 		}
 		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
@@ -102,7 +101,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	private static ItemStack changeModus(ServerPlayerEntity player, ItemStack modusItem, @Nullable Modus oldModus, ModusType<?> newType)
+	private static ItemStack changeModus(ServerPlayer player, ItemStack modusItem, @Nullable Modus oldModus, ModusType<?> newType)
 	{
 		final Modus newModus = newType.createServerSide(PlayerSavedData.get(player.server));
 		
@@ -135,7 +134,7 @@ public class CaptchaDeckHandler
 		return oldModus == null ? ItemStack.EMPTY : oldModus.getModusItem();
 	}
 	
-	private static void consumeCards(ServerPlayerEntity player, ItemStack cards, Modus modus)
+	private static void consumeCards(ServerPlayer player, ItemStack cards, Modus modus)
 	{
 		ItemStack content = AlchemyHelper.getDecodedItem(cards, true);
 		
@@ -157,7 +156,7 @@ public class CaptchaDeckHandler
 		modus.checkAndResend(player);
 	}
 	
-	public static void captchalogueItem(ServerPlayerEntity player)
+	public static void captchalogueItem(ServerPlayer player)
 	{
 		if(canPlayerUseModus(player) && hasModus(player))
 		{
@@ -165,9 +164,9 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	public static void captchalogueItemInSlot(ServerPlayerEntity player, int slotIndex, int windowId)
+	public static void captchalogueItemInSlot(ServerPlayer player, int slotIndex, int windowId)
 	{
-		if(canPlayerUseModus(player) && hasModus(player) && player.containerMenu.containerId == windowId && player.containerMenu.isSynched(player))
+		if(canPlayerUseModus(player) && hasModus(player) && player.containerMenu.containerId == windowId)
 		{
 			Slot slot = slotIndex >= 0 && slotIndex < player.containerMenu.slots.size() ? player.containerMenu.getSlot(slotIndex) : null;
 			
@@ -184,7 +183,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	private static void captchalogueItem(ServerPlayerEntity player, ItemStack stack)
+	private static void captchalogueItem(ServerPlayer player, ItemStack stack)
 	{
 		Modus modus = getModus(player);
 		
@@ -206,7 +205,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	private static void handleCardCaptchalogue(ServerPlayerEntity player, Modus modus, ItemStack card)
+	private static void handleCardCaptchalogue(ServerPlayer player, Modus modus, ItemStack card)
 	{
 		ItemStack stackInCard = AlchemyHelper.getDecodedItem(card, true);
 		boolean spentCard = modus.increaseSize(player);
@@ -230,7 +229,7 @@ public class CaptchaDeckHandler
 		}
 	}
 	
-	private static boolean putInModus(ServerPlayerEntity player, Modus modus, ItemStack stack)
+	private static boolean putInModus(ServerPlayer player, Modus modus, ItemStack stack)
 	{
 		boolean result = modus.putItemStack(player, stack.copy());
 		if(result)
@@ -241,7 +240,7 @@ public class CaptchaDeckHandler
 		return result;
 	}
 	
-	public static void getItem(ServerPlayerEntity player, int index, boolean asCard)
+	public static void getItem(ServerPlayer player, int index, boolean asCard)
 	{
 		if(!canPlayerUseModus(player))
 			return;
@@ -253,7 +252,7 @@ public class CaptchaDeckHandler
 		{
 			ItemStack otherStack = player.getMainHandItem();
 			if(otherStack.isEmpty())
-				player.setItemInHand(Hand.MAIN_HAND, stack);
+				player.setItemInHand(InteractionHand.MAIN_HAND, stack);
 			else if(canMergeItemStacks(stack, otherStack))
 			{
 				otherStack.grow(stack.getCount());
@@ -262,18 +261,18 @@ public class CaptchaDeckHandler
 			else
 			{
 				boolean placed = false;
-				for(int i = 0; i < player.inventory.items.size(); i++)
+				for(int i = 0; i < player.getInventory().items.size(); i++)
 				{
-					otherStack = player.inventory.items.get(i);
+					otherStack = player.getInventory().items.get(i);
 					if(otherStack.isEmpty())
-						player.inventory.items.set(i, stack.copy());
+						player.getInventory().items.set(i, stack.copy());
 					else if(canMergeItemStacks(stack, otherStack))
 						otherStack.grow(stack.getCount());
 					else continue;
 					
 					stack.setCount(0);
 					placed = true;
-					player.inventory.setChanged();
+					player.getInventory().setChanged();
 					player.inventoryMenu.broadcastChanges();
 					break;
 				}
@@ -284,7 +283,7 @@ public class CaptchaDeckHandler
 		modus.checkAndResend(player);
 	}
 	
-	private static void dropSylladex(ServerPlayerEntity player)
+	private static void dropSylladex(ServerPlayer player)
 	{
 		Modus modus = getModus(player);
 		
@@ -293,18 +292,12 @@ public class CaptchaDeckHandler
 		
 		NonNullList<ItemStack> stacks = modus.getItems();
 		int size = modus.getSize();
-		int cardsToKeep;
-		switch(MinestuckConfig.SERVER.sylladexDropMode.get())
-		{
-			case ITEMS:
-				cardsToKeep = size;
-				break;
-			case CARDS_AND_ITEMS:
-				cardsToKeep = MinestuckConfig.SERVER.initialModusSize.get();
-				break;
-			case ALL: default:
-				cardsToKeep = 0;
-		}
+		int cardsToKeep = switch(MinestuckConfig.SERVER.sylladexDropMode.get())
+				{
+					case ITEMS -> size;
+					case CARDS_AND_ITEMS -> MinestuckConfig.SERVER.initialModusSize.get();
+					case ALL -> 0;
+				};
 		
 		for(ItemStack stack : stacks)
 			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
@@ -329,7 +322,7 @@ public class CaptchaDeckHandler
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public static CompoundNBT writeToNBT(Modus modus)
+	public static CompoundTag writeToNBT(Modus modus)
 	{
 		if(modus == null)
 			return null;
@@ -337,13 +330,13 @@ public class CaptchaDeckHandler
 		ResourceLocation name = modus.getType().getRegistryName();
 		if(name != null)
 		{
-			CompoundNBT nbt = modus.writeToNBT(new CompoundNBT());
+			CompoundTag nbt = modus.writeToNBT(new CompoundTag());
 			nbt.putString("type", name.toString());
 			return nbt;
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundNBT nbt, PlayerSavedData savedData)
+	public static Modus readFromNBT(CompoundTag nbt, PlayerSavedData savedData)
 	{
 		boolean clientSide = savedData == null;
 		if(nbt == null)
@@ -366,17 +359,17 @@ public class CaptchaDeckHandler
 		return modus;
 	}
 	
-	private static boolean hasModus(ServerPlayerEntity player)
+	private static boolean hasModus(ServerPlayer player)
 	{
 		return getModus(player) != null;
 	}
 	
-	public static Modus getModus(ServerPlayerEntity player)
+	public static Modus getModus(ServerPlayer player)
 	{
 		return PlayerSavedData.getData(player).getModus();
 	}
 	
-	public static void setModus(ServerPlayerEntity player, Modus modus)
+	public static void setModus(ServerPlayer player, Modus modus)
 	{
 		PlayerSavedData.getData(player).setModus(modus);
 	}
@@ -387,7 +380,7 @@ public class CaptchaDeckHandler
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	
-	private static boolean canPlayerUseModus(ServerPlayerEntity player)
+	private static boolean canPlayerUseModus(ServerPlayer player)
 	{
 		return !player.isSpectator() && ServerEditHandler.getData(player) == null;
 	}

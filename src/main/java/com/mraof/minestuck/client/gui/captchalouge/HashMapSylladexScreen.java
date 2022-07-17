@@ -1,17 +1,17 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class HashMapSylladexScreen extends SylladexScreen
 {
@@ -32,19 +32,19 @@ public class HashMapSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, StringTextComponent.EMPTY, button -> changeSetting());
-		addButton(guiButton);
+		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, TextComponent.EMPTY, button -> changeSetting());
+		addRenderableWidget(guiButton);
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float f)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float f)
 	{
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
-		guiButton.setMessage(new TranslationTextComponent(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
+		guiButton.setMessage(new TranslatableComponent(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(matrixStack, mouseX, mouseY, f);
+		super.render(poseStack, mouseX, mouseY, f);
 	}
 	
 	@Override
@@ -87,9 +87,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
+	public void drawGuiMap(PoseStack poseStack, int mouseX, int mouseY)
 	{
-		super.drawGuiMap(matrixStack, mouseX, mouseY);
+		super.drawGuiMap(poseStack, mouseX, mouseY);
 		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.lineHeight;
 		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
 		
@@ -99,7 +99,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 			int width = font.width(s);
 			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
 			if(x + width > 0 && x < mapWidth)
-				font.draw(matrixStack, s, x, y, 0x000000);
+				font.draw(poseStack, s, x, y, 0x000000);
 		}
 	}
 	

@@ -3,8 +3,8 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 
 public class QueueStackModus extends StackModus
@@ -16,7 +16,7 @@ public class QueueStackModus extends StackModus
 	}
 	
 	@Override
-	public ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard)
+	public ItemStack getItem(ServerPlayer player, int id, boolean asCard)
 	{
 		if(id == CaptchaDeckHandler.EMPTY_CARD)
 		{
