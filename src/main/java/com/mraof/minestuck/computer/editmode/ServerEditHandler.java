@@ -20,29 +20,34 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.GameType;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
@@ -52,15 +57,15 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -77,19 +82,19 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	
-	static final Map<SburbConnection, Vector3d> lastEditmodePos = new HashMap<>();
+	static final Map<SburbConnection, Vec3> lastEditmodePos = new HashMap<>();
 	
 	/**
 	 * Called both when any player logged out and when a player pressed the exit button.
 	 */
-	public static void onPlayerExit(PlayerEntity player)
+	public static void onPlayerExit(Player player)
 	{
 		if(!player.level.isClientSide)
 			reset(getData(player));
 	}
 	
 	@SubscribeEvent
-	public static void serverStopped(FMLServerStoppedEvent event)
+	public static void serverStopped(ServerStoppedEvent event)
 	{
 		lastEditmodePos.clear();
 	}
@@ -111,28 +116,28 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static void onPlayerCloneEvent(PlayerEvent.Clone event)
 	{
 		EditData prevData = getData(event.getOriginal());
-		if(prevData != null && event.getPlayer() instanceof ServerPlayerEntity)
+		if(prevData != null && event.getPlayer() instanceof ServerPlayer player)
 		{
 			//take measures to prevent editmode data from ending up with an invalid player entity
 			LOGGER.error("Minestuck failed to prevent death or different cloning event for player {}. Applying measure to reduce problems", event.getPlayer().getName().getString());
 			
 			MSExtraData data = MSExtraData.get(event.getEntity().level);
 			data.removeEditData(prevData);
-			data.addEditData(new EditData(prevData.getDecoy(), (ServerPlayerEntity) event.getPlayer(), prevData.connection));
+			data.addEditData(new EditData(prevData.getDecoy(), player, prevData.connection));
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onLivingDamage(LivingDamageEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && getData(player) != null)
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayerEntity && getData((ServerPlayerEntity) event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && getData(player) != null)
 			event.setCanceled(true);
 	}
 	
@@ -167,7 +172,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(editData == null)
 			return;
 		
-		ServerPlayerEntity player = editData.getEditor();
+		ServerPlayer player = editData.getEditor();
 		
 		editData.recover();	//TODO handle exception from failed recovery
 		
@@ -180,27 +185,27 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			player.hurt(damageSource, damage);
 	}
 	
-	public static void newServerEditor(ServerPlayerEntity player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
+	public static void newServerEditor(ServerPlayer player, PlayerIdentifier computerOwner, PlayerIdentifier computerTarget)
 	{
 		if(player.isPassenger())
 		{
-			player.sendMessage(new StringTextComponent("You may not activate editmode while riding something"), Util.NIL_UUID);
+			player.sendMessage(new TextComponent("You may not activate editmode while riding something"), Util.NIL_UUID);
 			return;    //Don't want to bother making the decoy able to ride anything right now.
 		}
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
 			Debug.info("Activating edit mode on player \""+player.getName().getString()+"\", target player: \""+computerTarget+"\".");
-			DecoyEntity decoy = new DecoyEntity((ServerWorld) player.level, player);
+			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level, player);
 			EditData data = new EditData(decoy, player, c);
 
 			if(!setPlayerStats(player, c))
 			{
-				player.sendMessage(new StringTextComponent("Failed to activate edit mode.").withStyle(TextFormatting.RED), Util.NIL_UUID);
+				player.sendMessage(new TextComponent("Failed to activate edit mode.").withStyle(ChatFormatting.RED), Util.NIL_UUID);
 				return;
 			}
 			if(c.getEditmodeInventory() != null)
-				player.inventory.load(c.getEditmodeInventory());
+				player.getInventory().load(c.getEditmodeInventory());
 			decoy.level.addFreshEntity(decoy);
 			MSExtraData.get(player.level).addEditData(data);
 
@@ -211,15 +216,15 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
-	static boolean setPlayerStats(ServerPlayerEntity player, SburbConnection c)
+	static boolean setPlayerStats(ServerPlayer player, SburbConnection c)
 	{
 		
 		double posX, posY, posZ;
-		ServerWorld world = player.getServer().getLevel(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().dimension());
+		ServerLevel level = player.getServer().getLevel(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().dimension());
 		
 		if(lastEditmodePos.containsKey(c))
 		{
-			Vector3d lastPos = lastEditmodePos.get(c);
+			Vec3 lastPos = lastEditmodePos.get(c);
 			posX = lastPos.x;
 			posZ = lastPos.z;
 		} else
@@ -228,13 +233,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			posX = center.getX() + 0.5;
 			posZ = center.getZ() + 0.5;
 		}
-		posY = getMotionBlockingY(world, MathHelper.floor(posX), MathHelper.floor(posZ));
+		posY = getMotionBlockingY(level, Mth.floor(posX), Mth.floor(posZ));
 		
-		if(Teleport.teleportEntity(player, world, posX, posY, posZ) == null)
+		if(Teleport.teleportEntity(player, level, posX, posY, posZ) == null)
 			return false;
 		
 		player.closeContainer();
-		player.inventory.clearContent();
+		player.getInventory().clearContent();
 		
 		player.setGameMode(GameType.CREATIVE);
 		player.onUpdateAbilities();
@@ -243,12 +248,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	}
 	
 	//Helper function to force a chunk to load, to then get the top block
-	private static int getMotionBlockingY(ServerWorld world, int x, int z)
+	private static int getMotionBlockingY(ServerLevel level, int x, int z)
 	{
-		return world.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getHeight(Heightmap.Type.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
+		return level.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getHeight(Heightmap.Types.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
 	}
 	
-	public static void resendEditmodeStatus(ServerPlayerEntity editor)
+	public static void resendEditmodeStatus(ServerPlayer editor)
 	{
 		EditData data = getData(editor);
 		if(data != null)
@@ -264,7 +269,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
-	public static EditData getData(PlayerEntity editor)
+	public static EditData getData(Player editor)
 	{
 		return MSExtraData.get(editor.level).findEditData(editData -> editData.getEditor() == editor);
 	}
@@ -292,7 +297,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)
 			return;
-		ServerPlayerEntity player = (ServerPlayerEntity) event.player;
+		ServerPlayer player = (ServerPlayer) event.player;
 		
 		EditData data = getData(player);
 		if(data == null)
@@ -311,7 +316,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
-		PlayerInventory inventory = event.getPlayer().inventory;
+		Inventory inventory = event.getPlayer().getInventory();
 		if(!event.getEntity().level.isClientSide && getData(event.getPlayer()) != null)
 		{
 			EditData data = getData(event.getPlayer());
@@ -336,9 +341,10 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			}
 			if(event.isCanceled())
 			{
-				event.getEntityItem().remove();
-				if(!inventory.getCarried().isEmpty())
-					inventory.setCarried(ItemStack.EMPTY);
+				event.getEntityItem().discard();
+				AbstractContainerMenu menu = event.getPlayer().containerMenu;
+				if(!menu.getCarried().isEmpty())
+					menu.setCarried(ItemStack.EMPTY);
 				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
 			}
 		}
@@ -363,7 +369,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			event.setUseBlock(stack.isEmpty() && (block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
-			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(Hand.OFF_HAND))
+			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || event.getHand().equals(InteractionHand.OFF_HAND))
 			{
 				event.setCanceled(true);
 				return;
@@ -427,11 +433,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			else
 			{
 				BlockState block = event.getWorld().getBlockState(event.getPos());
-				ItemStack stack = block.getBlock().getPickBlock(block, null, event.getWorld(), event.getPos(), event.getPlayer());
+				ItemStack stack = block.getCloneItemStack(null, event.getWorld(), event.getPos(), event.getPlayer());
 				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 				if(set != null && !set.isEmpty())
+				{
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
 					GristHelper.notifyEditPlayer(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), true);
+				}
 			}
 		}
 	}
@@ -439,9 +447,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayerEntity)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getEntity();
 			if(getData(player) != null)
 			{
 				EditData data = getData(player);
@@ -465,7 +472,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 						GristHelper.decrease(player.level, c.getClientIdentifier(), cost);
 						GristHelper.notifyEditPlayer(player.level.getServer(), c.getClientIdentifier(), cost, false);
 					}
-					player.inventory.items.set(player.inventory.selected, ItemStack.EMPTY);
+					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.level, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()));
@@ -499,12 +506,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	/**
 	 * Used on both server and client side.
 	 */
-	public static void updatePosition(PlayerEntity player, double range, int centerX, int centerZ) {
+	public static void updatePosition(Player player, double range, int centerX, int centerZ) {
 		double y = player.getY();
 		if(y < 0) {
 			y = 0;
 			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
-			player.abilities.flying = true;
+			player.getAbilities().flying = true;
 		}
 		
 		double newX = player.getX();
@@ -536,7 +543,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
-	public static void updateInventory(ServerPlayerEntity player, SburbConnection connection)
+	public static void updateInventory(ServerPlayer player, SburbConnection connection)
 	{
 		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);
 		deployList.removeIf(entry -> entry.getCurrentCost(connection) == null);
@@ -544,9 +551,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		deployList.forEach(deployEntry -> itemList.add(deployEntry.getItemStack(connection, player.level)));
 		
 		boolean inventoryChanged = false;
-		for(int i = 0; i < player.inventory.items.size(); i++)
+		for(int i = 0; i < player.getInventory().items.size(); i++)
 		{
-			ItemStack stack = player.inventory.items.get(i);
+			ItemStack stack = player.getInventory().items.get(i);
 			if(stack.isEmpty())
 				continue;
 			if(GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()) == null || !isBlockItem(stack.getItem()))
@@ -556,7 +563,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					for(ItemStack deployStack : itemList)
 						if(ItemStack.matches(deployStack, stack))
 							break listSearch;
-					player.inventory.items.set(i, ItemStack.EMPTY);
+					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
 				}
 			} else if(stack.hasTag())
@@ -649,9 +656,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent
 	public static void onEntityTeleport(EntityTravelToDimensionEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayerEntity)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
-			EditData data = getData((ServerPlayerEntity) event.getEntity());
+			EditData data = getData(player);
 			// Prevent edit player teleportation unless it is recovering to its initial state
 			if(data != null && !data.isRecovering())
 				event.setCanceled(true);
@@ -663,16 +670,16 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		return item instanceof BlockItem;
 	}
 	
-	public static void cleanStackNBT(ItemStack stack, SburbConnection c, World world)
+	public static void cleanStackNBT(ItemStack stack, SburbConnection c, Level level)
 	{
-		if(!DeployList.containsItemStack(stack, c, world))
+		if(!DeployList.containsItemStack(stack, c, level))
 			stack.setTag(null);
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getPlayer();
 		UUID id = player.getGameProfile().getId();
 		EditData.PlayerRecovery recovery = MSExtraData.get(player.level).removePlayerRecovery(id);
 		if(recovery != null)
@@ -686,13 +693,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	}
 	
 	@SubscribeEvent
-	public static void onServerStopping(FMLServerStoppingEvent event)
+	public static void onServerStopping(ServerStoppingEvent event)
 	{
 		MSExtraData.get(event.getServer()).forEachAndClear(ServerEditHandler::partialReset);
 	}
 	
 	@SubscribeEvent
-	public static void serverStarted(FMLServerStartedEvent event)
+	public static void serverStarted(ServerStartedEvent event)
 	{
 		SkaianetHandler skaianet = SkaianetHandler.get(event.getServer());
 		MSExtraData.get(event.getServer()).recoverConnections(recovery -> recovery.recover(skaianet.getActiveConnection(recovery.getClientPlayer())));

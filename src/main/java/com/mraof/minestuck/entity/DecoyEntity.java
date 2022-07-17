@@ -2,74 +2,67 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.util.Debug;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.FoodStats;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.GameType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.UUID;
 
-public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
+public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 {
 	
 	public boolean isFlying;
 	public GameType gameType;
 	public String username;
 	private UUID playerId;
-	private FoodStats foodStats;
-	private CompoundNBT foodStatsNBT;
-	public CompoundNBT capabilities = new CompoundNBT();
+	private FoodData foodStats;
+	private CompoundTag foodStatsNBT;
+	public CompoundTag capabilities = new CompoundTag();
 	
 	public boolean markedForDespawn;
 	private double originX, originY, originZ;
 	private DecoyPlayer player;
 	
-	public PlayerInventory inventory;
+	public Inventory inventory;
 	
-	public DecoyEntity(World world)
+	public DecoyEntity(Level level)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, world);
-		inventory = new PlayerInventory(null);
-		if(!world.isClientSide)	//If not spawned the way it should
+		super(MSEntityTypes.PLAYER_DECOY, level);
+		inventory = new Inventory(null);
+		if(!level.isClientSide)	//If not spawned the way it should
 			markedForDespawn = true;
 	}
 	
-	public DecoyEntity(ServerWorld world, ServerPlayerEntity player)
+	public DecoyEntity(ServerLevel level, ServerPlayer player)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, world);
+		super(MSEntityTypes.PLAYER_DECOY, level);
 		this.setBoundingBox(player.getBoundingBox());
-		this.player = new DecoyPlayer(world, this, player);
+		this.player = new DecoyPlayer(level, this, player);
 		for(String key : player.getPersistentData().getAllKeys())
 			this.player.getPersistentData().put(key, player.getPersistentData().get(key).copy());
 		this.setPos(player.getX(), player.getY(), player.getZ());
 		originX = this.getX();
-		this.xChunk = player.xChunk;
 		originY = this.getY();
-		this.yChunk = player.yChunk;
 		originZ = this.getZ();
-		this.zChunk = player.zChunk;
-		this.xRot = player.xRot;
-		this.yRot = player.yRot;
+		this.setXRot(player.getXRot());
+		this.setYRot(player.getYRot());
 		this.yHeadRot = player.yHeadRot;
 		this.yBodyRot = player.yBodyRot;
 		this.gameType = player.gameMode.getGameModeForPlayer();
@@ -79,39 +72,39 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		this.setHealth(player.getHealth());
 		username = player.getGameProfile().getName();
 		playerId = player.getUUID();
-		isFlying = player.abilities.flying;
-		player.abilities.addSaveData(this.capabilities);
-		foodStatsNBT = new CompoundNBT();
+		isFlying = player.getAbilities().flying;
+		player.getAbilities().addSaveData(this.capabilities);
+		foodStatsNBT = new CompoundTag();
 		player.getFoodData().addAdditionalSaveData(foodStatsNBT);
 		initFoodStats(player);
 	}
 	
 	@Override
-	public EntitySize getDimensions(Pose poseIn)
+	public EntityDimensions getDimensions(Pose poseIn)
 	{
 		return EntityType.PLAYER.getDimensions();
 	}
 	
-	private void initInventory(ServerPlayerEntity player)
+	private void initInventory(ServerPlayer player)
 	{
-		inventory = this.player.inventory;
+		inventory = this.player.getInventory();
 		
-		inventory.replaceWith(player.inventory);
+		inventory.replaceWith(player.getInventory());
 	}
 	
-	private void initFoodStats(ServerPlayerEntity sourcePlayer)
+	private void initFoodStats(ServerPlayer sourcePlayer)
 	{
 		try
 		{
 			try
 			{
-				foodStats = new FoodStats();
+				foodStats = new FoodData();
 			} catch(NoSuchMethodError e)
 			{
 				Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
 				try
 				{
-					foodStats = FoodStats.class.getConstructor(PlayerEntity.class).newInstance(player);
+					foodStats = FoodData.class.getConstructor(Player.class).newInstance(player);
 				}
 				catch(NoSuchMethodException ex)
 				{
@@ -123,22 +116,22 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		{
 			foodStats = null;
 			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
-			sourcePlayer.sendMessage(new StringTextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
+			sourcePlayer.sendMessage(new TextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
 		}
 	}
 	
-	public CompoundNBT getFoodStatsNBT()
+	public CompoundTag getFoodStatsNBT()
 	{
 		if(foodStats != null)
 		{
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			foodStats.addAdditionalSaveData(nbt);
 			return nbt;
 		} else return foodStatsNBT;
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(username, 16);
 		buffer.writeUUID(playerId);
@@ -147,20 +140,20 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		username = additionalData.readUtf(16);
 		playerId = additionalData.readUUID();
 		yHeadRot = additionalData.readFloat();
 		isFlying = additionalData.readBoolean();
 		yHeadRotO = yHeadRot;
-		this.yRot = yHeadRot;	//I don't know how much of this that is necessary
-		yRotO = yRot;
-		yBodyRot = yRot;
+		this.setYRot(yHeadRot);	//I don't know how much of this that is necessary
+		yRotO = getYRot();
+		yBodyRot = getYRot();
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -175,14 +168,14 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	{
 		if(markedForDespawn)
 		{
-			this.remove();
+			this.discard();
 			return;
 		}
 		super.tick();
 		
 		yHeadRot = yHeadRotO;	//Neutralize the effect of the LookHelper
-		yRot = yRotO;
-		xRot = xRotO;
+		setYRot(yRotO);
+		setXRot(xRotO);
 		
 		if(isFlying)
 			this.setPos(this.getX(), yo, this.getZ());
@@ -215,27 +208,27 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public ITextComponent getName()
+	public Component getName()
 	{
-		return new StringTextComponent(username != null ? username : "DECOY");
+		return new TextComponent(username != null ? username : "DECOY");
 	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlotType slotIn)
+	public ItemStack getItemBySlot(EquipmentSlot slotIn)
 	{
-		if(slotIn == EquipmentSlotType.MAINHAND)
+		if(slotIn == EquipmentSlot.MAINHAND)
 			return inventory.getSelected();
-		else if(slotIn == EquipmentSlotType.OFFHAND)
+		else if(slotIn == EquipmentSlot.OFFHAND)
 			return inventory.offhand.get(0);
 		else return inventory.armor.get(slotIn.getIndex());
 	}
 	
 	@Override
-	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlot slotIn, ItemStack stack)
 	{
-		if(slotIn == EquipmentSlotType.MAINHAND)
+		if(slotIn == EquipmentSlot.MAINHAND)
 			inventory.setItem(inventory.selected, stack);
-		else if(slotIn == EquipmentSlotType.OFFHAND)
+		else if(slotIn == EquipmentSlot.OFFHAND)
 			inventory.offhand.set(0, stack);
 		else inventory.armor.set(slotIn.getIndex(), stack);
 	}
@@ -265,9 +258,9 @@ public class DecoyEntity extends MobEntity implements IEntityAdditionalSpawnData
 		
 		DecoyEntity decoy;
 		
-		DecoyPlayer(ServerWorld par1World, DecoyEntity decoy, ServerPlayerEntity player)
+		DecoyPlayer(ServerLevel level, DecoyEntity decoy, ServerPlayer player)
 		{
-			super(par1World, player.getGameProfile());
+			super(level, player.getGameProfile());
 			player.getServer().getPlayerList().getPlayerAdvancements(player);
 			//Fixes annoying NullPointerException when unlocking advancement, caused by just creating the fake player
 			this.decoy = decoy;
