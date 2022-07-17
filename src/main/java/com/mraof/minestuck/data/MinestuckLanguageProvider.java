@@ -5,15 +5,15 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.skaianet.MergeResult;
-import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.util.function.Supplier;
@@ -40,7 +40,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		addTooltip(key.get(), value);
 	}
-	protected void addTooltip(IItemProvider key, String value)
+	protected void addTooltip(ItemLike key, String value)
 	{
 		addExtra(key, "tooltip", value);
 	}
@@ -52,7 +52,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		addExtra(key.get(), type, value);
 	}
-	protected void addExtra(IItemProvider key, String type, String value)
+	protected void addExtra(ItemLike key, String type, String value)
 	{
 		add(key.asItem().getDescriptionId()+"."+type, value);
 	}
@@ -64,7 +64,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		addStore(key.get(), value);
 	}
-	protected void addStore(IItemProvider key, String value)
+	protected void addStore(ItemLike key, String value)
 	{
 		add("store."+key.asItem().getDescriptionId(), value);
 	}
@@ -84,7 +84,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		addStoreTooltip(key.get(), value);
 	}
-	protected void addStoreTooltip(IItemProvider key, String value)
+	protected void addStoreTooltip(ItemLike key, String value)
 	{
 		add("store."+key.asItem().getDescriptionId()+".tooltip", value);
 	}
@@ -96,9 +96,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("store."+key.getDescriptionId()+".tooltip", value);
 	}
-	protected void add(ItemGroup key, String value)
+	protected void add(CreativeModeTab key, String value)
 	{
-		add(((TranslationTextComponent)key.getDisplayName()).getKey(), value);
+		add(((TranslatableComponent)key.getDisplayName()).getKey(), value);
 	}
 	protected void addEntityTypeExtra(Supplier<EntityType<?>> key, String type, String value)
 	{

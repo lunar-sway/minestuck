@@ -47,12 +47,12 @@ import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.potion.PotionUtils;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
@@ -1017,7 +1017,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.FROG, "type.5", "Golden Frog");
 		addExtra(MSItems.FROG, "type.6", "Frog");
 		addExtra(MSItems.FROG, "desc.4", "frog.null.name");
-		addExtra(MSItems.FROG, "desc.6", TextFormatting.OBFUSCATED+"Susan");
+		addExtra(MSItems.FROG, "desc.6", ChatFormatting.OBFUSCATED+"Susan");
 		addExtra(MSItems.FROG, "eyes.0", "Lighter Eyes");
 		addExtra(MSItems.FROG, "eyes.1", "Darker Eyes");
 		addExtra(MSItems.FROG, "eyes.2", "Blank Eyes");
