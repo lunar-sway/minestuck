@@ -2,53 +2,50 @@ package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
-import java.util.List;
 import java.util.Random;
 
 public class CastleRoomPiece extends CastlePiece
 {
-	protected CastleRoomPiece(boolean isBlack, MutableBoundingBox structureBoundingBox)
+	protected CastleRoomPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM, 2, isBlack);
-		this.boundingBox = structureBoundingBox;
+		super(MSStructurePieces.SKAIA_CASTLE_ROOM, 2, boundingBox, isBlack);
 	}
 	
-	public CastleRoomPiece(TemplateManager templates, CompoundNBT nbt)
+	public CastleRoomPiece(CompoundTag nbt)
 	{
 		super(MSStructurePieces.SKAIA_CASTLE_ROOM, nbt);
 	}
 	
-	protected CastleRoomPiece(IStructurePieceType pieceType, boolean isBlack, MutableBoundingBox structureBoundingBox)
+	protected CastleRoomPiece(StructurePieceType pieceType, boolean isBlack, BoundingBox boundingBox)
 	{
-		super(pieceType, 2, isBlack);
-		this.boundingBox = structureBoundingBox;
+		super(pieceType, 2, boundingBox, isBlack);
 	}
 	
-	protected CastleRoomPiece(IStructurePieceType pieceType, CompoundNBT nbt)
+	protected CastleRoomPiece(StructurePieceType pieceType, CompoundTag nbt)
 	{
 		super(pieceType, nbt);
 	}
 	
 	@Override
-	public void addChildren(StructurePiece componentIn, List<StructurePiece> pieces, Random rand)
+	public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
 	{
 		if(((CastleStartPiece)componentIn).bottom)
 		{
 			this.genDepth = 0;
-			this.getNextComponentNormal((CastleStartPiece)componentIn, pieces, rand, 0, -8, 0);
+			this.getNextComponentNormal((CastleStartPiece)componentIn, accessor, rand, 0, -8, 0);
 		}
 	}
 
@@ -74,20 +71,19 @@ public class CastleRoomPiece extends CastlePiece
 
 	public static CastleRoomPiece findValidPlacement(boolean isBlack, int x, int y, int z)
 	{
-		MutableBoundingBox structureboundingbox = new MutableBoundingBox(x, y, z, x + 8, y + 8, z + 8);
+		BoundingBox structureboundingbox = new BoundingBox(x, y, z, x + 8, y + 8, z + 8);
 		return new CastleRoomPiece(isBlack, structureboundingbox);
 	}
 	
 	@Override
-	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
 		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
 		
-		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
-		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
-		this.generateBox(world, structureBoundingBox, 0, 1, 0, 7, 6, 7, Blocks.AIR.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
-		this.placeBlock(world, Blocks.TORCH.defaultBlockState(), 3, 1, 3, structureBoundingBox);	//placeBlockAtCurrentPosition
-		return true;
+		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
+		this.fillWithAlternatingBlocks(level, boundingBox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
+		this.generateBox(level, boundingBox, 0, 1, 0, 7, 6, 7, Blocks.AIR.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
+		this.placeBlock(level, Blocks.TORCH.defaultBlockState(), 3, 1, 3, boundingBox);	//placeBlockAtCurrentPosition
 	}
 }

@@ -1,26 +1,32 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class ImpDungeonStructure extends Structure<NoFeatureConfig>
+public class ImpDungeonStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	public ImpDungeonStructure(Codec<NoFeatureConfig> codec)
+	public ImpDungeonStructure(Codec<NoneFeatureConfiguration> codec)
 	{
-		super(codec);
+		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), ImpDungeonStructure::generatePieces));
 	}
 	
 	@Override
-	public GenerationStage.Decoration step()
+	public GenerationStep.Decoration step()
 	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
 	}
 	
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return ImpDungeonStart::new;
+		StructurePiece piece = ImpDungeonEntryPiece.create(context.chunkPos(), context.random());
+		builder.addPiece(piece);
+		piece.addChildren(piece, builder, context.random());
 	}
 }

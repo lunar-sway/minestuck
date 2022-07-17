@@ -2,51 +2,41 @@ package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.Random;
 
 public class CastleSolidPiece extends CastlePiece
 {
-	protected CastleSolidPiece(boolean isBlack, MutableBoundingBox structureBoundingBox)
+	protected CastleSolidPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_SOLID, 0, isBlack);
-		this.boundingBox = structureBoundingBox;
+		super(MSStructurePieces.SKAIA_CASTLE_SOLID, 0, boundingBox, isBlack);
 	}
 	
-	public CastleSolidPiece(TemplateManager templates, CompoundNBT nbt)
+	public CastleSolidPiece(CompoundTag nbt)
 	{
 		super(MSStructurePieces.SKAIA_CASTLE_SOLID, nbt);
 	}
 	
-	@Override
-	protected void addAdditionalSaveData(CompoundNBT nbt)
-	{
-	
-	}
-	
 	public static CastleSolidPiece findValidPlacement(boolean isBlack, int x, int y, int z)
     {
-		MutableBoundingBox structureboundingbox = new MutableBoundingBox(x, y, z, x + 8, y + 8, z + 8);
+		BoundingBox structureboundingbox = new BoundingBox(x, y, z, x + 8, y + 8, z + 8);
         return new CastleSolidPiece(isBlack, structureboundingbox);
     }
 	
 	@Override
-	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
 		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
 		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
   
-		this.fillWithAlternatingBlocks(world, structureBoundingBox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
-
-        return true;
+		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
 	}
 }

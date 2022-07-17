@@ -1,17 +1,19 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import net.minecraft.block.*;
-import net.minecraft.state.Property;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.Half;
-import net.minecraft.util.Direction;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.template.RuleTest;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
+import net.minecraft.core.Direction;
+import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -128,6 +130,7 @@ public final class StructureBlockRegistry
 	
 	private static class BlockEntry
 	{
+		//TODO define restriction with a set of block state properties instead of base class
 		Class<? extends Block> extention;
 		BlockState defaultBlock;
 		String parentEntry;
@@ -152,7 +155,7 @@ public final class StructureBlockRegistry
 	
 	//Nonstatic stuff
 	private final Map<String, BlockState> blockRegistry = new HashMap<>();
-	private RuleTest groundType = OreFeatureConfig.FillerBlockType.NATURAL_STONE;
+	private RuleTest groundType = OreFeatures.NATURAL_STONE;
 	
 	public void setBlockState(String name, BlockState state)
 	{
@@ -221,12 +224,12 @@ public final class StructureBlockRegistry
 			return newState;
 		} else return state;
 	}
-	
+	/*TODO
 	public SurfaceBuilderConfig getSurfaceBuilderConfig(LandBiomeType biomeType)
 	{
 		return new SurfaceBuilderConfig(getBlockState(biomeType == LandBiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
 	}
-	
+	*/
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)
 	{
 		if(toState.hasProperty(property))

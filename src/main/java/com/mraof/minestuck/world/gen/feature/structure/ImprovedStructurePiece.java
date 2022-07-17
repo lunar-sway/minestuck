@@ -1,53 +1,52 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mraof.minestuck.block.ReturnNodeBlock;
-import net.minecraft.block.*;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.BedPart;
-import net.minecraft.state.properties.DoorHingeSide;
-import net.minecraft.state.properties.DoubleBlockHalf;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.DoorHingeSide;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.Random;
 
 public abstract class ImprovedStructurePiece extends StructurePiece
 {
-	protected ImprovedStructurePiece(IStructurePieceType structurePieceTypeIn, int componentTypeIn)
+	protected ImprovedStructurePiece(StructurePieceType structurePieceTypeIn, int genDepth, BoundingBox boundingBox)
 	{
-		super(structurePieceTypeIn, componentTypeIn);
+		super(structurePieceTypeIn, genDepth, boundingBox);
 	}
 	
-	public ImprovedStructurePiece(IStructurePieceType structurePierceTypeIn, CompoundNBT nbt)
+	public ImprovedStructurePiece(StructurePieceType structurePierceTypeIn, CompoundTag nbt)
 	{
 		super(structurePierceTypeIn, nbt);
 	}
 	
-	protected void generateDoor(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
+	protected void generateDoor(WorldGenLevel level, BoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
 	{
 		BlockState state = door.defaultBlockState().setValue(DoorBlock.FACING, direction).setValue(DoorBlock.HINGE, hinge);
-		placeBlock(worldIn, state, x, y, z, sbb);
-		placeBlock(worldIn, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
+		placeBlock(level, state, x, y, z, sbb);
+		placeBlock(level, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
 	}
 	
-	protected void generateBed(ISeedReader worldIn, MutableBoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
+	protected void generateBed(WorldGenLevel level, BoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
 	{
 		state = state.setValue(BedBlock.FACING, direction);
-		placeBlock(worldIn, state, x, y, z, sbb);
-		placeBlock(worldIn, state.setValue(BedBlock.PART, BedPart.HEAD), x + direction.getStepX(), y, z + direction.getStepZ(), sbb);
+		placeBlock(level, state, x, y, z, sbb);
+		placeBlock(level, state.setValue(BedBlock.PART, BedPart.HEAD), x + direction.getStepX(), y, z + direction.getStepZ(), sbb);
 	}
 	
-	protected void placeReturnNode(IWorld world, MutableBoundingBox boundingBox, int x, int y, int z)
+	protected void placeReturnNode(LevelAccessor level, BoundingBox boundingBox, int x, int y, int z)
 	{
 		int posX = getWorldX(x, z), posY = getWorldY(y), posZ = getWorldZ(x, z);
 		
@@ -56,25 +55,25 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		if(getOrientation() == Direction.NORTH || getOrientation() == Direction.EAST)
 			posZ--;
 		
-		ReturnNodeBlock.placeReturnNode(world, new BlockPos(posX, posY, posZ), boundingBox);
+		ReturnNodeBlock.placeReturnNode(level, new BlockPos(posX, posY, posZ), boundingBox);
 	}
 	
-	protected int getAverageGroundLevel(IWorld worldIn, ChunkGenerator chunkGeneratorIn, MutableBoundingBox structurebb)
+	protected int getAverageGroundLevel(LevelAccessor level, ChunkGenerator chunkGeneratorIn, BoundingBox structurebb)
 	{
 		int i = 0;
 		int j = 0;
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		
-		for (int k = boundingBox.z0; k <= boundingBox.z1; ++k)
+		for (int k = boundingBox.minZ(); k <= boundingBox.maxZ(); ++k)
 		{
-			for (int l = boundingBox.x0; l <= boundingBox.x1; ++l)
+			for (int l = boundingBox.minX(); l <= boundingBox.maxX(); ++l)
 			{
 				mutablePos.set(l, 64, k);
 				
 				if (structurebb.isInside(mutablePos))
 				{
-					i += Math.max(worldIn.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, mutablePos).getY(),
-							chunkGeneratorIn.getSpawnHeight() - 1);
+					i += Math.max(level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, mutablePos).getY(),
+							chunkGeneratorIn.getSpawnHeight(level) - 1);
 					++j;
 				}
 			}
@@ -99,13 +98,13 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		else switch (direction)
 		{
 			case NORTH:
-				return boundingBox.x1 - x;
+				return boundingBox.maxX() - x;
 			case SOUTH:
-				return boundingBox.x0 + x;
+				return boundingBox.minX() + x;
 			case WEST:
-				return boundingBox.x1 - z;
+				return boundingBox.maxX() - z;
 			case EAST:
-				return boundingBox.x0 + z;
+				return boundingBox.minX() + z;
 			default:
 				return x;
 		}
@@ -121,13 +120,13 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		else switch (direction)
 		{
 			case NORTH:
-				return boundingBox.z1 - z;
+				return boundingBox.maxZ() - z;
 			case SOUTH:
-				return boundingBox.z0 + z;
+				return boundingBox.minZ() + z;
 			case WEST:
-				return boundingBox.z0 + x;
+				return boundingBox.minZ() + x;
 			case EAST:
-				return boundingBox.z1 - x;
+				return boundingBox.maxZ() - x;
 			default:
 				return z;
 		}
@@ -135,12 +134,12 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected boolean needPostprocessing(Block block)
 	{
-		return block instanceof FourWayBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairsBlock;
+		return block instanceof CrossCollisionBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairBlock;
 	}
 	
 	
 	@Override
-	protected void placeBlock(ISeedReader worldIn, BlockState blockstateIn, int x, int y, int z, MutableBoundingBox boundingboxIn)
+	protected void placeBlock(WorldGenLevel level, BlockState blockstateIn, int x, int y, int z, BoundingBox boundingboxIn)
 	{
 		BlockPos blockpos = new BlockPos(getWorldX(x, z), getWorldY(y), getWorldZ(x, z));
 		
@@ -161,14 +160,25 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 				default:
 			}
 			
-			worldIn.setBlock(blockpos, blockstateIn, Constants.BlockFlags.BLOCK_UPDATE);
+			level.setBlock(blockpos, blockstateIn, Block.UPDATE_CLIENTS);
 			
-			FluidState ifluidstate = worldIn.getFluidState(blockpos);
-			if(!ifluidstate.isEmpty())
-				worldIn.getLiquidTicks().scheduleTick(blockpos, ifluidstate.getType(), 0);
+			FluidState fluid = level.getFluidState(blockpos);
+			if(!fluid.isEmpty())
+				level.scheduleTick(blockpos, fluid.getType(), 0);
 			
 			if(needPostprocessing(blockstateIn.getBlock()))
-				worldIn.getChunk(blockpos).markPosForPostprocessing(blockpos);
+				level.getChunk(blockpos).markPosForPostprocessing(blockpos);
 		}
+	}
+	
+	public static BoundingBox makeBBFromCenter(int centerX, int y, int centerZ, Direction orientation, int sizeX, int sizeY, int sizeZ)
+	{
+		int xWidth = orientation.getAxis().equals(Direction.Axis.X) ? sizeZ : sizeX;
+		int zWidth = orientation.getAxis().equals(Direction.Axis.Z) ? sizeZ : sizeX;
+		
+		int x = centerX - (xWidth/2 - 1);
+		int z = centerZ - (zWidth/2 - 1);
+		
+		return new BoundingBox(x, y, z, x + xWidth - 1, y + sizeY - 1, z + zWidth - 1);
 	}
 }

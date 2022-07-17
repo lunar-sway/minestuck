@@ -1,31 +1,33 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 import java.util.Random;
 
-public abstract class CoreCompatibleScatteredStructurePiece extends ScatteredStructurePiece
+public abstract class CoreCompatibleScatteredStructurePiece extends ScatteredFeaturePiece
 {
 	private boolean hasBeenCompleted = false;
 	
-	public CoreCompatibleScatteredStructurePiece(IStructurePieceType structurePieceType, Random random, int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ)
+	public CoreCompatibleScatteredStructurePiece(StructurePieceType structurePieceType, int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ, Direction orientation)
 	{
-		super(structurePieceType, random, minX, minY, minZ, sizeX, sizeY, sizeZ);
+		super(structurePieceType, minX, minY, minZ, sizeX, sizeY, sizeZ, orientation);
 	}
 	
-	public CoreCompatibleScatteredStructurePiece(IStructurePieceType structurePieceType, CompoundNBT nbt)
+	public CoreCompatibleScatteredStructurePiece(StructurePieceType structurePieceType, CompoundTag nbt)
 	{
 		super(structurePieceType, nbt);
 		hasBeenCompleted = nbt.getBoolean("hasBeenCompleted");
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT tagCompound) //actually writeAdditional
+	protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tagCompound)
 	{
 		tagCompound.putBoolean("hasBeenCompleted", hasBeenCompleted);
-		super.addAdditionalSaveData(tagCompound);
+		super.addAdditionalSaveData(context, tagCompound);
 	}
 	
 	/**

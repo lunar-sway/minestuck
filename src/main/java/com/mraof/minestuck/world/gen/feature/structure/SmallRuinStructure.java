@@ -1,47 +1,34 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class SmallRuinStructure extends Structure<NoFeatureConfig>
+import java.util.Random;
+
+public class SmallRuinStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	public SmallRuinStructure(Codec<NoFeatureConfig> codec)
+	public SmallRuinStructure(Codec<NoneFeatureConfiguration> codec)
 	{
-		super(codec);
+		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), SmallRuinStructure::generatePieces));
 	}
 	
 	@Override
-	public GenerationStage.Decoration step()
+	public GenerationStep.Decoration step()
 	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;
 	}
 	
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return Start::new;
-	}
-	
-	public static class Start extends StructureStart<NoFeatureConfig>
-	{
-		private Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed) {
-			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
-		}
-		
-		@Override
-		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
-		{
-			SmallRuinPiece piece = new SmallRuinPiece(random, chunkX * 16 + random.nextInt(16), chunkZ * 16 + random.nextInt(16), 0.5F);
-			pieces.add(piece);
-			calculateBoundingBox();
-		}
+		Random random = context.random();
+		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
+		SmallRuinPiece piece = new SmallRuinPiece(random, x, z, 0.5F);
+		builder.addPiece(piece);
 	}
 }

@@ -1,44 +1,34 @@
 package com.mraof.minestuck.world.gen.feature.structure.blocks;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ChestBlock;
-import net.minecraft.entity.EntityType;
-import net.minecraft.state.properties.ChestType;
-import net.minecraft.tileentity.ChestTileEntity;
-import net.minecraft.tileentity.MobSpawnerTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.WeightedSpawnerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.minecraft.world.level.block.state.properties.ChestType;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
-import java.util.Objects;
 import java.util.Random;
 
 public class StructureBlockUtil
 {
 	
-	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, EntityType<?> entityType)
-	{
-		WeightedSpawnerEntity entity = new WeightedSpawnerEntity();
-		entity.getTag().putString("id", Objects.requireNonNull(entityType.getRegistryName()).toString());
-		return placeSpawner(pos, world, bb, entity);
-	}
-	
-	public static boolean placeSpawner(BlockPos pos, IWorld world, MutableBoundingBox bb, WeightedSpawnerEntity entity)
+	public static boolean placeSpawner(BlockPos pos, LevelAccessor level, BoundingBox bb, EntityType<?> entityType)
 	{
 		if(bb.isInside(pos))
 		{
-			world.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+			level.setBlock(pos, Blocks.SPAWNER.defaultBlockState(), Block.UPDATE_CLIENTS);
 			
-			TileEntity te = world.getBlockEntity(pos);
-			if(te instanceof MobSpawnerTileEntity)
+			BlockEntity te = level.getBlockEntity(pos);
+			if(te instanceof SpawnerBlockEntity spawner)
 			{
-				MobSpawnerTileEntity spawner = (MobSpawnerTileEntity) te;
-				spawner.getSpawner().setNextSpawnData(entity);
+				spawner.getSpawner().setEntityId(entityType);
 				
 				return true;
 			}
@@ -46,26 +36,24 @@ public class StructureBlockUtil
 		return false;
 	}
 	
-	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
+	public static void placeLootChest(BlockPos pos, LevelAccessor level, BoundingBox bb, Direction direction, ResourceLocation lootTable, Random rand)
 	{
-		placeLootChest(pos, world, bb, direction, ChestType.SINGLE, lootTable, rand);
+		placeLootChest(pos, level, bb, direction, ChestType.SINGLE, lootTable, rand);
 	}
 	
-	public static void placeLootChest(BlockPos pos, IWorld world, MutableBoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
+	public static void placeLootChest(BlockPos pos, LevelAccessor level, BoundingBox bb, Direction direction, ChestType type, ResourceLocation lootTable, Random rand)
 	{
 		if(bb == null || bb.isInside(pos))
 		{
-			world.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction).setValue(ChestBlock.TYPE, type), Constants.BlockFlags.BLOCK_UPDATE);
+			level.setBlock(pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction).setValue(ChestBlock.TYPE, type), Block.UPDATE_CLIENTS);
 			
-			TileEntity te = world.getBlockEntity(pos);
-			if(te instanceof ChestTileEntity)
+			if(level.getBlockEntity(pos) instanceof ChestBlockEntity chest)
 			{
-				ChestTileEntity chest = (ChestTileEntity) te;
 				chest.setLootTable(lootTable, rand.nextLong());
 			}
 			
 			if(bb != null)
-				world.getChunk(pos).markPosForPostprocessing(pos);
+				level.getChunk(pos).markPosForPostprocessing(pos);
 		}
 	}
 }

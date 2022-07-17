@@ -7,22 +7,23 @@ import com.mraof.minestuck.world.gen.feature.MSStructurePieces;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.state.properties.SlabType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.WeightedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SlabType;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 import java.util.List;
 import java.util.Random;
@@ -32,7 +33,7 @@ import java.util.Random;
  */
 public class ConsortVillageCenter
 {
-	private static class CenterEntry extends WeightedRandom.Item
+	private static class CenterEntry extends WeightedEntry.IntrusiveBase
 	{
 		private final CenterFactory center;
 		private CenterEntry(CenterFactory center, int weight)
@@ -51,10 +52,10 @@ public class ConsortVillageCenter
 		landTypes.getTitle().addVillageCenters(register);
 		
 		if(weightList.isEmpty())
-			return new ConsortVillageCenter.VillageMarketCenter(list, x, z, rand);
+			return ConsortVillageCenter.VillageMarketCenter.create(list, x, z, rand);
 		else
 		{
-			return WeightedRandom.getRandomItem(rand, weightList).center.createPiece(list, x, z, rand);
+			return WeightedRandom.getRandomItem(rand, weightList).orElseThrow().center.createPiece(list, x, z, rand);
 		}
 	}
 	
@@ -71,82 +72,79 @@ public class ConsortVillageCenter
 		public List<ConsortVillagePieces.PieceWeight> pieceWeightList;
 		public ConsortVillagePieces.PieceWeight lastPieceWeightUsed;
 		
-		public VillageCenter(IStructurePieceType structurePieceTypeIn, List<ConsortVillagePieces.PieceWeight> pieceWeightList, int componentTypeIn, int spawnCount)
+		public VillageCenter(StructurePieceType type, List<ConsortVillagePieces.PieceWeight> pieceWeightList, int genDepth, BoundingBox boundingBox, int spawnCount)
 		{
-			super(structurePieceTypeIn, componentTypeIn, spawnCount);
+			super(type, genDepth, boundingBox, spawnCount);
 			this.pieceWeightList = pieceWeightList;
 		}
 		
-		public VillageCenter(IStructurePieceType structurePierceTypeIn, CompoundNBT nbt, int spawnCount)
+		public VillageCenter(StructurePieceType type, CompoundTag nbt, int spawnCount)
 		{
-			super(structurePierceTypeIn, nbt, spawnCount);
+			super(type, nbt, spawnCount);
 		}
 	}
 	
 	public static class VillageMarketCenter extends VillageCenter
 	{
-		public VillageMarketCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public static VillageCenter create(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.MARKET_CENTER, pieceWeightList, 0, 5);
-			setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
-			
-			if (getOrientation().getAxis() == Direction.Axis.Z)
-			{
-				boundingBox = new MutableBoundingBox(x, 64, z, x + 8 - 1, 78, z + 10 - 1);
-			} else
-			{
-				boundingBox = new MutableBoundingBox(x, 64, z, x + 10 - 1, 78, z + 8 - 1);
-			}
+			return new VillageMarketCenter(pieceWeightList, x, z, getRandomHorizontalDirection(rand));
 		}
 		
-		public VillageMarketCenter(TemplateManager templates, CompoundNBT nbt)
+		private VillageMarketCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Direction orientation)
+		{
+			super(MSStructurePieces.MARKET_CENTER, pieceWeightList, 0, makeBoundingBox(x, 64, z, orientation, 8, 15, 10), 5);
+			setOrientation(orientation);
+		}
+		
+		public VillageMarketCenter(CompoundTag nbt)
 		{
 			super(MSStructurePieces.MARKET_CENTER, nbt, 5);
 		}
 		
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
 		{
 			switch(this.getOrientation())
 			{	//The vanilla code for "rotating coords based on facing" is messy
 				case NORTH:
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 3, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 - 1, boundingBox.y0, boundingBox.z0 - 1, Direction.NORTH);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z0, Direction.EAST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() - 1, boundingBox.minY(), boundingBox.minZ() - 1, Direction.NORTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.minZ(), Direction.EAST);
 					break;
 				case EAST:
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 - 1, boundingBox.y0, boundingBox.z0 + 3, Direction.WEST);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z1 - 1, Direction.EAST);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 - 1, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.WEST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.maxZ() - 1, Direction.EAST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() - 1, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 					break;
 				case SOUTH:
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 3, boundingBox.y0, boundingBox.z0 - 1, Direction.NORTH);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 - 1, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z1 - 1, Direction.EAST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.minZ() - 1, Direction.NORTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() - 1, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.maxZ() - 1, Direction.EAST);
 					break;
 				case WEST:
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z0 + 3, Direction.EAST);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 - 1, boundingBox.y0, boundingBox.z1 - 1, Direction.WEST);
-					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.EAST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.maxZ() - 1, Direction.WEST);
+					ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX(), boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 					break;
 				default:
 			}
 		}
 
 		@Override
-		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, boundingBox);
 
 				if (this.averageGroundLvl < 0)
 				{
-					return true;
+					return;
 				}
 
-				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.y0, 0);
+				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.minY(), 0);
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
@@ -157,84 +155,82 @@ public class ConsortVillageCenter
 			BlockState torch = blocks.getBlockState("torch");
 
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
-			this.placeBlock(worldIn, floorBlock, 1, 0, 8, structureBoundingBoxIn);
-			this.placeBlock(worldIn, floorBlock, 1, -1, 8, structureBoundingBoxIn);
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
+			this.placeBlock(level, floorBlock, 1, 0, 8, boundingBox);
+			this.placeBlock(level, floorBlock, 1, -1, 8, boundingBox);
+			this.generateBox(level, boundingBox, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 8, -1, 8, 8, -1, 9, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
+			this.generateBox(level, boundingBox, 8, -1, 8, 8, -1, 9, floorBlock, floorBlock, false);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 1, 2, 1, 1, 6, plankBlock, plankBlock, false);
-			this.placeBlock(worldIn, plankBlock, 0, 1, 2, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankSlab0, 0, 1, 3, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 0, 1, 4, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankSlab0, 0, 1, 5, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 0, 1, 6, structureBoundingBoxIn);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 2, 2, 1, 3, 2, plankBlock, plankBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 2, 6, 1, 3, 6, plankBlock, plankBlock, false);
+			this.generateBox(level, boundingBox, 1, 1, 2, 1, 1, 6, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 0, 1, 2, boundingBox);
+			this.placeBlock(level, plankSlab0, 0, 1, 3, boundingBox);
+			this.placeBlock(level, plankBlock, 0, 1, 4, boundingBox);
+			this.placeBlock(level, plankSlab0, 0, 1, 5, boundingBox);
+			this.placeBlock(level, plankBlock, 0, 1, 6, boundingBox);
+			this.generateBox(level, boundingBox, 1, 2, 2, 1, 3, 2, plankBlock, plankBlock, false);
+			this.generateBox(level, boundingBox, 1, 2, 6, 1, 3, 6, plankBlock, plankBlock, false);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 1, 2, 6, 1, 6, plankBlock, plankBlock, false);
-			this.placeBlock(worldIn, plankBlock, 7, 1, 2, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankSlab0, 7, 1, 3, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 7, 1, 4, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankSlab0, 7, 1, 5, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 7, 1, 6, structureBoundingBoxIn);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 2, 2, 6, 3, 2, plankBlock, plankBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 2, 6, 6, 3, 6, plankBlock, plankBlock, false);
+			this.generateBox(level, boundingBox, 6, 1, 2, 6, 1, 6, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 7, 1, 2, boundingBox);
+			this.placeBlock(level, plankSlab0, 7, 1, 3, boundingBox);
+			this.placeBlock(level, plankBlock, 7, 1, 4, boundingBox);
+			this.placeBlock(level, plankSlab0, 7, 1, 5, boundingBox);
+			this.placeBlock(level, plankBlock, 7, 1, 6, boundingBox);
+			this.generateBox(level, boundingBox, 6, 2, 2, 6, 3, 2, plankBlock, plankBlock, false);
+			this.generateBox(level, boundingBox, 6, 2, 6, 6, 3, 6, plankBlock, plankBlock, false);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 1, 8, 2, 3, 8, plankBlock, plankBlock, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 4, 1, 8, 4, 3, 8, plankBlock, plankBlock, false);
-			this.placeBlock(worldIn, plankBlock, 3, 1, 8, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 2, 1, 9, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankSlab0, 3, 1, 9, structureBoundingBoxIn);
-			this.placeBlock(worldIn, plankBlock, 4, 1, 9, structureBoundingBoxIn);
+			this.generateBox(level, boundingBox, 2, 1, 8, 2, 3, 8, plankBlock, plankBlock, false);
+			this.generateBox(level, boundingBox, 4, 1, 8, 4, 3, 8, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 3, 1, 8, boundingBox);
+			this.placeBlock(level, plankBlock, 2, 1, 9, boundingBox);
+			this.placeBlock(level, plankSlab0, 3, 1, 9, boundingBox);
+			this.placeBlock(level, plankBlock, 4, 1, 9, boundingBox);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 0, 3, 2, 0, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 7, 3, 2, 7, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 3, 3, 1, 3, 5, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 3, 3, 6, 3, 5, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 3, 7, 6, 3, 7, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 5, 3, 8, 6, 3, 8, plankSlab1, plankSlab1, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 3, 9, 4, 3, 9, plankSlab1, plankSlab1, false);
-			this.placeBlock(worldIn, plankSlab1, 3, 3, 8, structureBoundingBoxIn);
+			this.generateBox(level, boundingBox, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 0, 3, 2, 0, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 7, 3, 2, 7, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 1, 3, 3, 1, 3, 5, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 6, 3, 3, 6, 3, 5, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 1, 3, 7, 6, 3, 7, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 5, 3, 8, 6, 3, 8, plankSlab1, plankSlab1, false);
+			this.generateBox(level, boundingBox, 2, 3, 9, 4, 3, 9, plankSlab1, plankSlab1, false);
+			this.placeBlock(level, plankSlab1, 3, 3, 8, boundingBox);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 4, 2, 5, 4,  2, plankSlab0, plankSlab0, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 1, 4, 3, 6, 4,  5, plankSlab0, plankSlab0, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 4, 6, 5, 4,  6, plankSlab0, plankSlab0, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 3, 4, 7, 4, 4,  7, plankSlab0, plankSlab0, false);
-			this.placeBlock(worldIn, plankSlab0, 3, 4, 8, structureBoundingBoxIn);
+			this.generateBox(level, boundingBox, 2, 4, 2, 5, 4,  2, plankSlab0, plankSlab0, false);
+			this.generateBox(level, boundingBox, 1, 4, 3, 6, 4,  5, plankSlab0, plankSlab0, false);
+			this.generateBox(level, boundingBox, 2, 4, 6, 5, 4,  6, plankSlab0, plankSlab0, false);
+			this.generateBox(level, boundingBox, 3, 4, 7, 4, 4,  7, plankSlab0, plankSlab0, false);
+			this.placeBlock(level, plankSlab0, 3, 4, 8, boundingBox);
 
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 0, 5, 3, 0);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 1, 1, 1, 6, 2, 1);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 2, 5, 2, 7);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 0, 2, 3, 1, 2, 5);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 6, 2, 3, 7, 2, 5);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 2, 2, 9, 4, 2, 9);
-			this.placeBlock(worldIn, Blocks.AIR.defaultBlockState(), 3, 2, 8, structureBoundingBoxIn);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 0, 1, 7, 1, 2, 9);
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 5, 1, 7, 7, 2, 9);
+			this.generateAirBox(level, boundingBox, 2, 1, 0, 5, 3, 0);
+			this.generateAirBox(level, boundingBox, 1, 1, 1, 6, 2, 1);
+			this.generateAirBox(level, boundingBox, 2, 1, 2, 5, 2, 7);
+			this.generateAirBox(level, boundingBox, 0, 2, 3, 1, 2, 5);
+			this.generateAirBox(level, boundingBox, 6, 2, 3, 7, 2, 5);
+			this.generateAirBox(level, boundingBox, 2, 2, 9, 4, 2, 9);
+			this.placeBlock(level, Blocks.AIR.defaultBlockState(), 3, 2, 8, boundingBox);
+			this.generateAirBox(level, boundingBox, 0, 1, 7, 1, 2, 9);
+			this.generateAirBox(level, boundingBox, 5, 1, 7, 7, 2, 9);
 
-			placeBlock(worldIn, torch, 1, 2, 4, structureBoundingBoxIn);
-			placeBlock(worldIn, torch, 6, 2, 4, structureBoundingBoxIn);
+			placeBlock(level, torch, 1, 2, 4, boundingBox);
+			placeBlock(level, torch, 6, 2, 4, boundingBox);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(0, 2, 3, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[0] = spawnConsort(0, 2, 3, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(0, 2, 5, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[1] = spawnConsort(0, 2, 5, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(7, 2, 3, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[2] = spawnConsort(7, 2, 3, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[3])
-				spawns[3] = spawnConsort(7, 2, 5, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[3] = spawnConsort(7, 2, 5, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[4])
-				spawns[4] = spawnConsort(3, 2, 9, boundingBox, worldIn, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
-
-			return true;
+				spawns[4] = spawnConsort(3, 2, 9, this.boundingBox, level, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 		}
 		
 	}
@@ -243,39 +239,37 @@ public class ConsortVillageCenter
 	{
 		public RockCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.ROCK_CENTER, pieceWeightList, 0, 0);
+			super(MSStructurePieces.ROCK_CENTER, pieceWeightList, 0, new BoundingBox(x, 64, z, x + 7 - 1, 68, z + 7 - 1), 0);
 			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
-			
-			this.boundingBox = new MutableBoundingBox(x, 64, z, x + 7 - 1, 68, z + 7 - 1);
 		}
 		
-		public RockCenter(TemplateManager templates, CompoundNBT nbt)
+		public RockCenter(CompoundTag nbt)
 		{
 			super(MSStructurePieces.ROCK_CENTER, nbt, 0);
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
 		{
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 3, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 - 1, boundingBox.y0, boundingBox.z0 + 3, Direction.WEST);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 3, boundingBox.y0, boundingBox.z0 - 1, Direction.NORTH);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z0 + 3, Direction.EAST);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.WEST);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.minZ() - 1, Direction.NORTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.EAST);
 		}
 
 		@Override
-		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
 				{
-					return true;
+					return;
 				}
 
-				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.y0 - 1, 0);
+				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.minY() - 1, 0);
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
@@ -285,34 +279,32 @@ public class ConsortVillageCenter
 			for(int x = 0; x < 7; x++)
 			{
 				for (int z = 0; z < 2; z++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 
 				for (int z = 5; z < 7; z++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 			}
 
 			for(int z = 2; z < 5; z++)
 			{
 				for (int x = 0; x < 2; x++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 
 				for (int x = 5; x < 7; x++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 			}
-			this.generateAirBox(worldIn, structureBoundingBoxIn, 2, 1, 2, 4, 4, 4);
+			this.generateAirBox(level, structureBoundingBoxIn, 2, 1, 2, 4, 4, 4);
 
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, worldIn, rock);
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, worldIn, rock);
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, level, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, level, rock);
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, level, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, level, rock);
 
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, boundingBox, worldIn, rock);
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, boundingBox, worldIn, rock);
-			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
-			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, worldIn, rock);
-			this.blockPillar(3, 3, 3, boundingBox, worldIn, rock);
-
-			return true;
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, boundingBox, level, rock);
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, boundingBox, level, rock);
+			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, level, rock);
+			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, level, rock);
+			this.blockPillar(3, 3, 3, boundingBox, level, rock);
 		}
 		
 	}
@@ -321,39 +313,35 @@ public class ConsortVillageCenter
 	{
 		public CactusPyramidCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.CACTUS_PYRAMID_CENTER, pieceWeightList, 0, 0);
-			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
-			
-			this.boundingBox = new MutableBoundingBox(x, 64, z, x + 16 - 1, 73, z + 16 - 1);
+			super(MSStructurePieces.CACTUS_PYRAMID_CENTER, pieceWeightList, 0, new BoundingBox(x, 64, z, x + 16 - 1, 73, z + 16 - 1), 0);
+			this.setOrientation(getRandomHorizontalDirection(rand));
 		}
 		
-		public CactusPyramidCenter(TemplateManager templates, CompoundNBT nbt)
+		public CactusPyramidCenter(CompoundTag nbt)
 		{
 			super(MSStructurePieces.CACTUS_PYRAMID_CENTER, nbt, 0);
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, List<StructurePiece> listIn, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
 		{
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 7, boundingBox.y0, boundingBox.z1 + 1, Direction.SOUTH);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 - 1, boundingBox.y0, boundingBox.z0 + 7, Direction.WEST);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x0 + 7, boundingBox.y0, boundingBox.z0 - 1, Direction.NORTH);
-			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, listIn, rand, boundingBox.x1 + 1, boundingBox.y0, boundingBox.z0 + 7, Direction.EAST);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 7, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 7, Direction.WEST);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 7, boundingBox.minY(), boundingBox.minZ() - 1, Direction.NORTH);
+			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.maxX() + 1, boundingBox.minY(), boundingBox.minZ() + 7, Direction.EAST);
 		}
 
 		@Override
-		public boolean postProcess(ISeedReader worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, MutableBoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(worldIn, chunkGeneratorIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, structureBoundingBoxIn);
 
 				if (this.averageGroundLvl < 0)
-				{
-					return true;
-				}
+					return;
 
-				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.y0 - 2, 0);
+				this.boundingBox.move(0, this.averageGroundLvl - this.boundingBox.minY() - 2, 0);
 			}
 
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
@@ -363,38 +351,36 @@ public class ConsortVillageCenter
 
 			for(int x = 1; x < 15; x++)
 				for(int z = 1; z < 15; z++)
-					this.blockPillar(x, 0, z, structureBoundingBoxIn, worldIn, surface);
+					this.blockPillar(x, 0, z, structureBoundingBoxIn, level, surface);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 2, 2, 2, 13, 2, 13, surface, surface, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 3, 3, 3, 12, 3, 12, surface, surface, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 4, 4, 4, 11, 4, 11, surface, surface, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 5, 5, 5, 10, 5, 10, surface, surface, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 6, 6, 9, 6, 9, surface, surface, false);
+			this.generateBox(level, structureBoundingBoxIn, 2, 2, 2, 13, 2, 13, surface, surface, false);
+			this.generateBox(level, structureBoundingBoxIn, 3, 3, 3, 12, 3, 12, surface, surface, false);
+			this.generateBox(level, structureBoundingBoxIn, 4, 4, 4, 11, 4, 11, surface, surface, false);
+			this.generateBox(level, structureBoundingBoxIn, 5, 5, 5, 10, 5, 10, surface, surface, false);
+			this.generateBox(level, structureBoundingBoxIn, 6, 6, 6, 9, 6, 9, surface, surface, false);
 
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 7, 6, 6, 9, 6, cactus, cactus, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 9, 7, 6, 9, 9, 6, cactus, cactus, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 6, 7, 9, 6, 9, 9, cactus, cactus, false);
-			this.generateBox(worldIn, structureBoundingBoxIn, 9, 7, 9, 9, 9, 9, cactus, cactus, false);
+			this.generateBox(level, structureBoundingBoxIn, 6, 7, 6, 6, 9, 6, cactus, cactus, false);
+			this.generateBox(level, structureBoundingBoxIn, 9, 7, 6, 9, 9, 6, cactus, cactus, false);
+			this.generateBox(level, structureBoundingBoxIn, 6, 7, 9, 6, 9, 9, cactus, cactus, false);
+			this.generateBox(level, structureBoundingBoxIn, 9, 7, 9, 9, 9, 9, cactus, cactus, false);
 
 			for(int x = 0; x < 16; x++)
 			{
 				for (int z = 0; z < 2; z++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 
 				for (int z = 14; z < 16; z++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 			}
 
 			for(int z = 2; z < 14; z++)
 			{
 				for (int x = 0; x < 2; x++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 
 				for (int x = 14; x < 16; x++)
-					this.placeRoadtile(this.boundingBox.x0 + x, this.boundingBox.z0 + z, structureBoundingBoxIn, worldIn, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
 			}
-
-			return true;
 		}
 		
 	}

@@ -5,43 +5,40 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.GateHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.structure.IStructurePieceType;
-import net.minecraft.world.gen.feature.structure.ScatteredStructurePiece;
-import net.minecraft.world.gen.feature.structure.StructureManager;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 import java.util.Random;
 
-public abstract class GatePiece extends ScatteredStructurePiece
+public abstract class GatePiece extends ScatteredFeaturePiece
 {
-	public GatePiece(IStructurePieceType type, ChunkGenerator generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
+	public GatePiece(StructurePieceType type, LevelHeightAccessor level, ChunkGenerator generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
 	{
-		super(type, random, x, 64, z, width, height, depth);
+		super(type, x, 64, z, width, height, depth, getRandomHorizontalDirection(random));
 		
 		int count = 0;
 		int heightSum = 0;
-		for(int xPos = boundingBox.x0; xPos <= boundingBox.x1; xPos++)
-			for(int zPos = boundingBox.z0; zPos <= boundingBox.z1; zPos++)
+		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
+			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
 			{
-				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Type.OCEAN_FLOOR_WG);
+				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level);
 				heightSum += posHeight;
 				count++;
 			}
 		
 		if(count > 0)
-			boundingBox.move(0, heightSum/count + heightOffset - boundingBox.y0, 0);
+			boundingBox.move(0, heightSum/count + heightOffset - boundingBox.minY(), 0);
 	}
 	
-	public GatePiece(IStructurePieceType type, CompoundNBT nbt)
+	public GatePiece(StructurePieceType type, CompoundTag nbt)
 	{
 		super(type, nbt);
 	}
@@ -56,19 +53,18 @@ public abstract class GatePiece extends ScatteredStructurePiece
 	protected abstract BlockPos getRelativeGatePos();
 	
 	@Override
-	protected boolean updateAverageGroundHeight(IWorld worldIn, MutableBoundingBox boundsIn, int heightIn)
+	protected boolean updateAverageGroundHeight(LevelAccessor level, BoundingBox boundsIn, int heightIn)
 	{
 		throw new UnsupportedOperationException("Shouldn't change the bounding box after creating the gate piece. Look at other gate pieces for an example of what to do instead.");
 	}
 	
-	@Override	//create()
-	public boolean postProcess(ISeedReader world, StructureManager manager, ChunkGenerator chunkGenerator, Random random, MutableBoundingBox mutableBoundingBox, ChunkPos chunkPos, BlockPos pos)
+	@Override
+	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
-		placeGate(world, boundingBox);
-		return true;
+		placeGate(level, this.boundingBox);
 	}
 	
-	private void placeGate(IWorld worldIn, MutableBoundingBox boundingBoxIn)
+	private void placeGate(LevelAccessor level, BoundingBox boundingBoxIn)
 	{
 		BlockPos gatePos = getGatePos();
 		if (boundingBoxIn.isInside(gatePos))
@@ -78,12 +74,12 @@ public abstract class GatePiece extends ScatteredStructurePiece
 				{
 					if(offsetX == 0 && offsetZ == 0)
 					{
-						worldIn.setBlock(gatePos, MSBlocks.GATE.defaultBlockState().setValue(GateBlock.MAIN, true), Constants.BlockFlags.BLOCK_UPDATE);
-						TileEntity tileEntity = worldIn.getBlockEntity(gatePos);
-						if(tileEntity instanceof GateTileEntity)
-							((GateTileEntity) tileEntity).gateType = GateHandler.Type.LAND_GATE;
+						level.setBlock(gatePos, MSBlocks.GATE.defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
+						BlockEntity tileEntity = level.getBlockEntity(gatePos);
+						if(tileEntity instanceof GateTileEntity gate)
+							gate.gateType = GateHandler.Type.LAND_GATE;
 						else Debug.errorf("Expected a gate tile entity after placing a gate block, but got %s!", tileEntity);
-					} else worldIn.setBlock(gatePos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+					} else level.setBlock(gatePos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.defaultBlockState(), Block.UPDATE_CLIENTS);
 				}
 		}
 	}

@@ -1,45 +1,60 @@
 package com.mraof.minestuck.world.gen.feature.structure.castle;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * @author mraof
  *
  */
-public class CastleStructure extends Structure<NoFeatureConfig>
+public class CastleStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	public CastleStructure(Codec<NoFeatureConfig> configCodec)
+	public CastleStructure(Codec<NoneFeatureConfiguration> configCodec)
 	{
-		super(configCodec);
+		super(configCodec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), CastleStructure::generatePieces));
 	}
 	
 	@Override
-	protected boolean isFeatureChunk(ChunkGenerator generator, BiomeProvider biomeProvider, long seed, SharedSeedRandom rand, int chunkX, int chunkZ, Biome biome, ChunkPos pos, NoFeatureConfig config)
+	public GenerationStep.Decoration step()
 	{
-        int var3 = chunkX >> 4;
-        int var4 = chunkZ >> 4;
-        rand.setSeed((long)(var3 ^ var4 << 4) ^ seed);
-        rand.nextInt();
-        return chunkX == 1 && chunkZ == 0;//this.rand.nextInt(3) != 0 ? false : (par1 != (var3 << 4) + 4 + this.rand.nextInt(8) ? false : par2 == (var4 << 4) + 4 + this.rand.nextInt(8));
-    }
-	
-	@Override
-	public GenerationStage.Decoration step()
-	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;
 	}
 	
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-        return StructureCastleStart::new;
-    }
+		Random random = context.random();
+		boolean isBlack = random.nextBoolean();
+		
+		CastleStartPiece startPiece = new CastleStartPiece(context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ(), isBlack);
+		builder.addPiece(startPiece);
+		startPiece.addChildren(startPiece, builder, random);
+		List<CastlePiece> pendingPieces = startPiece.pendingPieces;
+		while(!pendingPieces.isEmpty())
+		{
+			int k = random.nextInt(pendingPieces.size());
+			CastlePiece structurePiece = pendingPieces.remove(k);
+			structurePiece.addChildren(startPiece, builder, random);
+		}
+		BoundingBox boundingBox = builder.getBoundingBox();
+		
+		int minY = Integer.MAX_VALUE;
+		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
+			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
+			{
+				int posHeight = context.chunkGenerator().getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor());
+				minY = Math.min(minY, posHeight);
+			}
+		
+		builder.offsetPiecesVertically(minY);
+	}
 }

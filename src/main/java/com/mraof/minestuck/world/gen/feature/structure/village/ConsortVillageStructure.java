@@ -2,70 +2,55 @@ package com.mraof.minestuck.world.gen.feature.structure.village;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
 import java.util.List;
+import java.util.Random;
 
-public class ConsortVillageStructure extends Structure<NoFeatureConfig>
+public class ConsortVillageStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	public ConsortVillageStructure(Codec<NoFeatureConfig> codec)
+	public ConsortVillageStructure(Codec<NoneFeatureConfiguration> codec)
 	{
-		super(codec);
+		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), ConsortVillageStructure::generatePieces));
 	}
 	
 	@Override
-	public GenerationStage.Decoration step()
+	public GenerationStep.Decoration step()
 	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;
 	}
 	
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return Start::new;
-	}
-	
-	private static class Start extends StructureStart<NoFeatureConfig>
-	{
+		Random random = context.random();
+		LandTypePair landTypes = LandTypePair.getTypes(context.chunkGenerator());
+		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
 		
-		Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
-		{
-			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
-		}
+		List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(random, landTypes);
+		ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart(x, z, random, pieceWeightList, landTypes);
+		builder.addPiece(start);
+		start.addChildren(start, builder, random);
 		
-		@Override
-		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
+		while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
 		{
-			LandTypePair landTypes = LandTypePair.getTypes(generator);
-			List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(random, landTypes);
-			ConsortVillageCenter.VillageCenter start = ConsortVillageCenter.getVillageStart((chunkX << 4) + random.nextInt(16), (chunkZ << 4) + random.nextInt(16), random, pieceWeightList, landTypes);
-			pieces.add(start);
-			start.addChildren(start, pieces, random);
-			
-			while(!start.pendingHouses.isEmpty() || !start.pendingRoads.isEmpty())
+			if(!start.pendingRoads.isEmpty())
 			{
-				if(!start.pendingRoads.isEmpty())
-				{
-					int index = random.nextInt(start.pendingRoads.size());
-					StructurePiece component = start.pendingRoads.remove(index);
-					component.addChildren(start, pieces, random);
-				} else
-				{
-					int index = random.nextInt(start.pendingHouses.size());
-					StructurePiece component = start.pendingHouses.remove(index);
-					component.addChildren(start, pieces, random);
-				}
+				int index = random.nextInt(start.pendingRoads.size());
+				StructurePiece component = start.pendingRoads.remove(index);
+				component.addChildren(start, builder, random);
+			} else
+			{
+				int index = random.nextInt(start.pendingHouses.size());
+				StructurePiece component = start.pendingHouses.remove(index);
+				component.addChildren(start, builder, random);
 			}
-			calculateBoundingBox();
 		}
 	}
 }

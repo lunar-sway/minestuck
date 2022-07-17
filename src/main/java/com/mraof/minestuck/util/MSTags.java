@@ -9,6 +9,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
@@ -118,6 +119,21 @@ public class MSTags
 		private static TagKey<EntityType<?>> tag(String name)
 		{
 			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class Biomes
+	{
+		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
+		public static final TagKey<Biome> HAS_FROG_TEMPLE = tag("has_structure/frog_temple");
+		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
+		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");
+		public static final TagKey<Biome> HAS_CONSORT_VILLAGE = tag("has_structure/consort_village");
+		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
+		
+		private static TagKey<Biome> tag(String name)
+		{
+			return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	

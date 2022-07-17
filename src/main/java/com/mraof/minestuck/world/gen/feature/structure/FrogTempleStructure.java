@@ -1,67 +1,49 @@
 package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class FrogTempleStructure extends Structure<NoFeatureConfig>
+public class FrogTempleStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	public FrogTempleStructure(Codec<NoFeatureConfig> codec)
+	public FrogTempleStructure(Codec<NoneFeatureConfiguration> codec)
 	{
-		super(codec);
+		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.OCEAN_FLOOR_WG), FrogTempleStructure::generatePieces));
 	}
 	
 	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	public GenerationStep.Decoration step()
 	{
-		return Start::new;
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;
 	}
 	
-	@Override
-	public GenerationStage.Decoration step()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;
-	}
-	
-	public static class Start extends StructureStart<NoFeatureConfig>
-	{
-		private Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
-		{
-			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
-		}
+		final WorldgenRandom random = context.random();
+		FrogTemplePiece mainPiece = new FrogTemplePiece(context.chunkGenerator(), context.heightAccessor(), random, context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ());
+		builder.addPiece(mainPiece);
 		
-		@Override
-		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config)
+		int y = mainPiece.getBoundingBox().minY(); //determines height of pillars from the variable height of the main structure
+		
+		int pillarOffset = 40;
+		for(int i = 0; i < 2; i++) //x iterate
 		{
-			int x = chunkX * 16 + random.nextInt(16);
-			int z = chunkZ * 16 + random.nextInt(16);
-			FrogTemplePiece mainPiece = new FrogTemplePiece(generator, random, x, z);
-			pieces.add(mainPiece);
-			
-			int y = mainPiece.getBoundingBox().y0; //determines height of pillars from the variable height of the main structure
-			
-			int pillarOffset = 40;
-			for(int i = 0; i < 2; i++) //x iterate
+			for(int j = 0; j < 2; j++) //z iterate
 			{
-				for(int j = 0; j < 2; j++) //z iterate
+				if(random.nextBoolean())
 				{
-					if(random.nextBoolean())
-					{
-						FrogTemplePillarPiece pillarPiece = new FrogTemplePillarPiece(generator, random,
-								(mainPiece.getBoundingBox().x0 + mainPiece.getBoundingBox().getXSpan() / 2) + (pillarOffset - 2 * i * pillarOffset), y, //uses frog temple location instead of x and z, so it gets the center of the temple structure
-								(mainPiece.getBoundingBox().z0 + mainPiece.getBoundingBox().getZSpan() / 2) + (pillarOffset - 2 * j * pillarOffset)); //center of temple + distance from center with +/- coordinate factor
-						pieces.add(pillarPiece); //50% chance of generating a pillar for every corner of the frog temple structure
-					}
+					FrogTemplePillarPiece pillarPiece = new FrogTemplePillarPiece(random,
+							(mainPiece.getBoundingBox().minX() + mainPiece.getBoundingBox().getXSpan() / 2) + (pillarOffset - 2 * i * pillarOffset), y, //uses frog temple location instead of x and z, so it gets the center of the temple structure
+							(mainPiece.getBoundingBox().minZ() + mainPiece.getBoundingBox().getZSpan() / 2) + (pillarOffset - 2 * j * pillarOffset)); //center of temple + distance from center with +/- coordinate factor
+					builder.addPiece(pillarPiece); //50% chance of generating a pillar for every corner of the frog temple structure
 				}
 			}
-			calculateBoundingBox();
 		}
 	}
 }

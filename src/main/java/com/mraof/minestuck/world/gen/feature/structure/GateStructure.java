@@ -2,22 +2,20 @@ package com.mraof.minestuck.world.gen.feature.structure;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import net.minecraft.util.SharedSeedRandom;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.util.registry.DynamicRegistries;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.StructurePiece;
-import net.minecraft.world.gen.feature.structure.StructureStart;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelHeightAccessor;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
+import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,98 +23,75 @@ import java.util.Random;
 
 //Note: placement is handled in a special way
 // Configured spacing should be 1, and separation should be 0, or else the gate might sometimes not generate
-public class GateStructure extends Structure<NoFeatureConfig>
+public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public GateStructure(Codec<NoFeatureConfig> codec)
+	public GateStructure(Codec<NoneFeatureConfiguration> codec)
 	{
-		super(codec);
+		super(codec, PieceGeneratorSupplier.simple(GateStructure::checkLocation, GateStructure::generatePieces));
 	}
 	
 	@Override
-	public GenerationStage.Decoration step()
+	public GenerationStep.Decoration step()
 	{
-		return GenerationStage.Decoration.SURFACE_STRUCTURES;
+		return GenerationStep.Decoration.SURFACE_STRUCTURES;
 	}
 	
-	@Override
-	protected boolean isFeatureChunk(ChunkGenerator generator, BiomeProvider provider, long seed, SharedSeedRandom rand, int chunkX, int chunkZ, Biome biome, ChunkPos pos, NoFeatureConfig config)
+	private static boolean checkLocation(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
 	{
-		return pos.equals(findGatePosition(generator));
+		return context.chunkPos().equals(findGatePosition(context.chunkGenerator()));
 	}
 	
-	@Override
-	public IStartFactory<NoFeatureConfig> getStartFactory()
+	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
-		return GateStructure.Start::new;
+		ChunkGenerator generator = context.chunkGenerator();
+		ChunkPos pos = context.chunkPos();
+		PieceFactory factory = getFactory(generator);
+		
+		if(factory == null)
+			factory = GatePillarPiece::new;
+		
+		builder.addPiece(factory.create(generator, context.heightAccessor(), context.random(), pos.getMinBlockX(), pos.getMinBlockZ()));
 	}
 	
-	public BlockPos findLandGatePos(ServerWorld world)
+	public BlockPos findLandGatePos(ServerLevel level)
 	{
-		ChunkPos chunkPos = findGatePosition(world.getChunkSource().getGenerator());
+		ChunkPos chunkPos = findGatePosition(level.getChunkSource().getGenerator());
 		
 		if (chunkPos != null)
 		{
-			StructureStart<?> start = world.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(this);
+			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(MSStructureFeatures.LAND_GATE.get());
 			
-			if(start instanceof Start)
+			if(start != null)
 			{
-				return ((Start) start).findGatePos();
+				for(StructurePiece piece : start.getPieces())
+				{
+					if(piece instanceof GatePiece)
+						return ((GatePiece) piece).getGatePos();
+				}
+				
+				LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", start.getPieces());
 			} else
-				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found {}!", chunkPos, world.dimension(), start);
+				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found nothing!", chunkPos, level.dimension());
 		} else
-			LOGGER.warn("No land gate position could be found for dimension {}.", world.dimension());
+			LOGGER.warn("No land gate position could be found for dimension {}.", level.dimension());
 		
 		return null;
 	}
 	
-	private ChunkPos findGatePosition(ChunkGenerator chunkGenerator)
+	private static ChunkPos findGatePosition(ChunkGenerator chunkGenerator)
 	{
-		if (chunkGenerator instanceof LandChunkGenerator)
+		if (chunkGenerator instanceof LandChunkGenerator landGenerator)
 		{
-			LandChunkGenerator landGenerator = (LandChunkGenerator) chunkGenerator;
-			
 			return landGenerator.getOrFindLandGatePosition();
 		} else
 			return null;
 	}
 	
-	public static class Start extends StructureStart<NoFeatureConfig>
-	{
-		public Start(Structure<NoFeatureConfig> structure, int chunkX, int chunkZ, MutableBoundingBox boundingBox, int reference, long seed)
-		{
-			super(structure, chunkX, chunkZ, boundingBox, reference, seed);
-		}
-		
-		@Override
-		public void generatePieces(DynamicRegistries registries, ChunkGenerator generator, TemplateManager templates, int chunkX, int chunkZ, Biome biome, NoFeatureConfig config)
-		{
-			PieceFactory factory = getFactory(generator);
-			
-			if(factory == null)
-				factory = GatePillarPiece::new;
-			
-			pieces.add(factory.create(generator, random, chunkX * 16 + random.nextInt(16), chunkZ * 16 + random.nextInt(16)));
-			calculateBoundingBox();
-		}
-		
-		private BlockPos findGatePos()
-		{
-			for(StructurePiece piece : pieces)
-			{
-				if(piece instanceof GatePiece)
-					return ((GatePiece) piece).getGatePos();
-			}
-			
-			LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", pieces);
-			return null;
-		}
-	}
-	
 	public interface PieceFactory
 	{
-		GatePiece create(ChunkGenerator generator, Random rand, int minX, int minZ);
+		GatePiece create(ChunkGenerator generator, LevelHeightAccessor level, Random rand, int minX, int minZ);
 	}
 	
 	private static PieceFactory getFactory(ChunkGenerator generator)
