@@ -4,18 +4,18 @@ import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.Map;
 
@@ -47,44 +47,44 @@ public class MultiblockItem extends BlockItem
 	}
 	
 	@Override
-	public ActionResultType place(BlockItemUseContext context)
+	public InteractionResult place(BlockPlaceContext context)
 	{
-		World world = context.getLevel();
+		Level level = context.getLevel();
 		Direction sideFace = context.getClickedFace();
-		if (world.isClientSide)
+		if (level.isClientSide)
 		{
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else if (sideFace != Direction.UP)
 		{
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		} else
 		{
 			Direction facing = context.getHorizontalDirection().getOpposite();
 			BlockPos pos = getPlacementPos(context);
 			
 			if(!canPlaceAt(context, pos, facing))
-				return ActionResultType.FAIL;
+				return InteractionResult.FAIL;
 			
 			BlockState state = getBlock().defaultBlockState().setValue(AlchemiterBlock.FACING, facing);
 			this.placeBlock(context, state);
-			updateCustomBlockEntityTag(pos, world, context.getPlayer(), context.getItemInHand(), state);
-			return ActionResultType.SUCCESS;
+			updateCustomBlockEntityTag(pos, level, context.getPlayer(), context.getItemInHand(), state);
+			return InteractionResult.SUCCESS;
 		}
 	}
 	
-	public boolean canPlaceAt(BlockItemUseContext context, BlockPos pos, Direction facing)
+	public boolean canPlaceAt(BlockPlaceContext context, BlockPos pos, Direction facing)
 	{
-		PlayerEntity player = context.getPlayer();
+		Player player = context.getPlayer();
 		if(player != null && !player.mayUseItemAt(pos, Direction.UP, context.getItemInHand()))
 			return false;
-		MutableBoundingBox boundingBox = multiblock.getBoundingBox(MSRotationUtil.fromDirection(facing));
-		for(int x = boundingBox.x0; x <= boundingBox.x1; x++)
+		BoundingBox boundingBox = multiblock.getBoundingBox(MSRotationUtil.fromDirection(facing));
+		for(int x = boundingBox.minX(); x <= boundingBox.maxX(); x++)
 		{
-			for(int z = boundingBox.z0; z <= boundingBox.z1; z++)
+			for(int z = boundingBox.minZ(); z <= boundingBox.maxZ(); z++)
 			{
-				for(int y = boundingBox.y0; y <= boundingBox.y1; y++)
+				for(int y = boundingBox.minY(); y <= boundingBox.maxY(); y++)
 				{
-					if(World.isOutsideBuildHeight(pos.offset(x, y, z)) || player != null && !context.getLevel().mayInteract(player, pos)
+					if(context.getLevel().isOutsideBuildHeight(pos.offset(x, y, z)) || player != null && !context.getLevel().mayInteract(player, pos)
 							|| !context.getLevel().getBlockState(pos.offset(x, y, z)).canBeReplaced(context))
 						return false;
 				}
@@ -94,23 +94,22 @@ public class MultiblockItem extends BlockItem
 	}
 	
 	@Override
-	protected boolean placeBlock(BlockItemUseContext context, BlockState newState)
+	protected boolean placeBlock(BlockPlaceContext context, BlockState newState)
 	{
-		World world = context.getLevel();
-		if(!world.isClientSide)
+		Level level = context.getLevel();
+		if(!level.isClientSide)
 		{
 			BlockPos pos = getPlacementPos(context);
 			
-			multiblock.placeWithRotation(world, pos, MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite()));
+			multiblock.placeWithRotation(level, pos, MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite()));
 			
-			PlayerEntity player = context.getPlayer();
-			if(player instanceof ServerPlayerEntity)
-				CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity) player, pos, context.getItemInHand());
+			if(context.getPlayer() instanceof ServerPlayer player)
+				CriteriaTriggers.PLACED_BLOCK.trigger(player, pos, context.getItemInHand());
 		}
 		return true;
 	}
 	
-	private BlockPos getPlacementPos(BlockItemUseContext context)
+	private BlockPos getPlacementPos(BlockPlaceContext context)
 	{
 		BlockPos pos = context.getClickedPos();
 		if(!context.getLevel().getBlockState(pos).canBeReplaced(context))
@@ -124,12 +123,12 @@ public class MultiblockItem extends BlockItem
 	
 	public BlockPos getPlacementPos(BlockPos pos, Direction direction, double hitX, double hitZ)
 	{
-		MutableBoundingBox bb = multiblock.getBoundingBox(MSRotationUtil.fromDirection(direction));
+		BoundingBox bb = multiblock.getBoundingBox(MSRotationUtil.fromDirection(direction));
 		
 		if(direction.getAxis() == Direction.Axis.X)
-			return pos.south((int) Math.floor(hitZ - (bb.z1 - bb.z0)*direction.getClockWise().getStepZ()/2D));
+			return pos.south((int) Math.floor(hitZ - (bb.maxZ() - bb.minZ())*direction.getClockWise().getStepZ()/2D));
 		else if(direction.getAxis() == Direction.Axis.Z)
-			return pos.east((int) Math.floor(hitX - (bb.x1 - bb.x0)*direction.getClockWise().getStepX()/2D));
+			return pos.east((int) Math.floor(hitX - (bb.maxX() - bb.minX())*direction.getClockWise().getStepX()/2D));
 		else throw new IllegalArgumentException("Direction should be horizontal");
 	}
 }

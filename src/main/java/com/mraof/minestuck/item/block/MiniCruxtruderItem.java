@@ -3,15 +3,15 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.tileentity.machine.MiniCruxtruderTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nullable;
@@ -24,13 +24,13 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
 		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
-			TileEntity te = world.getBlockEntity(pos);
-			if(te instanceof MiniCruxtruderTileEntity)
-				((MiniCruxtruderTileEntity) te).color = stack.getTag().getInt("color");
+			BlockEntity te = level.getBlockEntity(pos);
+			if(te instanceof MiniCruxtruderTileEntity blockEntity)
+				blockEntity.color = stack.getTag().getInt("color");
 			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate tile entity was created. Instead found {}.", te);
 		}
 		return true;
@@ -39,7 +39,7 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	public static ItemStack getCruxtruderWithColor(int color)
 	{
 		ItemStack stack = new ItemStack(MSBlocks.MINI_CRUXTRUDER);
-		stack.setTag(new CompoundNBT());
+		stack.setTag(new CompoundTag());
 		stack.getTag().putInt("color", color);
 		return stack;
 	}

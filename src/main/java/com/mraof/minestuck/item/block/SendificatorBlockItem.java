@@ -2,19 +2,19 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.MSDamageSources;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 public class SendificatorBlockItem extends BlockItem
 {
@@ -24,38 +24,38 @@ public class SendificatorBlockItem extends BlockItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
-		if(playerIn.isShiftKeyDown() && playerIn.getItemBySlot(EquipmentSlotType.HEAD).isEmpty())
+		if(playerIn.isShiftKeyDown() && playerIn.getItemBySlot(EquipmentSlot.HEAD).isEmpty())
 		{
-			playerIn.setSlot(103, new ItemStack(MSBlocks.SENDIFICATOR));
+			playerIn.setItemSlot(EquipmentSlot.HEAD, new ItemStack(MSBlocks.SENDIFICATOR));
 			
-			return ActionResult.success(new ItemStack(Blocks.AIR));
+			return InteractionResultHolder.success(new ItemStack(Blocks.AIR));
 		}
-		return ActionResult.pass(itemStackIn);
+		return InteractionResultHolder.pass(itemStackIn);
 	}
 	
 	@Override
-	public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		if(entityIn instanceof PlayerEntity)
+		if(entityIn instanceof Player)
 		{
-			PlayerEntity playerIn = (PlayerEntity) entityIn;
-			ItemStack recoverItem = playerIn.getItemBySlot(EquipmentSlotType.HEAD);
+			Player playerIn = (Player) entityIn;
+			ItemStack recoverItem = playerIn.getItemBySlot(EquipmentSlot.HEAD);
 			if(recoverItem.sameItem(new ItemStack(MSBlocks.SENDIFICATOR)) && !playerIn.isCreative())
 			{
 				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
-				NBTUtil.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());
+				NbtUtils.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());
 				ItemEntity headItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), headItem);
 				playerIn.level.addFreshEntity(headItemEntity);
 				
 				ItemEntity recoverItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), recoverItem);
 				playerIn.level.addFreshEntity(recoverItemEntity);
-				playerIn.setSlot(103, new ItemStack(Items.AIR));
+				playerIn.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.AIR));
 				playerIn.hurt(MSDamageSources.DECAPITATION, Float.MAX_VALUE);
 			}
 		}
-		super.inventoryTick(stack, worldIn, entityIn, itemSlot, isSelected);
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
 	}
 }

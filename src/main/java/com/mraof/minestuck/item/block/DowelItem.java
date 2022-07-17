@@ -4,20 +4,20 @@ import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -39,7 +39,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn)
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		if(AlchemyHelper.hasDecodedItem(stack))
 		{
@@ -47,18 +47,18 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new StringTextComponent("(").append(containedStack.getHoverName()).append(")").withStyle(TextFormatting.GRAY));
+				tooltip.add(new TextComponent("(").append(containedStack.getHoverName()).append(")").withStyle(ChatFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new StringTextComponent("(").append(new TranslationTextComponent(getDescriptionId() + ".invalid")).append(")").withStyle(TextFormatting.GRAY));
+				tooltip.add(new TextComponent("(").append(new TranslatableComponent(getDescriptionId() + ".invalid")).append(")").withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}
 	
 	@Nullable
 	@Override
-	protected BlockState getPlacementState(BlockItemUseContext context)
+	protected BlockState getPlacementState(BlockPlaceContext context)
 	{
 		BlockState state = super.getPlacementState(context);
 		if(state == null)
@@ -73,9 +73,9 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	protected boolean updateCustomBlockEntityTag(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state)
+	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		TileEntity te = world.getBlockEntity(pos);
+		BlockEntity te = level.getBlockEntity(pos);
 		if(te instanceof ItemStackTileEntity)
 		{
 			ItemStack newStack = stack.copy();
