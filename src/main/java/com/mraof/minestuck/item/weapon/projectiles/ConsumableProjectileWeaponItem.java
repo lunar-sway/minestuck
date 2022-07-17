@@ -2,12 +2,15 @@ package com.mraof.minestuck.item.weapon.projectiles;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.ConsumableProjectileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class ConsumableProjectileWeaponItem extends Item implements ProjectileDamaging
 {
@@ -24,18 +27,18 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 0.8F, 1.5F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.8F, 1.5F);
 		
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, worldIn);
+			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, level);
 			projectileEntity.setItem(item);
-			projectileEntity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, velocity, accuracy);
-			worldIn.addFreshEntity(projectileEntity);
+			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
+			level.addFreshEntity(projectileEntity);
 		}
 		if(!playerIn.isCreative())
 		{
@@ -44,7 +47,7 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 		
 		playerIn.getCooldowns().addCooldown(this, 7);
 		playerIn.awardStat(Stats.ITEM_USED.get(this));
-		return new ActionResult<>(ActionResultType.SUCCESS, item);
+		return InteractionResultHolder.success(item);
 	}
 	
 	@Override

@@ -1,18 +1,18 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Comparator;
@@ -53,7 +53,7 @@ public class FarmineEffect implements DestroyBlockEffect
 		
 		addAssociation(Blocks.DIRT, Blocks.GRASS);
 		addAssociation(Blocks.DIRT, Blocks.MYCELIUM);
-		addAssociation(Blocks.DIRT, Blocks.GRASS_PATH);
+		addAssociation(Blocks.DIRT, Blocks.DIRT_PATH);
 		addAssociation(Blocks.END_STONE, MSBlocks.END_GRASS);
 		
 		addOneWayAssociation(Blocks.COBBLESTONE, Blocks.INFESTED_COBBLESTONE);
@@ -65,21 +65,22 @@ public class FarmineEffect implements DestroyBlockEffect
 	}
 	
 	/**
-	* Called when a Block is destroyed using this Item. Returns true to trigger the "Use Item" statistic.
-	* This is the method that performs farmining calculations and destruction.
-	* @param stack The ItemStack being used to destroy the block. This should always be an instance of FarmineItem.
-	* This method also respects the presence of Silk Touch or Fortune on this ItemStack.
-	* @param worldIn The world where the blocks being destroyed can be found.
-	* @param blockState The state of the initial block being destroyed.
-	* @param pos The position of the initial block being destroyed.
-	* @param playerIn The player doing the actual destroying. This MUST be an instance of EntityPlayer or no farmining will occur!
-	* @return Returns false if and only if the world is remote.
-	*/
+	 * Called when a Block is destroyed using this Item. Returns true to trigger the "Use Item" statistic.
+	 * This is the method that performs farmining calculations and destruction.
+	 *
+	 * @param stack      The ItemStack being used to destroy the block. This should always be an instance of FarmineItem.
+	 *                   This method also respects the presence of Silk Touch or Fortune on this ItemStack.
+	 * @param level      The world where the blocks being destroyed can be found.
+	 * @param blockState The state of the initial block being destroyed.
+	 * @param pos        The position of the initial block being destroyed.
+	 * @param playerIn   The player doing the actual destroying. This MUST be an instance of EntityPlayer or no farmining will occur!
+	 * @return Returns false if and only if the world is remote.
+	 */
 	
 	@Override
-	public void onDestroyBlock(ItemStack stack, World worldIn, BlockState blockState, BlockPos pos, LivingEntity playerIn)
+	public void onDestroyBlock(ItemStack stack, Level level, BlockState blockState, BlockPos pos, LivingEntity playerIn)
 	{
-		if(worldIn.isClientSide)
+		if(level.isClientSide)
 		{
 			return;
 		}
@@ -89,19 +90,18 @@ public class FarmineEffect implements DestroyBlockEffect
 		Block block = blockState.getBlock();
 		int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, stack);
 		HashSet<Block> equals = farMineEquivalencies.get(block);
-		if(equals==null) equals = new HashSet<>();
+		if(equals == null) equals = new HashSet<>();
 		
 		//If the harvestTool can't harvest the block, or the player isn't actually a player, or the player is sneaking,
 		//or the harvestTool doesn't farmine, or it's one of those blocks that breaks instantly, don't farmine.
-		if (!stack.isCorrectToolForDrops(blockState) || !(playerIn instanceof PlayerEntity) || playerIn.isShiftKeyDown()
-				|| terminus == 1 || radius==0 || Math.abs(blockState.getDestroySpeed(worldIn, pos)) < 0.000000001)
+		if(!stack.isCorrectToolForDrops(blockState) || !(playerIn instanceof Player) || playerIn.isShiftKeyDown()
+				|| terminus == 1 || radius == 0 || Math.abs(blockState.getDestroySpeed(level, pos)) < 0.000000001)
 		{
 			return;
-		}
-		else
+		} else
 		{
 			//If the block is unacceptable or there's a harvestTool mismatch, cap out at a basic 3x3 area
-			if (farMineForbiddenBlocks.contains(block)
+			if(farMineForbiddenBlocks.contains(block)
 					|| stack.getDestroySpeed(blockState) < ((WeaponItem) stack.getItem()).getEfficiency())
 			{
 				candidates.add(Pair.of(pos, 1));
@@ -135,10 +135,10 @@ public class FarmineEffect implements DestroyBlockEffect
 						{
 							for (int k = -1; k < 2; k++)
 							{
-								if(i==0 && j==0 && k==0)
+								if(i == 0 && j == 0 && k == 0)
 									continue;
 								BlockPos newBlockPos = new BlockPos(curr.getX() + i, curr.getY() + j, curr.getZ() + k);
-								BlockState newState = worldIn.getBlockState(newBlockPos);
+								BlockState newState = level.getBlockState(newBlockPos);
 								Block newBlock = newState.getBlock();
 								if (	equals.contains(newBlock) || newBlock.equals(block))
 								{
@@ -165,12 +165,12 @@ public class FarmineEffect implements DestroyBlockEffect
 			
 			for (int i = -1; i < 2; i++)
 			{
-				for (int j = -1; j < 2; j++)
+				for(int j = -1; j < 2; j++)
 				{
-					for (int k = -1; k < 2; k++)
+					for(int k = -1; k < 2; k++)
 					{
 						BlockPos newBlockPos = new BlockPos(pos.getX() + i, pos.getY() + j, pos.getZ() + k);
-						BlockState newState = worldIn.getBlockState(newBlockPos);
+						BlockState newState = level.getBlockState(newBlockPos);
 						Block newBlock = newState.getBlock();
 						if (equals.contains(newBlock) || newBlock.equals(block)
 								&& blocksToBreak.size()+1 < stack.getMaxDamage() - stack.getDamageValue())
@@ -183,16 +183,16 @@ public class FarmineEffect implements DestroyBlockEffect
 		}
 		
 		//Now, break ALL of the blocks!
-		for (BlockPos blockToBreak : blocksToBreak)
+		for(BlockPos blockToBreak : blocksToBreak)
 		{
-			BlockState state = worldIn.getBlockState(blockToBreak);
-			harvestBlock(worldIn, state.getBlock(), blockToBreak, state, playerIn, stack);
+			BlockState state = level.getBlockState(blockToBreak);
+			harvestBlock(level, state.getBlock(), blockToBreak, state, playerIn, stack);
 		}
 		
 		//We add 1 because that means the harvestTool will always take at least 2 damage.
 		//This is important because all ItemWeapons take at least 2 damage whenever it breaks a block.
 		//This is because WeaponItem extends ItemSword.
-		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, player -> player.broadcastBreakEvent(Hand.MAIN_HAND));
+		stack.hurtAndBreak(blocksToBreak.size() + 1, playerIn, player -> player.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 	}
 	
 	/*
@@ -225,15 +225,15 @@ public class FarmineEffect implements DestroyBlockEffect
 		return e != null && e.contains(b);
 	}
 	
-	private boolean harvestBlock(World world, Block block, BlockPos pos, BlockState state, LivingEntity playerIn, ItemStack stack)
+	private boolean harvestBlock(Level level, Block block, BlockPos pos, BlockState state, LivingEntity playerIn, ItemStack stack)
 	{
-		PlayerEntity player = (PlayerEntity) playerIn;
+		Player player = (Player) playerIn;
 		
-		TileEntity te = world.getBlockEntity(pos);
-		if(block.removedByPlayer(state, world, pos, player, true, world.getFluidState(pos)))
+		BlockEntity te = level.getBlockEntity(pos);
+		if(block.onDestroyedByPlayer(state, level, pos, player, true, level.getFluidState(pos)))
 		{
-			block.destroy(world, pos, state);
-			block.playerDestroy(world, player, pos, state, te, stack);
+			block.destroy(level, pos, state);
+			block.playerDestroy(level, player, pos, state, te, stack);
 			return true;
 		}
 		return false;

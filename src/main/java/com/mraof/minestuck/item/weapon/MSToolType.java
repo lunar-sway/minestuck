@@ -1,35 +1,33 @@
 package com.mraof.minestuck.item.weapon;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class MSToolType
 {
 	private final Set<Material> harvestMaterials = new HashSet<>();
 	private final Set<Enchantment> enchantments = new HashSet<>();
-	private final Set<ToolType> toolType = new HashSet<>();
-	
-	public MSToolType(ToolType toolType, Material... materials)
-	{
-		this(materials);
-		this.toolType.add(toolType);
-	}
+	private final Set<TagKey<Block>> miningEfficiencyTags = new HashSet<>();
+	private final Set<ToolAction> miningActions = new HashSet<>();
 	
 	public MSToolType(Material... materials)
 	{
 		harvestMaterials.addAll(Arrays.asList(materials));
 	}
 	
-	public MSToolType() {}
+	public MSToolType()
+	{
+	}
 	
 	public MSToolType(MSToolType... classCombo)
 	{
@@ -37,7 +35,8 @@ public class MSToolType
 		{
 			harvestMaterials.addAll(cls.harvestMaterials);
 			enchantments.addAll(cls.enchantments);
-			toolType.addAll(cls.toolType);
+			miningEfficiencyTags.addAll(cls.miningEfficiencyTags);
+			miningActions.addAll(cls.miningActions);
 		}
 	}
 	
@@ -46,17 +45,28 @@ public class MSToolType
 		if(harvestMaterials.contains(state.getMaterial()))
 			return true;
 		
-		for(ToolType type : toolType)
-			if(state.getBlock().isToolEffective(state, type))
+		for(TagKey<Block> tag : miningEfficiencyTags)
+			if(state.is(tag))
 				return true;
 		
 		return false;
 	}
 	
-	public MSToolType addToolType(ToolType... toolType)
+	public MSToolType addAction(ToolAction action)
 	{
-		this.toolType.addAll(Arrays.asList(toolType));
+		this.miningActions.add(action);
 		return this;
+	}
+	
+	public MSToolType addMining(TagKey<Block> tag, ToolAction action)
+	{
+		this.miningEfficiencyTags.add(tag);
+		return this.addAction(action);
+	}
+	
+	public boolean hasAction(ToolAction toolAction)
+	{
+		return miningActions.contains(toolAction);
 	}
 	
 	//TODO Tool types WILL be created before mod enchantments are created and registered. We should use suppliers instead
@@ -66,25 +76,19 @@ public class MSToolType
 		return this;
 	}
 	
-	public MSToolType addEnchantments(List<Enchantment> enchantments)
+	public MSToolType addEnchantments(EnchantmentCategory... enchantmentTypes)
 	{
-		this.enchantments.addAll(enchantments);
-		return this;
-	}
-	
-	public MSToolType addEnchantments(EnchantmentType... enchantmentTypes)
-	{
-		for(EnchantmentType type : enchantmentTypes)
+		for(EnchantmentCategory type : enchantmentTypes)
 		{
 			ForgeRegistries.ENCHANTMENTS.forEach(enchantment ->
-			{if(enchantment.category == type) addEnchantments(enchantment);});
+			{
+				if(enchantment.category == type) addEnchantments(enchantment);
+			});
 		}
 		
 		return this;
 	}
 	
-	public Set<ToolType> getToolTypes() {return toolType;}
-	//TODO How about functions that checks if a material/enchantment is valid, rather than make the whole lists accessible?
-	public Set<Material> getHarvestMaterials() {return harvestMaterials;}
+	//TODO How about functions that checks if an enchantment is valid, rather than make the whole lists accessible?
 	public Set<Enchantment> getEnchantments() {return enchantments;}
 }

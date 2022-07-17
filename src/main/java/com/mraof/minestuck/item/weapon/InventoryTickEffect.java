@@ -3,29 +3,29 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Supplier;
 
 public interface InventoryTickEffect
 {
-	void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected);
+	void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected);
 	
-	InventoryTickEffect BREATH_SLOW_FALLING = passiveAspectEffect(EnumAspect.BREATH, () -> new EffectInstance(Effects.SLOW_FALLING, 2, 2));
+	InventoryTickEffect BREATH_SLOW_FALLING = passiveAspectEffect(EnumAspect.BREATH, () -> new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 2));
 	
 	InventoryTickEffect DROP_WHEN_IN_WATER = (stack, worldIn, entityIn, itemSlot, isSelected) -> {
-		if(isSelected && entityIn.isInWater() && entityIn instanceof LivingEntity)
+		if(isSelected && entityIn.isInWater() && entityIn instanceof LivingEntity living)
 		{
-			stack.hurtAndBreak(70, ((LivingEntity) entityIn), entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
+			stack.hurtAndBreak(70, living, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			ItemEntity weapon = new ItemEntity(entityIn.level, entityIn.getX(), entityIn.getY(), entityIn.getZ(), stack.copy());
 			weapon.getItem().setCount(1);
 			weapon.setPickUpDelay(40);
@@ -37,14 +37,14 @@ public interface InventoryTickEffect
 	};
 	
 	//TODO divide into useful components similarly to in OnHitEffect, such as requireAspect(aspect, tickEffect), whenSelected(tickEffect), potionEffect(effect)
-	static InventoryTickEffect passiveAspectEffect(EnumAspect aspect, Supplier<EffectInstance> effect)
+	static InventoryTickEffect passiveAspectEffect(EnumAspect aspect, Supplier<MobEffectInstance> effect)
 	{
 		return (stack, worldIn, entityIn, itemSlot, isSelected) -> {
-			if(isSelected && entityIn instanceof ServerPlayerEntity)
+			if(isSelected && entityIn instanceof ServerPlayer player)
 			{
-				Title title = PlayerSavedData.getData((ServerPlayerEntity) entityIn).getTitle();
+				Title title = PlayerSavedData.getData(player).getTitle();
 				if(title != null && title.getHeroAspect() == aspect)
-					((ServerPlayerEntity) entityIn).addEffect(effect.get());
+					player.addEffect(effect.get());
 			}
 		};
 	}
