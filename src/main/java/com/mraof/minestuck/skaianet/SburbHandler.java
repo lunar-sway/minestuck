@@ -17,13 +17,13 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,9 +41,9 @@ public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static Title produceTitle(World world, PlayerIdentifier player)
+	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
-		Session session = SessionHandler.get(world).getPlayerSession(player);
+		Session session = SessionHandler.get(level).getPlayerSession(player);
 		if(session == null)
 			if(MinestuckConfig.SERVER.playerSelectedTitle.get())
 				session = new Session();
@@ -73,20 +73,20 @@ public final class SburbHandler
 		return title;
 	}
 	
-	static void generateAndSetTitle(World world, PlayerIdentifier player)
+	static void generateAndSetTitle(Level level, PlayerIdentifier player)
 	{
-		PlayerData data = PlayerSavedData.getData(player, world);
+		PlayerData data = PlayerSavedData.getData(player, level);
 		if(data.getTitle() == null)
 		{
-			Title title = produceTitle(world, player);
+			Title title = produceTitle(level, player);
 			if(title == null)
 				return;
-			PlayerSavedData.getData(player, world).setTitle(title);
+			PlayerSavedData.getData(player, level).setTitle(title);
 		} else if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			LOGGER.warn("Trying to generate a title for {} when a title is already assigned!", player.getUsername());
 	}
 	
-	public static void handlePredefineData(ServerPlayerEntity player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
+	public static void handlePredefineData(ServerPlayer player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		SessionHandler.get(player.server).findOrCreateAndCall(identifier, session -> session.predefineCall(identifier, consumer));
@@ -96,25 +96,20 @@ public final class SburbHandler
 	 * @param c The connection.
 	 * @return Damage value for the entry item
 	 */
-	public static ItemStack getEntryItem(World world, SburbConnection c)
+	public static ItemStack getEntryItem(Level level, SburbConnection c)
 	{
-		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), world);
+		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), level);
 		
-		Item artifact;
-		switch(c.artifactType)
-		{
-		case 1: artifact = MSItems.CRUXITE_POTION; break;
-		default: artifact = MSItems.CRUXITE_APPLE;
-		}
+		Item artifact = c.artifactType == 1 ? MSItems.CRUXITE_POTION : MSItems.CRUXITE_APPLE;
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
 	}
 	
-	public static SburbConnection getConnectionForDimension(ServerWorld world)
+	public static SburbConnection getConnectionForDimension(ServerLevel level)
 	{
-		return getConnectionForDimension(world.getServer(), world.dimension());
+		return getConnectionForDimension(level.getServer(), level.dimension());
 	}
-	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, RegistryKey<World> dim)
+	public static SburbConnection getConnectionForDimension(MinecraftServer mcServer, ResourceKey<Level> dim)
 	{
 		if(dim == null)
 			return null;
@@ -204,9 +199,9 @@ public final class SburbHandler
 	{
 		PlayerIdentifier identifier = c.getClientIdentifier();
 		
-		generateAndSetTitle(mcServer.getLevel(World.OVERWORLD), c.getClientIdentifier());
+		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
-		RegistryKey<World> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
+		ResourceKey<Level> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
 		c.setLand(landTypes, dimType);
 	}
 	
@@ -216,7 +211,7 @@ public final class SburbHandler
 		
 		SessionHandler.get(server).getPlayerSession(c.getClientIdentifier()).checkIfCompleted();
 		
-		ServerPlayerEntity player = c.getClientIdentifier().getPlayer(server);
+		ServerPlayer player = c.getClientIdentifier().getPlayer(server);
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
@@ -229,7 +224,7 @@ public final class SburbHandler
 		return SessionHandler.get(mcServer).getConnectionStream().noneMatch(c -> c.getClientIdentifier().equals(player));
 	}
 	
-	public static boolean hasEntered(ServerPlayerEntity player)
+	public static boolean hasEntered(ServerPlayer player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(identifier, true);

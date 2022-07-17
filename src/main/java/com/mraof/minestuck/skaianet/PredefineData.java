@@ -6,12 +6,12 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.command.CommandSource;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -42,21 +42,21 @@ public final class PredefineData
 		this.session = session;
 	}
 	
-	PredefineData read(CompoundNBT nbt)
+	PredefineData read(CompoundTag nbt)
 	{
 		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
-		if(nbt.contains("landTerrain", Constants.NBT.TAG_STRING))
+		if(nbt.contains("landTerrain", Tag.TAG_STRING))
 			terrainLandType = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
-		if(nbt.contains("landTitle", Constants.NBT.TAG_STRING))
+		if(nbt.contains("landTitle", Tag.TAG_STRING))
 			titleLandType = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTitle")));
 		
 		return this;
 	}
 	
-	CompoundNBT write()
+	CompoundTag write()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("locked", lockedToSession);
 		if(title != null)
 			title.write(nbt, "title");
@@ -68,7 +68,7 @@ public final class PredefineData
 		return nbt;
 	}
 	
-	public void predefineTitle(@Nonnull Title title, CommandSource source) throws SkaianetException
+	public void predefineTitle(@Nonnull Title title, CommandSourceStack source) throws SkaianetException
 	{
 		if(title.equals(this.title))
 			throw new SkaianetException(TITLE_ALREADY_SET, title.asTextComponent());	//TODO when predefining with define, you wouldn't want this exception to get in the way. Fix this.
@@ -78,31 +78,28 @@ public final class PredefineData
 			this.title = title;
 	}
 	
-	public void predefineTerrainLand(TerrainLandType landType, CommandSource source) throws SkaianetException
+	public void predefineTerrainLand(TerrainLandType landType, CommandSourceStack source) throws SkaianetException
 	{
 		forceVerifyTitleLand(landType, source);
 		
 		this.terrainLandType = landType;
 	}
 	
-	public void predefineTitleLand(TitleLandType landType, CommandSource source) throws SkaianetException
+	public void predefineTitleLand(TitleLandType landType, CommandSourceStack source) throws SkaianetException
 	{
 		forceVerifyTitle(Collections.singleton(landType), source);
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendSuccess(new TranslationTextComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).withStyle(TextFormatting.YELLOW), true);
+			source.sendSuccess(new TranslatableComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).withStyle(ChatFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
 	}
 	
-	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSource source) throws SkaianetException
+	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source) throws SkaianetException
 	{
 		Set<EnumAspect> availableAspects = availableTypes.stream().map(TitleLandType::getAspect).filter(Objects::nonNull).collect(Collectors.toSet());
-		if (availableAspects.isEmpty())
-			availableAspects = EnumAspect.valuesSet();
-		
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
 			Title previous = title;
@@ -115,12 +112,12 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(new TranslationTextComponent(GENERATED_TITLE, title.asTextComponent()), true);
-			else source.sendSuccess(new TranslationTextComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).withStyle(TextFormatting.YELLOW), true);
+				source.sendSuccess(new TranslatableComponent(GENERATED_TITLE, title.asTextComponent()), true);
+			else source.sendSuccess(new TranslatableComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	
-	private void forceVerifyTitleLand(TerrainLandType type, CommandSource source) throws SkaianetException
+	private void forceVerifyTitleLand(TerrainLandType type, CommandSourceStack source) throws SkaianetException
 	{
 		if(titleLandType == null || !titleLandType.isAspectCompatible(type))
 		{
@@ -145,8 +142,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(new TranslationTextComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
-			else source.sendSuccess(new TranslationTextComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).withStyle(TextFormatting.YELLOW), true);
+				source.sendSuccess(new TranslatableComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
+			else source.sendSuccess(new TranslatableComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	

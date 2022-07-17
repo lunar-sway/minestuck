@@ -2,7 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -26,13 +26,13 @@ public final class GlobalSessionHandler extends SessionHandler
 		globalSession = Objects.requireNonNull(session);
 	}
 	
-	GlobalSessionHandler(SkaianetHandler skaianetHandler, CompoundNBT nbt)
+	GlobalSessionHandler(SkaianetHandler skaianetHandler, CompoundTag nbt)
 	{
 		this(skaianetHandler, Session.read(nbt, skaianetHandler));
 	}
 	
 	@Override
-	void write(CompoundNBT compound)
+	void write(CompoundTag compound)
 	{
 		compound.put("session", globalSession.write());
 	}

@@ -9,18 +9,18 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.LazyInstance;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,7 +39,7 @@ public final class InfoTracker
 	/**
 	 * Chains of lands to be used by the skybox render
 	 */
-	private final LazyInstance<List<List<RegistryKey<World>>>> landChains = new LazyInstance<>(this::createLandChains);
+	private final LazyInstance<List<List<ResourceKey<Level>>>> landChains = new LazyInstance<>(this::createLandChains);
 	
 	InfoTracker(SkaianetHandler skaianet)
 	{
@@ -49,9 +49,8 @@ public final class InfoTracker
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		if(event.getPlayer() instanceof ServerPlayerEntity)
+		if(event.getPlayer() instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 			SkaianetHandler.get(player.server).infoTracker.onPlayerLoggedIn(player);
 		}
 	}
@@ -59,9 +58,8 @@ public final class InfoTracker
 	@SubscribeEvent
 	public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event)
 	{
-		if(event.getPlayer() instanceof ServerPlayerEntity)
+		if(event.getPlayer() instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
 			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
 		}
@@ -76,7 +74,7 @@ public final class InfoTracker
 		}
 	}
 	
-	private void onPlayerLoggedIn(ServerPlayerEntity player)
+	private void onPlayerLoggedIn(ServerPlayer player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		getSet(identifier).add(identifier);
@@ -89,7 +87,7 @@ public final class InfoTracker
 		return listenerMap.computeIfAbsent(identifier, ignored -> new HashSet<>());
 	}
 	
-	void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
+	void requestInfo(ServerPlayer player, PlayerIdentifier p1)
 	{
 		PlayerIdentifier p0 = IdentifierHandler.encode(player);
 		if(p0 == null)
@@ -97,7 +95,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendMessage(new StringTextComponent("[Minestuck] ").withStyle(TextFormatting.RED).append(new TranslationTextComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.NIL_UUID);
+			player.sendMessage(new TextComponent("[Minestuck] ").withStyle(ChatFormatting.RED).append(new TranslatableComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.NIL_UUID);
 			return;
 		}
 		if(!getSet(p1).add(p0))
@@ -115,22 +113,22 @@ public final class InfoTracker
 		return SkaianetInfoPacket.landChains(landChains.get());
 	}
 	
-	private List<List<RegistryKey<World>>> createLandChains()
+	private List<List<ResourceKey<Level>>> createLandChains()
 	{
-		List<List<RegistryKey<World>>> landChains = new ArrayList<>();
+		List<List<ResourceKey<Level>>> landChains = new ArrayList<>();
 		
-		Set<RegistryKey<World>> checked = new HashSet<>();
+		Set<ResourceKey<Level>> checked = new HashSet<>();
 		skaianet.sessionHandler.getConnectionStream().forEach(c -> populateLandChain(landChains, checked, c));
 		
 		return landChains;
 	}
 	
-	private void populateLandChain(List<List<RegistryKey<World>>> landChains, Set<RegistryKey<World>> checked, SburbConnection c)
+	private void populateLandChain(List<List<ResourceKey<Level>>> landChains, Set<ResourceKey<Level>> checked, SburbConnection c)
 	{
-		RegistryKey<World> dimensionType = c.getClientDimension();
+		ResourceKey<Level> dimensionType = c.getClientDimension();
 		if(c.isMain() && dimensionType != null && !checked.contains(dimensionType))
 		{
-			LinkedList<RegistryKey<World>> chain = new LinkedList<>();
+			LinkedList<ResourceKey<Level>> chain = new LinkedList<>();
 			chain.add(c.getClientDimension());
 			checked.add(c.getClientDimension());
 			SburbConnection cIter = c;
@@ -211,7 +209,7 @@ public final class InfoTracker
 		
 		for(PlayerIdentifier listener : getSet(player))
 		{
-			ServerPlayerEntity playerListener = listener.getPlayer(skaianet.mcServer);
+			ServerPlayer playerListener = listener.getPlayer(skaianet.mcServer);
 			
 			if(playerListener != null)
 			{
@@ -246,7 +244,7 @@ public final class InfoTracker
 		listenerMap.forEach((identifier, set) -> set.removeIf(listener -> cannotAccess(listener.getPlayer(skaianet.mcServer), identifier)));
 	}
 	
-	private boolean cannotAccess(ServerPlayerEntity listener, PlayerIdentifier identifier)
+	private boolean cannotAccess(ServerPlayer listener, PlayerIdentifier identifier)
 	{
 		return listener == null || (MinestuckConfig.SERVER.privateComputers.get() && !identifier.appliesTo(listener)
 				&& !listener.hasPermissions(2));

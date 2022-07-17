@@ -1,29 +1,29 @@
 package com.mraof.minestuck.skaianet;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class SkaianetException extends Exception
 {
-	private final ITextComponent textComponent;
+	private final Component textComponent;
 	
 	public SkaianetException(String translationKey, Object... args)
 	{
-		this(new TranslationTextComponent(translationKey, args));
+		this(new TranslatableComponent(translationKey, args));
 	}
 	
-	public SkaianetException(ITextComponent textComponent)
+	public SkaianetException(Component textComponent)
 	{
 		this.textComponent = textComponent;
 	}
 	
-	public SkaianetException(ITextComponent textComponent, String message)
+	public SkaianetException(Component textComponent, String message)
 	{
 		super(message);
 		this.textComponent = textComponent;
 	}
 	
-	public ITextComponent getTextComponent()
+	public Component getTextComponent()
 	{
 		return textComponent;
 	}

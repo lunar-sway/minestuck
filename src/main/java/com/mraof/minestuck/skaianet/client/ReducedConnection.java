@@ -1,7 +1,7 @@
 package com.mraof.minestuck.skaianet.client;
 
 import com.mraof.minestuck.skaianet.SburbConnection;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 /**
  * The client side version of {@link SburbConnection}
@@ -33,12 +33,12 @@ public class ReducedConnection
 	/**
 	 * Reads a connection from a network buffer. Must match with {@link SburbConnection#toBuffer}.
 	 */
-	public static ReducedConnection read(PacketBuffer buffer)
+	public static ReducedConnection read(FriendlyByteBuf buffer)
 	{
 		return new ReducedConnection(buffer);
 	}
 	
-	private ReducedConnection(PacketBuffer buffer)
+	private ReducedConnection(FriendlyByteBuf buffer)
 	{
 		isMain = buffer.readBoolean();
 		if(isMain)

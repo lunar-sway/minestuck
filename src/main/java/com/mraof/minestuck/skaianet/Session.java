@@ -8,9 +8,9 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -253,17 +253,17 @@ public final class Session
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
 	 * @return An CompoundNBT representing this session.
 	 */
-	CompoundNBT write()
+	CompoundTag write()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		
 		if(isCustom())
 			nbt.putString("name", name);
-		ListNBT list = new ListNBT();
+		ListTag list = new ListTag();
 		for(SburbConnection c : connections)
 			list.add(c.write());
 		nbt.put("connections", list);
-		ListNBT predefineList = new ListNBT();
+		ListTag predefineList = new ListTag();
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
@@ -276,14 +276,14 @@ public final class Session
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
-	static Session read(CompoundNBT nbt, SkaianetHandler handler)
+	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
 		Session s = new Session();
-		if(nbt.contains("name", Constants.NBT.TAG_STRING))
+		if(nbt.contains("name", Tag.TAG_STRING))
 			s.name = nbt.getString("name");
 		else s.name = null;
 		
-		ListNBT list = nbt.getList("connections", Constants.NBT.TAG_COMPOUND);
+		ListTag list = nbt.getList("connections", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
 		{
 			try
@@ -297,12 +297,12 @@ public final class Session
 			}
 		}
 		
-		if(nbt.contains("predefinedPlayers", Constants.NBT.TAG_LIST))	//If it is a tag list
+		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))	//If it is a tag list
 		{
-			list = nbt.getList("predefinedPlayers", Constants.NBT.TAG_COMPOUND);
+			list = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)
 			{
-				CompoundNBT compound = list.getCompound(i);
+				CompoundTag compound = list.getCompound(i);
 				PlayerIdentifier player = IdentifierHandler.load(compound, "player");
 				s.predefinedPlayers.put(player, new PredefineData(player, s).read(compound));
 			}

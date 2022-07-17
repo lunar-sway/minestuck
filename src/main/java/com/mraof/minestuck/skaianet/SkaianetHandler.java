@@ -9,14 +9,13 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,18 +53,18 @@ public final class SkaianetHandler
 		sessionHandler = new DefaultSessionHandler(this);
 	}
 	
-	private SkaianetHandler(CompoundNBT nbt)
+	private SkaianetHandler(CompoundTag nbt)
 	{
 		SessionHandler sessions;
-		if(nbt.contains("session", Constants.NBT.TAG_COMPOUND))
+		if(nbt.contains("session", Tag.TAG_COMPOUND))
 			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
-		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Constants.NBT.TAG_COMPOUND));
+		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
 		
 		sessionHandler = sessions.getActual();
 		
-		openedServers.read(nbt.getList("serversOpen", Constants.NBT.TAG_COMPOUND));
-		resumingClients.read(nbt.getList("resumingClients", Constants.NBT.TAG_COMPOUND));
-		resumingServers.read(nbt.getList("resumingServers", Constants.NBT.TAG_COMPOUND));
+		openedServers.read(nbt.getList("serversOpen", Tag.TAG_COMPOUND));
+		resumingClients.read(nbt.getList("resumingClients", Tag.TAG_COMPOUND));
+		resumingServers.read(nbt.getList("resumingServers", Tag.TAG_COMPOUND));
 		
 		//fix data in secondary connections that isn't being saved by finding them and copying data from the primary counterpart
 		// TODO this is a simple solution, but a more elegant solution would be to achieve this during reading from nbt
@@ -342,13 +341,13 @@ public final class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
 	}
 	
-	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
+	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
 	{
 		checkData();
 		infoTracker.requestInfo(player, p1);
 	}
 	
-	private CompoundNBT write(CompoundNBT compound)
+	private CompoundTag write(CompoundTag compound)
 	{
 		//checkData();
 		
@@ -416,7 +415,7 @@ public final class SkaianetHandler
 	 * @param target the identifier of the player that is entering
 	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
 	 */
-	public RegistryKey<World> prepareEntry(PlayerIdentifier target)
+	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
 		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
 		if(c == null)
@@ -473,11 +472,11 @@ public final class SkaianetHandler
 		openedServers.replace(oldTE.owner, oldRef, newRef);
 	}
 	
-	public static SkaianetHandler get(World world)
+	public static SkaianetHandler get(Level level)
 	{
-		MinecraftServer server = world.getServer();
+		MinecraftServer server = level.getServer();
 		if(server == null)
-			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from world)");
+			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from level)");
 		return get(server);
 	}
 	
@@ -494,7 +493,7 @@ public final class SkaianetHandler
 	 * Called when reading skaianet persistence data.
 	 * Should only be called by minestuck itself (specifically {@link com.mraof.minestuck.MSWorldPersistenceHook}).
 	 */
-	public static void init(CompoundNBT nbt)
+	public static void init(CompoundTag nbt)
 	{
 		if(nbt != null)
 		{
@@ -508,11 +507,11 @@ public final class SkaianetHandler
 		}
 	}
 	
-	public static CompoundNBT write()
+	public static CompoundTag write()
 	{
 		if(INSTANCE == null)
 			return null;
-		else return INSTANCE.write(new CompoundNBT());
+		else return INSTANCE.write(new CompoundTag());
 	}
 	
 	/**
