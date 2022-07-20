@@ -192,7 +192,23 @@ public class GristSet
 		return this;
 
 	}
-
+	
+	/**
+	 * used to cap grist for the limitgristbyplayerrung function
+	 */
+	public GristSet capGrist(int cap)
+	{
+		GristSet overflowGrist = new GristSet();
+		for(GristAmount amount : this.getAmounts())
+		{
+			if(amount.getAmount() > cap)
+			{
+				long overflowAmount = amount.getAmount() - cap;
+				this.gristTypes.add(amount.getType(), cap);
+				overflowGrist.addGrist(amount.getType(), overflowAmount);
+			}
+		}
+	}
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
