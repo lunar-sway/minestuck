@@ -204,11 +204,13 @@ public class GristSet
 			if(amount.getAmount() > cap)
 			{
 				long overflowAmount = amount.getAmount() - cap;
-				this.gristTypes.add(amount.getType(), cap);
+				this.gristTypes.put(amount.getType(), (long) cap);
 				overflowGrist.addGrist(amount.getType(), overflowAmount);
 			}
 		}
+		return overflowGrist;
 	}
+	
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */

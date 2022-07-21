@@ -5,7 +5,6 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -18,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -147,16 +147,20 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
+		
+		limitGristByPlayerRung(world, player, newCache);
 	}
 	
 	/**
 	 * this is used to limit the player's maximum grist by rung
+	 * @return
 	 */
-	public static void limitGristByPlayerRung(World world, PlayerIdentifier player, GristSet set)
+	public static GristSet limitGristByPlayerRung(World world, PlayerIdentifier player, GristSet set)
 	{
 		int rung = PlayerSavedData.getData(player).getEcheladder().getRung();
 		int gristCap = rungGrist[rung];
 		
+		return set.capGrist(gristCap);
 	}
 	
 	public static final int[] rungGrist =

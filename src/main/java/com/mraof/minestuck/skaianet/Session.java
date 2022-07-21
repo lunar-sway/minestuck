@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.item.crafting.alchemy.GristGutter;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
@@ -104,6 +105,7 @@ public final class Session
 	
 	Session()
 	{
+		gutter = new GristGutter();
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 	}
@@ -241,6 +243,17 @@ public final class Session
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
 	}
+	
+	/**
+	 * this is a getter function for the grist gutter
+	 */
+	final GristGutter gutter;
+	
+	public GristGutter getGristGutter()
+	{
+		return gutter;
+	}
+	
 	
 	/**
 	 * Writes this session to an nbt tag.
