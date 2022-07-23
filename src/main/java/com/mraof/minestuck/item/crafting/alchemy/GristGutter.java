@@ -2,6 +2,9 @@ package com.mraof.minestuck.item.crafting.alchemy;
 
 import java.util.Collection;
 
+/*this is intended to tell the system "this is the max grist for each type(which is something equal and arbitrary)"
+that adds up to our desired amount
+ */
 public class GristGutter extends GristSet
 {
 	public int gutterTotal;
