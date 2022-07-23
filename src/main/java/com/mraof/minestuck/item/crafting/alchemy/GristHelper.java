@@ -8,7 +8,9 @@ import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.network.chat.Component;
@@ -18,10 +20,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
-
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
+
+import static com.mraof.minestuck.world.storage.ClientPlayerData.rung;
 
 public class GristHelper
 {
@@ -140,7 +143,11 @@ public class GristHelper
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
+	
 		Objects.requireNonNull(level);
+		Session session = SessionHandler.get(level).getPlayerSession(player);
+		GristGutter gutter = session.getGristGutter();
+		
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(set);
 		PlayerData data = PlayerSavedData.getData(player, level);
@@ -148,14 +155,19 @@ public class GristHelper
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
 		
-		limitGristByPlayerRung(world, player, newCache);
+		//this is related to the limmit grist and grist gutter function
+		
+		limitGristByPlayerRung(level, player, newCache);
+		int gristCap = rungGrist[rung];
+		GristSet overflowedGrist = set.capGrist(gristCap);
+		gutter.addGristSet(overflowedGrist);
 	}
 	
 	/**
 	 * this is used to limit the player's maximum grist by rung
 	 * @return
 	 */
-	public static GristSet limitGristByPlayerRung(World world, PlayerIdentifier player, GristSet set)
+	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
 	{
 		int rung = PlayerSavedData.getData(player).getEcheladder().getRung();
 		int gristCap = rungGrist[rung];
