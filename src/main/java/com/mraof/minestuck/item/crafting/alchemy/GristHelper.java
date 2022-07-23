@@ -160,7 +160,7 @@ public class GristHelper
 		limitGristByPlayerRung(level, player, newCache);
 		int gristCap = rungGrist[rung];
 		GristSet overflowedGrist = set.capGrist(gristCap);
-		gutter.addGristSet(overflowedGrist);
+		gutter.addGrist(overflowedGrist);
 	}
 	
 	/**

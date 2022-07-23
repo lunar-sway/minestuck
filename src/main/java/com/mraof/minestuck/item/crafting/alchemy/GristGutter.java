@@ -1,15 +1,20 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-public class GristGutter
+import java.util.Collection;
+
+public class GristGutter extends GristSet
 {
-	public int gristSet;
 	public int gutterTotal;
 	
-	public GristGutter addGristSet(GristSet set)
+	public static final int GUTTER_CAPACITY = 1000;
+	
+	public static long getGristLimitPerType()
 	{
-		gristSet.addGrist(set);
+		Collection<GristType> values = GristTypes.values();
+		int gutterCapacity = GUTTER_CAPACITY;
 		
-		//TODO: Add logic
-		return this;
+		long gutterTotal = gutterCapacity / values.size();
+		
+		return gutterTotal;
 	}
 }
