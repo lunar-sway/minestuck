@@ -20,6 +20,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.StartingModusManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -330,7 +331,7 @@ public final class PlayerData
 	
 	private void tryGiveStartingModus(ServerPlayer player)
 	{
-		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
+		List<String> startingTypes = StartingModusManager.getStartingModusTypes();
 		if(!startingTypes.isEmpty())
 		{
 			String type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
