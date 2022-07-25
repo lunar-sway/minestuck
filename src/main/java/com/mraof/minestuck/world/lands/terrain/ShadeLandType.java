@@ -31,29 +31,29 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.SHADE_STONE.defaultBlockState(), MSFillerBlockTypes.SHADE_STONE);
-		registry.setBlockState("upper", MSBlocks.BLUE_DIRT.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.OIL.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.SHADE_COLUMN.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.SHADE_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS.defaultBlockState());
+		registry.setGroundState(MSBlocks.SHADE_STONE.get().defaultBlockState(), MSFillerBlockTypes.SHADE_STONE);
+		registry.setBlockState("upper", MSBlocks.BLUE_DIRT.get().defaultBlockState());
+		registry.setBlockState("ocean", MSBlocks.OIL.get().defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.SHADE_BRICKS.get().defaultBlockState());
+		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS.get().defaultBlockState());
+		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS.get().defaultBlockState());
+		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS.get().defaultBlockState());
+		registry.setBlockState("structure_primary_column", MSBlocks.SHADE_COLUMN.get().defaultBlockState());
+		registry.setBlockState("structure_primary_stairs", MSBlocks.SHADE_STAIRS.get().defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE.get().defaultBlockState());
+		registry.setBlockState("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS.get().defaultBlockState());
+		registry.setBlockState("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS.get().defaultBlockState());
 		registry.setBlockState("village_path", Blocks.GRAVEL.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.get().defaultBlockState());
 		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
 		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
-		registry.setBlockState("mushroom_1", MSBlocks.GLOWING_MUSHROOM.defaultBlockState());
-		registry.setBlockState("mushroom_2", MSBlocks.GLOWING_MUSHROOM.defaultBlockState());
-		registry.setBlockState("bush", MSBlocks.GLOWING_MUSHROOM.defaultBlockState());
+		registry.setBlockState("mushroom_1", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
+		registry.setBlockState("mushroom_2", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
+		registry.setBlockState("bush", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.CYAN_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
-		registry.setBlockState("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE.defaultBlockState());
-		registry.setBlockState("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE.defaultBlockState());
+		registry.setBlockState("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE.get().defaultBlockState());
+		registry.setBlockState("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE.get().defaultBlockState());
 	}
 	
 	@Override

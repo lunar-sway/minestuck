@@ -29,7 +29,7 @@ public class SendificatorBlockItem extends BlockItem
 		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
 		if(playerIn.isShiftKeyDown() && playerIn.getItemBySlot(EquipmentSlot.HEAD).isEmpty())
 		{
-			playerIn.setItemSlot(EquipmentSlot.HEAD, new ItemStack(MSBlocks.SENDIFICATOR));
+			playerIn.setItemSlot(EquipmentSlot.HEAD, new ItemStack(MSBlocks.SENDIFICATOR.get()));
 			
 			return InteractionResultHolder.success(new ItemStack(Blocks.AIR));
 		}
@@ -43,7 +43,7 @@ public class SendificatorBlockItem extends BlockItem
 		{
 			Player playerIn = (Player) entityIn;
 			ItemStack recoverItem = playerIn.getItemBySlot(EquipmentSlot.HEAD);
-			if(recoverItem.sameItem(new ItemStack(MSBlocks.SENDIFICATOR)) && !playerIn.isCreative())
+			if(recoverItem.sameItem(new ItemStack(MSBlocks.SENDIFICATOR.get())) && !playerIn.isCreative())
 			{
 				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
 				NbtUtils.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());

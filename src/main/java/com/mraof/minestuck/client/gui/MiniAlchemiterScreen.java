@@ -70,7 +70,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 			//Render grist requirements
 			ItemStack stack;
 			if(!AlchemyHelper.hasDecodedItem(menu.getSlot(0).getItem()))
-				stack = new ItemStack(MSBlocks.GENERIC_OBJECT);
+				stack = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 			else stack = AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.level);

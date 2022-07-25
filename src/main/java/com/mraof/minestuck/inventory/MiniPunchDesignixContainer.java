@@ -54,7 +54,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.MINI_PUNCH_DESIGNIX;
+		return MSBlocks.MINI_PUNCH_DESIGNIX.get();
 	}
 	
 	protected void bindPlayerInventory(Inventory playerInventory)

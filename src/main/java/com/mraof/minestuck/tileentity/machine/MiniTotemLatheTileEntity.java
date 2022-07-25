@@ -44,7 +44,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem());
+		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
 	@Override
@@ -89,22 +89,22 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 		ItemStack output;
 		if (!input1.isEmpty() && !input2.isEmpty())
 			if (!AlchemyHelper.isPunchedCard(input1) || !AlchemyHelper.isPunchedCard(input2))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
+				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 			else
 				output = CombinationRecipe.findResult(combinerInventory, level);
 		else
 		{
 			ItemStack input = input1.isEmpty() ? input2 : input1;
 			if (!AlchemyHelper.isPunchedCard(input))
-				output = new ItemStack(MSBlocks.GENERIC_OBJECT);
+				output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 			else output = AlchemyHelper.getDecodedItem(input);
 		}
 		
 		if(output.isEmpty())
 			return ItemStack.EMPTY;
 		
-		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem())
-				? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
+		ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.get().asItem())
+				? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
 		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
 		return outputDowel;
 	}

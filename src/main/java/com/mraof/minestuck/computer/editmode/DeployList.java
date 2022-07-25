@@ -39,19 +39,19 @@ public final class DeployList
 	public static void registerItems()
 	{
 		
-		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, HAS_NOT_ENTERED,
 				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true));
-		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
+		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX.get()),
 				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4));
 		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
 				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)));
-		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));
-		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE));
-		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
-		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD), new GristSet(GristTypes.BUILD, 4000), 2);
+		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()));
+		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()));
+		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()));
+		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new GristSet(GristTypes.BUILD, 4000), 2);
 		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
 		
 	}

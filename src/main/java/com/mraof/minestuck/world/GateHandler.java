@@ -46,7 +46,7 @@ public class GateHandler
 			{
 				BlockState block = destinationWorld.getBlockState(destination.pos());
 				
-				if(block.getBlock() != MSBlocks.GATE)
+				if(block.getBlock() != MSBlocks.GATE.get())
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", destination);
 					player.sendMessage(new TranslatableComponent(DESTROYED), Util.NIL_UUID);

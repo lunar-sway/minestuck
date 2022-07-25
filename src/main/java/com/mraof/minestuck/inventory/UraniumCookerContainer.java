@@ -57,7 +57,7 @@ public class UraniumCookerContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.URANIUM_COOKER;
+		return MSBlocks.URANIUM_COOKER.get();
 	}
 	
 	protected void bindPlayerInventory(Inventory playerInventory)

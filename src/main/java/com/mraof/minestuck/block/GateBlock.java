@@ -84,7 +84,7 @@ public class GateBlock extends Block implements EntityBlock
 			BlockPos mainPos = pos;
 			if(!state.getValue(MAIN))
 			{
-				if(this != MSBlocks.GATE)
+				if(this != MSBlocks.GATE.get())
 					mainPos = this.findMainComponent(pos, level);
 				else return;
 			}

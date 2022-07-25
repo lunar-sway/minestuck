@@ -67,7 +67,7 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	
 	protected int getDistance(BlockState neighbor)
 	{
-		if(neighbor.is(MSBlocks.END_LOG))
+		if(neighbor.is(MSBlocks.END_LOG.get()))
 		{
 			return 0;
 		} else

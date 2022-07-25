@@ -42,10 +42,10 @@ public class ForestLandType extends TerrainLandType
 		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
 		if(type == Variant.TAIGA) {
 			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.get().defaultBlockState());
 		} else {
-			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.defaultBlockState());
+			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.get().defaultBlockState());
+			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.get().defaultBlockState());
 		}
 		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());

@@ -76,7 +76,7 @@ public class PunchDesignixTileEntity extends BlockEntity
 		if (part instanceof PunchDesignixBlock.Slot)
 		{
 			handleSlotClick(player);
-		} else if(isUsable(clickedState) && (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
+		} else if(isUsable(clickedState) && (part == MSBlocks.PUNCH_DESIGNIX.get().KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.get().RIGHT_LEG.get()))
 		{
 			handleKeyboardClick(player);
 		}
@@ -144,7 +144,7 @@ public class PunchDesignixTileEntity extends BlockEntity
 		if (broken || level == null)
 			return;
 		
-		if(MSBlocks.PUNCH_DESIGNIX.isInvalidFromSlot(level, getBlockPos()))
+		if(MSBlocks.PUNCH_DESIGNIX.get().isInvalidFromSlot(level, getBlockPos()))
 			broken = true;
 	}
 	

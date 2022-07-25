@@ -254,7 +254,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerUseHoe(UseHoeEvent event)	//TODO replace by an extension to block.getToolModifiedState()
 	{
-		if(event.getContext().getLevel().getBlockState(event.getContext().getClickedPos()).getBlock() == MSBlocks.COARSE_END_STONE)
+		if(event.getContext().getLevel().getBlockState(event.getContext().getClickedPos()).getBlock() == MSBlocks.COARSE_END_STONE.get())
 		{
 			event.getContext().getLevel().setBlockAndUpdate(event.getContext().getClickedPos(), Blocks.END_STONE.defaultBlockState());
 			event.getContext().getLevel().playSound(null, event.getContext().getClickedPos(), SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 	1.0F);
@@ -265,7 +265,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
-		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.asItem())
+		if(event.getItemStack().getItem() == MSBlocks.TREATED_PLANKS.get().asItem())
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	

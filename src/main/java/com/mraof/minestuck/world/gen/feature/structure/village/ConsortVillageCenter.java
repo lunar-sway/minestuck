@@ -347,7 +347,7 @@ public class ConsortVillageCenter
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			BlockState road = blocks.getBlockState("village_path");
 			BlockState surface = blocks.getBlockState("surface");
-			BlockState cactus = MSBlocks.WOODEN_CACTUS.defaultBlockState();
+			BlockState cactus = MSBlocks.WOODEN_CACTUS.get().defaultBlockState();
 
 			for(int x = 1; x < 15; x++)
 				for(int z = 1; z < 15; z++)

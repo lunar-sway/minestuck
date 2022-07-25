@@ -79,7 +79,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
 
 		tag(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE, MUSIC_DISC_EMISSARY_OF_DANCE, MUSIC_DISC_RETRO_BATTLE);
-		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.asItem());
+		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
 		tag(RODS).add(URANIUM_POWERED_STICK);
 		tag(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM);
 		tag(ExtraForgeTags.Items.COPPER_ORES);

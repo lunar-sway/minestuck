@@ -82,7 +82,7 @@ public class SendificatorContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.SENDIFICATOR;
+		return MSBlocks.SENDIFICATOR.get();
 	}
 	
 	protected void bindPlayerInventory(Inventory playerInventory)

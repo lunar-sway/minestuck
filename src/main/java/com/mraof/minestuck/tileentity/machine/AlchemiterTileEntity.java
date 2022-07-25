@@ -45,7 +45,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	
 	public void setDowel(ItemStack newDowel)
 	{
-		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
+		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
 			setChanged();
@@ -75,7 +75,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	public ItemStack getOutput()
 	{
 		if (!AlchemyHelper.hasDecodedItem(dowel))
-			return new ItemStack(MSBlocks.GENERIC_OBJECT);
+			return new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		else return AlchemyHelper.getDecodedItem(dowel);
 	}
 	
@@ -140,7 +140,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 		if(this.broken || level == null)
 			return;
 		
-		if(MSBlocks.ALCHEMITER.isInvalidFromPad(level, worldPosition))
+		if(MSBlocks.ALCHEMITER.get().isInvalidFromPad(level, worldPosition))
 			breakMachine();
 	}
 	
@@ -208,8 +208,8 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if(level.isClientSide)
 		{
-			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE.get()
-					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER.get())
+			if(state.getBlock() == MSBlocks.ALCHEMITER.get().CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().LEFT_SIDE.get()
+					|| state.getBlock() == MSBlocks.ALCHEMITER.get().RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().TOTEM_CORNER.get())
 			{
 				BlockPos mainPos = worldPosition;
 				if(!isBroken())
@@ -227,7 +227,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if (isUseable(clickedState))
 		{
-			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD.get())
+			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.get().TOTEM_PAD.get())
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad
@@ -241,7 +241,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 				} else
 				{
 					ItemStack heldStack = player.getMainHandItem();
-					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 						setDowel(heldStack.split(1));    //Put a dowel on the pad
 				}
 			}

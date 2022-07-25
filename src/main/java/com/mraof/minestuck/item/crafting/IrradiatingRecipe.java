@@ -21,7 +21,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	@Override
 	public ItemStack getToastSymbol()
 	{
-		return new ItemStack(MSBlocks.URANIUM_COOKER);
+		return new ItemStack(MSBlocks.URANIUM_COOKER.get());
 	}
 	
 	@Override

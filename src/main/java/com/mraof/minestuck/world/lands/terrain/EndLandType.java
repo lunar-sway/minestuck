@@ -37,11 +37,11 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.COARSE_END_STONE.defaultBlockState(), MSFillerBlockTypes.COARSE_END_STONE);
+		registry.setGroundState(MSBlocks.COARSE_END_STONE.get().defaultBlockState(), MSFillerBlockTypes.COARSE_END_STONE);
 		registry.setBlockState("surface", Blocks.END_STONE.defaultBlockState());
-		registry.setBlockState("surface_rough", MSBlocks.END_GRASS.defaultBlockState());
+		registry.setBlockState("surface_rough", MSBlocks.END_GRASS.get().defaultBlockState());
 		registry.setBlockState("upper", Blocks.END_STONE.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.ENDER.defaultBlockState());
+		registry.setBlockState("ocean", MSBlocks.ENDER.get().defaultBlockState());
 		registry.setBlockState("structure_primary", Blocks.END_STONE_BRICKS.defaultBlockState());
 		registry.setBlockState("structure_primary_decorative", Blocks.PURPUR_PILLAR.defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y));
 		registry.setBlockState("structure_primary_stairs", Blocks.END_STONE_BRICKS.defaultBlockState());
@@ -49,12 +49,12 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("structure_secondary_stairs", Blocks.PURPUR_STAIRS.defaultBlockState());
 		registry.setBlockState("structure_planks", Blocks.BRICKS.defaultBlockState());
 		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.defaultBlockState());
-		registry.setBlockState("village_path", MSBlocks.COARSE_END_STONE.defaultBlockState());
+		registry.setBlockState("village_path", MSBlocks.COARSE_END_STONE.get().defaultBlockState());
 		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.defaultBlockState());
-		registry.setBlockState("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE.defaultBlockState());
-		registry.setBlockState("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE.defaultBlockState());
+		registry.setBlockState("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE.get().defaultBlockState());
+		registry.setBlockState("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE.get().defaultBlockState());
 	}
 	
 	@Override

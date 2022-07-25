@@ -42,8 +42,8 @@ public class CastleStaircasePiece extends CastleRoomPiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
 		this.generateAirBox(level, structureBoundingBox, 0, 1, 0, 7, 14, 7);
 		this.fillWithAlternatingBlocks(level, structureBoundingBox, 0, 15, 0, 7, 15, 7, chessTile, chessTile1, false);
 		for(int step = 0; step < 8; step++) //Come on, step it up!

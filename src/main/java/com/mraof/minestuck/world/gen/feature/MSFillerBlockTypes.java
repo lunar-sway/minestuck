@@ -9,10 +9,10 @@ public class MSFillerBlockTypes
 {
 	public static final RuleTest SANDSTONE = new BlockMatchTest(Blocks.SANDSTONE);
 	public static final RuleTest RED_SANDSTONE = new BlockMatchTest(Blocks.RED_SANDSTONE);
-	public static final RuleTest COARSE_END_STONE = new BlockMatchTest(MSBlocks.COARSE_END_STONE);
-	public static final RuleTest SHADE_STONE = new BlockMatchTest(MSBlocks.SHADE_STONE);
-	public static final RuleTest PINK_STONE = new BlockMatchTest(MSBlocks.PINK_STONE);
-	public static final RuleTest MYCELIUM_STONE = new BlockMatchTest(MSBlocks.MYCELIUM_STONE);
+	public static final RuleTest COARSE_END_STONE = new BlockMatchTest(MSBlocks.COARSE_END_STONE.get());
+	public static final RuleTest SHADE_STONE = new BlockMatchTest(MSBlocks.SHADE_STONE.get());
+	public static final RuleTest PINK_STONE = new BlockMatchTest(MSBlocks.PINK_STONE.get());
+	public static final RuleTest MYCELIUM_STONE = new BlockMatchTest(MSBlocks.MYCELIUM_STONE.get());
 	
 	public static void init()
 	{
