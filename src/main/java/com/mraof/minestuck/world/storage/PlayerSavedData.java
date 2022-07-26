@@ -100,7 +100,7 @@ public class PlayerSavedData extends SavedData
 		return get(server).getData(player);
 	}
 
-	public static PlayerData getData(PlayerIdentifier player)
+	public PlayerData getData(PlayerIdentifier player)
 	{
 		Objects.requireNonNull(player);
 		if (!dataMap.containsKey(player))

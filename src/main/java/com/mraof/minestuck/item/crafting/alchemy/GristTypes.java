@@ -41,6 +41,7 @@ public class GristTypes
 	public static final RegistryObject<GristType> ARTIFACT = GRIST_TYPES.register("artifact", () -> new GristType(new GristType.Properties(0.1F, 1).candy(() -> MSItems.ARTIFACT_WARHEAD)));
 	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(() -> MSItems.ZILLIUM_SKITTLES).notUnderlingType()));
 	
+	
 	public static IForgeRegistry<GristType> getRegistry()
 	{
 		return REGISTRY.get();

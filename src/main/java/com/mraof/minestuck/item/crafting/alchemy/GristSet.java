@@ -27,8 +27,15 @@ public class GristSet
 	
 	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
 
+	/**
+	this has been replaced to allow the GristGutter to have full access to this dictionary
+	 */
+	/*
 	private final Map<GristType, Long> gristTypes;
-
+	 */
+	protected final Map<GristType, Long> gristTypes;
+	
+	
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
 	 */
@@ -203,6 +210,8 @@ public class GristSet
 		{
 			if(amount.getAmount() > cap)
 			{
+				
+				System.out.println("grist is going to gutter");
 				long overflowAmount = amount.getAmount() - cap;
 				this.gristTypes.put(amount.getType(), (long) cap);
 				overflowGrist.addGrist(amount.getType(), overflowAmount);
