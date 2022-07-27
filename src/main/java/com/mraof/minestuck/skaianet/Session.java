@@ -75,7 +75,7 @@ public final class Session
 	}
 	
 	/**
-	 * Checks if the variable completed should be true or false.
+	 * Sets `completed` to true if everyone in the session has entered and has completed connections.
 	 */
 	void checkIfCompleted()
 	{
@@ -84,28 +84,22 @@ public final class Session
 			completed = false;
 			return;
 		}
-		PlayerIdentifier start = connections.stream().findAny().get().getClientIdentifier();
-		PlayerIdentifier current = start;
-		main: while(true){
-			for(SburbConnection c : connections)
-			{
-				if(!c.hasEntered())
-				{
-					completed = false;
-					return;
-				}
-				if(c.getServerIdentifier().equals(current))
-				{
-					current = c.getClientIdentifier();
-					if(start.equals(current)) {
-						completed = true;
-						return;
-					} else continue main;
-				}
-			}
+		if(connections.stream().anyMatch(c -> !c.hasServerPlayer()))
+		{
 			completed = false;
 			return;
 		}
+		Set<PlayerIdentifier> players = this.getPlayerList();
+		for(PlayerIdentifier player : players)
+		{
+			if(connections.stream().noneMatch(c ->
+					c.getClientIdentifier().equals(player) && c.hasEntered()))
+			{
+				completed = false;
+				return;
+			}
+		}
+		completed = true;
 	}
 	
 	Session()
