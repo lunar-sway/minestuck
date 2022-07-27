@@ -41,6 +41,7 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		serializer(RecipeSerializer.SHAPED_RECIPE);
 		serializer(RecipeSerializer.SHAPELESS_RECIPE);
 		serializer(MSRecipeTypes.NON_MIRRORED);
+		type(RecipeType.SMITHING, SmithingInterpreter.INSTANCE);
 		type(RecipeType.STONECUTTING);
 		type(RecipeType.SMELTING, new CookingCostInterpreter(new GristSet(GristTypes.TAR, 1)));
 		type(MSRecipeTypes.IRRADIATING_TYPE, new CookingCostInterpreter(new GristSet(GristTypes.URANIUM, 1)));

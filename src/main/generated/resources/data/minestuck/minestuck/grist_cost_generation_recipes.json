@@ -16,6 +16,11 @@
   },
   {
     "source_type": "recipe_type",
+    "source": "smithing",
+    "interpreter_type": "minestuck:smithing"
+  },
+  {
+    "source_type": "recipe_type",
     "source": "stonecutting",
     "interpreter_type": "minestuck:default"
   },

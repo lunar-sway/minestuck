@@ -2,9 +2,12 @@ package com.mraof.minestuck.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
+import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,33 +16,34 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class MinestuckStartingModusProvider implements DataProvider
 {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	public static String PATH = "minestuck/config/starting_modus.json";
 	private final DataGenerator generator;
-	private List<String> modusTypes;
 	
 	public MinestuckStartingModusProvider(DataGenerator generator)
 	{
 		this.generator = generator;
 	}
 	
-	private List<String> createDefaultModusTypes()
+	private List<ModusType<?>> createDefaultModusTypes()
 	{
-		LinkedList<String> modusTypes = new LinkedList<>();
-		modusTypes.add("minestuck:stack");
-		modusTypes.add("minestuck:queue");
+		LinkedList<ModusType<?>> modusTypes = new LinkedList<>();
+		modusTypes.add(ModusTypes.STACK);
+		modusTypes.add(ModusTypes.QUEUE);
 		return modusTypes;
 	}
 	
 	@Override
 	public void run(HashCache pCache) throws IOException
 	{
-		Path path = this.generator.getOutputFolder().resolve("data/minestuck/minestuck/config/starting_modus.json");
-		modusTypes = createDefaultModusTypes();
+		Path path = this.generator.getOutputFolder().resolve(PATH);
+		List<ModusType<?>> modusTypes = createDefaultModusTypes();
 		
-		String data = GSON.toJson(modusTypes);
+		String data = GSON.toJson(modusTypes.stream().map(modusType -> modusType.getRegistryName().toString()).collect(Collectors.toList()));
 		String hash = DataProvider.SHA1.hashUnencodedChars(data).toString();
 		if(!Objects.equals(pCache.getHash(path), hash) || !Files.exists(path))
 		{
@@ -57,10 +61,5 @@ public class MinestuckStartingModusProvider implements DataProvider
 	public String getName()
 	{
 		return "Minestuck Starting Modus";
-	}
-	
-	public List<String> getModusTypes()
-	{
-		return modusTypes;
 	}
 }
