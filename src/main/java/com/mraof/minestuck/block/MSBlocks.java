@@ -119,7 +119,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> COARSE_STONE_COLUMN = REGISTER.register("coarse_stone_column", () -> new MSDirectionalBlock(coarseStone));
 	public static final RegistryObject<Block> CHISELED_COARSE_STONE_BRICKS = REGISTER.register("chiseled_coarse_stone_bricks", () -> new Block(coarseStone));
 	public static final RegistryObject<Block> CRACKED_COARSE_STONE_BRICKS = REGISTER.register("cracked_coarse_stone_bricks", () -> new Block(coarseStone));
-	public static final RegistryObject<Block> MOSSY_COARSE_STONE = REGISTER.register("mossy_coarse_stone", () -> new Block(coarseStone)); //TODO Rename this blocks registry to be MOSSY_COARSE_STONE_BRICKS now
+	public static final RegistryObject<Block> MOSSY_COARSE_STONE_BRICKS = REGISTER.register("mossy_coarse_stone_bricks", () -> new Block(coarseStone));
 	static BlockBehaviour.Properties shadeStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> SHADE_STONE = REGISTER.register("shade_stone", () -> new Block(shadeStone));
 	public static final RegistryObject<Block> SMOOTH_SHADE_STONE = REGISTER.register("smooth_shade_stone", () -> new Block(shadeStone));

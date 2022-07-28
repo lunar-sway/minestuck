@@ -109,7 +109,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(COARSE_STONE_COLUMN.get());
 		dropSelf(CHISELED_COARSE_STONE_BRICKS.get());
 		dropSelf(CRACKED_COARSE_STONE_BRICKS.get());
-		dropSelf(MOSSY_COARSE_STONE.get());
+		dropSelf(MOSSY_COARSE_STONE_BRICKS.get());
 		dropSelf(SHADE_STONE.get());
 		dropSelf(SMOOTH_SHADE_STONE.get());
 		dropSelf(SHADE_BRICKS.get());

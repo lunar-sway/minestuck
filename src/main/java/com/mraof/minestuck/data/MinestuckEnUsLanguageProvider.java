@@ -127,7 +127,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.COARSE_STONE_COLUMN.get(), "Coarse Stone Column");
 		add(MSBlocks.CHISELED_COARSE_STONE_BRICKS.get(), "Chiseled Coarse Stone Bricks");
 		add(MSBlocks.CRACKED_COARSE_STONE_BRICKS.get(), "Cracked Coarse Stone Bricks");
-		add(MSBlocks.MOSSY_COARSE_STONE.get(), "Mossy Coarse Stone Bricks");
+		add(MSBlocks.MOSSY_COARSE_STONE_BRICKS.get(), "Mossy Coarse Stone Bricks");
 		add(MSBlocks.SHADE_STONE.get(), "Shade Stone");
 		add(MSBlocks.SMOOTH_SHADE_STONE.get(), "Smooth Shade Stone");
 		add(MSBlocks.SHADE_BRICKS.get(), "Shade Bricks");
