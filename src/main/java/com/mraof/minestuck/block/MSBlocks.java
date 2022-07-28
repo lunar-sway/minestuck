@@ -37,7 +37,6 @@ public class MSBlocks
 	public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Minestuck.MOD_ID);
 	
 	//TODO @ObjectHolder(Minestuck.MOD_ID) was removed from the header, ensure that was ok to do
-	//TODO: rename all instances of "CASTLE_BRICKS" to "CHESS_BRICKS" (Black, DGrey, LGrey, White)
 	//Skaia
 	public static final RegistryObject<Block> BLACK_CHESS_DIRT = REGISTER.register("black_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_BLACK).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> WHITE_CHESS_DIRT = REGISTER.register("white_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.SNOW).strength(0.5F).sound(SoundType.GRAVEL)));
@@ -48,18 +47,18 @@ public class MSBlocks
 	static BlockBehaviour.Properties darkGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	static BlockBehaviour.Properties lightGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	static BlockBehaviour.Properties whiteChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
-	public static final RegistryObject<Block> BLACK_CASTLE_BRICKS = REGISTER.register("black_castle_bricks", () -> new Block(blackChessBricks));
-	public static final RegistryObject<Block> DARK_GRAY_CASTLE_BRICKS = REGISTER.register("dark_gray_castle_bricks", () -> new Block(darkGrayChessBricks));
-	public static final RegistryObject<Block> LIGHT_GRAY_CASTLE_BRICKS = REGISTER.register("light_gray_castle_bricks", () -> new Block(lightGrayChessBricks));
-	public static final RegistryObject<Block> WHITE_CASTLE_BRICKS = REGISTER.register("white_castle_bricks", () -> new Block(whiteChessBricks));
-	public static final RegistryObject<Block> BLACK_CASTLE_BRICK_SMOOTH = REGISTER.register("black_castle_brick_smooth", () -> new Block(blackChessBricks));
-	public static final RegistryObject<Block> DARK_GRAY_CASTLE_BRICK_SMOOTH = REGISTER.register("dark_gray_castle_brick_smooth", () -> new Block(darkGrayChessBricks));
-	public static final RegistryObject<Block> LIGHT_GRAY_CASTLE_BRICK_SMOOTH = REGISTER.register("light_gray_castle_brick_smooth", () -> new Block(lightGrayChessBricks));
-	public static final RegistryObject<Block> WHITE_CASTLE_BRICK_SMOOTH = REGISTER.register("white_castle_brick_smooth", () -> new Block(whiteChessBricks));
-	public static final RegistryObject<Block> BLACK_CASTLE_BRICK_TRIM = REGISTER.register("black_castle_brick_trim", () -> new MSDirectionalBlock(blackChessBricks));
-	public static final RegistryObject<Block> DARK_GRAY_CASTLE_BRICK_TRIM = REGISTER.register("dark_gray_castle_brick_trim", () -> new MSDirectionalBlock(darkGrayChessBricks));
-	public static final RegistryObject<Block> LIGHT_GRAY_CASTLE_BRICK_TRIM = REGISTER.register("light_gray_castle_brick_trim", () -> new MSDirectionalBlock(lightGrayChessBricks));
-	public static final RegistryObject<Block> WHITE_CASTLE_BRICK_TRIM = REGISTER.register("white_castle_brick_trim", () -> new MSDirectionalBlock(whiteChessBricks));
+	public static final RegistryObject<Block> BLACK_CHESS_BRICKS = REGISTER.register("black_chess_bricks", () -> new Block(blackChessBricks));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICKS = REGISTER.register("dark_gray_chess_bricks", () -> new Block(darkGrayChessBricks));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICKS = REGISTER.register("light_gray_chess_bricks", () -> new Block(lightGrayChessBricks));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICKS = REGISTER.register("white_chess_bricks", () -> new Block(whiteChessBricks));
+	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SMOOTH = REGISTER.register("black_chess_brick_smooth", () -> new Block(blackChessBricks));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("dark_gray_chess_brick_smooth", () -> new Block(darkGrayChessBricks));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SMOOTH = REGISTER.register("light_gray_chess_brick_smooth", () -> new Block(lightGrayChessBricks));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICK_SMOOTH = REGISTER.register("white_chess_brick_smooth", () -> new Block(whiteChessBricks));
+	public static final RegistryObject<Block> BLACK_CHESS_BRICK_TRIM = REGISTER.register("black_chess_brick_trim", () -> new MSDirectionalBlock(blackChessBricks));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_TRIM = REGISTER.register("dark_gray_chess_brick_trim", () -> new MSDirectionalBlock(darkGrayChessBricks));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_TRIM = REGISTER.register("light_gray_chess_brick_trim", () -> new MSDirectionalBlock(lightGrayChessBricks));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICK_TRIM = REGISTER.register("white_chess_brick_trim", () -> new MSDirectionalBlock(whiteChessBricks));
 	static BlockBehaviour.Properties stainedGlass = Block.Properties.of(Material.GLASS, DyeColor.BLUE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never);
 	public static final RegistryObject<Block> CHECKERED_STAINED_GLASS = REGISTER.register("checkered_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	public static final RegistryObject<Block> BLACK_CROWN_STAINED_GLASS = REGISTER.register("black_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
@@ -335,10 +334,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> NAKAGATOR_STATUE = REGISTER.register("nakagator_statue", () -> new CustomShapeBlock(Block.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE));
 	
 	//Structure Land Blocks
-	public static final RegistryObject<Block> BLACK_CASTLE_BRICK_STAIRS = REGISTER.register("black_castle_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CASTLE_BRICKS.get().defaultBlockState(), blackChessBricks));
-	public static final RegistryObject<Block> DARK_GRAY_CASTLE_BRICK_STAIRS = REGISTER.register("dark_gray_castle_brick_stairs", () -> new StairBlock(() -> MSBlocks.DARK_GRAY_CASTLE_BRICKS.get().defaultBlockState(), darkGrayChessBricks));
-	public static final RegistryObject<Block> LIGHT_GRAY_CASTLE_BRICK_STAIRS = REGISTER.register("light_gray_castle_brick_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_GRAY_CASTLE_BRICKS.get().defaultBlockState(), lightGrayChessBricks));
-	public static final RegistryObject<Block> WHITE_CASTLE_BRICK_STAIRS = REGISTER.register("white_castle_brick_stairs", () -> new StairBlock(() -> MSBlocks.WHITE_CASTLE_BRICKS.get().defaultBlockState(), whiteChessBricks));
+	public static final RegistryObject<Block> BLACK_CHESS_BRICK_STAIRS = REGISTER.register("black_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CHESS_BRICKS.get().defaultBlockState(), blackChessBricks));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("dark_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.DARK_GRAY_CHESS_BRICKS.get().defaultBlockState(), darkGrayChessBricks));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_STAIRS = REGISTER.register("light_gray_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.LIGHT_GRAY_CHESS_BRICKS.get().defaultBlockState(), lightGrayChessBricks));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICK_STAIRS = REGISTER.register("white_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.WHITE_CHESS_BRICKS.get().defaultBlockState(), whiteChessBricks));
 	public static final RegistryObject<Block> COARSE_STONE_STAIRS = REGISTER.register("coarse_stone_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE.get().defaultBlockState(), coarseStone));
 	public static final RegistryObject<Block> COARSE_STONE_BRICK_STAIRS = REGISTER.register("coarse_stone_brick_stairs", () -> new StairBlock(() -> MSBlocks.COARSE_STONE_BRICKS.get().defaultBlockState(), coarseStone));
 	public static final RegistryObject<Block> SHADE_STAIRS = REGISTER.register("shade_stairs", () -> new StairBlock(() -> MSBlocks.SHADE_STONE.get().defaultBlockState(), shadeStone));
@@ -365,10 +364,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), treatedPlanks));
 	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_BASE));
 	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = REGISTER.register("steep_green_stone_brick_stairs_top", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_TOP));
-	public static final RegistryObject<Block> BLACK_CASTLE_BRICK_SLAB = REGISTER.register("black_castle_brick_slab", () -> new SlabBlock(blackChessBricks));
-	public static final RegistryObject<Block> DARK_GRAY_CASTLE_BRICK_SLAB = REGISTER.register("dark_gray_castle_brick_slab", () -> new SlabBlock(darkGrayChessBricks));
-	public static final RegistryObject<Block> LIGHT_GRAY_CASTLE_BRICK_SLAB = REGISTER.register("light_gray_castle_brick_slab", () -> new SlabBlock(lightGrayChessBricks));
-	public static final RegistryObject<Block> WHITE_CASTLE_BRICK_SLAB = REGISTER.register("white_castle_brick_slab", () -> new SlabBlock(whiteChessBricks));
+	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SLAB = REGISTER.register("black_chess_brick_slab", () -> new SlabBlock(blackChessBricks));
+	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SLAB = REGISTER.register("dark_gray_chess_brick_slab", () -> new SlabBlock(darkGrayChessBricks));
+	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SLAB = REGISTER.register("light_gray_chess_brick_slab", () -> new SlabBlock(lightGrayChessBricks));
+	public static final RegistryObject<Block> WHITE_CHESS_BRICK_SLAB = REGISTER.register("white_chess_brick_slab", () -> new SlabBlock(whiteChessBricks));
 	public static final RegistryObject<Block> FLOWERY_MOSSY_STONE_BRICK_SLAB = REGISTER.register("flowery_mossy_stone_brick_slab", () -> new SlabBlock(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> COARSE_STONE_SLAB = REGISTER.register("coarse_stone_slab", () -> new SlabBlock(coarseStone));
 	public static final RegistryObject<Block> COARSE_STONE_BRICK_SLAB = REGISTER.register("coarse_stone_brick_slab", () -> new SlabBlock(coarseStone));
