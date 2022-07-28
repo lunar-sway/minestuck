@@ -426,11 +426,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.XNOR_GATE_BLOCK.get(), "XNOR Gate");
 		add(MSBlocks.GATE.get(), "Gate");
 		add(MSBlocks.RETURN_NODE.get(), "Return Node");
-		MSBlocks.CRUXTRUDER.get().forEachBlock(block -> add(block, "Cruxtruder"));
+		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));
 		add(MSBlocks.CRUXTRUDER_LID.get(), "Cruxtruder Lid");
-		MSBlocks.TOTEM_LATHE.get().forEachBlock(block -> add(block, "Totem Lathe"));
-		MSBlocks.ALCHEMITER.get().forEachBlock(block -> add(block, "Alchemiter"));
-		MSBlocks.PUNCH_DESIGNIX.get().forEachBlock(block -> add(block, "Punch Designix"));
+		MSBlocks.TOTEM_LATHE.forEachBlock(block -> add(block, "Totem Lathe"));
+		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
+		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
 		add(MSBlocks.HOLOPAD.get(), "Holopad");
 		add(MSBlocks.MINI_CRUXTRUDER.get(), "Miniature Cruxtruder");
 		add(MSBlocks.MINI_TOTEM_LATHE.get(), "Miniature Totem Lathe");
@@ -450,7 +450,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.URANIUM_COOKER.get(), "Cookalyzer");
 		add(MSBlocks.CRUXITE_DOWEL.get(), "Cruxite Dowel");
 		addExtra(MSBlocks.CRUXITE_DOWEL.get(), "invalid", "Invalid Data");
-		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.get().forEachBlock(block -> add(block, "Lotus Time Capsule"));
+		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		add(MSBlocks.GOLD_SEEDS.get(), "Golden Seeds");
 		addTooltip(MSBlocks.GOLD_SEEDS.get(), "These seeds are made out of 24-karat gold!");
 		addStoreTooltip(MSBlocks.GOLD_SEEDS.get(), "Do you like regular seeds? This here is the luxury variant!");
@@ -478,7 +478,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSBlocks.UNSTABLE_TNT.get(), "Unstable TNT");
 		add(MSBlocks.INSTANT_TNT.get(), "Instant TNT");
 		add(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.get(), "TNT Button");
-		add(MSBlocks.STONE_EXPLOSIVE_BUTTON, "TNT Button");
+		add(MSBlocks.STONE_EXPLOSIVE_BUTTON.get(), "TNT Button");
 		add(MSBlocks.BLENDER.get(), "Blender");
 		add(MSBlocks.CHESSBOARD.get(), "Chessboard");
 		add(MSBlocks.CASSETTE_PLAYER.get(), "Cassette Player");

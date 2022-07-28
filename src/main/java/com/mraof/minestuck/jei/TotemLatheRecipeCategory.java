@@ -31,7 +31,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	{
 		ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE.get()));
+		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 	@Override
 	public Component getTitle()
 	{
-		return new TranslatableComponent(MSBlocks.TOTEM_LATHE.get().MIDDLE.get().getDescriptionId());
+		return new TranslatableComponent(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
 	}
 
 	@Override

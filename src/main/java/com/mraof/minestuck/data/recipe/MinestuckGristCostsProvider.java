@@ -639,7 +639,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.PRIMED_TNT.get()).grist(BUILD, 8).grist(CHALK, 10).grist(SULFUR, 14).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.UNSTABLE_TNT.get()).grist(BUILD, 5).grist(CHALK, 11).grist(SULFUR, 15).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.INSTANT_TNT.get()).grist(BUILD, 6).grist(CHALK, 11).grist(SULFUR, 17).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.STONE_EXPLOSIVE_BUTTON).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.STONE_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.get()).grist(BUILD, 7).grist(CHALK, 5).grist(SULFUR, 8).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).grist(BUILD, 1).build(recipeSaver);

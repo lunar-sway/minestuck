@@ -39,12 +39,12 @@ public final class DeployList
 	public static void registerItems()
 	{
 		
-		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, HAS_NOT_ENTERED,
 				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true));
-		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER.get()), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX.get()),
+		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4));
 		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
 				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)));

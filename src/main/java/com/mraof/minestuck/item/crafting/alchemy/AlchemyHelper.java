@@ -17,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 
-import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL.get();
+import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
 import static com.mraof.minestuck.item.MSItems.SHUNT;
 

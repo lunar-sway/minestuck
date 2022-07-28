@@ -82,9 +82,9 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.SBAHJ_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		EntityRenderers.register(MSEntityTypes.SHOP_POSTER, manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
 		
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.ALCHEMITER.get().TOTEM_PAD.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.get().DOWEL_ROD.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.get().CARD_SLOT.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.ALCHEMITER.TOTEM_PAD.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.HOLOPAD.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CRUXITE_DOWEL.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLENDER.get(), RenderType.cutout());

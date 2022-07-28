@@ -117,7 +117,7 @@ public class TotemLatheTileEntity extends BlockEntity
 		if(level == null)
 			return false;
 		Direction facing = getFacing();
-		BlockPos pos = MSBlocks.TOTEM_LATHE.get().getDowelPos(getBlockPos(), getBlockState());
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState state = level.getBlockState(pos);
 		if(stack.isEmpty())
 		{
@@ -126,7 +126,7 @@ public class TotemLatheTileEntity extends BlockEntity
 			return true;
 		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 		{
-			BlockState newState = MSBlocks.TOTEM_LATHE.get().DOWEL_ROD.get()
+			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 					.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
 					.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
 			//TODO clean up the following code block
@@ -170,7 +170,7 @@ public class TotemLatheTileEntity extends BlockEntity
 	
 	private boolean isValidDowelRod(BlockState state, Direction facing)
 	{
-		return state.getBlock() == MSBlocks.TOTEM_LATHE.get().DOWEL_ROD.get() && state.getValue(TotemLatheBlock.FACING) == facing;
+		return state.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() && state.getValue(TotemLatheBlock.FACING) == facing;
 	}
 	
 	public Direction getFacing()
@@ -187,11 +187,11 @@ public class TotemLatheTileEntity extends BlockEntity
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.get().ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.get().DOWEL_ROD.get())
+		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.get().CARVER.get())
+		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
 		{
 			//carve the dowel.
 			processContents();
@@ -265,7 +265,7 @@ public class TotemLatheTileEntity extends BlockEntity
 		if(isBroken())
 			return;
 		
-		if(MSBlocks.TOTEM_LATHE.get().isInvalidFromSlot(level, getBlockPos()))
+		if(MSBlocks.TOTEM_LATHE.isInvalidFromSlot(level, getBlockPos()))
 			setBroken();
 	}
 	

@@ -140,7 +140,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 		if(this.broken || level == null)
 			return;
 		
-		if(MSBlocks.ALCHEMITER.get().isInvalidFromPad(level, worldPosition))
+		if(MSBlocks.ALCHEMITER.isInvalidFromPad(level, worldPosition))
 			breakMachine();
 	}
 	
@@ -208,8 +208,8 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if(level.isClientSide)
 		{
-			if(state.getBlock() == MSBlocks.ALCHEMITER.get().CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().LEFT_SIDE.get()
-					|| state.getBlock() == MSBlocks.ALCHEMITER.get().RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.get().TOTEM_CORNER.get())
+			if(state.getBlock() == MSBlocks.ALCHEMITER.CENTER.get() || state.getBlock() == MSBlocks.ALCHEMITER.CORNER.get() || state.getBlock() == MSBlocks.ALCHEMITER.LEFT_SIDE.get()
+					|| state.getBlock() == MSBlocks.ALCHEMITER.RIGHT_SIDE.get() || state.getBlock() == MSBlocks.ALCHEMITER.TOTEM_CORNER.get())
 			{
 				BlockPos mainPos = worldPosition;
 				if(!isBroken())
@@ -227,7 +227,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if (isUseable(clickedState))
 		{
-			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.get().TOTEM_PAD.get())
+			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD.get())
 			{
 				if (!dowel.isEmpty())
 				{    //Remove dowel from pad

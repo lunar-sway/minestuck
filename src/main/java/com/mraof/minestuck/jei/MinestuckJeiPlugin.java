@@ -67,11 +67,11 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
 	{
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER.get()), GRIST_COST_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER), GRIST_COST_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER.get()), GRIST_COST_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE.get()), LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE), LATHE_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE.get()), LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX.get()), DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX.get()), DESIGNIX_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), GRIST_COST_ID, LATHE_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD), LATHE_ID, DESIGNIX_ID);

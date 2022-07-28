@@ -29,7 +29,7 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
     {
         ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.PUNCH_DESIGNIX.get()));
+		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
 
 	@Override
@@ -47,7 +47,7 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 	@Override
 	public Component getTitle()
 	{
-		return new TranslatableComponent(MSBlocks.PUNCH_DESIGNIX.get().KEYBOARD.get().getDescriptionId());
+		return new TranslatableComponent(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get().getDescriptionId());
 	}
 
 	@Override

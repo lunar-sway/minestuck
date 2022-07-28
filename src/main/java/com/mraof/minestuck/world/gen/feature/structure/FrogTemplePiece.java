@@ -86,10 +86,10 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	
 	private void generateLoot(WorldGenLevel level, BoundingBox boundingBoxIn, Random randomIn, ChunkPos chunkPos)
 	{
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.get().CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.get().CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.get().CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20, 49, 21 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.get().CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20, 49, 20 + 14, boundingBox);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, boundingBox);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, boundingBox);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20, 49, 21 + 14, boundingBox);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20, 49, 20 + 14, boundingBox);
 		
 		ChestType leftChestType = ChestType.LEFT;
 		ChestType rightChestType = ChestType.RIGHT;
