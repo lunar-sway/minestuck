@@ -135,37 +135,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 				biome.buildSurfaceAt(rand, chunk, x, z, surfaceY, noise, defaultBlock, defaultFluid, getSeaLevel(), region.getSeed());
 			}
 		}
-		
-		placeBedrock(chunk, rand);
-	}
-	
-	private void placeBedrock(ChunkAccess chunk, Random rand)
-	{
-		int floor = settings.value().getBedrockFloorPosition();
-		int roof = height - 1 - settings.value().getBedrockRoofPosition();
-		int bedrockDepth = 5;
-		
-		boolean hasRoof = roof + bedrockDepth - 1 >= 0 && roof < height;
-		boolean hasFloor = floor + bedrockDepth - 1 >= 0 && floor < height;
-		
-		if(hasRoof || hasFloor)
-		{
-			int startX = chunk.getPos().getMinBlockX();
-			int startZ = chunk.getPos().getMinBlockZ();
-			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-			
-			for(BlockPos xzPos : BlockPos.betweenClosed(startX, 0, startZ, startX + 15, 0, startZ + 15))
-			{
-				for(int yOffset = 0; yOffset < bedrockDepth; yOffset++)
-				{
-					if(hasRoof && yOffset <= rand.nextInt(bedrockDepth))
-						chunk.setBlockState(pos.set(xzPos.getX(), roof - yOffset, xzPos.getZ()), Blocks.BEDROCK.defaultBlockState(), false);
-					
-					if(hasFloor && yOffset <= rand.nextInt(bedrockDepth))
-						chunk.setBlockState(pos.set(xzPos.getX(), floor + yOffset, xzPos.getZ()), Blocks.BEDROCK.defaultBlockState(), false);
-				}
-			}
-		}
 	}
 	*/
 	

@@ -70,7 +70,28 @@
         "vein_gap": "zero"
     },
     "surface_rule": {
-        "type": "bandlands"
+        "type": "sequence",
+        "sequence": [
+            {
+                "type": "condition",
+                "if_true": {
+                    "type": "vertical_gradient",
+                    "random_name": "bedrock_floor",
+                    "true_at_and_below": {
+                        "above_bottom": 0
+                    },
+                    "false_at_and_above": {
+                        "above_bottom": 5
+                    }
+                },
+                "then_run": {
+                    "type": "block",
+                    "result_state": {
+                        "Name": "minecraft:bedrock"
+                    }
+                }
+            }
+        ]
     },
     "aquifers_enabled": false,
     "ore_veins_enabled": false,

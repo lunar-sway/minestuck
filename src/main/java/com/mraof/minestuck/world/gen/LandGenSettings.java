@@ -6,6 +6,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
 import net.minecraft.util.CubicSpline;
 import net.minecraft.world.level.biome.TerrainShaper;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
 
 public class LandGenSettings
@@ -63,8 +64,11 @@ public class LandGenSettings
 				new NoiseSlider(-10, 3, 0), new NoiseSlider(-30, 0, 0), 1, 2,
 				new TerrainShaper(CubicSpline.constant(0.035F), CubicSpline.constant(1), CubicSpline.constant(0)));
 		
+		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
+		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor);
+		
 		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"),
-				blockRegistry.getBlockState("ocean"), new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()), SurfaceRules.bandlands(), 64, false, false, false, false);
+				blockRegistry.getBlockState("ocean"), new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()), surfaceRule, 64, false, false, false, false);
 		
 		return Holder.direct(settings);
 	}
