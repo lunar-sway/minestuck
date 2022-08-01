@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.crafting.alchemy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerRegistry;
+import com.mraof.minestuck.item.crafting.alchemy.GristType;
 
 /**
  this is intended to tell the system "this is the max grist for each type(which is something equal and arbitrary)"
@@ -19,33 +20,50 @@ public class GristGutter extends GristSet
 	public int gutterTotal;
 	
 	public static final int GUTTER_CAPACITY = 1000;
-		/*
-	public static long getGristLimitPerType()
-	{
-		/*
-		Collection<GristType> values = GristTypes.values();
-		int gutterCapacity = GUTTER_CAPACITY;
-		
-		long gutterTotal = gutterCapacity / values.size();
-		
-		return gutterTotal;
-		
-		return GUTTER_CAPACITY; */
-	
+
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public long getGutterTotal()
+	{
+		if(gutterTotal < 0)
+		{
+			//TODO: Recalculate total
+			// Then assign the newly-calculated total to gutterTotal.
+		}
+		return gutterTotal;
+	}
+	
 	
 	@Override
 	public GristGutter addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
-			this.gristTypes.compute(type, (key, value)
-					-> value == null ? amount : value + amount);
+			LOGGER.debug("Gutter before adding " + amount + " " + type.getDisplayName().getString() + " grist:");
+			LOGGER.debug("Total: " + gutterTotal);
+			LOGGER.debug("Value: " + getValue());
+	
+			
+			for(GristType t : this.gristTypes.keySet())
+			{
+				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
+			}
+			
+			
+			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
 			gutterTotal += amount;
-			LOGGER.debug("total gutter amount currently: " + gutterTotal);
-			LOGGER.debug("total gutter value currently: " + getValue());
+			
+			
+			LOGGER.debug("Gutter AFTER adding " + amount + " " + type.getDisplayName().toString() + " grist:");
+			LOGGER.debug("Total: " + gutterTotal);
+			LOGGER.debug("Value: " + getValue());
+			
+			for(GristType t : this.gristTypes.keySet())
+			{
+				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
+				
+			}
 		}
 		return this;
 	}
-
 }

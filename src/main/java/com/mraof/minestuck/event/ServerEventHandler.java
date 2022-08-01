@@ -9,16 +9,14 @@ import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.skaianet.TitleSelectionHook;
+import com.mraof.minestuck.item.crafting.alchemy.GristGutter;
+import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -269,16 +267,47 @@ public class ServerEventHandler
 			event.setBurnTime(50);	//Do not set this number to 0.
 	}
 	
+
+	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event, Session session, PlayerEntity player)
 	{
+		// here we are getting the session gutter for each player every tick
+		// this will allow us to determine whether the gutter contains anything that the
+		// player's cache has room for, and then subsequently, move one grist of a certain type
+		// into the player's cache
+/*
+	player = event.player;
+		World world = player.getEntity().level;
+		PlayerData data = PlayerSavedData.getData(player, world);
+		//ImmutableGristSet playerCache = data.getGristCache();
+		GristSet playerCache = PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache();
+		session = SessionHandler.get(world).getPlayerSession(player);
+		GristGutter sessionGutter = session.getGristGutter();
+	*/
+		
+		
+		
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			if(data.getTitle() != null)
-				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
+
+			IdentifierHandler.encode(player);
+			
+			World world = player.getEntity().level;
+			GristSet playerCache = PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache();
+			session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
+			GristGutter sessionGutter = session.getGristGutter();
+			GristSet rungGrist =
+			
+			
+		
 		}
+
+		
 	}
+	
 	
 	@SubscribeEvent
 	public static void breadStaling(ItemExpireEvent event)

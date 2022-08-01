@@ -180,7 +180,9 @@ public class GristHelper
 	}
 	
 	public static final int[] rungGrist =
-			{0,15,20};
+			{0,15,20,30,35,40,45,60,65,80,85,105,120,130,140,
+					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365
+			,370,375,380,385,390,395,400,410,420,500,650,760,870,980,1090,1100,1200,13000,14000,15000};
 	
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
