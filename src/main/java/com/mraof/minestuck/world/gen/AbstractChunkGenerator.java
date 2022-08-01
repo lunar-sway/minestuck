@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 
@@ -58,18 +59,24 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	protected final Holder<NoiseGeneratorSettings> settings;
 	private final int height;
 	
+	private final NoiseRouter router;
+	private final SurfaceSystem surfaceSystem;
+	private final Aquifer.FluidPicker globalFluidPicker;
+	protected final Registry<NormalNoise.NoiseParameters> noises;
+	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	public AbstractChunkGenerator(Registry<StructureSet> structureSets, Optional<HolderSet<StructureSet>> structureOverrides, BiomeSource biomeSource, BiomeSource runtimeBiomeSource, long seed, Holder<NoiseGeneratorSettings> settings)
+	public AbstractChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Optional<HolderSet<StructureSet>> structureOverrides, BiomeSource biomeSource, BiomeSource runtimeBiomeSource, long seed, Holder<NoiseGeneratorSettings> settingsHolder)
 	{
 		super(structureSets, structureOverrides, biomeSource, runtimeBiomeSource, seed);
 		
 		this.seed = seed;
 		random = new WorldgenRandom(WorldgenRandom.Algorithm.LEGACY.newInstance(seed));
-		this.settings = settings;
-		defaultBlock = settings.value().defaultBlock();
-		defaultFluid = settings.value().defaultFluid();
+		this.settings = settingsHolder;
+		NoiseGeneratorSettings settings = settingsHolder.value();
+		defaultBlock = settings.defaultBlock();
+		defaultFluid = settings.defaultFluid();
 		
-		NoiseSettings noiseSettings = settings.value().noiseSettings();
+		NoiseSettings noiseSettings = settings.noiseSettings();
 		height = noiseSettings.height();
 		sectionHeight = noiseSettings.getCellHeight();
 		sectionWidth = noiseSettings.getCellWidth();
@@ -85,12 +92,22 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		DensityFunction offsetFunction = new DensityFunctions.TerrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), noiseSettings.terrainShaper(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81D, 2.5D);
 		DensityFunction depthFunction = DensityFunctions.yClampedGradient(0, 256, 1, -1);
 		scaledDepthFunction = DensityFunctions.add(DensityFunctions.mul(depthFunction, factorFunction), offsetFunction);
+		
+		this.noises = noises;
+		this.router = settings.createNoiseRouter(noises, seed);
+		Aquifer.FluidStatus oceanFluidStatus = new Aquifer.FluidStatus(settings.seaLevel(), this.defaultFluid);
+		this.globalFluidPicker = (x, y, z) -> oceanFluidStatus;
+		
+		this.surfaceSystem = new SurfaceSystem(noises, this.defaultBlock, settings.seaLevel(), seed, settings.getRandomSource());
 	}
 	
 	@Override
-	public void buildSurface(WorldGenRegion level, StructureFeatureManager structureFeatureManager, ChunkAccess chunk)
+	public void buildSurface(WorldGenRegion level, StructureFeatureManager structureManager, ChunkAccess chunk)
 	{
-	
+		NoiseGeneratorSettings settings = this.settings.value();
+		NoiseChunk noiseChunk = chunk.getOrCreateNoiseChunk(this.router, () -> new Beardifier(structureManager, chunk){}, settings, this.globalFluidPicker, Blender.of(level));
+		this.surfaceSystem.buildSurface(level.getBiomeManager(), level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY),
+				settings.useLegacyRandomSource(), new WorldGenerationContext(this, level), chunk, noiseChunk, settings.surfaceRule());
 	}
 	/*TODO now a surface rule (see SurfaceRuleData)
 	@Override
