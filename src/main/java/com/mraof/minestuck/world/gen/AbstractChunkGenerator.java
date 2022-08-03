@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.gen;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -20,10 +19,7 @@ import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraft.world.level.levelgen.synth.PerlinNoise;
-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,7 +27,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 /**
  * Helper class that behaves similarly to {@link NoiseBasedChunkGenerator}, but extendable with additional features.
@@ -47,13 +42,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	private final int sectionCountXZ;
 	private final int sectionCountY;
 	
-	private final DensityFunction densityFunction;
-	private final DensityFunction scaledDepthFunction;
-	private final PerlinSimplexNoise surfaceNoise;
-	private final PerlinNoise depthNoise;
-	
 	protected final long seed;
-	protected final WorldgenRandom random;
 	protected final BlockState defaultBlock;
 	protected final BlockState defaultFluid;
 	protected final Holder<NoiseGeneratorSettings> settings;
@@ -70,7 +59,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		super(structureSets, structureOverrides, biomeSource, runtimeBiomeSource, seed);
 		
 		this.seed = seed;
-		random = new WorldgenRandom(WorldgenRandom.Algorithm.LEGACY.newInstance(seed));
 		this.settings = settingsHolder;
 		NoiseGeneratorSettings settings = settingsHolder.value();
 		defaultBlock = settings.defaultBlock();
@@ -82,16 +70,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		sectionWidth = noiseSettings.getCellWidth();
 		sectionCountXZ = 16 / sectionWidth;
 		sectionCountY = noiseSettings.getCellCountY();
-		
-		densityFunction = new BlendedNoise(random, noiseSettings.noiseSamplingSettings(), sectionWidth, sectionHeight);
-		surfaceNoise = new PerlinSimplexNoise(random, IntStream.rangeClosed(-3, 0).boxed().collect(ImmutableList.toImmutableList()));
-		random.consumeCount(2620);
-		depthNoise = PerlinNoise.createLegacyForBlendedNoise(random, IntStream.rangeClosed(-15, 0));
-		
-		DensityFunction factorFunction = new DensityFunctions.TerrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), noiseSettings.terrainShaper(), DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0.0D, 8.0D);
-		DensityFunction offsetFunction = new DensityFunctions.TerrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), noiseSettings.terrainShaper(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81D, 2.5D);
-		DensityFunction depthFunction = DensityFunctions.yClampedGradient(0, 256, 1, -1);
-		scaledDepthFunction = DensityFunctions.add(DensityFunctions.mul(depthFunction, factorFunction), offsetFunction);
 		
 		this.noises = noises;
 		this.router = settings.createNoiseRouter(noises, seed);
@@ -109,34 +87,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		this.surfaceSystem.buildSurface(level.getBiomeManager(), level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY),
 				settings.useLegacyRandomSource(), new WorldGenerationContext(this, level), chunk, noiseChunk, settings.surfaceRule());
 	}
-	/*TODO now a surface rule (see SurfaceRuleData)
-	@Override
-	public void buildSurfaceAndBedrock(WorldGenRegion region, ChunkAccess chunk)
-	{
-		ChunkPos chunkPos = chunk.getPos();
-		SharedSeedRandom rand = new SharedSeedRandom();
-		rand.setBaseChunkSeed(chunkPos.x, chunkPos.z);
-		
-		int startX = chunkPos.getMinBlockX();
-		int startZ = chunkPos.getMinBlockZ();
-		double noiseScale = 0.0625D;
-		
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		for(int relX = 0; relX < 16; relX++)
-		{
-			for(int relZ = 0; relZ < 16; relZ++)
-			{
-				int x = startX + relX;
-				int z = startZ + relZ;
-				int surfaceY = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, relX, relZ) + 1;
-				double noise = surfaceNoise.getSurfaceNoiseValue(x * noiseScale, z * noiseScale, noiseScale, relX * noiseScale) * 15.0D;
-				
-				Biome biome = getBiome(region, pos.set(startX + relX, surfaceY, startZ + relZ));
-				biome.buildSurfaceAt(rand, chunk, x, z, surfaceY, noise, defaultBlock, defaultFluid, getSeaLevel(), region.getSeed());
-			}
-		}
-	}
-	*/
 	
 	@Override
 	public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager structures, ChunkAccess chunk)
@@ -214,7 +164,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 								int csRelZ = z & 15;
 								double fracRelZ = (double)relZ / (double)sectionWidth;
 								double noiseForXYZ = Mth.lerp(fracRelZ, noiseForXY, noiseZForXY);
-								double clampedNoise = Mth.clamp(noiseForXYZ / 200.0D, -1.0D, 1.0D);
+								double clampedNoise = Mth.clamp(noiseForXYZ, -1.0D, 1.0D);
 								
 								BlockState state = baseStateForNoise(clampedNoise, y);
 								if (state != Blocks.AIR.defaultBlockState()) {
@@ -325,34 +275,11 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	
 	protected void fillNoiseColumn(double[] column, int sectX, int sectZ)
 	{
-		fillNoiseColumn(column, sectX, sectZ, -1 / 64D, 96 / 0.145D);
-	}
-	
-	protected void fillNoiseColumn(double[] column, int sectX, int sectZ, double scaledHeight, double scaleMod)
-	{
-		NoiseSettings settings = this.settings.value().noiseSettings();
-		
 		for(int sectY = 0; sectY <= sectionCountY; sectY++)
 		{
 			DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(sectX * sectionWidth, sectY * sectionHeight, sectZ * sectionWidth);
 			
-			double noise = densityFunction.compute(context) * 128.0D;
-			
-			// modify noise value based on height and biome values
-			double heightModifiedDensity = scaledDepthFunction.compute(context);
-			double noiseMod = (heightModifiedDensity + scaledHeight) * scaleMod;
-			if(noiseMod > 0)
-				noise += noiseMod * 4;
-			else
-				noise += noiseMod;
-			
-			// smooths the noise value towards a certain value near the upper height limit
-			noise = settings.topSlideSettings().applySlide(noise, settings.getCellCountY() - sectY);
-			
-			// smooths the noise value towards a certain value near the lower height limit
-			noise = settings.bottomSlideSettings().applySlide(noise, sectY);
-			
-			column[sectY] = noise;
+			column[sectY] = this.router.finalDensity().compute(context);
 		}
 	}
 	

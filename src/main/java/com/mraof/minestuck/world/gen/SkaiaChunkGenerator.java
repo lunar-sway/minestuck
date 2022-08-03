@@ -11,10 +11,8 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 public class SkaiaChunkGenerator extends AbstractChunkGenerator
 {
@@ -25,13 +23,9 @@ public class SkaiaChunkGenerator extends AbstractChunkGenerator
 					NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(generator -> generator.settings)))
 			.apply(instance, instance.stable(SkaiaChunkGenerator::new)));
 	
-	private final PerlinNoise depthNoise;
-	
 	public SkaiaChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, BiomeSource provider, long seed, Holder<NoiseGeneratorSettings> settings)
 	{
 		super(structureSets, noises, Optional.empty(), provider, provider, seed, settings);
-		
-		depthNoise = PerlinNoise.createLegacyForBlendedNoise(random, IntStream.rangeClosed(-15, 0));
 	}
 	
 	@Override
@@ -50,14 +44,5 @@ public class SkaiaChunkGenerator extends AbstractChunkGenerator
 	public Climate.Sampler climateSampler()
 	{
 		return Climate.empty();
-	}
-	
-	@Override
-	protected void fillNoiseColumn(double[] column, int sectX, int sectZ)
-	{
-		double depth = this.depthNoise.getValue(sectX * 200, 10.0D, sectZ * 200, 1.0D, 0.0D, true);
-		
-		double scaledHeight = (depth * 65535.0D / 12000.0D + 1.0D) / 4D;
-		fillNoiseColumn(column, sectX, sectZ, scaledHeight, 96D / 0.1);
 	}
 }
