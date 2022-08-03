@@ -166,7 +166,11 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 								double noiseForXYZ = Mth.lerp(fracRelZ, noiseForXY, noiseZForXY);
 								double clampedNoise = Mth.clamp(noiseForXYZ, -1.0D, 1.0D);
 								
-								BlockState state = baseStateForNoise(clampedNoise, y);
+								BlockState state;
+								if(clampedNoise > 0)
+									state = defaultBlock;
+								else
+									state = globalFluidPicker.computeFluid(x, y, z).at(y);
 								if (state != Blocks.AIR.defaultBlockState()) {
 									pos.set(x, y, z);
 									if (state.getLightEmission(chunk, pos) != 0 && chunk instanceof ProtoChunk) {
@@ -222,28 +226,29 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		int modZ = Math.floorMod(z, sectionWidth);
 		double modFracX = (double) modX / (double) sectionWidth;
 		double modFracZ = (double) modZ / (double) sectionWidth;
-		double[][] sectNoiseColumns = new double[][]{
-				makeAndFillNoiseColumn(sectX, sectZ), makeAndFillNoiseColumn(sectX, sectZ + 1),
-				makeAndFillNoiseColumn(sectX + 1, sectZ), makeAndFillNoiseColumn(sectX + 1, sectZ + 1)};
+		
+		NoiseChunk noiseChunk = NoiseChunk.forColumn(sectX * sectionWidth, sectZ * sectionWidth, 0, sectionCountY, this.router, this.settings.value(), this.globalFluidPicker);
+		noiseChunk.initializeForFirstCellX();
+		noiseChunk.advanceCellX(0);
 		
 		for(int sectY = sectionCountY - 1; sectY >= 0; sectY--)
 		{
-			double noise = sectNoiseColumns[0][sectY];
-			double noiseZ = sectNoiseColumns[1][sectY];
-			double noiseX = sectNoiseColumns[2][sectY];
-			double noiseXZ = sectNoiseColumns[3][sectY];
-			double noiseY = sectNoiseColumns[0][sectY + 1];
-			double noiseYZ = sectNoiseColumns[1][sectY + 1];
-			double noiseXY = sectNoiseColumns[2][sectY + 1];
-			double noiseXYZ = sectNoiseColumns[3][sectY + 1];
+			noiseChunk.selectCellYZ(sectY, 0);
 			
 			for(int modY = sectionHeight - 1; modY >= 0; modY--)
 			{
 				double modFracY = (double) modY / (double) sectionHeight;
 				// interpolated noise for this block
-				double interNoise = Mth.lerp3(modFracY, modFracX, modFracZ, noise, noiseY, noiseX, noiseXY, noiseZ, noiseYZ, noiseXZ, noiseXYZ);
 				int y = sectY * this.sectionHeight + modY;
-				BlockState state = baseStateForNoise(interNoise, y);
+				noiseChunk.updateForY(y, modFracY);
+				noiseChunk.updateForX(x, modFracX);
+				noiseChunk.updateForZ(z, modFracZ);
+				
+				// Returns null if it should be solid ground. Otherwise, it'll use the fluid picker to determine if it should be some fluid or air.
+				BlockState state = noiseChunk.getInterpolatedState();
+				if(state == null)
+					state = defaultBlock;
+				
 				if(stateCollector != null)
 					stateCollector[y] = state;
 				
@@ -253,24 +258,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		}
 		
 		return 0;
-	}
-	
-	private BlockState baseStateForNoise(double noise, int y)
-	{
-		if(noise > 0)
-			return defaultBlock;
-		else if(y < getSeaLevel())
-			return defaultFluid;
-		else
-			return Blocks.AIR.defaultBlockState();
-	}
-	
-	
-	private double[] makeAndFillNoiseColumn(int sectionX, int sectionZ)
-	{
-		double[] column = new double[sectionCountY + 1];
-		fillNoiseColumn(column, sectionX, sectionZ);
-		return column;
 	}
 	
 	protected void fillNoiseColumn(double[] column, int sectX, int sectZ)
