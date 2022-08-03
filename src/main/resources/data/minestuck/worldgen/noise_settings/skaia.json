@@ -23,13 +23,13 @@
     },
     "noise": {
         "top_slide": {
-            "target": -10,
-            "size": 3,
+            "target": -1,
+            "size": 2,
             "offset": 0
         },
         "bottom_slide": {
-            "target": -30,
-            "size": 0,
+            "target": 1,
+            "size": 3,
             "offset": 0
         },
         "sampling": {

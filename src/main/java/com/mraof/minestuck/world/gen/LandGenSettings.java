@@ -62,7 +62,7 @@ public class LandGenSettings
 		StructureSettings structureSettings = new StructureSettings(Optional.empty(), structures);
 		*/
 		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
-				new NoiseSlider(-10, 3, 0), new NoiseSlider(-30, 0, 0), 1, 2,
+				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
 				new TerrainShaper(CubicSpline.constant(0.035F), CubicSpline.constant(1), CubicSpline.constant(0)));
 		
 		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
