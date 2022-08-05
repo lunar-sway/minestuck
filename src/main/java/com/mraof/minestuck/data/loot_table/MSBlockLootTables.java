@@ -439,11 +439,11 @@ public class MSBlockLootTables extends BlockLoot
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE9j).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder uraniumOreDrop(Block block)
 	{
-		return createOreDrop(block, MSItems.RAW_URANIUM);
+		return createOreDrop(block, MSItems.RAW_URANIUM9j);
 	}
 	private static LootTable.Builder coalOreDrop(Block block)
 	{
@@ -531,11 +531,11 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT9j).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder strawberryStemDrop(Block block)
 	{
-		return createStemDrops(block, MSItems.STRAWBERRY_CHUNK);
+		return createStemDrops(block, MSItems.STRAWBERRY_CHUNK9j);
 	}
 	protected static LootTable.Builder droppingWithColor(Block block)
 	{

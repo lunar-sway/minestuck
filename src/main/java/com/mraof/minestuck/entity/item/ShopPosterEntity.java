@@ -55,7 +55,7 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MSItems.SHOP_POSTER);//, 1, getPosterType()); TODO poster subtypes
+		return new ItemStack(MSItems.SHOP_POSTER9j);//, 1, getPosterType()); TODO poster subtypes
 	}
 	
 	private void setPosterType(int i)

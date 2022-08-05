@@ -49,13 +49,13 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 	
 	private boolean isItemValid(int slot, ItemStack stack)
 	{
-		if(stack.getItem() != MSItems.CAPTCHA_CARD)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD9j)
 		{
 			return false;
 		} else
 		{
 			return (!AlchemyHelper.isPunchedCard(stack) && !AlchemyHelper.isGhostCard(stack)
-					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD);
+					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD9j);
 		}
 	}
 	
@@ -70,7 +70,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 			return null;
 		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
 		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD9j || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
 		return gristSet;

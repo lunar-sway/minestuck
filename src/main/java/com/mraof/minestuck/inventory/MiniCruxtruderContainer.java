@@ -40,7 +40,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 		
 		assertItemHandlerSize(inventory, 2);
 		
-		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSItems.RAW_CRUXITE));
+		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSItems.RAW_CRUXITE9j));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(playerInventory);
@@ -86,7 +86,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 			{
 				//if it's an inventory slot with valid contents
 				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
-				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE)
+				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE9j)
 				{
 					//Debug.print("Transferring...");
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);

@@ -152,7 +152,7 @@ public class SetModus extends Modus
 			{
 				size--;
 				markDirty();
-				return new ItemStack(MSItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD9j);
 			} else return ItemStack.EMPTY;
 		}
 		

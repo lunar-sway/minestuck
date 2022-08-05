@@ -156,7 +156,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.CHAKRAM;
+		return MSItems.CHAKRAM9j;
 	}
 	
 	public ItemStack getItemFromItemStack() {

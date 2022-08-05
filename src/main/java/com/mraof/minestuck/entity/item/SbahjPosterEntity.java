@@ -38,7 +38,7 @@ public class SbahjPosterEntity extends HangingArtEntity<SbahjPosterEntity.SbahjA
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MSItems.SBAHJ_POSTER);
+		return new ItemStack(MSItems.SBAHJ_POSTER9j);
 	}
 	
 	public enum SbahjArt implements HangingArtEntity.IArt

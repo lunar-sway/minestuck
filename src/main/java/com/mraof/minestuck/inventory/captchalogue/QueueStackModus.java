@@ -24,7 +24,7 @@ public class QueueStackModus extends StackModus
 			{
 				size--;
 				markDirty();
-				return new ItemStack(MSItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD9j);
 			} else return ItemStack.EMPTY;
 		}
 		

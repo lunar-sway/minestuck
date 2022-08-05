@@ -44,7 +44,7 @@ public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
+		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD9j || index == 2 && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
 	@Override

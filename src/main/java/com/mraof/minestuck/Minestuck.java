@@ -97,8 +97,8 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK9j), ProgramData::onClientClosed);
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK9j), ProgramData::onServerClosed);
 		
 		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());

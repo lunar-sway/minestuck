@@ -182,7 +182,7 @@ public class HashMapModus extends Modus
 			list.remove(id);
 			markDirty();
 			if(item.isEmpty())
-				return new ItemStack(MSItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD9j);
 			else return AlchemyHelper.createCard(item, false);
 		} else
 		{

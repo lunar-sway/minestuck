@@ -41,7 +41,7 @@ public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(2, (index, stack) -> index == 0 && stack.getItem() == MSItems.RAW_CRUXITE);
+		return new CustomHandler(2, (index, stack) -> index == 0 && stack.getItem() == MSItems.RAW_CRUXITE9j);
 	}
 	
 	@Override

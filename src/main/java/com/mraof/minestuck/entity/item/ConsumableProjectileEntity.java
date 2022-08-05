@@ -78,7 +78,7 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.SHURIKEN;
+		return MSItems.SHURIKEN9j;
 	}
 	
 	public ItemStack getItemFromItemStack() {

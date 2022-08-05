@@ -62,7 +62,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty)
 	{
 		super.populateDefaultEquipmentSlots(difficulty);
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD : random.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD9j : random.nextDouble() < .02 ? MSItems.SORD9j : Items.STONE_SWORD));
 	}
 	
 	@Override

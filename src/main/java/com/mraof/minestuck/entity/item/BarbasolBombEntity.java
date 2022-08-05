@@ -66,6 +66,6 @@ public class BarbasolBombEntity extends ThrowableItemProjectile
     @Override
     protected Item getDefaultItem()
     {
-        return MSItems.BARBASOL_BOMB;
+        return MSItems.BARBASOL_BOMB9j;
     }
 }

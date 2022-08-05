@@ -43,8 +43,8 @@ public class MiniTotemLatheContainer extends MachineContainer
 		
 		assertItemHandlerSize(inventory, 4);
 		
-		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MSItems.CAPTCHA_CARD));
-		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MSItems.CAPTCHA_CARD));
+		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MSItems.CAPTCHA_CARD9j));
+		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MSItems.CAPTCHA_CARD9j));
 		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MSBlocks.CRUXITE_DOWEL.get().asItem()));
 		addSlot(new OutputSlot(inventory, 3, OUTPUT_X, OUTPUT_Y));
 		
@@ -90,7 +90,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 			} else if(slotNumber > 3)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD)
+				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD9j)
 					result = moveItemStackTo(itemstackOrig, 0, 2, false);
 				else if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 					result = moveItemStackTo(itemstackOrig, 2, 3, false);

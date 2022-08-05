@@ -60,7 +60,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.hasDecodedItem(item))
+		if(item.getItem().equals(MSItems.CAPTCHA_CARD9j) && !AlchemyHelper.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -94,7 +94,7 @@ public class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			container.setContainerItem(newItem);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD9j) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
 		{
 			consumeCards(player, stack, modus);
@@ -187,7 +187,7 @@ public class CaptchaDeckHandler
 	{
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MSItems.BOONDOLLARS)
+		if(stack.getItem() == MSItems.BOONDOLLARS9j)
 		{
 			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 			stack.shrink(1);
@@ -196,7 +196,7 @@ public class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
+			if(stack.getItem() == MSItems.CAPTCHA_CARD9j && AlchemyHelper.hasDecodedItem(stack)
 					&& !AlchemyHelper.isPunchedCard(stack))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
@@ -219,7 +219,7 @@ public class CaptchaDeckHandler
 			
 			if(captchaloguedItem && !spentCard)
 			{	//Item was captchalogued, but the card remained
-				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
+				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD9j, 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
 				card.shrink(1);
 			} else if(!captchaloguedItem && spentCard)
 			{	//The card was used, but the item failed to captchalogue
@@ -308,9 +308,9 @@ public class CaptchaDeckHandler
 					size--;
 				} else player.drop(stack, true, false);
 		
-		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD).getMaxStackSize();
+		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD9j).getMaxStackSize();
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-			player.drop(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+			player.drop(new ItemStack(MSItems.CAPTCHA_CARD9j, Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{

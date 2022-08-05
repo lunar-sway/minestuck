@@ -80,10 +80,10 @@ public class FrogEntity extends PathfinderMob
 		
 		if(player.distanceToSqr(this) < 9.0D && !this.level.isClientSide)
 		{
-			if(itemstack.getItem() == MSItems.BUG_NET)
+			if(itemstack.getItem() == MSItems.BUG_NET9j)
 			{
 				itemstack.hurtAndBreak(1, player, (entityPlayer) -> entityPlayer.broadcastBreakEvent(hand));
-				ItemStack frogItem = new ItemStack(MSItems.FROG);
+				ItemStack frogItem = new ItemStack(MSItems.FROG9j);
 				
 				frogItem.setTag(getFrogData());
 				if(this.hasCustomName())frogItem.setHoverName(this.getCustomName());
@@ -91,7 +91,7 @@ public class FrogEntity extends PathfinderMob
 				spawnAtLocation(frogItem, 0);
 				this.discard();
 			}
-			else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER && this.getFrogType() != 5)
+			else if(itemstack.getItem() == MSItems.GOLDEN_GRASSHOPPER9j && this.getFrogType() != 5)
 			{
 				if(!player.isCreative())itemstack.shrink(1);
 				
@@ -152,7 +152,7 @@ public class FrogEntity extends PathfinderMob
 		
 		this.goalSelector.addGoal(1, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.2D));
-		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSItems.CONE_OF_FLIES, MSItems.BUG_ON_A_STICK, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS), false));	//TODO use bug item tag
+		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSItems.CONE_OF_FLIES9j, MSItems.BUG_ON_A_STICK9j, MSItems.GRASSHOPPER9j, MSItems.JAR_OF_BUGS9j), false));	//TODO use bug item tag
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.6D));
 		this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 10.0F));
 		
