@@ -27,6 +27,8 @@ public class MSContainerTypes
 	public static final MenuType<EditmodeContainer> EDIT_MODE = getNull();
 	public static final MenuType<ConsortMerchantContainer> CONSORT_MERCHANT = getNull();
 	
+	public static final MenuType<MusicPlayerContainer> MUSIC_PLAYER = getNull();
+	
 	@Nonnull
 	@SuppressWarnings("ConstantConditions")
 	private static <T> T getNull()
@@ -48,5 +50,6 @@ public class MSContainerTypes
 		registry.register(new MenuType<>(CaptchaDeckContainer::new).setRegistryName("captcha_deck"));
 		registry.register(new MenuType<>(EditmodeContainer::new).setRegistryName("edit_mode"));
 		registry.register(new MenuType<>((IContainerFactory<ConsortMerchantContainer>) ConsortMerchantContainer::load).setRegistryName("consort_merchant"));
+		registry.register(new MenuType<>(MusicPlayerContainer::new).setRegistryName("music_player"));
 	}
 }

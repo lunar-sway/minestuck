@@ -37,6 +37,7 @@ public class MSScreenFactories
 		MenuScreens.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
 		MenuScreens.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
 		MenuScreens.register(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		MenuScreens.register(MSContainerTypes.MUSIC_PLAYER, MusicPlayerScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
