@@ -9,9 +9,7 @@ import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristGutter;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.world.storage.PlayerData;
@@ -270,39 +268,46 @@ public class ServerEventHandler
 
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event, Session session, PlayerEntity player)
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		// here we are getting the session gutter for each player every tick
-		// this will allow us to determine whether the gutter contains anything that the
-		// player's cache has room for, and then subsequently, move one grist of a certain type
-		// into the player's cache
-/*
-	player = event.player;
-		World world = player.getEntity().level;
-		PlayerData data = PlayerSavedData.getData(player, world);
-		//ImmutableGristSet playerCache = data.getGristCache();
-		GristSet playerCache = PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache();
-		session = SessionHandler.get(world).getPlayerSession(player);
-		GristGutter sessionGutter = session.getGristGutter();
-	*/
-		
-		
 		
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
+			
+			PlayerEntity player = event.player;
 			if(data.getTitle() != null)
 
 			IdentifierHandler.encode(player);
 			
 			World world = player.getEntity().level;
-			GristSet playerCache = PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache();
-			session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
-			GristGutter sessionGutter = session.getGristGutter();
-			GristSet rungGrist =
+			long gameTime = world.getGameTime();
+			int inputTime = 200;
+			NonNegativeGristSet playerCache = new NonNegativeGristSet
+					(PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache());
 			
-			
-		
+			/**
+			 *  here, we are getting the session gutter for each player every tick
+			 this will allow us to determine whether the gutter contains anything that the
+			 player's cache has room for, and then subsequently, move one grist of a certain type
+			 into the player's cache
+			 */
+			if(gameTime % inputTime == 0)
+			{
+				
+				Session session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
+				GristGutter sessionGutter = session.getGristGutter();
+				
+				playerCache.addGrist(sessionGutter.splice(1));
+				
+				GristSet rungGrist = GristHelper.limitGristByPlayerRung
+						(world, IdentifierHandler.encode(player), playerCache);
+				
+				sessionGutter.addGrist(rungGrist);
+				
+				data.setGristCache(playerCache);
+			}
+			//todo scale splice amount to rung
 		}
 
 		

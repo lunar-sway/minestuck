@@ -202,6 +202,12 @@ public class GristSet
 	
 	/**
 	 * used to cap grist for the limitgristbyplayerrung function
+	 *this is how we decide grist overflow
+	 *what it's doing is everytime the amount is higher than the current cap,
+	 *it'll find the difference between the amount added and the cap and set that as an
+	 *overflow amount.
+	 *this'll then check the type of grist, and add it by amount. t
+	 *hen we just return the function and boom.
 	 */
 	public GristSet capGrist(int cap)
 	{

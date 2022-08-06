@@ -4,20 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerRegistry;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 
-/**
- this is intended to tell the system "this is the max grist for each type(which is something equal and arbitrary)"
- that adds up to our desired amount.
- */
 
-/**
-at the current time of writing this, it's under review whether it'll be used.
-the main reason being, if ever someone would want to add a new grist type, they would have to set the GUTTER_CAPACITY
-higher.
- */
 public class GristGutter extends GristSet
 {
-	public int gutterTotal;
+	public int gutterTotal = -1;
 	
 	public static final int GUTTER_CAPACITY = 1000;
 
@@ -32,38 +24,73 @@ public class GristGutter extends GristSet
 		}
 		return gutterTotal;
 	}
-	
+	//todo: what happens to grist gutter super overflow
 	
 	@Override
 	public GristGutter addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
-			LOGGER.debug("Gutter before adding " + amount + " " + type.getDisplayName().getString() + " grist:");
-			LOGGER.debug("Total: " + gutterTotal);
-			LOGGER.debug("Value: " + getValue());
-	
-			
-			for(GristType t : this.gristTypes.keySet())
-			{
-				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
-			}
-			
-			
-			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
+			this.gristTypes.compute(type, (key, value) ->
+					value == null ? amount : value + amount);
 			gutterTotal += amount;
-			
-			
-			LOGGER.debug("Gutter AFTER adding " + amount + " " + type.getDisplayName().toString() + " grist:");
-			LOGGER.debug("Total: " + gutterTotal);
-			LOGGER.debug("Value: " + getValue());
-			
-			for(GristType t : this.gristTypes.keySet())
-			{
-				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
-				
-			}
+		
 		}
 		return this;
 	}
+	
+	
+
+	public GristGutter logGutter(GristType type, long amount){
+		/**
+		 we're using a simple logger that'll tell us how much grist is going into the gutter by updating us on
+		 the current gutter total, followed by the "value" (which just means the type of grist getting added)
+		 */
+		
+	LOGGER.debug("Gutter before adding " + amount + " "
+			+ type.getDisplayName().getString() + " grist:");
+	LOGGER.debug("Total: " + getGutterTotal());
+	LOGGER.debug("Value: " + getValue());
+	
+	
+	for(GristType t : this.gristTypes.keySet())
+	{
+		LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
+	}
+		
+		LOGGER.debug("Gutter AFTER adding " + amount + " "
+				+ type.getDisplayName().toString() + " grist:");
+		LOGGER.debug("Total: " + getGutterTotal());
+		LOGGER.debug("Value: " + getValue());
+		
+		for(GristType t : this.gristTypes.keySet())
+		{
+			LOGGER.debug(t.getDisplayName().toString() + ": "
+					+ gristTypes.get(t));
+			
+		}
+		
+		return this;
+	}
+	
+	
+	
+	/**
+this is how we take grist from the gutter and throw it into the player's cache
+	 we use the xMover variable (comprised of the minimum of something or other)...
+	 */
+	public GristSet splice(int i)
+	{
+		GristSet spliceSet = new GristSet();
+		
+		for(GristType t : this.gristTypes.keySet())
+		{
+			int xMover = (int) Math.min(gristTypes.get(t), i);
+			spliceSet.addGrist(t, xMover);
+			
+			gutterTotal -= xMover;
+		}
+		return spliceSet;
+	}
+	
 }
