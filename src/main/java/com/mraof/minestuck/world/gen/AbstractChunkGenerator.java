@@ -5,7 +5,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -79,11 +78,16 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		this.surfaceSystem = new SurfaceSystem(noises, this.defaultBlock, settings.seaLevel(), seed, settings.getRandomSource());
 	}
 	
+	private NoiseChunk getOrCreateNoiseChunk(StructureFeatureManager structureManager, ChunkAccess chunk, Blender blender)
+	{
+		return chunk.getOrCreateNoiseChunk(this.router, () -> new Beardifier(structureManager, chunk){}, this.settings.value(), this.globalFluidPicker, blender);
+	}
+	
 	@Override
 	public void buildSurface(WorldGenRegion level, StructureFeatureManager structureManager, ChunkAccess chunk)
 	{
 		NoiseGeneratorSettings settings = this.settings.value();
-		NoiseChunk noiseChunk = chunk.getOrCreateNoiseChunk(this.router, () -> new Beardifier(structureManager, chunk){}, settings, this.globalFluidPicker, Blender.of(level));
+		NoiseChunk noiseChunk = getOrCreateNoiseChunk(structureManager, chunk, Blender.of(level));
 		this.surfaceSystem.buildSurface(level.getBiomeManager(), level.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY),
 				settings.useLegacyRandomSource(), new WorldGenerationContext(this, level), chunk, noiseChunk, settings.surfaceRule());
 	}
@@ -91,46 +95,31 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	@Override
 	public CompletableFuture<ChunkAccess> fillFromNoise(Executor executor, Blender blender, StructureFeatureManager structures, ChunkAccess chunk)
 	{
+		NoiseChunk noiseChunk = getOrCreateNoiseChunk(structures, chunk, blender);
 		ChunkPos chunkPos = chunk.getPos();
 		
-		int chunkX = chunkPos.x;
-		int chunkZ = chunkPos.z;
 		int minX = chunkPos.getMinBlockX();
 		int minZ = chunkPos.getMinBlockZ();
-		
-		double[][][] noiseColumns = new double[2][sectionCountXZ + 1][sectionCountY + 1];
-		
-		for(int sectZ = 0; sectZ < sectionCountXZ; sectZ++)
-		{
-			noiseColumns[0][sectZ] = new double[sectionCountY + 1];
-			fillNoiseColumn(noiseColumns[0][sectZ], chunkX * sectionCountXZ, chunkZ * sectionCountXZ + sectZ);
-			noiseColumns[1][sectZ] = new double[sectionCountY + 1];
-		}
 		
 		Heightmap oceanHeight = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR_WG);
 		Heightmap surfaceHeight = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE_WG);
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		
+		noiseChunk.initializeForFirstCellX();
+		
 		for(int sectX = 0; sectX < sectionCountXZ; sectX++)
 		{
-			for(int sectZ = 0; sectZ < sectionCountXZ + 1; sectZ++)
-				fillNoiseColumn(noiseColumns[1][sectZ], chunkX * sectionCountXZ + sectX + 1, chunkZ * sectionCountXZ + sectZ);
+			noiseChunk.advanceCellX(sectX);
 			
 			for(int sectZ = 0; sectZ < sectionCountXZ; ++sectZ)
 			{
+				//TODO need to be updated to account for configurable world height
 				LevelChunkSection section = chunk.getSection(15);
 				section.acquire();
 				
 				for(int sectY = sectionCountY - 1; sectY >= 0; sectY--)
 				{
-					double noise = noiseColumns[0][sectZ][sectY];
-					double noiseZ = noiseColumns[0][sectZ + 1][sectY];
-					double noiseX = noiseColumns[1][sectZ][sectY];
-					double noiseXZ = noiseColumns[1][sectZ + 1][sectY];
-					double noiseY = noiseColumns[0][sectZ][sectY + 1];
-					double noiseYZ = noiseColumns[0][sectZ + 1][sectY + 1];
-					double noiseXY = noiseColumns[1][sectZ][sectY + 1];
-					double noiseXYZ = noiseColumns[1][sectZ + 1][sectY + 1];
+					noiseChunk.selectCellYZ(sectY, sectZ);
 					
 					for(int relY = sectionHeight - 1; relY >= 0; relY--)
 					{
@@ -145,32 +134,29 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 						}
 						
 						double fracRelY = (double)relY / (double)sectionHeight;
-						double noiseForY = Mth.lerp(fracRelY, noise, noiseY);
-						double noiseXForY = Mth.lerp(fracRelY, noiseX, noiseXY);
-						double noiseZForY = Mth.lerp(fracRelY, noiseZ, noiseYZ);
-						double noiseXZForY = Mth.lerp(fracRelY, noiseXZ, noiseXYZ);
+						
+						noiseChunk.updateForY(y, fracRelY);
 						
 						for(int relX = 0; relX < sectionWidth; relX++)
 						{
 							int x = minX + sectX * sectionWidth + relX;
 							int csRelX = x & 15;
 							double fracRelX = (double)relX / (double)sectionWidth;
-							double noiseForXY = Mth.lerp(fracRelX, noiseForY, noiseXForY);
-							double noiseZForXY = Mth.lerp(fracRelX, noiseZForY, noiseXZForY);
+							
+							noiseChunk.updateForX(x, fracRelX);
 							
 							for(int relZ = 0; relZ < sectionWidth; relZ++)
 							{
 								int z = minZ + sectZ * sectionWidth + relZ;
 								int csRelZ = z & 15;
 								double fracRelZ = (double)relZ / (double)sectionWidth;
-								double noiseForXYZ = Mth.lerp(fracRelZ, noiseForXY, noiseZForXY);
-								double clampedNoise = Mth.clamp(noiseForXYZ, -1.0D, 1.0D);
 								
-								BlockState state;
-								if(clampedNoise > 0)
+								noiseChunk.updateForZ(z, fracRelZ);
+								
+								BlockState state = noiseChunk.getInterpolatedState();
+								if(state == null)
 									state = defaultBlock;
-								else
-									state = globalFluidPicker.computeFluid(x, y, z).at(y);
+								
 								if (state != Blocks.AIR.defaultBlockState()) {
 									pos.set(x, y, z);
 									if (state.getLightEmission(chunk, pos) != 0 && chunk instanceof ProtoChunk) {
@@ -189,11 +175,10 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 				section.release();
 			}
 			
-			double[][] oldColumns = noiseColumns[0];
-			noiseColumns[0] = noiseColumns[1];
-			noiseColumns[1] = oldColumns;
+			noiseChunk.swapSlices();
 		}
 		
+		noiseChunk.stopInterpolation();
 		return CompletableFuture.completedFuture(chunk);
 	}
 	
@@ -258,16 +243,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		}
 		
 		return 0;
-	}
-	
-	protected void fillNoiseColumn(double[] column, int sectX, int sectZ)
-	{
-		for(int sectY = 0; sectY <= sectionCountY; sectY++)
-		{
-			DensityFunction.FunctionContext context = new DensityFunction.SinglePointContext(sectX * sectionWidth, sectY * sectionHeight, sectZ * sectionWidth);
-			
-			column[sectY] = this.router.finalDensity().compute(context);
-		}
 	}
 	
 	@Override

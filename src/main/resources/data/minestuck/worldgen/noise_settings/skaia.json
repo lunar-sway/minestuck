@@ -65,13 +65,16 @@
         "ridges": "zero",
         "initial_density_without_jaggedness": "minestuck:skaia/initial_density",
         "final_density": {
-            "type": "slide",
+            "type": "interpolated",
             "argument": {
-                "type": "add",
-                "argument1": {
-                    "type": "old_blended_noise"
-                },
-                "argument2": "minestuck:skaia/initial_density"
+                "type": "slide",
+                "argument": {
+                    "type": "add",
+                    "argument1": {
+                        "type": "old_blended_noise"
+                    },
+                    "argument2": "minestuck:skaia/initial_density"
+                }
             }
         },
         "vein_toggle": "zero",
