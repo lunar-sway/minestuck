@@ -16,7 +16,7 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.weapon.*;
-import com.mraof.minestuck.item.weapon.musicplayer.MusicPlayerItem;
+import com.mraof.minestuck.item.weapon.MusicPlayerItem;
 import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item.weapon.musicplayer;
+package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.inventory.MusicPlayerContainer;
 import com.mraof.minestuck.item.weapon.WeaponItem;
