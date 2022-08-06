@@ -525,6 +525,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.SCARLET_ZILLYHOO, "Scarlet Zillyhoo");
 		addTooltip(MSItems.SCARLET_ZILLYHOO, "A legendary weapon, forged from the most powerful of charmic destiny and..a red frog...");
 		add(MSItems.MWRTHWL, "Mwrthwl");
+		add(MSItems.MUSIC_HAMMER, "Music Hammer");
 		add(MSItems.SORD, "Sord.....");
 		addTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
 		addExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
