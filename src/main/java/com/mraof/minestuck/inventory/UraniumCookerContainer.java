@@ -51,24 +51,13 @@ public class UraniumCookerContainer extends MachineContainer
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		addDataSlot(fuelHolder);
 		
-		bindPlayerInventory(playerInventory);
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
 	@Override
 	protected Block getValidBlock()
 	{
 		return MSBlocks.URANIUM_COOKER;
-	}
-	
-	protected void bindPlayerInventory(Inventory playerInventory)
-	{
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(playerInventory, j + i * 9 + 9,
-						8 + j * 18, 84 + i * 18));
-		
-		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 	}
 	
 	@Nonnull
