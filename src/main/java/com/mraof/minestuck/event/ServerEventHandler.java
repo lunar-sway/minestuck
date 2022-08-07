@@ -283,6 +283,7 @@ public class ServerEventHandler
 			World world = player.getEntity().level;
 			long gameTime = world.getGameTime();
 			int inputTime = 200;
+			
 			NonNegativeGristSet playerCache = new NonNegativeGristSet
 					(PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache());
 			
@@ -298,7 +299,7 @@ public class ServerEventHandler
 				Session session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
 				GristGutter sessionGutter = session.getGristGutter();
 				
-				playerCache.addGrist(sessionGutter.splice(1));
+				playerCache.addGrist(sessionGutter.splice(7));
 				
 				GristSet rungGrist = GristHelper.limitGristByPlayerRung
 						(world, IdentifierHandler.encode(player), playerCache);
@@ -309,7 +310,6 @@ public class ServerEventHandler
 			}
 			//todo scale splice amount to rung
 		}
-
 		
 	}
 	
