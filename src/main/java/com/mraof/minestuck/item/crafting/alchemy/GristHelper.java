@@ -168,7 +168,6 @@ public class GristHelper
 	
 	/**
 	 * this is used to limit the player's maximum grist by rung
-	 * @return
 	 */
 	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
 	{
@@ -179,6 +178,10 @@ public class GristHelper
 		return set.capGrist(gristCap);
 	}
 	
+	/**
+	 * this is the array we use to determine the grist cap for each rung
+	 * at the time of writing this it's arbitrarily chosen
+	 */
 	public static final int[] rungGrist =
 			{0,15,20,30,35,40,45,60,65,80,85,105,120,130,140,
 					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365
