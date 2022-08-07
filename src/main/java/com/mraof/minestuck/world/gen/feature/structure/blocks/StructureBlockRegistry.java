@@ -224,12 +224,7 @@ public final class StructureBlockRegistry
 			return newState;
 		} else return state;
 	}
-	/*TODO
-	public SurfaceBuilderConfig getSurfaceBuilderConfig(LandBiomeType biomeType)
-	{
-		return new SurfaceBuilderConfig(getBlockState(biomeType == LandBiomeType.ROUGH ? "surface_rough" : "surface"), getBlockState("upper"), getBlockState("ocean_surface"));
-	}
-	*/
+	
 	private static <T extends Comparable<T>> BlockState with(BlockState fromState, BlockState toState, Property<T> property)
 	{
 		if(toState.hasProperty(property))

@@ -4,7 +4,9 @@ import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.CubicSpline;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
@@ -66,8 +68,19 @@ public class LandGenSettings
 				new TerrainShaper(CubicSpline.constant(0.035F), CubicSpline.constant(1), CubicSpline.constant(0)));
 		
 		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
-		SurfaceRules.RuleSource surface = SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0), SurfaceRules.state(blockRegistry.getBlockState("surface")));
-		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, surface);
+		
+		ResourceKey<Biome> roughBiome = landTypes.getTerrain().getBiomeSet().ROUGH;
+		
+		SurfaceRules.RuleSource surfaceBlock = SurfaceRules.sequence(
+				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blockRegistry.getBlockState("surface_rough"))),
+				SurfaceRules.state(blockRegistry.getBlockState("surface")));
+		SurfaceRules.RuleSource surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0), surfaceBlock));
+		
+		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blockRegistry.getBlockState("upper"))));
+		// This surface rule targets the ocean surface by being positioned after "surface" and "upper", thus only placing blocks on surfaces where "surface" or "upper" doesn't
+		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blockRegistry.getBlockState("ocean_surface")));
+		
+		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, surface, upper, ocean_surface);
 		
 		DensityFunction offset = DensityFunctions.terrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5);
 		DensityFunction depth = DensityFunctions.add(DensityFunctions.yClampedGradient(0, 256, 1, -1), offset);
