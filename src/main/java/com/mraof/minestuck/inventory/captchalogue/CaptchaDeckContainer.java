@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSContainerTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
@@ -21,7 +22,8 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 	{
 		super(MSContainerTypes.CAPTCHA_DECK, windowId);
 		this.owner = playerInventory.player;
-		addSlots(playerInventory);
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 63, playerInventory);
+		addSlots();
 	}
 	
 	public ItemStack getContainerItem()
@@ -34,12 +36,8 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 		inventory.setItem(0, stack);
 	}
 	
-	private void addSlots(Inventory playerInventory)
+	private void addSlots()
 	{
-		for(int i = 9; i < 36; i++)
-			addSlot(new Slot(playerInventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
-		for(int i = 0; i < 9; i++)
-			addSlot(new Slot(playerInventory, i, 9 + i*18, 121));
 		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override
