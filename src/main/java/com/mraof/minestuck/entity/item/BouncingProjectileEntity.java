@@ -171,7 +171,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.SORCERERS_PINBALL9j;
+		return MSItems.SORCERERS_PINBALL.get();
 	}
 	
 	public ItemStack getItemFromItemStack() {

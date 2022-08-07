@@ -43,7 +43,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
     {
-        subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD9j);
+        subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD.get());
         subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
     }
 
@@ -74,7 +74,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX.get()), DESIGNIX_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), GRIST_COST_ID, LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD9j), LATHE_ID, DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD.get()), LATHE_ID, DESIGNIX_ID);
 	}
 
 	@Override

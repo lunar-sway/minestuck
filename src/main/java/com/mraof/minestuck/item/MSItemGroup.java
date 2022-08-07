@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 
 public class MSItemGroup extends CreativeModeTab
 {
-	public static final CreativeModeTab MAIN = new MSItemGroup("minestuck", () -> new ItemStack(MSItems.CLIENT_DISK9j));
+	public static final CreativeModeTab MAIN = new MSItemGroup("minestuck", () -> new ItemStack(MSItems.CLIENT_DISK.get()));
 	public static final CreativeModeTab LANDS = new MSItemGroup("minestuck_lands", () -> new ItemStack(MSBlocks.GLOWING_MUSHROOM.get()));
-	public static final CreativeModeTab WEAPONS = new MSItemGroup("minestuck_weapons", () -> new ItemStack(MSItems.ZILLYHOO_HAMMER9j));
+	public static final CreativeModeTab WEAPONS = new MSItemGroup("minestuck_weapons", () -> new ItemStack(MSItems.ZILLYHOO_HAMMER.get()));
 	
 	private final Supplier<ItemStack> icon;
 	

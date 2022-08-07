@@ -58,9 +58,9 @@ public class CruxtruderTileEntity extends BlockEntity    //TODO check if it is b
 			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && material < 64 && material > -1)
 			{
 				ItemStack stack = player.getMainHandItem();
-				if(stack.getItem() != MSItems.RAW_CRUXITE9j)
+				if(stack.getItem() != MSItems.RAW_CRUXITE.get())
 					stack = player.getOffhandItem();
-				if(stack.getItem() == MSItems.RAW_CRUXITE9j)
+				if(stack.getItem() == MSItems.RAW_CRUXITE.get())
 				{
 					int count = 1;
 					if(player.isShiftKeyDown())	//Doesn't actually work just yet

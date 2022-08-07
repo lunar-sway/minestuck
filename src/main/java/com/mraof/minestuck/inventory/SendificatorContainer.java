@@ -72,7 +72,7 @@ public class SendificatorContainer extends MachineContainer
 		this.destinationHolder = destinationHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
-		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM9j));
+		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
 		addDataSlot(fuelHolder);
 		addDataSlots(destinationHolder.getIntArray());
 		
@@ -119,7 +119,7 @@ public class SendificatorContainer extends MachineContainer
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM9j)
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
 				{
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else

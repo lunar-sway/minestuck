@@ -100,7 +100,7 @@ public final class SburbHandler
 	{
 		int color =  ColorHandler.getColorForPlayer(c.getClientIdentifier(), level);
 		
-		Item artifact = c.artifactType == 1 ? MSItems.CRUXITE_POTION9j : MSItems.CRUXITE_APPLE9j;
+		Item artifact = c.artifactType == 1 ? MSItems.CRUXITE_POTION.get() : MSItems.CRUXITE_APPLE.get();
 		
 		return ColorHandler.setColor(new ItemStack(artifact), color);
 	}

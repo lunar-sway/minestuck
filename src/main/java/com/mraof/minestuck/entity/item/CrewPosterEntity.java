@@ -38,7 +38,7 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MSItems.CREW_POSTER9j);
+		return new ItemStack(MSItems.CREW_POSTER.get());
 	}
 	
 	public enum MidnightCrewArt implements HangingArtEntity.IArt

@@ -187,7 +187,7 @@ public class ServerEventHandler
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING9j)
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING.get())
 			{
 				if(isDoom)
 					activateThreshold = activateThreshold * 1.5F;
@@ -210,7 +210,7 @@ public class ServerEventHandler
 				}
 			}
 			
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE9j)
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE.get())
 			{
 				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
 				
@@ -285,7 +285,7 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE9j));
+			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level.addFreshEntity(stalebread);
 		}
 	}

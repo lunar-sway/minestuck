@@ -47,7 +47,7 @@ public class UraniumCookerContainer extends MachineContainer
 		this.fuelHolder = fuelHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
-		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM9j));
+		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
 		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		addDataSlot(fuelHolder);
 		
@@ -94,14 +94,14 @@ public class UraniumCookerContainer extends MachineContainer
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else if(slotNumber == 2)    //Shift-clicking from the output slot
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM9j)
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
 				else
 					result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
 				
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM9j)
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
 				{
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else

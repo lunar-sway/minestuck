@@ -82,7 +82,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 			//Display the stone tablet screen
 			if(level.isClientSide)
 			{
-				boolean canEdit = playerIn.getItemInHand(handIn == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL9j;
+				boolean canEdit = playerIn.getItemInHand(handIn == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL.get();
 				String text = hasText(itemStackIn) ? itemStackIn.getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 			}

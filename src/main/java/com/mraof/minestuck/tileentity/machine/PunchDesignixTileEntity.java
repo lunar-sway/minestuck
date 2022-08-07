@@ -38,7 +38,7 @@ public class PunchDesignixTileEntity extends BlockEntity
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MSItems.CAPTCHA_CARD9j || card.isEmpty())
+		if (card.getItem() == MSItems.CAPTCHA_CARD.get() || card.isEmpty())
 		{
 			this.card = card;
 			updateState();
@@ -96,7 +96,7 @@ public class PunchDesignixTileEntity extends BlockEntity
 		} else if(!broken)
 		{
 			ItemStack heldStack = player.getMainHandItem();
-			if(!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD9j)
+			if(!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD.get())
 				setCard(heldStack.split(1));    //Insert card into the punch slot
 		}
 	}
@@ -104,10 +104,10 @@ public class PunchDesignixTileEntity extends BlockEntity
 	private void handleKeyboardClick(ServerPlayer player)
 	{
 		ItemStack heldStack = player.getMainHandItem();
-		if(heldStack.getItem() != MSItems.CAPTCHA_CARD9j)
+		if(heldStack.getItem() != MSItems.CAPTCHA_CARD.get())
 			return;    //Not a valid item in hand
 		
-		if(getCard().getItem() == MSItems.CAPTCHA_CARD9j)
+		if(getCard().getItem() == MSItems.CAPTCHA_CARD.get())
 		{
 			if(AlchemyHelper.hasDecodedItem(heldStack))
 			{

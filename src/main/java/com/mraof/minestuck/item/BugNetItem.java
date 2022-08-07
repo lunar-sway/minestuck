@@ -35,7 +35,7 @@ public class BugNetItem extends Item
 				{
 					if(rand.nextInt(555) == 0)
 					{
-						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER9j, 1));
+						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER.get(), 1));
 						level.addFreshEntity(item);
 						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 						
@@ -43,7 +43,7 @@ public class BugNetItem extends Item
 					}
 					else if(rand.nextInt(5) == 0)
 					{
-						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER9j, 1));
+						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER.get(), 1));
 						level.addFreshEntity(item);
 						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 						

@@ -352,9 +352,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK9j),
-				new ItemStack(MSItems.GRASSHOPPER9j), new ItemStack(MSItems.CHOCOLATE_BEETLE9j),	//TODO Use item tags for these kind of things
-				new ItemStack(MSItems.CONE_OF_FLIES9j));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK.get()),
+				new ItemStack(MSItems.GRASSHOPPER.get()), new ItemStack(MSItems.CHOCOLATE_BEETLE.get()),	//TODO Use item tags for these kind of things
+				new ItemStack(MSItems.CONE_OF_FLIES.get()));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },

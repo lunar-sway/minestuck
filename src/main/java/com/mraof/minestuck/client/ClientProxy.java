@@ -136,32 +136,32 @@ public class ClientProxy
 		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
 		
-		ItemProperties.register(MSItems.CAPTCHA_CARD9j, contentName, content);
-		ItemProperties.register(MSItems.CRUXITE_DOWEL, contentName, content);
-		ItemProperties.register(MSItems.SHUNT9j, contentName, content);
-		ItemProperties.register(MSItems.CAPTCHA_CARD9j, new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.CAPTCHA_CARD9j, new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, content);
+		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, content);
+		ItemProperties.register(MSItems.SHUNT.get(), contentName, content);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.BOONDOLLARS9j, new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
-		ItemProperties.register(MSItems.FROG9j, new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
-		ItemProperties.register(MSItems.STONE_SLAB9j, new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOONDOLLARS.get(), new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
+		ItemProperties.register(MSItems.FROG.get(), new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
+		ItemProperties.register(MSItems.STONE_SLAB.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 		
 		DimensionSpecialEffects.EFFECTS.put(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
 	}
 	
 	private static void registerArmorModels()
 	{
-		ArmorModels.register(MSItems.CRUMPLY_HAT9j, new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
+		ArmorModels.register(MSItems.CRUMPLY_HAT.get(), new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
 		
 		HumanoidModel<?> pajamasModel = new HumanoidModel<>(DreamerPajamasModel.createBodyLayer().bakeRoot());
-		ArmorModels.register(MSItems.PROSPIT_CIRCLET9j, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_SHIRT9j, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_PANTS9j, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_SHOES9j, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_CIRCLET9j, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_SHIRT9j, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_PANTS9j, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_SHOES9j, pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_CIRCLET.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHIRT.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_PANTS.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHOES.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_CIRCLET.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHIRT.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_PANTS.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHOES.get(), pajamasModel);
 	}
 	
 	/**

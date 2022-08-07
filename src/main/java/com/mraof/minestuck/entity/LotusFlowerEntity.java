@@ -187,10 +187,10 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		Level level = this.level;
 		Vec3 posVec = this.position();
 		
-		ItemEntity unpoweredComputerItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS9j, 1));
+		ItemEntity unpoweredComputerItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.COMPUTER_PARTS.get(), 1));
 		level.addFreshEntity(unpoweredComputerItemEntity);
 		
-		ItemEntity sburbCodeItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE9j, 1));
+		ItemEntity sburbCodeItemEntity = new ItemEntity(level, posVec.x(), posVec.y() + 1D, posVec.z(), new ItemStack(MSItems.SBURB_CODE.get(), 1));
 		level.addFreshEntity(sburbCodeItemEntity);
 	}
 	

@@ -23,7 +23,7 @@ public interface FinishUseItemEffect
 		{
 			Random rand = new Random();
 			int num = rand.nextInt(10);
-			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS9j, num);
+			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), num);
 			
 			player.addItem(crumbs);
 		}
@@ -33,7 +33,7 @@ public interface FinishUseItemEffect
 	FinishUseItemEffect SHARPEN_CANDY_CANE = (stack, worldIn, entityIn) -> {
 		if(entityIn instanceof Player player && !entityIn.level.isClientSide)
 		{
-			player.addItem(new ItemStack(MSItems.SHARP_CANDY_CANE9j, 1));
+			player.addItem(new ItemStack(MSItems.SHARP_CANDY_CANE.get(), 1));
 		}
 		stack.hurtAndBreak(999, entityIn, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		return stack;

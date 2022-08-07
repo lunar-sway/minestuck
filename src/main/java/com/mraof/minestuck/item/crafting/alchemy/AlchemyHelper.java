@@ -18,8 +18,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
-import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD9j;
-import static com.mraof.minestuck.item.MSItems.SHUNT9j;
+import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
+import static com.mraof.minestuck.item.MSItems.SHUNT;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AlchemyHelper
@@ -81,12 +81,12 @@ public class AlchemyHelper
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD9j && item.hasTag() && item.getTag().getBoolean("punched");
+		return item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && item.getTag().getBoolean("punched");
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD9j && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
+		return item.getItem() == MSItems.CAPTCHA_CARD.get() && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
 	}
 	
 	public static boolean hasDecodedItem(ItemStack item)
@@ -104,7 +104,7 @@ public class AlchemyHelper
 		
 		if (card.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if (card.getItem().equals(CAPTCHA_CARD9j) && card.hasTag() && card.getTag().contains("contentID"))
+		if (card.getItem().equals(CAPTCHA_CARD.get()) && card.hasTag() && card.getTag().contains("contentID"))
 		{
 			return getDecodedItem(card);
 		}
@@ -123,7 +123,7 @@ public class AlchemyHelper
 			nbt = new CompoundTag();
 			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
-		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD9j : CRUXITE_DOWEL.get());
+		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get());
 		stack.setTag(nbt);
 		return stack;
 	}
@@ -193,7 +193,7 @@ public class AlchemyHelper
 	
 	public static ItemStack createShunt(ItemStack item)
 	{
-		ItemStack stack = createEncodedItem(item, SHUNT9j);
+		ItemStack stack = createEncodedItem(item, SHUNT.get());
 		stack.getOrCreateTag().putBoolean("punched", true);
 		
 		if(item.hasTag())

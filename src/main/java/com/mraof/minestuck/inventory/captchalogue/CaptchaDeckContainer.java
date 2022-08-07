@@ -45,7 +45,7 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 			@Override
 			public boolean mayPlace(ItemStack stack)
 			{
-				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD9j) && !AlchemyHelper.isPunchedCard(stack);
+				return ModusTypes.getTypeFromItem(stack.getItem()) != null || stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
 	}

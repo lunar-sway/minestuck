@@ -149,7 +149,7 @@ public class StackModus extends Modus
 			{
 				size--;
 				markDirty();
-				return new ItemStack(MSItems.CAPTCHA_CARD9j);
+				return new ItemStack(MSItems.CAPTCHA_CARD.get());
 			} else return ItemStack.EMPTY;
 		}
 		

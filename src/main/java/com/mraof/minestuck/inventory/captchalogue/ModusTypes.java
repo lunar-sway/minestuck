@@ -58,12 +58,12 @@ public class ModusTypes
 	@SubscribeEvent
 	public static void registerTypes(final RegistryEvent.Register<ModusType<?>> event)
 	{
-		event.getRegistry().register(new ModusType<>(StackModus::new, MSItems.STACK_MODUS_CARD9j).setRegistryName("stack"));
-		event.getRegistry().register(new ModusType<>(QueueModus::new, MSItems.QUEUE_MODUS_CARD9j).setRegistryName("queue"));
-		event.getRegistry().register(new ModusType<>(QueueStackModus::new, MSItems.QUEUESTACK_MODUS_CARD9j).setRegistryName("queue_stack"));
-		event.getRegistry().register(new ModusType<>(TreeModus::new, MSItems.TREE_MODUS_CARD9j).setRegistryName("tree"));
-		event.getRegistry().register(new ModusType<>(HashMapModus::new, MSItems.HASHMAP_MODUS_CARD9j).setRegistryName("hash_map"));
-		event.getRegistry().register(new ModusType<>(SetModus::new, MSItems.SET_MODUS_CARD9j).setRegistryName("set"));
+		event.getRegistry().register(new ModusType<>(StackModus::new, MSItems.STACK_MODUS_CARD.get()).setRegistryName("stack"));
+		event.getRegistry().register(new ModusType<>(QueueModus::new, MSItems.QUEUE_MODUS_CARD.get()).setRegistryName("queue"));
+		event.getRegistry().register(new ModusType<>(QueueStackModus::new, MSItems.QUEUESTACK_MODUS_CARD.get()).setRegistryName("queue_stack"));
+		event.getRegistry().register(new ModusType<>(TreeModus::new, MSItems.TREE_MODUS_CARD.get()).setRegistryName("tree"));
+		event.getRegistry().register(new ModusType<>(HashMapModus::new, MSItems.HASHMAP_MODUS_CARD.get()).setRegistryName("hash_map"));
+		event.getRegistry().register(new ModusType<>(SetModus::new, MSItems.SET_MODUS_CARD.get()).setRegistryName("set"));
 	}
 	
 	private static class ModusCallbacks implements IForgeRegistry.AddCallback<ModusType<?>>, IForgeRegistry.ClearCallback<ModusType<?>>, IForgeRegistry.CreateCallback<ModusType<?>>

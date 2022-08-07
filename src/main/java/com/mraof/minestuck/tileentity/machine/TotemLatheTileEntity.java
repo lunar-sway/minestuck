@@ -41,7 +41,7 @@ public class TotemLatheTileEntity extends BlockEntity
 	
 	private boolean tryAddCard(ItemStack stack)
 	{
-		if(!isBroken() && stack.getItem() == MSItems.CAPTCHA_CARD9j)
+		if(!isBroken() && stack.getItem() == MSItems.CAPTCHA_CARD.get())
 		{
 			if(card1.isEmpty())
 				card1 = stack;
