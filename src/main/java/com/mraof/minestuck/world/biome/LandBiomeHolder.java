@@ -94,9 +94,8 @@ public class LandBiomeHolder implements ILandBiomeSet
 	
 	private static BiomeGenerationSettings createGenerationSettings(Biome base, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
 	{
-		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder()/*TODO surface rule
-				.surfaceBuilder(() -> SurfaceBuilder.DEFAULT.configured(blocks.getSurfaceBuilderConfig(type)))*/;
-		/*
+		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();
+		/*TODO
 		if(type != LandBiomeType.OCEAN)
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSCFeatures.RETURN_NODE.placed(RarityFilter.onAverageOnceEvery(128), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 		*/
