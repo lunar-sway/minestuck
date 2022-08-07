@@ -296,10 +296,13 @@ public class ServerEventHandler
 			if(gameTime % inputTime == 0)
 			{
 				
+				int rung = PlayerSavedData.getData((ServerPlayerEntity) player).getEcheladder().getRung();
+				int spliceAmount = GristHelper.rungGrist[rung] / 20;
 				Session session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
 				GristGutter sessionGutter = session.getGristGutter();
 				
-				playerCache.addGrist(sessionGutter.splice(7));
+				playerCache.addGrist(sessionGutter.splice(spliceAmount));
+				
 				
 				GristSet rungGrist = GristHelper.limitGristByPlayerRung
 						(world, IdentifierHandler.encode(player), playerCache);
