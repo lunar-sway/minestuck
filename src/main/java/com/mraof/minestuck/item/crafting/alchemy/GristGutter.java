@@ -44,9 +44,9 @@ public class GristGutter extends GristSet
 				
 				System.out.println("gutter has capped out");
 				long sOverflowAmount = gutterTotal - GUTTER_CAPACITY;
-				this.gristTypes.put(type, GUTTER_CAPACITY);
+				this.gristTypes.put(type, (long) GUTTER_CAPACITY);
 				sOverflowGrist.addGrist(type, sOverflowAmount);
-			}
+				}
 		
 		}
 		return this;
