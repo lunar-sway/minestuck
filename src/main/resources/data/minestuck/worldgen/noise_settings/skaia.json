@@ -47,8 +47,32 @@
         "island_noise_override": false,
         "amplified": false,
         "terrain_shaper": {
-            "offset": -0.46875,
-            "factor": 1.5,
+            "offset": {
+                "coordinate": "weirdness",
+                "points": [
+                    {
+                        "location": -1.5,
+                        "value": -0.2,
+                        "derivative": 0
+                    },
+                    {
+                        "location": -0.5,
+                        "value": 1,
+                        "derivative": 0
+                    },
+                    {
+                        "location": 0.5,
+                        "value": -0.2,
+                        "derivative": 0
+                    },
+                    {
+                        "location": 1.5,
+                        "value": 1,
+                        "derivative": 0
+                    }
+                ]
+            },
+            "factor": 5,
             "jaggedness": 0
         }
     },
@@ -61,22 +85,10 @@
         "vegetation": "zero",
         "continents": "zero",
         "erosion": "zero",
-        "depth": "zero",
-        "ridges": "zero",
+        "depth": "minestuck:skaia/depth",
+        "ridges": "minestuck:skaia/ridges",
         "initial_density_without_jaggedness": "minestuck:skaia/initial_density",
-        "final_density": {
-            "type": "interpolated",
-            "argument": {
-                "type": "slide",
-                "argument": {
-                    "type": "add",
-                    "argument1": {
-                        "type": "old_blended_noise"
-                    },
-                    "argument2": "minestuck:skaia/initial_density"
-                }
-            }
-        },
+        "final_density": "minestuck:skaia/final_density",
         "vein_toggle": "zero",
         "vein_ridged": "zero",
         "vein_gap": "zero"

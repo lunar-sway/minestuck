@@ -21,6 +21,7 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nullable;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -280,7 +281,13 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	
 	@Override
 	public void addDebugScreenInfo(List<String> infoList, BlockPos pos)
-	{}
+	{
+		DecimalFormat decimalformat = new DecimalFormat("0.000");
+		DensityFunction.SinglePointContext point = new DensityFunction.SinglePointContext(pos.getX(), pos.getY(), pos.getZ());
+		infoList.add("NoiseRouter T: " + decimalformat.format(this.router.temperature().compute(point)) + " H: " + decimalformat.format(this.router.humidity().compute(point))
+				+ " C: " + decimalformat.format(this.router.continents().compute(point)) + " E: " + decimalformat.format(this.router.erosion().compute(point))
+				+ " D: " + decimalformat.format(this.router.depth().compute(point)) + " W: " + decimalformat.format(this.router.ridges().compute(point))
+				+ " AS: " + decimalformat.format(this.router.initialDensityWithoutJaggedness().compute(point)) + " N: " + decimalformat.format(this.router.finalDensity().compute(point)));}
 	
 	@Override
 	public void applyCarvers(WorldGenRegion pLevel, long pSeed, BiomeManager pBiomeManager, StructureFeatureManager pStructureFeatureManager, ChunkAccess pChunk, GenerationStep.Carving pStep)
