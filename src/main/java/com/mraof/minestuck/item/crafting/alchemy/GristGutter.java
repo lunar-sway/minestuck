@@ -26,14 +26,27 @@ public class GristGutter extends GristSet
 	}
 	//todo: what happens to grist gutter super overflow
 	
+
 	@Override
 	public GristGutter addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
+			GristSet sOverflowGrist = new GristSet();
+			
 			this.gristTypes.compute(type, (key, value) ->
 					value == null ? amount : value + amount);
 			gutterTotal += amount;
+			
+			
+			if(gutterTotal > GUTTER_CAPACITY)
+			{
+				
+				System.out.println("gutter has capped out");
+				long sOverflowAmount = gutterTotal - GUTTER_CAPACITY;
+				this.gristTypes.put(type, GUTTER_CAPACITY);
+				sOverflowGrist.addGrist(type, sOverflowAmount);
+			}
 		
 		}
 		return this;
