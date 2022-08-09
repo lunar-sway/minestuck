@@ -36,7 +36,7 @@ public class HologramEntity extends Entity
 
 	public HologramEntity(EntityType<? extends HologramEntity> type, Level level)
 	{
-		this(type, level, new ItemStack(MSBlocks.GENERIC_OBJECT));
+		this(type, level, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
 	}
 	
 	public void onUpdate()
@@ -60,7 +60,7 @@ public class HologramEntity extends Entity
 	@Override
 	protected void defineSynchedData()
 	{
-		this.entityData.define(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT));
+		this.entityData.define(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
 	}
 	
 	@Override

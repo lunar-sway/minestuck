@@ -1,6 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ProgramData;
@@ -57,6 +58,7 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		MSBlocks.BLOCKS.register(eventBus);
 		MSFluids.FLUIDS.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);

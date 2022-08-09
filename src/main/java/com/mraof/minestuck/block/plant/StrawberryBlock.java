@@ -43,12 +43,12 @@ public class StrawberryBlock extends StemGrownBlock
 	@Override
 	public StemBlock getStem()
 	{
-		return MSBlocks.STRAWBERRY_STEM;
+		return MSBlocks.STRAWBERRY_STEM.get();
 	}
 	
 	@Override
 	public AttachedStemBlock getAttachedStem()
 	{
-		return MSBlocks.ATTACHED_STRAWBERRY_STEM;
+		return MSBlocks.ATTACHED_STRAWBERRY_STEM.get();
 	}
 }

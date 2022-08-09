@@ -34,8 +34,8 @@ public class CastleSolidPiece extends CastlePiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureFeatureManager structureManager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
   
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,7, 7, chessTile, chessTile1, false);
 	}

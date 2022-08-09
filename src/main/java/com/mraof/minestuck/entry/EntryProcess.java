@@ -459,11 +459,11 @@ public class EntryProcess
 		for(int i = 0; i < 9; i++)
 			if(i == 4)
 			{
-				world.setBlock(pos, MSBlocks.GATE.defaultBlockState().cycle(GateBlock.MAIN), 0);
+				world.setBlock(pos, MSBlocks.GATE.get().defaultBlockState().cycle(GateBlock.MAIN), 0);
 				GateTileEntity tileEntity = (GateTileEntity) world.getBlockEntity(pos);
 				tileEntity.gateType = gateType;
 			}
-			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.defaultBlockState(), 0);
+			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.get().defaultBlockState(), 0);
 	}
 	
 	private static class BlockMove

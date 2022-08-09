@@ -123,7 +123,7 @@ public class AlchemyHelper
 			nbt = new CompoundTag();
 			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
-		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL);
+		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL.get());
 		stack.setTag(nbt);
 		return stack;
 	}

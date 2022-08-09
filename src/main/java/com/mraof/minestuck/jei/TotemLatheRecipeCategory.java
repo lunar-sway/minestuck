@@ -94,7 +94,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		}
 		stackGroup.set(1, second);
 
-		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), ClientPlayerData.getPlayerColor()));
+		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), ClientPlayerData.getPlayerColor()));
 
 		List<ItemStack> outputs = new ArrayList<>(ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 		ItemStack outputDowel = ColorHandler.setColor(AlchemyHelper.createEncodedItem(outputs.get(0), false), ClientPlayerData.getPlayerColor());

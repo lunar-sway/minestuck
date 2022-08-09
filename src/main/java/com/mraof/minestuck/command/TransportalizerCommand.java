@@ -45,7 +45,7 @@ public class TransportalizerCommand
 		
 		ServerLevel level = source.getServer().getLevel(destination.dimension());
 		
-		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER)
+		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER.get())
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
 		if(TransportalizerTileEntity.isBlocked(level, destination.pos()))

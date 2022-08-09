@@ -53,15 +53,15 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
+		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.get().defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
 		if(eroded)
 		{
 			generateBox(level, boundingBoxIn, 1, -20, 1, 3, 40 - randReduction, 3, columnBlock, columnBlock, false);
 		} else
 		{
-			Block innerBlock = uraniumFilled ? MSBlocks.URANIUM_BLOCK : MSBlocks.CRUXITE_BLOCK;
+			Block innerBlock = uraniumFilled ? MSBlocks.URANIUM_BLOCK.get() : MSBlocks.CRUXITE_BLOCK.get();
 			generateBox(level, boundingBoxIn, 1, -20, 1, 3, 40, 3, columnBlock, columnBlock, false);
-			generateBox(level, boundingBoxIn, 0, 41, 0, 4, 45, 4, MSBlocks.GREEN_STONE.defaultBlockState(), innerBlock.defaultBlockState(), false); //top of pillar with a randomly filled center picked by uraniumFilled
+			generateBox(level, boundingBoxIn, 0, 41, 0, 4, 45, 4, MSBlocks.GREEN_STONE.get().defaultBlockState(), innerBlock.defaultBlockState(), false); //top of pillar with a randomly filled center picked by uraniumFilled
 		}
 	}
 }

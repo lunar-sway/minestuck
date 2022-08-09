@@ -44,7 +44,7 @@ public class MinestuckJeiPlugin implements IModPlugin
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
     {
         subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD);
-        subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.asItem());
+        subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
     }
 
 	@Override
@@ -68,12 +68,12 @@ public class MinestuckJeiPlugin implements IModPlugin
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
 	{
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER), GRIST_COST_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER), GRIST_COST_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER.get()), GRIST_COST_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE), LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE), LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE.get()), LATHE_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), DESIGNIX_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL), GRIST_COST_ID, LATHE_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX.get()), DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), GRIST_COST_ID, LATHE_ID);
 		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD), LATHE_ID, DESIGNIX_ID);
 	}
 

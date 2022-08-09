@@ -38,16 +38,16 @@ public class RainbowLandType extends TerrainLandType
 	{
 		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.defaultBlockState());
 		registry.setBlockState("surface", Blocks.WHITE_WOOL.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.defaultBlockState());
+		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.get().defaultBlockState());
+		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.get().defaultBlockState());
 		registry.setBlockState("structure_primary_decorative", Blocks.ACACIA_LOG.defaultBlockState());
 		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.defaultBlockState());
+		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.get().defaultBlockState());
 		registry.setBlockState("structure_secondary_decorative", Blocks.SPRUCE_PLANKS.defaultBlockState());
 		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.defaultBlockState());
 		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.defaultBlockState());
-		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
+		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.get().defaultBlockState());
+		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
 		registry.setBlockState("bush", rainbow_leaves);
 		registry.setBlockState("mushroom_1", rainbow_leaves);
 		registry.setBlockState("mushroom_2", rainbow_leaves);

@@ -81,7 +81,7 @@ public class SkaiaPortalTileEntity extends BlockEntity //implements ITeleporter
 		double x = worldPosition.getX();
 		double y = worldPosition.getY();
 		double z = worldPosition.getZ();
-		Block[] blocks = {MSBlocks.BLACK_CHESS_DIRT, MSBlocks.LIGHT_GRAY_CHESS_DIRT, MSBlocks.WHITE_CHESS_DIRT, MSBlocks.DARK_GRAY_CHESS_DIRT};
+		Block[] blocks = {MSBlocks.BLACK_CHESS_DIRT.get(), MSBlocks.LIGHT_GRAY_CHESS_DIRT.get(), MSBlocks.WHITE_CHESS_DIRT.get(), MSBlocks.DARK_GRAY_CHESS_DIRT.get()};
 		for(int blockX = (int) x - 2; blockX < x + 2; blockX++)
 		{
 			for(int blockZ = (int) z - 2; blockZ < z + 2; blockZ++)
