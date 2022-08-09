@@ -218,11 +218,16 @@ public class GristSet
 			{
 				
 				System.out.println("grist is going to gutter");
+				//it's actually quite deceptive but in order to get the cap effect without reworking significant amounts
+				//of the code, we decided to make it register the cap (that we got from limit player
+				//by run) and then simply set the cache to the appropriate number should there be
+				//an overflow.
 				long overflowAmount = amount.getAmount() - cap;
 				this.gristTypes.put(amount.getType(), (long) cap);
 				overflowGrist.addGrist(amount.getType(), overflowAmount);
 			}
 		}
+		//once all of this is done we go back to grist helper where we end the process in the increase function
 		return overflowGrist;
 	}
 	
@@ -315,6 +320,9 @@ public class GristSet
 	}
 	
 	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
+
+	
+	public void spawnGristEntities(World world, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
 	{
 		for(GristAmount amount : getAmounts())
 		{

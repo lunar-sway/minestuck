@@ -270,7 +270,6 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);

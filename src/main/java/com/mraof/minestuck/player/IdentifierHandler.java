@@ -22,6 +22,8 @@ import java.util.UUID;
  */
 public class IdentifierHandler
 {
+	
+	
 	public static final PlayerIdentifier NULL_IDENTIFIER = new NullIdentifier();
 	
 	private static List<PlayerIdentifier> identifierList = new ArrayList<>();
