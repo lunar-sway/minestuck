@@ -1,0 +1,9 @@
+{
+    "type": "terrain_shaper_spline",
+    "continentalness": "zero",
+    "erosion": "zero",
+    "weirdness": "minestuck:skaia/ridges",
+    "spline": "factor",
+    "min_value": 0,
+    "max_value": 8
+}

@@ -23,13 +23,13 @@
     },
     "noise": {
         "top_slide": {
-            "target": -10,
-            "size": 3,
+            "target": -1,
+            "size": 2,
             "offset": 0
         },
         "bottom_slide": {
-            "target": -30,
-            "size": 0,
+            "target": 1,
+            "size": 3,
             "offset": 0
         },
         "sampling": {
@@ -47,8 +47,32 @@
         "island_noise_override": false,
         "amplified": false,
         "terrain_shaper": {
-            "offset": -0.46875,
-            "factor": 1,
+            "offset": {
+                "coordinate": "weirdness",
+                "points": [
+                    {
+                        "location": -1.5,
+                        "value": -0.2,
+                        "derivative": 0
+                    },
+                    {
+                        "location": -0.5,
+                        "value": 1,
+                        "derivative": 0
+                    },
+                    {
+                        "location": 0.5,
+                        "value": -0.2,
+                        "derivative": 0
+                    },
+                    {
+                        "location": 1.5,
+                        "value": 1,
+                        "derivative": 0
+                    }
+                ]
+            },
+            "factor": 5,
             "jaggedness": 0
         }
     },
@@ -61,16 +85,37 @@
         "vegetation": "zero",
         "continents": "zero",
         "erosion": "zero",
-        "depth": "zero",
-        "ridges": "zero",
-        "initial_density_without_jaggedness": "zero",
-        "final_density": "zero",
+        "depth": "minestuck:skaia/depth",
+        "ridges": "minestuck:skaia/ridges",
+        "initial_density_without_jaggedness": "minestuck:skaia/initial_density",
+        "final_density": "minestuck:skaia/final_density",
         "vein_toggle": "zero",
         "vein_ridged": "zero",
         "vein_gap": "zero"
     },
     "surface_rule": {
-        "type": "bandlands"
+        "type": "sequence",
+        "sequence": [
+            {
+                "type": "condition",
+                "if_true": {
+                    "type": "vertical_gradient",
+                    "random_name": "bedrock_floor",
+                    "true_at_and_below": {
+                        "above_bottom": 0
+                    },
+                    "false_at_and_above": {
+                        "above_bottom": 5
+                    }
+                },
+                "then_run": {
+                    "type": "block",
+                    "result_state": {
+                        "Name": "minecraft:bedrock"
+                    }
+                }
+            }
+        ]
     },
     "aquifers_enabled": false,
     "ore_veins_enabled": false,

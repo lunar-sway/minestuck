@@ -48,7 +48,8 @@ public class DynamicDimensions
 		WorldData worldData = server.getWorldData();
 		WorldGenSettings genSettings = worldData.worldGenSettings();
 		
-		ChunkGenerator chunkGenerator = new LandChunkGenerator(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), genSettings.seed() + worldKey.location().getPath().hashCode(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
+		ChunkGenerator chunkGenerator = new LandChunkGenerator(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY),
+				genSettings.seed() + worldKey.location().getPath().hashCode(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
 		LevelStem dimension = new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolder(LAND_TYPE), chunkGenerator);
 		
 		((WritableRegistry<LevelStem>) genSettings.dimensions()).register(dimensionKey, dimension, Lifecycle.experimental());

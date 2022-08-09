@@ -45,7 +45,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 		
 		addSlot(new InputSlot(inventory, 0, CARD_1_X, CARD_1_Y, MSItems.CAPTCHA_CARD.get()));
 		addSlot(new InputSlot(inventory, 1, CARD_2_X, CARD_2_Y, MSItems.CAPTCHA_CARD.get()));
-		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MSBlocks.CRUXITE_DOWEL.get().asItem()));
+		addSlot(new InputSlot(inventory, 2, DOWEL_X, DOWEL_Y, MSItems.CRUXITE_DOWEL)); //was MSBlocks.CRUXITE_DOWEL.get().asItem()
 		addSlot(new OutputSlot(inventory, 3, OUTPUT_X, OUTPUT_Y));
 		
 		bindPlayerInventory(playerInventory);

@@ -43,10 +43,11 @@ public class MSBlocks
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_DIRT = BLOCKS.register("dark_gray_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_DIRT = BLOCKS.register("light_gray_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> SKAIA_PORTAL = BLOCKS.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of(Material.PORTAL, MaterialColor.COLOR_CYAN).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noDrops()));
-	static BlockBehaviour.Properties blackChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
-	static BlockBehaviour.Properties darkGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
-	static BlockBehaviour.Properties lightGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
-	static BlockBehaviour.Properties whiteChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties blackChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	private static final BlockBehaviour.Properties darkGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	private static final BlockBehaviour.Properties lightGrayChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_LIGHT_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	private static final BlockBehaviour.Properties whiteChessBricks = Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_WHITE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> BLACK_CHESS_BRICKS = BLOCKS.register("black_chess_bricks", () -> new Block(blackChessBricks));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICKS = BLOCKS.register("dark_gray_chess_bricks", () -> new Block(darkGrayChessBricks));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICKS = BLOCKS.register("light_gray_chess_bricks", () -> new Block(lightGrayChessBricks));
@@ -59,15 +60,18 @@ public class MSBlocks
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_TRIM = BLOCKS.register("dark_gray_chess_brick_trim", () -> new MSDirectionalBlock(darkGrayChessBricks));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_TRIM = BLOCKS.register("light_gray_chess_brick_trim", () -> new MSDirectionalBlock(lightGrayChessBricks));
 	public static final RegistryObject<Block> WHITE_CHESS_BRICK_TRIM = BLOCKS.register("white_chess_brick_trim", () -> new MSDirectionalBlock(whiteChessBricks));
-	static BlockBehaviour.Properties stainedGlass = Block.Properties.of(Material.GLASS, DyeColor.BLUE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never);
+	
+	private static final BlockBehaviour.Properties stainedGlass = Block.Properties.of(Material.GLASS, DyeColor.BLUE).strength(0.3F).sound(SoundType.GLASS).noOcclusion().isValidSpawn(MSBlocks::never).isRedstoneConductor(MSBlocks::never).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never);
 	public static final RegistryObject<Block> CHECKERED_STAINED_GLASS = BLOCKS.register("checkered_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	public static final RegistryObject<Block> BLACK_CROWN_STAINED_GLASS = BLOCKS.register("black_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	public static final RegistryObject<Block> BLACK_PAWN_STAINED_GLASS = BLOCKS.register("black_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	public static final RegistryObject<Block> WHITE_CROWN_STAINED_GLASS = BLOCKS.register("white_crown_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	public static final RegistryObject<Block> WHITE_PAWN_STAINED_GLASS = BLOCKS.register("white_pawn_stained_glass", () -> new StainedGlassBlock(DyeColor.BLUE, stainedGlass));
 	
+	
+	
 	//Ores
-	static BlockBehaviour.Properties cruxiteOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops();
+	private static final BlockBehaviour.Properties cruxiteOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops();
 	public static final UniformInt cruxiteDrops = UniformInt.of(2, 5);
 	public static final RegistryObject<Block> STONE_CRUXITE_ORE = BLOCKS.register("stone_cruxite_ore", () -> new OreBlock(cruxiteOre, cruxiteDrops));
 	public static final RegistryObject<Block> NETHERRACK_CRUXITE_ORE = BLOCKS.register("netherrack_cruxite_ore", () -> new OreBlock(cruxiteOre, cruxiteDrops));
@@ -77,8 +81,9 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_STONE_CRUXITE_ORE = BLOCKS.register("end_stone_cruxite_ore", () -> new OreBlock(cruxiteOre, cruxiteDrops));
 	public static final RegistryObject<Block> SHADE_STONE_CRUXITE_ORE = BLOCKS.register("shade_stone_cruxite_ore", () -> new OreBlock(cruxiteOre, cruxiteDrops));
 	public static final RegistryObject<Block> PINK_STONE_CRUXITE_ORE = BLOCKS.register("pink_stone_cruxite_ore", () -> new OreBlock(cruxiteOre, cruxiteDrops));
-	static BlockBehaviour.Properties uraniumOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3);
-	public static final UniformInt uraniumDrops = UniformInt.of(2, 5);
+	
+	private static final BlockBehaviour.Properties uraniumOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3);
+	private static final UniformInt uraniumDrops = UniformInt.of(2, 5);
 	public static final RegistryObject<Block> STONE_URANIUM_ORE = BLOCKS.register("stone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> NETHERRACK_URANIUM_ORE = BLOCKS.register("netherrack_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> COBBLESTONE_URANIUM_ORE = BLOCKS.register("cobblestone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
@@ -87,32 +92,41 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_STONE_URANIUM_ORE = BLOCKS.register("end_stone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> SHADE_STONE_URANIUM_ORE = BLOCKS.register("shade_stone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> PINK_STONE_URANIUM_ORE = BLOCKS.register("pink_stone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
-	static BlockBehaviour.Properties genericOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops();
-	public static final UniformInt coalDrops = UniformInt.of(0, 2);
+	
+	private static final BlockBehaviour.Properties genericOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops();
+	private static final UniformInt coalDrops = UniformInt.of(0, 2);
 	public static final RegistryObject<Block> NETHERRACK_COAL_ORE = BLOCKS.register("netherrack_coal_ore", () -> new OreBlock(genericOre, coalDrops));
 	public static final RegistryObject<Block> SHADE_STONE_COAL_ORE = BLOCKS.register("shade_stone_coal_ore", () -> new OreBlock(genericOre, coalDrops));
 	public static final RegistryObject<Block> PINK_STONE_COAL_ORE = BLOCKS.register("pink_stone_coal_ore", () -> new OreBlock(genericOre, coalDrops));
+	
 	public static final RegistryObject<Block> END_STONE_IRON_ORE = BLOCKS.register("end_stone_iron_ore", () -> new OreBlock(genericOre));
 	public static final RegistryObject<Block> SANDSTONE_IRON_ORE = BLOCKS.register("sandstone_iron_ore", () -> new OreBlock(genericOre));
 	public static final RegistryObject<Block> RED_SANDSTONE_IRON_ORE = BLOCKS.register("red_sandstone_iron_ore", () -> new OreBlock(genericOre));
+	
 	public static final RegistryObject<Block> SANDSTONE_GOLD_ORE = BLOCKS.register("sandstone_gold_ore", () -> new OreBlock(genericOre));
 	public static final RegistryObject<Block> RED_SANDSTONE_GOLD_ORE = BLOCKS.register("red_sandstone_gold_ore", () -> new OreBlock(genericOre));
 	public static final RegistryObject<Block> SHADE_STONE_GOLD_ORE = BLOCKS.register("shade_stone_gold_ore", () -> new OreBlock(genericOre));
 	public static final RegistryObject<Block> PINK_STONE_GOLD_ORE = BLOCKS.register("pink_stone_gold_ore", () -> new OreBlock(genericOre));
+	
 	public static final RegistryObject<Block> END_STONE_REDSTONE_ORE = BLOCKS.register("end_stone_redstone_ore", () -> new OreBlock(genericOre, UniformInt.of(1, 5)));
 	public static final RegistryObject<Block> STONE_QUARTZ_ORE = BLOCKS.register("stone_quartz_ore", () -> new OreBlock(genericOre, UniformInt.of(2, 5)));
 	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = BLOCKS.register("pink_stone_lapis_ore", () -> new OreBlock(genericOre, UniformInt.of(2, 5)));
 	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = BLOCKS.register("pink_stone_diamond_ore", () -> new OreBlock(genericOre, UniformInt.of(3, 7)));
+	
+	
 	
 	//Resource Blocks
 	public static final RegistryObject<Block> CRUXITE_BLOCK = BLOCKS.register("cruxite_block", () -> new Block(Block.Properties.of(Material.STONE, DyeColor.LIGHT_BLUE).strength(3.0F).requiresCorrectToolForDrops()));
 	public static final RegistryObject<Block> URANIUM_BLOCK = BLOCKS.register("uranium_block", () -> new Block(Block.Properties.of(Material.STONE, DyeColor.LIME).strength(3.0F).requiresCorrectToolForDrops().lightLevel(state -> 7)));
 	public static final RegistryObject<Block> GENERIC_OBJECT = BLOCKS.register("generic_object", () -> new Block(Block.Properties.of(Material.VEGETABLE, DyeColor.LIME).strength(1.0F).sound(SoundType.WOOD)));
 	
+	
+	
 	//Land Environment
 	public static final RegistryObject<Block> BLUE_DIRT = BLOCKS.register("blue_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_BLUE).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> THOUGHT_DIRT = BLOCKS.register("thought_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_LIGHT_GREEN).strength(0.5F).sound(SoundType.GRAVEL)));
-	static BlockBehaviour.Properties coarseStone = Block.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F);
+	
+	private static final BlockBehaviour.Properties coarseStone = Block.Properties.of(Material.STONE, MaterialColor.STONE).requiresCorrectToolForDrops().strength(2.0F, 6.0F);
 	public static final RegistryObject<Block> COARSE_STONE = BLOCKS.register("coarse_stone", () -> new Block(coarseStone));
 	public static final RegistryObject<Block> CHISELED_COARSE_STONE = BLOCKS.register("chiseled_coarse_stone", () -> new Block(coarseStone));
 	public static final RegistryObject<Block> COARSE_STONE_BRICKS = BLOCKS.register("coarse_stone_bricks", () -> new Block(coarseStone));
@@ -120,7 +134,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_COARSE_STONE_BRICKS = BLOCKS.register("chiseled_coarse_stone_bricks", () -> new Block(coarseStone));
 	public static final RegistryObject<Block> CRACKED_COARSE_STONE_BRICKS = BLOCKS.register("cracked_coarse_stone_bricks", () -> new Block(coarseStone));
 	public static final RegistryObject<Block> MOSSY_COARSE_STONE_BRICKS = BLOCKS.register("mossy_coarse_stone_bricks", () -> new Block(coarseStone));
-	static BlockBehaviour.Properties shadeStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties shadeStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> SHADE_STONE = BLOCKS.register("shade_stone", () -> new Block(shadeStone));
 	public static final RegistryObject<Block> SMOOTH_SHADE_STONE = BLOCKS.register("smooth_shade_stone", () -> new Block(shadeStone));
 	public static final RegistryObject<Block> SHADE_BRICKS = BLOCKS.register("shade_bricks", () -> new Block(shadeStone));
@@ -130,7 +145,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> MOSSY_SHADE_BRICKS = BLOCKS.register("mossy_shade_bricks", () -> new Block(shadeStone));
 	public static final RegistryObject<Block> BLOOD_SHADE_BRICKS = BLOCKS.register("blood_shade_bricks", () -> new Block(shadeStone));
 	public static final RegistryObject<Block> TAR_SHADE_BRICKS = BLOCKS.register("tar_shade_bricks", () -> new Block(shadeStone));
-	static BlockBehaviour.Properties frost = Block.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F); //TODO consider changing material to ICE_SOLID
+	
+	private static final BlockBehaviour.Properties frost = Block.Properties.of(Material.STONE, MaterialColor.ICE).requiresCorrectToolForDrops().strength(1.5F, 6.0F); //TODO consider changing material to ICE_SOLID
 	public static final RegistryObject<Block> FROST_TILE = BLOCKS.register("frost_tile", () -> new Block(frost));
 	public static final RegistryObject<Block> CHISELED_FROST_TILE = BLOCKS.register("chiseled_frost_tile", () -> new Block(frost));
 	public static final RegistryObject<Block> FROST_BRICKS = BLOCKS.register("frost_bricks", () -> new Block(frost));
@@ -138,11 +154,13 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_FROST_BRICKS = BLOCKS.register("chiseled_frost_bricks", () -> new Block(frost)); //while it is a pillar block, it cannot be rotated, making it similar to cut sandstone
 	public static final RegistryObject<Block> CRACKED_FROST_BRICKS = BLOCKS.register("cracked_frost_bricks", () -> new Block(frost));
 	public static final RegistryObject<Block> FLOWERY_FROST_BRICKS = BLOCKS.register("flowery_frost_bricks", () -> new Block(frost));
-	static BlockBehaviour.Properties metal = Block.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F);
+	
+	private static final BlockBehaviour.Properties metal = Block.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F);
 	public static final RegistryObject<Block> CAST_IRON = BLOCKS.register("cast_iron", () -> new Block(metal));
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = BLOCKS.register("chiseled_cast_iron", () -> new Block(metal));
 	public static final RegistryObject<Block> STEEL_BEAM = BLOCKS.register("steel_beam", () -> new MSDirectionalBlock(metal));
-	static BlockBehaviour.Properties myceliumStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties myceliumStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> MYCELIUM_COBBLESTONE = BLOCKS.register("mycelium_cobblestone", () -> new Block(myceliumStone));
 	public static final RegistryObject<Block> MYCELIUM_STONE = BLOCKS.register("mycelium_stone", () -> new Block(myceliumStone));
 	public static final RegistryObject<Block> POLISHED_MYCELIUM_STONE = BLOCKS.register("polished_mycelium_stone", () -> new Block(myceliumStone));
@@ -152,7 +170,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_MYCELIUM_BRICKS = BLOCKS.register("cracked_mycelium_bricks", () -> new Block(myceliumStone));
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = BLOCKS.register("mossy_mycelium_bricks", () -> new Block(myceliumStone));
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = BLOCKS.register("flowery_mycelium_bricks", () -> new Block(myceliumStone));
-	static BlockBehaviour.Properties blackStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties blackStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F);
 	public static final RegistryObject<Block> BLACK_SAND = BLOCKS.register("black_sand", () -> new SandBlock(0x181915, Block.Properties.of(Material.SAND, MaterialColor.COLOR_BLACK).strength(0.5F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> BLACK_COBBLESTONE = BLOCKS.register("black_cobblestone", () -> new Block(blackStone));
 	public static final RegistryObject<Block> BLACK_STONE = BLOCKS.register("black_stone", () -> new Block(blackStone));
@@ -161,14 +180,16 @@ public class MSBlocks
 	public static final RegistryObject<Block> BLACK_STONE_COLUMN = BLOCKS.register("black_stone_column", () -> new MSDirectionalBlock(blackStone));
 	public static final RegistryObject<Block> CHISELED_BLACK_STONE_BRICKS = BLOCKS.register("chiseled_black_stone_bricks", () -> new Block(blackStone));
 	public static final RegistryObject<Block> CRACKED_BLACK_STONE_BRICKS = BLOCKS.register("cracked_black_stone_bricks", () -> new Block(blackStone));
-	static BlockBehaviour.Properties floweryOrDecrepitStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties floweryOrDecrepitStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> FLOWERY_MOSSY_COBBLESTONE = BLOCKS.register("flowery_mossy_cobblestone", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> FLOWERY_MOSSY_STONE_BRICKS = BLOCKS.register("flowery_mossy_stone_bricks", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> DECREPIT_STONE_BRICKS = BLOCKS.register("decrepit_stone_bricks", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> MOSSY_DECREPIT_STONE_BRICKS = BLOCKS.register("mossy_decrepit_stone_bricks", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> COARSE_END_STONE = BLOCKS.register("coarse_end_stone", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	public static final RegistryObject<Block> END_GRASS = BLOCKS.register("end_grass", () -> new EndGrassBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
-	static BlockBehaviour.Properties chalk = Block.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties chalk = Block.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> CHALK = BLOCKS.register("chalk", () -> new Block(chalk));
 	public static final RegistryObject<Block> POLISHED_CHALK = BLOCKS.register("polished_chalk", () -> new Block(chalk));
 	public static final RegistryObject<Block> CHALK_BRICKS = BLOCKS.register("chalk_bricks", () -> new Block(chalk));
@@ -176,7 +197,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_CHALK_BRICKS = BLOCKS.register("chiseled_chalk_bricks", () -> new Block(chalk));
 	public static final RegistryObject<Block> MOSSY_CHALK_BRICKS = BLOCKS.register("mossy_chalk_bricks", () -> new Block(chalk));
 	public static final RegistryObject<Block> FLOWERY_CHALK_BRICKS = BLOCKS.register("flowery_chalk_bricks", () -> new Block(chalk));
-	static BlockBehaviour.Properties pinkStone = Block.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
+	
+	private static final BlockBehaviour.Properties pinkStone = Block.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
 	public static final RegistryObject<Block> PINK_STONE = BLOCKS.register("pink_stone", () -> new Block(pinkStone));
 	public static final RegistryObject<Block> POLISHED_PINK_STONE = BLOCKS.register("polished_pink_stone", () -> new Block(pinkStone));
 	public static final RegistryObject<Block> PINK_STONE_BRICKS = BLOCKS.register("pink_stone_bricks", () -> new Block(pinkStone));
@@ -184,13 +206,15 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_PINK_STONE_BRICKS = BLOCKS.register("chiseled_pink_stone_bricks", () -> new Block(pinkStone));
 	public static final RegistryObject<Block> CRACKED_PINK_STONE_BRICKS = BLOCKS.register("cracked_pink_stone_bricks", () -> new Block(pinkStone));
 	public static final RegistryObject<Block> MOSSY_PINK_STONE_BRICKS = BLOCKS.register("mossy_pink_stone_bricks", () -> new Block(pinkStone));
-	static BlockBehaviour.Properties brownStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F);
+	
+	private static final BlockBehaviour.Properties brownStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_BROWN).requiresCorrectToolForDrops().strength(2.5F, 7.0F);
 	public static final RegistryObject<Block> BROWN_STONE = BLOCKS.register("brown_stone", () -> new Block(brownStone));
 	public static final RegistryObject<Block> POLISHED_BROWN_STONE = BLOCKS.register("polished_brown_stone", () -> new Block(brownStone));
 	public static final RegistryObject<Block> BROWN_STONE_BRICKS = BLOCKS.register("brown_stone_bricks", () -> new Block(brownStone));
 	public static final RegistryObject<Block> CRACKED_BROWN_STONE_BRICKS = BLOCKS.register("cracked_brown_stone_bricks", () -> new Block(brownStone));
 	public static final RegistryObject<Block> BROWN_STONE_COLUMN = BLOCKS.register("brown_stone_column", () -> new MSDirectionalBlock(brownStone));
-	static BlockBehaviour.Properties greenStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).requiresCorrectToolForDrops().strength(2.5F, 7.0F);
+	
+	private static final BlockBehaviour.Properties greenStone = Block.Properties.of(Material.STONE, MaterialColor.COLOR_GREEN).requiresCorrectToolForDrops().strength(2.5F, 7.0F);
 	public static final RegistryObject<Block> GREEN_STONE = BLOCKS.register("green_stone", () -> new Block(greenStone));
 	public static final RegistryObject<Block> POLISHED_GREEN_STONE = BLOCKS.register("polished_green_stone", () -> new Block(greenStone));
 	public static final RegistryObject<Block> GREEN_STONE_BRICKS = BLOCKS.register("green_stone_bricks", () -> new Block(greenStone));
@@ -209,16 +233,21 @@ public class MSBlocks
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_SALAMANDER_RIGHT = BLOCKS.register("green_stone_brick_salamander_right", () -> new HieroglyphBlock(greenStone));
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_SKAIA = BLOCKS.register("green_stone_brick_skaia", () -> new HieroglyphBlock(greenStone));
 	public static final RegistryObject<Block> GREEN_STONE_BRICK_TURTLE = BLOCKS.register("green_stone_brick_turtle", () -> new HieroglyphBlock(greenStone));
+	
 	public static final RegistryObject<Block> SANDSTONE_COLUMN = BLOCKS.register("sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> CHISELED_SANDSTONE_COLUMN = BLOCKS.register("chiseled_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> RED_SANDSTONE_COLUMN = BLOCKS.register("red_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F)));
 	public static final RegistryObject<Block> CHISELED_RED_SANDSTONE_COLUMN = BLOCKS.register("chiseled_red_sandstone_column", () -> new MSDirectionalBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(0.8F)));
+	
 	public static final RegistryObject<Block> UNCARVED_WOOD = BLOCKS.register("uncarved_wood", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CHIPBOARD = BLOCKS.register("chipboard", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<Block> WOOD_SHAVINGS = BLOCKS.register("wood_shavings", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).sound(SoundType.SAND)));
+	
 	public static final RegistryObject<Block> DENSE_CLOUD = BLOCKS.register("dense_cloud", () -> new Block(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)));
 	public static final RegistryObject<Block> BRIGHT_DENSE_CLOUD = BLOCKS.register("bright_dense_cloud", () -> new Block(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)));
 	public static final RegistryObject<Block> SUGAR_CUBE = BLOCKS.register("sugar_cube", () -> new Block(Block.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)));
+	
+	
 	
 	//Land Tree Blocks
 	public static final RegistryObject<Block> GLOWING_LOG = BLOCKS.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
@@ -239,24 +268,32 @@ public class MSBlocks
 	public static final RegistryObject<Block> PETRIFIED_WOOD = BLOCKS.register("petrified_wood", () -> new RotatedPillarBlock(Block.Properties.of(Material.WOOD, MaterialColor.PODZOL).strength(2.0F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> GLOWING_PLANKS = BLOCKS.register("glowing_planks", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F, 3.0F).lightLevel(state -> 7).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_PLANKS = BLOCKS.register("frost_planks", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD, MaterialColor.ICE).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	static BlockBehaviour.Properties rainbowPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	
+	private static final BlockBehaviour.Properties rainbowPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> RAINBOW_PLANKS = BLOCKS.register("rainbow_planks", () -> new FlammableBlock(5, 20, rainbowPlanks));
-	static BlockBehaviour.Properties endPlanks = Block.Properties.of(Material.WOOD, MaterialColor.SAND).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	
+	private static final BlockBehaviour.Properties endPlanks = Block.Properties.of(Material.WOOD, MaterialColor.SAND).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> END_PLANKS = BLOCKS.register("end_planks", () -> new FlammableBlock(1, 250, endPlanks));
-	static BlockBehaviour.Properties deadPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	
+	private static final BlockBehaviour.Properties deadPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> DEAD_PLANKS = BLOCKS.register("dead_planks", () -> new FlammableBlock(5, 5, deadPlanks));
-	static BlockBehaviour.Properties treatedPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	
+	private static final BlockBehaviour.Properties treatedPlanks = Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> TREATED_PLANKS = BLOCKS.register("treated_planks", () -> new FlammableBlock(0, 0, treatedPlanks));
-	static BlockBehaviour.Properties leaves = Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never);
+	
+	private static final BlockBehaviour.Properties leaves = Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never);
 	public static final RegistryObject<Block> FROST_LEAVES = BLOCKS.register("frost_leaves", () -> new FlammableLeavesBlock(leaves));
 	public static final RegistryObject<Block> RAINBOW_LEAVES = BLOCKS.register("rainbow_leaves", () -> new FlammableLeavesBlock(leaves));
 	public static final RegistryObject<Block> END_LEAVES = BLOCKS.register("end_leaves", () -> new EndLeavesBlock(leaves));
-	static BlockBehaviour.Properties sapling = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
-	public static final RegistryObject<Block> RAINBOW_SAPLING = BLOCKS.register("rainbow_sapling", () -> new RainbowSaplingBlock(sapling));
-	public static final RegistryObject<Block> END_SAPLING = BLOCKS.register("end_sapling", () -> new EndSaplingBlock(sapling));
+	
+	private static final BlockBehaviour.Properties sapling = Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS);
+	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = BLOCKS.register("rainbow_sapling", () -> new RainbowSaplingBlock(sapling));
+	public static final RegistryObject<BushBlock> END_SAPLING = BLOCKS.register("end_sapling", () -> new EndSaplingBlock(sapling));
+	
+	
 	
 	//Aspect Tree Blocks
-	static BlockBehaviour.Properties aspectLog = Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD);
+	private static final BlockBehaviour.Properties aspectLog = Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = BLOCKS.register("blood_aspect_log", () -> new FlammableLogBlock(aspectLog));
 	public static final RegistryObject<Block> BREATH_ASPECT_LOG = BLOCKS.register("breath_aspect_log", () -> new FlammableLogBlock(aspectLog));
 	public static final RegistryObject<Block> DOOM_ASPECT_LOG = BLOCKS.register("doom_aspect_log", () -> new FlammableLogBlock(aspectLog));
@@ -269,7 +306,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_LOG = BLOCKS.register("space_aspect_log", () -> new FlammableLogBlock(aspectLog));
 	public static final RegistryObject<Block> TIME_ASPECT_LOG = BLOCKS.register("time_aspect_log", () -> new FlammableLogBlock(aspectLog));
 	public static final RegistryObject<Block> VOID_ASPECT_LOG = BLOCKS.register("void_aspect_log", () -> new FlammableLogBlock(aspectLog));
-	static BlockBehaviour.Properties aspectPlanks = Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
+	
+	private static final BlockBehaviour.Properties aspectPlanks = Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD);
 	public static final RegistryObject<Block> BLOOD_ASPECT_PLANKS = BLOCKS.register("blood_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
 	public static final RegistryObject<Block> BREATH_ASPECT_PLANKS = BLOCKS.register("breath_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
 	public static final RegistryObject<Block> DOOM_ASPECT_PLANKS = BLOCKS.register("doom_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
@@ -282,7 +320,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_PLANKS = BLOCKS.register("space_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
 	public static final RegistryObject<Block> TIME_ASPECT_PLANKS = BLOCKS.register("time_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
 	public static final RegistryObject<Block> VOID_ASPECT_PLANKS = BLOCKS.register("void_aspect_planks", () -> new FlammableBlock(5, 20, aspectPlanks));
-	static BlockBehaviour.Properties aspectLeaves = Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion();
+	
+	private static final BlockBehaviour.Properties aspectLeaves = Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion();
 	public static final RegistryObject<Block> BLOOD_ASPECT_LEAVES = BLOCKS.register("blood_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
 	public static final RegistryObject<Block> BREATH_ASPECT_LEAVES = BLOCKS.register("breath_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
 	public static final RegistryObject<Block> DOOM_ASPECT_LEAVES = BLOCKS.register("doom_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
@@ -295,6 +334,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> SPACE_ASPECT_LEAVES = BLOCKS.register("space_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
 	public static final RegistryObject<Block> TIME_ASPECT_LEAVES = BLOCKS.register("time_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
 	public static final RegistryObject<Block> VOID_ASPECT_LEAVES = BLOCKS.register("void_aspect_leaves", () -> new FlammableLeavesBlock(aspectLeaves));
+	
 	public static final RegistryObject<Block> BLOOD_ASPECT_SAPLING = BLOCKS.register("blood_aspect_sapling", () -> new AspectSaplingBlock(sapling));
 	public static final RegistryObject<Block> BREATH_ASPECT_SAPLING = BLOCKS.register("breath_aspect_sapling", () -> new AspectSaplingBlock(sapling));
 	public static final RegistryObject<Block> DOOM_ASPECT_SAPLING = BLOCKS.register("doom_aspect_sapling", () -> new AspectSaplingBlock(sapling));
@@ -308,20 +348,23 @@ public class MSBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = BLOCKS.register("time_aspect_sapling", () -> new AspectSaplingBlock(sapling));
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = BLOCKS.register("void_aspect_sapling", () -> new AspectSaplingBlock(sapling));
 	
+	
+	
 	//Land Plant Blocks
 	public static final RegistryObject<Block> GLOWING_MUSHROOM = BLOCKS.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11)));
 	public static final RegistryObject<Block> DESERT_BUSH = BLOCKS.register("desert_bush", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> BLOOMING_CACTUS = BLOCKS.register("blooming_cactus", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> PETRIFIED_GRASS = BLOCKS.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> PETRIFIED_POPPY = BLOCKS.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE)));
-	//TODO StemGrownBlock
+	
 	public static final RegistryObject<StemGrownBlock> STRAWBERRY = BLOCKS.register("strawberry", () -> new StrawberryBlock(Block.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD)));
-	//TODO AttachedStemBlock
-	public static final RegistryObject<AttachedStemBlock> ATTACHED_STRAWBERRY_STEM = BLOCKS.register("attached_strawberry_stem", () -> new AttachedStemBlock(STRAWBERRY.get(), () -> MSItems.STRAWBERRY_CHUNK.get(), Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
-	//TODO StemBlock
-	public static final RegistryObject<StemBlock> STRAWBERRY_STEM = BLOCKS.register("strawberry_stem", () -> new StemBlock(STRAWBERRY.get(), () -> MSItems.STRAWBERRY_CHUNK.get(), Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
+	public static final RegistryObject<AttachedStemBlock> ATTACHED_STRAWBERRY_STEM = BLOCKS.register("attached_strawberry_stem", () -> new AttachedStemBlock(STRAWBERRY.get(), () -> MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
+	public static final RegistryObject<StemBlock> STRAWBERRY_STEM = BLOCKS.register("strawberry_stem", () -> new StemBlock(STRAWBERRY.get(), () -> MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
+	
 	public static final RegistryObject<Block> TALL_END_GRASS = BLOCKS.register("tall_end_grass", () -> new TallEndGrassBlock(Block.Properties.of(Material.REPLACEABLE_PLANT, DyeColor.GREEN).noCollission().randomTicks().strength(0.1F).sound(SoundType.NETHER_WART)));
 	public static final RegistryObject<Block> GLOWFLOWER = BLOCKS.register("glowflower", () -> new FlowerBlock(MobEffects.GLOWING, 20, Block.Properties.of(Material.PLANT, DyeColor.YELLOW).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS)));
+	
+	
 	
 	//Special Land Blocks
 	public static final RegistryObject<Block> GLOWY_GOOP = BLOCKS.register("glowy_goop", () -> new SlimeBlock(Block.Properties.of(Material.CLAY).strength(0.1F).sound(SoundType.SLIME_BLOCK).lightLevel(state -> 14)));
@@ -332,6 +375,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> PYXIS_LID = BLOCKS.register("pyxis_lid", () -> new CustomShapeBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F), MSBlockShapes.PYXIS_LID));
 	public static final RegistryObject<Block> STONE_SLAB = BLOCKS.register("stone_slab", () -> new StoneTabletBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.3F))); //TODO consider renaming, same thing as stone tablet
 	public static final RegistryObject<Block> NAKAGATOR_STATUE = BLOCKS.register("nakagator_statue", () -> new CustomShapeBlock(Block.Properties.of(Material.STONE).strength(0.5F), MSBlockShapes.NAKAGATOR_STATUE));
+	
+	
 	
 	//Structure Land Blocks
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_STAIRS = BLOCKS.register("black_chess_brick_stairs", () -> new StairBlock(() -> MSBlocks.BLACK_CHESS_BRICKS.get().defaultBlockState(), blackChessBricks));
@@ -362,8 +407,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_PLANKS_STAIRS = BLOCKS.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), endPlanks));
 	public static final RegistryObject<Block> DEAD_PLANKS_STAIRS = BLOCKS.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), deadPlanks));
 	public static final RegistryObject<Block> TREATED_PLANKS_STAIRS = BLOCKS.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), treatedPlanks));
+	
 	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = BLOCKS.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_BASE));
 	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = BLOCKS.register("steep_green_stone_brick_stairs_top", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_TOP));
+	
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SLAB = BLOCKS.register("black_chess_brick_slab", () -> new SlabBlock(blackChessBricks));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SLAB = BLOCKS.register("dark_gray_chess_brick_slab", () -> new SlabBlock(darkGrayChessBricks));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_BRICK_SLAB = BLOCKS.register("light_gray_chess_brick_slab", () -> new SlabBlock(lightGrayChessBricks));
@@ -392,9 +439,11 @@ public class MSBlocks
 	public static final RegistryObject<Block> DEAD_PLANKS_SLAB = BLOCKS.register("dead_planks_slab", () -> new SlabBlock(deadPlanks));
 	public static final RegistryObject<Block> TREATED_PLANKS_SLAB = BLOCKS.register("treated_planks_slab", () -> new SlabBlock(treatedPlanks));
 	
+	
+	
 	//Dungeon Functional Blocks
-	static BlockBehaviour.Properties metalMechanicalBlock = Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL); //also used by some machines in addition to puzzle blocks
-	static BlockBehaviour.Properties durableMetalMechanicalBlock = Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(6).sound(SoundType.METAL);
+	private static final BlockBehaviour.Properties metalMechanicalBlock = Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL); //also used by some machines in addition to puzzle blocks
+	private static final BlockBehaviour.Properties durableMetalMechanicalBlock = Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(6).sound(SoundType.METAL);
 	public static final RegistryObject<Block> TRAJECTORY_BLOCK = BLOCKS.register("trajectory_block", () -> new TrajectoryBlock(metalMechanicalBlock));
 	public static final RegistryObject<Block> STAT_STORER = BLOCKS.register("stat_storer", () -> new StatStorerBlock(metalMechanicalBlock));
 	public static final RegistryObject<Block> REMOTE_OBSERVER = BLOCKS.register("remote_observer", () -> new RemoteObserverBlock(metalMechanicalBlock));
@@ -421,7 +470,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> RETRACTABLE_SPIKES = BLOCKS.register("retractable_spikes", () -> new RetractableSpikesBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> BLOCK_PRESSURE_PLATE = BLOCKS.register("block_pressure_plate", () -> new BlockPressurePlateBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> PUSHABLE_BLOCK = BLOCKS.register("pushable_block", () -> new PushableBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.GILDED_BLACKSTONE)));
-	static BlockBehaviour.Properties logicGate = Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.STONE); //TODO potentially change material/sound to metal considering textures
+	
+	private static final BlockBehaviour.Properties logicGate = Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.STONE); //TODO potentially change material/sound to metal considering textures
 	public static final RegistryObject<Block> AND_GATE_BLOCK = BLOCKS.register("and_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.AND));
 	public static final RegistryObject<Block> OR_GATE_BLOCK = BLOCKS.register("or_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.OR));
 	public static final RegistryObject<Block> XOR_GATE_BLOCK = BLOCKS.register("xor_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.XOR));
@@ -429,11 +479,17 @@ public class MSBlocks
 	public static final RegistryObject<Block> NOR_GATE_BLOCK = BLOCKS.register("nor_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.NOR));
 	public static final RegistryObject<Block> XNOR_GATE_BLOCK = BLOCKS.register("xnor_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.XNOR));
 	
+	
+	
 	//Core Functional Land Blocks
 	public static final RegistryObject<Block> GATE = BLOCKS.register("gate", () -> new GateBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
 	public static final RegistryObject<Block> RETURN_NODE = BLOCKS.register("return_node", () -> new ReturnNodeBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
 	
+	
+	
 	//Misc Functional Land Blocks
+	
+	
 	
 	//Sburb Machines
 	public static final RegistryObject<Block> CRUXTRUDER_LID = BLOCKS.register("cruxtruder_lid", () -> new CruxtruderLidBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1.0F)));
@@ -441,11 +497,15 @@ public class MSBlocks
 	public static final TotemLatheMultiblock TOTEM_LATHE = new TotemLatheMultiblock(Minestuck.MOD_ID);
 	public static final AlchemiterMultiblock ALCHEMITER = new AlchemiterMultiblock(Minestuck.MOD_ID);
 	public static final PunchDesignixMultiblock PUNCH_DESIGNIX = new PunchDesignixMultiblock(Minestuck.MOD_ID);
+	
 	public static final RegistryObject<Block> MINI_CRUXTRUDER = BLOCKS.register("mini_cruxtruder", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	public static final RegistryObject<Block> MINI_TOTEM_LATHE = BLOCKS.register("mini_totem_lathe", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	public static final RegistryObject<Block> MINI_ALCHEMITER = BLOCKS.register("mini_alchemiter", () -> new MiniAlchemiterBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	public static final RegistryObject<Block> MINI_PUNCH_DESIGNIX = BLOCKS.register("mini_punch_designix", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
+	
 	public static final RegistryObject<Block> HOLOPAD = BLOCKS.register("holopad", () -> new HolopadBlock(Block.Properties.of(Material.METAL, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(3.0F)));
+	
+	
 	
 	//Misc Machines
 	public static final RegistryObject<Block> COMPUTER = BLOCKS.register("computer", () -> new ComputerBlock(ComputerBlock.COMPUTER_SHAPE, ComputerBlock.COMPUTER_SHAPE, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(4.0F)));
@@ -460,16 +520,22 @@ public class MSBlocks
 	public static final RegistryObject<Block> GRIST_WIDGET = BLOCKS.register("grist_widget", () -> new GristWidgetBlock(metalMechanicalBlock));
 	public static final RegistryObject<Block> URANIUM_COOKER = BLOCKS.register("uranium_cooker", () -> new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	
+	
+	
 	//Misc Core Objects
 	public static final RegistryObject<Block> CRUXITE_DOWEL = BLOCKS.register("cruxite_dowel", () -> new CruxiteDowelBlock(Block.Properties.of(Material.GLASS).strength(0.0F)));
 	public static final LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(Minestuck.MOD_ID);
+	
+	
 	
 	//Misc Alchemy Semi-Plants
 	public static final RegistryObject<Block> GOLD_SEEDS = BLOCKS.register("gold_seeds", () -> new GoldSeedsBlock(Block.Properties.of(Material.PLANT).strength(0.1F).sound(SoundType.METAL).noCollission()));
 	public static final RegistryObject<Block> WOODEN_CACTUS = BLOCKS.register("wooden_cactus", () -> new SpecialCactusBlock(Block.Properties.of(Material.WOOD).randomTicks().strength(1.0F, 2.5F).sound(SoundType.WOOD)));
 	
+	
+	
 	//Cakes
-	static BlockBehaviour.Properties cake = Block.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL);
+	private static final BlockBehaviour.Properties cake = Block.Properties.of(Material.CAKE).strength(0.5F).sound(SoundType.WOOL);
 	public static final RegistryObject<Block> APPLE_CAKE = BLOCKS.register("apple_cake", () -> new SimpleCakeBlock(cake, 2, 0.5F, null));
 	public static final RegistryObject<Block> BLUE_CAKE = BLOCKS.register("blue_cake", () -> new SimpleCakeBlock(cake, 2, 0.3F, player -> player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 150, 0))));
 	public static final RegistryObject<Block> COLD_CAKE = BLOCKS.register("cold_cake", () -> new SimpleCakeBlock(cake, 2, 0.3F, player -> {
@@ -489,12 +555,16 @@ public class MSBlocks
 	}));
 	public static final RegistryObject<Block> CARROT_CAKE = BLOCKS.register("carrot_cake", () -> new SimpleCakeBlock(cake, 2, 0.3F, player -> player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0))));
 	
+	
+	
 	//Explosion and Redstone
 	public static final RegistryObject<Block> PRIMED_TNT = BLOCKS.register("primed_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), true, false, false));
 	public static final RegistryObject<Block> UNSTABLE_TNT = BLOCKS.register("unstable_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS).randomTicks(), false, true, false));
 	public static final RegistryObject<Block> INSTANT_TNT = BLOCKS.register("instant_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), false, false, true));
 	public static final RegistryObject<Block> WOODEN_EXPLOSIVE_BUTTON = BLOCKS.register("wooden_explosive_button", () -> new SpecialButtonBlock(Block.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.WOOD), true, true));
 	public static final RegistryObject<Block> STONE_EXPLOSIVE_BUTTON = BLOCKS.register("stone_explosive_button", () -> new SpecialButtonBlock(Block.Properties.of(Material.DECORATION).noCollission().strength(0.5F).sound(SoundType.STONE), true, false));
+	
+	
 	
 	//Misc Alchemy Objects
 	static BlockBehaviour.Properties decor = Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F);
@@ -506,6 +576,8 @@ public class MSBlocks
 	public static final RegistryObject<CassettePlayerBlock> CASSETTE_PLAYER = BLOCKS.register("cassette_player", () -> new CassettePlayerBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER));
 	public static final RegistryObject<Block> GLOWYSTONE_DUST = BLOCKS.register("glowystone_dust", () -> new GlowystoneWireBlock(Block.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()));
 	
+	
+	
 	//TODO no grist cost
 	public static final RegistryObject<LiquidBlock> OIL = BLOCKS.register("oil", () -> new FlowingModFluidBlock(MSFluids.OIL, new Vec3(0.0, 0.0, 0.0), 0.75f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 	public static final RegistryObject<LiquidBlock> BLOOD = BLOCKS.register("blood", () -> new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3(0.8, 0.0, 0.0), 0.25f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
@@ -513,6 +585,8 @@ public class MSBlocks
 	public static final RegistryObject<LiquidBlock> WATER_COLORS = BLOCKS.register("water_colors", () -> new FlowingWaterColorsBlock(MSFluids.WATER_COLORS, 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 	public static final RegistryObject<LiquidBlock> ENDER = BLOCKS.register("ender", () -> new FlowingModFluidBlock(MSFluids.ENDER, new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 	public static final RegistryObject<LiquidBlock> LIGHT_WATER = BLOCKS.register("light_water", () -> new FlowingModFluidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+	
+	
 	
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event)
