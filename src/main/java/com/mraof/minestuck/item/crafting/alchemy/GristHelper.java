@@ -181,7 +181,6 @@ public class GristHelper
 		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
 		int gristCap = rungGrist[rung];
 		
-		System.out.println("i am limiting grist");
 		return set.capGrist(gristCap);
 		//this will continue into grist set where this return will be used
 	}

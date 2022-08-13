@@ -25,6 +25,8 @@ import net.minecraftforge.network.NetworkHooks;
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 {	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
+	
+	public int consumeDelay;
 
 	public int gristAge = 0;
 
@@ -58,6 +60,18 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(type, level);
 	}
+	
+	/**
+	 * this is where we set up our consumedelay
+	 */
+	public GristEntity(World world, double x, double y, double z, GristAmount gristData, int pickupDelay)
+	{
+		this(world, x, y, z, gristData);
+		consumeDelay = pickupDelay;
+		// Set the class's consume-delay variable to equal the pickupDelay value that got passed in.
+	}
+	
+	
 	
 	@Override
 	protected void defineSynchedData()
@@ -97,6 +111,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void tick()
 	{
+		
 		super.tick();
 
 		this.xo = this.getX();
@@ -210,6 +225,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		if (!this.level.isClientSide && !(entityIn instanceof FakePlayer))
 		{
+			if(gristAge < this.consumeDelay) return;
 			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
 	}
@@ -219,7 +235,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(this.level.isClientSide)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
-			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
+			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F *
+					((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		GristHelper.increase(level, identifier, new GristSet(gristType, gristValue));
 		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue));
 		this.discard();

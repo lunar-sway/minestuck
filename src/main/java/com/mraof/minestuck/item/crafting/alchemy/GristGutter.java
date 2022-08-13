@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.entity.player.PlayerEntity;
 import org.apache.logging.log4j.LogManager;
@@ -40,9 +41,14 @@ public class GristGutter extends GristSet
 	
 	public void spillGrist(World world, PlayerEntity player)
 	{
-		
-		gristToSpill.spawnDelayedGristEntities(world, player, world.random, entity -> entity.setDeltaMovement
-						(entity.getDeltaMovement().multiply(0, 0.5, 0)));
+		gristToSpill.spawnGristEntities(
+				world,
+				player.getX(), player.getY(), player.getZ(),
+				world.random,
+				entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)),
+				90,
+				world.random.nextInt(6) > 0 ? 1 : 2
+		);
 	}
 	
 	/**
@@ -58,6 +64,8 @@ public class GristGutter extends GristSet
 			//this is a full gristset(which is essentially a grist inventory for things like the cache)
 			//For super Overflow
 			GristSet sOverflowGrist = new GristSet();
+			long originalAmount = this.gristTypes.getOrDefault(type, 0L);
+			long maximumAllowed = gutterTotal - GUTTER_CAPACITY + originalAmount;
 			
 			
 			this.gristTypes.compute(type, (key, value) ->
@@ -72,9 +80,10 @@ public class GristGutter extends GristSet
 			{
 				System.out.println("gutter has capped out");
 				long sOverflowAmount = gutterTotal - GUTTER_CAPACITY;
-				this.gristTypes.put(type, (long) GUTTER_CAPACITY);
+				this.gristTypes.put(type, maximumAllowed);
 				sOverflowGrist.addGrist(type, sOverflowAmount);
 				gristToSpill.addGrist(sOverflowGrist);
+				gutterTotal -= sOverflowAmount;
 				
 			}
 		
