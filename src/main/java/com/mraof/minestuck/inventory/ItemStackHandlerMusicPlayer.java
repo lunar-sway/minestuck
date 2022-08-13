@@ -8,8 +8,8 @@ import javax.annotation.Nonnull;
 
 public class ItemStackHandlerMusicPlayer extends ItemStackHandler
 {
-	public ItemStackHandlerMusicPlayer() {
-		super(1);
+	public ItemStackHandlerMusicPlayer (int numberOfSlots) {
+		super(numberOfSlots);
 	}
 	
 	@Override

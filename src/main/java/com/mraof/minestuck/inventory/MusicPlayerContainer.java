@@ -1,7 +1,5 @@
 package com.mraof.minestuck.inventory;
 
-import com.mraof.minestuck.inventory.slot.InputSlot;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -9,15 +7,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
 public class MusicPlayerContainer extends AbstractContainerMenu
 {
-	private static final int CASSETTE_X = 79;
-	private static final int CASSETTE_Y = 57;
+	private static final int CASSETTE_X = 80;
+	private static final int CASSETTE_Y = 36;
 	
 	public MusicPlayerContainer(int windowId, Inventory playerInventory, IItemHandler itemStackHandler)
 	{
@@ -28,7 +25,7 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 	
 	public MusicPlayerContainer(int windowId, Inventory playerInventory)
 	{
-		this(windowId, playerInventory, new ItemStackHandlerMusicPlayer());
+		this(windowId, playerInventory, new ItemStackHandlerMusicPlayer(1));
 	}
 	
 	@Override
@@ -43,28 +40,17 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
-		int allSlots = this.slots.size();
 		
 		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
-			
-			
-			if(slotNumber <= 1)
-			{
-				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
-			} else
-			{
-				//if it's an inventory slot with valid contents
-				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
 				if(itemstackOrig.is(MSTags.Items.CASSETTES))
 				{
 					//Debug.print("Transferring...");
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 				}
-			}
 			
 			if(!result)
 				return ItemStack.EMPTY;

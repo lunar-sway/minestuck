@@ -26,7 +26,7 @@ public class CapabilityProviderMusicPlayer implements ICapabilityProvider, INBTS
 	
 	private @NotNull ItemStackHandlerMusicPlayer getCachedInventory() {
 		if (itemStackHandlerMusicPlayer == null) {
-			itemStackHandlerMusicPlayer = new ItemStackHandlerMusicPlayer();
+			itemStackHandlerMusicPlayer = new ItemStackHandlerMusicPlayer(1);
 		}
 		return itemStackHandlerMusicPlayer;
 	}

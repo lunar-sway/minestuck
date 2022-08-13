@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.inventory.CapabilityProviderMusicPlayer;
 import com.mraof.minestuck.inventory.ItemStackHandlerMusicPlayer;
 import com.mraof.minestuck.inventory.MusicPlayerContainer;
@@ -12,7 +13,6 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -21,11 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class MusicPlayerItem extends WeaponItem
 {
-	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack) {
+	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
+	{
 		IItemHandler musicPlayer = itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
 				new IllegalArgumentException("ItemStack " + itemStack + " is not an item handler"));
-		if (!(musicPlayer instanceof ItemStackHandlerMusicPlayer)) {
-			return new ItemStackHandlerMusicPlayer();
+		if(!(musicPlayer instanceof ItemStackHandlerMusicPlayer))
+		{
+			return new ItemStackHandlerMusicPlayer(1);
 		}
 		return musicPlayer;
 	}
@@ -45,10 +47,33 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
+		//open the GUI if right clicked
 		if(!level.isClientSide)
+		{
 			NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
-					new MusicPlayerContainer(pContainerId, pInventory, getItemStackHandlerMusicPlayer(playerIn.getItemInHand(handIn))),
+					new MusicPlayerContainer(pContainerId, pInventory,
+							getItemStackHandlerMusicPlayer(playerIn.getItemInHand(handIn))),
 					new TextComponent("Music Player")));
+		}
 		return super.use(level, playerIn, handIn);
+	}
+	
+	public void musicEffect(EnumCassetteType cassetteType)
+	{
+		switch(cassetteType)
+		{
+			case THIRTEEN -> {}
+			case CAT -> {}
+			case BLOCKS -> {}
+			case CHIRP -> {}
+			case FAR -> {}
+			case MALL -> {}
+			case MELLOHI -> {}
+			case EMISSARY_OF_DANCE -> {}
+			case DANCE_STAB_DANCE -> {}
+			case RETRO_BATTLE_THEME -> {}
+			case NONE -> {}
+		}
+		;
 	}
 }
