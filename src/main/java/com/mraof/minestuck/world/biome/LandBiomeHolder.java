@@ -19,15 +19,16 @@ public class LandBiomeHolder implements ILandBiomeSet
 	private final Holder<Biome> normalBiome, oceanBiome, roughBiome;
 	public final LandBiomeSetWrapper baseBiomes;
 	
+	@SuppressWarnings("ConstantConditions")
 	public LandBiomeHolder(LandBiomeSetWrapper biomes, LandGenSettings settings, LandProperties properties)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		
 		baseBiomes = biomes;
 		
-		normalBiome = Holder.direct(createNormal(biomes, blocks, properties, settings.getLandTypes()));
-		roughBiome = Holder.direct(createRough(biomes, blocks, properties, settings.getLandTypes()));
-		oceanBiome = Holder.direct(createOcean(biomes, blocks, properties, settings.getLandTypes()));
+		normalBiome = Holder.direct(createNormal(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.NORMAL.value().getRegistryName()));
+		roughBiome = Holder.direct(createRough(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.ROUGH.value().getRegistryName()));
+		oceanBiome = Holder.direct(createOcean(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.OCEAN.value().getRegistryName()));
 	}
 	
 	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)

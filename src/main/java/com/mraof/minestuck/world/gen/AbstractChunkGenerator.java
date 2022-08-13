@@ -1,9 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
@@ -17,6 +14,7 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
@@ -77,6 +75,38 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		this.globalFluidPicker = (x, y, z) -> oceanFluidStatus;
 		
 		this.surfaceSystem = new SurfaceSystem(noises, this.defaultBlock, settings.seaLevel(), seed, settings.getRandomSource());
+	}
+	
+	/**
+	 * Not as optimised as the usual implementation for applyBiomeDecoration(), and does not yet place structures.
+	 * But it does properly work when the two biome sources provide different biomes.
+	 */
+	@Override
+	public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureFeatureManager structureManager)
+	{
+		SectionPos sectionPos = SectionPos.of(chunk.getPos(), level.getMinSection());
+		BlockPos pos = sectionPos.origin();
+		WorldgenRandom worldgenrandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.seedUniquifier()));
+		//Override WorldGenLevel.getBiome() in order to control the biome checked in BiomeFilter
+		WorldGenLevel customBiomeLevel = new WorldGenLevelWrapper(level)
+		{
+			@Override
+			public Holder<Biome> getBiome(BlockPos pos)
+			{
+				return AbstractChunkGenerator.this.getWorldGenBiome(super.getBiome(pos));
+			}
+		};
+		long seed = worldgenrandom.setDecorationSeed(level.getSeed(), pos.getX(), pos.getZ());
+		
+		for(int decorationStep = 0; decorationStep < this.biomeSource.featuresPerStep().size(); decorationStep++)
+		{
+			BiomeSource.StepFeatureData featureStep = this.biomeSource.featuresPerStep().get(decorationStep);
+			for(PlacedFeature feature : featureStep.features())
+			{
+				worldgenrandom.setFeatureSeed(seed, featureStep.indexMapping().applyAsInt(feature), decorationStep);
+				feature.placeWithBiomeCheck(customBiomeLevel, this, worldgenrandom, pos);
+			}
+		}
 	}
 	
 	private NoiseChunk getOrCreateNoiseChunk(StructureFeatureManager structureManager, ChunkAccess chunk, Blender blender)
@@ -268,9 +298,9 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		NaturalSpawner.spawnMobsForChunkGeneration(region, biome, pos, random);
 	}
 	
-	protected Holder<Biome> getBiome(WorldGenRegion region, BlockPos pos)
+	protected Holder<Biome> getWorldGenBiome(Holder<Biome> actualBiome)
 	{
-		return region.getBiome(pos);
+		return actualBiome;
 	}
 	
 	@Override
