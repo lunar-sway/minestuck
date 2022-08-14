@@ -28,7 +28,7 @@ public class CastleStartPiece extends CastlePiece
     
     protected CastleStartPiece(int x, int z, boolean isBlack)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START, 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
+        super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
         this.x = x;
         this.z = z;
         if(pendingPieces == null)pendingPieces = new ArrayList<>();
@@ -37,7 +37,7 @@ public class CastleStartPiece extends CastlePiece
     
     public CastleStartPiece(CompoundTag nbt)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START, nbt);
+        super(MSStructurePieces.SKAIA_CASTLE_START.get(), nbt);
     }
     
     @Override

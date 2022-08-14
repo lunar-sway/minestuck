@@ -21,12 +21,12 @@ public class CastleRoomPiece extends CastlePiece
 {
 	protected CastleRoomPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM, 2, boundingBox, isBlack);
+		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), 2, boundingBox, isBlack);
 	}
 	
 	public CastleRoomPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM, nbt);
+		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), nbt);
 	}
 	
 	protected CastleRoomPiece(StructurePieceType pieceType, boolean isBlack, BoundingBox boundingBox)

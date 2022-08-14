@@ -122,7 +122,5 @@ public final class MSFeatures
 		registry.register(new TowerFeature(NoneFeatureConfiguration.CODEC).setRegistryName("tower"));
 		registry.register(new StoneMoundFeature(BlockStateConfiguration.CODEC).setRegistryName("stone_mound"));
 		
-		MSStructurePieces.init();
-		MSStructureProcessorTypes.init();
 	}
 }

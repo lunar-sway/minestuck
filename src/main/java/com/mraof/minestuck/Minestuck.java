@@ -20,9 +20,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
-import com.mraof.minestuck.world.gen.feature.MSCFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.feature.*;
 import com.mraof.minestuck.world.gen.feature.structure.MSStructureFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.MSStructureSets;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
@@ -67,8 +65,12 @@ public class Minestuck
 		
 		MSCFeatures.REGISTER.register(eventBus);
 		MSPlacedFeatures.REGISTER.register(eventBus);
+		
+		MSStructurePieces.REGISTER.register(eventBus);
 		MSStructureFeatures.REGISTER.register(eventBus);
 		MSStructureSets.REGISTER.register(eventBus);
+		
+		MSStructureProcessorTypes.REGISTER.register(eventBus);
 	}
 	
 	/**

@@ -27,14 +27,14 @@ public class IguanaVillagePieces
 		
 		SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SMALL_VILLAGE_TENT_1, 0, boundingBox, 1);
+			super(MSStructurePieces.SMALL_VILLAGE_TENT_1.get(), 0, boundingBox, 1);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public SmallTent1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SMALL_VILLAGE_TENT_1, nbt, 1);
+			super(MSStructurePieces.SMALL_VILLAGE_TENT_1.get(), nbt, 1);
 			this.woolType = nbt.getInt("Wool");
 		}
 		
@@ -106,14 +106,14 @@ public class IguanaVillagePieces
 		
 		LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.LARGE_VILLAGE_TENT_1, 0, boundingBox, 4);
+			super(MSStructurePieces.LARGE_VILLAGE_TENT_1.get(), 0, boundingBox, 4);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public LargeTent1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.LARGE_VILLAGE_TENT_1, nbt, 4);
+			super(MSStructurePieces.LARGE_VILLAGE_TENT_1.get(), nbt, 4);
 			this.woolType = nbt.getInt("Wool");
 		}
 		
@@ -229,14 +229,14 @@ public class IguanaVillagePieces
 		
 		SmallTentStore(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SMALL_TENT_STORE, 0, boundingBox, 1);
+			super(MSStructurePieces.SMALL_TENT_STORE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
 			woolType = 1 + rand.nextInt(3);
 		}
 		
 		public SmallTentStore(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SMALL_TENT_STORE, nbt, 1);
+			super(MSStructurePieces.SMALL_TENT_STORE.get(), nbt, 1);
 			this.woolType = nbt.getInt("Wool");
 		}
 		

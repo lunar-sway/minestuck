@@ -21,14 +21,14 @@ public class CastleWallPiece extends CastlePiece
 	
 	protected CastleWallPiece(boolean isBlack, BoundingBox boundingBox, int direction, boolean cornerPiece)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_WALL, 1, boundingBox, isBlack);
+		super(MSStructurePieces.SKAIA_CASTLE_WALL.get(), 1, boundingBox, isBlack);
 		this.direction = direction;
 		this.cornerPiece = cornerPiece;
 	}
 	
 	public CastleWallPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_WALL, nbt);
+		super(MSStructurePieces.SKAIA_CASTLE_WALL.get(), nbt);
 	}
 	
 	@Override
