@@ -36,6 +36,13 @@ public final class MSCFeatures
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new ConfiguredFeature<>(MSFeatures.SURFACE_FOSSIL, FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> BROKEN_SWORD = REGISTER.register("broken_sword", () -> new ConfiguredFeature<>(MSFeatures.BROKEN_SWORD, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> BUCKET = REGISTER.register("bucket", () -> new ConfiguredFeature<>(MSFeatures.BUCKET, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new ConfiguredFeature<>(MSFeatures.CAKE_PEDESTAL, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> COG = REGISTER.register("cog", () -> new ConfiguredFeature<>(MSFeatures.COG, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> FLOOR_COG = REGISTER.register("floor_cog", () -> new ConfiguredFeature<>(MSFeatures.FLOOR_COG, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new ConfiguredFeature<>(MSFeatures.SMALL_LIBRARY, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> TOWER = REGISTER.register("tower", () -> new ConfiguredFeature<>(MSFeatures.TOWER, FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS, FeatureConfiguration.NONE));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> BLOOD_POOL = REGISTER.register("blood_pool", () -> new ConfiguredFeature<>(Feature.LAKE,
 			new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));
@@ -69,5 +76,9 @@ public final class MSCFeatures
 			FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> DESERT_BUSH_PATCH = REGISTER.register("desert_bush_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.DESERT_BUSH.get()))))));
+	
+	public static final RegistryObject<ConfiguredFeature<?, ?>> PUMPKIN = REGISTER.register("pumpkin", () -> new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PUMPKIN))));
+	
+	public static final RegistryObject<ConfiguredFeature<?, ?>> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> new ConfiguredFeature<>(MSFeatures.RABBIT_PLACEMENT, FeatureConfiguration.NONE));
 	
 }

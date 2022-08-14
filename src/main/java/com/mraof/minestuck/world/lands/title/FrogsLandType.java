@@ -4,6 +4,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
@@ -12,6 +13,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.material.Material;
 
 public class FrogsLandType extends TitleLandType
@@ -53,14 +55,12 @@ public class FrogsLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
+		
 		if(type == LandBiomeType.OCEAN)
 		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.configured(
-					new BlockClusterFeatureConfig.Builder(new SimpleBlockStateProvider(Blocks.LILY_PAD.defaultBlockState()), SimpleBlockPlacer.INSTANCE).tries(10).build())
-					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE));
+			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.WATERLILY_PATCH.getHolder().orElseThrow());
 		}
-		*/
+		
 	}
 	
 	@Override

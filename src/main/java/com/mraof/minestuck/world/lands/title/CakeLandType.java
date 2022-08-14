@@ -3,11 +3,20 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 public class CakeLandType extends TitleLandType
 {
@@ -35,15 +44,16 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
+		
 		if(type != LandBiomeType.OCEAN)
 		{
-			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CAKE_PEDESTAL.configured(IFeatureConfig.NONE).chance(100));
+			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL.getHolder().orElseThrow());
 		}
 		
-		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.CAKE.configured(new ProbabilityConfig(baseBiome.getBaseTemperature()/2))
-				.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).countRandom(5));
-		*/
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE,
+				new ProbabilityFeatureConfiguration(baseBiome.getBaseTemperature()/2),
+				CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
+		
 	}
 	
 	@Override
