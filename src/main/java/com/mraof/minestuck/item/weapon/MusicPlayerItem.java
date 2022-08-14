@@ -1,9 +1,9 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.CapabilityProviderMusicPlayer;
-import com.mraof.minestuck.inventory.ItemStackHandlerMusicPlayer;
-import com.mraof.minestuck.inventory.MusicPlayerContainer;
+import com.mraof.minestuck.inventory.musicplayer.CapabilityProviderMusicPlayer;
+import com.mraof.minestuck.inventory.musicplayer.ItemStackHandlerMusicPlayer;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;

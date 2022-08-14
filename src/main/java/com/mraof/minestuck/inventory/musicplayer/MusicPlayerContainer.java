@@ -1,5 +1,8 @@
-package com.mraof.minestuck.inventory;
+package com.mraof.minestuck.inventory.musicplayer;
 
+import com.mraof.minestuck.inventory.ContainerHelper;
+import com.mraof.minestuck.inventory.MSContainerTypes;
+import com.mraof.minestuck.inventory.musicplayer.ItemStackHandlerMusicPlayer;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

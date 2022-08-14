@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory;
+package com.mraof.minestuck.inventory.musicplayer;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

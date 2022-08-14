@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory;
+package com.mraof.minestuck.inventory.musicplayer;
 
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.world.item.ItemStack;

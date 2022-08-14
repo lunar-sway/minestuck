@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
