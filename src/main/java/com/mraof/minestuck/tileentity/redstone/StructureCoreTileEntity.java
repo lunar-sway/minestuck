@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.redstone.StructureCoreBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.gen.feature.structure.CoreCompatibleScatteredStructurePiece;
-import com.mraof.minestuck.world.gen.feature.structure.MSStructureFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -33,7 +33,7 @@ public class StructureCoreTileEntity extends BlockEntity
 	private ActionType actionType;
 	private int shutdownRange = 32;
 	private boolean hasWiped = false;
-	public final ConfiguredStructureFeature<?, ?>[] SOLVABLE_STRUCTURES = new ConfiguredStructureFeature<?, ?>[]{MSStructureFeatures.FROG_TEMPLE.get()};
+	public final ConfiguredStructureFeature<?, ?>[] SOLVABLE_STRUCTURES = new ConfiguredStructureFeature<?, ?>[]{MSConfiguredStructures.FROG_TEMPLE.get()};
 	
 	/**
 	 * READ AND WIPE checks to see if the structure piece hasBeenCompleted variable is true, and then prevents puzzle blocks not meant to be utilized for survival players from working

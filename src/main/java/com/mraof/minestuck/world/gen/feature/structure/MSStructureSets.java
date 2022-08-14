@@ -12,6 +12,6 @@ public final class MSStructureSets
 {
 	public static final DeferredRegister<StructureSet> REGISTER = DeferredRegister.create(Registry.STRUCTURE_SET_REGISTRY, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<StructureSet> FROG_TEMPLE = REGISTER.register("frog_temple", () -> new StructureSet(MSStructureFeatures.FROG_TEMPLE.getHolder().orElseThrow(), new RandomSpreadStructurePlacement(140, 92, RandomSpreadType.LINEAR, 41361201)));
+	public static final RegistryObject<StructureSet> FROG_TEMPLE = REGISTER.register("frog_temple", () -> new StructureSet(MSConfiguredStructures.FROG_TEMPLE.getHolder().orElseThrow(), new RandomSpreadStructurePlacement(140, 92, RandomSpreadType.LINEAR, 41361201)));
 	
 }

@@ -1,16 +1,9 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.FrogTempleStructure;
-import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
-import com.mraof.minestuck.world.gen.feature.structure.ImpDungeonStructure;
-import com.mraof.minestuck.world.gen.feature.structure.SmallRuinStructure;
-import com.mraof.minestuck.world.gen.feature.structure.castle.CastleStructure;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageStructure;
 import com.mraof.minestuck.world.gen.feature.tree.EndTreeFeature;
 import com.mraof.minestuck.world.gen.feature.tree.LeaflessTreeFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -27,12 +20,6 @@ import javax.annotation.Nonnull;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSFeatures
 {
-	public static final GateStructure LAND_GATE = getNull();
-	public static final StructureFeature<NoneFeatureConfiguration> FROG_TEMPLE = getNull();
-	public static final StructureFeature<NoneFeatureConfiguration> SMALL_RUIN = getNull();
-	public static final StructureFeature<NoneFeatureConfiguration> IMP_DUNGEON = getNull();
-	public static final StructureFeature<NoneFeatureConfiguration> CONSORT_VILLAGE = getNull();
-	public static final StructureFeature<NoneFeatureConfiguration> SKAIA_CASTLE = getNull();
 	
 	public static final Feature<NoneFeatureConfiguration> END_TREE = getNull();
 	public static final Feature<BlockStateConfiguration> LEAFLESS_TREE = getNull();
@@ -68,24 +55,6 @@ public final class MSFeatures
 	private static <T> T getNull()
 	{
 		return null;
-	}
-	
-	@SubscribeEvent
-	public static void registerStructures(RegistryEvent.Register<StructureFeature<?>> event)
-	{
-		IForgeRegistry<StructureFeature<?>> registry = event.getRegistry();
-		
-		register(registry, new GateStructure(NoneFeatureConfiguration.CODEC).setRegistryName("land_gate"));
-		register(registry, new FrogTempleStructure(NoneFeatureConfiguration.CODEC).setRegistryName("frog_temple"));
-		register(registry, new SmallRuinStructure(NoneFeatureConfiguration.CODEC).setRegistryName("small_ruin"));
-		register(registry, new ImpDungeonStructure(NoneFeatureConfiguration.CODEC).setRegistryName("imp_dungeon"));
-		register(registry, new ConsortVillageStructure(NoneFeatureConfiguration.CODEC).setRegistryName("consort_village"));
-		register(registry, new CastleStructure(NoneFeatureConfiguration.CODEC).setRegistryName("skaia_castle"));
-	}
-	
-	private static void register(IForgeRegistry<StructureFeature<?>> registry, StructureFeature<?> structure)
-	{
-		registry.register(structure);
 	}
 	
 	@SubscribeEvent
