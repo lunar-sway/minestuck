@@ -933,21 +933,21 @@ public class MSItems
 	
 	
 	/**/
-	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<Block> block)
+	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<? extends Block> block)
 	{
 		return registerBlockAsItem(block, new Item.Properties());
 	}
 	
-	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<Block> block, CreativeModeTab tab)
+	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<? extends Block> block, CreativeModeTab tab)
 	{
 		return registerBlockAsItem(block, new Item.Properties().tab(tab));
 	}
 	
-	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<Block> block, Item.Properties properties)
+	private static RegistryObject<Item> registerBlockAsItem(RegistryObject<? extends Block> block, Item.Properties properties)
 	{
 		if(block.getKey() == null)
 			throw new IllegalArgumentException(String.format("The provided RegistryObject<Block> %s has a block without a registry name!", block));
-		return ITEMS.register(block.getKey().getRegistryName().getPath(), () -> new Item(properties));
+		return ITEMS.register(block.getKey().location().getPath(), () -> new Item(properties));
 	}
 	
 	/**
@@ -963,6 +963,6 @@ public class MSItems
 	 */
 	private static RegistryObject<Item> registerBlockItem(RegistryObject<? extends Block> block, Function<Block, ? extends BlockItem> function)
 	{
-		return ITEMS.register(block.getKey().getRegistryName().getPath(), () -> function.apply(block.get())); //assumed getRegistryName will occur without fail as it works through DeferredRegistry
+		return ITEMS.register(block.getKey().location().getPath(), () -> function.apply(block.get())); //assumed getRegistryName will occur without fail as it works through DeferredRegistry
 	}
 }
