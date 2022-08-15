@@ -49,7 +49,7 @@ public class TowersLandType extends TitleLandType
 		
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR,
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR.get(),
 					new BlockStateConfiguration(blocks.getBlockState("structure_primary")),
 					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}

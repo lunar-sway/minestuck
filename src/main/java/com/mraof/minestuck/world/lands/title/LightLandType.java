@@ -61,12 +61,12 @@ public class LightLandType extends TitleLandType
 		BlockState lightBlock = blocks.getBlockState("light_block");
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR,
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR.get(),
 					new BlockStateConfiguration(lightBlock),
 					CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		} else
 		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.PILLAR,
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.PILLAR.get(),
 					new BlockStateConfiguration(lightBlock),
 					RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}

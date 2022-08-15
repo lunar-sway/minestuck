@@ -64,6 +64,7 @@ public class Minestuck
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
 		
+		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
 		MSPlacedFeatures.REGISTER.register(eventBus);
 		
