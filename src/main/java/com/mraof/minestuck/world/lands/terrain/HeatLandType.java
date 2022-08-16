@@ -7,16 +7,29 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.Random;
 
 public class HeatLandType extends TerrainLandType
@@ -76,44 +89,41 @@ public class HeatLandType extends TerrainLandType
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
-	{/*
+	{
 		if(type != LandBiomeType.OCEAN)
 		{
-			builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.OCEAN_RUNDOWN
-					.configured(IFeatureConfig.NONE).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(3));
+			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.OCEAN_RUNDOWN.getHolder().orElseThrow());
 		}
 		
 		if(type == LandBiomeType.NORMAL)
 		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.FIRE_FIELD
-					.configured(NoFeatureConfig.NONE).range(256).squared().count(7));
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD.getHolder().orElseThrow());
 			
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.GLOWSTONE.defaultBlockState(), FeatureSpread.of(2, 1), 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(5));
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.SOUL_SAND.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(8));
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
+					new DiskConfiguration(Blocks.GLOWSTONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
+					CountPlacement.of(5), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
+					new DiskConfiguration(Blocks.SOUL_SAND.defaultBlockState(), UniformInt.of(2, 6), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
+					CountPlacement.of(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		} else if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.FIRE_FIELD.configured(IFeatureConfig.NONE)
-					.range(256).squared().count(10));
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.EXTRA_FIRE_FIELD.getHolder().orElseThrow());
 			
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.SOUL_SAND.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(15));
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
+					new DiskConfiguration(Blocks.SOUL_SAND.defaultBlockState(), UniformInt.of(2, 6), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
+					CountPlacement.of(15), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}
 		
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.BLACK_STONE.defaultBlockState(), 33))
-				.range(256).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-				.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.defaultBlockState(), 17))
-				.range(128).squared().count(26));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE
-				.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 8))
-				.range(64).squared().count(13));
-		*/
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), MSBlocks.BLACK_STONE.get().defaultBlockState(), 33),
+				CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), MSBlocks.NETHERRACK_COAL_ORE.get().defaultBlockState(), 17),
+				CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128)), BiomeFilter.biome()));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), Blocks.NETHER_QUARTZ_ORE.defaultBlockState(), 8),
+				CountPlacement.of(13), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()));
+		
 	}
 	
 	@Override
