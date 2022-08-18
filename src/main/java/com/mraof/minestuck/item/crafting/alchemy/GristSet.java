@@ -319,11 +319,6 @@ public class GristSet
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
-	
-	
-	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
-
 	/**
 	 * this is a version of the spawn grist entities function with a delay.
 	 */
