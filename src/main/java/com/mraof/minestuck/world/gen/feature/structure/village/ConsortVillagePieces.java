@@ -356,14 +356,14 @@ public class ConsortVillagePieces
 		
 		VillagePath(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.VILLAGE_PATH, 0, boundingBox, 0);
+			super(MSStructurePieces.VILLAGE_PATH.get(), 0, boundingBox, 0);
 			this.setOrientation(facing);
 			this.length = Math.max(boundingBox.getXSpan(), boundingBox.getZSpan());
 		}
 		
 		public VillagePath(CompoundTag nbt)
 		{
-			super(MSStructurePieces.VILLAGE_PATH, nbt, 0);
+			super(MSStructurePieces.VILLAGE_PATH.get(), nbt, 0);
 			this.length = nbt.getInt("Length");
 		}
 		

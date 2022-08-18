@@ -19,12 +19,12 @@ public class GateMushroomPiece extends GatePiece
 {
 	public GateMushroomPiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM, level, generator, random, minX, minZ, 11, 25, 11, 0);
+		super(MSStructurePieces.GATE_MUSHROOM.get(), level, generator, random, minX, minZ, 11, 25, 11, 0);
 	}
 	
 	public GateMushroomPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM, nbt);
+		super(MSStructurePieces.GATE_MUSHROOM.get(), nbt);
 	}
 	
 	@Override

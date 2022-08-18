@@ -17,12 +17,12 @@ public class CastleSolidPiece extends CastlePiece
 {
 	protected CastleSolidPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_SOLID, 0, boundingBox, isBlack);
+		super(MSStructurePieces.SKAIA_CASTLE_SOLID.get(), 0, boundingBox, isBlack);
 	}
 	
 	public CastleSolidPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_SOLID, nbt);
+		super(MSStructurePieces.SKAIA_CASTLE_SOLID.get(), nbt);
 	}
 	
 	public static CastleSolidPiece findValidPlacement(boolean isBlack, int x, int y, int z)

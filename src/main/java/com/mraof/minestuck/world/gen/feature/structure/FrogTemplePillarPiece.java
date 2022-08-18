@@ -26,7 +26,7 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	
 	public FrogTemplePillarPiece(Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, x - 2, y, z - 2, 5, 46, 5, getRandomHorizontalDirection(random));
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR.get(), x - 2, y, z - 2, 5, 46, 5, getRandomHorizontalDirection(random));
 		eroded = random.nextBoolean();
 		uraniumFilled = random.nextBoolean();
 		randReduction = random.nextInt(10);
@@ -34,7 +34,7 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	
 	public FrogTemplePillarPiece(CompoundTag nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, nbt);
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR.get(), nbt);
 		eroded = nbt.getBoolean("eroded");
 		uraniumFilled = nbt.getBoolean("uraniumFilled");
 		randReduction = nbt.getInt("randReduction");

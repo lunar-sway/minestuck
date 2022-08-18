@@ -28,13 +28,13 @@ public class TurtleVillagePieces
 	{
 		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.TURTLE_WELL_CENTER, pieceWeightList, 0, new BoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1), 0);
+			super(MSStructurePieces.TURTLE_WELL_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
 		}
 		
 		public TurtleWellCenter(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_WELL_CENTER, nbt, 0);
+			super(MSStructurePieces.TURTLE_WELL_CENTER.get(), nbt, 0);
 		}
 		
 		@Override
@@ -131,13 +131,13 @@ public class TurtleVillagePieces
 	{
 		ShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.SHELL_HOUSE_1, 0, boundingBox, 2);
+			super(MSStructurePieces.SHELL_HOUSE_1.get(), 0, boundingBox, 2);
 			setOrientation(facing);
 		}
 		
 		public ShellHouse1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.SHELL_HOUSE_1, nbt, 2);
+			super(MSStructurePieces.SHELL_HOUSE_1.get(), nbt, 2);
 		}
 		
 		public static ShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
@@ -202,13 +202,13 @@ public class TurtleVillagePieces
 	{
 		TurtleMarket1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.TURTLE_MARKET_1, 0, boundingBox, 2);
+			super(MSStructurePieces.TURTLE_MARKET_1.get(), 0, boundingBox, 2);
 			setOrientation(facing);
 		}
 		
-		public TurtleMarket1(StructurePieceSerializationContext context, CompoundTag nbt)
+		public TurtleMarket1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_MARKET_1, nbt, 2);
+			super(MSStructurePieces.TURTLE_MARKET_1.get(), nbt, 2);
 		}
 		
 		public static TurtleMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
@@ -309,13 +309,13 @@ public class TurtleVillagePieces
 	{
 		TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1, 0, boundingBox, 3);
+			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), 0, boundingBox, 3);
 			setOrientation(facing);
 		}
 		
 		public TurtleTemple1(CompoundTag nbt)
 		{
-			super(MSStructurePieces.TURTLE_TEMPLE_1, nbt, 3);
+			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), nbt, 3);
 		}
 		
 		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)

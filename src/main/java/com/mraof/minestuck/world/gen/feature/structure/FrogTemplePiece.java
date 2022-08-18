@@ -37,7 +37,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	
 	public FrogTemplePiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int x, int z)
 	{
-		super(MSStructurePieces.FROG_TEMPLE, x - 21, 64, z - 35, 42, 100, 70, getRandomHorizontalDirection(random));
+		super(MSStructurePieces.FROG_TEMPLE.get(), x - 21, 64, z - 35, 42, 100, 70, getRandomHorizontalDirection(random));
 		
 		int posHeightPicked = Integer.MAX_VALUE;
 		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
@@ -52,7 +52,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	
 	public FrogTemplePiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.FROG_TEMPLE, nbt);
+		super(MSStructurePieces.FROG_TEMPLE.get(), nbt);
 		createRan = nbt.getBoolean("createRan");
 	}
 	

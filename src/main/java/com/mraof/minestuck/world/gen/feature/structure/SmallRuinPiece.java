@@ -33,7 +33,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 	
 	public SmallRuinPiece(Random random, int minX, int minZ, float skyLight)
 	{
-		super(MSStructurePieces.SMALL_RUIN, minX, 64, minZ, 7, 4, 10, getRandomHorizontalDirection(random));
+		super(MSStructurePieces.SMALL_RUIN.get(), minX, 64, minZ, 7, 4, 10, getRandomHorizontalDirection(random));
 		
 		float torchChance = 1 - skyLight;
 		
@@ -45,7 +45,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 	
 	public SmallRuinPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SMALL_RUIN, nbt);
+		super(MSStructurePieces.SMALL_RUIN.get(), nbt);
 		
 		for(int i = 0; i < 4; i++)
 			torches[i] = nbt.getBoolean("torch" + i);

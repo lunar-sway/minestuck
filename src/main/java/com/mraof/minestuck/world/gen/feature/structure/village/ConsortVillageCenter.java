@@ -93,13 +93,13 @@ public class ConsortVillageCenter
 		
 		private VillageMarketCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Direction orientation)
 		{
-			super(MSStructurePieces.MARKET_CENTER, pieceWeightList, 0, makeBoundingBox(x, 64, z, orientation, 8, 15, 10), 5);
+			super(MSStructurePieces.MARKET_CENTER.get(), pieceWeightList, 0, makeBoundingBox(x, 64, z, orientation, 8, 15, 10), 5);
 			setOrientation(orientation);
 		}
 		
 		public VillageMarketCenter(CompoundTag nbt)
 		{
-			super(MSStructurePieces.MARKET_CENTER, nbt, 5);
+			super(MSStructurePieces.MARKET_CENTER.get(), nbt, 5);
 		}
 		
 		
@@ -239,13 +239,13 @@ public class ConsortVillageCenter
 	{
 		public RockCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.ROCK_CENTER, pieceWeightList, 0, new BoundingBox(x, 64, z, x + 7 - 1, 68, z + 7 - 1), 0);
+			super(MSStructurePieces.ROCK_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 7 - 1, 68, z + 7 - 1), 0);
 			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
 		}
 		
 		public RockCenter(CompoundTag nbt)
 		{
-			super(MSStructurePieces.ROCK_CENTER, nbt, 0);
+			super(MSStructurePieces.ROCK_CENTER.get(), nbt, 0);
 		}
 		
 		@Override
@@ -313,13 +313,13 @@ public class ConsortVillageCenter
 	{
 		public CactusPyramidCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
 		{
-			super(MSStructurePieces.CACTUS_PYRAMID_CENTER, pieceWeightList, 0, new BoundingBox(x, 64, z, x + 16 - 1, 73, z + 16 - 1), 0);
+			super(MSStructurePieces.CACTUS_PYRAMID_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 16 - 1, 73, z + 16 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
 		}
 		
 		public CactusPyramidCenter(CompoundTag nbt)
 		{
-			super(MSStructurePieces.CACTUS_PYRAMID_CENTER, nbt, 0);
+			super(MSStructurePieces.CACTUS_PYRAMID_CENTER.get(), nbt, 0);
 		}
 		
 		@Override

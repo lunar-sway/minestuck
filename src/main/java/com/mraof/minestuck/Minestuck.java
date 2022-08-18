@@ -19,11 +19,12 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
-import com.mraof.minestuck.world.gen.feature.MSCFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import com.mraof.minestuck.world.gen.feature.structure.MSStructureFeatures;
+import com.mraof.minestuck.world.gen.feature.*;
+import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
 import com.mraof.minestuck.world.gen.feature.structure.MSStructureSets;
+import com.mraof.minestuck.world.gen.feature.structure.MSStructures;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.world.item.ItemStack;
@@ -65,9 +66,17 @@ public class Minestuck
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.EFFECTS.register(eventBus);
 		
+		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
-		MSStructureFeatures.REGISTER.register(eventBus);
+		MSPlacedFeatures.REGISTER.register(eventBus);
+		
+		MSStructurePieces.REGISTER.register(eventBus);
+		MSStructures.REGISTER.register(eventBus);
+		MSConfiguredStructures.REGISTER.register(eventBus);
 		MSStructureSets.REGISTER.register(eventBus);
+		
+		MSStructureProcessorTypes.REGISTER.register(eventBus);
+		MSSurfaceRules.REGISTER.register(eventBus);
 	}
 	
 	/**
