@@ -1,14 +1,11 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import com.mraof.minestuck.entity.item.GristEntity;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import net.minecraft.world.World;
-import org.apache.logging.log4j.spi.LoggerRegistry;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
+
+import java.util.Map;
 
 
 public class GristGutter extends GristSet
@@ -25,31 +22,32 @@ public class GristGutter extends GristSet
 	 * just kind of ended up working anyway
 	 * i'm not entirely sure at all how this works honestly
 	 * */
-	 public long getGutterTotal()
+	public long getGutterTotal()
 	{
 		if(gutterTotal < 0)
 		{
-			//TODO: Recalculate total
-			// Then assign the newly-calculated total to gutterTotal.
+			gutterTotal = 0;
+			for(Map.Entry<GristType, Long> pair : gristTypes.entrySet())
+			{
+				gutterTotal += pair.getValue();
+			}
 		}
 		return gutterTotal;
 	}
-	//todo: what happens to grist gutter super overflow
-	
 
 	public GristSet gristToSpill = new GristSet();
 	
-	public void spillGrist(World world, PlayerEntity player)
+/**	public void spillGrist(Level level, Player player)
 	{
 		gristToSpill.spawnGristEntities(
-				world,
+				level,
 				player.getX(), player.getY(), player.getZ(),
-				world.random,
+				level.random,
 				entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)),
 				90,
-				world.random.nextInt(6) > 0 ? 1 : 2
+				level.random.nextInt(6) > 0 ? 1 : 2
 		);
-	}
+	}*/
 	
 	/**
 	 * this is our main function that adds grist to the gutter.

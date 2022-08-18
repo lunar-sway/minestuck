@@ -1,5 +1,8 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.client.renderer.entity.GristRenderer;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -11,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -18,6 +22,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Material;
+import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
@@ -64,9 +70,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	/**
 	 * this is where we set up our consumedelay
 	 */
-	public GristEntity(World world, double x, double y, double z, GristAmount gristData, int pickupDelay)
+	public GristEntity(Level level, double x, double y, double z, GristAmount gristData, int pickupDelay)
 	{
-		this(world, x, y, z, gristData);
+		this(level, x, y, z, gristData);
 		consumeDelay = pickupDelay;
 		// Set the class's consume-delay variable to equal the pickupDelay value that got passed in.
 	}
@@ -111,6 +117,11 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void tick()
 	{
+		if(this.level.isClientSide == true)
+		{
+			shaderAlpha = Math.max(shaderAlpha - 1, 0);
+		}
+		
 		
 		super.tick();
 
@@ -214,24 +225,46 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.gristType = GristType.read(compound, "Type");
 	}
 	
+	public int shaderAlpha = 0;
+	
 	/**
 	 * Called by a player entity when they collide with an entity
+	 * dectects collision with player entity and
 	 */
 	@Override
 	public void playerTouch(Player entityIn)
 	{
-		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
-			return;
+		long playerGristAmount = PlayerSavedData.getData
+				((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
+		int rung = PlayerSavedData.getData
+				((ServerPlayer) entityIn).getEcheladder().getRung();
+		int gristCap = GristHelper.rungGrist[rung];
+		int gutterCap = GristGutter.GUTTER_CAPACITY;
+		long gutterTotal = SessionHandler.get(level).
+				getPlayerSession(IdentifierHandler.encode(entityIn)).getGristGutter().getGutterTotal();
+		long gutterRoom = gutterCap - gutterTotal;
+		long cacheRoom = gristCap - playerGristAmount;
 		
-		if (!this.level.isClientSide && !(entityIn instanceof FakePlayer))
+		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
+			return;//checks if player is in edit mode. returns nothing and doesn't allow the entities to touch.
+		
+		
+		boolean hasRoom = (gutterRoom + cacheRoom) >= (gristValue);
+		if(this.level.isClientSide==false && hasRoom == true)
 		{
-			if(gristAge < this.consumeDelay) return;
 			consumeGrist(IdentifierHandler.encode(entityIn), true);
 		}
+		else if(this.level.isClientSide==true && hasRoom == false)
+		{
+			// Makes the grist flash red
+			shaderAlpha = 255;
+		}
+		
 	}
 	
 	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{
+		
 		if(this.level.isClientSide)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
