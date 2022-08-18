@@ -5,15 +5,19 @@ import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.feature.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.gen.feature.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
@@ -80,6 +84,22 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	public LandBiomeSet getBiomeSet()
 	{
 		return MSBiomes.DEFAULT_LAND;
+	}
+	
+	public SurfaceRules.RuleSource getSurfaceRule(StructureBlockRegistry blocks)
+	{
+		ResourceKey<Biome> roughBiome = this.getBiomeSet().ROUGH;
+		
+		SurfaceRules.RuleSource surfaceBlock = SurfaceRules.sequence(
+				SurfaceRules.ifTrue(SurfaceRules.isBiome(roughBiome), SurfaceRules.state(blocks.getBlockState("surface_rough"))),
+				SurfaceRules.state(blocks.getBlockState("surface")));
+		SurfaceRules.RuleSource surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterBlockCheck(0, 0), surfaceBlock));
+		
+		SurfaceRules.RuleSource upper = SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, SurfaceRules.ifTrue(SurfaceRules.waterStartCheck(-6, -1), SurfaceRules.state(blocks.getBlockState("upper"))));
+		// This surface rule targets the ocean surface by being positioned after "surface" and "upper", thus only placing blocks on surfaces where "surface" or "upper" doesn't
+		SurfaceRules.RuleSource ocean_surface = SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.state(blocks.getBlockState("ocean_surface")));
+		
+		return SurfaceRules.sequence(surface, upper, ocean_surface);
 	}
 	
 	/**
