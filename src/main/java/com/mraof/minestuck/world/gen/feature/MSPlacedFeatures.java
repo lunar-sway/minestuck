@@ -69,9 +69,9 @@ public class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> DARK_OAK = REGISTER.register("dark_oak",  () -> new PlacedFeature(Holder.hackyErase(TreeFeatures.DARK_OAK),
 			List.of(CountPlacement.of(10), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> RAINBOW_TREE = REGISTER.register("rainbow_tree", () -> new PlacedFeature(MSCFeatures.RAINBOW_TREE.getHolder().orElseThrow(),
-			List.of(PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+			List.of(PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> EXTRA_RAINBOW_TREE = REGISTER.register("extra_rainbow_tree", () -> new PlacedFeature(MSCFeatures.RAINBOW_TREE.getHolder().orElseThrow(),
-			List.of(PlacementUtils.countExtra(4, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+			List.of(PlacementUtils.countExtra(4, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> GLOWING_TREE = REGISTER.register("glowing_tree", () -> new PlacedFeature(MSCFeatures.GLOWING_TREE.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> new PlacedFeature(MSCFeatures.PETRIFIED_TREE.getHolder().orElseThrow(),
