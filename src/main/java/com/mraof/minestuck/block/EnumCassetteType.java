@@ -9,15 +9,20 @@ public enum EnumCassetteType implements StringRepresentable
 {
 	NONE,
 	THIRTEEN,
-	CAT,
 	BLOCKS,
+	CAT,
 	CHIRP,
+	DANCE_STAB_DANCE,
+	EMISSARY_OF_DANCE,
 	FAR,
 	MALL,
 	MELLOHI,
-	EMISSARY_OF_DANCE,
-	DANCE_STAB_DANCE,
-	RETRO_BATTLE_THEME;
+	PIGSTEP,
+	RETRO_BATTLE_THEME,
+	STAL,
+	STRAD,
+	WAIT,
+	WARD;
 	
 	@Override
 	public String getSerializedName()
@@ -30,15 +35,20 @@ public enum EnumCassetteType implements StringRepresentable
 		return switch(type)
 				{
 					case THIRTEEN -> SoundEvents.MUSIC_DISC_13;
-					case CAT -> SoundEvents.MUSIC_DISC_CAT;
 					case BLOCKS -> SoundEvents.MUSIC_DISC_BLOCKS;
+					case CAT -> SoundEvents.MUSIC_DISC_CAT;
 					case CHIRP -> SoundEvents.MUSIC_DISC_CHIRP;
+					case DANCE_STAB_DANCE -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE;
+					case EMISSARY_OF_DANCE -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE;
 					case FAR -> SoundEvents.MUSIC_DISC_FAR;
 					case MALL -> SoundEvents.MUSIC_DISC_MALL;
 					case MELLOHI -> SoundEvents.MUSIC_DISC_MELLOHI;
-					case EMISSARY_OF_DANCE -> MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE;
-					case DANCE_STAB_DANCE -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE;
+					case PIGSTEP -> SoundEvents.MUSIC_DISC_PIGSTEP;
 					case RETRO_BATTLE_THEME -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME;
+					case STAL -> SoundEvents.MUSIC_DISC_STAL;
+					case STRAD -> SoundEvents.MUSIC_DISC_STRAD;
+					case WAIT -> SoundEvents.MUSIC_DISC_WAIT;
+					case WARD -> SoundEvents.MUSIC_DISC_WARD;
 					case NONE -> null;
 				};
 	}
