@@ -23,7 +23,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.Random;
 
-public class CakePedestalFeature extends Feature<NoneFeatureConfiguration>
+public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation STRUCTURE_CAKE_PEDESTAL = new ResourceLocation(Minestuck.MOD_ID, "cake_pedestal");
 	
@@ -33,30 +33,14 @@ public class CakePedestalFeature extends Feature<NoneFeatureConfiguration>
 	}
 	
 	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	protected ResourceLocation pickTemplate(Random random)
 	{
-		WorldGenLevel level = context.level();
-		BlockPos pos = context.origin();
-		ChunkGenerator generator = context.chunkGenerator();
-		Random rand = context.random();
-		StructureManager templates = level.getLevel().getStructureManager();
-		StructureTemplate template = templates.getOrCreate(STRUCTURE_CAKE_PEDESTAL);
-		
-		ChunkPos chunkPos = new ChunkPos(pos);
-		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
-		StructurePlaceSettings settings = new StructurePlaceSettings().setBoundingBox(boundingBox).setRandom(rand)
-				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
-		
-		Vec3i size = template.getSize();
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getX());
-		
-		int yMin = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(xOffset, 0, zOffset)))
-			yMin = Math.min(yMin, level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, floorPos).getY());
-		
-		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, yMin, pos.getZ() + zOffset), Mirror.NONE, Rotation.NONE);
-		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
-		
-		return true;
+		return STRUCTURE_CAKE_PEDESTAL;
+	}
+	
+	@Override
+	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random)
+	{
+		return minWorldHeightInSize(level, pos, templateSize);
 	}
 }
