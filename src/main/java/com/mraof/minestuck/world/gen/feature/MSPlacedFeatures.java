@@ -29,7 +29,7 @@ public class MSPlacedFeatures
 			List.of(RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), BiomeFilter.biome())));
 	
 	public static final RegistryObject<PlacedFeature> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new PlacedFeature(MSCFeatures.SURFACE_FOSSIL.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(5), BiomeFilter.biome())));
+			List.of(RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), BiomeFilter.biome())));
 	
 	public static final RegistryObject<PlacedFeature> BROKEN_SWORD = REGISTER.register("broken_sword", () -> new PlacedFeature(MSCFeatures.BROKEN_SWORD.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(10), BiomeFilter.biome())));
