@@ -490,6 +490,7 @@ public class MSItems
 	public static final Item CASSETTE_FAR = getNull();
 	public static final Item CASSETTE_MALL = getNull();
 	public static final Item CASSETTE_MELLOHI = getNull();
+	public static final Item CASSETTE_PIGSTEP = getNull();
 	public static final Item CASSETTE_RETRO_BATTLE = getNull();
 	public static final Item CASSETTE_STAL = getNull();
 	public static final Item CASSETTE_STRAD = getNull();
@@ -1335,6 +1336,7 @@ public class MSItems
 		registry.register(new CassetteItem(5, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.FAR), EnumCassetteType.FAR, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_far"));
 		registry.register(new CassetteItem(6, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.MALL), EnumCassetteType.MALL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_mall"));
 		registry.register(new CassetteItem(7, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.MELLOHI), EnumCassetteType.MELLOHI, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_mellohi"));
+		registry.register(new CassetteItem(6, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.PIGSTEP), EnumCassetteType.PIGSTEP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_pigstep"));
 		registry.register(new CassetteItem(3, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.RETRO_BATTLE_THEME), EnumCassetteType.RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_retro_battle"));
 		registry.register(new CassetteItem(8, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.STAL), EnumCassetteType.STAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_stal"));
 		registry.register(new CassetteItem(9, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.STRAD), EnumCassetteType.STRAD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_strad"));

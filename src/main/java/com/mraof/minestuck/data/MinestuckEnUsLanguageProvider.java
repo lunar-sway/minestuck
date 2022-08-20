@@ -1136,6 +1136,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
 		add(MSItems.CASSETTE_MELLOHI, "Cassette");
 		addExtra(MSItems.CASSETTE_MELLOHI, "desc", "C418 - mellohi");
+		add(MSItems.CASSETTE_PIGSTEP, "Cassette");
+		addExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Mono Mix - Pigstep");
 		add(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
 		addExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		add(MSItems.CASSETTE_STAL, "Cassette");

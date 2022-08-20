@@ -575,6 +575,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_FAR).input(Items.MUSIC_DISC_FAR).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_MALL).input(Items.MUSIC_DISC_MALL).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_MELLOHI).input(Items.MUSIC_DISC_MELLOHI).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_PIGSTEP).input(Items.MUSIC_DISC_PIGSTEP).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_RETRO_BATTLE).input(MSItems.MUSIC_DISC_RETRO_BATTLE).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_STAL).input(Items.MUSIC_DISC_STAL).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_STRAD).input(Items.MUSIC_DISC_STRAD).or().namedInput(MSBlocks.CASSETTE_PLAYER).build(consumer);

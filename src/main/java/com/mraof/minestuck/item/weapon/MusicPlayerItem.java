@@ -131,7 +131,6 @@ public class MusicPlayerItem extends WeaponItem
 			}
 			case NONE ->
 			{
-				player.setNoGravity(false);
 			}
 		}
 	}
