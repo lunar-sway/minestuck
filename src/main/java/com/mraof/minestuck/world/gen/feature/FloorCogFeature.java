@@ -2,28 +2,16 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.Random;
 
-public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
+public class FloorCogFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_1 = new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_1");
 	private static final ResourceLocation STRUCTURE_LARGE_FLOOR_COG_2 = new ResourceLocation(Minestuck.MOD_ID, "large_floor_cog_2");
@@ -34,39 +22,25 @@ public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
 	}
 	
 	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	protected ResourceLocation pickTemplate(Random random)
 	{
-		WorldGenLevel level = context.level();
-		BlockPos pos = context.origin();
-		ChunkGenerator generator = context.chunkGenerator();
-		Random rand = context.random();
-		StructureManager templates = level.getLevel().getStructureManager();
-		StructureTemplate template = templates.getOrCreate(rand.nextBoolean() ? STRUCTURE_LARGE_FLOOR_COG_1 : STRUCTURE_LARGE_FLOOR_COG_2);
-		
-		ChunkPos chunkPos = new ChunkPos(pos);
-		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
-		StructurePlaceSettings settings = new StructurePlaceSettings().setBoundingBox(boundingBox).setRandom(rand)
-				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
-		
-		Vec3i size = template.getSize();
-		pos = pos.offset(-size.getX()/2, 0, -size.getZ()/2);
-		
+		return random.nextBoolean() ? STRUCTURE_LARGE_FLOOR_COG_1 : STRUCTURE_LARGE_FLOOR_COG_2;
+	}
+	
+	@Override
+	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random)
+	{
 		int yMin = Integer.MAX_VALUE, yMax = 0;
-		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
+		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, templateSize.getX(), 0, templateSize.getZ()))
 		{
 			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());
 			yMax = Math.max(yMax, y);
 			yMin = Math.min(yMin, y);
 		}
 		
-		int y;
 		if(yMin == yMax)
-			y = yMin - size.getY() + 1;
-		else y = yMin - size.getY() + 2;
-		
-		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, Rotation.NONE);
-		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
-		
-		return true;
+			return yMin - templateSize.getY() + 1;
+		else
+			return yMin - templateSize.getY() + 2;
 	}
 }
