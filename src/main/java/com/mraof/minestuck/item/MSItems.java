@@ -442,7 +442,7 @@ public class MSItems
 	public static final RegistryObject<MSArmorItem> CRUMPLY_HAT = ITEMS.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlot.HEAD, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> STONE_EYEBALLS = ITEMS.register("stone_eyeballs", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> STONE_SLAB = ITEMS.register("stone_slab", () -> new StoneTabletItem(MSBlocks.STONE_SLAB.get(), new Item.Properties().tab(MSItemGroup.LANDS)));
-	public static /*final*/ RegistryObject<Item> SHOP_POSTER = ITEMS.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)));
+	public static final RegistryObject<Item> SHOP_POSTER = ITEMS.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS))); //not used
 	
 	
 	

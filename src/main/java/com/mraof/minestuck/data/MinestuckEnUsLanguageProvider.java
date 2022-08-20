@@ -1036,6 +1036,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItems.STONE_SLAB.get(), "Stone Tablet");
 		addExtra(MSItems.STONE_SLAB.get(), "carved", "Looks like something has been carved into it!");
 		addStoreTooltip(MSItems.STONE_SLAB.get(), "It's pretty rock, but I wouldn't advise rolling on it.");
+		add(MSItems.SHOP_POSTER.get(), "Shop Poster");
 		add(MSItems.OIL_BUCKET.get(), "Bucket of Oil");
 		add(MSItems.BLOOD_BUCKET.get(), "Bucket of Blood");
 		addTooltip(MSItems.BLOOD_BUCKET.get(), "It looks like Kool-Aid... But you're too scared to try it yourself.");
