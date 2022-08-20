@@ -49,12 +49,12 @@ public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
 				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		Vec3i size = template.getSize();
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
+		pos = pos.offset(-size.getX()/2, 0, -size.getZ()/2);
 		
 		int yMin = Integer.MAX_VALUE, yMax = 0;
 		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
 		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
+			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());
 			yMax = Math.max(yMax, y);
 			yMin = Math.min(yMin, y);
 		}
@@ -64,7 +64,7 @@ public class FloorCogFeature extends Feature<NoneFeatureConfiguration>
 			y = yMin - size.getY() + 1;
 		else y = yMin - size.getY() + 2;
 		
-		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, Rotation.NONE);
+		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, Rotation.NONE);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
 		
 		return true;
