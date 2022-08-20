@@ -36,7 +36,7 @@ public class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> UNCOMMON_BROKEN_SWORD = REGISTER.register("uncommon_broken_sword", () -> new PlacedFeature(MSCFeatures.BROKEN_SWORD.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(50), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> BUCKET = REGISTER.register("bucket", () -> new PlacedFeature(MSCFeatures.BUCKET.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(16), BiomeFilter.biome())));
+			List.of(RarityFilter.onAverageOnceEvery(16), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new PlacedFeature(MSCFeatures.CAKE_PEDESTAL.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(100), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> SMALL_LIBRARY = REGISTER.register("small_library", () -> new PlacedFeature(MSCFeatures.SMALL_LIBRARY.getHolder().orElseThrow(),
