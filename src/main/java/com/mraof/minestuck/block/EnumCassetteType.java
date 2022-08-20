@@ -8,6 +8,7 @@ import net.minecraft.util.StringRepresentable;
 public enum EnumCassetteType implements StringRepresentable
 {
 	NONE,
+	ELEVEN,
 	THIRTEEN,
 	BLOCKS,
 	CAT,
@@ -34,6 +35,7 @@ public enum EnumCassetteType implements StringRepresentable
 	{
 		return switch(type)
 				{
+					case ELEVEN -> SoundEvents.MUSIC_DISC_11;
 					case THIRTEEN -> SoundEvents.MUSIC_DISC_13;
 					case BLOCKS -> SoundEvents.MUSIC_DISC_BLOCKS;
 					case CAT -> SoundEvents.MUSIC_DISC_CAT;

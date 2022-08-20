@@ -1118,6 +1118,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addExtra(MSItems.MUSIC_DISC_DANCE_STAB_DANCE, "desc", "Catboss - Dance-Stab-Dance");
 		add(MSItems.MUSIC_DISC_RETRO_BATTLE, "Music Disc");
 		addExtra(MSItems.MUSIC_DISC_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
+		add(MSItems.CASSETTE_11, "Cassette");
+		addExtra(MSItems.CASSETTE_11, "desc", "C418 - 11");
 		add(MSItems.CASSETTE_13, "Cassette");
 		addExtra(MSItems.CASSETTE_13, "desc", "C418 - 13");
 		add(MSItems.CASSETTE_BLOCKS, "Cassette");

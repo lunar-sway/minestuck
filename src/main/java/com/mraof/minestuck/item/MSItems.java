@@ -486,6 +486,7 @@ public class MSItems
 	public static final Item CASSETTE_CAT = getNull();
 	public static final Item CASSETTE_CHIRP = getNull();
 	public static final Item CASSETTE_DANCE_STAB = getNull();
+	public static final Item CASSETTE_11 = getNull();
 	public static final Item CASSETTE_EMISSARY = getNull();
 	public static final Item CASSETTE_FAR = getNull();
 	public static final Item CASSETTE_MALL = getNull();
@@ -1327,6 +1328,7 @@ public class MSItems
 		registry.register(new RecordItem(2, () -> MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_dance_stab_dance"));
 		registry.register(new RecordItem(3, () -> MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("music_disc_retro_battle"));
 		//Cassettes
+		registry.register(new CassetteItem(4, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.ELEVEN), EnumCassetteType.ELEVEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_11"));
 		registry.register(new CassetteItem(1, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.THIRTEEN), EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_13"));
 		registry.register(new CassetteItem(3, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.BLOCKS), EnumCassetteType.BLOCKS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_blocks"));
 		registry.register(new CassetteItem(2, () -> EnumCassetteType.getSoundEvent(EnumCassetteType.CAT), EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)).setRegistryName("cassette_cat"));

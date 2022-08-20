@@ -101,37 +101,7 @@ public class MusicPlayerItem extends WeaponItem
 	{
 		switch(cassetteType)
 		{
-			case THIRTEEN ->
-			{
-			}
-			case CAT ->
-			{
-			}
-			case BLOCKS ->
-			{
-			}
-			case CHIRP ->
-			{
-			}
 			case FAR -> player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 10, 1));
-			case MALL ->
-			{
-			}
-			case MELLOHI ->
-			{
-			}
-			case EMISSARY_OF_DANCE ->
-			{
-			}
-			case DANCE_STAB_DANCE ->
-			{
-			}
-			case RETRO_BATTLE_THEME ->
-			{
-			}
-			case NONE ->
-			{
-			}
 		}
 	}
 }
