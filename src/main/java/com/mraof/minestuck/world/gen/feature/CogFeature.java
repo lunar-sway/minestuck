@@ -55,18 +55,18 @@ public class CogFeature extends Feature<NoneFeatureConfiguration>
 				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		Vec3i size = template.getSize(rotation);
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
+		pos.offset(-size.getX()/2, 0, -size.getZ()/2);
 		
 		int yMin = Integer.MAX_VALUE;
 		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
 		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
+			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());
 			yMin = Math.min(yMin, y);
 		}
 		
 		int y = Math.max(0, yMin - rand.nextInt(big ? 4 : 3));
 		
-		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
+		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, rotation);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
 		
 		return true;
