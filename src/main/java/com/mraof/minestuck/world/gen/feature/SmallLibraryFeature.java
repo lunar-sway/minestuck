@@ -52,7 +52,8 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 		}
 		
 		Vec3i size = template.getSize(rotation);
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
+		pos = pos.offset(-size.getX()/2, 0, -size.getZ()/2);
+		
 		int minX = template.getSize().getX()/2 - 1, maxX = template.getSize().getX()/2 + 1, z1 = 0, z2 = template.getSize().getZ();
 		BoundingBox door1, door2;
 		if(rotation == Rotation.NONE || rotation == Rotation.CLOCKWISE_180)
@@ -68,16 +69,16 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 		int y1 = 0;
 		for(BlockPos doorPos : BlockPos.betweenClosed(door1.minX(), 0, door1.minZ(), door1.maxX(), 0, door1.maxZ()))
 		{
-			y1 = Math.max(y1, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
+			y1 = Math.max(y1, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX(), pos.getZ() + doorPos.getZ()));
 		}
 		int y2 = 0;
 		for(BlockPos doorPos : BlockPos.betweenClosed(door2.minX(), 0, door2.minZ(), door2.maxX(), 0, door2.maxZ()))
 		{
-			y2 = Math.max(y2, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX() + xOffset, pos.getZ() + doorPos.getZ() + zOffset));
+			y2 = Math.max(y2, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX(), pos.getZ() + doorPos.getZ()));
 		}
 		int y = Math.min(y1, y2) - 1;
 		
-		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
+		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, rotation);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
 		
 		return true;

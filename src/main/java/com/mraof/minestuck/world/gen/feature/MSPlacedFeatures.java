@@ -40,7 +40,7 @@ public class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new PlacedFeature(MSCFeatures.CAKE_PEDESTAL.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(100), InSquarePlacement.spread(), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> SMALL_LIBRARY = REGISTER.register("small_library", () -> new PlacedFeature(MSCFeatures.SMALL_LIBRARY.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(64), BiomeFilter.biome())));
+			List.of(RarityFilter.onAverageOnceEvery(64), InSquarePlacement.spread(), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> TOWER = REGISTER.register("tower", () -> new PlacedFeature(MSCFeatures.TOWER.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new PlacedFeature(MSCFeatures.PARCEL_PYXIS.getHolder().orElseThrow(),
