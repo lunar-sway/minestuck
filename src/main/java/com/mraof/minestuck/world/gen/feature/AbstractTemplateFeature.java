@@ -36,11 +36,9 @@ public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> ex
 	protected static int minWorldHeightInSize(WorldGenLevel level, BlockPos pos, Vec3i templateSize)
 	{
 		int minY = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, templateSize.getX(), 0, templateSize.getZ()))
-		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());
-			minY = Math.min(minY, y);
-		}
+		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(templateSize.getX(), 0, templateSize.getZ())))
+			minY = Math.min(minY, level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, floorPos.getX(), floorPos.getZ()));
+		
 		return minY;
 	}
 	
