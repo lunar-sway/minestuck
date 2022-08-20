@@ -557,7 +557,7 @@ public class MSBlocks
 	
 	
 	
-	//Explosion and Redstone
+	//Explosives
 	public static final RegistryObject<Block> PRIMED_TNT = BLOCKS.register("primed_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), true, false, false));
 	public static final RegistryObject<Block> UNSTABLE_TNT = BLOCKS.register("unstable_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS).randomTicks(), false, true, false));
 	public static final RegistryObject<Block> INSTANT_TNT = BLOCKS.register("instant_tnt", () -> new SpecialTNTBlock(Block.Properties.of(Material.EXPLOSIVE).strength(0.0F).sound(SoundType.GRASS), false, false, true));
