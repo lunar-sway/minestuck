@@ -50,7 +50,7 @@ public class CakeLandType extends TitleLandType
 			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL.getHolder().orElseThrow());
 		}
 		
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE,
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
 				new ProbabilityFeatureConfiguration(baseBiome.getBaseTemperature()/2),
 				CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		

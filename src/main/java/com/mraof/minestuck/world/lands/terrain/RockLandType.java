@@ -123,10 +123,10 @@ public class RockLandType extends TerrainLandType
 			{
 				builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RANDOM_ROCK_BLOCK_BLOB.getHolder().orElseThrow());
 				builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_GRASS_PATCH.getHolder().orElseThrow());
-				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 						new DiskConfiguration(Blocks.COBBLESTONE.defaultBlockState(), UniformInt.of(2, 5), 1, List.of(blocks.getBlockState("surface"), Blocks.COBBLESTONE.defaultBlockState())),
 						RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 						new DiskConfiguration(Blocks.STONE.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(blocks.getBlockState("surface"), Blocks.STONE.defaultBlockState())),
 						RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 			} else if(this.type == Variant.PETRIFICATION)
@@ -145,13 +145,13 @@ public class RockLandType extends TerrainLandType
 				builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_TREE.getHolder().orElseThrow());
 				builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_RANDOM_ROCK_BLOCK_BLOB.getHolder().orElseThrow());
 				builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.PETRIFIED_GRASS_PATCH.getHolder().orElseThrow());
-				builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.STONE_MOUND,
+				builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.STONE_MOUND.get(),
 						new BlockStateConfiguration(blocks.getBlockState("ground")),
 						InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 						new DiskConfiguration(Blocks.COBBLESTONE.defaultBlockState(), UniformInt.of(2, 5), 1, List.of(blocks.getBlockState("surface"), Blocks.COBBLESTONE.defaultBlockState())),
 						RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+				builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 						new DiskConfiguration(Blocks.STONE.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(blocks.getBlockState("surface"), Blocks.STONE.defaultBlockState())),
 						RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 			} else if(this.type == Variant.PETRIFICATION)

@@ -114,6 +114,74 @@
                         "Name": "minecraft:bedrock"
                     }
                 }
+            },
+            {
+                "type": "condition",
+                "if_true": {
+                    "type": "stone_depth",
+                    "offset": 0,
+                    "add_surface_depth": true,
+                    "secondary_depth_range": 0,
+                    "surface_type": "floor"
+                },
+                "then_run": {
+                    "type": "minestuck:checkered",
+                    "size": 16,
+                    "rules": [
+                        {
+                            "type": "sequence",
+                            "sequence": [
+                                {
+                                    "type": "condition",
+                                    "if_true": {
+                                        "type": "noise_threshold",
+                                        "noise": "surface",
+                                        "min_threshold": 0.4,
+                                        "max_threshold": 99999
+                                    },
+                                    "then_run": {
+                                        "type": "block",
+                                        "result_state": {
+                                            "Name": "minestuck:light_gray_chess_dirt"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "block",
+                                    "result_state": {
+                                        "Name": "minestuck:white_chess_dirt"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "sequence",
+                            "sequence": [
+                                {
+                                    "type": "condition",
+                                    "if_true": {
+                                        "type": "noise_threshold",
+                                        "noise": "surface",
+                                        "min_threshold": -99999,
+                                        "max_threshold": -0.4
+                                    },
+                                    "then_run": {
+                                        "type": "block",
+                                        "result_state": {
+                                            "Name": "minestuck:dark_gray_chess_dirt"
+                                        }
+                                    }
+                                },
+                                {
+                                    "type": "block",
+                                    "result_state": {
+                                        "Name": "minestuck:black_chess_dirt"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
             }
         ]
     },

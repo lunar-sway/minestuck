@@ -19,6 +19,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.*;
 import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
@@ -64,6 +65,7 @@ public class Minestuck
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
 		
+		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
 		MSPlacedFeatures.REGISTER.register(eventBus);
 		
@@ -73,6 +75,7 @@ public class Minestuck
 		MSStructureSets.REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
+		MSSurfaceRules.REGISTER.register(eventBus);
 	}
 	
 	/**

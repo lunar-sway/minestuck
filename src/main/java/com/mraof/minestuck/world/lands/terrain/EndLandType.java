@@ -99,13 +99,13 @@ public class EndLandType extends TerrainLandType
 		
 		if(type == LandBiomeType.NORMAL)
 		{
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 					new DiskConfiguration(MSBlocks.END_GRASS.get().defaultBlockState(), UniformInt.of(2, 4), 1, List.of(blocks.getBlockState("surface"), MSBlocks.END_GRASS.get().defaultBlockState())),
 					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH.getHolder().orElseThrow());
 		} else if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK,
+			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
 					new DiskConfiguration(Blocks.END_STONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(blocks.getBlockState("surface_rough"), Blocks.END_STONE.defaultBlockState())),
 					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, EndPlacements.CHORUS_PLANT);
