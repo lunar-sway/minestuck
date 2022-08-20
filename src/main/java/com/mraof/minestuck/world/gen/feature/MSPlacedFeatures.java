@@ -19,6 +19,15 @@ public class MSPlacedFeatures
 {
 	public static final DeferredRegister<PlacedFeature> REGISTER = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Minestuck.MOD_ID);
 	
+	public static final RegistryObject<PlacedFeature> COG = REGISTER.register("cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
+			List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), BiomeFilter.biome())));
+	public static final RegistryObject<PlacedFeature> UNCOMMON_COG = REGISTER.register("uncommon_cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
+			List.of(RarityFilter.onAverageOnceEvery(10), InSquarePlacement.spread(), BiomeFilter.biome())));
+	public static final RegistryObject<PlacedFeature> FLOOR_COG = REGISTER.register("floor_cog", () -> new PlacedFeature(MSCFeatures.FLOOR_COG.getHolder().orElseThrow(),
+			List.of(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), BiomeFilter.biome())));
+	public static final RegistryObject<PlacedFeature> UNCOMMON_FLOOR_COG = REGISTER.register("uncommon_floor_cog", () -> new PlacedFeature(MSCFeatures.FLOOR_COG.getHolder().orElseThrow(),
+			List.of(RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), BiomeFilter.biome())));
+	
 	public static final RegistryObject<PlacedFeature> SURFACE_FOSSIL = REGISTER.register("surface_fossil", () -> new PlacedFeature(MSCFeatures.SURFACE_FOSSIL.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(5), BiomeFilter.biome())));
 	
@@ -30,14 +39,6 @@ public class MSPlacedFeatures
 			List.of(RarityFilter.onAverageOnceEvery(16), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new PlacedFeature(MSCFeatures.CAKE_PEDESTAL.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(100), BiomeFilter.biome())));
-	public static final RegistryObject<PlacedFeature> COG = REGISTER.register("cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), BiomeFilter.biome())));
-	public static final RegistryObject<PlacedFeature> UNCOMMON_COG = REGISTER.register("uncommon_cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(10), InSquarePlacement.spread(), BiomeFilter.biome())));
-	public static final RegistryObject<PlacedFeature> FLOOR_COG = REGISTER.register("floor_cog", () -> new PlacedFeature(MSCFeatures.FLOOR_COG.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), BiomeFilter.biome())));
-	public static final RegistryObject<PlacedFeature> UNCOMMON_FLOOR_COG = REGISTER.register("uncommon_floor_cog", () -> new PlacedFeature(MSCFeatures.FLOOR_COG.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(20), InSquarePlacement.spread(), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> SMALL_LIBRARY = REGISTER.register("small_library", () -> new PlacedFeature(MSCFeatures.SMALL_LIBRARY.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(64), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> TOWER = REGISTER.register("tower", () -> new PlacedFeature(MSCFeatures.TOWER.getHolder().orElseThrow(),

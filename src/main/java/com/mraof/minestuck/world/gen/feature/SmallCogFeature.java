@@ -23,13 +23,11 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.Random;
 
-public class CogFeature extends Feature<NoneFeatureConfiguration>
+public class SmallCogFeature extends Feature<NoneFeatureConfiguration>
 {
 	private static final ResourceLocation STRUCTURE_SMALL_COG = new ResourceLocation(Minestuck.MOD_ID, "small_cog");
-	private static final ResourceLocation STRUCTURE_LARGE_COG_1 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_1");
-	private static final ResourceLocation STRUCTURE_LARGE_COG_2 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_2");
 	
-	public CogFeature(Codec<NoneFeatureConfiguration> codec)
+	public SmallCogFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
@@ -43,11 +41,7 @@ public class CogFeature extends Feature<NoneFeatureConfiguration>
 		Random rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
 		StructureManager templates = level.getLevel().getStructureManager();
-		StructureTemplate template;
-		boolean big = rand.nextInt(10) == 0;
-		if(big)
-			template = templates.getOrCreate(rand.nextBoolean() ? STRUCTURE_LARGE_COG_1 : STRUCTURE_LARGE_COG_2);
-		else template = templates.getOrCreate(STRUCTURE_SMALL_COG);
+		StructureTemplate template = templates.getOrCreate(STRUCTURE_SMALL_COG);
 		
 		ChunkPos chunkPos = new ChunkPos(pos);
 		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
@@ -64,7 +58,7 @@ public class CogFeature extends Feature<NoneFeatureConfiguration>
 			yMin = Math.min(yMin, y);
 		}
 		
-		int y = Math.max(0, yMin - rand.nextInt(big ? 4 : 3));
+		int y = Math.max(0, yMin - rand.nextInt(3));
 		
 		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, rotation);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
