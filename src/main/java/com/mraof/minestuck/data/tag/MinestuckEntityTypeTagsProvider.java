@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.data.DataGenerator;
