@@ -29,6 +29,7 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
@@ -274,17 +275,17 @@ public class ServerEventHandler
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			
-			PlayerEntity player = event.player;
+			Player player = event.player;
 			if(data.getTitle() != null)
 
 			IdentifierHandler.encode(player);
 			
-			World world = player.getEntity().level;
-			long gameTime = world.getGameTime();
+			Level level = player.level;
+			long gameTime = level.getGameTime();
 			int inputTime = 200;
 			
 			NonNegativeGristSet playerCache = new NonNegativeGristSet
-					(PlayerSavedData.getData((ServerPlayerEntity) player).getGristCache());
+					(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
 			
 			/**
 			 *  here, we are getting the session gutter for each player every tick
@@ -295,16 +296,16 @@ public class ServerEventHandler
 			if(gameTime % inputTime == 0)
 			{
 				
-				int rung = PlayerSavedData.getData((ServerPlayerEntity) player).getEcheladder().getRung();
+				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();
 				int spliceAmount = GristHelper.rungGrist[rung] / 20;
-				Session session = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
+				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
 				GristGutter sessionGutter = session.getGristGutter();
 				
 				playerCache.addGrist(sessionGutter.splice(spliceAmount));
 				
 				
 				GristSet rungGrist = GristHelper.limitGristByPlayerRung
-						(world, IdentifierHandler.encode(player), playerCache);
+						(level, IdentifierHandler.encode(player), playerCache);
 				
 				sessionGutter.addGrist(rungGrist);
 				

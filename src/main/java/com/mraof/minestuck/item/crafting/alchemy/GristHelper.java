@@ -8,9 +8,9 @@ import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.network.chat.Component;
@@ -143,7 +143,6 @@ public class GristHelper
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
-	
 		Objects.requireNonNull(level);
 		Session session = SessionHandler.get(level).getPlayerSession(player);
 		GristGutter gutter = session.getGristGutter();
@@ -156,7 +155,6 @@ public class GristHelper
 		
 		limitGristByPlayerRung(level, player, newCache);
 		int gristCap = rungGrist[rung];
-		GristSet overflowedGrist = set.capGrist(gristCap);
 		//this is related to the limit grist and grist gutter function
 		
 		
@@ -164,11 +162,6 @@ public class GristHelper
 		gutter.addGrist(overflowedGrist);
 		data.setGristCache(newCache);
 		
-		ServerPlayerEntity playerEntity = player.getPlayer(world.getServer());
-		if(playerEntity != null)
-		{
-			gutter.spillGrist(level, playerEntity);
-		}
 	}
 	
 	/**
