@@ -99,7 +99,6 @@ public class CastleWallPiece extends CastlePiece
 				this.getNextComponentNormal(startPiece, accessor, rand, 0, -8, true);
 				break;
 			default:
-//			Debug.print("Wall done");
 		}
 		this.genDepth = 3;
 //		if(!this.cornerPiece)

@@ -84,6 +84,6 @@ public class CastleRoomPiece extends CastlePiece
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);
 		this.generateBox(level, boundingBox, 0, 1, 0, 7, 6, 7, Blocks.AIR.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);
-		this.placeBlock(level, Blocks.TORCH.defaultBlockState(), 3, 1, 3, boundingBox);	//placeBlockAtCurrentPosition
+		this.placeBlock(level, Blocks.TORCH.defaultBlockState(), 3, 1, 3, boundingBox);
 	}
 }

@@ -23,15 +23,14 @@ public class CastleStartPiece extends CastlePiece
 
     protected boolean bottom;
     public int averageGroundLevel = -1;
-    public int castleWidth, castleLength, x, z, totalPieces;
-    public ArrayList<CastlePiece> pendingPieces = new ArrayList<>();
+    public int castleWidth, castleLength, x, z;
+    public final ArrayList<CastlePiece> pendingPieces = new ArrayList<>();
     
     protected CastleStartPiece(int x, int z, boolean isBlack)
     {
         super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
         this.x = x;
         this.z = z;
-        if(pendingPieces == null)pendingPieces = new ArrayList<>();
         this.bottom = true;
     }
     

@@ -69,7 +69,7 @@ public abstract class CastlePiece extends StructurePiece
 		{
 			for (int var6 = this.boundingBox.minX(); var6 <= this.boundingBox.maxX(); ++var6)
 			{
-				if (par2StructureBoundingBox.isInside(new BlockPos(var6, 64, var5)))	//isVecInside
+				if (par2StructureBoundingBox.isInside(new BlockPos(var6, 64, var5)))
 				{
 					var3 += level.getHeight(Heightmap.Types.MOTION_BLOCKING, var6, var5);
 					++var4;
@@ -100,13 +100,11 @@ public abstract class CastlePiece extends StructurePiece
 				{
 					if(((x + y + z) % 2 == 0) ^ b)
 					{
-//						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID + " " + metadata1);
-						this.placeBlock(level, block1, x, y, z, boundingBox);	//placeBlockAtCurrentPosition
+						this.placeBlock(level, block1, x, y, z, boundingBox);
 					}
 					else
 					{
 						this.placeBlock(level, block2, x, y, z, boundingBox);
-//						Debug.print("Placing block at " + x + " " + y + " " + z + " " + blockID2 + " " + metadata2);
 					}
 				}
 			}
