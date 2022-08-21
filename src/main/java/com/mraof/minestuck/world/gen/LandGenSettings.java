@@ -1,19 +1,24 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.CubicSpline;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 public class LandGenSettings
 {
+	private static final ResourceKey<NormalNoise.NoiseParameters> CONTINENTS = ResourceKey.create(Registry.NOISE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "land_continents"));
+	
 	private final LandTypePair landTypes;
 	private final StructureBlockRegistry blockRegistry;
 	private GateStructure.PieceFactory gatePiece;
@@ -63,22 +68,27 @@ public class LandGenSettings
 		
 		StructureSettings structureSettings = new StructureSettings(Optional.empty(), structures);
 		*/
+		CubicSpline<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents)
+				.addPoint(-0.3F, -0.1F, 0).addPoint(-0.1F, 0.05F, 0).build();
+		
 		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
 				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
-				new TerrainShaper(CubicSpline.constant(0.05F), CubicSpline.constant(5), CubicSpline.constant(0)));
+				new TerrainShaper(offsetSpline, CubicSpline.constant(5), CubicSpline.constant(0)));
 		
 		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
 		
 		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, landTypes.getTerrain().getSurfaceRule(blockRegistry));
 		
-		DensityFunction offset = DensityFunctions.terrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5);
+		DensityFunction continents = DensityFunctions.noise(MSNoiseParameters.LAND_CONTINENTS.getHolder().orElseThrow(), 0.25, 0);
+		
+		DensityFunction offset = DensityFunctions.terrainShaperSpline(continents, DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5);
 		DensityFunction depth = DensityFunctions.add(DensityFunctions.yClampedGradient(0, 256, 1, -1), offset);
-		DensityFunction factor = DensityFunctions.terrainShaperSpline(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0.0, 8.0);
+		DensityFunction factor = DensityFunctions.terrainShaperSpline(continents, DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0.0, 8.0);
 		DensityFunction initialDensity = DensityFunctions.mul(DensityFunctions.constant(4), DensityFunctions.mul(depth, factor).quarterNegative());
 		DensityFunction finalDensity = DensityFunctions.interpolated(DensityFunctions.slide(noiseSettings, DensityFunctions.add(BlendedNoise.UNSEEDED, initialDensity))).squeeze();
 		
 		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
-				new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), initialDensity, finalDensity, DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()),
+				new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), continents, depth, DensityFunctions.zero(), DensityFunctions.zero(), initialDensity, finalDensity, DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()),
 				surfaceRule, 64, false, false, false, false);
 		
 		return Holder.direct(settings);
