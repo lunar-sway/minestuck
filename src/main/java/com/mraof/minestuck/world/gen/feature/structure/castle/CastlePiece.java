@@ -40,21 +40,21 @@ public abstract class CastlePiece extends StructurePiece
 	}
 	
 	protected StructurePiece getNextComponentNormal(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int zShift, boolean par6)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int zShift, StructureCastlePieces.Type type)
 	{
-		return getNextComponentNormal(castleStartPiece, accessor, random, xShift, 0, zShift);
+		return getNextComponentNormal(castleStartPiece, accessor, random, xShift, 0, zShift, type);
 	}
 
 	protected StructurePiece getNextComponentNormal(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int yShift, int zShift)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int yShift, int zShift, StructureCastlePieces.Type type)
 	{
-			return this.getNextComponent(castleStartPiece, accessor, random, this.boundingBox.minX() + xShift, this.boundingBox.minY() + yShift, this.boundingBox.minZ() + zShift, this.direction, this.getGenDepth());
+			return this.getNextComponent(castleStartPiece, accessor, random, this.boundingBox.minX() + xShift, this.boundingBox.minY() + yShift, this.boundingBox.minZ() + zShift, this.direction, type);
 	}
 
 	protected StructurePiece getNextComponent(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random par3Random, int i, int j, int k, int coordBaseMode, int componentType)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random par3Random, int i, int j, int k, int coordBaseMode, StructureCastlePieces.Type type)
 	{
-		return StructureCastlePieces.getNextValidComponent(castleStartPiece, accessor, par3Random, i, j, k, coordBaseMode, componentType);
+		return StructureCastlePieces.getNextValidComponent(castleStartPiece, accessor, par3Random, i, j, k, coordBaseMode, type);
 	}
 	/**
 	 * Discover the y coordinate that will serve as the ground level of the supplied BoundingBox. (A median of all the

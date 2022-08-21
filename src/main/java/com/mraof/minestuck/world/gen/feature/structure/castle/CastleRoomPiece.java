@@ -44,8 +44,7 @@ public class CastleRoomPiece extends CastlePiece
 	{
 		if(((CastleStartPiece)componentIn).bottom)
 		{
-			this.genDepth = 0;
-			this.getNextComponentNormal((CastleStartPiece)componentIn, accessor, rand, 0, -8, 0);
+			this.getNextComponentNormal((CastleStartPiece)componentIn, accessor, rand, 0, -8, 0, StructureCastlePieces.Type.SOLID);
 		}
 	}
 
