@@ -18,12 +18,12 @@ public class GatePillarPiece extends GatePiece
 {
 	public GatePillarPiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_PILLAR, level, generator, random, minX, minZ, 3, 25, 3, -3);
+		super(MSStructurePieces.GATE_PILLAR.get(), level, generator, random, minX, minZ, 3, 25, 3, -3);
 	}
 	
 	public GatePillarPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.GATE_PILLAR, nbt);
+		super(MSStructurePieces.GATE_PILLAR.get(), nbt);
 	}
 	
 	@Override

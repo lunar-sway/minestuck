@@ -64,8 +64,8 @@ public class ReturnNodeBlock extends GateBlock
 			if(boundingBox == null || boundingBox.isInside(pos))
 			{
 				if(i == 3)
-					level.setBlock(pos, MSBlocks.RETURN_NODE.defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
-				else level.setBlock(pos, MSBlocks.RETURN_NODE.defaultBlockState(), Block.UPDATE_CLIENTS);
+					level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
+				else level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
 	}

@@ -8,7 +8,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -46,7 +46,7 @@ public class GateHandler
 			{
 				BlockState block = destinationWorld.getBlockState(destination.pos());
 				
-				if(block.getBlock() != MSBlocks.GATE)
+				if(block.getBlock() != MSBlocks.GATE.get())
 				{
 					Debug.debugf("Can't find destination gate at %s. Probably broken.", destination);
 					player.sendMessage(new TranslatableComponent(DESTROYED), Util.NIL_UUID);
@@ -67,7 +67,7 @@ public class GateHandler
 				return info.getGatePos();
 		}
 		
-		BlockPos gatePos = MSFeatures.LAND_GATE.findLandGatePos(level);
+		BlockPos gatePos = MSStructures.LAND_GATE.get().findLandGatePos(level);
 		
 		if(info != null)
 			info.setGatePos(gatePos);

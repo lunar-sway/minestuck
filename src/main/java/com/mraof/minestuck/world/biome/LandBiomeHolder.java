@@ -19,15 +19,16 @@ public class LandBiomeHolder implements ILandBiomeSet
 	private final Holder<Biome> normalBiome, oceanBiome, roughBiome;
 	public final LandBiomeSetWrapper baseBiomes;
 	
+	@SuppressWarnings("ConstantConditions")
 	public LandBiomeHolder(LandBiomeSetWrapper biomes, LandGenSettings settings, LandProperties properties)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		
 		baseBiomes = biomes;
 		
-		normalBiome = Holder.direct(createNormal(biomes, blocks, properties, settings.getLandTypes()));
-		roughBiome = Holder.direct(createRough(biomes, blocks, properties, settings.getLandTypes()));
-		oceanBiome = Holder.direct(createOcean(biomes, blocks, properties, settings.getLandTypes()));
+		normalBiome = Holder.direct(createNormal(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.NORMAL.value().getRegistryName()));
+		roughBiome = Holder.direct(createRough(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.ROUGH.value().getRegistryName()));
+		oceanBiome = Holder.direct(createOcean(biomes, blocks, properties, settings.getLandTypes()).setRegistryName(biomes.OCEAN.value().getRegistryName()));
 	}
 	
 	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)
@@ -94,9 +95,8 @@ public class LandBiomeHolder implements ILandBiomeSet
 	
 	private static BiomeGenerationSettings createGenerationSettings(Biome base, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
 	{
-		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder()/*TODO surface rule
-				.surfaceBuilder(() -> SurfaceBuilder.DEFAULT.configured(blocks.getSurfaceBuilderConfig(type)))*/;
-		/*
+		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();
+		/*TODO
 		if(type != LandBiomeType.OCEAN)
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSCFeatures.RETURN_NODE.placed(RarityFilter.onAverageOnceEvery(128), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
 		*/

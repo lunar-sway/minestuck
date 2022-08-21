@@ -1,0 +1,12 @@
+{
+    "type": "mul",
+    "argument1": 4,
+    "argument2": {
+        "type": "quarter_negative",
+        "argument": {
+            "type": "mul",
+            "argument1": "minestuck:skaia/depth",
+            "argument2": "minestuck:skaia/factor"
+        }
+    }
+}

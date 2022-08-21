@@ -4,13 +4,22 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.phys.Vec3;
 
 public class LightLandType extends TitleLandType
@@ -35,7 +44,7 @@ public class LightLandType extends TitleLandType
 		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
 		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.defaultBlockState());
 		registry.setBlockState("torch", Blocks.TORCH.defaultBlockState());
-		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.defaultBlockState());
+		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.get().defaultBlockState());
 	}
 	
 	@Override
@@ -48,18 +57,20 @@ public class LightLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
+		
 		BlockState lightBlock = blocks.getBlockState("light_block");
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.LARGE_PILLAR
-					.configured(new BlockStateFeatureConfig(lightBlock)).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(3));
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR.get(),
+					new BlockStateConfiguration(lightBlock),
+					CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		} else
 		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PILLAR
-					.configured(new BlockStateFeatureConfig(lightBlock)).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).chance(2));
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.PILLAR.get(),
+					new BlockStateConfiguration(lightBlock),
+					RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}
-		 */
+		
 	}
 	
 	@Override

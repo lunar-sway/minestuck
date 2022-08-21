@@ -12,7 +12,6 @@ public class MSWorldGenTypes
 {
 	public static void register()
 	{
-		Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(Minestuck.MOD_ID, "skaia"), SkaiaChunkGenerator.CODEC);
 		Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(Minestuck.MOD_ID, "land"), LandChunkGenerator.CODEC);
 	}
 }

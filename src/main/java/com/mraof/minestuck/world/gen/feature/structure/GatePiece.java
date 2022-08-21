@@ -74,12 +74,12 @@ public abstract class GatePiece extends ScatteredFeaturePiece
 				{
 					if(offsetX == 0 && offsetZ == 0)
 					{
-						level.setBlock(gatePos, MSBlocks.GATE.defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
+						level.setBlock(gatePos, MSBlocks.GATE.get().defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
 						BlockEntity tileEntity = level.getBlockEntity(gatePos);
 						if(tileEntity instanceof GateTileEntity gate)
 							gate.gateType = GateHandler.Type.LAND_GATE;
 						else Debug.errorf("Expected a gate tile entity after placing a gate block, but got %s!", tileEntity);
-					} else level.setBlock(gatePos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.defaultBlockState(), Block.UPDATE_CLIENTS);
+					} else level.setBlock(gatePos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 				}
 		}
 	}

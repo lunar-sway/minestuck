@@ -32,7 +32,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	@Override
 	protected AABB getTeleportField()
 	{
-		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
+		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE.get())
 			return new AABB(worldPosition.getX() - 1, worldPosition.getY() + 7D / 16, worldPosition.getZ() - 1, worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
 		else
 			return new AABB(worldPosition.getX(), worldPosition.getY() + 7D / 16, worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
@@ -43,7 +43,7 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	{
 		if(level instanceof ServerLevel serverLevel)
 		{
-			if(getBlockState().getBlock() == MSBlocks.RETURN_NODE)
+			if(getBlockState().getBlock() == MSBlocks.RETURN_NODE.get())
 			{
 				BlockPos spawnPos = serverLevel.getSharedSpawnPos();
 				// "level.getHeightmapPos()" will default to y = 0 if the chunk isn't loaded,
@@ -112,6 +112,6 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	
 	public boolean isGate()
 	{
-		return this.level != null ? this.level.getBlockState(this.getBlockPos()).getBlock() != MSBlocks.RETURN_NODE : this.gateType != null;
+		return this.level != null ? this.level.getBlockState(this.getBlockPos()).getBlock() != MSBlocks.RETURN_NODE.get() : this.gateType != null;
 	}
 }

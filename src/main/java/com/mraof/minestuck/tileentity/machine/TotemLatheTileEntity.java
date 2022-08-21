@@ -124,7 +124,7 @@ public class TotemLatheTileEntity extends BlockEntity
 			if(isValidDowelRod(state, facing))
 				level.removeBlock(pos, false);
 			return true;
-		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 		{
 			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 					.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
@@ -225,7 +225,7 @@ public class TotemLatheTileEntity extends BlockEntity
 		ItemStack dowel = getDowel();
 		if (dowel.isEmpty())
 		{
-			if(isWorking && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+			if(isWorking && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 			{
 				ItemStack copy = heldStack.copy();
 				copy.setCount(1);
@@ -314,19 +314,19 @@ public class TotemLatheTileEntity extends BlockEntity
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
-					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
+					output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!AlchemyHelper.isPunchedCard(input))
-					output = new ItemStack(MSBlocks.GENERIC_OBJECT);
+					output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
 			{
-				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL) : AlchemyHelper.createEncodedItem(output, false);
+				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.get().asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
 				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
 				
 				setDowel(outputDowel);

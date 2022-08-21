@@ -49,7 +49,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.MINI_CRUXTRUDER;
+		return MSBlocks.MINI_CRUXTRUDER.get();
 	}
 	
 	@Nonnull

@@ -55,7 +55,7 @@ public class GristWidgetContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.GRIST_WIDGET;
+		return MSBlocks.GRIST_WIDGET.get();
 	}
 	
 	@Nonnull

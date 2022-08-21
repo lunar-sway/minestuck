@@ -26,7 +26,7 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	
 	public FrogTemplePillarPiece(Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, x - 2, y, z - 2, 5, 46, 5, getRandomHorizontalDirection(random));
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR.get(), x - 2, y, z - 2, 5, 46, 5, getRandomHorizontalDirection(random));
 		eroded = random.nextBoolean();
 		uraniumFilled = random.nextBoolean();
 		randReduction = random.nextInt(10);
@@ -34,7 +34,7 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	
 	public FrogTemplePillarPiece(CompoundTag nbt) //this constructor is used for reading from data
 	{
-		super(MSStructurePieces.FROG_TEMPLE_PILLAR, nbt);
+		super(MSStructurePieces.FROG_TEMPLE_PILLAR.get(), nbt);
 		eroded = nbt.getBoolean("eroded");
 		uraniumFilled = nbt.getBoolean("uraniumFilled");
 		randReduction = nbt.getInt("randReduction");
@@ -53,15 +53,15 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
+		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.get().defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
 		if(eroded)
 		{
 			generateBox(level, boundingBoxIn, 1, -20, 1, 3, 40 - randReduction, 3, columnBlock, columnBlock, false);
 		} else
 		{
-			Block innerBlock = uraniumFilled ? MSBlocks.URANIUM_BLOCK : MSBlocks.CRUXITE_BLOCK;
+			Block innerBlock = uraniumFilled ? MSBlocks.URANIUM_BLOCK.get() : MSBlocks.CRUXITE_BLOCK.get();
 			generateBox(level, boundingBoxIn, 1, -20, 1, 3, 40, 3, columnBlock, columnBlock, false);
-			generateBox(level, boundingBoxIn, 0, 41, 0, 4, 45, 4, MSBlocks.GREEN_STONE.defaultBlockState(), innerBlock.defaultBlockState(), false); //top of pillar with a randomly filled center picked by uraniumFilled
+			generateBox(level, boundingBoxIn, 0, 41, 0, 4, 45, 4, MSBlocks.GREEN_STONE.get().defaultBlockState(), innerBlock.defaultBlockState(), false); //top of pillar with a randomly filled center picked by uraniumFilled
 		}
 	}
 }

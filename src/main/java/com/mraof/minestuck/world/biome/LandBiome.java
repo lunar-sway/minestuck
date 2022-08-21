@@ -42,8 +42,7 @@ public abstract class LandBiome
 		BiomeSpecialEffects.Builder effects = new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533)
 				.fogColor(0xC0D8FF).skyColor(0x7AA4FF);
 		
-		BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder()/*TODO look at surface rules
-				.surfaceBuilder(() -> SurfaceBuilder.DEFAULT.configured(SurfaceBuilder.CONFIG_GRASS))*/;
+		BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder();
 		
 		return builder.specialEffects(effects.build()).mobSpawnSettings(new MobSpawnSettings.Builder().build())
 				.generationSettings(generation.build());

@@ -89,12 +89,10 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		
 		settings.addProcessor(new RuleProcessor(ImmutableList.of(new ProcessorRule(new BlockMatchTest(Blocks.BLUE_STAINED_GLASS), AlwaysTrueTest.INSTANCE, bucketFluid))));
 		
-		Vec3i size = template.getSize(rotation);
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
-		pos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos.offset(xOffset + size.getX()/2, 0, zOffset + size.getZ()/2));
 		if(!level.getFluidState(pos.below()).isEmpty())
 			return false;
 		
+		Vec3i size = template.getSize(rotation);
 		BlockPos structurePos = template.getZeroPositionWithTransform(pos.offset(-size.getX()/2, -rand.nextInt(3), -size.getZ()/2), Mirror.NONE, rotation);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
 		

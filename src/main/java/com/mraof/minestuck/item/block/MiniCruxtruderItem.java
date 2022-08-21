@@ -38,7 +38,7 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	
 	public static ItemStack getCruxtruderWithColor(int color)
 	{
-		ItemStack stack = new ItemStack(MSBlocks.MINI_CRUXTRUDER);
+		ItemStack stack = new ItemStack(MSBlocks.MINI_CRUXTRUDER.get());
 		stack.setTag(new CompoundTag());
 		stack.getTag().putInt("color", color);
 		return stack;

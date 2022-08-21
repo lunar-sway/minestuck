@@ -121,7 +121,7 @@ public class PlatformGeneratorTileEntity extends BlockEntity
 	
 	private void generatePlatform(Level level, BlockPos pos, int loopIteration)
 	{
-		level.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.defaultBlockState()
+		level.setBlockAndUpdate(pos, MSBlocks.PLATFORM_BLOCK.get().defaultBlockState()
 				.setValue(PlatformBlock.INVISIBLE, getBlockState().getValue(PlatformGeneratorBlock.INVISIBLE_MODE))
 				.setValue(PlatformBlock.FACING, getBlockState().getValue(PlatformGeneratorBlock.FACING))
 				.setValue(PlatformBlock.GENERATOR_DISTANCE, loopIteration));

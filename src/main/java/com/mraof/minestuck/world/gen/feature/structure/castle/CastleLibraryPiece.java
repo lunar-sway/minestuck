@@ -16,12 +16,12 @@ public class CastleLibraryPiece extends CastleRoomPiece
 {
 	public CastleLibraryPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY, isBlack, boundingBox);
+		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY.get(), isBlack, boundingBox);
 	}
 	
 	public CastleLibraryPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY, nbt);
+		super(MSStructurePieces.SKAIA_CASTLE_LIBRARY.get(), nbt);
 	}
 	
 	public static CastleLibraryPiece findValidPlacement(boolean isBlack, int x, int y, int z)

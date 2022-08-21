@@ -28,7 +28,7 @@ public class CastleStartPiece extends CastlePiece
     
     protected CastleStartPiece(int x, int z, boolean isBlack)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START, 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
+        super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
         this.x = x;
         this.z = z;
         if(pendingPieces == null)pendingPieces = new ArrayList<>();
@@ -37,7 +37,7 @@ public class CastleStartPiece extends CastlePiece
     
     public CastleStartPiece(CompoundTag nbt)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START, nbt);
+        super(MSStructurePieces.SKAIA_CASTLE_START.get(), nbt);
     }
     
     @Override
@@ -58,8 +58,8 @@ public class CastleStartPiece extends CastlePiece
     @Override
     public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
 		if(this.averageGroundLevel < 0)
 		{
 			this.averageGroundLevel = this.getAverageGroundLevel(level, structureBoundingBox);

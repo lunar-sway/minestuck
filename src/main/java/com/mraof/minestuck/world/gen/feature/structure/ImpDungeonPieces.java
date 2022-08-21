@@ -44,13 +44,13 @@ public class ImpDungeonPieces
 		
 		private EntryCorridor(Direction orientation, int x, int y, int z, Random rand)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR, 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10), 2);
+			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10), 2);
 			setOrientation(orientation);
 		}
 		
 		public EntryCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ENTRY_CORRIDOR, nbt, 2);
+			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), nbt, 2);
 		}
 		
 		@Override
@@ -249,7 +249,7 @@ public class ImpDungeonPieces
 		
 		public StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 4, 5, 10), 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 4, 5, 10), 1);
 			setOrientation(coordBaseMode);
 			
 			light = true;//ctxt.rand.nextFloat() < 0.1F;
@@ -264,7 +264,7 @@ public class ImpDungeonPieces
 		
 		public StraightCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR, nbt, 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), nbt, 1);
 			light = nbt.getBoolean("l");
 			if(light)
 				lightPos = nbt.getByte("lpos");
@@ -320,7 +320,7 @@ public class ImpDungeonPieces
 		
 		public CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 6, 10), 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 6, 10), 3);
 			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.3F;
@@ -343,7 +343,7 @@ public class ImpDungeonPieces
 		
 		public CrossCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR, nbt, 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), nbt, 3);
 			light = nbt.getBoolean("l");
 		}
 		
@@ -426,7 +426,7 @@ public class ImpDungeonPieces
 		
 		public TurnCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR, 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 1 : -1), pos.getY(),
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 1 : -1), pos.getY(),
 					pos.getZ() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.EAST ? 1 : -1), coordBaseMode, 7, 5, 7), 2);
 			boolean direction = ctxt.rand.nextBoolean();
 			if(direction)
@@ -444,7 +444,7 @@ public class ImpDungeonPieces
 		
 		public TurnCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR, nbt, 2);
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), nbt, 2);
 			light = nbt.getBoolean("l");
 		}
 		
@@ -504,7 +504,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM, 0,
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0,
 					makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(),
 							coordBaseMode, 6, 11, 8), 0);
 			setOrientation(coordBaseMode);
@@ -515,7 +515,7 @@ public class ImpDungeonPieces
 		
 		public ReturnRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM, nbt, 0);
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), nbt, 0);
 		}
 		
 		@Override
@@ -567,7 +567,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 11, 10), 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 11, 10), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -576,7 +576,7 @@ public class ImpDungeonPieces
 		
 		public ReturnRoomAlt(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM, nbt, 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), nbt, 0);
 		}
 		
 		@Override
@@ -635,7 +635,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM, 0, makeBBFromCenter(pos.getX() - (coordBaseMode.equals(Direction.EAST) ? 1 : 0) - coordBaseMode.getStepX(), pos.getY(),
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeBBFromCenter(pos.getX() - (coordBaseMode.equals(Direction.EAST) ? 1 : 0) - coordBaseMode.getStepX(), pos.getY(),
 					pos.getZ() - (coordBaseMode.equals(Direction.SOUTH) ? 1 : 0) - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 7), 0);
 			setOrientation(coordBaseMode);
 			
@@ -654,7 +654,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM, nbt, 0);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), nbt, 0);
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 		}
@@ -732,7 +732,7 @@ public class ImpDungeonPieces
 		
 		public BookcaseRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM, 0, makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 8), 0);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 8), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -743,7 +743,7 @@ public class ImpDungeonPieces
 		
 		public BookcaseRoom(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM, nbt, 0);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), nbt, 0);
 			bookChance = nbt.getFloat("b");
 			light = nbt.getBoolean("l");
 		}
@@ -828,7 +828,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 6, 5, 10), 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 6, 5, 10), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -855,7 +855,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR, nbt, 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), nbt, 2);
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 			chestPos = nbt.getBoolean("ch");
@@ -938,7 +938,7 @@ public class ImpDungeonPieces
 		
 		public OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 5, 10), 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 5, 10), 1);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -954,7 +954,7 @@ public class ImpDungeonPieces
 		
 		public OgreCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR, nbt, 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), nbt, 1);
 			chestPos = nbt.getBoolean("ch");
 			ogreSpawned = nbt.getBoolean("spwn");
 		}
@@ -1050,7 +1050,7 @@ public class ImpDungeonPieces
 		
 		public LargeSpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR, 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 5, 10), 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 5, 10), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -1077,7 +1077,7 @@ public class ImpDungeonPieces
 		
 		public LargeSpawnerCorridor(CompoundTag nbt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR, nbt, 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), nbt, 2);
 			spawner1 = nbt.getBoolean("sp1");
 			spawner2 = nbt.getBoolean("sp2");
 			chestPos = nbt.getBoolean("ch");

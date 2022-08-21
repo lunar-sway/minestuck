@@ -61,7 +61,7 @@ public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 		
 		if (chunkPos != null)
 		{
-			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(MSStructureFeatures.LAND_GATE.get());
+			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(MSConfiguredStructures.LAND_GATE.get());
 			
 			if(start != null)
 			{

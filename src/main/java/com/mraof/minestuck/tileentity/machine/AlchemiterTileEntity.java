@@ -45,7 +45,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	
 	public void setDowel(ItemStack newDowel)
 	{
-		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.asItem() || newDowel.isEmpty())
+		if(newDowel.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem() || newDowel.isEmpty())
 		{
 			dowel = newDowel;
 			setChanged();
@@ -75,7 +75,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	public ItemStack getOutput()
 	{
 		if (!AlchemyHelper.hasDecodedItem(dowel))
-			return new ItemStack(MSBlocks.GENERIC_OBJECT);
+			return new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		else return AlchemyHelper.getDecodedItem(dowel);
 	}
 	
@@ -241,7 +241,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 				} else
 				{
 					ItemStack heldStack = player.getMainHandItem();
-					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem())
+					if (!heldStack.isEmpty() && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
 						setDowel(heldStack.split(1));    //Put a dowel on the pad
 				}
 			}

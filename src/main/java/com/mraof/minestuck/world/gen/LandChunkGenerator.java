@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
 import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.WorldGenRegion;
@@ -21,10 +23,12 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,6 +40,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> commonCodec(instance).and(instance.group(
+					RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).forGetter(generator -> generator.noises),
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
 					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry)))
@@ -49,19 +54,20 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private ChunkPos landGatePosition;
 	
-	public LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandTypePair landTypes, Registry<Biome> registry)
+	public LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair landTypes, Registry<Biome> registry)
 	{
-		this(structureSets, seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
+		this(structureSets, noises, seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
 	}
 	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
 	{
-		this(structureSets, seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
+		this(structureSets, noises, seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
 	}
 	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
-		super(structureSets, Optional.empty(), new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),
+		super(structureSets, noises, Optional.empty(), /*new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),*/
+				new CheckerboardColumnBiomeSource(HolderSet.direct(biomes::fromType, LandBiomeType.values()), 4), new CheckerboardColumnBiomeSource(HolderSet.direct(biomes.baseBiomes::fromType, LandBiomeType.values()), 4),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
@@ -80,13 +86,13 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	@Override
 	public ChunkGenerator withSeed(long seed)
 	{
-		return new LandChunkGenerator(this.structureSets, seed, landTypes, registry);
+		return new LandChunkGenerator(this.structureSets, this.noises, seed, landTypes, registry);
 	}
 	
 	@Override
-	protected Holder<Biome> getBiome(WorldGenRegion region, BlockPos pos)
+	protected Holder<Biome> getWorldGenBiome(Holder<Biome> actualBiome)
 	{
-		return biomes.getBiomeFromBase(super.getBiome(region, pos));
+		return biomes.getBiomeFromBase(actualBiome);
 	}
 	
 	@Override

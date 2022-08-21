@@ -68,7 +68,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.asItem());
+		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
 	@Override
@@ -86,7 +86,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 			if(newItem.isEmpty())
 				if(!itemHandler.getStackInSlot(INPUT).hasTag() || !itemHandler.getStackInSlot(INPUT).getTag().contains("contentID"))
-					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
+					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 				else return false;
 			if(!itemHandler.getStackInSlot(OUTPUT).isEmpty() && (itemHandler.getStackInSlot(OUTPUT).getItem() != newItem.getItem() || itemHandler.getStackInSlot(OUTPUT).getMaxStackSize() <= itemHandler.getStackInSlot(OUTPUT).getCount()))
 			{
@@ -108,7 +108,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 		
 		if (newItem.isEmpty())
-			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
+			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		
@@ -191,7 +191,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 			if (newItem.isEmpty())
 			{
 				if(!AlchemyHelper.hasDecodedItem(input))
-					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT);
+					newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 				else return 0;
 			}
 			ItemStack output = itemHandler.getStackInSlot(OUTPUT);

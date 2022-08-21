@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -15,7 +14,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -23,19 +22,28 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.Random;
 
-public class CogFeature extends Feature<NoneFeatureConfiguration>
+public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> extends Feature<T>
 {
-	private static final ResourceLocation STRUCTURE_SMALL_COG = new ResourceLocation(Minestuck.MOD_ID, "small_cog");
-	private static final ResourceLocation STRUCTURE_LARGE_COG_1 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_1");
-	private static final ResourceLocation STRUCTURE_LARGE_COG_2 = new ResourceLocation(Minestuck.MOD_ID, "large_cog_2");
-	
-	public CogFeature(Codec<NoneFeatureConfiguration> codec)
+	public AbstractTemplateFeature(Codec<T> pCodec)
 	{
-		super(codec);
+		super(pCodec);
+	}
+	
+	protected abstract ResourceLocation pickTemplate(Random random);
+	
+	protected abstract int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random);
+	
+	protected static int minWorldHeightInSize(WorldGenLevel level, BlockPos pos, Vec3i templateSize)
+	{
+		int minY = Integer.MAX_VALUE;
+		for(BlockPos floorPos : BlockPos.betweenClosed(pos, pos.offset(templateSize.getX(), 0, templateSize.getZ())))
+			minY = Math.min(minY, level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, floorPos.getX(), floorPos.getZ()));
+		
+		return minY;
 	}
 	
 	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
+	public boolean place(FeaturePlaceContext<T> context)
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
@@ -43,11 +51,7 @@ public class CogFeature extends Feature<NoneFeatureConfiguration>
 		Random rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
 		StructureManager templates = level.getLevel().getStructureManager();
-		StructureTemplate template;
-		boolean big = rand.nextInt(10) == 0;
-		if(big)
-			template = templates.getOrCreate(rand.nextBoolean() ? STRUCTURE_LARGE_COG_1 : STRUCTURE_LARGE_COG_2);
-		else template = templates.getOrCreate(STRUCTURE_SMALL_COG);
+		StructureTemplate template = templates.getOrCreate(this.pickTemplate(rand));
 		
 		ChunkPos chunkPos = new ChunkPos(pos);
 		BoundingBox boundingBox = new BoundingBox(chunkPos.getMinBlockX() - 16, level.getMinBuildHeight(), chunkPos.getMinBlockZ() - 16, chunkPos.getMaxBlockX() + 16, level.getMaxBuildHeight(), chunkPos.getMaxBlockZ() + 16);
@@ -55,18 +59,11 @@ public class CogFeature extends Feature<NoneFeatureConfiguration>
 				.addProcessor(new StructureBlockRegistryProcessor(StructureBlockRegistry.getOrDefault(generator)));
 		
 		Vec3i size = template.getSize(rotation);
-		int xOffset = rand.nextInt(16 - size.getX()), zOffset = rand.nextInt(16 - size.getZ());
+		pos.offset(-size.getX()/2, 0, -size.getZ()/2);
 		
-		int yMin = Integer.MAX_VALUE;
-		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, size.getX(), 0, size.getZ()))
-		{
-			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX() + xOffset, pos.getZ() + floorPos.getZ() + zOffset);
-			yMin = Math.min(yMin, y);
-		}
+		int y = this.pickY(level, pos, size, rand);
 		
-		int y = Math.max(0, yMin - rand.nextInt(big ? 4 : 3));
-		
-		BlockPos structurePos = template.getZeroPositionWithTransform(new BlockPos(pos.getX() + xOffset, y, pos.getZ() + zOffset), Mirror.NONE, rotation);
+		BlockPos structurePos = template.getZeroPositionWithTransform(pos.atY(y), Mirror.NONE, rotation);
 		template.placeInWorld(level, structurePos, structurePos, settings, rand, Block.UPDATE_INVISIBLE);
 		
 		return true;

@@ -34,17 +34,17 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 		if(f < 0.1F)
 		{
 			if(rand.nextFloat() < context.config().probability)
-				cake = f < 0.05F ? MSBlocks.RED_CAKE : MSBlocks.HOT_CAKE;
-			else cake = f < 0.05F ? MSBlocks.BLUE_CAKE : MSBlocks.COLD_CAKE;
+				cake = f < 0.05F ? MSBlocks.RED_CAKE.get() : MSBlocks.HOT_CAKE.get();
+			else cake = f < 0.05F ? MSBlocks.BLUE_CAKE.get() : MSBlocks.COLD_CAKE.get();
 		}
 		else if(f < 0.4F)
-			cake = MSBlocks.APPLE_CAKE;
+			cake = MSBlocks.APPLE_CAKE.get();
 		else if (f < 0.45F)
-			cake = MSBlocks.NEGATIVE_CAKE;
+			cake = MSBlocks.NEGATIVE_CAKE.get();
 		else if (f < 0.5F)
-			cake = MSBlocks.CARROT_CAKE;
+			cake = MSBlocks.CARROT_CAKE.get();
 		else if(rand.nextFloat() < 0.01)
-			cake = MSBlocks.REVERSE_CAKE;
+			cake = MSBlocks.REVERSE_CAKE.get();
 		else
 			cake = Blocks.CAKE;
 		

@@ -3,11 +3,13 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 
 public class BucketsLandType extends TitleLandType    //Yes, buckets
 {
@@ -34,12 +36,12 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
+		
 		if(type != LandBiomeType.OCEAN)
 		{
-			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.BUCKET.configured(IFeatureConfig.NONE).chance(16));
+			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.BUCKET.getHolder().orElseThrow());
 		}
-		*/
+		
 	}
 	
 	@Override

@@ -26,21 +26,21 @@ public class ParcelPyxisFeature extends Feature<NoneFeatureConfiguration>
 		BlockPos pos = context.origin();
 		Random rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
-		BlockState state = MSBlocks.PARCEL_PYXIS.defaultBlockState().rotate(level, pos, rotation);
+		BlockState state = MSBlocks.PARCEL_PYXIS.get().defaultBlockState().rotate(level, pos, rotation);
 		
 		if(state.canSurvive(level, pos) && !level.getBlockState(pos).getMaterial().isLiquid())
 		{
 			int randInt = 10 + rand.nextInt(5);
 			setBlock(level, pos.above(1), state);
-			setBlock(level, pos, MSBlocks.PIPE_INTERSECTION.defaultBlockState());
+			setBlock(level, pos, MSBlocks.PIPE_INTERSECTION.get().defaultBlockState());
 			for(int i = 1; i < randInt; i++)
 			{
-				setBlock(level, pos.below(i), MSBlocks.PIPE.defaultBlockState());
+				setBlock(level, pos.below(i), MSBlocks.PIPE.get().defaultBlockState());
 			}
-			setBlock(level, pos.below(randInt), MSBlocks.PIPE_INTERSECTION.defaultBlockState());
+			setBlock(level, pos.below(randInt), MSBlocks.PIPE_INTERSECTION.get().defaultBlockState());
 			if(rand.nextBoolean())
 			{
-				setBlock(level, pos.above(2), MSBlocks.PYXIS_LID.defaultBlockState().rotate(level, pos, rotation));
+				setBlock(level, pos.above(2), MSBlocks.PYXIS_LID.get().defaultBlockState().rotate(level, pos, rotation));
 			}
 			return true;
 		}

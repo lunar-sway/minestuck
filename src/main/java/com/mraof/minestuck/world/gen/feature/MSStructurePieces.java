@@ -6,94 +6,66 @@ import com.mraof.minestuck.world.gen.feature.structure.castle.*;
 import com.mraof.minestuck.world.gen.feature.structure.village.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public final class MSStructurePieces
 {
-	public static StructurePieceType FROG_TEMPLE, FROG_TEMPLE_PILLAR;
+	public static final DeferredRegister<StructurePieceType> REGISTER = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, Minestuck.MOD_ID);
 	
-	public static StructurePieceType GATE_PILLAR;
-	public static StructurePieceType GATE_MUSHROOM;
-	public static StructurePieceType SMALL_RUIN;
+	public static final RegistryObject<StructurePieceType.ContextlessType> FROG_TEMPLE = REGISTER.register("frog_temple", () -> FrogTemplePiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> FROG_TEMPLE_PILLAR = REGISTER.register("frog_temple_pillar", () -> FrogTemplePillarPiece::new);
 	
-	public static StructurePieceType IMP_ENTRY, IMP_ENTRY_CORRIDOR;
-	public static StructurePieceType IMP_STRAIGHT_CORRIDOR, IMP_CROSS_CORRIDOR, IMP_TURN_CORRIDOR;
-	public static StructurePieceType IMP_RETURN_ROOM, IMP_ALT_RETURN_ROOM;
-	public static StructurePieceType IMP_SPAWNER_ROOM, IMP_SPAWNER_CORRIDOR, IMP_LARGE_SPAWNER_CORRIDOR;
-	public static StructurePieceType IMP_BOOKCASE_ROOM, IMP_OGRE_CORRIDOR;
+	public static final RegistryObject<StructurePieceType.ContextlessType> GATE_PILLAR = REGISTER.register("gate_pillar", () -> GatePillarPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> GATE_MUSHROOM = REGISTER.register("gate_mushroom", () -> GateMushroomPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SMALL_RUIN = REGISTER.register("small_ruin", () -> SmallRuinPiece::new);
 	
-	public static StructurePieceType VILLAGE_PATH;
-	public static StructurePieceType MARKET_CENTER;
-	public static StructurePieceType ROCK_CENTER;
-	public static StructurePieceType CACTUS_PYRAMID_CENTER;
-	public static StructurePieceType MUSHROOM_TOWER_CENTER;
-	public static StructurePieceType TURTLE_WELL_CENTER;
-	public static StructurePieceType RADIO_TOWER_CENTER;
-	public static StructurePieceType PIPE_HOUSE_1, HIGH_PIPE_HOUSE_1, SMALL_TOWER_STORE;
-	public static StructurePieceType SHELL_HOUSE_1, TURTLE_MARKET_1, TURTLE_TEMPLE_1;
-	public static StructurePieceType SMALL_VILLAGE_TENT_1, LARGE_VILLAGE_TENT_1, SMALL_TENT_STORE;
-	public static StructurePieceType HIGH_NAK_HOUSING_1, HIGH_NAK_MARKET, HIGH_NAK_INN;
 	
-	public static StructurePieceType SKAIA_CASTLE_START, SKAIA_CASTLE_SOLID, SKAIA_CASTLE_WALL;
-	public static StructurePieceType SKAIA_CASTLE_ROOM, SKAIA_CASTLE_LIBRARY, SKAIA_CASTLE_STAIRCASE;
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_ENTRY = REGISTER.register("imp_entry", () -> ImpDungeonEntryPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_ENTRY_CORRIDOR = REGISTER.register("imp_entry_corridor", () -> ImpDungeonPieces.EntryCorridor::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_STRAIGHT_CORRIDOR = REGISTER.register("imp_straight_corridor", () -> ImpDungeonPieces.StraightCorridor::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_CROSS_CORRIDOR = REGISTER.register("imp_cross_corridor", () -> ImpDungeonPieces.CrossCorridor::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_TURN_CORRIDOR = REGISTER.register("imp_turn_corridor", () -> ImpDungeonPieces.TurnCorridor::new);
 	
-	/**
-	 * Should only be called by {@link com.mraof.minestuck.world.gen.feature.MSFeatures} on feature registry.
-	 */
-	static void init()
-	{
-		FROG_TEMPLE = register(FrogTemplePiece::new, Minestuck.MOD_ID+":frog_temple");
-		FROG_TEMPLE_PILLAR = register(FrogTemplePillarPiece::new, Minestuck.MOD_ID+":frog_temple_pillar");
-		
-		GATE_PILLAR = register(GatePillarPiece::new, Minestuck.MOD_ID+":gate_pillar");
-		GATE_MUSHROOM = register(GateMushroomPiece::new, Minestuck.MOD_ID+":gate_mushroom");
-		SMALL_RUIN = register(SmallRuinPiece::new, Minestuck.MOD_ID+":small_ruin");
-		
-		IMP_ENTRY = register(ImpDungeonEntryPiece::new, Minestuck.MOD_ID+":imp_entry");
-		IMP_ENTRY_CORRIDOR = register(ImpDungeonPieces.EntryCorridor::new, Minestuck.MOD_ID+":imp_entry_corridor");
-		IMP_STRAIGHT_CORRIDOR = register(ImpDungeonPieces.StraightCorridor::new, Minestuck.MOD_ID+":imp_straight_corridor");
-		IMP_CROSS_CORRIDOR = register(ImpDungeonPieces.CrossCorridor::new, Minestuck.MOD_ID+":imp_cross_corridor");
-		IMP_TURN_CORRIDOR = register(ImpDungeonPieces.TurnCorridor::new, Minestuck.MOD_ID+":imp_turn_corridor");
-		IMP_RETURN_ROOM = register(ImpDungeonPieces.ReturnRoom::new, Minestuck.MOD_ID+":imp_return_room");
-		IMP_ALT_RETURN_ROOM = register(ImpDungeonPieces.ReturnRoomAlt::new, Minestuck.MOD_ID+":imp_alt_return_room");
-		IMP_SPAWNER_ROOM = register(ImpDungeonPieces.SpawnerRoom::new, Minestuck.MOD_ID+":imp_spawner_room");
-		IMP_SPAWNER_CORRIDOR = register(ImpDungeonPieces.SpawnerCorridor::new, Minestuck.MOD_ID+":imp_spawner_corridor");
-		IMP_LARGE_SPAWNER_CORRIDOR = register(ImpDungeonPieces.LargeSpawnerCorridor::new, Minestuck.MOD_ID+":imp_large_spawner_corridor");
-		IMP_BOOKCASE_ROOM = register(ImpDungeonPieces.BookcaseRoom::new, Minestuck.MOD_ID+":imp_bookcase_room");
-		IMP_OGRE_CORRIDOR = register(ImpDungeonPieces.OgreCorridor::new, Minestuck.MOD_ID+":imp_ogre_corridor");
-		
-		VILLAGE_PATH = register(ConsortVillagePieces.VillagePath::new, Minestuck.MOD_ID+":village_path");
-		MARKET_CENTER = register(ConsortVillageCenter.VillageMarketCenter::new, Minestuck.MOD_ID+":market_center");
-		ROCK_CENTER = register(ConsortVillageCenter.RockCenter::new, Minestuck.MOD_ID+":rock_center");
-		CACTUS_PYRAMID_CENTER = register(ConsortVillageCenter.CactusPyramidCenter::new, Minestuck.MOD_ID+":cactus_pyramid_center");
-		MUSHROOM_TOWER_CENTER = register(SalamanderVillagePieces.RuinedTowerMushroomCenter::new, Minestuck.MOD_ID+":mushroom_tower_center");
-		TURTLE_WELL_CENTER = register(TurtleVillagePieces.TurtleWellCenter::new, Minestuck.MOD_ID+":turtle_well_center");
-		RADIO_TOWER_CENTER = register(NakagatorVillagePieces.RadioTowerCenter::new, Minestuck.MOD_ID+":radio_tower_center");
-		PIPE_HOUSE_1 = register(SalamanderVillagePieces.PipeHouse1::new, Minestuck.MOD_ID+":pipe_house_1");
-		HIGH_PIPE_HOUSE_1 = register(SalamanderVillagePieces.HighPipeHouse1::new, Minestuck.MOD_ID+":high_pipe_house_1");
-		SMALL_TOWER_STORE = register(SalamanderVillagePieces.SmallTowerStore::new, Minestuck.MOD_ID+":small_tower_store");
-		SHELL_HOUSE_1 = register(TurtleVillagePieces.ShellHouse1::new, Minestuck.MOD_ID+":village_shell_house_1");
-		TURTLE_MARKET_1 = register(TurtleVillagePieces.TurtleMarket1::new, Minestuck.MOD_ID+":turtle_market_1");
-		TURTLE_TEMPLE_1 = register(TurtleVillagePieces.TurtleTemple1::new, Minestuck.MOD_ID+":turtle_temple_1");
-		HIGH_NAK_HOUSING_1 = register(NakagatorVillagePieces.HighNakHousing1::new, Minestuck.MOD_ID+":high_nak_housing_1");
-		HIGH_NAK_MARKET = register(NakagatorVillagePieces.HighNakMarket1::new, Minestuck.MOD_ID+":high_nak_market");
-		HIGH_NAK_INN = register(NakagatorVillagePieces.HighNakInn1::new, Minestuck.MOD_ID+":high_nak_inn");
-		SMALL_VILLAGE_TENT_1 = register(IguanaVillagePieces.SmallTent1::new, Minestuck.MOD_ID+":small_village_tent_1");
-		LARGE_VILLAGE_TENT_1 = register(IguanaVillagePieces.LargeTent1::new, Minestuck.MOD_ID+":large_village_tent_1");
-		SMALL_TENT_STORE = register(IguanaVillagePieces.SmallTentStore::new, Minestuck.MOD_ID+":small_tent_store");
-		
-		SKAIA_CASTLE_START = register(CastleStartPiece::new, Minestuck.MOD_ID+":skaia_castle_start");
-		SKAIA_CASTLE_SOLID = register(CastleSolidPiece::new, Minestuck.MOD_ID+":skaia_castle_solid");
-		SKAIA_CASTLE_WALL = register(CastleWallPiece::new, Minestuck.MOD_ID+":skaia_castle_wall");
-		SKAIA_CASTLE_ROOM = register(CastleRoomPiece::new, Minestuck.MOD_ID+":skaia_castle_room");
-		SKAIA_CASTLE_LIBRARY = register(CastleLibraryPiece::new, Minestuck.MOD_ID+":skaia_castle_library");
-		SKAIA_CASTLE_STAIRCASE = register(CastleStaircasePiece::new, Minestuck.MOD_ID+":skaia_castle_staircase");
-	}
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_RETURN_ROOM = REGISTER.register("imp_return_room", () -> ImpDungeonPieces.ReturnRoom::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_ALT_RETURN_ROOM = REGISTER.register("imp_alt_return_room", () -> ImpDungeonPieces.ReturnRoomAlt::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_SPAWNER_ROOM = REGISTER.register("imp_spawner_room", () -> ImpDungeonPieces.SpawnerRoom::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_SPAWNER_CORRIDOR = REGISTER.register("imp_spawner_corridor", () -> ImpDungeonPieces.SpawnerCorridor::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_LARGE_SPAWNER_CORRIDOR = REGISTER.register("imp_large_spawner_corridor", () -> ImpDungeonPieces.LargeSpawnerCorridor::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_BOOKCASE_ROOM = REGISTER.register("imp_bookcase_room", () -> ImpDungeonPieces.BookcaseRoom::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> IMP_OGRE_CORRIDOR = REGISTER.register("imp_ogre_corridor", () -> ImpDungeonPieces.OgreCorridor::new);
 	
-	private static StructurePieceType register(StructurePieceType type, String name) {
-		return Registry.register(Registry.STRUCTURE_PIECE, name, type);
-	}
+	public static final RegistryObject<StructurePieceType.ContextlessType> VILLAGE_PATH = REGISTER.register("village_path", () -> ConsortVillagePieces.VillagePath::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> MARKET_CENTER = REGISTER.register("market_center", () -> ConsortVillageCenter.VillageMarketCenter::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> ROCK_CENTER = REGISTER.register("rock_center", () -> ConsortVillageCenter.RockCenter::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> CACTUS_PYRAMID_CENTER = REGISTER.register("cactus_pyramid_center", () -> ConsortVillageCenter.CactusPyramidCenter::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> MUSHROOM_TOWER_CENTER = REGISTER.register("mushroom_tower_center", () -> SalamanderVillagePieces.RuinedTowerMushroomCenter::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> TURTLE_WELL_CENTER = REGISTER.register("turtle_well_center", () -> TurtleVillagePieces.TurtleWellCenter::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> RADIO_TOWER_CENTER = REGISTER.register("radio_tower_center", () -> NakagatorVillagePieces.RadioTowerCenter::new);
 	
-	private static StructurePieceType register(StructurePieceType.ContextlessType type, String name) {
-		return register((StructurePieceType) type, name);
-	}
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> PIPE_HOUSE_1 = REGISTER.register("pipe_house_1", () -> SalamanderVillagePieces.PipeHouse1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_PIPE_HOUSE_1 = REGISTER.register("high_pipe_house_1", () -> SalamanderVillagePieces.HighPipeHouse1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SMALL_TOWER_STORE = REGISTER.register("small_tower_store", () -> SalamanderVillagePieces.SmallTowerStore::new);
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> SHELL_HOUSE_1 = REGISTER.register("village_shell_house_1", () -> TurtleVillagePieces.ShellHouse1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> TURTLE_MARKET_1 = REGISTER.register("turtle_market_1", () -> TurtleVillagePieces.TurtleMarket1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> TURTLE_TEMPLE_1 = REGISTER.register("turtle_temple_1", () -> TurtleVillagePieces.TurtleTemple1::new);
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> SMALL_VILLAGE_TENT_1 = REGISTER.register("small_village_tent_1", () -> IguanaVillagePieces.SmallTent1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> LARGE_VILLAGE_TENT_1 = REGISTER.register("large_village_tent_1", () -> IguanaVillagePieces.LargeTent1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SMALL_TENT_STORE = REGISTER.register("small_tent_store", () -> IguanaVillagePieces.SmallTentStore::new);
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_HOUSING_1 = REGISTER.register("high_nak_housing_1", () -> NakagatorVillagePieces.HighNakHousing1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_MARKET = REGISTER.register("high_nak_market", () -> NakagatorVillagePieces.HighNakMarket1::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> HIGH_NAK_INN = REGISTER.register("high_nak_inn", () -> NakagatorVillagePieces.HighNakInn1::new);
+	
+	
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_START = REGISTER.register("skaia_castle_start", () -> CastleStartPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_SOLID = REGISTER.register("skaia_castle_solid", () -> CastleSolidPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_WALL = REGISTER.register("skaia_castle_wall", () -> CastleWallPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_ROOM = REGISTER.register("skaia_castle_room", () -> CastleRoomPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_LIBRARY = REGISTER.register("skaia_castle_library", () -> CastleLibraryPiece::new);
+	public static final RegistryObject<StructurePieceType.ContextlessType> SKAIA_CASTLE_STAIRCASE = REGISTER.register("skaia_castle_staircase", () -> CastleStaircasePiece::new);
+	
 }

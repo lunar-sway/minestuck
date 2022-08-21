@@ -21,12 +21,12 @@ public class CastleRoomPiece extends CastlePiece
 {
 	protected CastleRoomPiece(boolean isBlack, BoundingBox boundingBox)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM, 2, boundingBox, isBlack);
+		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), 2, boundingBox, isBlack);
 	}
 	
 	public CastleRoomPiece(CompoundTag nbt)
 	{
-		super(MSStructurePieces.SKAIA_CASTLE_ROOM, nbt);
+		super(MSStructurePieces.SKAIA_CASTLE_ROOM.get(), nbt);
 	}
 	
 	protected CastleRoomPiece(StructurePieceType pieceType, boolean isBlack, BoundingBox boundingBox)
@@ -78,8 +78,8 @@ public class CastleRoomPiece extends CastlePiece
 	@Override
 	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT : MSBlocks.WHITE_CHESS_DIRT).defaultBlockState();
-		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT : MSBlocks.LIGHT_GRAY_CHESS_DIRT).defaultBlockState();
+		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
+		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();
 		
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 0, 0, 7 ,0, 7, chessTile,  chessTile1, false);
 		this.fillWithAlternatingBlocks(level, boundingBox, 0, 7, 0, 7 ,7, 7, chessTile,  chessTile1, false);

@@ -52,7 +52,7 @@ public class HolopadTileEntity extends BlockEntity
 				{
 					setCard(heldStack.split(1));    //Insert card into the card slot
 					ItemStack in = getCard();
-					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
+					ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 					
 					if (in.hasTag() && in.getTag().contains("contentID"))
 						item = AlchemyHelper.getDecodedItem(in);
@@ -101,7 +101,7 @@ public class HolopadTileEntity extends BlockEntity
 	public ItemStack getHoloItem()
 	{
 		ItemStack in = getCard();
-		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT);
+		ItemStack item = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
 		if (in.hasTag() && in.getTag().contains("contentID"))
 			item = AlchemyHelper.getDecodedItem(in);
