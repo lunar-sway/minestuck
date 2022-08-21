@@ -10,10 +10,10 @@ public class StructureCastlePieces
 
 	public static StructurePiece getNextValidComponent(
 			CastleStartPiece startPiece,
-			StructurePieceAccessor accessor, Random par2Random, int x, int y, int z, int par6, int componentType)
+			StructurePieceAccessor accessor, Random par2Random, int x, int y, int z, int par6, StructureCastlePieces.Type type)
 	{
 		{
-			CastlePiece newPiece = getNextComponent(startPiece, par2Random, x, y, z, par6, componentType);
+			CastlePiece newPiece = getNextComponent(startPiece, par2Random, x, y, z, par6, type);
 
 			if (newPiece != null)
 			{
@@ -25,20 +25,23 @@ public class StructureCastlePieces
 		}
 	}
 
-	public static CastlePiece getNextComponent(CastleStartPiece startPiece, Random par2Random, int x, int y, int z, int par6, int componentType)
+	public static CastlePiece getNextComponent(CastleStartPiece startPiece, Random random, int x, int y, int z, int par6, Type type)
 	{
-		switch(componentType)
-		{
-		case 0:
-			return CastleSolidPiece.findValidPlacement(startPiece.isBlack, x, y, z);
-		case 1:
-			return CastleWallPiece.findValidPlacement(startPiece.isBlack, x, y, z, par6, false);
-		case 2:
-			return CastleRoomPiece.findValidPlacement(startPiece.isBlack, x, y, z);
-		case 3:
-			return CastleRoomPiece.createRandomRoom(startPiece.isBlack, startPiece.bottom, x, y, z, par2Random);
-		default:
-			return null;
-		}
+		return switch(type)
+				{
+					case SOLID -> CastleSolidPiece.findValidPlacement(startPiece.isBlack, x, y, z);
+					case WALL -> CastleWallPiece.findValidPlacement(startPiece.isBlack, x, y, z, par6, false);
+					case ROOM -> CastleRoomPiece.findValidPlacement(startPiece.isBlack, x, y, z);
+					case RANDOM_ROOM ->
+							CastleRoomPiece.createRandomRoom(startPiece.isBlack, startPiece.bottom, x, y, z, random);
+				};
+	}
+	
+	public enum Type
+	{
+		SOLID,
+		WALL,
+		ROOM,
+		RANDOM_ROOM,
 	}
 }

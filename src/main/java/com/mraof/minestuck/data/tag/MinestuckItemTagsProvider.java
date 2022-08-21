@@ -23,7 +23,7 @@ import static net.minecraftforge.common.Tags.Items.*;
 
 public class MinestuckItemTagsProvider extends ItemTagsProvider
 {
-	MinestuckItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider, @Nullable ExistingFileHelper existingFileHelper)
+	public MinestuckItemTagsProvider(DataGenerator dataGenerator, BlockTagsProvider blockTagProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
 		super(dataGenerator, blockTagProvider, Minestuck.MOD_ID, existingFileHelper);
 	}

@@ -23,15 +23,14 @@ public class CastleStartPiece extends CastlePiece
 
     protected boolean bottom;
     public int averageGroundLevel = -1;
-    public int castleWidth, castleLength, x, z, totalPieces;
-    public ArrayList<CastlePiece> pendingPieces = new ArrayList<>();
+    public int castleWidth, castleLength, x, z;
+    public final ArrayList<CastlePiece> pendingPieces = new ArrayList<>();
     
     protected CastleStartPiece(int x, int z, boolean isBlack)
     {
-        super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x, 74, z), isBlack);
+        super(MSStructurePieces.SKAIA_CASTLE_START.get(), 0, new BoundingBox(x, 0, z, x + 8, 8, z + 8), isBlack);
         this.x = x;
         this.z = z;
-        if(pendingPieces == null)pendingPieces = new ArrayList<>();
         this.bottom = true;
     }
     
@@ -45,13 +44,10 @@ public class CastleStartPiece extends CastlePiece
     {
 		this.castleWidth = (rand.nextInt(12) + 4) * 16;
 		this.castleLength = (rand.nextInt(24) + 8) * 16;
-		this.genDepth = 1;
-		this.getNextComponentNormal(this, accessor, rand, 8, 0, true);
-		this.genDepth = 2;
+		this.getNextComponentNormal(this, accessor, rand, 8, 0, StructureCastlePieces.Type.WALL);
 		for(int depth = 8; depth < this.castleLength; depth += 8)
-			this.getNextComponentNormal(this, accessor, rand,  0, depth, true);
-		this.genDepth = 0;
-		this.getNextComponentNormal(this, accessor, rand, 0, -8, 0);
+			this.getNextComponentNormal(this, accessor, rand,  0, depth, StructureCastlePieces.Type.ROOM);
+		this.getNextComponentNormal(this, accessor, rand, 0, -8, 0, StructureCastlePieces.Type.SOLID);
 		
 	}
     

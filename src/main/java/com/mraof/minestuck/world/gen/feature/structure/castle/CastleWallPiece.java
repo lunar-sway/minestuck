@@ -64,15 +64,13 @@ public class CastleWallPiece extends CastlePiece
 		}
 		if(startPiece.bottom)
 		{
-			this.genDepth = 0;
-			this.getNextComponentNormal(startPiece, accessor, rand, 0, -8, 0);
+			this.getNextComponentNormal(startPiece, accessor, rand, 0, -8, 0, StructureCastlePieces.Type.SOLID);
 		}
 		if(this.direction == 5 && startPiece.castleLength > 16 && startPiece.castleWidth > 8)
 		{
-			this.genDepth = 3;
 			for(int depth = 8; depth < startPiece.castleLength; depth += 8)
 				for(int row = -startPiece.castleWidth + 8; row < startPiece.castleWidth; row += 8)
-					this.getNextComponentNormal(startPiece, accessor, rand, row, depth, true);//TODO change this so it generates the whole floor smartly
+					this.getNextComponentNormal(startPiece, accessor, rand, row, depth, StructureCastlePieces.Type.RANDOM_ROOM);//TODO change this so it generates the whole floor smartly
 			this.cornerPiece = false;
 			startPiece.z += 8;
 			startPiece.castleWidth -= 8;
@@ -82,29 +80,24 @@ public class CastleWallPiece extends CastlePiece
 			this.direction = 0;
 			this.boundingBox.move(0, 8, 8);
 		}
-		this.genDepth = 1;
+		
 		switch(this.direction)
 		{
 			case 4:
 			case 0:
-				this.getNextComponentNormal(startPiece, accessor, rand, 8, 0, true);
+				this.getNextComponentNormal(startPiece, accessor, rand, 8, 0, StructureCastlePieces.Type.WALL);
 				break;
 			case 1:
-				this.getNextComponentNormal(startPiece, accessor, rand, 0, 8, true);
+				this.getNextComponentNormal(startPiece, accessor, rand, 0, 8, StructureCastlePieces.Type.WALL);
 				break;
 			case 2:
-				this.getNextComponentNormal(startPiece, accessor, rand, -8, 0, true);
+				this.getNextComponentNormal(startPiece, accessor, rand, -8, 0, StructureCastlePieces.Type.WALL);
 				break;
 			case 3:
-				this.getNextComponentNormal(startPiece, accessor, rand, 0, -8, true);
+				this.getNextComponentNormal(startPiece, accessor, rand, 0, -8, StructureCastlePieces.Type.WALL);
 				break;
 			default:
-//			Debug.print("Wall done");
 		}
-		this.genDepth = 3;
-//		if(!this.cornerPiece)
-//			if((this.direction & 3) == 0)
-	
 	}
 	
 	public static CastleWallPiece findValidPlacement(boolean isBlack, int x, int y, int z, int par5, boolean cornerPiece)
