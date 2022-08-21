@@ -19,6 +19,9 @@ public class MSPlacedFeatures
 {
 	public static final DeferredRegister<PlacedFeature> REGISTER = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Minestuck.MOD_ID);
 	
+	public static final RegistryObject<PlacedFeature> RETURN_NODE = REGISTER.register("return_node", () -> new PlacedFeature(MSCFeatures.RETURN_NODE.getHolder().orElseThrow(),
+			List.of(RarityFilter.onAverageOnceEvery(128), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+	
 	public static final RegistryObject<PlacedFeature> COG = REGISTER.register("cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
 			List.of(RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), BiomeFilter.biome())));
 	public static final RegistryObject<PlacedFeature> UNCOMMON_COG = REGISTER.register("uncommon_cog", () -> new PlacedFeature(MSCFeatures.COG.getHolder().orElseThrow(),
