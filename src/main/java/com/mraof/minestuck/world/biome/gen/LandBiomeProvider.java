@@ -30,9 +30,15 @@ public class LandBiomeProvider extends BiomeSource
 		this.settings = settings;
 		
 		this.parameters = new Climate.ParameterList<>(List.of(
-				Pair.of(Climate.parameters(0, 0, -0.3F, 0, 0, 0, 0), biomes.fromType(LandBiomeType.OCEAN)),
-				Pair.of(Climate.parameters(0, 0, -0.1F, 0, 0, 0, 0), biomes.fromType(LandBiomeType.NORMAL))
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, -0.2F), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)),
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-0.2F, 1)), biomes.fromType(LandBiomeType.NORMAL)),
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-1, -0.2F)), biomes.fromType(LandBiomeType.ROUGH))
 		));
+	}
+	
+	private static Climate.ParameterPoint simpleParameterPoint(Climate.Parameter continents, Climate.Parameter erosion)
+	{
+		return Climate.parameters(Climate.Parameter.point(0), Climate.Parameter.point(0), continents, erosion, Climate.Parameter.point(0), Climate.Parameter.point(0), 0);
 	}
 	
 	@Override
