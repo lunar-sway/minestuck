@@ -30,4 +30,12 @@ public class MusicPlayerScreen extends AbstractContainerScreen<MusicPlayerContai
 		RenderSystem.setShaderTexture(0, BACKGROUND);
 		this.blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
 	}
+	
+	@Override
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	{
+		this.renderBackground(poseStack);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		this.renderTooltip(poseStack, mouseX, mouseY);
+	}
 }
