@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;

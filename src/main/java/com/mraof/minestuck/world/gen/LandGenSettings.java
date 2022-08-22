@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.GateStructure;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

@@ -8,7 +8,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.gen.feature.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;

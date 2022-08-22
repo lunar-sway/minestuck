@@ -13,7 +13,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
+import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
