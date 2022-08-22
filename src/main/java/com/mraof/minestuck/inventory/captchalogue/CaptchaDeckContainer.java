@@ -22,8 +22,7 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 	{
 		super(MSContainerTypes.CAPTCHA_DECK, windowId);
 		this.owner = playerInventory.player;
-		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 63, playerInventory);
-		addSlots();
+		addSlots(playerInventory);
 	}
 	
 	public ItemStack getContainerItem()
@@ -36,8 +35,9 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 		inventory.setItem(0, stack);
 	}
 	
-	private void addSlots()
+	private void addSlots(Inventory playerInventory)
 	{
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 63, playerInventory);
 		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override
