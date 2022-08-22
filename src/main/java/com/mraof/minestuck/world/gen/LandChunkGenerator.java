@@ -6,7 +6,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
+import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.gen.structure.GateStructure;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -61,7 +61,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
-		super(structureSets, noises, Optional.empty(), new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),
+		super(structureSets, noises, Optional.empty(), new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
