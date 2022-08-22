@@ -120,11 +120,11 @@ public class MusicPlayerItem extends WeaponItem
 			targetLuckValue = 0.0D;
 		
 		chanceToHit = chanceToHit - (attackerLuckValue / 10) + (targetLuckValue / 10);
-		Debug.debug("chanceToHit: " + chanceToHit + " applyingChance: " + applyingChance);
-		Debug.debug("attackerLuckValue: " + attackerLuckValue + " targetLuckValue: " + targetLuckValue);
+		System.out.println("chanceToHit: " + chanceToHit + " applyingChance: " + applyingChance);
+		System.out.println("attackerLuckValue: " + attackerLuckValue + " targetLuckValue: " + targetLuckValue);
 		if(effect != null && applyingChance > chanceToHit)
 		{
-			Debug.debug("Applying effect" + effect);
+			System.out.println("Applying effect" + effect);
 			target.addEffect(new MobEffectInstance(effect, duration, 1));
 		}
 		return super.hurtEnemy(stack, target, attacker);
