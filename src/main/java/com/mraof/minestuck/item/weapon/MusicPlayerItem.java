@@ -43,13 +43,13 @@ public class MusicPlayerItem extends WeaponItem
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
-				new IllegalArgumentException("ItemStack " + itemStack + " is not an item handler"));
+				new IllegalArgumentException("Expected an item handler for the music player item, but " + itemStack + " does not expose an item handler."));
 	}
 	
 	private static IMusicPlaying getMusicPlaying(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
-				new IllegalArgumentException("ItemStack " + itemStack + " is not a music playing"));
+				new IllegalArgumentException("Expected an music playing for the music player item, but " + itemStack + " does not expose a music playing."));
 	}
 	
 	@Nullable
