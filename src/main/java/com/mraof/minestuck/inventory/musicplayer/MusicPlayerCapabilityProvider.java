@@ -13,8 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
-	private final LazyOptional<IItemHandler> lazyInitialisionSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
-	private final LazyOptional<IMusicPlaying> lazyInitialisionSupplierMusicPlaying = LazyOptional.of(this::getCachedMusicPlaying);
+	private final LazyOptional<IItemHandler> lazyInitSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
+	private final LazyOptional<IMusicPlaying> lazyInitSupplierMusicPlaying = LazyOptional.of(this::getCachedMusicPlaying);
 	private ItemStackHandlerMusicPlayer itemStackHandlerMusicPlayer;
 	private MusicPlaying musicPlaying;
 	
@@ -23,9 +23,9 @@ public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTS
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 	{
 		if(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap)
-			return (lazyInitialisionSupplierItemHandler).cast();
+			return (lazyInitSupplierItemHandler).cast();
 		if(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY == cap)
-			return (lazyInitialisionSupplierMusicPlaying).cast();
+			return (lazyInitSupplierMusicPlaying).cast();
 		return LazyOptional.empty();
 	}
 	
