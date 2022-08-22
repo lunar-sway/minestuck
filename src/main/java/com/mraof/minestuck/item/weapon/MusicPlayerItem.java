@@ -77,13 +77,13 @@ public class MusicPlayerItem extends WeaponItem
 			{
 				if(musicPlaying.getCurrentMusic() == null)
 				{
-					musicPlaying.setCurrentMusic(EnumCassetteType.getSoundEvent(cassette.cassetteID));
-					musicEffect(cassette.cassetteID, playerIn);
+					musicPlaying.setCurrentMusic(cassette.cassetteID.getSoundEvent());
+					musicEffectToPlayer(cassette.cassetteID, playerIn);
 					soundInstance = new MusicPlayerOnPlayerSoundInstance(playerIn, musicPlaying);
 					soundManager.play(soundInstance);
 				} else
 				{
-					musicEffect(EnumCassetteType.NONE, playerIn);
+					musicEffectToPlayer(EnumCassetteType.NONE, playerIn);
 					musicPlaying.setCurrentMusic(null);
 				}
 			}
@@ -128,7 +128,7 @@ public class MusicPlayerItem extends WeaponItem
 		return super.hurtEnemy(stack, target, attacker);
 	}
 	
-	public void musicEffect(EnumCassetteType cassetteType, Player player)
+	public void musicEffectToPlayer(EnumCassetteType cassetteType, Player player)
 	{
 		switch(cassetteType)
 		{
