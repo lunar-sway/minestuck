@@ -3,11 +3,10 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.client.sounds.MusicPlayerOnPlayerSoundInstance;
 import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
-import com.mraof.minestuck.inventory.musicplayer.CapabilityProviderMusicPlayer;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import com.mraof.minestuck.item.CassetteItem;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.nbt.CompoundTag;
@@ -39,7 +38,6 @@ public class MusicPlayerItem extends WeaponItem
 	private MobEffect effect = null;
 	private float applyingChance = 0.0F;
 	int duration = 0;
-	
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
@@ -56,7 +54,7 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
-		return new CapabilityProviderMusicPlayer();
+		return new MusicPlayerCapabilityProvider();
 	}
 	
 	public MusicPlayerItem(Builder builder, Properties properties)
