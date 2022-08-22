@@ -435,7 +435,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.POPAMATIC_VRILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FLUORITE_OCTET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO).input(MSItems.ZILLYHOO_HAMMER).and().input(MSItems.FROG).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL).input(MSItems.REGI_HAMMER).or().input(MSItems.CUEBALL).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.MUSIC_HAMMER).input(MSItems.SLEDGE_HAMMER).and().input(MSBlocks.CASSETTE_PLAYER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MUSIC_HAMMER).input(MSItems.SLEDGE_HAMMER).and().input(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(MSItems.CANE).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK).namedInput(Items.STICK).or().input(MSItems.WISEGUY).build(consumer);
@@ -583,7 +583,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WAIT).input(Items.MUSIC_DISC_WAIT).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WARD).input(Items.MUSIC_DISC_WARD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		
-    CombinationRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
+    	CombinationRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
 
 		CombinationRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.GRAY_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.LIGHT_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.LIGHT_GRAY_DYE).build(consumer);
