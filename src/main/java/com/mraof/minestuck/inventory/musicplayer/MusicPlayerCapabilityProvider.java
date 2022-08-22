@@ -23,9 +23,9 @@ public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTS
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 	{
 		if(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap)
-			return (LazyOptional<T>) (lazyInitialisionSupplierItemHandler);
+			return (lazyInitialisionSupplierItemHandler).cast();
 		if(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY == cap)
-			return (LazyOptional<T>) (lazyInitialisionSupplierMusicPlaying);
+			return (lazyInitialisionSupplierMusicPlaying).cast();
 		return LazyOptional.empty();
 	}
 	
