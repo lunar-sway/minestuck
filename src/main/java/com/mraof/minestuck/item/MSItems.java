@@ -44,7 +44,6 @@ import static com.mraof.minestuck.block.MSBlocks.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MSItems
 {
-	//TODO removed @ObjectHolder(Minestuck.MOD_ID), ensure that was okay to do
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Minestuck.MOD_ID);
 	
 	//Hammers
@@ -991,7 +990,7 @@ public class MSItems
 	 */
 	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block)
 	{
-		return registerBlockItem(block, block1 -> new BlockItem(block.get(), new Item.Properties()));
+		return registerBlockItem(block, block1 -> new BlockItem(block1, new Item.Properties()));
 	}
 	
 	/**
@@ -999,7 +998,7 @@ public class MSItems
 	 */
 	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, CreativeModeTab tab)
 	{
-		return registerBlockItem(block, block1 -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
+		return registerBlockItem(block, block1 -> new BlockItem(block1, new Item.Properties().tab(tab)));
 	}
 	
 	/**
@@ -1007,7 +1006,7 @@ public class MSItems
 	 */
 	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Item.Properties properties)
 	{
-		return registerBlockItem(block, block1 -> new BlockItem(block.get(), properties));
+		return registerBlockItem(block, block1 -> new BlockItem(block1, properties));
 	}
 	
 	/**
@@ -1015,6 +1014,6 @@ public class MSItems
 	 */
 	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Function<Block, ? extends BlockItem> function)
 	{
-		return ITEMS.register(block.getKey().location().getPath(), () -> function.apply(block.get())); //assumed getRegistryName will occur without fail as it works through DeferredRegistry
+		return ITEMS.register(block.getKey().location().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}
 }
