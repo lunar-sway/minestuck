@@ -6,6 +6,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -47,6 +48,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	private final int height;
 	
 	private final NoiseRouter router;
+	private final Climate.Sampler sampler;
 	private final SurfaceSystem surfaceSystem;
 	private final Aquifer.FluidPicker globalFluidPicker;
 	protected final Registry<NormalNoise.NoiseParameters> noises;
@@ -71,10 +73,17 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		
 		this.noises = noises;
 		this.router = settings.createNoiseRouter(noises, seed);
+		this.sampler = new Climate.Sampler(this.router.temperature(), this.router.humidity(), this.router.continents(), this.router.erosion(), this.router.depth(), this.router.ridges(), this.router.spawnTarget());
 		Aquifer.FluidStatus oceanFluidStatus = new Aquifer.FluidStatus(settings.seaLevel(), this.defaultFluid);
 		this.globalFluidPicker = (x, y, z) -> oceanFluidStatus;
 		
 		this.surfaceSystem = new SurfaceSystem(noises, this.defaultBlock, settings.seaLevel(), seed, settings.getRandomSource());
+	}
+	
+	@Override
+	public Climate.Sampler climateSampler()
+	{
+		return this.sampler;
 	}
 	
 	/**

@@ -6,25 +6,20 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.gen.LandBiomeProvider;
-import com.mraof.minestuck.world.gen.feature.structure.GateStructure;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.biome.LandBiomeSource;
+import com.mraof.minestuck.world.gen.structure.GateStructure;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.CheckerboardColumnBiomeSource;
-import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -66,8 +61,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
-		super(structureSets, noises, Optional.empty(), /*new LandBiomeProvider(seed, biomes, genSettings), new LandBiomeProvider(seed, biomes.baseBiomes, genSettings),*/
-				new CheckerboardColumnBiomeSource(HolderSet.direct(biomes::fromType, LandBiomeType.values()), 4), new CheckerboardColumnBiomeSource(HolderSet.direct(biomes.baseBiomes::fromType, LandBiomeType.values()), 4),
+		super(structureSets, noises, Optional.empty(), new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
@@ -155,11 +149,5 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 		else landGatePosition = new ChunkPos(posX, posZ);
 		
 		return landGatePosition;
-	}
-	
-	@Override
-	public Climate.Sampler climateSampler()
-	{
-		return Climate.empty();
 	}
 }
