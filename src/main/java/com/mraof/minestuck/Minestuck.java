@@ -59,12 +59,12 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		MSBlocks.BLOCKS.register(eventBus);
-		MSItems.ITEMS.register(eventBus);
-		MSFluids.FLUIDS.register(eventBus);
+		MSBlocks.REGISTER.register(eventBus);
+		MSItems.REGISTER.register(eventBus);
+		MSFluids.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
-		MSEffects.EFFECTS.register(eventBus);
+		MSEffects.REGISTER.register(eventBus);
 		
 		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);

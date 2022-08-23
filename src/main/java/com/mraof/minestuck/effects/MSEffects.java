@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class MSEffects
 {
-	public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Minestuck.MOD_ID);
+	public static final DeferredRegister<MobEffect> REGISTER = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<CreativeShockEffect> CREATIVE_SHOCK = EFFECTS.register("creative_shock", CreativeShockEffect::new);
+	public static final RegistryObject<CreativeShockEffect> CREATIVE_SHOCK = REGISTER.register("creative_shock", CreativeShockEffect::new);
 }
