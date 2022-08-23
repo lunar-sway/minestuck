@@ -68,17 +68,10 @@ public final class LandGenSettings
 		
 		StructureSettings structureSettings = new StructureSettings(Optional.empty(), structures);
 		*/
-		CubicSpline<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents)
-				.addPoint(-0.25F, -0.1F, 0).addPoint(-0.15F, 0.05F, 0).build();
-		
-		CubicSpline<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion)
-				.addPoint(-0.25F, 3, 0).addPoint(-0.15F, 5, 0).build();
-		CubicSpline<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents)
-				.addPoint(-0.3F, 5, 0).addPoint(-0.1F, inlandFactorSpline, 0).build();
 		
 		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
 				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
-				new TerrainShaper(offsetSpline, factorSpline, CubicSpline.constant(0)));
+				this.createTerrainShaper());
 		
 		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
 		
@@ -98,6 +91,19 @@ public final class LandGenSettings
 				surfaceRule, 64, false, false, false, false);
 		
 		return Holder.direct(settings);
+	}
+	
+	private TerrainShaper createTerrainShaper()
+	{
+		CubicSpline<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents)
+				.addPoint(-0.25F, -0.1F, 0).addPoint(-0.15F, 0.05F, 0).build();
+		
+		CubicSpline<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion)
+				.addPoint(-0.25F, 3, 0).addPoint(-0.15F, 5, 0).build();
+		CubicSpline<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents)
+				.addPoint(-0.3F, 5, 0).addPoint(-0.1F, inlandFactorSpline, 0).build();
+		
+		return new TerrainShaper(offsetSpline, factorSpline, CubicSpline.constant(0));
 	}
 	
 	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(ILandBiomeSet biomes)
