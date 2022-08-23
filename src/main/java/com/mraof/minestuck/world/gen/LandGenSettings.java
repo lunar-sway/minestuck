@@ -38,6 +38,13 @@ public final class LandGenSettings
 	 */
 	public float roughThreshold = -0.2F;
 	
+	public float oceanOffset = -0.1F;
+	public float normalOffset = 0.05F;
+	
+	public float oceanFactor = 5;
+	public float normalFactor = 5;
+	public float roughFactor = 3;
+	
 	LandGenSettings(LandTypePair landTypes)
 	{
 		this.landTypes = landTypes;
@@ -131,17 +138,17 @@ public final class LandGenSettings
 	{
 		CubicSpline.Builder<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents);
 		if(this.hasOceanTerrain())
-			offsetSpline.addPoint(this.getOceanThreshold(-0.05F), -0.1F, 0);
-		offsetSpline.addPoint(this.getOceanThreshold(0.05F), 0.05F, 0);
+			offsetSpline.addPoint(this.getOceanThreshold(-0.05F), this.oceanOffset, 0);
+		offsetSpline.addPoint(this.getOceanThreshold(0.05F), this.normalOffset, 0);
 		
 		CubicSpline.Builder<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion);
 		if(this.hasRoughTerrain())
-			inlandFactorSpline.addPoint(this.getRoughThreshold(-0.05F), 3, 0);
-		inlandFactorSpline.addPoint(this.getRoughThreshold(0.05F), 5, 0);
+			inlandFactorSpline.addPoint(this.getRoughThreshold(-0.05F), this.roughFactor, 0);
+		inlandFactorSpline.addPoint(this.getRoughThreshold(0.05F), this.normalFactor, 0);
 		
 		CubicSpline.Builder<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents);
 		if(this.hasOceanTerrain())
-			factorSpline.addPoint(this.getOceanThreshold(-0.1F), 5, 0);
+			factorSpline.addPoint(this.getOceanThreshold(-0.1F), this.oceanFactor, 0);
 		factorSpline.addPoint(this.getOceanThreshold(0.1F), inlandFactorSpline.build(), 0);
 		
 		return new TerrainShaper(offsetSpline.build(), factorSpline.build(), CubicSpline.constant(0));

@@ -96,10 +96,6 @@ public class RainLandType extends TerrainLandType
 	public void setProperties(LandProperties properties)
 	{
 		properties.category = Biome.BiomeCategory.BEACH;	//I guess?
-		
-		properties.oceanBiomeScale += 0.1;
-		properties.roughBiomeScale += 0.1;
-		properties.roughBiomeDepth -= 0.2;
 	}
 	
 	@Override

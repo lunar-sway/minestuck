@@ -42,9 +42,6 @@ public class WindLandType extends TitleLandType
 		if(properties.forceRain == LandProperties.ForceType.OFF)
 			properties.forceRain = LandProperties.ForceType.DEFAULT;
 		
-		properties.normalBiomeScale *= 0.6;
-		properties.roughBiomeScale *= 0.6;
-		properties.roughBiomeDepth = (properties.roughBiomeDepth + properties.normalBiomeDepth)/2;
 	}
 	
 	@Override
