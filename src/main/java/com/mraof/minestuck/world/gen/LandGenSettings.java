@@ -1,24 +1,24 @@
 package com.mraof.minestuck.world.gen;
 
-import com.mraof.minestuck.Minestuck;
+import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.world.biome.ILandBiomeSet;
+import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.structure.GateStructure;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.CubicSpline;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
-public class LandGenSettings
+import java.util.List;
+
+public final class LandGenSettings
 {
-	private static final ResourceKey<NormalNoise.NoiseParameters> CONTINENTS = ResourceKey.create(Registry.NOISE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "land_continents"));
-	
 	private final LandTypePair landTypes;
 	private final StructureBlockRegistry blockRegistry;
 	private GateStructure.PieceFactory gatePiece;
@@ -98,5 +98,19 @@ public class LandGenSettings
 				surfaceRule, 64, false, false, false, false);
 		
 		return Holder.direct(settings);
+	}
+	
+	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(ILandBiomeSet biomes)
+	{
+		return new Climate.ParameterList<>(List.of(
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, -0.2F), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)),
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-0.2F, 1)), biomes.fromType(LandBiomeType.NORMAL)),
+				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-1, -0.2F)), biomes.fromType(LandBiomeType.ROUGH))
+		));
+	}
+	
+	private static Climate.ParameterPoint simpleParameterPoint(Climate.Parameter continents, Climate.Parameter erosion)
+	{
+		return Climate.parameters(Climate.Parameter.point(0), Climate.Parameter.point(0), continents, erosion, Climate.Parameter.point(0), Climate.Parameter.point(0), 0);
 	}
 }
