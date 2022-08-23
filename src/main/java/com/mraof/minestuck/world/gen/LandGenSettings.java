@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.world.biome.ILandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -15,14 +16,21 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 
-import java.util.List;
-
 public final class LandGenSettings
 {
 	private final LandTypePair landTypes;
 	private final StructureBlockRegistry blockRegistry;
 	private GateStructure.PieceFactory gatePiece;
-	public float oceanChance = 1/3F, roughChance = 1/5F;
+	
+	public float oceanChance = 1/3F;
+	
+	/**
+	 * A threshold that determines the split between rough and normal terrain.
+	 * When the terrain is inland, the terrain will be rough when erosion is below the threshold.
+	 * Thus, a higher threshold will translate to more rough terrain.
+	 * At 0, there should be a rough split between normal and rough terrain occurring.
+	 */
+	public float roughThreshold = -0.2F;
 	
 	LandGenSettings(LandTypePair landTypes)
 	{
@@ -93,26 +101,45 @@ public final class LandGenSettings
 		return Holder.direct(settings);
 	}
 	
+	private boolean hasRoughTerrain()
+	{
+		return this.roughThreshold > -0.95;
+	}
+	
+	private float getRoughThreshold(float offset)
+	{
+		return this.hasRoughTerrain() ? this.roughThreshold + offset : -1.0F;
+	}
+	
 	private TerrainShaper createTerrainShaper()
 	{
 		CubicSpline<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents)
 				.addPoint(-0.25F, -0.1F, 0).addPoint(-0.15F, 0.05F, 0).build();
 		
-		CubicSpline<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion)
-				.addPoint(-0.25F, 3, 0).addPoint(-0.15F, 5, 0).build();
+		CubicSpline.Builder<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion);
+		
+		if(this.hasRoughTerrain())
+			inlandFactorSpline.addPoint(this.getRoughThreshold(-0.05F), 3, 0);
+		inlandFactorSpline.addPoint(this.getRoughThreshold(0.05F), 5, 0);
+		
 		CubicSpline<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents)
-				.addPoint(-0.3F, 5, 0).addPoint(-0.1F, inlandFactorSpline, 0).build();
+				.addPoint(-0.3F, 5, 0).addPoint(-0.1F, inlandFactorSpline.build(), 0).build();
 		
 		return new TerrainShaper(offsetSpline, factorSpline, CubicSpline.constant(0));
 	}
 	
 	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(ILandBiomeSet biomes)
 	{
-		return new Climate.ParameterList<>(List.of(
-				Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, -0.2F), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)),
-				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-0.2F, 1)), biomes.fromType(LandBiomeType.NORMAL)),
-				Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-1, -0.2F)), biomes.fromType(LandBiomeType.ROUGH))
-		));
+		ImmutableList.Builder<Pair<Climate.ParameterPoint, Holder<Biome>>> builder = ImmutableList.builder();
+		
+		builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, -0.2F), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)));
+		
+		if(this.hasRoughTerrain())
+			builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-1, this.getRoughThreshold(0))), biomes.fromType(LandBiomeType.ROUGH)));
+		
+		builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(this.getRoughThreshold(0), 1)), biomes.fromType(LandBiomeType.NORMAL)));
+		
+		return new Climate.ParameterList<>(builder.build());
 	}
 	
 	private static Climate.ParameterPoint simpleParameterPoint(Climate.Parameter continents, Climate.Parameter erosion)
