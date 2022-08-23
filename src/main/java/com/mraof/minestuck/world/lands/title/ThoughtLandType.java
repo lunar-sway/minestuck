@@ -50,7 +50,7 @@ public class ThoughtLandType extends TitleLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
+		settings.oceanThreshold = Math.max(settings.oceanThreshold, -0.4F);
 	}
 	
 	@Override

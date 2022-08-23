@@ -47,7 +47,8 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = Math.min(Math.max(0.5F, settings.oceanChance), settings.oceanChance*1.2F);	//Increase ocean chance by a factor 1.2, but not higher than to 0.5F
+		if(settings.hasOceanTerrain())
+			settings.oceanThreshold = Math.min(Math.max(0, settings.oceanThreshold), settings.oceanThreshold + 0.1F);	//Increase ocean chance by a factor 1.2, but not higher than to 0.5F
 	}
 	
 	@Override

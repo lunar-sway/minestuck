@@ -102,7 +102,7 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 1 / 4F;
+		settings.oceanThreshold = -0.3F;
 	}
 	
 	@Override

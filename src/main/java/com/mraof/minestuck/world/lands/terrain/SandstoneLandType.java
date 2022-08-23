@@ -108,7 +108,7 @@ public class SandstoneLandType extends TerrainLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 1/10F;
+		settings.oceanThreshold = -0.6F;
 	}
 	
 	@Override

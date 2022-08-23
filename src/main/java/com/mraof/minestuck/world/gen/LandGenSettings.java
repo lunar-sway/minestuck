@@ -22,12 +22,18 @@ public final class LandGenSettings
 	private final StructureBlockRegistry blockRegistry;
 	private GateStructure.PieceFactory gatePiece;
 	
-	public float oceanChance = 1/3F;
+	/**
+	 * A threshold that determines the split between ocean and inland terrain.
+	 * The terrain will be ocean when continentalness is below the threshold.
+	 * Thus, a higher threshold will result in more ocean terrain.
+	 * At 0, there should be a rough split between ocean and inland terrain occurring.
+	 */
+	public float oceanThreshold = -0.2F;
 	
 	/**
 	 * A threshold that determines the split between rough and normal terrain.
 	 * When the terrain is inland, the terrain will be rough when erosion is below the threshold.
-	 * Thus, a higher threshold will translate to more rough terrain.
+	 * Thus, a higher threshold will result in more rough terrain.
 	 * At 0, there should be a rough split between normal and rough terrain occurring.
 	 */
 	public float roughThreshold = -0.2F;
@@ -101,7 +107,17 @@ public final class LandGenSettings
 		return Holder.direct(settings);
 	}
 	
-	private boolean hasRoughTerrain()
+	public boolean hasOceanTerrain()
+	{
+		return this.oceanThreshold > -0.95;
+	}
+	
+	private float getOceanThreshold(float offset)
+	{
+		return this.hasOceanTerrain() ? this.oceanThreshold + offset : -1.0F;
+	}
+	
+	public boolean hasRoughTerrain()
 	{
 		return this.roughThreshold > -0.95;
 	}
@@ -113,31 +129,36 @@ public final class LandGenSettings
 	
 	private TerrainShaper createTerrainShaper()
 	{
-		CubicSpline<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents)
-				.addPoint(-0.25F, -0.1F, 0).addPoint(-0.15F, 0.05F, 0).build();
+		CubicSpline.Builder<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents);
+		if(this.hasOceanTerrain())
+			offsetSpline.addPoint(this.getOceanThreshold(-0.05F), -0.1F, 0);
+		offsetSpline.addPoint(this.getOceanThreshold(0.05F), 0.05F, 0);
 		
 		CubicSpline.Builder<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion);
-		
 		if(this.hasRoughTerrain())
 			inlandFactorSpline.addPoint(this.getRoughThreshold(-0.05F), 3, 0);
 		inlandFactorSpline.addPoint(this.getRoughThreshold(0.05F), 5, 0);
 		
-		CubicSpline<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents)
-				.addPoint(-0.3F, 5, 0).addPoint(-0.1F, inlandFactorSpline.build(), 0).build();
+		CubicSpline.Builder<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents);
+		if(this.hasOceanTerrain())
+			factorSpline.addPoint(this.getOceanThreshold(-0.1F), 5, 0);
+		factorSpline.addPoint(this.getOceanThreshold(0.1F), inlandFactorSpline.build(), 0);
 		
-		return new TerrainShaper(offsetSpline, factorSpline, CubicSpline.constant(0));
+		return new TerrainShaper(offsetSpline.build(), factorSpline.build(), CubicSpline.constant(0));
 	}
 	
 	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(ILandBiomeSet biomes)
 	{
 		ImmutableList.Builder<Pair<Climate.ParameterPoint, Holder<Biome>>> builder = ImmutableList.builder();
 		
-		builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, -0.2F), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)));
+		if(this.hasOceanTerrain())
+			builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-1, this.getOceanThreshold(0)), Climate.Parameter.span(-1, 1)), biomes.fromType(LandBiomeType.OCEAN)));
 		
+		Climate.Parameter inlandContinentalness = Climate.Parameter.span(this.getOceanThreshold(0), 1);
 		if(this.hasRoughTerrain())
-			builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(-1, this.getRoughThreshold(0))), biomes.fromType(LandBiomeType.ROUGH)));
+			builder.add(Pair.of(simpleParameterPoint(inlandContinentalness, Climate.Parameter.span(-1, this.getRoughThreshold(0))), biomes.fromType(LandBiomeType.ROUGH)));
 		
-		builder.add(Pair.of(simpleParameterPoint(Climate.Parameter.span(-0.2F, 1), Climate.Parameter.span(this.getRoughThreshold(0), 1)), biomes.fromType(LandBiomeType.NORMAL)));
+		builder.add(Pair.of(simpleParameterPoint(inlandContinentalness, Climate.Parameter.span(this.getRoughThreshold(0), 1)), biomes.fromType(LandBiomeType.NORMAL)));
 		
 		return new Climate.ParameterList<>(builder.build());
 	}

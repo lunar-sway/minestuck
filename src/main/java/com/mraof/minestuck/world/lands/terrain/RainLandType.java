@@ -105,7 +105,7 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 3/4F;
+		settings.oceanThreshold = 0.2F;
 	}
 	
 	@Override
