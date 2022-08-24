@@ -9,9 +9,11 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -252,6 +254,17 @@ public final class Session
 	public GristGutter getGristGutter()
 	{
 		return gutter;
+	}
+	
+	public double getSessionPowerlevel(MinecraftServer mcServer)
+	{
+		int playerCount = this.getPlayerList().size();
+		double rungAverage = 0.0;
+		for(PlayerIdentifier pi : this.getPlayerList())
+		{
+			rungAverage += PlayerSavedData.get(mcServer).getData(pi).getEcheladder().getRung();
+		}
+		return rungAverage / playerCount;
 	}
 	
 	

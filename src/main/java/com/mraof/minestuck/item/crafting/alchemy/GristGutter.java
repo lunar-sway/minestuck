@@ -1,5 +1,8 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
+import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SessionHandler;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -11,18 +14,33 @@ import java.util.Map;
 
 public class GristGutter extends GristSet
 {
+	private static Session session;
+	
+	private static MinecraftServer mcServer;
+	
 	public int gutterTotal = -1;
 	
-	public static final int GUTTER_CAPACITY = 1000;
+	public static final int GUTTER_CAPACITY = 10000;
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	/**
-	 * the original intent of this code was to acquire the gutter total for logging purposes
-	 * however for some reason we're not exactly sure to, the part of the gutter this was designed to work with
-	 * just kind of ended up working anyway
-	 * i'm not entirely sure at all how this works honestly
-	 * */
+	public void setSession(Session session)
+	{
+		this.session = session;
+	}
+	
+	public void setMcServer(MinecraftServer mcServer)
+	{
+		this.mcServer = mcServer;
+	}
+	
+	public double getGutterCapacity()
+	{
+		double sesPL = session.getSessionPowerlevel(mcServer);
+		double gutcap = (GUTTER_CAPACITY * sesPL);
+		return gutcap;
+	}
+	
 	public long getGutterTotal()
 	{
 		if(gutterTotal < 0)
@@ -65,7 +83,7 @@ public class GristGutter extends GristSet
 			//For super Overflow
 			GristSet sOverflowGrist = new GristSet();
 			long originalAmount = this.gristTypes.getOrDefault(type, 0L);
-			long maximumAllowed = gutterTotal - GUTTER_CAPACITY + originalAmount;
+			long maximumAllowed = (long) (gutterTotal - getGutterCapacity() + originalAmount);
 			
 			
 			this.gristTypes.compute(type, (key, value) ->
@@ -90,7 +108,7 @@ public class GristGutter extends GristSet
 			if(gutterTotal > GUTTER_CAPACITY)
 			{
 				System.out.println("gutter has capped out");
-				long sOverflowAmount = gutterTotal - GUTTER_CAPACITY;
+				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity());
 				this.gristTypes.put(type, maximumAllowed);
 				sOverflowGrist.addGrist(type, sOverflowAmount);
 				gristToSpill.addGrist(sOverflowGrist);
