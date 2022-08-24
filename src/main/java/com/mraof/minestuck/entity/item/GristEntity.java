@@ -137,7 +137,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(this.level.isClientSide == true)
 		{
-			shaderAlpha = Math.max(shaderAlpha - 5, 0);
+			shaderAlpha = Math.max(shaderAlpha - 7, 0);
 		}
 		
 		
@@ -157,7 +157,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
 		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 
-		if (this.targetCycle < this.cycle - 20 + this.getId() % 100 && shaderAlpha == 0) //Why should I care about the entityId
+		if (this.targetCycle < this.cycle - 20 + this.getId() % 100  && shaderAlpha == 0) //Why should I care about the entityId
 		{
 			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
