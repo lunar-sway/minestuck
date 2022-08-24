@@ -19,8 +19,8 @@ GristEntityPacket implements PlayToClientPacket
 	
 	private GristEntityPacket(int entityID, GristEntity.Animation animation)
 	{
-			this.entityID = entityID;
-			this.animation = animation;
+		this.entityID = entityID;
+		this.animation = animation;
 		
 	}
 	
@@ -48,5 +48,5 @@ GristEntityPacket implements PlayToClientPacket
 			((GristEntity) entity).setAnimationFromPacket(animation);
 		}
 	}
-
+	
 }

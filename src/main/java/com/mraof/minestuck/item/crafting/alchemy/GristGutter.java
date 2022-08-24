@@ -21,7 +21,7 @@ public class GristGutter extends GristSet
 	public int gutterTotal = -1;
 	
 	public static final int GUTTER_CAPACITY = 10000;
-
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public void setSession(Session session)
@@ -53,7 +53,7 @@ public class GristGutter extends GristSet
 		}
 		return gutterTotal;
 	}
-
+	
 	public GristSet gristToSpill = new GristSet();
 	
 	public void spillGrist(Level level, Player player)
@@ -120,8 +120,8 @@ public class GristGutter extends GristSet
 	}
 	
 	
-	
-	public GristGutter logGutter(GristType type, long amount){
+	public GristGutter logGutter(GristType type, long amount)
+	{
 		/**
 		 * we're using a simple logger that'll tell us how much grist is in the gutter by updating us on
 		 * the current gutter total
@@ -140,10 +140,9 @@ public class GristGutter extends GristSet
 	}
 	
 	
-	
 	/**
-this is how we take grist from the gutter and throw it into the player's cache
-	 we use the xMover variable (comprised of the minimum of something or other)...
+	 * this is how we take grist from the gutter and throw it into the player's cache
+	 * we use the xMover variable (comprised of the minimum of something or other)...
 	 */
 	public GristSet splice(int i)
 	{

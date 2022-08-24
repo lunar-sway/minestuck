@@ -20,6 +20,7 @@ import java.util.*;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
+ *
  * @author kirderf1
  */
 public final class Session
@@ -114,6 +115,7 @@ public final class Session
 	
 	/**
 	 * Checks if a certain player is in the connection list.
+	 *
 	 * @param player The username of the player.
 	 * @return If the player was found.
 	 */
@@ -131,6 +133,7 @@ public final class Session
 	
 	/**
 	 * Creates a list with all players in the session.
+	 *
 	 * @return Returns a list with the players identifiers.
 	 */
 	public Set<PlayerIdentifier> getPlayerList()
@@ -240,7 +243,7 @@ public final class Session
 	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
-		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
+		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
 			data = new PredefineData(player, this);
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
@@ -271,6 +274,7 @@ public final class Session
 	/**
 	 * Writes this session to an nbt tag.
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
+	 *
 	 * @return An CompoundNBT representing this session.
 	 */
 	CompoundTag write()
@@ -293,6 +297,7 @@ public final class Session
 	
 	/**
 	 * Reads data from the given nbt tag.
+	 *
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
@@ -313,11 +318,11 @@ public final class Session
 					s.connections.add(c);
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);
+				Debug.logger.error("Unable to read sburb connection from tag " + list.getCompound(i) + ". Forced to skip connection. Caused by:", e);
 			}
 		}
 		
-		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))	//If it is a tag list
+		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))    //If it is a tag list
 		{
 			list = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)

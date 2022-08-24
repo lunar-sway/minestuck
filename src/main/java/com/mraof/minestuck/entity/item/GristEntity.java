@@ -29,20 +29,20 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
-{	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
+{    //TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
 	
 	public int consumeDelay;
-
+	
 	public int gristAge = 0;
-
+	
 	private int gristHealth = 5;
 	//Type of grist
 	private GristType gristType = GristTypes.BUILD.get();
 	private long gristValue = 1;
-
+	
 	private Player closestPlayer;
-
+	
 	private int targetCycle;
 	
 	private Animation animation = Animation.REJECT;
@@ -58,12 +58,12 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		this.gristValue = gristData.getAmount();
 //		this.yOffset = this.height / 2.0F;
 		this.setPos(x, y, z);
-		this.setYRot((float)(Math.random() * 360.0D));
+		this.setYRot((float) (Math.random() * 360.0D));
 		this.setDeltaMovement(level.random.nextGaussian() * 0.2D - 0.1D, level.random.nextGaussian() * 0.2D, level.random.nextGaussian() * 0.2D - 0.1D);
 		
 		this.gristType = gristData.getType();
 	}
-
+	
 	public GristEntity(EntityType<? extends GristEntity> type, Level level)
 	{
 		super(type, level);
@@ -80,10 +80,10 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	
-	
 	@Override
 	protected void defineSynchedData()
-	{}
+	{
+	}
 	
 	/**
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they walk on. used for spiders and wolves to
@@ -101,13 +101,12 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(this.isInvulnerableTo(source))
 		{
 			return false;
-		}
-		else
+		} else
 		{
 			this.markHurt();
-			this.gristHealth = (int)((float)this.gristHealth - amount);
+			this.gristHealth = (int) ((float) this.gristHealth - amount);
 			
-			if (this.gristHealth <= 0)
+			if(this.gristHealth <= 0)
 			{
 				this.discard();
 			}
@@ -142,40 +141,40 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		
 		super.tick();
-
+		
 		this.xo = this.getX();
 		this.yo = this.getY();
 		this.zo = this.getZ();
 		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
-
-		if (this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
+		
+		if(this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
 		{
 			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
 		}
-
+		
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
 		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
-
-		if (this.targetCycle < this.cycle - 20 + this.getId() % 100  && shaderAlpha == 0) //Why should I care about the entityId
+		
+		if(this.targetCycle < this.cycle - 20 + this.getId() % 100 && shaderAlpha == 0) //Why should I care about the entityId
 		{
-			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
+			if(this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
 				this.closestPlayer = this.level.getNearestPlayer(this, d0);
 			}
-
+			
 			this.targetCycle = this.cycle;
 		}
-
-		if (this.closestPlayer != null && shaderAlpha == 0)
+		
+		if(this.closestPlayer != null && shaderAlpha == 0)
 		{
 			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
-			double d2 = (this.closestPlayer.getY() + (double)this.closestPlayer.getEyeHeight() - this.getY()) / d0;
+			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
 			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
-
-			if (d5 > 0.0D)
+			
+			if(d5 > 0.0D)
 			{
 				this.setDeltaMovement(this.getDeltaMovement().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
 			}
@@ -191,16 +190,16 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 		
 		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
-
-		if (this.onGround)
+		
+		if(this.onGround)
 		{
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
-
+		
 		++this.cycle;
 		++this.gristAge;
-
-		if (this.gristAge >= 6000)
+		
+		if(this.gristAge >= 6000)
 		{
 			this.discard();
 		}
@@ -226,9 +225,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	protected void addAdditionalSaveData(CompoundTag compound)
 	{
-		compound.putShort("Health", (short)this.gristHealth);
-		compound.putShort("Age", (short)this.gristAge);
-		compound.putLong("Value", (short)this.gristValue);
+		compound.putShort("Health", (short) this.gristHealth);
+		compound.putShort("Age", (short) this.gristAge);
+		compound.putLong("Value", (short) this.gristValue);
 		compound.putString("Type", gristType.getRegistryName().toString());
 	}
 	
@@ -284,8 +283,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			if(hasRoom)
 			{
 				consumeGrist(IdentifierHandler.encode(entityIn), true);
-			}
-			else
+			} else
 			{
 				this.animation = Animation.REJECT;
 				GristEntityPacket packet = GristEntityPacket.createPacket(this, animation);
@@ -330,11 +328,12 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		return super.getDimensions(poseIn).scale((float) Math.pow(gristValue, .25));
 	}
-
-	public float getSizeByValue() {
-		return (float)(Math.pow((double)this.gristValue, 0.25D) / 3.0D);
+	
+	public float getSizeByValue()
+	{
+		return (float) (Math.pow((double) this.gristValue, 0.25D) / 3.0D);
 	}
-
+	
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{

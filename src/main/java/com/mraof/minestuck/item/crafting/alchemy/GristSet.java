@@ -26,13 +26,7 @@ public class GristSet
 	public static final String GRIST_COMMA = "grist.comma";
 	
 	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
-
-	/**
-	this has been replaced to allow the GristGutter to have full access to this dictionary
-	 */
-	/*
-	private final Map<GristType, Long> gristTypes;
-	 */
+	
 	protected final Map<GristType, Long> gristTypes;
 	
 	
@@ -67,7 +61,7 @@ public class GristSet
 	{
 		this();
 		
-		for (int i = 0; i < type.length; i++)
+		for(int i = 0; i < type.length; i++)
 		{
 			this.gristTypes.put(type[i].get(), amount[i]);
 		}
@@ -79,17 +73,17 @@ public class GristSet
 	public GristSet(GristType[] type, long[] amount)
 	{
 		this();
-
-		for (int i = 0; i < type.length; i++)
+		
+		for(int i = 0; i < type.length; i++)
 		{
 			this.gristTypes.put(type[i], amount[i]);
 		}
 	}
-
+	
 	public GristSet(GristAmount... grist)
 	{
 		this();
-		for (GristAmount amount : grist)
+		for(GristAmount amount : grist)
 		{
 			this.gristTypes.put(amount.getType(), amount.getAmount());
 		}
@@ -137,18 +131,17 @@ public class GristSet
 	{
 		if(type != null)
 		{
-			if (amount == 0)
+			if(amount == 0)
 			{
 				this.gristTypes.remove(type);
-			}
-			else
+			} else
 			{
 				gristTypes.put(type, amount);
 			}
 		}
 		return this;
 	}
-
+	
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
@@ -165,7 +158,7 @@ public class GristSet
 	{
 		return addGrist(type.get(), amount);
 	}
-
+	
 	/**
 	 * Returns a Hashtable with grist->amount pairs.
 	 */
@@ -186,28 +179,28 @@ public class GristSet
 	{
 		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 	}
-
+	
 	/**
 	 * Adds an amount of grist to a GristSet, given another set of grist.
 	 */
 	public GristSet addGrist(GristSet set)
 	{
-		for (GristAmount grist : set.getAmounts())
+		for(GristAmount grist : set.getAmounts())
 		{
 			this.addGrist(grist);
 		}
 		return this;
-
+		
 	}
 	
 	/**
 	 * used to cap grist for the limitgristbyplayerrung function
-	 *this is how we decide grist overflow
-	 *what it's doing is everytime the amount is higher than the current cap,
-	 *it'll find the difference between the amount added and the cap and set that as an
-	 *overflow amount.
-	 *this'll then check the type of grist, and add it by amount. t
-	 *hen we just return the function and boom.
+	 * this is how we decide grist overflow
+	 * what it's doing is everytime the amount is higher than the current cap,
+	 * it'll find the difference between the amount added and the cap and set that as an
+	 * overflow amount.
+	 * this'll then check the type of grist, and add it by amount. t
+	 * hen we just return the function and boom.
 	 */
 	public GristSet capGrist(int cap)
 	{
@@ -251,12 +244,12 @@ public class GristSet
 	public GristSet scale(float scale, boolean roundDown)
 	{
 		this.gristTypes.forEach((type, amount) -> {
-			if (amount != 0)
+			if(amount != 0)
 			{
 				this.gristTypes.put(type, roundDown ? (long) (amount * scale) : roundToNonZero(amount * scale));
 			}
 		});
-
+		
 		return this;
 	}
 	
@@ -266,7 +259,7 @@ public class GristSet
 			return Math.min(-1, Math.round(value));
 		else return Math.max(1, Math.round(value));
 	}
-
+	
 	/**
 	 * Checks if this grist set is empty.
 	 */
@@ -274,22 +267,22 @@ public class GristSet
 	{
 		return this.gristTypes.isEmpty();
 	}
-
+	
 	@Override
 	public String toString()
 	{
 		StringBuilder build = new StringBuilder();
 		build.append("gristSet:[");
-
+		
 		boolean first = true;
-		for (Map.Entry<GristType, Long> entry : gristTypes.entrySet())
+		for(Map.Entry<GristType, Long> entry : gristTypes.entrySet())
 		{
-			if (!first)
+			if(!first)
 				build.append(',');
 			build.append(entry.getKey().getRegistryName()).append("=").append(entry.getValue());
 			first = false;
 		}
-
+		
 		build.append(']');
 		return build.toString();
 	}
@@ -330,9 +323,9 @@ public class GristSet
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount()/10 || i ==
-						gusherCount-1 ? countLeft : Math.min(countLeft,
-						(long) level.random.nextDouble()*countLeft + 1);
+				long spawnedCount = countLeft <= amount.getAmount() / 10 || i ==
+						gusherCount - 1 ? countLeft : Math.min(countLeft,
+						(long) level.random.nextDouble() * countLeft + 1);
 				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
 				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
 				postProcessor.accept(entity);
@@ -371,8 +364,8 @@ public class GristSet
 			ResourceLocation gristId = new ResourceLocation(entry.getKey());
 			GristType type = GristTypes.getRegistry().getValue(gristId);
 			if(type == null)
-				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = GsonHelper.convertToLong(entry.getValue(), entry.getKey());	//getLong
+				throw new JsonParseException("'" + entry.getKey() + "' did not match an existing grist type!");
+			long amount = GsonHelper.convertToLong(entry.getValue(), entry.getKey());    //getLong
 			set.addGrist(type, amount);
 		}
 		

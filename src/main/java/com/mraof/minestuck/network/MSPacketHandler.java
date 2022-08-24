@@ -71,6 +71,7 @@ public class MSPacketHandler
 	}
 	
 	private static int nextIndex;
+	
 	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, StandardPacket::encode, decoder, StandardPacket::consume);
