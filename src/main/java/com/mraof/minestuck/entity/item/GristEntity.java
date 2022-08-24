@@ -1,14 +1,15 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.client.renderer.entity.GristRenderer;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.crafting.alchemy.*;
+import com.mraof.minestuck.network.GristEntityPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -24,7 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Material;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -44,6 +44,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	private Player closestPlayer;
 
 	private int targetCycle;
+	
+	private Animation animation = Animation.REJECT;
 	
 	public static GristEntity create(EntityType<? extends GristEntity> type, Level level)
 	{
@@ -114,12 +116,28 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
+	public void setAnimationFromPacket(Animation animation)
+	{
+		switch(animation)
+		{
+			case REJECT:
+				shaderAlpha = 255;
+				break;
+		}
+	}
+	
+	public enum Animation
+	{
+		REJECT
+	}
+	
 	@Override
+	
 	public void tick()
 	{
 		if(this.level.isClientSide == true)
 		{
-			shaderAlpha = Math.max(shaderAlpha - 1, 0);
+			shaderAlpha = Math.max(shaderAlpha - 5, 0);
 		}
 		
 		
@@ -139,7 +157,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
 		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 
-		if (this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
+		if (this.targetCycle < this.cycle - 20 + this.getId() % 100 && shaderAlpha == 0) //Why should I care about the entityId
 		{
 			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
@@ -149,7 +167,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.targetCycle = this.cycle;
 		}
 
-		if (this.closestPlayer != null)
+		if (this.closestPlayer != null && shaderAlpha == 0)
 		{
 			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
 			double d2 = (this.closestPlayer.getY() + (double)this.closestPlayer.getEyeHeight() - this.getY()) / d0;
@@ -234,33 +252,49 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void playerTouch(Player entityIn)
 	{
-		long playerGristAmount = PlayerSavedData.getData
-				((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
-		int rung = PlayerSavedData.getData
-				((ServerPlayer) entityIn).getEcheladder().getRung();
-		int gristCap = GristHelper.rungGrist[rung];
-		int gutterCap = GristGutter.GUTTER_CAPACITY;
-		long gutterTotal = SessionHandler.get(level).
-				getPlayerSession(IdentifierHandler.encode(entityIn)).getGristGutter().getGutterTotal();
-		long gutterRoom = gutterCap - gutterTotal;
-		long cacheRoom = gristCap - playerGristAmount;
+		if(this.level.isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(entityIn) != null)
+			return; //checks if player is in edit mode. returns nothing and doesn't allow the entities to touch.
 		
-		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(entityIn) != null)
-			return;//checks if player is in edit mode. returns nothing and doesn't allow the entities to touch.
-		
-		
-		boolean hasRoom = (gutterRoom + cacheRoom) >= (gristValue);
-		if(this.level.isClientSide==false && hasRoom == true)
+		if(entityIn instanceof ServerPlayer)
 		{
-			consumeGrist(IdentifierHandler.encode(entityIn), true);
+			Session playerSession = SessionHandler.get(level).
+					getPlayerSession(IdentifierHandler.encode(entityIn));
+			
+			long playerGristAmount;
+			long rung;
+			
+			playerGristAmount = PlayerSavedData.getData((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
+			rung = PlayerSavedData.getData((ServerPlayer) entityIn).getEcheladder().getRung();
+			
+			int gristCap = GristHelper.rungGrist[(int) rung];
+			int gutterCap = 0;
+			long gutterTotal = 0;
+			
+			if(playerSession != null)
+			{
+				gutterTotal = playerSession.getGristGutter().getGutterTotal();
+				gutterCap = GristGutter.GUTTER_CAPACITY;
+			}
+			
+			long gutterRoom = gutterCap - gutterTotal;
+			long cacheRoom = gristCap - playerGristAmount;
+			
+			boolean hasRoom = (gutterRoom + cacheRoom) >= (gristValue);
+			
+			if(hasRoom)
+			{
+				consumeGrist(IdentifierHandler.encode(entityIn), true);
+			}
+			else
+			{
+				this.animation = Animation.REJECT;
+				GristEntityPacket packet = GristEntityPacket.createPacket(this, animation);
+				MSPacketHandler.sendToTracking(packet, this);
+				shaderAlpha = 255;
+			}
 		}
-		else if(this.level.isClientSide==true && hasRoom == false)
-		{
-			// Makes the grist flash red
-			shaderAlpha = 255;
-		}
-		
 	}
+	
 	
 	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{

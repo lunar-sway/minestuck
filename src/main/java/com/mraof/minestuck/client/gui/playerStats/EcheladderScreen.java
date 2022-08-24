@@ -4,8 +4,10 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.world.storage.PlayerData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,6 +19,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -167,10 +171,12 @@ public class EcheladderScreen extends PlayerStatsScreen
 		Random rand = new Random(452619373);
 		for(int i = 0; i < scrollIndex/14; i++)
 			rand.nextInt(0xFFFFFF);
+		Title playerTitle = ClientPlayerData.getTitle();
+		
 		for(int i = 0; i < rows; i++)
 		{
-			int y = yOffset + 177 + scroll - i*14;
-			int rung = scrollIndex/14 + i;
+			int y = yOffset + 177 + scroll - i * 14;
+			int rung = scrollIndex / 14 + i;
 			if(rung > Echeladder.RUNG_COUNT)
 				break;
 			
@@ -180,7 +186,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				textColor = rand.nextInt(0xFFFFFF);
 				if(textColors.length > rung)
 					textColor = textColors[rung];
-				fill(poseStack, xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
+				fill(poseStack, xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor ^ 0xFFFFFFFF));
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				int bg = ~rand.nextInt(0xFFFFFF);
@@ -188,13 +194,54 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(poseStack, xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
+				fill(poseStack, xOffset + 90, y + 10, xOffset + 90 + (int) (146 * ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
-			String s = I18n.exists("echeladder.rung."+rung) ? I18n.get("echeladder.rung."+rung) : "Rung "+(rung+1);
-			mc.font.draw(poseStack, s, xOffset+ladderXOffset - mc.font.width(s) / 2, y + 2, textColor);
+			
+			String s = null;
+			if(playerTitle != null)
+			{
+				String playerBoots = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(0));
+				String playerLeggings = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(1));
+				String playerChestplate = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(2));
+				String playerHat = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(3));
+				String playerClass = (playerTitle.getHeroClass().toString());
+				String playerAspect = (playerTitle.getHeroAspect().toString());
+				String playerColor = String.valueOf(ClientPlayerData.getPlayerColor());
+				String playerBoon = String.valueOf(ClientPlayerData.getBoondollars());
+				String playerModus = String.valueOf(ClientPlayerData.getModus());
+				String consortRep = String.valueOf(ClientPlayerData.getConsortReputation());
+				String isWearingArmor = playerChestplate + playerBoots + playerHat + playerLeggings;
+				
+				if(I18n.exists("echeladder.rung." + rung + "." + playerAspect + "." + playerClass))
+				{
+					s = I18n.get("echeladder.rung." + rung + "." + playerAspect + "." + playerClass);
+				}
+				else if(I18n.exists("echeladder.rung." + rung + "." + playerColor))
+				{
+					s = I18n.get("echeladder.rung." + rung + "." + playerColor);
+				}
+				
+				else if(I18n.exists("echeladder.rung." + rung + "." + playerAspect))
+				{
+					s = I18n.get("echeladder.rung." + rung + "." + playerAspect);
+				}
+			}
+				if(s == null)
+				{
+					if(I18n.exists("echeladder.rung." + rung))
+					{
+						s = I18n.get("echeladder.rung." + rung);
+					}
+					else
+					{
+						s = "Rung " + (rung + 1);
+					}
+				}
+				mc.font.draw(poseStack, s, xOffset + ladderXOffset -
+						mc.font.width(s) / 2, y + 2, textColor);
+			}
 		}
-	}
 	
 	@Nullable
 	private List<Component> drawEffectIconsAndText(PoseStack poseStack, int currentRung, int mouseX, int mouseY)

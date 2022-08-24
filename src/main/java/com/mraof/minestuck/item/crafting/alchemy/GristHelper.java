@@ -152,16 +152,17 @@ public class GristHelper
 		PlayerData data = PlayerSavedData.getData(player, level);
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
-		
-		limitGristByPlayerRung(level, player, newCache);
 		int gristCap = rungGrist[rung];
 		//this is related to the limit grist and grist gutter function
-		
 		
 		GristSet overflowedGrist = limitGristByPlayerRung(level, player, newCache);
 		gutter.addGrist(overflowedGrist);
 		data.setGristCache(newCache);
-		
+		ServerPlayer playerEntity = player.getPlayer(level.getServer());
+		if(playerEntity != null)
+		{
+			gutter.spillGrist(level, playerEntity);
+		}
 	}
 	
 	/**
@@ -183,7 +184,7 @@ public class GristHelper
 	 * at the time of writing this it's arbitrarily chosen
 	 */
 	public static final int[] rungGrist =
-			{0,15,20,30,35,40,45,60,65,80,85,105,120,130,140,
+			{90,90,90,30,35,40,45,60,65,80,85,105,120,130,140,
 					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365
 			,370,375,380,385,390,395,400,410,420,500,650,760,870,980,1090,1100,1200,13000,14000,15000};
 	

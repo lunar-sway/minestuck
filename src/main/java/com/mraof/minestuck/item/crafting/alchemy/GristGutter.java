@@ -1,9 +1,10 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import net.minecraft.world.entity.player.Player;
-import org.apache.logging.log4j.Level;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
 
 import java.util.Map;
 
@@ -37,8 +38,9 @@ public class GristGutter extends GristSet
 
 	public GristSet gristToSpill = new GristSet();
 	
-/**	public void spillGrist(Level level, Player player)
+	public void spillGrist(Level level, Player player)
 	{
+		
 		gristToSpill.spawnGristEntities(
 				level,
 				player.getX(), player.getY(), player.getZ(),
@@ -47,7 +49,7 @@ public class GristGutter extends GristSet
 				90,
 				level.random.nextInt(6) > 0 ? 1 : 2
 		);
-	}*/
+	}
 	
 	/**
 	 * this is our main function that adds grist to the gutter.
@@ -70,6 +72,17 @@ public class GristGutter extends GristSet
 					value == null ? amount : value + amount);
 			gutterTotal += amount;
 			
+			LOGGER.debug("Gutter after adding " + amount + " "
+					+ type.getDisplayName().toString() + " grist:");
+			LOGGER.debug("Total: " + getGutterTotal());
+			
+			for(GristType t : this.gristTypes.keySet())
+			{
+				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
+			}
+			
+			logGutter(type, amount);
+			
 			//this is essentially saying "if the gutter goes higher than the set capacity
 			//then print "gutter has capped out
 			//find the remainder of guttertotal and gutter capacity and set that to a super overflow
@@ -84,40 +97,25 @@ public class GristGutter extends GristSet
 				gutterTotal -= sOverflowAmount;
 				
 			}
-		
 		}
 		return this;
 	}
 	
 	
-
+	
 	public GristGutter logGutter(GristType type, long amount){
 		/**
-		 we're using a simple logger that'll tell us how much grist is going into the gutter by updating us on
-		 the current gutter total, followed by the "value" (which just means the type of grist getting added)
+		 * we're using a simple logger that'll tell us how much grist is in the gutter by updating us on
+		 * the current gutter total
 		 */
 		
-	LOGGER.debug("Gutter before adding " + amount + " "
-			+ type.getDisplayName().getString() + " grist:");
-	LOGGER.debug("Total: " + getGutterTotal());
-	LOGGER.debug("Value: " + getValue());
-	
-	
-	for(GristType t : this.gristTypes.keySet())
-	{
-		LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
-	}
-		
-		LOGGER.debug("Gutter AFTER adding " + amount + " "
+		LOGGER.debug("Gutter after adding " + amount + " "
 				+ type.getDisplayName().toString() + " grist:");
 		LOGGER.debug("Total: " + getGutterTotal());
-		LOGGER.debug("Value: " + getValue());
 		
 		for(GristType t : this.gristTypes.keySet())
 		{
-			LOGGER.debug(t.getDisplayName().toString() + ": "
-					+ gristTypes.get(t));
-			
+			LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
 		}
 		
 		return this;

@@ -5,7 +5,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 
-public class LotusFlowerPacket implements PlayToClientPacket
+public class
+LotusFlowerPacket implements PlayToClientPacket
 {
 	private final int entityID;
 	private final LotusFlowerEntity.Animation animation;

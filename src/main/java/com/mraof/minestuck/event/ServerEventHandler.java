@@ -299,6 +299,9 @@ public class ServerEventHandler
 				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();
 				int spliceAmount = GristHelper.rungGrist[rung] / 20;
 				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
+				if(session == null){
+					return;
+				}
 				GristGutter sessionGutter = session.getGristGutter();
 				
 				playerCache.addGrist(sessionGutter.splice(spliceAmount));
