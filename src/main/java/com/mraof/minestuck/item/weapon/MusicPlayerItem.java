@@ -1,10 +1,12 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.client.sounds.MusicPlayerOnPlayerSoundInstance;
 import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
-import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import com.mraof.minestuck.item.CassetteItem;
 import net.minecraft.client.Minecraft;
@@ -18,8 +20,11 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -35,9 +40,6 @@ import java.util.Random;
 
 public class MusicPlayerItem extends WeaponItem
 {
-	private MobEffect effect = null;
-	private float applyingChance = 0.0F;
-	int duration = 0;
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
@@ -77,17 +79,17 @@ public class MusicPlayerItem extends WeaponItem
 			{
 				if(musicPlaying.getCurrentMusic() == null)
 				{
-					musicPlaying.setCurrentMusic(cassette.cassetteID.getSoundEvent());
-					musicEffectToPlayer(cassette.cassetteID, playerIn);
-					soundInstance = new MusicPlayerOnPlayerSoundInstance(playerIn, musicPlaying);
+					musicPlaying.setCurrentMusic(cassette.cassetteID.getSoundEvent(), cassette.cassetteID);
+					soundInstance = new MusicPlayerOnPlayerSoundInstance(playerIn, musicPlaying.getCurrentMusic());
+					playerIn.addEffect(getEffect(musicPlaying.getCassetteType()).getEffect());
 					soundManager.play(soundInstance);
 				} else
 				{
-					musicEffectToPlayer(EnumCassetteType.NONE, playerIn);
-					musicPlaying.setCurrentMusic(null);
+					musicPlaying.setCurrentMusic(null, null);
 				}
 			}
 		}
+		
 		//open the GUI if right-clicked
 		else if(!level.isClientSide)
 		{
@@ -99,46 +101,108 @@ public class MusicPlayerItem extends WeaponItem
 	}
 	
 	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
+	{
+		IMusicPlaying musicPlaying = getMusicPlaying(stack);
+		if(musicPlaying.getCurrentMusic() != null)
+		{
+			ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
+			float attackSpeed = musicPlaying.getCassetteType().getAttackSpeed();
+			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeed, AttributeModifier.Operation.ADDITION));
+			return multimap.build();
+		}
+		return super.getAttributeModifiers(slot, stack);
+	}
+	
+	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		Random r = attacker.level.getRandom();
-		double chanceToHit = r.nextFloat();
-		AttributeInstance attackerLuck = attacker.getAttribute(Attributes.LUCK);
-		AttributeInstance targetLuck = target.getAttribute(Attributes.LUCK);
-		double attackerLuckValue;
-		double targetLuckValue;
-		if(attackerLuck != null)
-			attackerLuckValue = attackerLuck.getValue();
-		else
-			attackerLuckValue = 0.0D;
-		
-		if(targetLuck != null)
-			targetLuckValue = targetLuck.getValue();
-		else
-			targetLuckValue = 0.0D;
-		
-		chanceToHit = chanceToHit - (attackerLuckValue / 10) + (targetLuckValue / 10);
-		System.out.println("chanceToHit: " + chanceToHit + " applyingChance: " + applyingChance);
-		System.out.println("attackerLuckValue: " + attackerLuckValue + " targetLuckValue: " + targetLuckValue);
-		if(effect != null && applyingChance > chanceToHit)
+		IMusicPlaying musicPlaying = getMusicPlaying(stack);
+		if(musicPlaying.getCurrentMusic() != null)
 		{
-			System.out.println("Applying effect" + effect);
-			target.addEffect(new MobEffectInstance(effect, duration, 1));
+			Random r = attacker.level.getRandom();
+			
+			double chanceToHit = r.nextFloat();
+			double attackerLuckValue;
+			double targetLuckValue;
+			
+			EffectContainer effect = getEffect(musicPlaying.getCassetteType());
+			AttributeInstance attackerLuck = attacker.getAttribute(Attributes.LUCK);
+			AttributeInstance targetLuck = target.getAttribute(Attributes.LUCK);
+			
+			if(attackerLuck != null)
+				attackerLuckValue = attackerLuck.getValue();
+			else
+				attackerLuckValue = 0.0D;
+			
+			if(targetLuck != null)
+				targetLuckValue = targetLuck.getValue();
+			else
+				targetLuckValue = 0.0D;
+			
+			chanceToHit = chanceToHit - (attackerLuckValue / 10) + (targetLuckValue / 10);
+			
+			if(effect != null && effect.getApplyingChance() > chanceToHit && effect.isOnHit())
+			{
+					target.addEffect(effect.getEffect());
+			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
 	}
 	
-	public void musicEffectToPlayer(EnumCassetteType cassetteType, Player player)
+	public EffectContainer getEffect(EnumCassetteType cassetteType)
 	{
 		switch(cassetteType)
 		{
-			case FAR ->
+			case MALL ->
 			{
-				effect = MobEffects.LEVITATION;
-				duration = 10;
-				applyingChance = 0.25F;
+				return new EffectContainer(new MobEffectInstance(MobEffects.REGENERATION, 10, 0),
+						0.30F, true);
 			}
-			case NONE -> effect = null;
+			case MELLOHI ->
+			{
+				return new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 5, 0),
+						0.20F, true);
+			}
+			case CAT ->
+			{
+				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 0),
+						1F, false);
+			}
+			case NONE ->
+			{
+				return null;
+			}
+		}
+		throw new IllegalArgumentException(cassetteType + " is not a valid cassette type");
+	}
+	
+	static class EffectContainer
+	{
+		public MobEffectInstance effect;
+		private final float applyingChance;
+		private final boolean onHit;
+		
+		public EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
+		{
+			this.effect = effect;
+			this.applyingChance = applyingChance;
+			this.onHit = onHit;
+		}
+		
+		public float getApplyingChance()
+		{
+			return applyingChance;
+		}
+		
+		public MobEffectInstance getEffect()
+		{
+			return effect;
+		}
+		
+		public boolean isOnHit()
+		{
+			return onHit;
 		}
 	}
 }
