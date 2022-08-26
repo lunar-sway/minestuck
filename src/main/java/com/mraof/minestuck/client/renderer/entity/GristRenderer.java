@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
 {
-	
+	static final double shakeScale = 1.0 / 256.0;
 	public GristRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);
@@ -27,7 +27,6 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 	@Override
 	public void render(GristEntity grist, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn)
 	{
-		double shakeScale = 1.0 / 256.0;
 		poseStack.pushPose();
 		poseStack.translate(0.0F, 0.0F + grist.getSizeByValue() / 2, 0.0F);
 		poseStack.scale(grist.getSizeByValue(), grist.getSizeByValue(), grist.getSizeByValue());
