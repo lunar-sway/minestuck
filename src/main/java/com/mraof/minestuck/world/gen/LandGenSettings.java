@@ -80,16 +80,6 @@ public final class LandGenSettings
 	
 	Holder<NoiseGeneratorSettings> createDimensionSettings()
 	{
-		/*TODO structure settings go elsewhere now
-		Map<StructureFeature<?>, StructureFeatureConfiguration> structures = new HashMap<>();
-		structures.put(MSFeatures.LAND_GATE, new StructureFeatureConfiguration(1, 0, 0));
-		structures.put(MSFeatures.SMALL_RUIN, new StructureFeatureConfiguration(16, 4, 59273643));
-		structures.put(MSFeatures.IMP_DUNGEON, new StructureFeatureConfiguration(16, 4, 34527185));
-		structures.put(MSFeatures.CONSORT_VILLAGE, new StructureFeatureConfiguration(24, 5, 10387312));
-		
-		StructureSettings structureSettings = new StructureSettings(Optional.empty(), structures);
-		*/
-		
 		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
 				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
 				this.createTerrainShaper());

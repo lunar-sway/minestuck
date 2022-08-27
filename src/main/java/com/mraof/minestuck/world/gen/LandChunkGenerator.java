@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -8,13 +9,16 @@ import com.mraof.minestuck.world.biome.LandBiomeHolder;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.gen.structure.GateStructure;
+import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryOps;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ChunkPos;
@@ -22,11 +26,13 @@ import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
@@ -96,19 +102,27 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 			return UnderlingController.getUnderlingList(pos);
 		else return biomes.getBiomeFromBase(biome).value().getMobSettings().getMobs(category);
 	}
-	/*TODO gate position elsewhere
+	
 	@Nullable
 	@Override
-	public Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> findNearestMapFeature(ServerLevel level, HolderSet<ConfiguredStructureFeature<?, ?>> structure, BlockPos pos, int searchSize, boolean checkReference)
+	public Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> findNearestMapFeature(ServerLevel level, HolderSet<ConfiguredStructureFeature<?, ?>> structureSet, BlockPos pos, int searchRadius, boolean skipKnownStructures)
 	{
-		if (structure == MSFeatures.LAND_GATE)
-		{
-			ChunkPos gatePos = getOrFindLandGatePosition();
-			return new BlockPos((gatePos.x << 4) + 8, 32, (gatePos.z << 4) + 8);
-		} else
-			return super.findNearestMapFeature(level, structure, pos, searchSize, checkReference);
+		var result = super.findNearestMapFeature(level, structureSet, pos, searchRadius, skipKnownStructures);
+		
+		Optional<Holder<ConfiguredStructureFeature<?, ?>>> optionalGateStructure = this.possibleStructureSets().map(Holder::value)
+				.filter(set -> set.placement() == LandGatePlacement.INSTANCE)
+				.flatMap(set -> set.structures().stream().filter(entry -> structureSet.contains(entry.structure())))
+				.findAny().map(StructureSet.StructureSelectionEntry::structure);
+		
+		return optionalGateStructure.map(gateStructure -> {
+			BlockPos gatePos = getOrFindLandGatePosition().getBlockAt(8, 64, 8);
+			if(result != null && pos.distSqr(result.getFirst()) < pos.distSqr(gatePos))
+				return result;
+			else
+				return Pair.of(gatePos, gateStructure);
+		}).orElse(result);
 	}
-	*/
+	
 	public long getSeed()
 	{
 		return seed;

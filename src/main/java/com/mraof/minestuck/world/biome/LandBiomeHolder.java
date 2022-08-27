@@ -115,8 +115,6 @@ public class LandBiomeHolder implements ILandBiomeSet
 		
 		addDefaultOres(builder, blocks);
 		
-		addDefaultStructures(builder, type);
-		
 		landTypes.getTerrain().setBiomeGeneration(builder, blocks, type, base);
 		landTypes.getTitle().setBiomeGeneration(builder, blocks, type, base);
 		
@@ -137,19 +135,5 @@ public class LandBiomeHolder implements ILandBiomeSet
 					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
 					CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(uraniumStratumMax)), BiomeFilter.biome()));
 		}
-	}
-	
-	private static void addDefaultStructures(BiomeGenerationSettings.Builder builder, LandBiomeType type)
-	{/*TODO should go somewhere else
-		builder.addStructureStart(MSFeatures.LAND_GATE.configured(FeatureConfiguration.NONE));
-		
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addStructureStart(MSFeatures.SMALL_RUIN.configured(FeatureConfiguration.NONE));
-			builder.addStructureStart(MSFeatures.CONSORT_VILLAGE.configured(FeatureConfiguration.NONE));
-		}
-		if(type == LandBiomeType.NORMAL || type == LandBiomeType.ROUGH)
-			builder.addStructureStart(MSFeatures.IMP_DUNGEON.configured(FeatureConfiguration.NONE));
-			*/
 	}
 }

@@ -23,10 +23,7 @@ import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.*;
-import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
-import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
-import com.mraof.minestuck.world.gen.structure.MSStructureSets;
-import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.*;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.world.item.ItemStack;
@@ -75,6 +72,7 @@ public class Minestuck
 		MSStructurePieces.REGISTER.register(eventBus);
 		MSStructures.REGISTER.register(eventBus);
 		MSConfiguredStructures.REGISTER.register(eventBus);
+		MSStructurePlacements.REGISTER.register(eventBus);
 		MSStructureSets.REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);

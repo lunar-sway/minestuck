@@ -8,6 +8,7 @@ import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
+import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.Util;
@@ -67,7 +68,7 @@ public class GateHandler
 				return info.getGatePos();
 		}
 		
-		BlockPos gatePos = MSStructures.LAND_GATE.get().findLandGatePos(level);
+		BlockPos gatePos = LandGatePlacement.findLandGatePos(level);
 		
 		if(info != null)
 			info.setGatePos(gatePos);

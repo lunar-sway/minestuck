@@ -128,6 +128,11 @@ public class MSTags
 		public static final TagKey<Biome> HAS_FROG_TEMPLE = tag("has_structure/frog_temple");
 		
 		// Land
+		public static final TagKey<Biome> LAND_NORMAL = tag("land/normal");
+		public static final TagKey<Biome> LAND_OCEAN = tag("land/ocean");
+		public static final TagKey<Biome> LAND_ROUGH = tag("land/rough");
+		public static final TagKey<Biome> LAND = tag("land");
+		
 		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
 		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
 		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");

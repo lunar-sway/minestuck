@@ -25,8 +25,6 @@ import java.util.Random;
 // Configured spacing should be 1, and separation should be 0, or else the gate might sometimes not generate
 public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	public GateStructure(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec, PieceGeneratorSupplier.simple(GateStructure::checkLocation, GateStructure::generatePieces));
@@ -40,7 +38,7 @@ public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 	
 	private static boolean checkLocation(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
 	{
-		return context.chunkPos().equals(findGatePosition(context.chunkGenerator()));
+		return true;
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
@@ -53,40 +51,6 @@ public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 			factory = GatePillarPiece::new;
 		
 		builder.addPiece(factory.create(generator, context.heightAccessor(), context.random(), pos.getMinBlockX(), pos.getMinBlockZ()));
-	}
-	
-	public BlockPos findLandGatePos(ServerLevel level)
-	{
-		ChunkPos chunkPos = findGatePosition(level.getChunkSource().getGenerator());
-		
-		if (chunkPos != null)
-		{
-			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(MSConfiguredStructures.LAND_GATE.get());
-			
-			if(start != null)
-			{
-				for(StructurePiece piece : start.getPieces())
-				{
-					if(piece instanceof GatePiece)
-						return ((GatePiece) piece).getGatePos();
-				}
-				
-				LOGGER.error("Did not find a gate piece in gate structure. Instead had components {}.", start.getPieces());
-			} else
-				LOGGER.warn("Expected to find gate structure at chunk coords {}, in dimension {}, but found nothing!", chunkPos, level.dimension());
-		} else
-			LOGGER.warn("No land gate position could be found for dimension {}.", level.dimension());
-		
-		return null;
-	}
-	
-	private static ChunkPos findGatePosition(ChunkGenerator chunkGenerator)
-	{
-		if (chunkGenerator instanceof LandChunkGenerator landGenerator)
-		{
-			return landGenerator.getOrFindLandGatePosition();
-		} else
-			return null;
 	}
 	
 	public interface PieceFactory
