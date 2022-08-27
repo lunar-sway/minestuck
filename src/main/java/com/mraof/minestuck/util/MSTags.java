@@ -124,11 +124,16 @@ public class MSTags
 	
 	public static class Biomes
 	{
-		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
+		// Overworld
 		public static final TagKey<Biome> HAS_FROG_TEMPLE = tag("has_structure/frog_temple");
+		
+		// Land
+		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
 		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
 		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");
 		public static final TagKey<Biome> HAS_CONSORT_VILLAGE = tag("has_structure/consort_village");
+		
+		// Skaia
 		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
 		
 		private static TagKey<Biome> tag(String name)
