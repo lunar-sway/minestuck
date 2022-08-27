@@ -118,7 +118,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	public boolean mouseClicked(double par1, double par2, int par3)
 	{
 		boolean b = super.mouseClicked(par1, par2, par3);
-		if (par3 == 0 && menu.getCarried().isEmpty() && AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem()).getItem() == MSItems.CAPTCHA_CARD
+		if (par3 == 0 && menu.getCarried().isEmpty() && AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem()).getItem() == MSItems.CAPTCHA_CARD.get()
 				&& par1 >= leftPos + 9 && par1 < leftPos + 167 && par2 >= topPos + 45 && par2 < topPos + 70)
 		{
 			minecraft.screen = new GristSelectorScreen<>(this);

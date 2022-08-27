@@ -24,8 +24,8 @@ public class StoneTabletPacket implements PlayToServerPacket
 		ItemStack tablet = player.getItemInHand(hand);
 		ItemStack tool = player.getItemInHand(hand == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
 		
-		if(tablet.getItem() == MSItems.STONE_SLAB &&
-				tool.getItem() == MSItems.CARVING_TOOL)
+		if(tablet.getItem() == MSItems.STONE_SLAB.get() &&
+				tool.getItem() == MSItems.CARVING_TOOL.get())
 		{
 			CompoundTag nbt = tablet.getOrCreateTag();
 			nbt.putString("text", text);

@@ -48,7 +48,7 @@ public class HolopadTileEntity extends BlockEntity
 			ItemStack heldStack = player.getMainHandItem();
 			if (card.isEmpty())
 			{
-				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD)
+				if (!heldStack.isEmpty() && heldStack.getItem() == MSItems.CAPTCHA_CARD.get())
 				{
 					setCard(heldStack.split(1));    //Insert card into the card slot
 					ItemStack in = getCard();
@@ -83,7 +83,7 @@ public class HolopadTileEntity extends BlockEntity
 	
 	public void setCard(ItemStack card)
 	{
-		if (card.getItem() == MSItems.CAPTCHA_CARD || card.isEmpty())
+		if (card.getItem() == MSItems.CAPTCHA_CARD.get() || card.isEmpty())
 		{
 			this.card = card;
 			if(level != null)

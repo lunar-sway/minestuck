@@ -45,7 +45,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 		assertItemHandlerSize(inventory, 3);
 		
 		addSlot(new SlotItemHandler(inventory, 0, designixInputX, designixInputY));
-		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MSItems.CAPTCHA_CARD));
+		addSlot(new InputSlot(inventory, 1, designixCardsX, designixCardsY, MSItems.CAPTCHA_CARD.get()));
 		addSlot(new OutputSlot(inventory, 2, designixOutputX, designixOutputY));
 		
 		bindPlayerInventory(playerInventory);
@@ -90,7 +90,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			} else if(slotNumber > 2)
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
+				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get() && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);
 				else result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}

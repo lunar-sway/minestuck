@@ -58,8 +58,9 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		MSBlocks.BLOCKS.register(eventBus);
-		MSFluids.FLUIDS.register(eventBus);
+		MSBlocks.REGISTER.register(eventBus);
+		MSItems.REGISTER.register(eventBus);
+		MSFluids.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
@@ -107,8 +108,8 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
 		
 		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());

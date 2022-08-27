@@ -129,7 +129,7 @@ public class TreeModus extends Modus
 				return ItemStack.EMPTY;
 			size--;
 			markDirty();
-			return new ItemStack(MSItems.CAPTCHA_CARD);
+			return new ItemStack(MSItems.CAPTCHA_CARD.get());
 		}
 		if(node == null)
 			return ItemStack.EMPTY;

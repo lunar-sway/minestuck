@@ -146,8 +146,8 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	
 	public enum Type
 	{
-		IRON(1/1.5F, () -> Items.IRON_INGOT, () -> MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
-		GOLD(1.0F, () -> Items.GOLD_INGOT, () -> MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		IRON(1/1.5F, () -> Items.IRON_INGOT, () -> MSItems.IRON_BOAT.get(), new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, () -> MSItems.GOLD_BOAT.get(), new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
 		
 		private final float damageModifier;
 		private final Supplier<Item> droppedItem, boatItem;
