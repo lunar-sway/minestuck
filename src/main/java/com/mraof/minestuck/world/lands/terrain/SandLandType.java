@@ -46,9 +46,24 @@ public class SandLandType extends TerrainLandType
 	private final Vec3 fogColor, skyColor;
 	private final Variant type;
 	
-	public SandLandType(Variant variation)
+	public static TerrainLandType createSand()
 	{
-		super(new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+		return new SandLandType(Variant.SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+	}
+	
+	public static TerrainLandType createLushDeserts()
+	{
+		return new SandLandType(Variant.LUSH_DESERTS, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+	}
+	
+	public static TerrainLandType createRedSand()
+	{
+		return new SandLandType(Variant.RED_SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+	}
+	
+	private SandLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 		
 		if(type == Variant.SAND)
@@ -206,14 +221,10 @@ public class SandLandType extends TerrainLandType
 		return type == Variant.LUSH_DESERTS ? MSSoundEvents.MUSIC_LUSH_DESERTS : MSSoundEvents.MUSIC_SAND;
 	}
 	
-	public enum Variant
+	private enum Variant
 	{
 		SAND,
 		LUSH_DESERTS,
-		RED_SAND;
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		RED_SAND
 	}
 }

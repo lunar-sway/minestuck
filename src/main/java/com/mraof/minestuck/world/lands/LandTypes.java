@@ -116,18 +116,18 @@ public class LandTypes
 		IForgeRegistry<TerrainLandType> registry = event.getRegistry();
 		
 		registry.register(new NullTerrainLandType().setRegistryName("null"));
-		registry.register(new ForestLandType(ForestLandType.Variant.FOREST).setRegistryName("forest"));
-		registry.register(new ForestLandType(ForestLandType.Variant.TAIGA).setRegistryName("taiga"));
+		registry.register(ForestLandType.createForest().setRegistryName("forest"));
+		registry.register(ForestLandType.createTaiga().setRegistryName("taiga"));
 		registry.register(new FrostLandType().setRegistryName("frost"));
 		registry.register(new FungiLandType().setRegistryName("fungi"));
 		registry.register(new HeatLandType().setRegistryName("heat"));
-		registry.register(new RockLandType(RockLandType.Variant.ROCK).setRegistryName("rock"));
-		registry.register(new RockLandType(RockLandType.Variant.PETRIFICATION).setRegistryName("petrification"));
-		registry.register(new SandLandType(SandLandType.Variant.SAND).setRegistryName("sand"));
-		registry.register(new SandLandType(SandLandType.Variant.RED_SAND).setRegistryName("red_sand"));
-		registry.register(new SandLandType(SandLandType.Variant.LUSH_DESERTS).setRegistryName("lush_deserts"));
-		registry.register(new SandstoneLandType(SandstoneLandType.Variant.SANDSTONE).setRegistryName("sandstone"));
-		registry.register(new SandstoneLandType(SandstoneLandType.Variant.RED_SANDSTONE).setRegistryName("red_sandstone"));
+		registry.register(RockLandType.createRock().setRegistryName("rock"));
+		registry.register(RockLandType.createPetrification().setRegistryName("petrification"));
+		registry.register(SandLandType.createSand().setRegistryName("sand"));
+		registry.register(SandLandType.createRedSand().setRegistryName("red_sand"));
+		registry.register(SandLandType.createLushDeserts().setRegistryName("lush_deserts"));
+		registry.register(SandstoneLandType.createSandstone().setRegistryName("sandstone"));
+		registry.register(SandstoneLandType.createRedSandstone().setRegistryName("red_sandstone"));
 		registry.register(new ShadeLandType().setRegistryName("shade"));
 		registry.register(new WoodLandType().setRegistryName("wood"));
 		registry.register(new RainbowLandType().setRegistryName("rainbow"));

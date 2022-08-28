@@ -47,9 +47,19 @@ public class RockLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
-	public RockLandType(Variant variation)
+	public static TerrainLandType createRock()
 	{
-		super(new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
+		return new RockLandType(Variant.ROCK, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
+	}
+	
+	public static TerrainLandType createPetrification()
+	{
+		return new RockLandType(Variant.PETRIFICATION, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
+	}
+	
+	private RockLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 	}
 	
@@ -227,14 +237,9 @@ public class RockLandType extends TerrainLandType
 		return type == Variant.PETRIFICATION ? MSSoundEvents.MUSIC_PETRIFICATION : MSSoundEvents.MUSIC_ROCK;
 	}
 	
-	public enum Variant
+	private enum Variant
 	{
 		ROCK,
 		PETRIFICATION;
-		
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
 	}
 }

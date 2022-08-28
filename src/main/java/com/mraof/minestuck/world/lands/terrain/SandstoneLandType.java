@@ -41,9 +41,19 @@ public class SandstoneLandType extends TerrainLandType
 	private final Vec3 fogColor, skyColor;
 	private final Variant type;
 	
-	public SandstoneLandType(Variant type)
+	public static TerrainLandType createSandstone()
 	{
-		super(new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).skylight(3/4F));
+		return new SandstoneLandType(Variant.SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).skylight(3/4F));
+	}
+	
+	public static TerrainLandType createRedSandstone()
+	{
+		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).skylight(3/4F));
+	}
+	
+	private SandstoneLandType(Variant type, Builder builder)
+	{
+		super(builder);
 		this.type = type;
 		if(type == Variant.SANDSTONE)
 		{
@@ -176,13 +186,9 @@ public class SandstoneLandType extends TerrainLandType
 		return MSSoundEvents.MUSIC_SANDSTONE;
 	}
 	
-	public enum Variant
+	private enum Variant
 	{
 		SANDSTONE,
-		RED_SANDSTONE;
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		RED_SANDSTONE
 	}
 }

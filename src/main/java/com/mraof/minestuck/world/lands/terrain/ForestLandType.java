@@ -39,9 +39,19 @@ public class ForestLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
-	public ForestLandType(Variant variation)
+	public static TerrainLandType createForest()
 	{
-		super(new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
+		return new ForestLandType(Variant.FOREST, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
+	}
+	
+	public static TerrainLandType createTaiga()
+	{
+		return new ForestLandType(Variant.TAIGA, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
+	}
+	
+	private ForestLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 	}
 	
@@ -164,7 +174,7 @@ public class ForestLandType extends TerrainLandType
 		return type == Variant.TAIGA ? MSSoundEvents.MUSIC_TAIGA : MSSoundEvents.MUSIC_FOREST;
 	}
 	
-	public enum Variant
+	private enum Variant
 	{
 		FOREST,
 		TAIGA
