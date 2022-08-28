@@ -132,7 +132,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 	
 	private static float calculateVeilAngle(ClientLevel level)
 	{
-		double d0 = Mth.frac((double)level.getDayTime() / 24000.0D - 0.25D);
+		double d0 = Mth.frac((double)level.getGameTime() / 24000.0D - 0.25D);
 		double d1 = 0.5D - Math.cos(d0 * Math.PI) / 2.0D;
 		return (float)(d0 * 2.0D + d1) / 3.0F;
 	}
