@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.tileentity.OnCollisionTeleporterTileEntity;
+import com.mraof.minestuck.tileentity.ReturnNodeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -29,14 +29,14 @@ public class ReturnNodeBlock extends AbstractGateBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return state.getValue(MAIN) ? new GateTileEntity(pos, state) : null;
+		return state.getValue(MAIN) ? new ReturnNodeBlockEntity(pos, state) : null;
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.GATE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.RETURN_NODE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class ReturnNodeBlock extends AbstractGateBlock implements EntityBlock
 			if(mainPos != null)
 			{
 				BlockEntity blockEntity = level.getBlockEntity(mainPos);
-				if(blockEntity instanceof GateTileEntity gate)
+				if(blockEntity instanceof ReturnNodeBlockEntity gate)
 					gate.onCollision(player);
 			} else level.removeBlock(pos, false);
 		}
