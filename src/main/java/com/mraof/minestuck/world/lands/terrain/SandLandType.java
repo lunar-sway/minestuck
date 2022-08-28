@@ -118,9 +118,9 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.DESERT;
+		return Biome.BiomeCategory.DESERT;
 	}
 	
 	@Override

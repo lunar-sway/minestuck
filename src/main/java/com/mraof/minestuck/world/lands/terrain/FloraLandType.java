@@ -8,7 +8,6 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -72,9 +71,9 @@ public class FloraLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.FOREST;
+		return Biome.BiomeCategory.FOREST;
 	}
 	
 	@Override

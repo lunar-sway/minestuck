@@ -80,9 +80,14 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
+	public Biome.BiomeCategory getBiomeCategory()
+	{
+		return Biome.BiomeCategory.ICY;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.BiomeCategory.ICY;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	

@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.gen.structure.GateStructure;
 import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -58,10 +57,9 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair landTypes, Registry<Biome> registry)
 	{
 		LandBiomeSetWrapper biomeSetWrapper = new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry);
-		LandProperties properties = LandProperties.create(landTypes);
 		LandGenSettings genSettings = new LandGenSettings(landTypes);
 		
-		LandBiomeHolder biomeHolder = new LandBiomeHolder(biomeSetWrapper, genSettings, properties);
+		LandBiomeHolder biomeHolder = new LandBiomeHolder(biomeSetWrapper, genSettings);
 		
 		return new LandChunkGenerator(structureSets, noises, seed, biomeHolder, registry, genSettings);
 	}

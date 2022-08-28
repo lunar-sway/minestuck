@@ -94,9 +94,9 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.EXTREME_HILLS;
+		return Biome.BiomeCategory.EXTREME_HILLS;
 	}
 	
 	@Override

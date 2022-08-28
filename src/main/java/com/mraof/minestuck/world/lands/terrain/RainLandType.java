@@ -93,9 +93,9 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.BEACH;	//I guess?
+		return Biome.BiomeCategory.BEACH;
 	}
 	
 	@Override

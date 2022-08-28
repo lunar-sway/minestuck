@@ -82,9 +82,9 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.NETHER;
+		return Biome.BiomeCategory.NETHER;
 	}
 	
 	@Override

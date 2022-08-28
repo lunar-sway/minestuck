@@ -83,9 +83,14 @@ public class FungiLandType extends TerrainLandType
 	}
 	
 	@Override
+	public Biome.BiomeCategory getBiomeCategory()
+	{
+		return Biome.BiomeCategory.MUSHROOM;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.BiomeCategory.MUSHROOM;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	

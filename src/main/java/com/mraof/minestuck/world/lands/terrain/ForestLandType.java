@@ -83,9 +83,14 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
+	public Biome.BiomeCategory getBiomeCategory()
+	{
+		return this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
+	}
+	
+	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	

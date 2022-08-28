@@ -75,9 +75,9 @@ public class RainbowLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.PLAINS; //I guess?
+		return Biome.BiomeCategory.PLAINS;
 	}
 	
 	@Override

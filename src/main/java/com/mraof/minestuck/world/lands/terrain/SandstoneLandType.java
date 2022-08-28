@@ -100,9 +100,9 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setProperties(LandProperties properties)
+	public Biome.BiomeCategory getBiomeCategory()
 	{
-		properties.category = Biome.BiomeCategory.MESA;
+		return Biome.BiomeCategory.MESA;
 	}
 	
 	@Override

@@ -86,6 +86,11 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		return MSBiomes.DEFAULT_LAND;
 	}
 	
+	public Biome.BiomeCategory getBiomeCategory()
+	{
+		return Biome.BiomeCategory.NONE;
+	}
+	
 	public SurfaceRules.RuleSource getSurfaceRule(StructureBlockRegistry blocks)
 	{
 		ResourceKey<Biome> roughBiome = this.getBiomeSet().ROUGH;
