@@ -45,7 +45,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
 					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry)))
-			.apply(instance, instance.stable(LandChunkGenerator::new)));
+			.apply(instance, instance.stable(LandChunkGenerator::create)));
 	
 	public final LandTypePair landTypes;
 	public final StructureBlockRegistry blockRegistry;
@@ -55,14 +55,15 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private ChunkPos landGatePosition;
 	
-	public LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair landTypes, Registry<Biome> registry)
+	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair landTypes, Registry<Biome> registry)
 	{
-		this(structureSets, noises, seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
-	}
-	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
-	{
-		this(structureSets, noises, seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
+		LandBiomeSetWrapper biomeSetWrapper = new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry);
+		LandProperties properties = LandProperties.create(landTypes);
+		LandGenSettings genSettings = new LandGenSettings(landTypes);
+		
+		LandBiomeHolder biomeHolder = new LandBiomeHolder(biomeSetWrapper, genSettings, properties);
+		
+		return new LandChunkGenerator(structureSets, noises, seed, biomeHolder, registry, genSettings);
 	}
 	
 	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
@@ -86,7 +87,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	@Override
 	public ChunkGenerator withSeed(long seed)
 	{
-		return new LandChunkGenerator(this.structureSets, this.noises, seed, landTypes, registry);
+		return LandChunkGenerator.create(this.structureSets, this.noises, seed, landTypes, registry);
 	}
 	
 	@Override
