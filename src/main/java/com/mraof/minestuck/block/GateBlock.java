@@ -2,24 +2,59 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.tileentity.OnCollisionTeleporterTileEntity;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.CommonLevelAccessor;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class GateBlock extends AbstractGateBlock
+import javax.annotation.Nullable;
+
+public class GateBlock extends AbstractGateBlock implements EntityBlock
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public GateBlock(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return state.getValue(MAIN) ? new GateTileEntity(pos, state) : null;
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.GATE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+	{
+		if(state.getValue(MAIN) && entityIn instanceof ServerPlayer player)
+		{
+			BlockEntity blockEntity = level.getBlockEntity(pos);
+			if(blockEntity instanceof GateTileEntity gate)
+				gate.onCollision(player);
+		}
 	}
 	
 	@Override
@@ -37,6 +72,7 @@ public class GateBlock extends AbstractGateBlock
 		return true;
 	}
 	
+	@Nullable
 	@Override
 	protected BlockPos findMainComponent(BlockPos pos, Level level)
 	{
