@@ -13,7 +13,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -38,12 +36,11 @@ public class EndLandType extends TerrainLandType
 	public static final String END = "minestuck.end";
 	public static final String DIMENSION = "minestuck.dimension";
 	
-	private static final Vec3 fogColor = new Vec3(0.0D, 0.4D, 0.2D);
-	private static final Vec3 skyColor = new Vec3(0.3D, 0.1D, 0.5D);
-	
 	public EndLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.NAKAGATOR).biomeSet(MSBiomes.NO_RAIN_LAND));
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
+				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(() -> MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override
@@ -67,18 +64,6 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.defaultBlockState());
 		registry.setBlockState("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE.get().defaultBlockState());
 		registry.setBlockState("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE.get().defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		return new String[]{END, DIMENSION};
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.THEEND;
 	}
 	
 	@Override
@@ -117,18 +102,6 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addNakagatorVillageCenters(register);
@@ -138,11 +111,5 @@ public class EndLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addNakagatorVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_END;
 	}
 }

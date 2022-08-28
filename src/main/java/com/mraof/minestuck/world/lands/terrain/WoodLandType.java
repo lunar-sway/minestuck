@@ -6,9 +6,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -22,7 +20,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -33,11 +30,11 @@ public class WoodLandType extends TerrainLandType
 	public static final String OAK = "minestuck.oak";
 	public static final String LUMBER = "minestuck.lumber";
 	
-	private static final Vec3 fogColor = new Vec3(0.0D, 0.16D, 0.38D);
-	
 	public WoodLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.SALAMANDER).skylight(1/2F));
+		super(new Builder(() -> MSEntityTypes.SALAMANDER).names(WOOD, OAK, LUMBER)
+				.skylight(1/2F).fogColor(0.0, 0.16, 0.38).skyColor(0.0, 0.3, 0.4)
+				.music(() -> MSSoundEvents.MUSIC_WOOD));
 	}
 	
 	@Override
@@ -55,17 +52,6 @@ public class WoodLandType extends TerrainLandType
 		registry.setBlockState("bush", Blocks.RED_MUSHROOM.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.PURPLE_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		return new String[]{WOOD, OAK, LUMBER};
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
 	}
 	
 	@Override
@@ -113,18 +99,6 @@ public class WoodLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.0D, 0.3D, 0.4D);
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addSalamanderVillageCenters(register);
@@ -134,11 +108,5 @@ public class WoodLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addSalamanderVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_WOOD;
 	}
 }

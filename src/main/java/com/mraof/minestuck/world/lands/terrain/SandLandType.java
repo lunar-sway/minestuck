@@ -16,7 +16,6 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -30,7 +29,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -43,39 +41,33 @@ public class SandLandType extends TerrainLandType
 	public static final String LUSH_DESERTS = "minestuck.lush_deserts";
 	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sand");
-	private final Vec3 fogColor, skyColor;
 	private final Variant type;
 	
 	public static TerrainLandType createSand()
 	{
-		return new SandLandType(Variant.SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+		return new SandLandType(Variant.SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
+				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
 	}
 	
 	public static TerrainLandType createLushDeserts()
 	{
-		return new SandLandType(Variant.LUSH_DESERTS, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+		return new SandLandType(Variant.LUSH_DESERTS, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(LUSH_DESERTS)
+				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_LUSH_DESERTS));
 	}
 	
 	public static TerrainLandType createRedSand()
 	{
-		return new SandLandType(Variant.RED_SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
+		return new SandLandType(Variant.RED_SAND, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
+				.fogColor(0.99, 0.6, 0.05).skyColor(0.8, 0.6, 0.1)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
 	}
 	
 	private SandLandType(Variant variation, Builder builder)
 	{
 		super(builder);
 		type = variation;
-		
-		if(type == Variant.SAND)
-		{
-			fogColor = new Vec3(0.99D, 0.8D, 0.05D);
-			skyColor = new Vec3(0.8D, 0.8D, 0.1D);
-		} else
-		{
-			fogColor = new Vec3(0.99D, 0.6D, 0.05D);
-			skyColor = new Vec3(0.8D, 0.6D, 0.1D);
-		}
-		
 	}
 	
 	@Override
@@ -110,22 +102,6 @@ public class SandLandType extends TerrainLandType
 		registry.setBlockState("river", registry.getBlockState("upper"));
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.LUSH_DESERTS) {
-			return new String[] {LUSH_DESERTS};
-		} else {
-			return new String[] {SAND, DUNES, DESERTS};
-		}
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.DESERT;
 	}
 	
 	@Override
@@ -190,18 +166,6 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addTurtleVillageCenters(register);
@@ -213,12 +177,6 @@ public class SandLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addTurtleVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.LUSH_DESERTS ? MSSoundEvents.MUSIC_LUSH_DESERTS : MSSoundEvents.MUSIC_SAND;
 	}
 	
 	private enum Variant

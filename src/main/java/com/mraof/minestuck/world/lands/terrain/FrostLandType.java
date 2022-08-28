@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -35,11 +33,11 @@ public class FrostLandType extends TerrainLandType
 	public static final String ICE = "minestuck.ice";
 	public static final String SNOW = "minestuck.snow";
 	
-	private static final Vec3 fogColor = new Vec3(0.5D, 0.6D, 0.98D);
-	
 	public FrostLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.IGUANA).skylight(7/8F).biomeSet(MSBiomes.SNOW_LAND));
+		super(new Builder(() -> MSEntityTypes.IGUANA).names(FROST, ICE, SNOW)
+				.skylight(7/8F).fogColor(0.5, 0.6, 0.98).skyColor(0.6, 0.7, 0.9)
+				.biomeSet(MSBiomes.SNOW_LAND).category(Biome.BiomeCategory.ICY).music(() -> MSSoundEvents.MUSIC_FROST));
 	}
 	
 	@Override
@@ -63,17 +61,6 @@ public class FrostLandType extends TerrainLandType
 		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {FROST, ICE, SNOW};
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.ICY;
 	}
 	
 	@Override
@@ -131,18 +118,6 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.6D, 0.7D, 0.9D);
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addIguanaVillageCenters(register);
@@ -152,11 +127,5 @@ public class FrostLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addIguanaVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FROST;
 	}
 }

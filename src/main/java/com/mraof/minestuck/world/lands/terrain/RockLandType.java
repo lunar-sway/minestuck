@@ -13,7 +13,6 @@ import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.TrapezoidFloat;
 import net.minecraft.util.valueproviders.UniformFloat;
@@ -32,7 +31,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.DiskConfigurati
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -49,12 +47,16 @@ public class RockLandType extends TerrainLandType
 	
 	public static TerrainLandType createRock()
 	{
-		return new RockLandType(Variant.ROCK, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
+		return new RockLandType(Variant.ROCK, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(ROCK, STONE, ORE)
+				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_ROCK));
 	}
 	
 	public static TerrainLandType createPetrification()
 	{
-		return new RockLandType(Variant.PETRIFICATION, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
+		return new RockLandType(Variant.PETRIFICATION, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
+				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_PETRIFICATION));
 	}
 	
 	private RockLandType(Variant variation, Builder builder)
@@ -86,24 +88,6 @@ public class RockLandType extends TerrainLandType
 		registry.setBlockState("village_fence", Blocks.COBBLESTONE_WALL.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.BROWN_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.PETRIFICATION)
-		{
-			return new String[]{PETRIFICATION};
-		} else
-		{
-			return new String[]{ROCK, STONE, ORE};
-		}
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.EXTREME_HILLS;
 	}
 	
 	@Override
@@ -206,18 +190,6 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return new Vec3(0.5, 0.5, 0.55);
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.6D, 0.6D, 0.7D);
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addNakagatorVillageCenters(register);
@@ -231,15 +203,9 @@ public class RockLandType extends TerrainLandType
 		addNakagatorVillagePieces(register, random);
 	}
 	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.PETRIFICATION ? MSSoundEvents.MUSIC_PETRIFICATION : MSSoundEvents.MUSIC_ROCK;
-	}
-	
 	private enum Variant
 	{
 		ROCK,
-		PETRIFICATION;
+		PETRIFICATION
 	}
 }

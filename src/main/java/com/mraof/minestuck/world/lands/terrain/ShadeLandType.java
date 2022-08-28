@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -21,7 +20,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -29,11 +27,11 @@ public class ShadeLandType extends TerrainLandType
 {
 	public static final String SHADE = "minestuck.shade";
 	
-	private static final Vec3 skyColor = new Vec3(0.16D, 0.38D, 0.54D);
-	
 	public ShadeLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.SALAMANDER).skylight(0F));
+		super(new Builder(() -> MSEntityTypes.SALAMANDER).names(SHADE)
+				.skylight(0F).fogColor(0.16, 0.38, 0.54)
+				.category(Biome.BiomeCategory.MUSHROOM).music(() -> MSSoundEvents.MUSIC_SHADE));
 	}
 	
 	@Override
@@ -62,17 +60,6 @@ public class ShadeLandType extends TerrainLandType
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
 		registry.setBlockState("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE.get().defaultBlockState());
 		registry.setBlockState("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE.get().defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {SHADE};
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.MUSHROOM;
 	}
 	
 	@Override
@@ -116,12 +103,6 @@ public class ShadeLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addSalamanderVillageCenters(register);
@@ -131,11 +112,5 @@ public class ShadeLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addSalamanderVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_SHADE;
 	}
 }

@@ -12,7 +12,6 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -41,12 +39,16 @@ public class ForestLandType extends TerrainLandType
 	
 	public static TerrainLandType createForest()
 	{
-		return new ForestLandType(Variant.FOREST, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
+		return new ForestLandType(Variant.FOREST, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FOREST));
 	}
 	
 	public static TerrainLandType createTaiga()
 	{
-		return new ForestLandType(Variant.TAIGA, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
+		return new ForestLandType(Variant.TAIGA, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.TAIGA).music(() -> MSSoundEvents.MUSIC_TAIGA));
 	}
 	
 	private ForestLandType(Variant variation, Builder builder)
@@ -78,22 +80,6 @@ public class ForestLandType extends TerrainLandType
 		} else {
 			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.defaultBlockState());
 		}
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.FOREST) {
-			return new String[] {FORESTS, TREES};
-		} else {
-			return new String[] {TAIGAS, BOREAL_FORESTS, COLD_FORESTS};
-		}
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
 	}
 	
 	@Override
@@ -144,17 +130,6 @@ public class ForestLandType extends TerrainLandType
 		BiomeDefaultFeatures.addExtraEmeralds(builder);
 		
 	}
-	@Override
-	public Vec3 getFogColor()
-	{
-		return new Vec3(0.0D, 1.0D, 0.6D);
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.4D, 0.7D, 1.0D);
-	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
@@ -166,12 +141,6 @@ public class ForestLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addIguanaVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.TAIGA ? MSSoundEvents.MUSIC_TAIGA : MSSoundEvents.MUSIC_FOREST;
 	}
 	
 	private enum Variant

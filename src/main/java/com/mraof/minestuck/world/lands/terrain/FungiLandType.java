@@ -12,7 +12,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -26,7 +25,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -40,12 +38,11 @@ public class FungiLandType extends TerrainLandType
 	public static final String MOLD = "minestuck.mold";
 	public static final String MILDEW = "minestuck.mildew";
 	
-	private static final Vec3 fogColor = new Vec3(0.69D, 0.76D, 0.61D);
-	private static final Vec3 skyColor = new Vec3(0.69D, 0.76D, 0.61D);
-	
 	public FungiLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.SALAMANDER));
+		super(new Builder(() -> MSEntityTypes.SALAMANDER).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
+				.fogColor(0.69, 0.76, 0.61).skyColor(0.69, 0.76, 0.61)
+				.category(Biome.BiomeCategory.MUSHROOM).music(() -> MSSoundEvents.MUSIC_FUNGI));
 	}
 	
 	@Override
@@ -73,17 +70,6 @@ public class FungiLandType extends TerrainLandType
 		registry.setBlockState("bush", Blocks.BROWN_MUSHROOM.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.LIME_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM};
-	}
-	
-	@Override
-	public Biome.BiomeCategory getBiomeCategory()
-	{
-		return Biome.BiomeCategory.MUSHROOM;
 	}
 	
 	@Override
@@ -133,18 +119,6 @@ public class FungiLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
 		addSalamanderVillageCenters(register);
@@ -154,11 +128,5 @@ public class FungiLandType extends TerrainLandType
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
 		addSalamanderVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FUNGI;
 	}
 }
