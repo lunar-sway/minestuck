@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.Util;
@@ -24,6 +23,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,6 +32,8 @@ import java.util.Optional;
 
 public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<Entity> implements Nameable
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String DISABLED = "minestuck.transportalizer.disabled";
 	public static final String BLOCKED = "minestuck.transportalizer.blocked";
 	public static final String BLOCKED_DESTINATION = "minestuck.transportalizer.blocked_destination";
@@ -110,7 +113,7 @@ public class TransportalizerTileEntity extends OnCollisionTeleporterTileEntity<E
 			TransportalizerTileEntity destTransportalizer = (TransportalizerTileEntity) level.getBlockEntity(location.pos());
 			if(destTransportalizer == null)
 			{
-				Debug.warn("Invalid transportalizer in map: " + this.destId + " at " + location);
+				LOGGER.warn("Invalid transportalizer in map: {} at {}", this.destId, location);
 				TransportalizerSavedData.get(level).remove(this.destId, location);
 				this.destId = "";
 				return;

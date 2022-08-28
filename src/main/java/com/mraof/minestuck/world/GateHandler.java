@@ -4,12 +4,10 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
-import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -21,6 +19,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 import java.util.Random;
@@ -28,6 +28,8 @@ import java.util.function.Function;
 
 public class GateHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String DESTROYED = "minestuck.gate_destroyed";
 	public static final String MISSING_LAND = "minestuck.gate_missing_land";
 	
@@ -49,7 +51,7 @@ public class GateHandler
 				
 				if(block.getBlock() != MSBlocks.GATE.get())
 				{
-					Debug.debugf("Can't find destination gate at %s. Probably broken.", destination);
+					LOGGER.debug("Can't find destination gate at {}. Probably broken.", destination);
 					player.sendMessage(new TranslatableComponent(DESTROYED), Util.NIL_UUID);
 					return;
 				}
@@ -104,7 +106,7 @@ public class GateHandler
 				}
 			}
 		} else
-			Debug.errorf("Unexpected error: Couldn't find position for land gate for dimension %s.", level.dimension());
+			LOGGER.error("Unexpected error: Couldn't find position for land gate for dimension {}.", level.dimension());
 		return null;
 	}
 	
@@ -121,13 +123,13 @@ public class GateHandler
 				ServerLevel clientLevel = level.getServer().getLevel(clientDim);
 				BlockPos gatePos = Type.LAND_GATE.getPosition(clientLevel);
 				if(gatePos == null)
-				{Debug.errorf("Unexpected error: Can't initialize land gate placement for dimension %d!", clientDim); return null;}
+				{LOGGER.error("Unexpected error: Can't initialize land gate placement for dimension {}!", clientDim); return null;}
 				
 				return GlobalPos.of(clientDim, gatePos);
 			}
 			//else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 		} else
-			Debug.errorf("Unexpected error: Can't find connection for dimension %d!", level.dimension());
+			LOGGER.error("Unexpected error: Can't find connection for dimension {}!", level.dimension());
 		return null;
 	}
 	
@@ -145,7 +147,8 @@ public class GateHandler
 				
 			}// else player.sendMessage(new TranslationTextComponent(MISSING_LAND));
 			
-		} else Debug.errorf("Unexpected error: Can't find connection for dimension %d!", level.dimension());
+		} else
+			LOGGER.error("Unexpected error: Can't find connection for dimension {}!", level.dimension());
 		return null;
 	}
 	

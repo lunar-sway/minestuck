@@ -12,7 +12,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.IColored;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,9 +29,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AlchemiterTileEntity extends BlockEntity implements IColored, GristWildcardHolder
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -113,7 +115,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if(level == null)
 		{
-			Debug.warn("Tried to drop alchemiter dowel before the tile entity was given a world!");
+			LOGGER.warn("Tried to drop alchemiter dowel before the tile entity was given a world!");
 			return;
 		}
 		BlockPos dropPos = direction == null ? this.worldPosition : this.worldPosition.relative(direction);
@@ -130,7 +132,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 		{
 			checkStates();
 			if(broken)
-				Debug.warnf("Failed to notice a block being broken or misplaced at the alchemiter at %s", getBlockPos());
+				LOGGER.warn("Failed to notice a block being broken or misplaced at the alchemiter at {}", getBlockPos());
 		}
 		return !broken;
 	}

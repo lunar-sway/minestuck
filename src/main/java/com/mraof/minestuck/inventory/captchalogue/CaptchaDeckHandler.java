@@ -9,7 +9,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -28,12 +27,16 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CaptchaDeckHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	
@@ -351,7 +354,7 @@ public class CaptchaDeckHandler
 			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
 			if(modus == null)
 			{
-				Debug.warnf("Failed to load modus from nbt with the name \"%s\"", name.toString());
+				LOGGER.warn("Failed to load modus from nbt with the name \"{}\"", name.toString());
 				return null;
 			}
 		}

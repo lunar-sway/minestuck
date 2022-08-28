@@ -11,7 +11,6 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
@@ -24,6 +23,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -33,6 +34,8 @@ import java.util.Set;
 
 public final class SburbConnection
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	final SkaianetHandler skaianet;
 	
 	@Nonnull
@@ -98,7 +101,7 @@ public final class SburbConnection
 				isActive = true;
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
+				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
 			}
 		}
 		if(nbt.contains("ClientLand", Tag.TAG_COMPOUND))
@@ -286,7 +289,7 @@ public final class SburbConnection
 		{
 			Title title = PlayerSavedData.getData(getClientIdentifier(), skaianet.mcServer).getTitle();
 			if(title == null)
-				Debug.warnf("Found player %s that has entered, but did not have a title!", getClientIdentifier().getUsername());
+				LOGGER.warn("Found player {} that has entered, but did not have a title!", getClientIdentifier().getUsername());
 			return title;
 		}
 		return null;

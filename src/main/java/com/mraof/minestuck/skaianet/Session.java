@@ -4,13 +4,14 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -21,6 +22,7 @@ import java.util.*;
  */
 public final class Session
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
@@ -287,7 +289,7 @@ public final class Session
 					s.connections.add(c);
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);
+				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
 			}
 		}
 		

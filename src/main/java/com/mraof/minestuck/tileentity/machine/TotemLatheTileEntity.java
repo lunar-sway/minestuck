@@ -12,7 +12,6 @@ import com.mraof.minestuck.item.crafting.alchemy.CombinerWrapper;
 import com.mraof.minestuck.tileentity.ItemStackTileEntity;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,11 +23,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 
 public class TotemLatheTileEntity extends BlockEntity
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	private ItemStack card1 = ItemStack.EMPTY;
@@ -252,7 +255,7 @@ public class TotemLatheTileEntity extends BlockEntity
 		{
 			checkStates();
 			if(isBroken())
-				Debug.warnf("Failed to notice a block being broken or misplaced at the totem lathe at %s", getBlockPos());
+				LOGGER.warn("Failed to notice a block being broken or misplaced at the totem lathe at {}", getBlockPos());
 		}
 		
 		if(!state.getValue(TotemLatheBlock.FACING).equals(currentState.getValue(TotemLatheBlock.FACING)))

@@ -1,18 +1,21 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
 class TEComputerReference implements ComputerReference
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	protected final GlobalPos location;
 	
 	TEComputerReference(GlobalPos location)
@@ -22,7 +25,7 @@ class TEComputerReference implements ComputerReference
 	
 	static TEComputerReference create(CompoundTag nbt)
 	{
-		GlobalPos location = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("pos")).resultOrPartial(Debug::error).orElse(null);
+		GlobalPos location = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("pos")).resultOrPartial(LOGGER::error).orElse(null);
 		return new TEComputerReference(location);
 	}
 	
@@ -30,7 +33,7 @@ class TEComputerReference implements ComputerReference
 	public CompoundTag write(CompoundTag nbt)
 	{
 		nbt.putString("type", "tile_entity");
-		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, location).resultOrPartial(Debug::error).ifPresent(tag -> nbt.put("pos", tag));
+		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("pos", tag));
 		return nbt;
 	}
 	

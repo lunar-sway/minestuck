@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.structure.village;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.ImprovedStructurePiece;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -31,12 +30,16 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
 public class ConsortVillagePieces
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static List<PieceWeight> getStructureVillageWeightedPieceList(Random random, LandTypePair landTypes)
 	{
 		List<PieceWeight> list = Lists.newArrayList();
@@ -326,7 +329,7 @@ public class ConsortVillagePieces
 					ConsortEntity consort = consortType.create(level.getLevel());
 					if(consort == null)
 					{
-						Debug.warnf("Unable to create consort entity %s from a level.", consortType);
+						LOGGER.warn("Unable to create consort entity {} from a level.", consortType);
 						return false;
 					}
 					

@@ -12,7 +12,6 @@ import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
@@ -26,6 +25,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -36,6 +37,8 @@ import java.util.function.Consumer;
 
 public class MSAdvancementProvider implements DataProvider
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String ROOT = "minestuck.root";
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
@@ -135,7 +138,7 @@ public class MSAdvancementProvider implements DataProvider
 				DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), jsonPath);
 			} catch(IOException e)
 			{
-				Debug.logger.error("Couldn't save advancement {}", jsonPath, e);
+				LOGGER.error("Couldn't save advancement {}", jsonPath, e);
 			}
 		}
 	}

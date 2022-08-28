@@ -9,7 +9,6 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.UnderlingController;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.core.BlockPos;
@@ -41,6 +40,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -48,6 +49,8 @@ import java.util.*;
 
 public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());	//TODO this filter isn't being saved. F1X PLZ
@@ -148,7 +151,8 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		if(type != null)
 		{
 			return type;
-		} else Debug.warnf("Unable to read underling grist type from string %s.", entityData.get(GRIST_TYPE));
+		} else
+			LOGGER.warn("Unable to read underling grist type from string {}.", entityData.get(GRIST_TYPE));
 		
 		return GristTypes.ARTIFACT.get();
 	}
@@ -348,7 +352,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		}
 		
 		if(playerList.length > 0)
-			Debug.debugf("%s players are splitting on %s progress from %s", playerList.length, progress, getType().getRegistryName());
+			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType().getRegistryName());
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)

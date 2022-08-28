@@ -8,7 +8,6 @@ import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
@@ -21,12 +20,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ISkyRenderHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
 public class LandSkyRenderer implements ISkyRenderHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	@Override
 	public void render(int ticks, float partialTicks, PoseStack poseStack, ClientLevel level, Minecraft mc)
 	{
@@ -203,7 +206,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 				Random random = new Random(/*31*mc.world.getSeed() + TODO?*/ landName.hashCode());
 				LandTypePair landTypes = ClientDimensionData.getLandTypes(landName);
 				if(landTypes == null)
-					Debug.warnf("Missing land types for dimension %s!", landName);
+					LOGGER.warn("Missing land types for dimension {}!", landName);
 				else drawLand(mc, poseStack, landTypes, (i / (float) list.size()), random);
 			}
 		}
