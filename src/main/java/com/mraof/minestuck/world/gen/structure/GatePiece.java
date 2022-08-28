@@ -1,28 +1,21 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
 public abstract class GatePiece extends ScatteredFeaturePiece
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	public GatePiece(StructurePieceType type, LevelHeightAccessor level, ChunkGenerator generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
 	{
 		super(type, x, 64, z, width, height, depth, getRandomHorizontalDirection(random));
@@ -72,18 +65,7 @@ public abstract class GatePiece extends ScatteredFeaturePiece
 		BlockPos gatePos = getGatePos();
 		if (boundingBoxIn.isInside(gatePos))
 		{
-			for(int offsetX = -1; offsetX <= 1; offsetX++)
-				for(int offsetZ = -1; offsetZ <= 1; offsetZ++)
-				{
-					if(offsetX == 0 && offsetZ == 0)
-					{
-						level.setBlock(gatePos, MSBlocks.GATE.get().defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
-						BlockEntity tileEntity = level.getBlockEntity(gatePos);
-						if(tileEntity instanceof GateTileEntity gate)
-							gate.gateType = GateHandler.Type.LAND_GATE;
-						else LOGGER.error("Expected a gate tile entity after placing a gate block, but got {}!", tileEntity);
-					} else level.setBlock(gatePos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
-				}
+			GateBlock.placeGate(level, gatePos, GateHandler.Type.LAND_GATE, Block.UPDATE_CLIENTS);
 		}
 	}
 }
