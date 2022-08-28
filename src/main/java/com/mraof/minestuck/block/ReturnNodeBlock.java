@@ -9,9 +9,8 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import javax.annotation.Nullable;
 
-public class ReturnNodeBlock extends GateBlock
+public class ReturnNodeBlock extends AbstractGateBlock
 {
-	
 	public ReturnNodeBlock(Properties properties)
 	{
 		super(properties);
@@ -64,7 +63,7 @@ public class ReturnNodeBlock extends GateBlock
 			if(boundingBox == null || boundingBox.isInside(pos))
 			{
 				if(i == 3)
-					level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
+					level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState().setValue(MAIN, true), Block.UPDATE_CLIENTS);
 				else level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}
