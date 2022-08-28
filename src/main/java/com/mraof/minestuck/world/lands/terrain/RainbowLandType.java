@@ -2,13 +2,11 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
@@ -44,7 +42,7 @@ public class RainbowLandType extends TerrainLandType
 	
 	public RainbowLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.TURTLE));
 	}
 	
 	@Override
@@ -151,12 +149,6 @@ public class RainbowLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
 	}
 	
 	@Override

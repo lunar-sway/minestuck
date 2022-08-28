@@ -2,20 +2,16 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -52,7 +48,7 @@ public class RainLandType extends TerrainLandType
 	
 	public RainLandType()
 	{
-		super(false);
+		super(new Builder(() -> MSEntityTypes.TURTLE).unavailable().biomeSet(MSBiomes.HIGH_HUMID_LAND));
 	}
 	
 	@Override
@@ -84,12 +80,6 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public String[] getNames() {
 		return new String[] {RAIN, ISLANDS, SKY};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.HIGH_HUMID_LAND;
 	}
 	
 	@Override
@@ -145,12 +135,6 @@ public class RainLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
 	}
 	
 	@Override

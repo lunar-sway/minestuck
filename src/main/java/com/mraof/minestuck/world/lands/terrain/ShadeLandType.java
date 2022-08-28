@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
@@ -11,7 +10,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +33,7 @@ public class ShadeLandType extends TerrainLandType
 	
 	public ShadeLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.SALAMANDER).skylight(0F));
 	}
 	
 	@Override
@@ -118,21 +116,9 @@ public class ShadeLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 0F;
-	}
-	
-	@Override
 	public Vec3 getFogColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.SALAMANDER;
 	}
 	
 	@Override

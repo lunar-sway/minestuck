@@ -22,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 /**
  * Base class for land types that make up the base of a land.
@@ -32,30 +33,23 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	private final ResourceLocation groupName;
 	private final boolean pickedAtRandom;
 	
-	protected TerrainLandType()
+	private final Supplier<EntityType<? extends ConsortEntity>> consortType;
+	private final float skylightBase;
+	private final LandBiomeSet biomeSet;
+	
+	protected TerrainLandType(Builder builder)
 	{
-		this(null, true);
+		this.groupName = builder.group;
+		this.pickedAtRandom = builder.pickedAtRandom;
+		
+		this.consortType = builder.consortType;
+		this.skylightBase = builder.skylightBase;
+		this.biomeSet = builder.biomeSet;
 	}
 	
-	protected TerrainLandType(boolean pickedAtRandom)
+	public final float getSkylightBase()
 	{
-		this(null, pickedAtRandom);
-	}
-	
-	protected TerrainLandType(ResourceLocation groupName)
-	{
-		this(groupName, true);
-	}
-	
-	protected TerrainLandType(ResourceLocation groupName, boolean pickedAtRandom)
-	{
-		this.groupName = groupName;
-		this.pickedAtRandom = pickedAtRandom;
-	}
-	
-	public float getSkylightBase()
-	{
-		return 1F;
+		return this.skylightBase;
 	}
 	
 	public abstract Vec3 getFogColor();
@@ -66,24 +60,27 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	}
 	
 	@Override
-	public boolean canBePickedAtRandom()
+	public final boolean canBePickedAtRandom()
 	{
 		return pickedAtRandom;
 	}
 	
 	@Override
-	public ResourceLocation getGroup()
+	public final ResourceLocation getGroup()
 	{
 		if(groupName == null)
 			return this.getRegistryName();
 		else return groupName;
 	}
 	
-	public abstract EntityType<? extends ConsortEntity> getConsortType();
-	
-	public LandBiomeSet getBiomeSet()
+	public final EntityType<? extends ConsortEntity> getConsortType()
 	{
-		return MSBiomes.DEFAULT_LAND;
+		return this.consortType.get();
+	}
+	
+	public final LandBiomeSet getBiomeSet()
+	{
+		return this.biomeSet;
 	}
 	
 	public Biome.BiomeCategory getBiomeCategory()
@@ -169,5 +166,44 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		register.add(IguanaVillagePieces.SmallTent1::createPiece, 3, Mth.nextInt(random, 5, 8));
 		register.add(IguanaVillagePieces.LargeTent1::createPiece, 10, Mth.nextInt(random, 1, 2));
 		register.add(IguanaVillagePieces.SmallTentStore::createPiece, 8, Mth.nextInt(random, 2, 3));
+	}
+	
+	public static class Builder
+	{
+		private boolean pickedAtRandom = true;
+		private ResourceLocation group = null;
+		
+		private final Supplier<EntityType<? extends ConsortEntity>> consortType;
+		private float skylightBase = 1F;
+		private LandBiomeSet biomeSet = MSBiomes.DEFAULT_LAND;
+		
+		public Builder(Supplier<EntityType<? extends ConsortEntity>> consortType)
+		{
+			this.consortType = consortType;
+		}
+		
+		public Builder unavailable()
+		{
+			this.pickedAtRandom = false;
+			return this;
+		}
+		
+		public Builder group(ResourceLocation group)
+		{
+			this.group = group;
+			return this;
+		}
+		
+		public Builder skylight(float skylightBase)
+		{
+			this.skylightBase = skylightBase;
+			return this;
+		}
+		
+		public Builder biomeSet(LandBiomeSet biomeSet)
+		{
+			this.biomeSet = biomeSet;
+			return this;
+		}
 	}
 }

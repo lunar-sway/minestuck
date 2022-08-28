@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
@@ -14,7 +13,6 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -43,7 +41,7 @@ public class ForestLandType extends TerrainLandType
 	
 	public ForestLandType(Variant variation)
 	{
-		super(GROUP_NAME);
+		super(new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME));
 		type = variation;
 	}
 	
@@ -146,12 +144,6 @@ public class ForestLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return new Vec3(0.4D, 0.7D, 1.0D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
 	}
 	
 	@Override

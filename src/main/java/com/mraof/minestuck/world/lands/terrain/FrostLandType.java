@@ -2,9 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -14,7 +12,6 @@ import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -42,7 +39,7 @@ public class FrostLandType extends TerrainLandType
 	
 	public FrostLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.IGUANA).skylight(7/8F).biomeSet(MSBiomes.SNOW_LAND));
 	}
 	
 	@Override
@@ -71,12 +68,6 @@ public class FrostLandType extends TerrainLandType
 	@Override
 	public String[] getNames() {
 		return new String[] {FROST, ICE, SNOW};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.SNOW_LAND;
 	}
 	
 	@Override
@@ -140,12 +131,6 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 7/8F;
-	}
-	
-	@Override
 	public Vec3 getFogColor()
 	{
 		return fogColor;
@@ -155,12 +140,6 @@ public class FrostLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return new Vec3(0.6D, 0.7D, 0.9D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
 	}
 	
 	@Override

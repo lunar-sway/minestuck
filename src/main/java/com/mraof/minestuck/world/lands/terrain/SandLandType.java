@@ -4,9 +4,7 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -14,14 +12,12 @@ import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -52,7 +48,7 @@ public class SandLandType extends TerrainLandType
 	
 	public SandLandType(Variant variation)
 	{
-		super(GROUP_NAME);
+		super(new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).biomeSet(MSBiomes.NO_RAIN_LAND));
 		type = variation;
 		
 		if(type == Variant.SAND)
@@ -109,12 +105,6 @@ public class SandLandType extends TerrainLandType
 		} else {
 			return new String[] {SAND, DUNES, DESERTS};
 		}
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.NO_RAIN_LAND;
 	}
 	
 	@Override
@@ -194,12 +184,6 @@ public class SandLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
 	}
 	
 	@Override

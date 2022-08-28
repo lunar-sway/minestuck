@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -15,7 +14,6 @@ import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -47,7 +45,7 @@ public class FungiLandType extends TerrainLandType
 	
 	public FungiLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.SALAMANDER));
 	}
 	
 	@Override
@@ -144,12 +142,6 @@ public class FungiLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.SALAMANDER;
 	}
 	
 	@Override

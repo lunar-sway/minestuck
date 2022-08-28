@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -11,7 +10,6 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +18,6 @@ import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.TrapezoidFloat;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -52,7 +49,7 @@ public class RockLandType extends TerrainLandType
 	
 	public RockLandType(Variant variation)
 	{
-		super(GROUP_NAME);
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).skylight(7/8F));
 		type = variation;
 	}
 	
@@ -199,12 +196,6 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 7 / 8F;
-	}
-	
-	@Override
 	public Vec3 getFogColor()
 	{
 		return new Vec3(0.5, 0.5, 0.55);
@@ -214,12 +205,6 @@ public class RockLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return new Vec3(0.6D, 0.6D, 0.7D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
 	}
 	
 	@Override

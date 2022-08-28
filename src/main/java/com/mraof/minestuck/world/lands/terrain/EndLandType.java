@@ -2,9 +2,7 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
@@ -17,7 +15,6 @@ import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -46,7 +43,7 @@ public class EndLandType extends TerrainLandType
 	
 	public EndLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).biomeSet(MSBiomes.NO_RAIN_LAND));
 	}
 	
 	@Override
@@ -76,12 +73,6 @@ public class EndLandType extends TerrainLandType
 	public String[] getNames()
 	{
 		return new String[]{END, DIMENSION};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.NO_RAIN_LAND;
 	}
 	
 	@Override
@@ -135,12 +126,6 @@ public class EndLandType extends TerrainLandType
 	public Vec3 getSkyColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
 	}
 	
 	@Override

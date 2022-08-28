@@ -2,19 +2,15 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -42,7 +38,7 @@ public class HeatLandType extends TerrainLandType
 	
 	public HeatLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).skylight(1/2F).biomeSet(MSBiomes.NO_RAIN_LAND));
 	}
 	
 	@Override
@@ -73,12 +69,6 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public String[] getNames() {
 		return new String[] {HEAT, FLAME, FIRE};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.NO_RAIN_LAND;
 	}
 	
 	@Override
@@ -127,21 +117,9 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 1/2F;
-	}
-	
-	@Override
 	public Vec3 getFogColor()
 	{
 		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
 	}
 	
 	@Override
