@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.storage.loot;
+package com.mraof.minestuck.item.loot;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;

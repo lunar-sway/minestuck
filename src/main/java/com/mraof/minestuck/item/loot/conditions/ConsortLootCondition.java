@@ -1,8 +1,8 @@
-package com.mraof.minestuck.world.storage.loot.conditions;
+package com.mraof.minestuck.item.loot.conditions;
 
 import com.google.gson.*;
 import com.mraof.minestuck.entity.consort.EnumConsort;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;

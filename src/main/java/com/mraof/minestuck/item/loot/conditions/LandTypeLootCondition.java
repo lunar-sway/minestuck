@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.storage.loot.conditions;
+package com.mraof.minestuck.item.loot.conditions;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
@@ -7,7 +7,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
