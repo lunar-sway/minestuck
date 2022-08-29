@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -104,12 +105,12 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 }

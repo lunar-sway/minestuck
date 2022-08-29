@@ -3,9 +3,11 @@ package com.mraof.minestuck.world.gen.structure.village;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.ILandType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -21,6 +23,23 @@ import java.util.Random;
 
 public class IguanaVillagePieces
 {
+	/**
+	 * Helper function for adding village centers associated with iguanas.
+	 */
+	public static void addCenters(ILandType.CenterRegister register)
+	{
+	}
+	
+	/**
+	 * Helper function for adding village pieces associated with iguanas.
+	 */
+	public static void addPieces(ILandType.PieceRegister register, Random random)
+	{
+		register.add(SmallTent1::createPiece, 3, Mth.nextInt(random, 5, 8));
+		register.add(LargeTent1::createPiece, 10, Mth.nextInt(random, 1, 2));
+		register.add(SmallTentStore::createPiece, 8, Mth.nextInt(random, 2, 3));
+	}
+	
 	public static class SmallTent1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
 		private int woolType = 1;

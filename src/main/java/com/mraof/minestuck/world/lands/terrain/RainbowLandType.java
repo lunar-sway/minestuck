@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -128,12 +129,12 @@ public class RainbowLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(register);
+		TurtleVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addTurtleVillagePieces(register, random);
+		TurtleVillagePieces.addPieces(register, random);
 	}
 }

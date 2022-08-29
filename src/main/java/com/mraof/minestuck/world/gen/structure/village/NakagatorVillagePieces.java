@@ -3,9 +3,11 @@ package com.mraof.minestuck.world.gen.structure.village;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.ILandType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -23,6 +25,24 @@ import java.util.Random;
 
 public class NakagatorVillagePieces
 {
+	/**
+	 * Helper function for adding village centers associated with nakagators.
+	 */
+	public static void addCenters(ILandType.CenterRegister register)
+	{
+		register.add(RadioTowerCenter::new, 5);
+	}
+	
+	/**
+	 * Helper function for adding village pieces associated with nakagators.
+	 */
+	public static void addPieces(ILandType.PieceRegister register, Random random)
+	{
+		register.add(HighNakHousing1::createPiece, 6, Mth.nextInt(random, 3, 5));
+		register.add(HighNakMarket1::createPiece, 10, Mth.nextInt(random, 1, 2));
+		register.add(HighNakInn1::createPiece, 15, Mth.nextInt(random, 1, 1));
+	}
+	
 	public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
 	{
 		public RadioTowerCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)

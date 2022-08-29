@@ -7,6 +7,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -134,13 +135,13 @@ public class ForestLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
+		IguanaVillagePieces.addPieces(register, random);
 	}
 	
 	private enum Variant

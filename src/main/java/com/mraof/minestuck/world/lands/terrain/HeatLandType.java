@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -106,12 +107,12 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 }

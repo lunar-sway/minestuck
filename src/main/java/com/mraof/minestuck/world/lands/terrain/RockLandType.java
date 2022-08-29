@@ -10,6 +10,7 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -192,7 +193,7 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 		
 		register.add(ConsortVillageCenter.RockCenter::new, 5);
 	}
@@ -200,7 +201,7 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 	
 	private enum Variant

@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
+import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
@@ -168,7 +169,7 @@ public class SandLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(register);
+		TurtleVillagePieces.addCenters(register);
 		
 		register.add(ConsortVillageCenter.CactusPyramidCenter::new, 5);
 	}
@@ -176,7 +177,7 @@ public class SandLandType extends TerrainLandType
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addTurtleVillagePieces(register, random);
+		TurtleVillagePieces.addPieces(register, random);
 	}
 	
 	private enum Variant

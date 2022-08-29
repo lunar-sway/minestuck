@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
@@ -101,12 +102,12 @@ public class WoodLandType extends TerrainLandType
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addSalamanderVillageCenters(register);
+		SalamanderVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addSalamanderVillagePieces(register, random);
+		SalamanderVillagePieces.addPieces(register, random);
 	}
 }
