@@ -99,7 +99,7 @@ public class BoondollarPricingProvider implements DataProvider
 		add(MSItems.MINI_FROG_STATUE.get(), 200, 250);
 		add(MSItems.MINI_WIZARD_STATUE.get(), 200, 250);
 		add(MSItems.MINI_TYPHEUS_STATUE.get(), 10000, 12000);
-		add(MSItems.STONE_SLAB.get(), 20, 30);
+		add(MSItems.STONE_TABLET.get(), 20, 30);
 		add(THRESH_DVD.get(), 350, 400);
 		add(CREW_POSTER.get(), 350, 400);
 		add(SBAHJ_POSTER.get(), 350, 400);

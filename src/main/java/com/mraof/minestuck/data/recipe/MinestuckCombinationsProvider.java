@@ -559,9 +559,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.GOLD_SEEDS.get()).input(Items.WHEAT_SEEDS).and().namedInput(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET.get()).input(Items.WATER_BUCKET).or().input(Items.LAVA_BUCKET).namedSource("buckets").build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OBSIDIAN_BUCKET.get()).input(Items.BUCKET).and().namedInput(Items.OBSIDIAN).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.STONE_SLAB.get()).input(Items.STONE).or().namedInput(MSItems.CARVING_TOOL.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.STONE_SLAB.get()).input(Items.STONE).or().namedInput(Items.WRITABLE_BOOK).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.STONE_SLAB.get()).input(Items.STONE).or().namedInput(MSItems.CAPTCHA_CARD.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_TABLET.get()).input(Items.STONE).or().namedInput(MSItems.CARVING_TOOL.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_TABLET.get()).input(Items.STONE).or().namedInput(Items.WRITABLE_BOOK).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.STONE_TABLET.get()).input(Items.STONE).or().namedInput(MSItems.CAPTCHA_CARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST.get()).input(Items.REDSTONE).or().input(Items.GLOWSTONE_DUST).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COCOA_WART.get()).input(Items.COCOA_BEANS).and().input(Items.NETHER_WART).build(consumer);
 		

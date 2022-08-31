@@ -2,7 +2,7 @@
   "parent": "minestuck:minestuck/entry",
   "display": {
     "icon": {
-      "item": "minestuck:stone_slab"
+      "item": "minestuck:stone_tablet"
     },
     "title": {
       "translate": "advancements.minestuck.commune.title"

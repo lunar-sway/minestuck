@@ -43,7 +43,8 @@ public class MSTags
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
-		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
+		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
+		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		
 		private static TagKey<Block> tag(String name)
 		{

@@ -1,7 +1,7 @@
 {
   "type": "minestuck:grist_cost",
   "ingredient": {
-    "item": "minestuck:stone_slab"
+    "item": "minestuck:stone_tablet"
   },
   "grist_cost": {
     "minestuck:build": 30

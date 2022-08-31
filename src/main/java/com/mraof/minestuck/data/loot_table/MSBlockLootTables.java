@@ -295,7 +295,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(PIPE_INTERSECTION.get());
 		dropSelf(PARCEL_PYXIS.get());
 		dropSelf(PYXIS_LID.get());
-		add(STONE_SLAB.get(), MSBlockLootTables::droppingWithTEItem);
+		add(STONE_TABLET.get(), MSBlockLootTables::droppingWithTEItem);
 		dropSelf(NAKAGATOR_STATUE.get());
 		
 		dropSelf(BLACK_CHESS_BRICK_STAIRS.get());
