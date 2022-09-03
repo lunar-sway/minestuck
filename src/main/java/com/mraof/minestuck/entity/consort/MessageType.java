@@ -1070,6 +1070,15 @@ public abstract class MessageType
 		
 		private boolean containsItemFromTag(ServerPlayer player, CompoundTag nbt)
 		{
+			for(ItemStack stack : player.getHandSlots()) //prioritizes items in hands before items from the rest of the inventory
+			{
+				if(stack.is(itemTag))
+				{
+					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
+					return true;
+				}
+			}
+			
 			for(ItemStack stack : player.getInventory().items)
 			{
 				if(stack.is(itemTag))
