@@ -145,10 +145,14 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler()).getFirst();
+			Pair<BlockPos, Holder<Biome>> result = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler());
 			
-			if(pos != null && getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, climateSampler()).stream().allMatch(biome -> biome == normalBiome))
-				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+			if(result != null)
+			{
+				BlockPos pos = result.getFirst();
+				if(getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, climateSampler()).stream().allMatch(biome -> biome == normalBiome))
+					return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+			}
 		}
 		
 		int posX = (int) Math.round(Math.cos(angle) * radius);
