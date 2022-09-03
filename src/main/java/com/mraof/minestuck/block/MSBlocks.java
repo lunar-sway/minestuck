@@ -185,7 +185,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> FLOWERY_MOSSY_STONE_BRICKS = REGISTER.register("flowery_mossy_stone_bricks", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> DECREPIT_STONE_BRICKS = REGISTER.register("decrepit_stone_bricks", () -> new Block(floweryOrDecrepitStone));
 	public static final RegistryObject<Block> MOSSY_DECREPIT_STONE_BRICKS = REGISTER.register("mossy_decrepit_stone_bricks", () -> new Block(floweryOrDecrepitStone));
-	public static final RegistryObject<Block> COARSE_END_STONE = REGISTER.register("coarse_end_stone", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
+	public static final RegistryObject<Block> COARSE_END_STONE = REGISTER.register("coarse_end_stone", () -> new TillableBlock(Block.Properties.of(Material.STONE, MaterialColor.SAND).requiresCorrectToolForDrops().strength(3.0F, 9.0F), () -> Blocks.END_STONE.defaultBlockState()));
 	public static final RegistryObject<Block> END_GRASS = REGISTER.register("end_grass", () -> new EndGrassBlock(Block.Properties.of(Material.STONE, MaterialColor.COLOR_PURPLE).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
 	private static final BlockBehaviour.Properties chalk = Block.Properties.of(Material.STONE, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(1.5F, 6.0F);
