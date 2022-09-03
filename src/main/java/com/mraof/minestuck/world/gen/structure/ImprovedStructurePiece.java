@@ -134,7 +134,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected boolean needPostprocessing(Block block)
 	{
-		return block instanceof CrossCollisionBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairBlock;
+		return block instanceof CrossCollisionBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairBlock || block instanceof WallBlock;
 	}
 	
 	
