@@ -85,9 +85,9 @@ public class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> SPARSE_PETRIFIED_TREE = REGISTER.register("sparse_petrified_tree", () -> new PlacedFeature(MSCFeatures.PETRIFIED_TREE.getHolder().orElseThrow(),
 			biomeAndPredicatePlacement(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> DEAD_TREE = REGISTER.register("dead_tree", () -> new PlacedFeature(MSCFeatures.DEAD_TREE.getHolder().orElseThrow(),
-			biomeAndPredicatePlacement(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(1, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
 	public static final RegistryObject<PlacedFeature> EXTRA_DEAD_TREE = REGISTER.register("extra_dead_tree", () -> new PlacedFeature(MSCFeatures.DEAD_TREE.getHolder().orElseThrow(),
-			biomeAndPredicatePlacement(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
 	
 	public static final RegistryObject<PlacedFeature> FOREST_LAND_TREES = REGISTER.register("forest_land_trees", () -> new PlacedFeature(MSCFeatures.FOREST_LAND_TREES.getHolder().orElseThrow(),
 			biomePlacement(PlacementUtils.countExtra(5, 0.1F, 1), PlacementUtils.HEIGHTMAP)));
