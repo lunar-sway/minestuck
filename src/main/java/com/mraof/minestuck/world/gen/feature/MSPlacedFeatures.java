@@ -4,11 +4,13 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -71,21 +73,21 @@ public class MSPlacedFeatures
 			biomePlacement(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> DARK_OAK = REGISTER.register("dark_oak",  () -> new PlacedFeature(Holder.hackyErase(TreeFeatures.DARK_OAK),
-			List.of(CountPlacement.of(10), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING), BiomeFilter.biome())));
+			biomeAndPredicatePlacement(CountPlacement.of(10), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING))));
 	public static final RegistryObject<PlacedFeature> RAINBOW_TREE = REGISTER.register("rainbow_tree", () -> new PlacedFeature(MSCFeatures.RAINBOW_TREE.getHolder().orElseThrow(),
-			List.of(PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()), BiomeFilter.biome())));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
 	public static final RegistryObject<PlacedFeature> EXTRA_RAINBOW_TREE = REGISTER.register("extra_rainbow_tree", () -> new PlacedFeature(MSCFeatures.RAINBOW_TREE.getHolder().orElseThrow(),
-			List.of(PlacementUtils.countExtra(4, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()), BiomeFilter.biome())));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
 	public static final RegistryObject<PlacedFeature> GLOWING_TREE = REGISTER.register("glowing_tree", () -> new PlacedFeature(MSCFeatures.GLOWING_TREE.getHolder().orElseThrow(),
-			biomePlacement(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
+			biomeAndPredicatePlacement(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.BLUE_DIRT.get(), Vec3i.ZERO.below())))));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> new PlacedFeature(MSCFeatures.PETRIFIED_TREE.getHolder().orElseThrow(),
-			biomePlacement(PlacementUtils.countExtra(2, 0.5F, 1), PlacementUtils.HEIGHTMAP)));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(2, 0.5F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> SPARSE_PETRIFIED_TREE = REGISTER.register("sparse_petrified_tree", () -> new PlacedFeature(MSCFeatures.PETRIFIED_TREE.getHolder().orElseThrow(),
-			biomePlacement(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP)));
+			biomeAndPredicatePlacement(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> DEAD_TREE = REGISTER.register("dead_tree", () -> new PlacedFeature(MSCFeatures.DEAD_TREE.getHolder().orElseThrow(),
-			biomePlacement(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
 	public static final RegistryObject<PlacedFeature> EXTRA_DEAD_TREE = REGISTER.register("extra_dead_tree", () -> new PlacedFeature(MSCFeatures.DEAD_TREE.getHolder().orElseThrow(),
-			biomePlacement(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			biomeAndPredicatePlacement(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP_TOP_SOLID, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.CHALK.get(), Vec3i.ZERO.below())))));
 	
 	public static final RegistryObject<PlacedFeature> FOREST_LAND_TREES = REGISTER.register("forest_land_trees", () -> new PlacedFeature(MSCFeatures.FOREST_LAND_TREES.getHolder().orElseThrow(),
 			biomePlacement(PlacementUtils.countExtra(5, 0.1F, 1), PlacementUtils.HEIGHTMAP)));
@@ -113,7 +115,7 @@ public class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> RED_MUSHROOM_PATCH = REGISTER.register("red_mushroom_patch", () -> new PlacedFeature(Holder.hackyErase(VegetationFeatures.PATCH_RED_MUSHROOM),
 			biomePlacement(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> TALL_END_GRASS_PATCH = REGISTER.register("tall_end_grass_patch", () -> new PlacedFeature(MSCFeatures.TALL_END_GRASS_PATCH.getHolder().orElseThrow(),
-			List.of(RarityFilter.onAverageOnceEvery(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_END_GRASS.get()), BiomeFilter.biome())));
+			biomeAndPredicatePlacement(RarityFilter.onAverageOnceEvery(8), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_END_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_GRASS_PATCH = REGISTER.register("petrified_grass_patch", () -> new PlacedFeature(MSCFeatures.PETRIFIED_GRASS_PATCH.getHolder().orElseThrow(),
 			biomePlacement(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> SPARSE_PETRIFIED_GRASS_PATCH = REGISTER.register("sparse_petrified_grass_patch", () -> new PlacedFeature(MSCFeatures.PETRIFIED_GRASS_PATCH.getHolder().orElseThrow(),
@@ -142,5 +144,10 @@ public class MSPlacedFeatures
 	private static List<PlacementModifier> biomePlacement(PlacementModifier frequency, PlacementModifier height)
 	{
 		return List.of(frequency, InSquarePlacement.spread(), height, BiomeFilter.biome());
+	}
+	
+	private static List<PlacementModifier> biomeAndPredicatePlacement(PlacementModifier frequency, PlacementModifier height, PlacementModifier predicate)
+	{
+		return List.of(frequency, InSquarePlacement.spread(), height, predicate, BiomeFilter.biome());
 	}
 }

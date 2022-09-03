@@ -33,7 +33,6 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		Random rand = context.random();
 		BlockState state = context.config().state;
 		
-		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);
 		int height = 4 + size;
 		
