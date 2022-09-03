@@ -6,7 +6,6 @@ import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -71,6 +70,11 @@ public final class LandTypePair
 		return new LandTypePair(terrain, title);
 	}
 	
+	public static Optional<LandTypePair> getTypes(MinecraftServer server, ResourceKey<Level> levelKey)
+	{
+		return getNamed(server, levelKey).map(Named::landTypes);
+	}
+	
 	public static Optional<LandTypePair> getTypes(ServerLevel level)
 	{
 		return getNamed(level).map(Named::landTypes);
@@ -98,63 +102,6 @@ public final class LandTypePair
 			return Optional.of(chunkGenerator.namedTypes);
 		else
 			return Optional.empty();
-	}
-	
-	public LazyInstance createLazy()
-	{
-		return new LazyInstance(this.terrain.getRegistryName(), this.title.getRegistryName());
-	}
-	
-	public static class LazyInstance
-	{
-		private LazyInstance(ResourceLocation terrainAspect, ResourceLocation titleAspect)
-		{
-			terrainName = Objects.requireNonNull(terrainAspect);
-			titleName = Objects.requireNonNull(titleAspect);
-		}
-		
-		@Nonnull
-		public final ResourceLocation terrainName;
-		@Nonnull
-		public final ResourceLocation titleName;
-		
-		public LandTypePair create()
-		{
-			TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.getValue(terrainName);
-			TitleLandType title = LandTypes.TITLE_REGISTRY.getValue(titleName);
-			Objects.requireNonNull(terrain, "Could not find terrain land aspect by name " + terrainName);
-			Objects.requireNonNull(title, "Could not find title land aspect by name " + titleName);
-			
-			return new LandTypePair(terrain, title);
-		}
-		
-		public CompoundTag write(CompoundTag nbt)
-		{
-			nbt.putString("terrain_aspect", terrainName.toString());
-			nbt.putString("title_aspect", titleName.toString());
-			return nbt;
-		}
-		
-		public static LazyInstance read(CompoundTag nbt)
-		{
-			String terrainName = nbt.getString("terrain_aspect");
-			String titleName = nbt.getString("title_aspect");
-			
-			return new LazyInstance(new ResourceLocation(terrainName), new ResourceLocation(titleName));
-		}
-		
-		public void write(FriendlyByteBuf buffer)
-		{
-			buffer.writeResourceLocation(terrainName);
-			buffer.writeResourceLocation(titleName);
-		}
-		
-		public static LazyInstance read(FriendlyByteBuf buffer)
-		{
-			ResourceLocation terrain = buffer.readResourceLocation();
-			ResourceLocation title = buffer.readResourceLocation();
-			return new LazyInstance(terrain, title);
-		}
 	}
 	
 	public record Named(LandTypePair landTypes, boolean useReverseOrder, int terrainNameIndex, int titleNameIndex)

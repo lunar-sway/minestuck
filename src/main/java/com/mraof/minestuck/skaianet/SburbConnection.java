@@ -13,7 +13,6 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandInfo;
-import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,6 +20,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
@@ -107,7 +107,7 @@ public final class SburbConnection
 		if(nbt.contains("ClientLand", Tag.TAG_COMPOUND))
 		{
 			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
-			MSDimensions.updateLandMaps(this, false);
+			MSDimensions.updateLandMaps(skaianet.mcServer, this, false);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -305,14 +305,15 @@ public final class SburbConnection
 	{
 		return clientLandInfo;
 	}
-	void setLand(LandTypePair landTypes, ResourceKey<Level> dimension)
+	void setLand(MinecraftServer server, ResourceKey<Level> dimension)
 	{
 		if(clientLandInfo != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
-			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			MSDimensions.updateLandMaps(this, true);
+			clientLandInfo = new LandInfo(clientIdentifier, dimension);
+			//TODO call this when creating a land dimension instead of when the land key is set to the connection
+			MSDimensions.updateLandMaps(server, this, true);
 		}
 	}
 	void setHasEntered()

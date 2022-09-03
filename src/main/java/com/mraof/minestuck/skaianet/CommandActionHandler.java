@@ -144,7 +144,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -159,7 +159,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+					c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -172,11 +172,11 @@ public final class CommandActionHandler
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.setLand(landTypes, dimensionName);
+		c.setLand(skaianet.mcServer, dimensionName);
 		c.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);

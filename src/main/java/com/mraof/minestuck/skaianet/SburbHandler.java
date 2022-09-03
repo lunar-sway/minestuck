@@ -159,21 +159,21 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes().contains(LandTypes.FROGS) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS) &&
 					(terrainLandType == null || LandTypes.FROGS.isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS;
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
-					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
+					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, connection.getClientIdentifier());
+			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, connection.getClientIdentifier());
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
@@ -202,7 +202,7 @@ public final class SburbHandler
 		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		ResourceKey<Level> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
-		c.setLand(landTypes, dimType);
+		c.setLand(mcServer, dimType);
 	}
 	
 	static void onEntry(MinecraftServer server, SburbConnection c)

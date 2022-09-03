@@ -466,7 +466,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(consort.getServer(), consort.homeDimension);
+		LandTypePair aspects = LandTypePair.getTypes(consort.getServer(), consort.homeDimension).orElse(null);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
