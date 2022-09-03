@@ -1,5 +1,6 @@
 package com.mraof.minestuck.event;
 
+import com.mojang.blaze3d.shaders.FogShape;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
@@ -77,11 +78,8 @@ public class ClientEventHandler
 		}
 	}
 	
-	/**
-	 *Used to change the density on of the Fog overlay
-	 */
 	@SubscribeEvent
-	public static void onFogRender(EntityViewRenderEvent.FogDensity event)
+	public static void onFogRender(EntityViewRenderEvent.RenderFogEvent event)
 	{
 		LevelReader level = event.getCamera().getEntity().level;
 		BlockPos blockPos = event.getCamera().getBlockPosition();
@@ -96,8 +94,11 @@ public class ClientEventHandler
 			float fogDensity = fog.getMSFogDensity();
 			
 			event.setCanceled(true);
-			event.setDensity(fogDensity);
+			event.setNearPlaneDistance(-8);
+			event.setFarPlaneDistance(4.8F/fogDensity);
+			event.setFogShape(FogShape.SPHERE);
 		}
+		
 	}
 	
 	/**
