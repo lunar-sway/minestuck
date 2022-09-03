@@ -297,15 +297,13 @@ public final class SburbConnection
 	{
 		return this.clientLandKey;
 	}
-	void setLand(MinecraftServer server, ResourceKey<Level> dimension)
+	void setLand(ResourceKey<Level> dimension)
 	{
 		if(clientLandKey != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
 			clientLandKey = dimension;
-			//TODO call this when creating a land dimension instead of when the land key is set to the connection
-			MSDimensions.sendLandTypesToAll(server);
 		}
 	}
 	void setHasEntered()

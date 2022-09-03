@@ -7,6 +7,7 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -106,7 +107,6 @@ public final class CommandActionHandler
 	
 	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes, CommandSourceStack source) throws CommandSyntaxException
 	{
-		SessionHandler sessions = SessionHandler.get(player.server);
 		SkaianetHandler skaianet = SkaianetHandler.get(player.server);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
@@ -169,6 +169,8 @@ public final class CommandActionHandler
 			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
 		
+		// Several new lands may have been created through calls to createDebugLand(). Send potentially new land types to players
+		MSDimensions.sendLandTypesToAll(source.getServer());
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
@@ -176,7 +178,7 @@ public final class CommandActionHandler
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.setLand(skaianet.mcServer, dimensionName);
+		c.setLand(dimensionName);
 		c.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);

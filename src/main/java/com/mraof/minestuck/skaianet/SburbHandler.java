@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -205,8 +206,11 @@ public final class SburbHandler
 		
 		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		
 		ResourceKey<Level> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
-		c.setLand(mcServer, dimType);
+		MSDimensions.sendLandTypesToAll(mcServer);
+		
+		c.setLand(dimType);
 	}
 	
 	static void onEntry(MinecraftServer server, SburbConnection c)
