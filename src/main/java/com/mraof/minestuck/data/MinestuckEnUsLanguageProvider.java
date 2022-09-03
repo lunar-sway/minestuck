@@ -33,17 +33,13 @@ import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
-import com.mraof.minestuck.skaianet.Generator;
-import com.mraof.minestuck.skaianet.MergeResult;
-import com.mraof.minestuck.skaianet.PredefineData;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
-import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -1476,7 +1472,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(MonstersLandType.MONSTERS, "Monsters");
 		addLand(TowersLandType.TOWERS, "Towers");
 		add(LandTypePair.FORMAT, "Land of %s and %s");
-		add(LandInfo.LAND_ENTRY, "Welcome to %s.");
+		add(SburbHandler.LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		

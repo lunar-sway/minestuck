@@ -17,6 +17,8 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +42,8 @@ import java.util.stream.Collectors;
 public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
@@ -216,7 +220,8 @@ public final class SburbHandler
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			c.getLandInfo().sendLandEntryMessage(player);
+			LandTypePair.Named landTypes = LandTypePair.getNamed(player.getLevel()).orElseThrow();
+			player.sendMessage(new TranslatableComponent(LAND_ENTRY, landTypes.asComponent()), Util.NIL_UUID);
 		}
 	}
 	

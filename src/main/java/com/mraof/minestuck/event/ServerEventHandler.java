@@ -16,7 +16,6 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -75,7 +74,6 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
-		MSDimensions.clear();
 	}
 	
 	@SubscribeEvent

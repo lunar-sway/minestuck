@@ -8,7 +8,6 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
 import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
-import com.mraof.minestuck.world.lands.LandInfo;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -59,23 +58,6 @@ public class GateHandler
 			
 			Teleport.teleportEntity(player, destinationWorld, destination.pos().getX() + 0.5, destination.pos().getY(), destination.pos().getZ() + 0.5);
 		}
-	}
-	
-	private static BlockPos getSavedLandGate(ServerLevel level)
-	{
-		LandInfo info = MSDimensions.getLandInfo(level);
-		if(info != null)
-		{
-			if(info.getGatePos() != null)
-				return info.getGatePos();
-		}
-		
-		BlockPos gatePos = LandGatePlacement.findLandGatePos(level);
-		
-		if(info != null)
-			info.setGatePos(gatePos);
-		
-		return gatePos;
 	}
 	
 	private static GlobalPos findPosNearLandGate(ServerLevel level)
@@ -156,7 +138,7 @@ public class GateHandler
 	{
 		GATE_1(false, world -> new BlockPos(0, gateHeight1, 0), GateHandler::findPosNearLandGate),
 		GATE_2(true, world -> new BlockPos(0, gateHeight2, 0), GateHandler::findClientLandGate),
-		LAND_GATE(true, GateHandler::getSavedLandGate, GateHandler::findServerSecondGate);
+		LAND_GATE(true, LandGatePlacement::findLandGatePos, GateHandler::findServerSecondGate);
 		
 		private final boolean isDestinationGate;
 		private final Function<ServerLevel, BlockPos> locationFinder;

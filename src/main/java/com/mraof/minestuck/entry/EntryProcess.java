@@ -22,7 +22,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -337,8 +336,6 @@ public class EntryProcess
 			placeGates(level1);
 			
 			MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
-			
-			MSDimensions.getLandInfo(level1).setSpawn(Mth.floor(player.getY()));
 			
 			LOGGER.info("Entry finished");
 		}

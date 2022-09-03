@@ -12,12 +12,8 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfo;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -50,7 +46,7 @@ public final class SburbConnection
 	private boolean isMain;
 	boolean lockedToSession;
 	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
-	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
+	private ResourceKey<Level> clientLandKey;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
 	private GristType baseGrist;
 	
@@ -104,10 +100,9 @@ public final class SburbConnection
 				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
 			}
 		}
-		if(nbt.contains("ClientLand", Tag.TAG_COMPOUND))
+		if(nbt.contains("ClientLand"))
 		{
-			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
-			MSDimensions.updateLandMaps(skaianet.mcServer, this, false);
+			clientLandKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
@@ -129,9 +124,10 @@ public final class SburbConnection
 				list.add(StringTag.valueOf(name));
 			
 			nbt.put("GivenItems", list);
-			if(clientLandInfo != null)
+			if(clientLandKey != null)
 			{
-				nbt.put("ClientLand", clientLandInfo.write(new CompoundTag()));
+				Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, clientLandKey).resultOrPartial(LOGGER::error)
+						.ifPresent(tag -> nbt.put("ClientLand", tag));
 				nbt.putBoolean("has_entered", hasEntered);
 			}
 		}
@@ -299,26 +295,22 @@ public final class SburbConnection
 	 */
 	public ResourceKey<Level> getClientDimension()
 	{
-		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
-	}
-	public LandInfo getLandInfo()
-	{
-		return clientLandInfo;
+		return this.clientLandKey;
 	}
 	void setLand(MinecraftServer server, ResourceKey<Level> dimension)
 	{
-		if(clientLandInfo != null)
+		if(clientLandKey != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
-			clientLandInfo = new LandInfo(clientIdentifier, dimension);
+			clientLandKey = dimension;
 			//TODO call this when creating a land dimension instead of when the land key is set to the connection
-			MSDimensions.updateLandMaps(server, this, true);
+			MSDimensions.sendLandTypesToAll(server);
 		}
 	}
 	void setHasEntered()
 	{
-		if(clientLandInfo == null)
+		if(clientLandKey == null)
 			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
 		if(hasEntered)
 			throw new IllegalStateException("Can't have entered twice");
@@ -371,7 +363,7 @@ public final class SburbConnection
 	void copyFrom(SburbConnection other)
 	{
 		lockedToSession = other.lockedToSession;
-		clientLandInfo = other.clientLandInfo;
+		clientLandKey = other.clientLandKey;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;
 		baseGrist = other.baseGrist;
