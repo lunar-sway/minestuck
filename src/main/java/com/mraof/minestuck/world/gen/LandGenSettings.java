@@ -39,7 +39,8 @@ public final class LandGenSettings
 	public float roughThreshold = -0.2F;
 	
 	public float oceanOffset = -0.12F;
-	public float normalOffset = 0.05F;
+	public float inlandOffset = 0.05F;
+	public float inlandAngle = 0.1F;
 	
 	public float oceanFactor = 6;
 	public float normalFactor = 5;
@@ -129,7 +130,7 @@ public final class LandGenSettings
 		CubicSpline.Builder<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents);
 		if(this.hasOceanTerrain())
 			offsetSpline.addPoint(this.getOceanThreshold(-0.1F), this.oceanOffset, 0);
-		offsetSpline.addPoint(this.getOceanThreshold(0.1F), this.normalOffset, 0);
+		offsetSpline.addPoint(this.getOceanThreshold(0.1F), this.inlandOffset, this.inlandAngle);
 		
 		CubicSpline.Builder<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion);
 		if(this.hasRoughTerrain())
