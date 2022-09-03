@@ -7,13 +7,16 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.Random;
 
-public class LandTypePair
+public final class LandTypePair
 {
 	public static final Codec<LandTypePair> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			TerrainLandType.CODEC.fieldOf("terrain").forGetter(LandTypePair::getTerrain),
@@ -66,7 +69,7 @@ public class LandTypePair
 	public static LandTypePair getTypes(ChunkGenerator generator)
 	{
 		if (generator instanceof LandChunkGenerator)
-			return ((LandChunkGenerator) generator).landTypes;
+			return ((LandChunkGenerator) generator).namedTypes.landTypes();
 		else return new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
 	}
 	
@@ -125,5 +128,38 @@ public class LandTypePair
 			ResourceLocation title = buffer.readResourceLocation();
 			return new LazyInstance(terrain, title);
 		}
+	}
+	
+	public record Named(LandTypePair landTypes, boolean useReverseOrder, int terrainNameIndex, int titleNameIndex)
+	{
+		public static final Codec<Named> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+				LandTypePair.CODEC.fieldOf("types").forGetter(Named::landTypes),
+				Codec.BOOL.fieldOf("reverse").forGetter(Named::useReverseOrder),
+				Codec.intRange(0, Integer.MAX_VALUE).fieldOf("terrain_name").forGetter(Named::terrainNameIndex),
+				Codec.intRange(0, Integer.MAX_VALUE).fieldOf("title_name").forGetter(Named::titleNameIndex)
+		).apply(instance, Named::new));
+		
+		private Component landName(boolean first)
+		{
+			if(first != useReverseOrder)
+				return new TranslatableComponent("land." + loopingGet(landTypes.getTerrain().getNames(), terrainNameIndex));
+			else return new TranslatableComponent("land." +  loopingGet(landTypes.getTitle().getNames(), titleNameIndex));
+		}
+		
+		public Component asComponent()
+		{
+			return new TranslatableComponent(LandTypePair.FORMAT, landName(true), landName(false));
+		}
+		
+		private static String loopingGet(String[] names, int index)
+		{
+			return names[Math.floorMod(index, names.length)];
+		}
+	}
+	
+	public Named createNamedRandomly(Random random)
+	{
+		return new Named(this, random.nextBoolean(),
+				random.nextInt(this.terrain.getNames().length), random.nextInt(this.title.getNames().length));
 	}
 }

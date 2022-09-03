@@ -215,6 +215,7 @@ public final class SburbHandler
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
+			
 			c.getLandInfo().sendLandEntryMessage(player);
 		}
 	}

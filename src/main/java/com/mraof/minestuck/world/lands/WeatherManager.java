@@ -22,7 +22,7 @@ public class WeatherManager
 		{
 			if (level.getChunkSource().getGenerator() instanceof LandChunkGenerator generator)
 			{
-				LandProperties properties = LandProperties.create(generator.landTypes);
+				LandProperties properties = LandProperties.create(generator.namedTypes.landTypes());
 				
 				if (level.levelData instanceof ServerLevelData levelData)
 					level.levelData = new LandWorldInfo(levelData, properties.forceRain, properties.forceThunder, properties.skylightBase);

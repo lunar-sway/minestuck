@@ -2,12 +2,12 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +33,6 @@ public class LandInfo
 	public final PlayerIdentifier identifier;
 	private final LandTypePair.LazyInstance landAspects;
 	private final ResourceKey<Level> dimension;
-	private final boolean useReverseOrder;
-	private final int terrainNameIndex, titleNameIndex;
 	@Nullable
 	private BlockPos gatePos = null;
 	private int spawnY = -1;
@@ -47,40 +45,13 @@ public class LandInfo
 		cachedAspects = Objects.requireNonNull(landTypes);
 		this.landAspects = landTypes.createLazy();
 		dimension = Objects.requireNonNull(dimensionType);
-		useReverseOrder = random.nextBoolean();
-		terrainNameIndex = random.nextInt(landTypes.getTerrain().getNames().length);
-		titleNameIndex = random.nextInt(landTypes.getTitle().getNames().length);
 	}
 	
-	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceKey<Level> dimensionType, boolean reverseOrder, int terrainNameIndex, int titleNameIndex)
+	private LandInfo(SkaianetHandler handler, PlayerIdentifier identifier, LandTypePair.LazyInstance landAspects, ResourceKey<Level> dimensionType)
 	{
 		this.identifier = identifier;
 		this.landAspects = landAspects;
 		dimension = dimensionType;
-		useReverseOrder = reverseOrder;
-		this.terrainNameIndex = terrainNameIndex;
-		this.titleNameIndex = titleNameIndex;
-	}
-	
-	public Component landAsTextComponent()
-	{
-		Component aspect1 = new TranslatableComponent("land."+landName1());
-		Component aspect2 = new TranslatableComponent("land."+landName2());
-		return new TranslatableComponent(LandTypePair.FORMAT, aspect1, aspect2);
-	}
-	
-	public String landName1()
-	{
-		if(!useReverseOrder)
-			return getLandAspects().getTerrain().getNames()[terrainNameIndex];
-		else return getLandAspects().getTitle().getNames()[titleNameIndex];
-	}
-	
-	public String landName2()
-	{
-		if(useReverseOrder)
-			return getLandAspects().getTerrain().getNames()[terrainNameIndex];
-		else return getLandAspects().getTitle().getNames()[titleNameIndex];
 	}
 	
 	@Nullable
@@ -136,9 +107,6 @@ public class LandInfo
 		landAspects.write(nbt);
 		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> nbt.put("dim_type", tag));
-		nbt.putBoolean("reverse_order", useReverseOrder);
-		nbt.putInt("terrain_name_index", terrainNameIndex);
-		nbt.putInt("title_name_index", titleNameIndex);
 		if(gatePos != null)
 		{
 			nbt.putInt("gate_x", gatePos.getX());
@@ -154,11 +122,8 @@ public class LandInfo
 	{
 		LandTypePair.LazyInstance aspects = LandTypePair.LazyInstance.read(nbt);
 		ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim_type")).resultOrPartial(LOGGER::error).get();	//TODO properly use optional, maybe by writing LandInfo with codec
-		boolean reverse = nbt.getBoolean("reverse_order");
-		int terrainIndex = nbt.getInt("terrain_name_index");
-		int titleIndex = nbt.getInt("title_name_index");
 		
-		LandInfo info = new LandInfo(handler, identifier, aspects, dimension, reverse, terrainIndex, titleIndex);
+		LandInfo info = new LandInfo(handler, identifier, aspects, dimension);
 		
 		if(nbt.contains("gate_x", Tag.TAG_ANY_NUMERIC))
 		{
@@ -171,6 +136,7 @@ public class LandInfo
 	
 	public void sendLandEntryMessage(ServerPlayer player)
 	{
-		player.sendMessage(new TranslatableComponent(LAND_ENTRY, this.landAsTextComponent()), Util.NIL_UUID);
+		LandChunkGenerator chunkGenerator = (LandChunkGenerator) player.getLevel().getChunkSource().getGenerator();
+		player.sendMessage(new TranslatableComponent(LAND_ENTRY, chunkGenerator.namedTypes.asComponent()), Util.NIL_UUID);
 	}
 }

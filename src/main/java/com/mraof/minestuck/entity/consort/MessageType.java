@@ -7,8 +7,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.ChatFormatting;
@@ -75,10 +74,10 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("land_name"))
 			{
-				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
-				if(landInfo != null)
+				ServerLevel level = consort.getServer().getLevel(consort.homeDimension);
+				if(level != null && level.getChunkSource().getGenerator() instanceof LandChunkGenerator chunkGenerator)
 				{
-					obj[i] = landInfo.landAsTextComponent();
+					obj[i] = chunkGenerator.namedTypes.asComponent();
 				} else
 					obj[i] = "Land name";
 			} else if(args[i].equals("player_title_land"))
