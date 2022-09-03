@@ -19,8 +19,10 @@ import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -977,17 +979,17 @@ public abstract class MessageType
 		protected boolean random, held, repeat;
 		protected MessageType defaultMessage;
 		protected MessageType conditionedMessage;
-		protected List<ItemStack> possibleItems;
+		protected TagKey<Item> itemTag;
 		
-		public ItemRequirement(List<ItemStack> list, MessageType defaultMessage, MessageType nextMessage)
+		public ItemRequirement(TagKey<Item> itemTag, MessageType defaultMessage, MessageType nextMessage)
 		{
-			this(defaultMessage.getString(), list, true, true, false, defaultMessage, nextMessage);
+			this(defaultMessage.getString(), itemTag, true, true, false, defaultMessage, nextMessage);
 		}
 		
-		public ItemRequirement(List<ItemStack> list, boolean random, boolean held, MessageType defaultMessage,
+		public ItemRequirement(TagKey<Item> itemTag, boolean random, boolean held, MessageType defaultMessage,
 							   MessageType nextMessage)
 		{
-			this(defaultMessage.getString(), list, random, held, false, defaultMessage, nextMessage);
+			this(defaultMessage.getString(), itemTag, random, held, false, defaultMessage, nextMessage);
 		}
 		
 		/**
@@ -1010,11 +1012,11 @@ public abstract class MessageType
 		 * @param nextMessage
 		 *            Message when requirement is met
 		 */
-		public ItemRequirement(String name, List<ItemStack> list, boolean random, boolean held, boolean repeat,
+		public ItemRequirement(String name, TagKey<Item> itemTag, boolean random, boolean held, boolean repeat,
 				MessageType defaultMessage, MessageType nextMessage)
 		{
 			this.nbtName = name;
-			this.possibleItems = list;
+			this.itemTag = itemTag;
 			this.defaultMessage = defaultMessage;
 			this.conditionedMessage = nextMessage;
 			this.random = random;
@@ -1036,39 +1038,7 @@ public abstract class MessageType
 				return conditionedMessage.getMessage(consort, player,
 						addTo(chainIdentifier, conditionedMessage.getString()));
 			
-			boolean hasItem = false;
-			if(random || repeat && nbt.contains(this.getString()))
-			{
-				int index;
-				if(nbt.contains(this.getString()))
-					index = nbt.getInt(this.getString());
-				else
-				{
-					index = consort.level.random.nextInt(possibleItems.size());
-					nbt.putInt(this.getString(), index);
-				}
-				
-				ItemStack stack = possibleItems.get(index);
-				nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
-				
-				hasItem = lookFor(stack, player);
-			} else
-			{
-				List<ItemStack> list = new ArrayList<>(possibleItems);
-				while (!list.isEmpty())
-				{
-					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
-					if(lookFor(stack, player))
-					{
-						nbt.putInt(this.getString(), possibleItems.indexOf(stack));
-						nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
-						hasItem = true;
-						break;
-					}
-				}
-			}
-			
-			if(hasItem)
+			if(containsItemFromTag(player, nbt))
 			{
 				return conditionedMessage.getMessage(consort, player, addTo(chainIdentifier, conditionedMessage.getString()));
 			}
@@ -1098,17 +1068,17 @@ public abstract class MessageType
 			return null;
 		}
 		
-		private boolean lookFor(ItemStack stack, ServerPlayer player)
+		private boolean containsItemFromTag(ServerPlayer player, CompoundTag nbt)
 		{
-			for(ItemStack held : player.getHandSlots())
-				if(ItemStack.isSame(held, stack))
+			for(ItemStack stack : player.getInventory().items)
+			{
+				if(stack.is(itemTag))
+				{
+					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 					return true;
-				
-			if(!held)
-				for(ItemStack held : player.getInventory().items)
-					if(ItemStack.isSame(held, stack))
-						return true;
-					
+				}
+			}
+			
 			return false;
 		}
 		

@@ -105,7 +105,7 @@ public class StoneTabletScreen extends Screen
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(poseStack); //TODO issue on this line, "java.lang.NullPointerException: Cannot read field "level" because "this.minecraft" is null"
 		this.setFocused(null);
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;

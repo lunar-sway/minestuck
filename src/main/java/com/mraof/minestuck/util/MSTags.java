@@ -81,6 +81,7 @@ public class MSTags
 		public static final TagKey<Item> MODUS_CARD = tag("modus_card");
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
+		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static TagKey<Item> tag(String name)

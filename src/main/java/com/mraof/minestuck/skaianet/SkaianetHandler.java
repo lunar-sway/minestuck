@@ -343,7 +343,7 @@ public final class SkaianetHandler
 	
 	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
 	{
-		checkData();
+		checkData(); //TODO checkData is called again(conditionally) in requestInfo, is there a way to reduce redundancy?
 		infoTracker.requestInfo(player, p1);
 	}
 	
