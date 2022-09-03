@@ -136,7 +136,7 @@ public class LandInfo
 	
 	public void sendLandEntryMessage(ServerPlayer player)
 	{
-		LandChunkGenerator chunkGenerator = (LandChunkGenerator) player.getLevel().getChunkSource().getGenerator();
-		player.sendMessage(new TranslatableComponent(LAND_ENTRY, chunkGenerator.namedTypes.asComponent()), Util.NIL_UUID);
+		LandTypePair.Named landTypes = LandTypePair.getNamed(player.getLevel()).orElseThrow();
+		player.sendMessage(new TranslatableComponent(LAND_ENTRY, landTypes.asComponent()), Util.NIL_UUID);
 	}
 }

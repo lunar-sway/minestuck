@@ -9,11 +9,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 public final class LandTypePair
@@ -66,11 +71,33 @@ public final class LandTypePair
 		return new LandTypePair(terrain, title);
 	}
 	
-	public static LandTypePair getTypes(ChunkGenerator generator)
+	public static Optional<LandTypePair> getTypes(ServerLevel level)
 	{
-		if (generator instanceof LandChunkGenerator)
-			return ((LandChunkGenerator) generator).namedTypes.landTypes();
-		else return new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL);
+		return getNamed(level).map(Named::landTypes);
+	}
+	
+	public static LandTypePair getTypesOrDefaulted(ChunkGenerator generator)
+	{
+		return getNamed(generator).map(Named::landTypes)
+				.orElseGet(() -> new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL));
+	}
+	
+	public static Optional<Named> getNamed(MinecraftServer server, ResourceKey<Level> levelKey)
+	{
+		return Optional.ofNullable(server.getLevel(levelKey)).flatMap(LandTypePair::getNamed);
+	}
+	
+	public static Optional<Named> getNamed(ServerLevel level)
+	{
+		return getNamed(level.getChunkSource().getGenerator());
+	}
+	
+	public static Optional<Named> getNamed(ChunkGenerator generator)
+	{
+		if(generator instanceof LandChunkGenerator chunkGenerator)
+			return Optional.of(chunkGenerator.namedTypes);
+		else
+			return Optional.empty();
 	}
 	
 	public LazyInstance createLazy()

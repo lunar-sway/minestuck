@@ -5,7 +5,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.DataCheckerPermission;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class DataCheckerManager
@@ -96,12 +95,11 @@ public class DataCheckerManager
 			if(landDimensionKey != null)
 			{
 				connectionTag.putString("clientDim", connection.getClientDimension().location().toString());
-				ServerLevel level = server.getLevel(landDimensionKey);
-				if(level != null && level.getChunkSource().getGenerator() instanceof LandChunkGenerator chunkGenerator)
-				{
-					LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, chunkGenerator.namedTypes).resultOrPartial(LOGGER::error)
-							.ifPresent(tag -> connectionTag.put("landTypes", tag));
-				}
+				
+				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
+				landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
+						.ifPresent(tag -> connectionTag.put("landTypes", tag));
+				
 				Title title = PlayerSavedData.getData(connection.getClientIdentifier(), connection.skaianet.mcServer).getTitle();
 				if(title != null)
 				{

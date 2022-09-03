@@ -3,7 +3,7 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -22,15 +22,10 @@ public class CheckLandCommand
 	
 	private static int execute(CommandSourceStack source) throws CommandSyntaxException
 	{
-		if(source.getLevel().getChunkSource().getGenerator() instanceof LandChunkGenerator chunkGenerator)
-		{
-			Component toSend = new TranslatableComponent(CHECK, chunkGenerator.namedTypes.asComponent());
-			source.sendSuccess(toSend, false);
-			return 1;
-		}
-		else
-		{
-			throw FAIL_EXCEPTION.create();
-		}
+		LandTypePair.Named landTypes = LandTypePair.getNamed(source.getLevel()).orElseThrow(FAIL_EXCEPTION::create);
+		
+		Component toSend = new TranslatableComponent(CHECK, landTypes.asComponent());
+		source.sendSuccess(toSend, false);
+		return 1;
 	}
 }

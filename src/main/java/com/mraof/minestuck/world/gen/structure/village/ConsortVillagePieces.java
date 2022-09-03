@@ -320,7 +320,7 @@ public class ConsortVillagePieces
 			
 			if(boundingBox.isInside(pos))
 			{
-				LandTypePair landTypes = LandTypePair.getTypes(chunkGenerator);
+				LandTypePair landTypes = LandTypePair.getTypesOrDefaulted(chunkGenerator);
 				
 				EntityType<? extends ConsortEntity> consortType = landTypes.getTerrain().getConsortType();
 				
