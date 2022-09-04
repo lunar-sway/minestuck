@@ -61,25 +61,25 @@ public class ForestLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", type == Variant.TAIGA ? Blocks.PODZOL.defaultBlockState() : Blocks.GRASS_BLOCK.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
+		registry.setBlock("surface", type == Variant.TAIGA ? Blocks.PODZOL : Blocks.GRASS_BLOCK);
+		registry.setBlock("upper", Blocks.DIRT);
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.get().defaultBlockState());
+			registry.setBlock("structure_primary", Blocks.SPRUCE_WOOD);
+			registry.setBlock("structure_primary_decorative", MSBlocks.FROST_WOOD);
 		} else {
-			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.get().defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.get().defaultBlockState());
+			registry.setBlock("structure_primary", MSBlocks.VINE_WOOD);
+			registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD);
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
-		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.defaultBlockState());
+		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
+		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("bush", Blocks.FERN);
+		registry.setBlock("structure_wool_1", Blocks.GREEN_WOOL);
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_wool_3", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
+			registry.setBlock("structure_wool_3", Blocks.LIGHT_BLUE_WOOL);
 		} else {
-			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.defaultBlockState());
+			registry.setBlock("structure_wool_3", Blocks.BROWN_WOOL);
 		}
 	}
 	

@@ -64,32 +64,32 @@ public class SandstoneLandType extends TerrainLandType
 	{
 		if(type == Variant.SANDSTONE)
 		{
-			registry.setBlockState("sand", Blocks.SAND.defaultBlockState());
-			registry.setBlockState("ocean_surface", Blocks.SAND.defaultBlockState());
-			registry.setBlockState("upper", Blocks.SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.defaultBlockState());
-			registry.setBlockState("village_path", Blocks.RED_SAND.defaultBlockState());
+			registry.setBlock("sand", Blocks.SAND);
+			registry.setBlock("ocean_surface", Blocks.SAND);
+			registry.setBlock("upper", Blocks.SANDSTONE);
+			registry.setBlock("structure_primary", Blocks.SMOOTH_SANDSTONE);
+			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_SANDSTONE);
+			registry.setBlock("structure_primary_stairs", Blocks.SANDSTONE_STAIRS);
+			registry.setBlock("village_path", Blocks.RED_SAND);
 		} else
 		{
-			registry.setBlockState("sand", Blocks.RED_SAND.defaultBlockState());
-			registry.setBlockState("ocean_surface", Blocks.RED_SAND.defaultBlockState());
-			registry.setBlockState("upper", Blocks.RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.defaultBlockState());
-			registry.setBlockState("village_path", Blocks.SAND.defaultBlockState());
+			registry.setBlock("sand", Blocks.RED_SAND);
+			registry.setBlock("ocean_surface", Blocks.RED_SAND);
+			registry.setBlock("upper", Blocks.RED_SANDSTONE);
+			registry.setBlock("structure_primary", Blocks.SMOOTH_RED_SANDSTONE);
+			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE);
+			registry.setBlock("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS);
+			registry.setBlock("village_path", Blocks.SAND);
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.defaultBlockState());
-		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.defaultBlockState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
+		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
+		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("structure_planks", Blocks.ACACIA_PLANKS);
+		registry.setBlock("structure_planks_slab", Blocks.ACACIA_SLAB);
+		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock("structure_wool_1", Blocks.WHITE_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);
 	}
 	
 	@Override

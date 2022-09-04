@@ -29,8 +29,8 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.BLACK_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.BLUE_WOOL);
+		registry.setBlock("carpet", Blocks.BLACK_CARPET);
 	}
 	
 	@Override

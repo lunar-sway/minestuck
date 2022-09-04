@@ -37,8 +37,8 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.ORANGE_WOOL);
+		registry.setBlock("carpet", Blocks.MAGENTA_CARPET);
 	}
 	
 	@Override

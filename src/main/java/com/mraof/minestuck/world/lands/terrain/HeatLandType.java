@@ -42,26 +42,26 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ground", Blocks.NETHERRACK.defaultBlockState());
-		registry.setBlockState("upper", Blocks.NETHERRACK.defaultBlockState());
-		registry.setBlockState("ocean", Blocks.LAVA.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.BLACK_STONE_COLUMN.get().defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS.get().defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.CAST_IRON.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_CAST_IRON.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.CAST_IRON_STAIRS.get().defaultBlockState());
-		registry.setBlockState("fall_fluid", Blocks.WATER.defaultBlockState());
-		registry.setBlockState("structure_planks", Blocks.BRICKS.defaultBlockState());
-		registry.setBlockState("structure_planks_slab", Blocks.BRICK_SLAB.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.QUARTZ_BLOCK.defaultBlockState());
-		registry.setBlockState("village_fence", Blocks.NETHER_BRICK_FENCE.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.defaultBlockState());
-		registry.setBlockState("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE.get().defaultBlockState());
-		registry.setBlockState("uranium_ore", MSBlocks.NETHERRACK_URANIUM_ORE.get().defaultBlockState());
+		registry.setBlock("ground", Blocks.NETHERRACK);
+		registry.setBlock("upper", Blocks.NETHERRACK);
+		registry.setBlock("ocean", Blocks.LAVA);
+		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_BLACK_STONE_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.BLACK_STONE_COLUMN);
+		registry.setBlock("structure_primary_stairs", MSBlocks.BLACK_STONE_BRICK_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.CAST_IRON);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_CAST_IRON);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.CAST_IRON_STAIRS);
+		registry.setBlock("fall_fluid", Blocks.WATER);
+		registry.setBlock("structure_planks", Blocks.BRICKS);
+		registry.setBlock("structure_planks_slab", Blocks.BRICK_SLAB);
+		registry.setBlock("village_path", Blocks.QUARTZ_BLOCK);
+		registry.setBlock("village_fence", Blocks.NETHER_BRICK_FENCE);
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.PURPLE_WOOL);
+		registry.setBlock("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.NETHERRACK_URANIUM_ORE);
 	}
 	
 	@Override

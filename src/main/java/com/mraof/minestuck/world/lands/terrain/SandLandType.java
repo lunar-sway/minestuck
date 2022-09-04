@@ -75,33 +75,33 @@ public class SandLandType extends TerrainLandType
 	{
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
-			registry.setBlockState("ground", Blocks.SANDSTONE.defaultBlockState());
-			registry.setBlockState("upper", Blocks.SAND.defaultBlockState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_stairs", Blocks.SANDSTONE_STAIRS.defaultBlockState());
-			registry.setBlockState("village_path", Blocks.RED_SAND.defaultBlockState());
-			registry.setBlockState("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE.get().defaultBlockState());
-			registry.setBlockState("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE.get().defaultBlockState());
+			registry.setBlock("ground", Blocks.SANDSTONE);
+			registry.setBlock("upper", Blocks.SAND);
+			registry.setBlock("structure_primary", Blocks.SMOOTH_SANDSTONE);
+			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_SANDSTONE);
+			registry.setBlock("structure_primary_stairs", Blocks.SANDSTONE_STAIRS);
+			registry.setBlock("village_path", Blocks.RED_SAND);
+			registry.setBlock("cruxite_ore", MSBlocks.SANDSTONE_CRUXITE_ORE);
+			registry.setBlock("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE);
 		} else
 		{
-			registry.setBlockState("ground", Blocks.RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("upper", Blocks.RED_SAND.defaultBlockState());
-			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
-			registry.setBlockState("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS.defaultBlockState());
-			registry.setBlockState("village_path", Blocks.SAND.defaultBlockState());
-			registry.setBlockState("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE.get().defaultBlockState());
-			registry.setBlockState("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE.get().defaultBlockState());
+			registry.setBlock("ground", Blocks.RED_SANDSTONE);
+			registry.setBlock("upper", Blocks.RED_SAND);
+			registry.setBlock("structure_primary", Blocks.SMOOTH_RED_SANDSTONE);
+			registry.setBlock("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE);
+			registry.setBlock("structure_primary_stairs", Blocks.RED_SANDSTONE_STAIRS);
+			registry.setBlock("village_path", Blocks.SAND);
+			registry.setBlock("cruxite_ore", MSBlocks.RED_SANDSTONE_CRUXITE_ORE);
+			registry.setBlock("uranium_ore", MSBlocks.RED_SANDSTONE_URANIUM_ORE);
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_planks", Blocks.ACACIA_PLANKS.defaultBlockState());
-		registry.setBlockState("structure_planks_slab", Blocks.ACACIA_SLAB.defaultBlockState());
+		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
+		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("structure_planks", Blocks.ACACIA_PLANKS);
+		registry.setBlock("structure_planks_slab", Blocks.ACACIA_SLAB);
 		registry.setBlockState("river", registry.getBlockState("upper"));
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.MAGENTA_WOOL.defaultBlockState());
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.MAGENTA_WOOL);
 	}
 	
 	@Override

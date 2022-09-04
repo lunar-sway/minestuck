@@ -18,6 +18,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public final class StructureBlockRegistry
 {
@@ -116,9 +117,9 @@ public final class StructureBlockRegistry
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.defaultBlockState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.defaultBlockState());
 		
-		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
-		defaultRegistry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.defaultBlockState());
+		defaultRegistry.setBlock("surface", Blocks.GRASS_BLOCK);
+		defaultRegistry.setBlock("upper", Blocks.DIRT);
+		defaultRegistry.setBlock("ocean_surface", Blocks.GRAVEL);
 	}
 	
 	public static StructureBlockRegistry getOrDefault(ChunkGenerator generator)
@@ -156,6 +157,16 @@ public final class StructureBlockRegistry
 	//Nonstatic stuff
 	private final Map<String, BlockState> blockRegistry = new HashMap<>();
 	private RuleTest groundType = OreFeatures.NATURAL_STONE;
+	
+	public void setBlock(String name, Supplier<? extends Block> block)
+	{
+		setBlock(name, block.get());
+	}
+	
+	public void setBlock(String name, Block block)
+	{
+		setBlockState(name, block.defaultBlockState());
+	}
 	
 	public void setBlockState(String name, BlockState state)
 	{

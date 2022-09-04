@@ -43,21 +43,21 @@ public class FloraLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
-		registry.setBlockState("surface_rough", Blocks.COARSE_DIRT.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.BLOOD.get().defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
-		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
+		registry.setBlock("surface", Blocks.GRASS_BLOCK);
+		registry.setBlock("surface_rough", Blocks.COARSE_DIRT);
+		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("ocean", MSBlocks.BLOOD);
+		registry.setBlock("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		registry.setBlock("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("structure_secondary", Blocks.MOSSY_COBBLESTONE);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		registry.setBlock("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("bush", Blocks.FERN);
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.CYAN_WOOL);
 	}
 	
 	@Override

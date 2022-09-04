@@ -37,29 +37,29 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ground", MSBlocks.SHADE_STONE.get().defaultBlockState());
-		registry.setBlockState("upper", MSBlocks.BLUE_DIRT.get().defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.OIL.get().defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.SHADE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.SHADE_COLUMN.get().defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.SHADE_STAIRS.get().defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS.get().defaultBlockState());
-		registry.setBlockState("village_path", Blocks.GRAVEL.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.get().defaultBlockState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
-		registry.setBlockState("mushroom_1", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
-		registry.setBlockState("mushroom_2", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
-		registry.setBlockState("bush", MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.CYAN_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
-		registry.setBlockState("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE.get().defaultBlockState());
-		registry.setBlockState("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE.get().defaultBlockState());
+		registry.setBlock("ground", MSBlocks.SHADE_STONE);
+		registry.setBlock("upper", MSBlocks.BLUE_DIRT);
+		registry.setBlock("ocean", MSBlocks.OIL);
+		registry.setBlock("structure_primary", MSBlocks.SHADE_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_SHADE_BRICKS);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_SHADE_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_SHADE_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.SHADE_COLUMN);
+		registry.setBlock("structure_primary_stairs", MSBlocks.SHADE_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.SMOOTH_SHADE_STONE);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.TAR_SHADE_BRICKS);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.SHADE_BRICK_STAIRS);
+		registry.setBlock("village_path", Blocks.GRAVEL);
+		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
+		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock("mushroom_1", MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock("mushroom_2", MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock("bush", MSBlocks.GLOWING_MUSHROOM);
+		registry.setBlock("structure_wool_1", Blocks.CYAN_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
+		registry.setBlock("cruxite_ore", MSBlocks.SHADE_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.SHADE_STONE_URANIUM_ORE);
 	}
 	
 	@Override

@@ -32,13 +32,13 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLACK_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.BLUE_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.BLACK_WOOL);
+		registry.setBlock("carpet", Blocks.BLUE_CARPET);
 		
 		if(registry.getCustomBlock("torch") == null)
-			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
+			registry.setBlock("torch", Blocks.REDSTONE_TORCH);
 		if(registry.getCustomBlock("wall_torch") == null)
-			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
+			registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
 	}
 	
 	@Override

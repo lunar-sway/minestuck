@@ -46,23 +46,23 @@ public class RainbowLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("upper", Blocks.WHITE_TERRACOTTA.defaultBlockState());
-		registry.setBlockState("surface", Blocks.WHITE_WOOL.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.WATER_COLORS.get().defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.RAINBOW_WOOD.get().defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", Blocks.ACACIA_LOG.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.RAINBOW_PLANKS.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.SPRUCE_PLANKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.JUNGLE_STAIRS.defaultBlockState());
-		registry.setBlockState("salamander_floor", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWING_WOOD.get().defaultBlockState());
+		registry.setBlock("upper", Blocks.WHITE_TERRACOTTA);
+		registry.setBlock("surface", Blocks.WHITE_WOOL);
+		registry.setBlock("ocean", MSBlocks.WATER_COLORS);
+		registry.setBlock("structure_primary", MSBlocks.RAINBOW_WOOD);
+		registry.setBlock("structure_primary_decorative", Blocks.ACACIA_LOG);
+		registry.setBlock("structure_primary_stairs", Blocks.DARK_OAK_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.RAINBOW_PLANKS);
+		registry.setBlock("structure_secondary_decorative", Blocks.SPRUCE_PLANKS);
+		registry.setBlock("structure_secondary_stairs", Blocks.JUNGLE_STAIRS);
+		registry.setBlock("salamander_floor", Blocks.STONE_BRICKS);
+		registry.setBlock("light_block", MSBlocks.GLOWING_WOOD);
 		BlockState rainbow_leaves = MSBlocks.RAINBOW_LEAVES.get().defaultBlockState().setValue(LeavesBlock.PERSISTENT, true);
 		registry.setBlockState("bush", rainbow_leaves);
 		registry.setBlockState("mushroom_1", rainbow_leaves);
 		registry.setBlockState("mushroom_2", rainbow_leaves);
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.GREEN_WOOL);
 	}
 	
 	@Override

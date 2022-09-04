@@ -48,28 +48,28 @@ public class FungiLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ground", MSBlocks.MYCELIUM_STONE.get().defaultBlockState());
-		registry.setBlockState("surface", Blocks.MYCELIUM.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.MYCELIUM_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS.get().defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.MYCELIUM_COLUMN.get().defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS.get().defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE.get().defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS.get().defaultBlockState());
-		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWY_GOOP.get().defaultBlockState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
-		registry.setBlockState("mushroom_1", Blocks.RED_MUSHROOM.defaultBlockState());
-		registry.setBlockState("mushroom_2", Blocks.BROWN_MUSHROOM.defaultBlockState());
-		registry.setBlockState("bush", Blocks.BROWN_MUSHROOM.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.LIME_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
+		registry.setBlock("ground", MSBlocks.MYCELIUM_STONE);
+		registry.setBlock("surface", Blocks.MYCELIUM);
+		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("ocean", Blocks.WATER);
+		registry.setBlock("structure_primary", MSBlocks.MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.MYCELIUM_COLUMN);
+		registry.setBlock("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("light_block", MSBlocks.GLOWY_GOOP);
+		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock("mushroom_1", Blocks.RED_MUSHROOM);
+		registry.setBlock("mushroom_2", Blocks.BROWN_MUSHROOM);
+		registry.setBlock("bush", Blocks.BROWN_MUSHROOM);
+		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
 	}
 	
 	@Override
