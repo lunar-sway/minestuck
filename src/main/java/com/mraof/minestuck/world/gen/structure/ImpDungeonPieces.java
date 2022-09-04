@@ -567,7 +567,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 11, 10, pos, coordBaseMode), 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -598,35 +598,35 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
 			
-			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 4, 0, 1, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 2, 7, 0, 2, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, -1, 4, 1, -1, 5, floorDecor, floorDecor, false);
-			generateBox(level, structureBoundingBoxIn, 2, -1, 4, 5, -1, 5, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 6, -1, 4, 6, -1, 5, floorDecor, floorDecor, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 7, 6, 0, 8, floorBlock, floorBlock, false);
-			generateAirBox(level, structureBoundingBoxIn, 3, 1, 0, 4, 3, 1);
-			generateAirBox(level, structureBoundingBoxIn, 1, 1, 2, 6, 4, 3);
-			generateAirBox(level, structureBoundingBoxIn, 1, 0, 3, 6, 5, 5);
-			generateAirBox(level, structureBoundingBoxIn, 1, 1, 6, 6, 5, 8);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 6, 0, 3, floorStairsBack, floorStairsBack, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorStairsFront, floorStairsFront, false);
+			generateBox(level, structureBoundingBoxIn, 3, 1, 0, 4, 1, 1, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 2, 7, 1, 2, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 0, 4, 1, 0, 5, floorDecor, floorDecor, false);
+			generateBox(level, structureBoundingBoxIn, 2, 0, 4, 5, 0, 5, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 6, 0, 4, 6, 0, 5, floorDecor, floorDecor, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 7, 6, 1, 8, floorBlock, floorBlock, false);
+			generateAirBox(level, structureBoundingBoxIn, 3, 2, 0, 4, 4, 1);
+			generateAirBox(level, structureBoundingBoxIn, 1, 2, 2, 6, 5, 3);
+			generateAirBox(level, structureBoundingBoxIn, 1, 1, 3, 6, 6, 5);
+			generateAirBox(level, structureBoundingBoxIn, 1, 2, 6, 6, 6, 8);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 3, 6, 1, 3, floorStairsBack, floorStairsBack, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 6, 6, 1, 6, floorStairsFront, floorStairsFront, false);
 			
-			generateBox(level, structureBoundingBoxIn, 2, 1, 0, 2, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 5, 1, 0, 5, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 1, 1, 1, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 6, 1, 1, 7, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 4, 1, 7, 5, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 0, 2, 0, 5, 8, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 7, 0, 2, 7, 5, 8, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 1, 9, 7, 5, 9, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 5, 2, 6, 5, 3, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 6, 4, 6, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 2, 2, 0, 2, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 5, 2, 0, 5, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 2, 1, 1, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 6, 2, 1, 7, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 5, 1, 7, 6, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 1, 2, 0, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 7, 1, 2, 7, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 2, 9, 7, 6, 9, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 3, 5, 0, 4, 5, 0, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 6, 2, 6, 6, 3, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 7, 4, 6, 7, 8, wallBlock, wallBlock, false);
 			
-			generateBox(level, structureBoundingBoxIn, 1, 6, 5, 1, 6, 6, light, light, false);
-			generateBox(level, structureBoundingBoxIn, 6, 6, 5, 6, 6, 6, light, light, false);
+			generateBox(level, structureBoundingBoxIn, 1, 7, 5, 1, 7, 6, light, light, false);
+			generateBox(level, structureBoundingBoxIn, 6, 7, 5, 6, 7, 6, light, light, false);
 			
-			placeReturnNode(level, structureBoundingBoxIn, 3, 1, 7);
+			placeReturnNode(level, structureBoundingBoxIn, 3, 2, 7);
 		}
 	}
 	public static class SpawnerRoom extends ImpDungeonPiece
