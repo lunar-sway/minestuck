@@ -140,9 +140,9 @@ public class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
-			List.of(RarityFilter.onAverageOnceEvery(5), CountPlacement.of(6), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> SMALL_RABBIT_PLACEMENT = REGISTER.register("small_rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
-			List.of(RarityFilter.onAverageOnceEvery(5), CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
 	
 	private static PlacedFeature placed(Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
 	{
