@@ -27,10 +27,10 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	
 	public static StructurePiece create(ChunkPos pos, Random rand)
 	{
-		return new ImpDungeonEntryPiece(pos.getBlockX(rand.nextInt(16)), pos.getBlockZ(rand.nextInt(16)), rand, getRandomHorizontalDirection(rand));
+		return new ImpDungeonEntryPiece(pos.getBlockX(rand.nextInt(16)), pos.getBlockZ(rand.nextInt(16)), getRandomHorizontalDirection(rand));
 	}
 	
-	private ImpDungeonEntryPiece(int x, int z, Random rand, Direction orientation)
+	private ImpDungeonEntryPiece(int x, int z, Direction orientation)
 	{
 		super(MSStructurePieces.IMP_ENTRY.get(), 0, makeBoundingBox(x, 64, z, orientation, 6, 4, 11));
 		setOrientation(orientation);

@@ -176,8 +176,8 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		int xWidth = orientation.getAxis().equals(Direction.Axis.X) ? sizeZ : sizeX;
 		int zWidth = orientation.getAxis().equals(Direction.Axis.Z) ? sizeZ : sizeX;
 		
-		int x = centerX - (xWidth/2 - 1);
-		int z = centerZ - (zWidth/2 - 1);
+		int x = centerX - (xWidth - 1)/2;
+		int z = centerZ - (zWidth - 1)/2;
 		
 		return new BoundingBox(x, y, z, x + xWidth - 1, y + sizeY - 1, z + zWidth - 1);
 	}

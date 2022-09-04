@@ -38,10 +38,10 @@ public class ImpDungeonPieces
 			int x = posX + (orientation.getAxis().equals(Direction.Axis.Z) ? 0 : offset);
 			int y = 45 - rand.nextInt(8);
 			int z = posZ + (orientation.getAxis().equals(Direction.Axis.X) ? 0 : offset);
-			return new EntryCorridor(orientation, x, y, z, rand);
+			return new EntryCorridor(orientation, x, y, z);
 		}
 		
-		private EntryCorridor(Direction orientation, int x, int y, int z, Random rand)
+		private EntryCorridor(Direction orientation, int x, int y, int z)
 		{
 			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10), 2);
 			setOrientation(orientation);
@@ -158,7 +158,7 @@ public class ImpDungeonPieces
 		{
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
-				component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+				component = TurnCorridor.create(facing, pos, xIndex, zIndex, index, ctxt);
 			else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
@@ -423,19 +423,23 @@ public class ImpDungeonPieces
 	{
 		boolean light;
 		
-		public TurnCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		public static ImpDungeonPiece create(Direction orientation, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 1 : -1), pos.getY(),
-					pos.getZ() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.EAST ? 1 : -1), coordBaseMode, 7, 5, 7), 2);
 			boolean direction = ctxt.rand.nextBoolean();
-			if(direction)
-				setOrientation(coordBaseMode.getClockWise());
-			else setOrientation(coordBaseMode);
+			return new TurnCorridor(direction, direction ? orientation.getClockWise() : orientation, pos, xIndex, zIndex, index, ctxt);
+		}
+		
+		private TurnCorridor(boolean direction, Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 2 : -1), pos.getY(),
+					pos.getZ() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.EAST ? 2 : -1), coordBaseMode, 7, 5, 7), 2);
+			
+			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.2F;
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
-			Direction newFacing = direction ? coordBaseMode.getCounterClockWise() : coordBaseMode.getClockWise();
+			Direction newFacing = direction ? coordBaseMode.getOpposite() : coordBaseMode.getClockWise();
 			int xOffset = newFacing.getStepX();
 			int zOffset = newFacing.getStepZ();
 			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), newFacing, index + 1);
