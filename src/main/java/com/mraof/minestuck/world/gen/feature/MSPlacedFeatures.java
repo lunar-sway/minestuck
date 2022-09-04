@@ -40,9 +40,9 @@ public class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(5))));
 	
 	public static final RegistryObject<PlacedFeature> BROKEN_SWORD = REGISTER.register("broken_sword", () -> placed(MSCFeatures.BROKEN_SWORD,
-			List.of(RarityFilter.onAverageOnceEvery(10), BiomeFilter.biome())));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(10))));
 	public static final RegistryObject<PlacedFeature> UNCOMMON_BROKEN_SWORD = REGISTER.register("uncommon_broken_sword", () -> placed(MSCFeatures.BROKEN_SWORD,
-			List.of(RarityFilter.onAverageOnceEvery(50), BiomeFilter.biome())));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
 	public static final RegistryObject<PlacedFeature> BUCKET = REGISTER.register("bucket", () -> placed(MSCFeatures.BUCKET,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 	public static final RegistryObject<PlacedFeature> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> placed(MSCFeatures.CAKE_PEDESTAL,
