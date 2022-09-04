@@ -35,9 +35,9 @@ public class SilenceLandType extends TitleLandType
 		registry.setBlock("structure_wool_2", Blocks.BLACK_WOOL);
 		registry.setBlock("carpet", Blocks.BLUE_CARPET);
 		
-		if(registry.getCustomBlock("torch") == null)
+		if(registry.isUsingDefault("torch"))
 			registry.setBlock("torch", Blocks.REDSTONE_TORCH);
-		if(registry.getCustomBlock("wall_torch") == null)
+		if(registry.isUsingDefault("wall_torch"))
 			registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
 	}
 	

@@ -195,9 +195,9 @@ public final class StructureBlockRegistry
 		else return staticRegistry.get(name).getBlockState(this);
 	}
 	
-	public BlockState getCustomBlock(String name)
+	public boolean isUsingDefault(String name)
 	{
-		return blockRegistry.get(name);
+		return blockRegistry.get(name) == null;
 	}
 	
 	public BlockState getStairs(String name, Direction facing, boolean upsideDown)
