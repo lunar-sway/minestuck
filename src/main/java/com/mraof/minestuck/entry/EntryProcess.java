@@ -169,7 +169,7 @@ public class EntryProcess
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
-				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+				for(blockY = Math.max(level.getMinBuildHeight(), y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
@@ -395,8 +395,8 @@ public class EntryProcess
 	private static void copyBlockDirect(LevelAccessor levelAccessor, ChunkAccess cSrc, ChunkAccess cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
 		BlockPos dest = new BlockPos(xDst, yDst, zDst);
-		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
-		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc);
+		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst);
 		int y = yDst;
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
@@ -414,7 +414,7 @@ public class EntryProcess
 	
 	private static LevelChunkSection getBlockStorage(ChunkAccess c, int y)
 	{
-		return c.getSections()[y];
+		return c.getSection(c.getSectionIndex(y));
 	}
 	
 	/**
