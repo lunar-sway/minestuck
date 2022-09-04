@@ -13,11 +13,11 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public final class StructureBlockRegistry
 {
@@ -165,19 +165,11 @@ public final class StructureBlockRegistry
 			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be set.");
 		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
 			throw new IllegalArgumentException("The provided block must extend \""+staticRegistry.get(name).extention+"\".");
-		if(name.equals("ground"))
-			throw new IllegalArgumentException("Should use setGroundState() for setting the ground block.");
 		
 		blockRegistry.put(name, state);
-	}
-	
-	public void setGroundState(BlockState state, RuleTest groundType)
-	{
-		Objects.requireNonNull(state,  "Null parameters not allowed.");
-		Objects.requireNonNull(groundType,  "Null parameters not allowed.");
 		
-		blockRegistry.put("ground", state);
-		this.groundType = groundType;
+		if(name.equals("ground"))
+			groundType = new BlockStateMatchTest(state);
 	}
 	
 	public BlockState getBlockState(String name)

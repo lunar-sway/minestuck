@@ -6,7 +6,6 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
@@ -52,7 +51,7 @@ public class RainLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.PINK_STONE.get().defaultBlockState(), MSFillerBlockTypes.PINK_STONE);
+		registry.setBlockState("ground", MSBlocks.PINK_STONE.get().defaultBlockState());
 		registry.setBlockState("surface", MSBlocks.CHALK.get().defaultBlockState());
 		registry.setBlockState("upper", MSBlocks.CHALK.get().defaultBlockState());
 		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());

@@ -8,7 +8,6 @@ import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
-import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
@@ -43,7 +42,7 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(Blocks.NETHERRACK.defaultBlockState(), OreFeatures.NETHER_ORE_REPLACEABLES);
+		registry.setBlockState("ground", Blocks.NETHERRACK.defaultBlockState());
 		registry.setBlockState("upper", Blocks.NETHERRACK.defaultBlockState());
 		registry.setBlockState("ocean", Blocks.LAVA.defaultBlockState());
 		registry.setBlockState("structure_primary", MSBlocks.BLACK_STONE_BRICKS.get().defaultBlockState());

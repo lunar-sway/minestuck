@@ -4,7 +4,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
@@ -38,7 +37,7 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.SHADE_STONE.get().defaultBlockState(), MSFillerBlockTypes.SHADE_STONE);
+		registry.setBlockState("ground", MSBlocks.SHADE_STONE.get().defaultBlockState());
 		registry.setBlockState("upper", MSBlocks.BLUE_DIRT.get().defaultBlockState());
 		registry.setBlockState("ocean", MSBlocks.OIL.get().defaultBlockState());
 		registry.setBlockState("structure_primary", MSBlocks.SHADE_BRICKS.get().defaultBlockState());

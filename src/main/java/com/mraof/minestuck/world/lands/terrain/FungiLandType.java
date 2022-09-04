@@ -5,7 +5,6 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -49,7 +48,7 @@ public class FungiLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.MYCELIUM_STONE.get().defaultBlockState(), MSFillerBlockTypes.MYCELIUM_STONE);
+		registry.setBlockState("ground", MSBlocks.MYCELIUM_STONE.get().defaultBlockState());
 		registry.setBlockState("surface", Blocks.MYCELIUM.defaultBlockState());
 		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
 		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());

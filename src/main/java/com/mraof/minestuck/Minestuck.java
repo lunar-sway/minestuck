@@ -100,7 +100,6 @@ public class Minestuck
 	{
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
-		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
 		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();

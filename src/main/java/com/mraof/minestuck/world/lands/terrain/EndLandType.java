@@ -7,7 +7,6 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
@@ -47,7 +46,7 @@ public class EndLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.COARSE_END_STONE.get().defaultBlockState(), MSFillerBlockTypes.COARSE_END_STONE);
+		registry.setBlockState("ground", MSBlocks.COARSE_END_STONE.get().defaultBlockState());
 		registry.setBlockState("surface", Blocks.END_STONE.defaultBlockState());
 		registry.setBlockState("surface_rough", MSBlocks.END_GRASS.get().defaultBlockState());
 		registry.setBlockState("upper", Blocks.END_STONE.defaultBlockState());

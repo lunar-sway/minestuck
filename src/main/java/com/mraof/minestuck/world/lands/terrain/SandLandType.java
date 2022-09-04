@@ -8,7 +8,6 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
@@ -76,7 +75,7 @@ public class SandLandType extends TerrainLandType
 	{
 		if(type == Variant.SAND || type == Variant.LUSH_DESERTS)
 		{
-			registry.setGroundState(Blocks.SANDSTONE.defaultBlockState(), MSFillerBlockTypes.SANDSTONE);
+			registry.setBlockState("ground", Blocks.SANDSTONE.defaultBlockState());
 			registry.setBlockState("upper", Blocks.SAND.defaultBlockState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_SANDSTONE.defaultBlockState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_SANDSTONE.defaultBlockState());
@@ -86,7 +85,7 @@ public class SandLandType extends TerrainLandType
 			registry.setBlockState("uranium_ore", MSBlocks.SANDSTONE_URANIUM_ORE.get().defaultBlockState());
 		} else
 		{
-			registry.setGroundState(Blocks.RED_SANDSTONE.defaultBlockState(), MSFillerBlockTypes.RED_SANDSTONE);
+			registry.setBlockState("ground", Blocks.RED_SANDSTONE.defaultBlockState());
 			registry.setBlockState("upper", Blocks.RED_SAND.defaultBlockState());
 			registry.setBlockState("structure_primary", Blocks.SMOOTH_RED_SANDSTONE.defaultBlockState());
 			registry.setBlockState("structure_primary_decorative", Blocks.CHISELED_RED_SANDSTONE.defaultBlockState());
