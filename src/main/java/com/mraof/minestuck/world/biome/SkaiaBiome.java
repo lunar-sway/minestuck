@@ -24,7 +24,7 @@ public class SkaiaBiome
 		//genSettings.getStructures().add(() -> MSFeatures.SKAIA_CASTLE.configured(NoneFeatureConfiguration.NONE));	//TODO configured structure is being registered in vanilla
 		
 		BiomeSpecialEffects.Builder ambience = new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533);
-		ambience.fogColor(0xC0D8FF).skyColor(0x7AA4FF);
+		ambience.fogColor(0xCDCDFF).skyColor(0x7AA4FF);
 		
 		return new Biome.BiomeBuilder().precipitation(Biome.Precipitation.NONE).biomeCategory(Biome.BiomeCategory.NONE)/*.depth(0.1F).scale(0.2F)TODO*/.temperature(0.5F).downfall(0.5F).specialEffects(ambience.build()).mobSpawnSettings(spawnInfo.build()).generationSettings(genSettings.build()).build();
 	}
