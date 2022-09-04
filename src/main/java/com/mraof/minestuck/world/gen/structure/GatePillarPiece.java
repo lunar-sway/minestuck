@@ -32,24 +32,24 @@ public class GatePillarPiece extends GatePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox mutableBoundingBox, ChunkPos chunkPos, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator);
 		
 		BlockState ground = blocks.getBlockState("ground");
 		
-		generateBox(level, boundingBox, 0, 0, 1, 2, 20, 1, ground, ground, false);
-		generateBox(level, boundingBox, 1, 0, 0, 1, 20, 0, ground, ground, false);
-		generateBox(level, boundingBox, 1, 0, 2, 1, 20, 2, ground, ground, false);
+		generateBox(level, box, 0, 0, 1, 2, 20, 1, ground, ground, false);
+		generateBox(level, box, 1, 0, 0, 1, 20, 0, ground, ground, false);
+		generateBox(level, box, 1, 0, 2, 1, 20, 2, ground, ground, false);
 		
 		for(int y = 0; y <= 20; y++)
 		{
-			maybeGenerateBlock(level, boundingBox, random, 0.5F, 0, y, 0, ground);
-			maybeGenerateBlock(level, boundingBox, random, 0.5F, 2, y, 0, ground);
-			maybeGenerateBlock(level, boundingBox, random, 0.5F, 0, y, 2, ground);
-			maybeGenerateBlock(level, boundingBox, random, 0.5F, 2, y, 2, ground);
+			maybeGenerateBlock(level, box, random, 0.5F, 0, y, 0, ground);
+			maybeGenerateBlock(level, box, random, 0.5F, 2, y, 0, ground);
+			maybeGenerateBlock(level, box, random, 0.5F, 0, y, 2, ground);
+			maybeGenerateBlock(level, box, random, 0.5F, 2, y, 2, ground);
 		}
 
-		super.postProcess(level, manager, chunkGenerator, random, boundingBox, chunkPos, pos);
+		super.postProcess(level, manager, chunkGenerator, random, box, chunkPos, pos);
 	}
 }

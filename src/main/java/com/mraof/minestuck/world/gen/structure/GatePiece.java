@@ -55,9 +55,9 @@ public abstract class GatePiece extends ScatteredFeaturePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBox, ChunkPos chunkPos, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
 	{
-		placeGate(level, this.boundingBox);
+		placeGate(level, box);
 	}
 	
 	private void placeGate(LevelAccessor level, BoundingBox boundingBoxIn)
