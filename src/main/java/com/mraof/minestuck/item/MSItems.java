@@ -495,7 +495,7 @@ public class MSItems
 	public static final RegistryObject<Item> ICE_SHARD = REGISTER.register("ice_shard", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> HORN = REGISTER.register("horn", () -> new SoundItem(() -> MSSoundEvents.ITEM_HORN_USE, new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> CAKE_MIX = REGISTER.register("cake_mix", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1), MSTags.ConfiguredFeatures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
+	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
 	
 	public static final RegistryObject<Item> SCALEMATE_APPLESCAB = REGISTER.register("scalemate_applescab", () -> new ScalemateItem(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> SCALEMATE_BERRYBREATH = REGISTER.register("scalemate_berrybreath", () -> new ScalemateItem(new Item.Properties()));
