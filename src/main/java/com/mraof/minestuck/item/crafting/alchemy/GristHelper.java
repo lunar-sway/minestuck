@@ -153,37 +153,27 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
 		int gristCap = rungGrist[rung];
-		//this is related to the limit grist and grist gutter function
 		
 		GristSet overflowedGrist = limitGristByPlayerRung(level, player, newCache);
-		gutter.addGrist(overflowedGrist);
+		gutter.addGrist(overflowedGrist);//sends grist overflow to gutter
 		data.setGristCache(newCache);
 		ServerPlayer playerEntity = player.getPlayer(level.getServer());
 		if(playerEntity != null)
 		{
-			gutter.spillGrist(level, playerEntity);
+			gutter.spillGrist(level, playerEntity);//this isn't currently being used
 		}
 	}
 	
-	/**
-	 * this is where the grist limiting process starts.
-	 * here we decide where to cap the grist and by what rung, and we tell that to check the array
-	 * rungGrist see how much that cap should be
-	 */
+	
 	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
 	{
 		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
-		int gristCap = rungGrist[rung];
+		int gristCap = rungGrist[rung];//uses the values in the rungGrist array to determine the current grist cap
 		
 		
-		return set.capGrist(gristCap);
-		//this will continue into grist set where this return will be used
+		return set.capGrist(gristCap);//returns the result of capGrist
 	}
 	
-	/**
-	 * this is the array we use to determine the grist cap for each rung
-	 * at the time of writing this it's arbitrarily chosen
-	 */
 	public static final int[] rungGrist =
 			{90,90,90,30,35,40,45,60,65,80,85,105,120,130,140,
 					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365

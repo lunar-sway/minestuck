@@ -12,6 +12,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
+import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -30,7 +31,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -40,7 +40,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -56,6 +55,9 @@ import java.util.List;
 public class ServerEventHandler
 {
 	public static long lastDay;
+	
+	private static Session session;
+	private static MinecraftServer mcServer;
 	
 	@SubscribeEvent
 	public static void serverStarting(ServerStartingEvent event)
@@ -247,17 +249,7 @@ public class ServerEventHandler
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
 	
-	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.
-	@SubscribeEvent
-	public static void onPlayerUseHoe(UseHoeEvent event)	//TODO replace by an extension to block.getToolModifiedState()
-	{
-		if(event.getContext().getLevel().getBlockState(event.getContext().getClickedPos()).getBlock() == MSBlocks.COARSE_END_STONE.get())
-		{
-			event.getContext().getLevel().setBlockAndUpdate(event.getContext().getClickedPos(), Blocks.END_STONE.defaultBlockState());
-			event.getContext().getLevel().playSound(null, event.getContext().getClickedPos(), SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 	1.0F);
-			event.setResult(Event.Result.ALLOW);
-		}
-	}
+
 	
 	@SubscribeEvent
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
@@ -287,24 +279,19 @@ public class ServerEventHandler
 			NonNegativeGristSet playerCache = new NonNegativeGristSet
 					(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
 			
-			/**
-			 *  here, we are getting the session gutter for each player every tick
-			 this will allow us to determine whether the gutter contains anything that the
-			 player's cache has room for, and then subsequently, move one grist of a certain type
-			 into the player's cache
-			 */
+			//every tick, the server will try to put some of the gutter's grist into each player's cache
 			if(gameTime % inputTime == 0)
 			{
-				
-				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();
-				int spliceAmount = GristHelper.rungGrist[rung] / 20;
-				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
+				int sPl = (int) session.getSessionPowerlevel(mcServer);
+				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
+				int spliceAmount = GristHelper.rungGrist[rung] / sPl;//determines the appropriate splice amount
+				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
 				if(session == null){
 					return;
 				}
-				GristGutter sessionGutter = session.getGristGutter();
+				GristGutter sessionGutter = session.getGristGutter();//get's the grist gutter
 				
-				playerCache.addGrist(sessionGutter.splice(spliceAmount));
+				playerCache.addGrist(sessionGutter.splice(spliceAmount));//adds splice some grist from the splice set
 				
 				
 				GristSet rungGrist = GristHelper.limitGristByPlayerRung
@@ -314,7 +301,6 @@ public class ServerEventHandler
 				
 				data.setGristCache(playerCache);
 			}
-			//todo scale splice amount to rung
 		}
 		
 	}

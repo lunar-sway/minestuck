@@ -249,9 +249,7 @@ public final class Session
 		predefinedPlayers.put(player, data);
 	}
 	
-	/**
-	 * this is a getter function for the grist gutter
-	 */
+
 	final GristGutter gutter;
 	
 	public GristGutter getGristGutter()

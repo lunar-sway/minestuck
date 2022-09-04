@@ -194,13 +194,8 @@ public class GristSet
 	}
 	
 	/**
-	 * used to cap grist for the limitgristbyplayerrung function
-	 * this is how we decide grist overflow
-	 * what it's doing is everytime the amount is higher than the current cap,
-	 * it'll find the difference between the amount added and the cap and set that as an
-	 * overflow amount.
-	 * this'll then check the type of grist, and add it by amount. t
-	 * hen we just return the function and boom.
+	 * caps an amount of grist by comparing the grist going in to the amount that should be in
+	 * and then returning the remainder as overflow
 	 */
 	public GristSet capGrist(int cap)
 	{
@@ -209,18 +204,11 @@ public class GristSet
 		{
 			if(amount.getAmount() > cap)
 			{
-				
-				System.out.println("grist is going to gutter");
-				//it's actually quite deceptive but in order to get the cap effect without reworking significant amounts
-				//of the code, we decided to make it register the cap (that we got from limit player
-				//by run) and then simply set the cache to the appropriate number should there be
-				//an overflow.
-				long overflowAmount = amount.getAmount() - cap;
+				long overflowAmount = amount.getAmount() - cap;//sets the overflow amount
 				this.gristTypes.put(amount.getType(), (long) cap);
-				overflowGrist.addGrist(amount.getType(), overflowAmount);
+				overflowGrist.addGrist(amount.getType(), overflowAmount);//adds the overflow amount to the overflow set
 			}
 		}
-		//once all of this is done we go back to grist helper where we end the process in the increase function
 		return overflowGrist;
 	}
 	

@@ -1,13 +1,11 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
 import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
 
 import java.util.Map;
 
@@ -58,7 +56,7 @@ public class GristGutter extends GristSet
 	
 	public void spillGrist(Level level, Player player)
 	{
-		
+	//isn't being used by anything to my knowledge
 		gristToSpill.spawnGristEntities(
 				level,
 				player.getX(), player.getY(), player.getZ(),
@@ -69,26 +67,21 @@ public class GristGutter extends GristSet
 		);
 	}
 	
-	/**
-	 * this is our main function that adds grist to the gutter.
-	 * it does this by checking the type (which is represented by value)
-	 * and checking the amount (which is represented by amount
-	 */
+
 	@Override
 	public GristGutter addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
-			//this is a full gristset(which is essentially a grist inventory for things like the cache)
-			//For super Overflow
-			GristSet sOverflowGrist = new GristSet();
+			GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
 			long originalAmount = this.gristTypes.getOrDefault(type, 0L);
 			long maximumAllowed = (long) (gutterTotal - getGutterCapacity() + originalAmount);
 			
 			
 			this.gristTypes.compute(type, (key, value) ->
 					value == null ? amount : value + amount);
-			gutterTotal += amount;
+			gutterTotal += amount;//adds grist to gutter
+			
 			
 			LOGGER.debug("Gutter after adding " + amount + " "
 					+ type.getDisplayName().toString() + " grist:");
@@ -101,10 +94,7 @@ public class GristGutter extends GristSet
 			
 			logGutter(type, amount);
 			
-			//this is essentially saying "if the gutter goes higher than the set capacity
-			//then print "gutter has capped out
-			//find the remainder of guttertotal and gutter capacity and set that to a super overflow
-			//and then add the type and amount to that super overflow
+			//not used by anything currently
 			if(gutterTotal > GUTTER_CAPACITY)
 			{
 				System.out.println("gutter has capped out");
@@ -146,19 +136,16 @@ public class GristGutter extends GristSet
 	 */
 	public GristSet splice(int i)
 	{
-		//this is our splice-set inventory
 		GristSet spliceSet = new GristSet();
 		
-		//we use I here instead of a value so that it's easier to work with in the onPlayerTickEvent class
-		//which is where this function will be used primarily
 		for(GristType t : this.gristTypes.keySet())
 		{
 			int xMover = (int) Math.min(gristTypes.get(t), i);
-			spliceSet.addGrist(t, xMover);
+			spliceSet.addGrist(t, xMover);//spliceSet calls addgrist with the amount and type specified
 			
-			gutterTotal -= xMover;
+			gutterTotal -= xMover;//takes grist from the gutter
 		}
-		return spliceSet;
+		return spliceSet;//returns splice set to be used to distribute itself to the player's caches
 	}
 	
 }
