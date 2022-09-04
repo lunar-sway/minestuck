@@ -248,7 +248,7 @@ public class ImpDungeonPieces
 		
 		public StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 4, 5, 10), 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode), 1);
 			setOrientation(coordBaseMode);
 			
 			light = true;//ctxt.rand.nextFloat() < 0.1F;
@@ -319,7 +319,7 @@ public class ImpDungeonPieces
 		
 		public CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 6, 10), 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, coordBaseMode), 3);
 			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.3F;
@@ -431,8 +431,7 @@ public class ImpDungeonPieces
 		
 		private TurnCorridor(boolean direction, Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 2 : -1), pos.getY(),
-					pos.getZ() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.EAST ? 2 : -1), coordBaseMode, 7, 5, 7), 2);
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, coordBaseMode), 2);
 			
 			setOrientation(coordBaseMode);
 			
@@ -507,9 +506,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0,
-					makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(),
-							coordBaseMode, 6, 11, 8), 0);
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -570,7 +567,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 11, 10), 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 11, 10, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -638,8 +635,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeBBFromCenter(pos.getX() - (coordBaseMode.equals(Direction.EAST) ? 1 : 0) - coordBaseMode.getStepX(), pos.getY(),
-					pos.getZ() - (coordBaseMode.equals(Direction.SOUTH) ? 1 : 0) - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 7), 0);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -735,7 +731,7 @@ public class ImpDungeonPieces
 		
 		public BookcaseRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 8), 0);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -831,7 +827,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 6, 5, 10), 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, coordBaseMode), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -941,7 +937,7 @@ public class ImpDungeonPieces
 		
 		public OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 5, 10), 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, coordBaseMode), 1);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -1053,7 +1049,7 @@ public class ImpDungeonPieces
 		
 		public LargeSpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 5, 10), 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, coordBaseMode), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -1162,5 +1158,27 @@ public class ImpDungeonPieces
 	private static EntityType<?> getTypeForSpawners()
 	{
 		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH : MSEntityTypes.IMP;
+	}
+	
+	/**
+	 * A helper function for creating a bounding box rotated and offset based on imp dungeon's 10x10 grid pieces
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private static BoundingBox makeGridBoundingBox(int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ, BlockPos centerPos, Direction orientation)
+	{
+		int maxX = minX + sizeX - 1, maxY = minY + sizeY - 1, maxZ = minZ + sizeZ - 1;
+		
+		int startX = centerPos.getX() - 4, startZ = centerPos.getZ() - 4;
+		int endX = startX + 10 - 1, endZ = startZ + 10 - 1;
+		int y = centerPos.getY();
+		
+		return switch(orientation)
+				{
+					case SOUTH -> new BoundingBox(startX + minX, y + minY, startZ + minZ, startX + maxX, y + maxY, startZ + maxZ);
+					case NORTH -> new BoundingBox(endX - maxX, y + minY, endZ - maxZ, endX - minX, y + maxY, endZ - minZ);
+					case EAST -> new BoundingBox(startX + minZ, y + minY, endZ - maxX, startX + maxZ, y + maxY, endZ - minX);
+					case WEST -> new BoundingBox(endX - maxZ, y + minY, startZ + minX, endX - minZ, y + maxY, startZ + maxX);
+					default -> throw new IllegalArgumentException("Invalid orientation");
+				};
 	}
 }
