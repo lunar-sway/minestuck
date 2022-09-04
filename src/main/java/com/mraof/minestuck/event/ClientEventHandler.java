@@ -81,6 +81,10 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.RenderFogEvent event)
 	{
+		// Don't change fog distance for spectators
+		if(event.getCamera().getEntity().isSpectator())
+			return;
+		
 		LevelReader level = event.getCamera().getEntity().level;
 		BlockPos blockPos = event.getCamera().getBlockPosition();
 		Vec3 pos = event.getCamera().getPosition();
