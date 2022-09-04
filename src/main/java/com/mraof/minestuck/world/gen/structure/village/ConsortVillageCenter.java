@@ -133,11 +133,11 @@ public class ConsortVillageCenter
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, boundingBox);
+				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, box);
 
 				if (this.averageGroundLvl < 0)
 				{
@@ -155,82 +155,82 @@ public class ConsortVillageCenter
 			BlockState torch = blocks.getBlockState("torch");
 
 
-			this.generateBox(level, boundingBox, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
-			this.generateBox(level, boundingBox, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
-			this.generateBox(level, boundingBox, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
-			this.placeBlock(level, floorBlock, 1, 0, 8, boundingBox);
-			this.placeBlock(level, floorBlock, 1, -1, 8, boundingBox);
-			this.generateBox(level, boundingBox, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 2, -1, 0, 5, 0, 0, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 1, -1, 1, 6, 0, 1, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 0, -1, 2, 1, 0, 7, floorBlock, floorBlock, false);
+			this.placeBlock(level, floorBlock, 1, 0, 8, box);
+			this.placeBlock(level, floorBlock, 1, -1, 8, box);
+			this.generateBox(level, box, 2, -1, 2, 7, 0, 9, floorBlock, floorBlock, false);
 
-			this.generateBox(level, boundingBox, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
-			this.generateBox(level, boundingBox, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
-			this.generateBox(level, boundingBox, 8, -1, 8, 8, -1, 9, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 2, -1, -1, 5, -1, -1, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 6, -1, 10, 7, -1, 10, floorBlock, floorBlock, false);
+			this.generateBox(level, box, 8, -1, 8, 8, -1, 9, floorBlock, floorBlock, false);
 
-			this.generateBox(level, boundingBox, 1, 1, 2, 1, 1, 6, plankBlock, plankBlock, false);
-			this.placeBlock(level, plankBlock, 0, 1, 2, boundingBox);
-			this.placeBlock(level, plankSlab0, 0, 1, 3, boundingBox);
-			this.placeBlock(level, plankBlock, 0, 1, 4, boundingBox);
-			this.placeBlock(level, plankSlab0, 0, 1, 5, boundingBox);
-			this.placeBlock(level, plankBlock, 0, 1, 6, boundingBox);
-			this.generateBox(level, boundingBox, 1, 2, 2, 1, 3, 2, plankBlock, plankBlock, false);
-			this.generateBox(level, boundingBox, 1, 2, 6, 1, 3, 6, plankBlock, plankBlock, false);
+			this.generateBox(level, box, 1, 1, 2, 1, 1, 6, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 0, 1, 2, box);
+			this.placeBlock(level, plankSlab0, 0, 1, 3, box);
+			this.placeBlock(level, plankBlock, 0, 1, 4, box);
+			this.placeBlock(level, plankSlab0, 0, 1, 5, box);
+			this.placeBlock(level, plankBlock, 0, 1, 6, box);
+			this.generateBox(level, box, 1, 2, 2, 1, 3, 2, plankBlock, plankBlock, false);
+			this.generateBox(level, box, 1, 2, 6, 1, 3, 6, plankBlock, plankBlock, false);
 
-			this.generateBox(level, boundingBox, 6, 1, 2, 6, 1, 6, plankBlock, plankBlock, false);
-			this.placeBlock(level, plankBlock, 7, 1, 2, boundingBox);
-			this.placeBlock(level, plankSlab0, 7, 1, 3, boundingBox);
-			this.placeBlock(level, plankBlock, 7, 1, 4, boundingBox);
-			this.placeBlock(level, plankSlab0, 7, 1, 5, boundingBox);
-			this.placeBlock(level, plankBlock, 7, 1, 6, boundingBox);
-			this.generateBox(level, boundingBox, 6, 2, 2, 6, 3, 2, plankBlock, plankBlock, false);
-			this.generateBox(level, boundingBox, 6, 2, 6, 6, 3, 6, plankBlock, plankBlock, false);
+			this.generateBox(level, box, 6, 1, 2, 6, 1, 6, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 7, 1, 2, box);
+			this.placeBlock(level, plankSlab0, 7, 1, 3, box);
+			this.placeBlock(level, plankBlock, 7, 1, 4, box);
+			this.placeBlock(level, plankSlab0, 7, 1, 5, box);
+			this.placeBlock(level, plankBlock, 7, 1, 6, box);
+			this.generateBox(level, box, 6, 2, 2, 6, 3, 2, plankBlock, plankBlock, false);
+			this.generateBox(level, box, 6, 2, 6, 6, 3, 6, plankBlock, plankBlock, false);
 
-			this.generateBox(level, boundingBox, 2, 1, 8, 2, 3, 8, plankBlock, plankBlock, false);
-			this.generateBox(level, boundingBox, 4, 1, 8, 4, 3, 8, plankBlock, plankBlock, false);
-			this.placeBlock(level, plankBlock, 3, 1, 8, boundingBox);
-			this.placeBlock(level, plankBlock, 2, 1, 9, boundingBox);
-			this.placeBlock(level, plankSlab0, 3, 1, 9, boundingBox);
-			this.placeBlock(level, plankBlock, 4, 1, 9, boundingBox);
+			this.generateBox(level, box, 2, 1, 8, 2, 3, 8, plankBlock, plankBlock, false);
+			this.generateBox(level, box, 4, 1, 8, 4, 3, 8, plankBlock, plankBlock, false);
+			this.placeBlock(level, plankBlock, 3, 1, 8, box);
+			this.placeBlock(level, plankBlock, 2, 1, 9, box);
+			this.placeBlock(level, plankSlab0, 3, 1, 9, box);
+			this.placeBlock(level, plankBlock, 4, 1, 9, box);
 
-			this.generateBox(level, boundingBox, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 0, 3, 2, 0, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 7, 3, 2, 7, 3, 6, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 1, 3, 3, 1, 3, 5, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 6, 3, 3, 6, 3, 5, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 1, 3, 7, 6, 3, 7, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 5, 3, 8, 6, 3, 8, plankSlab1, plankSlab1, false);
-			this.generateBox(level, boundingBox, 2, 3, 9, 4, 3, 9, plankSlab1, plankSlab1, false);
-			this.placeBlock(level, plankSlab1, 3, 3, 8, boundingBox);
+			this.generateBox(level, box, 1, 3, 1, 6, 3, 1, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 2, 3, 2, 5, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 0, 3, 2, 0, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 7, 3, 2, 7, 3, 6, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 1, 3, 3, 1, 3, 5, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 6, 3, 3, 6, 3, 5, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 1, 3, 7, 6, 3, 7, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 5, 3, 8, 6, 3, 8, plankSlab1, plankSlab1, false);
+			this.generateBox(level, box, 2, 3, 9, 4, 3, 9, plankSlab1, plankSlab1, false);
+			this.placeBlock(level, plankSlab1, 3, 3, 8, box);
 
-			this.generateBox(level, boundingBox, 2, 4, 2, 5, 4,  2, plankSlab0, plankSlab0, false);
-			this.generateBox(level, boundingBox, 1, 4, 3, 6, 4,  5, plankSlab0, plankSlab0, false);
-			this.generateBox(level, boundingBox, 2, 4, 6, 5, 4,  6, plankSlab0, plankSlab0, false);
-			this.generateBox(level, boundingBox, 3, 4, 7, 4, 4,  7, plankSlab0, plankSlab0, false);
-			this.placeBlock(level, plankSlab0, 3, 4, 8, boundingBox);
+			this.generateBox(level, box, 2, 4, 2, 5, 4,  2, plankSlab0, plankSlab0, false);
+			this.generateBox(level, box, 1, 4, 3, 6, 4,  5, plankSlab0, plankSlab0, false);
+			this.generateBox(level, box, 2, 4, 6, 5, 4,  6, plankSlab0, plankSlab0, false);
+			this.generateBox(level, box, 3, 4, 7, 4, 4,  7, plankSlab0, plankSlab0, false);
+			this.placeBlock(level, plankSlab0, 3, 4, 8, box);
 
-			this.generateAirBox(level, boundingBox, 2, 1, 0, 5, 3, 0);
-			this.generateAirBox(level, boundingBox, 1, 1, 1, 6, 2, 1);
-			this.generateAirBox(level, boundingBox, 2, 1, 2, 5, 2, 7);
-			this.generateAirBox(level, boundingBox, 0, 2, 3, 1, 2, 5);
-			this.generateAirBox(level, boundingBox, 6, 2, 3, 7, 2, 5);
-			this.generateAirBox(level, boundingBox, 2, 2, 9, 4, 2, 9);
-			this.placeBlock(level, Blocks.AIR.defaultBlockState(), 3, 2, 8, boundingBox);
-			this.generateAirBox(level, boundingBox, 0, 1, 7, 1, 2, 9);
-			this.generateAirBox(level, boundingBox, 5, 1, 7, 7, 2, 9);
+			this.generateAirBox(level, box, 2, 1, 0, 5, 3, 0);
+			this.generateAirBox(level, box, 1, 1, 1, 6, 2, 1);
+			this.generateAirBox(level, box, 2, 1, 2, 5, 2, 7);
+			this.generateAirBox(level, box, 0, 2, 3, 1, 2, 5);
+			this.generateAirBox(level, box, 6, 2, 3, 7, 2, 5);
+			this.generateAirBox(level, box, 2, 2, 9, 4, 2, 9);
+			this.placeBlock(level, Blocks.AIR.defaultBlockState(), 3, 2, 8, box);
+			this.generateAirBox(level, box, 0, 1, 7, 1, 2, 9);
+			this.generateAirBox(level, box, 5, 1, 7, 7, 2, 9);
 
-			placeBlock(level, torch, 1, 2, 4, boundingBox);
-			placeBlock(level, torch, 6, 2, 4, boundingBox);
+			placeBlock(level, torch, 1, 2, 4, box);
+			placeBlock(level, torch, 6, 2, 4, box);
 
 			if(!spawns[0])
-				spawns[0] = spawnConsort(0, 2, 3, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[0] = spawnConsort(0, 2, 3, box, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[1])
-				spawns[1] = spawnConsort(0, 2, 5, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
+				spawns[1] = spawnConsort(0, 2, 5, box, level, chunkGeneratorIn, EnumConsort.MerchantType.FOOD, 1);
 			if(!spawns[2])
-				spawns[2] = spawnConsort(7, 2, 3, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[2] = spawnConsort(7, 2, 3, box, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[3])
-				spawns[3] = spawnConsort(7, 2, 5, this.boundingBox, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
+				spawns[3] = spawnConsort(7, 2, 5, box, level, chunkGeneratorIn, EnumConsort.MerchantType.GENERAL, 1);
 			if(!spawns[4])
-				spawns[4] = spawnConsort(3, 2, 9, this.boundingBox, level, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
+				spawns[4] = spawnConsort(3, 2, 9, box, level, chunkGeneratorIn, EnumConsort.getRandomMerchant(randomIn), 1);
 		}
 		
 	}
@@ -258,11 +258,11 @@ public class ConsortVillageCenter
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
-				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, structureBoundingBoxIn);
+				this.averageGroundLvl = this.getAverageGroundLevel(level, chunkGeneratorIn, box);
 
 				if (this.averageGroundLvl < 0)
 				{
@@ -279,32 +279,32 @@ public class ConsortVillageCenter
 			for(int x = 0; x < 7; x++)
 			{
 				for (int z = 0; z < 2; z++)
-					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, box, level, road);
 
 				for (int z = 5; z < 7; z++)
-					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, box, level, road);
 			}
 
 			for(int z = 2; z < 5; z++)
 			{
 				for (int x = 0; x < 2; x++)
-					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, box, level, road);
 
 				for (int x = 5; x < 7; x++)
-					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, structureBoundingBoxIn, level, road);
+					this.placeRoadtile(this.boundingBox.minX() + x, this.boundingBox.minZ() + z, box, level, road);
 			}
-			this.generateAirBox(level, structureBoundingBoxIn, 2, 1, 2, 4, 4, 4);
+			this.generateAirBox(level, box, 2, 1, 2, 4, 4, 4);
 
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, level, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, boundingBox, level, rock);
-			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, level, rock);
-			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, boundingBox, level, rock);
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 2, box, level, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 2, box, level, rock);
+			this.blockPillar(2, randomIn.nextInt(2) + randomIn.nextInt(2), 4, box, level, rock);
+			this.blockPillar(4, randomIn.nextInt(2) + randomIn.nextInt(2), 4, box, level, rock);
 
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, boundingBox, level, rock);
-			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, boundingBox, level, rock);
-			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, level, rock);
-			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, boundingBox, level, rock);
-			this.blockPillar(3, 3, 3, boundingBox, level, rock);
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 2, box, level, rock);
+			this.blockPillar(3, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 4, box, level, rock);
+			this.blockPillar(2, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, box, level, rock);
+			this.blockPillar(4, 2 + (randomIn.nextInt(4) == 3 ? 1 : 0), 3, box, level, rock);
+			this.blockPillar(3, 3, 3, box, level, rock);
 		}
 		
 	}

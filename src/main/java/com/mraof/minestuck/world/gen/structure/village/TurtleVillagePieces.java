@@ -3,9 +3,11 @@ package com.mraof.minestuck.world.gen.structure.village;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.ILandType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -23,6 +25,24 @@ import java.util.Random;
 
 public class TurtleVillagePieces
 {
+	/**
+	 * Helper function for adding village centers associated with turtles.
+	 */
+	public static void addCenters(ILandType.CenterRegister register)
+	{
+		register.add(TurtleWellCenter::new, 5);
+	}
+	
+	/**
+	 * Helper function for adding village pieces associated with turtles.
+	 */
+	public static void addPieces(ILandType.PieceRegister register, Random random)
+	{
+		register.add(ShellHouse1::createPiece, 3, Mth.nextInt(random, 5, 8));
+		register.add(TurtleMarket1::createPiece, 10, Mth.nextInt(random, 0, 2));
+		register.add(TurtleTemple1::createPiece, 10, Mth.nextInt(random, 1, 1));
+	}
+	
 	public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
 	{
 		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)

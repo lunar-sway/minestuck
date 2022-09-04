@@ -2,7 +2,6 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -10,7 +9,6 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
@@ -24,7 +22,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -172,7 +169,7 @@ public class EntryProcess
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
-				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+				for(blockY = Math.max(level.getMinBuildHeight(), y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
@@ -340,8 +337,6 @@ public class EntryProcess
 			
 			MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
-			MSDimensions.getLandInfo(level1).setSpawn(Mth.floor(player.getY()));
-			
 			LOGGER.info("Entry finished");
 		}
 	}
@@ -400,8 +395,8 @@ public class EntryProcess
 	private static void copyBlockDirect(LevelAccessor levelAccessor, ChunkAccess cSrc, ChunkAccess cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
 		BlockPos dest = new BlockPos(xDst, yDst, zDst);
-		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
-		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc);
+		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst);
 		int y = yDst;
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
@@ -419,7 +414,7 @@ public class EntryProcess
 	
 	private static LevelChunkSection getBlockStorage(ChunkAccess c, int y)
 	{
-		return c.getSections()[y];
+		return c.getSection(c.getSectionIndex(y));
 	}
 	
 	/**
@@ -448,22 +443,10 @@ public class EntryProcess
 		return maxY;
 	}
 	
-	public static void placeGates(ServerLevel world)
+	public static void placeGates(ServerLevel level)
 	{
-		placeGate(GateHandler.Type.GATE_1, new BlockPos(0, GateHandler.gateHeight1, 0), world);
-		placeGate(GateHandler.Type.GATE_2, new BlockPos(0, GateHandler.gateHeight2, 0), world);
-	}
-	
-	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerLevel world)
-	{
-		for(int i = 0; i < 9; i++)
-			if(i == 4)
-			{
-				world.setBlock(pos, MSBlocks.GATE.get().defaultBlockState().cycle(GateBlock.MAIN), 0);
-				GateTileEntity tileEntity = (GateTileEntity) world.getBlockEntity(pos);
-				tileEntity.gateType = gateType;
-			}
-			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.get().defaultBlockState(), 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight1, 0), GateHandler.Type.GATE_1, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight2, 0), GateHandler.Type.GATE_2, 0);
 	}
 	
 	private static class BlockMove

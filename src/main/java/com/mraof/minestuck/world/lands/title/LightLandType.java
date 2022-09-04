@@ -41,10 +41,10 @@ public class LightLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.defaultBlockState());
-		registry.setBlockState("torch", Blocks.TORCH.defaultBlockState());
-		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.get().defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.ORANGE_WOOL);
+		registry.setBlock("carpet", Blocks.ORANGE_CARPET);
+		registry.setBlock("torch", Blocks.TORCH);
+		registry.setBlock("slime", MSBlocks.GLOWY_GOOP);
 	}
 	
 	@Override

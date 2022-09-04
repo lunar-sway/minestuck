@@ -30,7 +30,7 @@ public class ConsortVillageStructure extends StructureFeature<NoneFeatureConfigu
 	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
 	{
 		Random random = context.random();
-		LandTypePair landTypes = LandTypePair.getTypes(context.chunkGenerator());
+		LandTypePair landTypes = LandTypePair.getTypesOrDefaulted(context.chunkGenerator());
 		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
 		
 		List<ConsortVillagePieces.PieceWeight> pieceWeightList = ConsortVillagePieces.getStructureVillageWeightedPieceList(random, landTypes);

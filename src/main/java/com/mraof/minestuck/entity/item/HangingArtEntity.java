@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,12 +16,16 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Set;
 
 public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityAdditionalSpawnData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public T art;
 	
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level)
@@ -97,7 +100,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		if(this.art == null)
 		{
 			this.art = this.getDefault();
-			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getDescriptionId());
+			LOGGER.warn("Could not load art {} for type {}, resorting to the default type.", s, this.getType().getDescriptionId());
 		}
 		super.readAdditionalSaveData(compound);
 		recalculateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt

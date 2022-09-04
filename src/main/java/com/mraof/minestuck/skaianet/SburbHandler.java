@@ -11,12 +11,15 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -40,6 +43,8 @@ import java.util.stream.Collectors;
 public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String LAND_ENTRY = "minestuck.land_entry";
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
@@ -159,21 +164,21 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes().contains(LandTypes.FROGS) &&
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS) &&
 					(terrainLandType == null || LandTypes.FROGS.isAspectCompatible(terrainLandType)))
 				titleLandType = LandTypes.FROGS;
 			else
 			{
-				titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
+				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
-					titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), null, connection.getClientIdentifier());
+					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
 				}
 			}
 		}
 		if(terrainLandType == null)
-			terrainLandType = Generator.generateWeightedTerrainLandType(session, titleLandType, connection.getClientIdentifier());
+			terrainLandType = Generator.generateWeightedTerrainLandType(mcServer, session, titleLandType, connection.getClientIdentifier());
 		
 		return new LandTypePair(terrainLandType, titleLandType);
 	}
@@ -201,8 +206,11 @@ public final class SburbHandler
 		
 		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
+		
 		ResourceKey<Level> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
-		c.setLand(landTypes, dimType);
+		MSDimensions.sendLandTypesToAll(mcServer);
+		
+		c.setLand(dimType);
 	}
 	
 	static void onEntry(MinecraftServer server, SburbConnection c)
@@ -215,7 +223,9 @@ public final class SburbHandler
 		if(player != null)
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
-			c.getLandInfo().sendLandEntryMessage(player);
+			
+			LandTypePair.Named landTypes = LandTypePair.getNamed(player.getLevel()).orElseThrow();
+			player.sendMessage(new TranslatableComponent(LAND_ENTRY, landTypes.asComponent()), Util.NIL_UUID);
 		}
 	}
 	

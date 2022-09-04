@@ -7,7 +7,7 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -70,10 +70,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		BlockState floorBlock = MSBlocks.POLISHED_GREEN_STONE.get().defaultBlockState();
 		BlockState stoneBlock = MSBlocks.GREEN_STONE.get().defaultBlockState();
 		
-		for(int a = 0; a < 7; a++)
-		{
-			buildMainPlatform(wallBlock, level, boundingBoxIn, a);
-		}
+		buildMainPlatform(wallBlock, level, boundingBoxIn);
 		
 		buildStairsAndUnderneath(wallBlock, level, boundingBoxIn);
 		buildWallsAndFloors(floorBlock, level, boundingBoxIn, randomIn);
@@ -83,12 +80,12 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		buildFrog(stoneBlock, level, boundingBoxIn);
 	}
 	
-	private void generateLoot(WorldGenLevel level, BoundingBox boundingBoxIn, Random randomIn, ChunkPos chunkPos)
+	private void generateLoot(WorldGenLevel level, BoundingBox box, Random randomIn, ChunkPos chunkPos)
 	{
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20, 49, 21 + 14, boundingBox);
-		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20, 49, 20 + 14, boundingBox);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, box);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, box);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.WEST), 20, 49, 21 + 14, box);
+		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.SOUTH), 20, 49, 20 + 14, box);
 		
 		ChestType leftChestType = ChestType.LEFT;
 		ChestType rightChestType = ChestType.RIGHT;
@@ -99,19 +96,19 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 		
 		BlockPos chestFarPos = new BlockPos(this.getWorldX(21, 12 + 14), this.getWorldY(21), this.getWorldZ(21, 12 + 14));
-		generateBox(level, boundingBoxIn, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState().setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestFarPos, level, boundingBoxIn, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		generateBox(level, box, 20, 20, 12 + 14, 21, 20, 12 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState().setValue(StairBlock.HALF, Half.TOP).setValue(StairBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState(), false);
+		StructureBlockUtil.placeLootChest(chestFarPos, level, box, getOrientation(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestFarPos = new BlockPos(this.getWorldX(20, 12 + 14), this.getWorldY(21), this.getWorldZ(20, 12 + 14));
-		StructureBlockUtil.placeLootChest(chestFarPos, level, boundingBoxIn, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeLootChest(chestFarPos, level, box, getOrientation(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		BlockPos chestNearDoorPos = new BlockPos(this.getWorldX(11, 29 + 14), this.getWorldY(21), this.getWorldZ(11, 29 + 14));
-		generateBox(level, boundingBoxIn, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState().setValue(StairBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState(), false);
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, level, boundingBoxIn, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		generateBox(level, box, 10, 20, 29 + 14, 11, 20, 29 + 14, MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState().setValue(StairBlock.HALF, Half.TOP), MSBlocks.GREEN_STONE_BRICK_STAIRS.get().defaultBlockState(), false);
+		StructureBlockUtil.placeLootChest(chestNearDoorPos, level, box, getOrientation().getOpposite(), leftChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		chestNearDoorPos = new BlockPos(this.getWorldX(10, 29 + 14), this.getWorldY(21), this.getWorldZ(10, 29 + 14));
-		StructureBlockUtil.placeLootChest(chestNearDoorPos, level, boundingBoxIn, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
+		StructureBlockUtil.placeLootChest(chestNearDoorPos, level, box, getOrientation().getOpposite(), rightChestType, MSLootTables.FROG_TEMPLE_CHEST, randomIn);
 		
 		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getWorldY(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
-		if(!createRan && boundingBoxIn.isInside(entityVec))
+		if(!createRan && box.isInside(entityVec))
 		{
 			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(level.getLevel());
 			if(lotusFlowerEntity == null)
@@ -123,9 +120,13 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 	}
 	
-	private void buildMainPlatform(BlockState block, WorldGenLevel level, BoundingBox boundingBox, int a)
+	private void buildMainPlatform(BlockState block, WorldGenLevel level, BoundingBox box)
 	{
-		generateBox(level, boundingBox, a * 2, 8 * a, a * 2 + 14, (int) (40 * (1F - a / 20F)) + 1, (8 * a) + 8, (int) (40 * (1F - a / 20F)) + 1 + 14, block, block, false);
+		for(int a = 0; a < 7; a++)
+		{
+			generateBox(level, box, a * 2, 8 * a, a * 2 + 14, (int) (40 * (1F - a / 20F)) + 1, (8 * a) + 8, (int) (40 * (1F - a / 20F)) + 1 + 14, block, block, false);
+		}
+		
 	}
 	
 	private void buildStairsAndUnderneath(BlockState block, WorldGenLevel level, BoundingBox boundingBox)

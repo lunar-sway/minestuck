@@ -134,7 +134,7 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 	
 	protected boolean needPostprocessing(Block block)
 	{
-		return block instanceof CrossCollisionBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairBlock;
+		return block instanceof CrossCollisionBlock || block instanceof TorchBlock || block instanceof LadderBlock || block instanceof StairBlock || block instanceof WallBlock;
 	}
 	
 	
@@ -171,14 +171,4 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		}
 	}
 	
-	public static BoundingBox makeBBFromCenter(int centerX, int y, int centerZ, Direction orientation, int sizeX, int sizeY, int sizeZ)
-	{
-		int xWidth = orientation.getAxis().equals(Direction.Axis.X) ? sizeZ : sizeX;
-		int zWidth = orientation.getAxis().equals(Direction.Axis.Z) ? sizeZ : sizeX;
-		
-		int x = centerX - (xWidth/2 - 1);
-		int z = centerZ - (zWidth/2 - 1);
-		
-		return new BoundingBox(x, y, z, x + xWidth - 1, y + sizeY - 1, z + zWidth - 1);
-	}
 }

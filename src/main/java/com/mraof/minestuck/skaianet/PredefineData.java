@@ -133,7 +133,7 @@ public final class PredefineData
 			}
 			
 			TitleLandType previous = titleLandType;
-			titleLandType = Generator.generateWeightedTitleLandType(session, title.getHeroAspect(), type, player);
+			titleLandType = Generator.generateWeightedTitleLandType(source.getServer(), session, title.getHeroAspect(), type, player);
 			
 			if(!titleLandType.isAspectCompatible(type))
 			{

@@ -12,7 +12,6 @@ public class LandProperties
 	private Vec3 skyColor;
 	private Vec3 fogColor;
 	
-	public Biome.BiomeCategory category = Biome.BiomeCategory.NONE;
 	public ForceType forceRain = ForceType.OFF, forceThunder = ForceType.OFF;	//TODO Make private and set up setters that'd prevent combinations that doesn't make sense, + also setting forceRain + rainType at the same time
 	
 	public static LandProperties create(LandTypePair types)

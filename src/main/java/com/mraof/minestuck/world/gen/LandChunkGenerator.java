@@ -11,7 +11,6 @@ import com.mraof.minestuck.world.biome.LandBiomeSource;
 import com.mraof.minestuck.world.gen.structure.GateStructure;
 import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -43,11 +42,11 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> commonCodec(instance).and(instance.group(
 					RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).forGetter(generator -> generator.noises),
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
-					LandTypePair.CODEC.fieldOf("land_types").forGetter(generator -> generator.landTypes),
+					LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
 					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry)))
-			.apply(instance, instance.stable(LandChunkGenerator::new)));
+			.apply(instance, instance.stable(LandChunkGenerator::create)));
 	
-	public final LandTypePair landTypes;
+	public final LandTypePair.Named namedTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final LandBiomeHolder biomes;
 	public final GateStructure.PieceFactory gatePiece;
@@ -55,24 +54,24 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private ChunkPos landGatePosition;
 	
-	public LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair landTypes, Registry<Biome> registry)
+	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair.Named namedTypes, Registry<Biome> registry)
 	{
-		this(structureSets, noises, seed, new LandBiomeSetWrapper(landTypes.getTerrain().getBiomeSet(), registry), registry, LandProperties.create(landTypes), new LandGenSettings(landTypes));
+		LandBiomeSetWrapper biomeSetWrapper = new LandBiomeSetWrapper(namedTypes.landTypes().getTerrain().getBiomeSet(), registry);
+		LandGenSettings genSettings = new LandGenSettings(namedTypes.landTypes());
+		
+		LandBiomeHolder biomeHolder = new LandBiomeHolder(biomeSetWrapper, genSettings);
+		
+		return new LandChunkGenerator(structureSets, noises, seed, namedTypes, biomeHolder, registry, genSettings);
 	}
 	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeSetWrapper baseBiomes, Registry<Biome> registry, LandProperties properties, LandGenSettings genSettings)
-	{
-		this(structureSets, noises, seed, new LandBiomeHolder(baseBiomes, genSettings, properties), registry, genSettings);
-	}
-	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair.Named namedTypes, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
 		super(structureSets, noises, Optional.empty(), new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings());
 		
 		this.biomes = biomes;
 		this.registry = registry;
-		landTypes = genSettings.getLandTypes();
+		this.namedTypes = namedTypes;
 		blockRegistry = genSettings.getBlockRegistry();
 		gatePiece = genSettings.getGatePiece();
 	}
@@ -86,7 +85,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	@Override
 	public ChunkGenerator withSeed(long seed)
 	{
-		return new LandChunkGenerator(this.structureSets, this.noises, seed, landTypes, registry);
+		return LandChunkGenerator.create(this.structureSets, this.noises, seed, namedTypes, registry);
 	}
 	
 	@Override
@@ -146,10 +145,14 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 			int posZ = (int) Math.round(Math.sin(angle) * radius);
 			
 			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			BlockPos pos = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler()).getFirst();
+			Pair<BlockPos, Holder<Biome>> result = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, climateSampler());
 			
-			if(pos != null && getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, climateSampler()).stream().allMatch(biome -> biome == normalBiome))
-				return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+			if(result != null)
+			{
+				BlockPos pos = result.getFirst();
+				if(getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, climateSampler()).stream().allMatch(biome -> biome == normalBiome))
+					return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+			}
 		}
 		
 		int posX = (int) Math.round(Math.cos(angle) * radius);

@@ -1,8 +1,7 @@
-package com.mraof.minestuck.event;
+package com.mraof.minestuck.item.loot;
 
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;

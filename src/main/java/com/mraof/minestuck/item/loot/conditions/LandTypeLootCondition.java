@@ -1,13 +1,12 @@
-package com.mraof.minestuck.world.storage.loot.conditions;
+package com.mraof.minestuck.item.loot.conditions;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.*;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
@@ -50,14 +49,11 @@ public class LandTypeLootCondition implements LootItemCondition
 	{
 		ServerLevel level = context.getLevel();
 		
-		if(level != null && MSDimensions.isLandDimension(level.getServer(), level.dimension()))
-		{
-			LandTypePair aspects = MSDimensions.getAspects(level.getServer(), level.dimension());
-			
-			if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
-					|| terrainGroups.contains(aspects.getTerrain().getGroup()) || titleGroups.contains(aspects.getTitle().getGroup())))
-					return !inverted;
-		}
+		LandTypePair aspects = LandTypePair.getTypes(level).orElse(null);
+		
+		if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
+				|| terrainGroups.contains(aspects.getTerrain().getGroup()) || titleGroups.contains(aspects.getTitle().getGroup())))
+				return !inverted;
 		
 		return inverted;
 	}

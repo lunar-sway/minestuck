@@ -5,7 +5,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -38,10 +38,10 @@ public class ImpDungeonPieces
 			int x = posX + (orientation.getAxis().equals(Direction.Axis.Z) ? 0 : offset);
 			int y = 45 - rand.nextInt(8);
 			int z = posZ + (orientation.getAxis().equals(Direction.Axis.X) ? 0 : offset);
-			return new EntryCorridor(orientation, x, y, z, rand);
+			return new EntryCorridor(orientation, x, y, z);
 		}
 		
-		private EntryCorridor(Direction orientation, int x, int y, int z, Random rand)
+		private EntryCorridor(Direction orientation, int x, int y, int z)
 		{
 			super(MSStructurePieces.IMP_ENTRY_CORRIDOR.get(), 0, makeBoundingBox(x, y, z, orientation, 6, 7, 10), 2);
 			setOrientation(orientation);
@@ -158,7 +158,7 @@ public class ImpDungeonPieces
 		{
 			ctxt.corridors -= 1;
 			if(ctxt.rand.nextBoolean())
-				component = new TurnCorridor(facing, pos, xIndex, zIndex, index, ctxt);
+				component = TurnCorridor.create(facing, pos, xIndex, zIndex, index, ctxt);
 			else
 			{	//Corridor
 				i = ctxt.rand.nextFloat();
@@ -248,7 +248,7 @@ public class ImpDungeonPieces
 		
 		public StraightCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 4, 5, 10), 1);
+			super(MSStructurePieces.IMP_STRAIGHT_CORRIDOR.get(), 0, makeGridBoundingBox(3, 0, 0, 4, 5, 10, pos, coordBaseMode), 1);
 			setOrientation(coordBaseMode);
 			
 			light = true;//ctxt.rand.nextFloat() < 0.1F;
@@ -319,7 +319,7 @@ public class ImpDungeonPieces
 		
 		public CrossCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 6, 10), 3);
+			super(MSStructurePieces.IMP_CROSS_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 6, 10, pos, coordBaseMode), 3);
 			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.3F;
@@ -423,19 +423,22 @@ public class ImpDungeonPieces
 	{
 		boolean light;
 		
-		public TurnCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		public static ImpDungeonPiece create(Direction orientation, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.WEST ? 1 : -1), pos.getY(),
-					pos.getZ() + (coordBaseMode == Direction.NORTH || coordBaseMode == Direction.EAST ? 1 : -1), coordBaseMode, 7, 5, 7), 2);
 			boolean direction = ctxt.rand.nextBoolean();
-			if(direction)
-				setOrientation(coordBaseMode.getClockWise());
-			else setOrientation(coordBaseMode);
+			return new TurnCorridor(direction, direction ? orientation.getClockWise() : orientation, pos, xIndex, zIndex, index, ctxt);
+		}
+		
+		private TurnCorridor(boolean direction, Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
+		{
+			super(MSStructurePieces.IMP_TURN_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 7, 5, 7, pos, coordBaseMode), 2);
+			
+			setOrientation(coordBaseMode);
 			
 			light = ctxt.rand.nextFloat() < 0.2F;
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
-			Direction newFacing = direction ? coordBaseMode.getCounterClockWise() : coordBaseMode.getClockWise();
+			Direction newFacing = direction ? coordBaseMode.getOpposite() : coordBaseMode.getClockWise();
 			int xOffset = newFacing.getStepX();
 			int zOffset = newFacing.getStepZ();
 			corridors[direction ? 0 : 1] = !generatePart(ctxt, xIndex + xOffset, zIndex + zOffset, pos.offset(xOffset*10, 0, zOffset*10), newFacing, index + 1);
@@ -503,9 +506,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0,
-					makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(),
-							coordBaseMode, 6, 11, 8), 0);
+			super(MSStructurePieces.IMP_RETURN_ROOM.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 11, 8, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -566,7 +567,7 @@ public class ImpDungeonPieces
 	{
 		public ReturnRoomAlt(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 11, 10), 0);
+			super(MSStructurePieces.IMP_ALT_RETURN_ROOM.get(), 0, makeGridBoundingBox(1, -1, 0, 8, 8, 10, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.generatedReturn = true;
@@ -597,35 +598,35 @@ public class ImpDungeonPieces
 			BlockState floorDecor = blocks.getBlockState("structure_secondary_decorative");
 			BlockState light = blocks.getBlockState("light_block");
 			
-			generateBox(level, structureBoundingBoxIn, 3, 0, 0, 4, 0, 1, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 2, 7, 0, 2, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, -1, 4, 1, -1, 5, floorDecor, floorDecor, false);
-			generateBox(level, structureBoundingBoxIn, 2, -1, 4, 5, -1, 5, floorBlock, floorBlock, false);
-			generateBox(level, structureBoundingBoxIn, 6, -1, 4, 6, -1, 5, floorDecor, floorDecor, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 7, 6, 0, 8, floorBlock, floorBlock, false);
-			generateAirBox(level, structureBoundingBoxIn, 3, 1, 0, 4, 3, 1);
-			generateAirBox(level, structureBoundingBoxIn, 1, 1, 2, 6, 4, 3);
-			generateAirBox(level, structureBoundingBoxIn, 1, 0, 3, 6, 5, 5);
-			generateAirBox(level, structureBoundingBoxIn, 1, 1, 6, 6, 5, 8);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 3, 6, 0, 3, floorStairsBack, floorStairsBack, false);
-			generateBox(level, structureBoundingBoxIn, 1, 0, 6, 6, 0, 6, floorStairsFront, floorStairsFront, false);
+			generateBox(level, structureBoundingBoxIn, 3, 1, 0, 4, 1, 1, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 2, 7, 1, 2, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 0, 4, 1, 0, 5, floorDecor, floorDecor, false);
+			generateBox(level, structureBoundingBoxIn, 2, 0, 4, 5, 0, 5, floorBlock, floorBlock, false);
+			generateBox(level, structureBoundingBoxIn, 6, 0, 4, 6, 0, 5, floorDecor, floorDecor, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 7, 6, 1, 8, floorBlock, floorBlock, false);
+			generateAirBox(level, structureBoundingBoxIn, 3, 2, 0, 4, 4, 1);
+			generateAirBox(level, structureBoundingBoxIn, 1, 2, 2, 6, 5, 3);
+			generateAirBox(level, structureBoundingBoxIn, 1, 1, 3, 6, 6, 5);
+			generateAirBox(level, structureBoundingBoxIn, 1, 2, 6, 6, 6, 8);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 3, 6, 1, 3, floorStairsBack, floorStairsBack, false);
+			generateBox(level, structureBoundingBoxIn, 1, 1, 6, 6, 1, 6, floorStairsFront, floorStairsFront, false);
 			
-			generateBox(level, structureBoundingBoxIn, 2, 1, 0, 2, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 5, 1, 0, 5, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 1, 1, 1, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 6, 1, 1, 7, 3, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 4, 1, 7, 5, 1, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 0, 2, 0, 5, 8, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 7, 0, 2, 7, 5, 8, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 0, 1, 9, 7, 5, 9, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 3, 4, 0, 4, 4, 0, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 5, 2, 6, 5, 3, wallBlock, wallBlock, false);
-			generateBox(level, structureBoundingBoxIn, 1, 6, 4, 6, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 2, 2, 0, 2, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 5, 2, 0, 5, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 2, 1, 1, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 6, 2, 1, 7, 4, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 5, 1, 7, 6, 1, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 1, 2, 0, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 7, 1, 2, 7, 6, 8, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 0, 2, 9, 7, 6, 9, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 3, 5, 0, 4, 5, 0, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 6, 2, 6, 6, 3, wallBlock, wallBlock, false);
+			generateBox(level, structureBoundingBoxIn, 1, 7, 4, 6, 7, 8, wallBlock, wallBlock, false);
 			
-			generateBox(level, structureBoundingBoxIn, 1, 6, 5, 1, 6, 6, light, light, false);
-			generateBox(level, structureBoundingBoxIn, 6, 6, 5, 6, 6, 6, light, light, false);
+			generateBox(level, structureBoundingBoxIn, 1, 7, 5, 1, 7, 6, light, light, false);
+			generateBox(level, structureBoundingBoxIn, 6, 7, 5, 6, 7, 6, light, light, false);
 			
-			placeReturnNode(level, structureBoundingBoxIn, 3, 1, 7);
+			placeReturnNode(level, structureBoundingBoxIn, 3, 2, 7);
 		}
 	}
 	public static class SpawnerRoom extends ImpDungeonPiece
@@ -634,8 +635,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeBBFromCenter(pos.getX() - (coordBaseMode.equals(Direction.EAST) ? 1 : 0) - coordBaseMode.getStepX(), pos.getY(),
-					pos.getZ() - (coordBaseMode.equals(Direction.SOUTH) ? 1 : 0) - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 7), 0);
+			super(MSStructurePieces.IMP_SPAWNER_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 7, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -731,7 +731,7 @@ public class ImpDungeonPieces
 		
 		public BookcaseRoom(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeBBFromCenter(pos.getX() - coordBaseMode.getStepX(), pos.getY(), pos.getZ() - coordBaseMode.getStepZ(), coordBaseMode, 8, 5, 8), 0);
+			super(MSStructurePieces.IMP_BOOKCASE_ROOM.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 8, pos, coordBaseMode), 0);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -827,7 +827,7 @@ public class ImpDungeonPieces
 		
 		public SpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 6, 5, 10), 2);
+			super(MSStructurePieces.IMP_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(2, 0, 0, 6, 5, 10, pos, coordBaseMode), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -937,7 +937,7 @@ public class ImpDungeonPieces
 		
 		public OgreCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 8, 5, 10), 1);
+			super(MSStructurePieces.IMP_OGRE_CORRIDOR.get(), 0, makeGridBoundingBox(1, 0, 0, 8, 5, 10, pos, coordBaseMode), 1);
 			setOrientation(coordBaseMode);
 			
 			ctxt.compoGen[xIndex][zIndex] = this;
@@ -1049,7 +1049,7 @@ public class ImpDungeonPieces
 		
 		public LargeSpawnerCorridor(Direction coordBaseMode, BlockPos pos, int xIndex, int zIndex, int index, StructureContext ctxt)
 		{
-			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeBBFromCenter(pos.getX(), pos.getY(), pos.getZ(), coordBaseMode, 10, 5, 10), 2);
+			super(MSStructurePieces.IMP_LARGE_SPAWNER_CORRIDOR.get(), 0, makeGridBoundingBox(0, 0, 0, 10, 5, 10, pos, coordBaseMode), 2);
 			boolean mirror = ctxt.rand.nextBoolean();
 			if(mirror)
 				setOrientation(coordBaseMode.getOpposite());
@@ -1158,5 +1158,27 @@ public class ImpDungeonPieces
 	private static EntityType<?> getTypeForSpawners()
 	{
 		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH : MSEntityTypes.IMP;
+	}
+	
+	/**
+	 * A helper function for creating a bounding box rotated and offset based on imp dungeon's 10x10 grid pieces
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private static BoundingBox makeGridBoundingBox(int minX, int minY, int minZ, int sizeX, int sizeY, int sizeZ, BlockPos centerPos, Direction orientation)
+	{
+		int maxX = minX + sizeX - 1, maxY = minY + sizeY - 1, maxZ = minZ + sizeZ - 1;
+		
+		int startX = centerPos.getX() - 4, startZ = centerPos.getZ() - 4;
+		int endX = startX + 10 - 1, endZ = startZ + 10 - 1;
+		int y = centerPos.getY();
+		
+		return switch(orientation)
+				{
+					case SOUTH -> new BoundingBox(startX + minX, y + minY, startZ + minZ, startX + maxX, y + maxY, startZ + maxZ);
+					case NORTH -> new BoundingBox(endX - maxX, y + minY, endZ - maxZ, endX - minX, y + maxY, endZ - minZ);
+					case EAST -> new BoundingBox(startX + minZ, y + minY, endZ - maxX, startX + maxZ, y + maxY, endZ - minX);
+					case WEST -> new BoundingBox(endX - maxZ, y + minY, startZ + minX, endX - minZ, y + maxY, startZ + maxX);
+					default -> throw new IllegalArgumentException("Invalid orientation");
+				};
 	}
 }

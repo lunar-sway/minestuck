@@ -2,15 +2,17 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.tileentity.machine.GristWildcardHolder;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
 public class GristWildcardPacket implements PlayToServerPacket
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final GristType gristType;
 	private final BlockPos pos;
@@ -44,7 +46,7 @@ public class GristWildcardPacket implements PlayToServerPacket
 			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof GristWildcardHolder blockEntity)
 				blockEntity.setWildcardGrist(gristType);
 			else
-				Debug.warnf("No tile entity found at %s for packet sent by player %s!", pos, player.getName());
+				LOGGER.warn("No tile entity found at {} for packet sent by player {}!", pos, player.getName());
 		}
 	}
 }

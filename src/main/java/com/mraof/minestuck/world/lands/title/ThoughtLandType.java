@@ -35,10 +35,10 @@ public class ThoughtLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("ocean", MSBlocks.BRAIN_JUICE.get().defaultBlockState());
-		registry.setBlockState("river", MSBlocks.BRAIN_JUICE.get().defaultBlockState());
-		registry.setBlockState("structure_wool_2", Blocks.LIME_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.LIME_CARPET.defaultBlockState());
+		registry.setBlock("ocean", MSBlocks.BRAIN_JUICE);
+		registry.setBlock("river", MSBlocks.BRAIN_JUICE);
+		registry.setBlock("structure_wool_2", Blocks.LIME_WOOL);
+		registry.setBlock("carpet", Blocks.LIME_CARPET);
 	}
 	
 	@Override

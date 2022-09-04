@@ -1,9 +1,9 @@
-package com.mraof.minestuck.world.storage.loot;
+package com.mraof.minestuck.item.loot;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.storage.loot.conditions.ConsortLootCondition;
-import com.mraof.minestuck.world.storage.loot.conditions.LandTypeLootCondition;
-import com.mraof.minestuck.world.storage.loot.functions.SetBoondollarCount;
+import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
+import com.mraof.minestuck.item.loot.conditions.LandTypeLootCondition;
+import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.Serializer;

@@ -29,6 +29,7 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Created with assistance from https://gist.github.com/Commoble/7db2ef25f94952a4d2e2b7e3d4be53e0
@@ -48,8 +49,9 @@ public class DynamicDimensions
 		WorldData worldData = server.getWorldData();
 		WorldGenSettings genSettings = worldData.worldGenSettings();
 		
-		ChunkGenerator chunkGenerator = new LandChunkGenerator(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY),
-				genSettings.seed() + worldKey.location().getPath().hashCode(), landTypes, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
+		LandTypePair.Named named = landTypes.createNamedRandomly(new Random());	//TODO consider handling random differently
+		ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY),
+				genSettings.seed() + worldKey.location().getPath().hashCode(), named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
 		LevelStem dimension = new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolder(LAND_TYPE), chunkGenerator);
 		
 		((WritableRegistry<LevelStem>) genSettings.dimensions()).register(dimensionKey, dimension, Lifecycle.experimental());

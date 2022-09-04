@@ -1,7 +1,6 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.Util;
@@ -16,12 +15,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ConsortMerchantInventory implements Container
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String CANT_AFFORD = "consort.cant_afford";
 	
 	private final NonNullList<ItemStack> inv = NonNullList.withSize(9, ItemStack.EMPTY);
@@ -81,7 +84,7 @@ public class ConsortMerchantInventory implements Container
 					ItemEntity entity = player.drop(items, false);
 					if (entity != null)
 						entity.setNoPickUpDelay();
-					else Debug.warn("Couldn't spawn in an item purchased from a consort! "+items);
+					else LOGGER.warn("Couldn't spawn in an item purchased from a consort: {}", items);
 				}
 			}
 		}

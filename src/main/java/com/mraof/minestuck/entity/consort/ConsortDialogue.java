@@ -9,7 +9,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,8 +22,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 import static com.mraof.minestuck.world.lands.LandTypes.*;
-import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
-import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
+import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -460,7 +460,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(consort.getServer(), consort.homeDimension);
+		LandTypePair aspects = LandTypePair.getTypes(consort.getServer(), consort.homeDimension).orElse(null);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		
