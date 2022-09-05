@@ -12,6 +12,7 @@ import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
@@ -996,8 +997,8 @@ public abstract class MessageType
 		 * 
 		 * @param name
 		 *            Name used used for nbt data
-		 * @param list
-		 *            List of potential item requirements
+		 * @param itemTag
+		 *            TagKey(an item tag) of items that are allowed
 		 * @param random
 		 *            If the item required should be picked at random or be
 		 *            based on what the player has
@@ -1037,7 +1038,50 @@ public abstract class MessageType
 				return conditionedMessage.getMessage(consort, player,
 						addTo(chainIdentifier, conditionedMessage.getString()));
 			
-			if(containsItemFromTag(player, nbt))
+			boolean hasItem = false;
+			List<ItemStack> stackListFromTag = new ArrayList<>();
+			Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
+			
+			if(random || repeat && nbt.contains(this.getString()))
+			{
+				String string;
+				if(nbt.contains(this.getString()))
+				{
+					string = nbt.getString(this.getString());
+				}
+				else
+				{
+					int index = consort.level.random.nextInt(stackListFromTag.size());
+					ItemStack randomStack = stackListFromTag.get(index);
+					string = randomStack.getItem().getRegistryName().toString();
+					nbt.putString(this.getString(), string);
+				}
+				
+				Optional<Item> optionalItem = Registry.ITEM.getOptional(new ResourceLocation(string));
+				if(optionalItem.isPresent())
+				{
+					ItemStack stack = new ItemStack(optionalItem.get());
+					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
+					
+					hasItem = lookFor(stack, player);
+				}
+			} else
+			{
+				List<ItemStack> list = new ArrayList<>(stackListFromTag);
+				while (!list.isEmpty())
+				{
+					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
+					if(lookFor(stack, player))
+					{
+						nbt.putInt(this.getString(), stackListFromTag.indexOf(stack));
+						nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
+						hasItem = true;
+						break;
+					}
+				}
+			}
+			
+			if(hasItem)
 			{
 				return conditionedMessage.getMessage(consort, player, addTo(chainIdentifier, conditionedMessage.getString()));
 			}
@@ -1067,23 +1111,24 @@ public abstract class MessageType
 			return null;
 		}
 		
-		private boolean containsItemFromTag(ServerPlayer player, CompoundTag nbt)
+		private boolean lookFor(ItemStack stack, ServerPlayer player)
 		{
-			for(ItemStack stack : player.getHandSlots()) //prioritizes items in hands before items from the rest of the inventory
+			for(ItemStack held : player.getHandSlots()) //prioritizes items in hands before items from the rest of the inventory
 			{
-				if(stack.is(itemTag))
+				if(ItemStack.isSame(held, stack))
 				{
-					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 					return true;
 				}
 			}
 			
-			for(ItemStack stack : player.getInventory().items)
+			if(!held)
 			{
-				if(stack.is(itemTag))
+				for(ItemStack held : player.getInventory().items)
 				{
-					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
-					return true;
+					if(ItemStack.isSame(held, stack))
+					{
+						return true;
+					}
 				}
 			}
 			

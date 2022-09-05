@@ -1,7 +1,7 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
