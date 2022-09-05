@@ -421,7 +421,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.NOR_GATE_BLOCK, "NOR Gate");
 		addBlock(MSBlocks.XNOR_GATE_BLOCK, "XNOR Gate");
 		addBlock(MSBlocks.GATE, "Gate");
+		addBlock(MSBlocks.GATE_MAIN, "Gate");
 		addBlock(MSBlocks.RETURN_NODE, "Return Node");
+		addBlock(MSBlocks.RETURN_NODE_MAIN, "Return Node");
 		MSBlocks.CRUXTRUDER.forEachBlock(block -> add(block, "Cruxtruder"));
 		addBlock(MSBlocks.CRUXTRUDER_LID, "Cruxtruder Lid");
 		MSBlocks.TOTEM_LATHE.forEachBlock(block -> add(block, "Totem Lathe"));

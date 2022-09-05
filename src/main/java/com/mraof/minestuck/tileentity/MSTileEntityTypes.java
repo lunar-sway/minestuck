@@ -30,8 +30,8 @@ public class MSTileEntityTypes
 	public static final RegistryObject<BlockEntityType<HolopadTileEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadTileEntity::new, MSBlocks.HOLOPAD.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<SkaiaPortalTileEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalTileEntity::new, MSBlocks.SKAIA_PORTAL.get()).build(null));
-	public static final RegistryObject<BlockEntityType<GateTileEntity>> GATE = REGISTER.register("gate", () -> BlockEntityType.Builder.of(GateTileEntity::new, MSBlocks.GATE.get()).build(null));
-	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE.get()).build(null));
+	public static final RegistryObject<BlockEntityType<GateTileEntity>> GATE = REGISTER.register("gate", () -> BlockEntityType.Builder.of(GateTileEntity::new, MSBlocks.GATE_MAIN.get()).build(null));
+	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE_MAIN.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<CassettePlayerTileEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> BlockEntityType.Builder.of(CassettePlayerTileEntity::new, MSBlocks.CASSETTE_PLAYER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<StatStorerTileEntity>> STAT_STORER = REGISTER.register("stat_storer", () -> BlockEntityType.Builder.of(StatStorerTileEntity::new, MSBlocks.STAT_STORER.get()).build(null));

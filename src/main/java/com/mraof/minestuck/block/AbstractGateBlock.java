@@ -7,8 +7,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.client.IBlockRenderProperties;
@@ -18,14 +16,11 @@ import java.util.function.Consumer;
 
 public abstract class AbstractGateBlock extends Block
 {
-	
 	protected static final VoxelShape SHAPE = Block.box(0.0D, 7.0D, 0.0D, 16.0D, 9.0D, 16.0D);
-	public static final BooleanProperty MAIN = MSProperties.MAIN;
 	
 	public AbstractGateBlock(Properties properties)
 	{
 		super(properties);
-		registerDefaultState(defaultBlockState().setValue(MAIN, false));
 	}
 	
 	@Override
@@ -55,25 +50,6 @@ public abstract class AbstractGateBlock extends Block
 		return RenderShape.INVISIBLE;
 	}
 	
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-	{
-		builder.add(MAIN);
-	}
-	
-	protected boolean isValid(BlockPos pos, Level level, BlockState state)
-	{
-		if(state.getValue(MAIN))
-			return isValid(pos, level);
-		else
-		{
-			BlockPos mainPos = findMainComponent(pos, level);
-			if(mainPos != null)
-				return isValid(mainPos, level);
-			else return false;
-		}
-	}
-	
 	protected abstract boolean isValid(BlockPos pos, Level level);
 	
 	protected abstract void removePortal(BlockPos pos, Level level);
@@ -83,30 +59,23 @@ public abstract class AbstractGateBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.onRemove(state, level, pos, newState, isMoving);
-		if(state.getValue(MAIN))
-			removePortal(pos, level);
-		else
-		{
-			BlockPos mainPos = findMainComponent(pos, level);
-			if(mainPos != null)
-				removePortal(mainPos, level);
-		}
+		BlockPos mainPos = findMainComponent(pos, level);
+		if(mainPos == null)
+			level.removeBlock(pos, false);
+		else if(!this.isValid(mainPos, level))
+			removePortal(mainPos, level);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if(!this.isValid(pos, level, state))
-		{
-			BlockPos mainPos = state.getValue(MAIN) ? pos : findMainComponent(pos, level);
-			
-			if(mainPos == null)
-				level.removeBlock(pos, false);
-			else removePortal(mainPos, level);
-		}
+		super.onRemove(state, level, pos, newState, isMoving);
+		BlockPos mainPos = findMainComponent(pos, level);
+		if(mainPos != null)
+			removePortal(mainPos, level);
 	}
+	
 }
