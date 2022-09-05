@@ -316,7 +316,6 @@ public final class Session
 					s.connections.add(c);
 			} catch(Exception e)
 			{
-
 				LOGGER.error("Unable to read sburb connection from tag " + list.getCompound(i) + ". Forced to skip connection. Caused by:", e);
 
 			}

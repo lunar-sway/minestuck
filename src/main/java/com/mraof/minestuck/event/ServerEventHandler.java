@@ -250,7 +250,6 @@ public class ServerEventHandler
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
 	
-
 	@SubscribeEvent
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{

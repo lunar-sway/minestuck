@@ -40,7 +40,7 @@ public class GristTypes
 	public static final RegistryObject<GristType> URANIUM = GRIST_TYPES.register("uranium", () -> new GristType(new GristType.Properties(0.2F, 5).spawnsFor(UNCOMMON, ANY).candy(MSItems.URANIUM_GUMMY_BEAR).secondary(GristTypes.DIAMOND)));
 	public static final RegistryObject<GristType> ARTIFACT = GRIST_TYPES.register("artifact", () -> new GristType(new GristType.Properties(0.1F, 1).candy(MSItems.ARTIFACT_WARHEAD)));
 	public static final RegistryObject<GristType> ZILLIUM = GRIST_TYPES.register("zillium", () -> new GristType(new GristType.Properties(0.0F, 10).candy(MSItems.ZILLIUM_SKITTLES).notUnderlingType()));
-	
+
 	
 	public static IForgeRegistry<GristType> getRegistry()
 	{
