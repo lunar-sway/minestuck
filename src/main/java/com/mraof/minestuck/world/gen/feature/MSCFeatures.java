@@ -2,8 +2,10 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.world.gen.OreGeneration;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -26,6 +28,7 @@ import java.util.List;
  * Holds minestuck configured features. Also creates and registers them when appropriate.
  * See {@link MSFeatures} for minestuck features.
  * (Configured features are world-gen features that has been configured with blocks, sizes or whatever else features may be configured with)
+ * Check {@link MSPlacedFeatures} for utilizations of these configured features
  */
 public final class MSCFeatures
 {
@@ -95,4 +98,11 @@ public final class MSCFeatures
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> new ConfiguredFeature<>(MSFeatures.RABBIT_PLACEMENT.get(), FeatureConfiguration.NONE));
 	
+	/**
+	 * The OreConfiguration uses an inlined list that matches ores to the stone type they should replace
+	 */
+	public static final RegistryObject<ConfiguredFeature<?, ?>> CRUXITE_ORE = REGISTER.register("cruxite_ore", () -> new ConfiguredFeature<>(Feature.ORE,
+			new OreConfiguration(List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_CRUXITE_ORE.get().defaultBlockState())), OreGeneration.baseCruxiteVeinSize)));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> URANIUM_ORE = REGISTER.register("uranium_ore", () -> new ConfiguredFeature<>(Feature.ORE,
+			new OreConfiguration(List.of(OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_URANIUM_ORE.get().defaultBlockState())), OreGeneration.baseUraniumVeinSize)));
 }
