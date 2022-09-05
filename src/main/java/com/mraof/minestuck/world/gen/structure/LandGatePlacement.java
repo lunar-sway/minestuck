@@ -3,16 +3,20 @@ package com.mraof.minestuck.world.gen.structure;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
 
 public final class LandGatePlacement implements StructurePlacement
 {
@@ -43,8 +47,14 @@ public final class LandGatePlacement implements StructurePlacement
 	{
 		if(level.getChunkSource().getGenerator() instanceof LandChunkGenerator landGenerator)
 		{
+			// (Last checked mc 1.18) RegistryObject's refers to global instances, but builtin registries create world-specific instances
+			// We need specifically the world-specific instance for getStartForFeature() to work, so we get an instance from the world-specific registry
+			ConfiguredStructureFeature<?, ?> landGate = level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+					.get(MSConfiguredStructures.LAND_GATE.getKey());
+			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
+			
 			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition();
-			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(MSConfiguredStructures.LAND_GATE.get());
+			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(landGate);
 			
 			if(start != null)
 			{
