@@ -1044,20 +1044,20 @@ public abstract class MessageType
 			
 			if(random || repeat && nbt.contains(this.getString()))
 			{
-				String string;
+				String nbtString;
 				if(nbt.contains(this.getString()))
 				{
-					string = nbt.getString(this.getString());
+					nbtString = nbt.getString(this.getString());
 				}
 				else
 				{
 					int index = consort.level.random.nextInt(stackListFromTag.size());
 					ItemStack randomStack = stackListFromTag.get(index);
-					string = randomStack.getItem().getRegistryName().toString();
-					nbt.putString(this.getString(), string);
+					nbtString = randomStack.getItem().getRegistryName().toString();
+					nbt.putString(this.getString(), nbtString);
 				}
 				
-				Optional<Item> optionalItem = Registry.ITEM.getOptional(new ResourceLocation(string));
+				Optional<Item> optionalItem = Registry.ITEM.getOptional(new ResourceLocation(nbtString));
 				if(optionalItem.isPresent())
 				{
 					ItemStack stack = new ItemStack(optionalItem.get());
@@ -1073,7 +1073,7 @@ public abstract class MessageType
 					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
-						nbt.putInt(this.getString(), stackListFromTag.indexOf(stack));
+						nbt.putString(this.getString(), stack.getItem().getRegistryName().toString());
 						nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 						hasItem = true;
 						break;
