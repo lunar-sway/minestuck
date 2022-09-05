@@ -7,8 +7,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.ChatFormatting;
@@ -31,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -75,11 +75,10 @@ public abstract class MessageType
 				obj[i] = player.getName();
 			} else if(args[i].equals("land_name"))
 			{
-				LandInfo landInfo = MSDimensions.getLandInfo(consort.getServer(), consort.homeDimension);
-				if(landInfo != null)
-				{
-					obj[i] = landInfo.landAsTextComponent();
-				} else
+				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(consort.getServer(), consort.homeDimension);
+				if(landTypes.isPresent())
+					obj[i] = landTypes.get().asComponent();
+				else
 					obj[i] = "Land name";
 			} else if(args[i].equals("player_title_land"))
 			{

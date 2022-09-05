@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -22,11 +21,14 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.UUID;
 
 public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public boolean isFlying;
 	public GameType gameType;
@@ -101,7 +103,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 				foodStats = new FoodData();
 			} catch(NoSuchMethodError e)
 			{
-				Debug.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
+				LOGGER.info("Custom constructor detected for FoodStats. Trying with player as parameter...");
 				try
 				{
 					foodStats = FoodData.class.getConstructor(Player.class).newInstance(player);
@@ -115,7 +117,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		} catch(Exception e)
 		{
 			foodStats = null;
-			Debug.logger.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
+			LOGGER.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
 			sourcePlayer.sendMessage(new TextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
 		}
 	}

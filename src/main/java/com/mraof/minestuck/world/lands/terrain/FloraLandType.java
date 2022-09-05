@@ -3,18 +3,15 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -27,7 +24,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -37,12 +33,11 @@ public class FloraLandType extends TerrainLandType
 	public static final String FLOWERS = "minestuck.flowers";
 	public static final String THORNS = "minestuck.thorns";
 	
-	private static final Vec3 fogColor = new Vec3(0.5D, 0.6D, 0.9D);
-	private static final Vec3 skyColor = new Vec3(0.6D, 0.8D, 0.6D);
-	
 	public FloraLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.IGUANA).names(FLORA, FLOWERS, THORNS)
+				.fogColor(0.5, 0.6, 0.9).skyColor(0.6, 0.8, 0.6)
+				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FLORA));
 	}
 	
 	@Override
@@ -63,18 +58,6 @@ public class FloraLandType extends TerrainLandType
 		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		return new String[]{FLORA, FLOWERS, THORNS};
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.FOREST;
 	}
 	
 	@Override
@@ -132,38 +115,14 @@ public class FloraLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FLORA;
+		IguanaVillagePieces.addPieces(register, random);
 	}
 }

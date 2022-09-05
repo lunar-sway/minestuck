@@ -11,6 +11,7 @@ import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.HolopadRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.ReturnNodeRenderer;
 import com.mraof.minestuck.client.renderer.tileentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
@@ -42,6 +43,7 @@ public class ClientProxy
 	{
 		BlockEntityRenderers.register(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
 		BlockEntityRenderers.register(MSTileEntityTypes.GATE.get(), GateRenderer::new);
+		BlockEntityRenderers.register(MSTileEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
 		BlockEntityRenderers.register(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
@@ -136,32 +138,32 @@ public class ClientProxy
 		ItemPropertyFunction content = (stack, level, holder, seed) -> AlchemyHelper.hasDecodedItem(stack) ? 1 : 0;
 		ResourceLocation contentName = new ResourceLocation(Minestuck.MOD_ID, "content");
 		
-		ItemProperties.register(MSItems.CAPTCHA_CARD, contentName, content);
-		ItemProperties.register(MSItems.CRUXITE_DOWEL, contentName, content);
-		ItemProperties.register(MSItems.SHUNT, contentName, content);
-		ItemProperties.register(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
-		ItemProperties.register(MSItems.CAPTCHA_CARD, new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), contentName, content);
+		ItemProperties.register(MSItems.CRUXITE_DOWEL.get(), contentName, content);
+		ItemProperties.register(MSItems.SHUNT.get(), contentName, content);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "punched"), (stack, level, holder, seed) -> AlchemyHelper.isPunchedCard(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.CAPTCHA_CARD.get(), new ResourceLocation(Minestuck.MOD_ID, "ghost"), (stack, level, holder, seed) -> AlchemyHelper.isGhostCard(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.BOONDOLLARS, new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
-		ItemProperties.register(MSItems.FROG, new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
-		ItemProperties.register(MSItems.STONE_SLAB, new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOONDOLLARS.get(), new ResourceLocation(Minestuck.MOD_ID, "count"), (stack, level, holder, seed) -> BoondollarsItem.getCount(stack));
+		ItemProperties.register(MSItems.FROG.get(), new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
+		ItemProperties.register(MSItems.STONE_SLAB.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 		
 		DimensionSpecialEffects.EFFECTS.put(MSDimensions.LAND_EFFECTS, new LandRenderInfo());
 	}
 	
 	private static void registerArmorModels()
 	{
-		ArmorModels.register(MSItems.CRUMPLY_HAT, new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
+		ArmorModels.register(MSItems.CRUMPLY_HAT.get(), new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
 		
 		HumanoidModel<?> pajamasModel = new HumanoidModel<>(DreamerPajamasModel.createBodyLayer().bakeRoot());
-		ArmorModels.register(MSItems.PROSPIT_CIRCLET, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_SHIRT, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_PANTS, pajamasModel);
-		ArmorModels.register(MSItems.PROSPIT_SHOES, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_CIRCLET, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_SHIRT, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_PANTS, pajamasModel);
-		ArmorModels.register(MSItems.DERSE_SHOES, pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_CIRCLET.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHIRT.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_PANTS.get(), pajamasModel);
+		ArmorModels.register(MSItems.PROSPIT_SHOES.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_CIRCLET.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHIRT.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_PANTS.get(), pajamasModel);
+		ArmorModels.register(MSItems.DERSE_SHOES.get(), pajamasModel);
 	}
 	
 	/**

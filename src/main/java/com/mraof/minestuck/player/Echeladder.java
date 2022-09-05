@@ -6,7 +6,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +19,8 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Echeladder
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String NEW_RUNG = "echeladder.new_rung";
 	
@@ -92,7 +94,7 @@ public class Echeladder
 		
 		int prevRung = rung;
 		int prevExp = exp;
-		Debug.debugf("Adding %s exp(modified) to player %s's echeladder (previously at rung %s progress %s/%s)", exp, identifier.getUsername(), rung, progress, expReq);
+		LOGGER.debug("Adding {} exp(modified) to player {}'s echeladder (previously at rung {} progress {}/{})", exp, identifier.getUsername(), rung, progress, expReq);
 		long boondollarsGained = 0;
 		
 		increment:
@@ -109,20 +111,20 @@ public class Echeladder
 					break increment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp / 1.5);
-				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
+				LOGGER.debug("Increased rung to {}, remaining exp is {}", rung, exp);
 			}
 			if(exp >= 1)
 			{
 				progress += exp;
 				savedData.setDirty();
-				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
+				LOGGER.debug("Added remainder exp to progress, which is now at {}", progress);
 			} else
-				Debug.debugf("Remaining exp %s is below 1, and will therefore be ignored", exp);
+				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
 		savedData.getData(identifier).addBoondollars(boondollarsGained);
 		
-		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
+		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
 		ServerPlayer player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
 		{

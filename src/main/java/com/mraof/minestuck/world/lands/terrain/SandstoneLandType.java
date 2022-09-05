@@ -2,20 +2,17 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -30,7 +27,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -41,23 +37,26 @@ public class SandstoneLandType extends TerrainLandType
 	public static final String STONY_DESERTS = "minestuck.stony_deserts";
 	
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sandstone");
-	private final Vec3 fogColor, skyColor;
 	private final Variant type;
 	
-	public SandstoneLandType(Variant type)
+	public static TerrainLandType createSandstone()
 	{
-		super(GROUP_NAME);
+		return new SandstoneLandType(Variant.SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+				.skylight(3/4F).fogColor(0.9, 0.7, 0.05).skyColor(0.8, 0.6, 0.2)
+				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
+	}
+	
+	public static TerrainLandType createRedSandstone()
+	{
+		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+				.skylight(3/4F).fogColor(0.7, 0.4, 0.05).skyColor(0.8, 0.5, 0.1)
+				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
+	}
+	
+	private SandstoneLandType(Variant type, Builder builder)
+	{
+		super(builder);
 		this.type = type;
-		if(type == Variant.SANDSTONE)
-		{
-			fogColor = new Vec3(0.9D, 0.7D, 0.05D);
-			skyColor = new Vec3(0.8D, 0.6D, 0.2D);
-		} else
-		{
-			fogColor = new Vec3(0.7D, 0.4D, 0.05D);
-			skyColor = new Vec3(0.8D, 0.5D, 0.1D);
-			
-		}
 	}
 	
 	@Override
@@ -94,21 +93,9 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public String[] getNames()
-	{
-		return new String[] {SANDSTONE, STONY_DESERTS};
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.MESA;
-	}
-	
-	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 1/10F;
+		settings.oceanThreshold = -0.6F;
 	}
 	
 	@Override
@@ -150,54 +137,20 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 3/4F;
-	}
-	
-	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(register);
+		TurtleVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addTurtleVillagePieces(register, random);
+		TurtleVillagePieces.addPieces(register, random);
 	}
 	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_SANDSTONE;
-	}
-	
-	public enum Variant
+	private enum Variant
 	{
 		SANDSTONE,
-		RED_SANDSTONE;
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		RED_SANDSTONE
 	}
 }

@@ -39,7 +39,7 @@ public class CaptchaCardItem extends Item
 		if(this.allowdedIn(tab))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE), true));
+			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE.get()), true));
 		}
 	}
 	

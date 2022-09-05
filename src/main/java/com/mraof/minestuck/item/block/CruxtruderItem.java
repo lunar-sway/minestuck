@@ -5,7 +5,6 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,11 +13,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public class CruxtruderItem extends MultiblockItem
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final CruxtruderMultiblock multiblock;
 	
 	public CruxtruderItem(CruxtruderMultiblock multiblock, Properties properties)
@@ -43,7 +46,7 @@ public class CruxtruderItem extends MultiblockItem
 			
 			((CruxtruderTileEntity) te).setColor(color);
 			return true;
-		} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
+		} else LOGGER.warn("Placed cruxtruder, but can't find tile entity. Instead found {}.", te);
 		return false;
 	}
 }

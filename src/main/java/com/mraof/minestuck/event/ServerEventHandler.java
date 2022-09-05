@@ -10,11 +10,13 @@ import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
-import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumAspect;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.server.MinecraftServer;
@@ -74,7 +76,6 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
-		MSDimensions.clear();
 	}
 	
 	@SubscribeEvent
@@ -186,7 +187,7 @@ public class ServerEventHandler
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING.get())
 			{
 				if(isDoom)
 					activateThreshold = activateThreshold * 1.5F;
@@ -209,7 +210,7 @@ public class ServerEventHandler
 				}
 			}
 			
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE.get())
 			{
 				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
 				
@@ -250,7 +251,6 @@ public class ServerEventHandler
 	}
 	
 
-	
 	@SubscribeEvent
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
@@ -284,7 +284,7 @@ public class ServerEventHandler
 			{
 				int sPl = (int) session.getSessionPowerlevel(mcServer);
 				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
-				int spliceAmount = GristHelper.rungGrist[rung] / sPl;//determines the appropriate splice amount
+				int spliceAmount = (int) (GristHelper.rungGrist[rung] / 20 * Math.max(sPl, 1.0));//determines the appropriate splice amount
 				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
 				if(session == null){
 					return;
@@ -311,7 +311,7 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE));
+			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level.addFreshEntity(stalebread);
 		}
 	}

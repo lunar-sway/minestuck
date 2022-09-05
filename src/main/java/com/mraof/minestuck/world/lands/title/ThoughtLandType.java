@@ -6,7 +6,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
@@ -50,7 +50,7 @@ public class ThoughtLandType extends TitleLandType
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = Math.max(settings.oceanChance, 0.2F);
+		settings.oceanThreshold = Math.max(settings.oceanThreshold, -0.4F);
 	}
 	
 	@Override

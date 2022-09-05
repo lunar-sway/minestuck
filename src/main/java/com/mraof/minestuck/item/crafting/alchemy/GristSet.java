@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mraof.minestuck.entity.item.GristEntity;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -14,6 +13,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 
 public class GristSet
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String MISSING_MESSAGE = "grist.missing";
 	public static final String GRIST_COMMA = "grist.comma";
 	
@@ -336,7 +339,7 @@ public class GristSet
 			ResourceLocation id = entry.getKey().getRegistryName();
 			if(id == null)
 			{
-				Debug.warnf("Found grist type without a registry name! (%s)", entry.getKey());
+				LOGGER.warn("Found grist type without a registry name! ({})", entry.getKey());
 				continue;
 			}
 			json.addProperty(id.toString(), entry.getValue());

@@ -2,19 +2,15 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -27,7 +23,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -38,11 +33,11 @@ public class HeatLandType extends TerrainLandType
 	public static final String FLAME = "minestuck.flame";
 	public static final String FIRE = "minestuck.fire";
 	
-	private static final Vec3 skyColor = new Vec3(0.4D, 0.0D, 0.0D);
-	
 	public HeatLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).names(HEAT, FLAME, FIRE)
+				.skylight(1/2F).fogColor(0.4, 0.0, 0.0)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.NETHER).music(() -> MSSoundEvents.MUSIC_HEAT));
 	}
 	
 	@Override
@@ -68,23 +63,6 @@ public class HeatLandType extends TerrainLandType
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.defaultBlockState());
 		registry.setBlockState("cruxite_ore", MSBlocks.NETHERRACK_CRUXITE_ORE.get().defaultBlockState());
 		registry.setBlockState("uranium_ore", MSBlocks.NETHERRACK_URANIUM_ORE.get().defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {HEAT, FLAME, FIRE};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.NO_RAIN_LAND;
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.NETHER;
 	}
 	
 	@Override
@@ -127,38 +105,14 @@ public class HeatLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 1/2F;
-	}
-	
-	@Override
-	public Vec3 getFogColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_HEAT;
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 }

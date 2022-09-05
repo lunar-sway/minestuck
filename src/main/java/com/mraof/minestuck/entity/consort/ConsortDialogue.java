@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,8 +25,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 
 import static com.mraof.minestuck.world.lands.LandTypes.*;
-import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_FOOD_STOCK;
-import static com.mraof.minestuck.world.storage.loot.MSLootTables.CONSORT_GENERAL_STOCK;
+import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_FOOD_STOCK;
+import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
 
 /**
  * Handles message registry, message selection and contains the main message
@@ -352,9 +352,9 @@ public class ConsortDialogue
 				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
 				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK),
-				new ItemStack(MSItems.GRASSHOPPER), new ItemStack(MSItems.CHOCOLATE_BEETLE),	//TODO Use item tags for these kind of things
-				new ItemStack(MSItems.CONE_OF_FLIES));
+		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK.get()),
+				new ItemStack(MSItems.GRASSHOPPER.get()), new ItemStack(MSItems.CHOCOLATE_BEETLE.get()),	//TODO Use item tags for these kind of things
+				new ItemStack(MSItems.CONE_OF_FLIES.get()));
 		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
@@ -466,7 +466,7 @@ public class ConsortDialogue
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
 	{
-		LandTypePair aspects = MSDimensions.getAspects(consort.getServer(), consort.homeDimension);
+		LandTypePair aspects = LandTypePair.getTypes(consort.getServer(), consort.homeDimension).orElse(null);
 		
 		List<DialogueWrapper> list = new ArrayList<>();
 		

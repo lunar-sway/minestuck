@@ -3,18 +3,16 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -26,7 +24,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
@@ -41,9 +38,23 @@ public class ForestLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
-	public ForestLandType(Variant variation)
+	public static TerrainLandType createForest()
 	{
-		super(GROUP_NAME);
+		return new ForestLandType(Variant.FOREST, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FOREST));
+	}
+	
+	public static TerrainLandType createTaiga()
+	{
+		return new ForestLandType(Variant.TAIGA, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.TAIGA).music(() -> MSSoundEvents.MUSIC_TAIGA));
+	}
+	
+	private ForestLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 	}
 	
@@ -73,19 +84,8 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.FOREST) {
-			return new String[] {FORESTS, TREES};
-		} else {
-			return new String[] {TAIGAS, BOREAL_FORESTS, COLD_FORESTS};
-		}
-	}
-	
-	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	
@@ -131,43 +131,20 @@ public class ForestLandType extends TerrainLandType
 		BiomeDefaultFeatures.addExtraEmeralds(builder);
 		
 	}
-	@Override
-	public Vec3 getFogColor()
-	{
-		return new Vec3(0.0D, 1.0D, 0.6D);
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.4D, 0.7D, 1.0D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
-	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
+		IguanaVillagePieces.addPieces(register, random);
 	}
 	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.TAIGA ? MSSoundEvents.MUSIC_TAIGA : MSSoundEvents.MUSIC_FOREST;
-	}
-	
-	public enum Variant
+	private enum Variant
 	{
 		FOREST,
 		TAIGA

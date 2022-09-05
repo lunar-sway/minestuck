@@ -71,7 +71,7 @@ public interface OnHitEffect
 			target.hurt(DamageSource.playerAttack(player), 2);
 			stack.hurtAndBreak(2, attacker, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			
-			ItemEntity shardEntity = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD, 1));
+			ItemEntity shardEntity = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD.get(), 1));
 			target.level.addFreshEntity(shardEntity);
 		}
 	};
@@ -82,7 +82,7 @@ public interface OnHitEffect
 			//TODO Make this a loot table
 			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
 					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.REDSTONE),
-					new ItemStack(MSItems.SURPRISE_EMBRYO), new ItemStack(MSItems.GAMEGRL_MAGAZINE), new ItemStack(MSItems.GAMEBRO_MAGAZINE),
+					new ItemStack(MSItems.SURPRISE_EMBRYO.get()), new ItemStack(MSItems.GAMEGRL_MAGAZINE.get()), new ItemStack(MSItems.GAMEBRO_MAGAZINE.get()),
 					new ItemStack(Blocks.DEAD_HORN_CORAL)};
 			int num = ran.nextInt(items.length);
 			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), items[num].copy());
@@ -115,7 +115,7 @@ public interface OnHitEffect
 	OnHitEffect SPAWN_BREADCRUMBS = (stack, target, attacker) -> {
 		if(!target.level.isClientSide)
 		{
-			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, 1);
+			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), 1);
 			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), crumbs);
 			target.level.addFreshEntity(item);
 		}

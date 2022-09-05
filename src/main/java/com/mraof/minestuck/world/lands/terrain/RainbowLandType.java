@@ -2,15 +2,13 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biome;
@@ -29,7 +27,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 import java.util.stream.Stream;
@@ -39,12 +36,11 @@ public class RainbowLandType extends TerrainLandType
 	public static final String RAINBOW = "minestuck.rainbow";
 	public static final String COLORS = "minestuck.colors";
 	
-	private static final Vec3 fogColor = new Vec3(0.0D, 0.6D, 0.8D);
-	private static final Vec3 skyColor = new Vec3(0.9D, 0.6D, 0.8D);
-	
 	public RainbowLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.TURTLE).names(RAINBOW, COLORS)
+				.fogColor(0.0, 0.6, 0.8).skyColor(0.9, 0.6, 0.8)
+				.category(Biome.BiomeCategory.PLAINS).music(() -> MSSoundEvents.MUSIC_RAINBOW));
 	}
 	
 	@Override
@@ -67,17 +63,6 @@ public class RainbowLandType extends TerrainLandType
 		registry.setBlockState("mushroom_2", rainbow_leaves);
 		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
 		registry.setBlockState("structure_wool_3", Blocks.GREEN_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {RAINBOW, COLORS};
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.PLAINS; //I guess?
 	}
 	
 	@Override
@@ -142,38 +127,14 @@ public class RainbowLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(register);
+		TurtleVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addTurtleVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_RAINBOW;
+		TurtleVillagePieces.addPieces(register, random);
 	}
 }

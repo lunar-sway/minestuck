@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.DynamicDimensions;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
@@ -18,6 +17,8 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class LandTypes
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private static final ResourceLocation TERRAIN_GROUP = new ResourceLocation(Minestuck.MOD_ID, "terrain_group_map");
 	private static final ResourceLocation TITLE_GROUP = new ResourceLocation(Minestuck.MOD_ID, "title_group_map");
 	
@@ -113,18 +116,18 @@ public class LandTypes
 		IForgeRegistry<TerrainLandType> registry = event.getRegistry();
 		
 		registry.register(new NullTerrainLandType().setRegistryName("null"));
-		registry.register(new ForestLandType(ForestLandType.Variant.FOREST).setRegistryName("forest"));
-		registry.register(new ForestLandType(ForestLandType.Variant.TAIGA).setRegistryName("taiga"));
+		registry.register(ForestLandType.createForest().setRegistryName("forest"));
+		registry.register(ForestLandType.createTaiga().setRegistryName("taiga"));
 		registry.register(new FrostLandType().setRegistryName("frost"));
 		registry.register(new FungiLandType().setRegistryName("fungi"));
 		registry.register(new HeatLandType().setRegistryName("heat"));
-		registry.register(new RockLandType(RockLandType.Variant.ROCK).setRegistryName("rock"));
-		registry.register(new RockLandType(RockLandType.Variant.PETRIFICATION).setRegistryName("petrification"));
-		registry.register(new SandLandType(SandLandType.Variant.SAND).setRegistryName("sand"));
-		registry.register(new SandLandType(SandLandType.Variant.RED_SAND).setRegistryName("red_sand"));
-		registry.register(new SandLandType(SandLandType.Variant.LUSH_DESERTS).setRegistryName("lush_deserts"));
-		registry.register(new SandstoneLandType(SandstoneLandType.Variant.SANDSTONE).setRegistryName("sandstone"));
-		registry.register(new SandstoneLandType(SandstoneLandType.Variant.RED_SANDSTONE).setRegistryName("red_sandstone"));
+		registry.register(RockLandType.createRock().setRegistryName("rock"));
+		registry.register(RockLandType.createPetrification().setRegistryName("petrification"));
+		registry.register(SandLandType.createSand().setRegistryName("sand"));
+		registry.register(SandLandType.createRedSand().setRegistryName("red_sand"));
+		registry.register(SandLandType.createLushDeserts().setRegistryName("lush_deserts"));
+		registry.register(SandstoneLandType.createSandstone().setRegistryName("sandstone"));
+		registry.register(SandstoneLandType.createRedSandstone().setRegistryName("red_sandstone"));
 		registry.register(new ShadeLandType().setRegistryName("shade"));
 		registry.register(new WoodLandType().setRegistryName("wood"));
 		registry.register(new RainbowLandType().setRegistryName("rainbow"));
@@ -171,7 +174,7 @@ public class LandTypes
 			return aspect;
 		else
 		{
-			Debug.errorf("No land aspect is compatible with the title aspect %s! Defaulting to null land aspect.", aspect2.getRegistryName());
+			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", aspect2.getRegistryName());
 			return TERRAIN_NULL;
 		}
 	}

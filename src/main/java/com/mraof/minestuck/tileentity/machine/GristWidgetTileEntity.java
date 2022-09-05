@@ -10,7 +10,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -25,11 +24,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public class GristWidgetTileEntity extends MachineProcessTileEntity implements MenuProvider, IOwnable
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	
@@ -49,13 +52,13 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 	
 	private boolean isItemValid(int slot, ItemStack stack)
 	{
-		if(stack.getItem() != MSItems.CAPTCHA_CARD)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD.get())
 		{
 			return false;
 		} else
 		{
 			return (!AlchemyHelper.isPunchedCard(stack) && !AlchemyHelper.isGhostCard(stack)
-					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD);
+					&& AlchemyHelper.getDecodedItem(stack).getItem() != MSItems.CAPTCHA_CARD.get());
 		}
 	}
 	
@@ -70,7 +73,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 			return null;
 		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
 		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
-		if(stack.getItem() != MSItems.CAPTCHA_CARD || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
+		if(stack.getItem() != MSItems.CAPTCHA_CARD.get() || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
 		return gristSet;
@@ -111,7 +114,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 		
 		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
 		{
-			Debug.warnf("Failed to remove boondollars for a grist widget from %s's porkhollow", owner.getUsername());
+			LOGGER.warn("Failed to remove boondollars for a grist widget from {}'s porkhollow", owner.getUsername());
 			return;
 		}
 		

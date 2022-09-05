@@ -42,7 +42,7 @@ public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implem
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD);
+		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD.get());
 	}
 	
 	@Override

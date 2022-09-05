@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -8,11 +7,14 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
 public class SpecialButtonBlock extends ButtonBlock
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public final boolean explosive, wooden;
 	
@@ -30,7 +32,7 @@ public class SpecialButtonBlock extends ButtonBlock
 		super.tick(state, level, pos, random);
 		if(level.getBlockState(pos).getBlock() != this)
 		{
-			Debug.warn("Tick update without the correct block/position?");
+			LOGGER.warn("Tick update without the correct block/position?");
 			return;
 		}
 		boolean b1 = level.getBlockState(pos).getValue(POWERED);

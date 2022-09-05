@@ -19,12 +19,11 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.*;
-import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
-import com.mraof.minestuck.world.gen.feature.structure.MSStructureSets;
-import com.mraof.minestuck.world.gen.feature.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.*;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.world.item.ItemStack;
@@ -59,12 +58,14 @@ public class Minestuck
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		MSBlocks.BLOCKS.register(eventBus);
-		MSFluids.FLUIDS.register(eventBus);
+		MSBlocks.REGISTER.register(eventBus);
+		MSItems.REGISTER.register(eventBus);
+		MSFluids.REGISTER.register(eventBus);
 		MSTileEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
 		
+		MSNoiseParameters.REGISTER.register(eventBus);
 		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
 		MSPlacedFeatures.REGISTER.register(eventBus);
@@ -72,6 +73,7 @@ public class Minestuck
 		MSStructurePieces.REGISTER.register(eventBus);
 		MSStructures.REGISTER.register(eventBus);
 		MSConfiguredStructures.REGISTER.register(eventBus);
+		MSStructurePlacements.REGISTER.register(eventBus);
 		MSStructureSets.REGISTER.register(eventBus);
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
@@ -106,8 +108,8 @@ public class Minestuck
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
 		
 		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());

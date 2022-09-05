@@ -1,7 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
@@ -17,9 +16,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SkaiaPortalTileEntity extends BlockEntity //implements ITeleporter
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private GlobalPos destination = GlobalPos.of(MSDimensions.SKAIA, new BlockPos(0, -1, 0));
 	
 	public SkaiaPortalTileEntity(BlockPos pos, BlockState state)
@@ -40,14 +43,14 @@ public class SkaiaPortalTileEntity extends BlockEntity //implements ITeleporter
 	{
 		super.load(nbt);
 		if(nbt.contains("dest", Tag.TAG_COMPOUND))
-			destination = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("dest")).resultOrPartial(Debug::error).orElse(destination);
+			destination = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("dest")).resultOrPartial(LOGGER::error).orElse(destination);
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, destination).resultOrPartial(Debug::error)
+		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, destination).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> compound.put("dest", tag));
 	}
 	

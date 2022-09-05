@@ -24,8 +24,8 @@ public class ColorHandler
         ItemColors itemColors = event.getItemColors();
     
         itemColors.register((stack, tintIndex) -> BlockColorCruxite.handleColorTint(com.mraof.minestuck.util.ColorHandler.getColorFromStack(stack), tintIndex),
-                MSBlocks.CRUXITE_DOWEL.get(), MSItems.CRUXITE_APPLE, MSItems.CRUXITE_POTION);
-        itemColors.register(new FrogItemColor(), MSItems.FROG);
+                MSBlocks.CRUXITE_DOWEL.get(), MSItems.CRUXITE_APPLE.get(), MSItems.CRUXITE_POTION.get());
+        itemColors.register(new FrogItemColor(), MSItems.FROG.get());
     }
     
     @SubscribeEvent

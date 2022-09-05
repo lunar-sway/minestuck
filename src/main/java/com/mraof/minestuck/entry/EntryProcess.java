@@ -2,7 +2,6 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -10,7 +9,6 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.GateTileEntity;
 import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
@@ -24,7 +22,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -340,8 +337,6 @@ public class EntryProcess
 			
 			MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
-			MSDimensions.getLandInfo(level1).setSpawn(Mth.floor(player.getY()));
-			
 			LOGGER.info("Entry finished");
 		}
 	}
@@ -448,22 +443,10 @@ public class EntryProcess
 		return maxY;
 	}
 	
-	public static void placeGates(ServerLevel world)
+	public static void placeGates(ServerLevel level)
 	{
-		placeGate(GateHandler.Type.GATE_1, new BlockPos(0, GateHandler.gateHeight1, 0), world);
-		placeGate(GateHandler.Type.GATE_2, new BlockPos(0, GateHandler.gateHeight2, 0), world);
-	}
-	
-	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerLevel world)
-	{
-		for(int i = 0; i < 9; i++)
-			if(i == 4)
-			{
-				world.setBlock(pos, MSBlocks.GATE.get().defaultBlockState().cycle(GateBlock.MAIN), 0);
-				GateTileEntity tileEntity = (GateTileEntity) world.getBlockEntity(pos);
-				tileEntity.gateType = gateType;
-			}
-			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.get().defaultBlockState(), 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight1, 0), GateHandler.Type.GATE_1, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight2, 0), GateHandler.Type.GATE_2, 0);
 	}
 	
 	private static class BlockMove

@@ -2,20 +2,16 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +24,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -38,9 +33,6 @@ public class RainLandType extends TerrainLandType
 	public static final String RAIN = "minestuck.rain";
 	public static final String ISLANDS = "minestuck.islands";
 	public static final String SKY = "minestuck.sky";
-	
-	private static final Vec3 skyColor = new Vec3(0.3D, 0.5D, 0.98D);
-	private static final Vec3 fogColor = new Vec3(0.9D, 0.8D, 0.6D);
 	
 	//TODO:
 	//Pink stone brick temples		Monsters in these temples tend to guard living trees, Magic Beans, and Fertile Soil.
@@ -52,7 +44,9 @@ public class RainLandType extends TerrainLandType
 	
 	public RainLandType()
 	{
-		super(false);
+		super(new Builder(() -> MSEntityTypes.TURTLE).unavailable().names(RAIN, ISLANDS, SKY)
+				.fogColor(0.9, 0.8, 0.6).skyColor(0.3, 0.5, 0.98)
+				.biomeSet(MSBiomes.HIGH_HUMID_LAND).category(Biome.BiomeCategory.BEACH).music(() -> MSSoundEvents.MUSIC_RAIN));
 	}
 	
 	@Override
@@ -82,30 +76,9 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public String[] getNames() {
-		return new String[] {RAIN, ISLANDS, SKY};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.HIGH_HUMID_LAND;
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.BEACH;	//I guess?
-		
-		properties.oceanBiomeScale += 0.1;
-		properties.roughBiomeScale += 0.1;
-		properties.roughBiomeDepth -= 0.2;
-	}
-	
-	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 3/4F;
+		settings.oceanThreshold = 0.2F;
 	}
 	
 	@Override
@@ -140,38 +113,14 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.TURTLE;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addTurtleVillageCenters(register);
+		TurtleVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addTurtleVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_RAIN;
+		TurtleVillagePieces.addPieces(register, random);
 	}
 }

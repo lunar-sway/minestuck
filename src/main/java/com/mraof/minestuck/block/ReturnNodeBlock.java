@@ -1,20 +1,59 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.tileentity.OnCollisionTeleporterTileEntity;
+import com.mraof.minestuck.tileentity.ReturnNodeBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import javax.annotation.Nullable;
 
-public class ReturnNodeBlock extends GateBlock
+public class ReturnNodeBlock extends AbstractGateBlock implements EntityBlock
 {
-	
 	public ReturnNodeBlock(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return state.getValue(MAIN) ? new ReturnNodeBlockEntity(pos, state) : null;
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.RETURN_NODE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+	{
+		if(entityIn instanceof ServerPlayer player)
+		{
+			BlockPos mainPos = state.getValue(MAIN) ? pos : this.findMainComponent(pos, level);
+			
+			if(mainPos != null)
+			{
+				BlockEntity blockEntity = level.getBlockEntity(mainPos);
+				if(blockEntity instanceof ReturnNodeBlockEntity gate)
+					gate.onCollision(player);
+			} else level.removeBlock(pos, false);
+		}
 	}
 	
 	@Override
@@ -32,6 +71,7 @@ public class ReturnNodeBlock extends GateBlock
 		return true;
 	}
 	
+	@Nullable
 	@Override
 	protected BlockPos findMainComponent(BlockPos pos, Level level)
 	{
@@ -64,7 +104,7 @@ public class ReturnNodeBlock extends GateBlock
 			if(boundingBox == null || boundingBox.isInside(pos))
 			{
 				if(i == 3)
-					level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState().setValue(GateBlock.MAIN, true), Block.UPDATE_CLIENTS);
+					level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState().setValue(MAIN, true), Block.UPDATE_CLIENTS);
 				else level.setBlock(pos, MSBlocks.RETURN_NODE.get().defaultBlockState(), Block.UPDATE_CLIENTS);
 			}
 		}

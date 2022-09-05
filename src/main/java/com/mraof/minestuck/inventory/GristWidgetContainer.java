@@ -46,7 +46,7 @@ public class GristWidgetContainer extends MachineContainer
 			@Override
 			public boolean mayPlace(ItemStack stack)
 			{
-				return stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
+				return stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
 		

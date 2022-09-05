@@ -32,34 +32,14 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 	@Override
 	protected AABB getTeleportField()
 	{
-		if(getBlockState().getBlock() == MSBlocks.RETURN_NODE.get())
-			return new AABB(worldPosition.getX() - 1, worldPosition.getY() + 7D / 16, worldPosition.getZ() - 1, worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
-		else
-			return new AABB(worldPosition.getX(), worldPosition.getY() + 7D / 16, worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
+		return new AABB(worldPosition.getX(), worldPosition.getY() + 7D / 16, worldPosition.getZ(), worldPosition.getX() + 1, worldPosition.getY() + 9D / 16, worldPosition.getZ() + 1);
 	}
 	
 	@Override
 	protected void teleport(ServerPlayer player)
 	{
 		if(level instanceof ServerLevel serverLevel)
-		{
-			if(getBlockState().getBlock() == MSBlocks.RETURN_NODE.get())
-			{
-				BlockPos spawnPos = serverLevel.getSharedSpawnPos();
-				// "level.getHeightmapPos()" will default to y = 0 if the chunk isn't loaded,
-				// so we get the height from the chunk directly to get an accurate height.
-				int spawnHeight = level.getChunk(spawnPos).getHeight(Heightmap.Types.MOTION_BLOCKING, spawnPos.getX(), spawnPos.getZ());
-				BlockPos pos = new BlockPos(spawnPos.getX(), spawnHeight, spawnPos.getZ());
-				
-				Teleport.teleportEntity(player, serverLevel, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-				player.setPortalCooldown();
-				player.setDeltaMovement(Vec3.ZERO);
-				player.fallDistance = 0;
-			} else
-			{
-				GateHandler.teleport(gateType, serverLevel, player);
-			}
-		}
+			GateHandler.teleport(gateType, serverLevel, player);
 	}
 	
 	@Override
@@ -110,8 +90,4 @@ public class GateTileEntity extends OnCollisionTeleporterTileEntity<ServerPlayer
 		handleUpdateTag(pkt.getTag());
 	}
 	
-	public boolean isGate()
-	{
-		return this.level != null ? this.level.getBlockState(this.getBlockPos()).getBlock() != MSBlocks.RETURN_NODE.get() : this.gateType != null;
-	}
 }

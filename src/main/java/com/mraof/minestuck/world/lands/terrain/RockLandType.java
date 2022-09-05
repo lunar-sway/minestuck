@@ -3,24 +3,21 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.ConstantFloat;
 import net.minecraft.util.valueproviders.TrapezoidFloat;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +32,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.DiskConfigurati
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
 import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Random;
@@ -50,9 +46,23 @@ public class RockLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
-	public RockLandType(Variant variation)
+	public static TerrainLandType createRock()
 	{
-		super(GROUP_NAME);
+		return new RockLandType(Variant.ROCK, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(ROCK, STONE, ORE)
+				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_ROCK));
+	}
+	
+	public static TerrainLandType createPetrification()
+	{
+		return new RockLandType(Variant.PETRIFICATION, new Builder(() -> MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
+				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_PETRIFICATION));
+	}
+	
+	private RockLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 	}
 	
@@ -82,27 +92,9 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.PETRIFICATION)
-		{
-			return new String[]{PETRIFICATION};
-		} else
-		{
-			return new String[]{ROCK, STONE, ORE};
-		}
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.EXTREME_HILLS;
-	}
-	
-	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 1 / 4F;
+		settings.oceanThreshold = -0.3F;
 	}
 	
 	@Override
@@ -199,33 +191,9 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public float getSkylightBase()
-	{
-		return 7 / 8F;
-	}
-	
-	@Override
-	public Vec3 getFogColor()
-	{
-		return new Vec3(0.5, 0.5, 0.55);
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.6D, 0.6D, 0.7D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 		
 		register.add(ConsortVillageCenter.RockCenter::new, 5);
 	}
@@ -233,23 +201,12 @@ public class RockLandType extends TerrainLandType
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.PETRIFICATION ? MSSoundEvents.MUSIC_PETRIFICATION : MSSoundEvents.MUSIC_ROCK;
-	}
-	
-	public enum Variant
+	private enum Variant
 	{
 		ROCK,
-		PETRIFICATION;
-		
-		public String getName()
-		{
-			return this.toString().toLowerCase();
-		}
+		PETRIFICATION
 	}
 }

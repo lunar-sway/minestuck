@@ -2,23 +2,19 @@ package com.mraof.minestuck.world.lands.terrain;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
@@ -28,8 +24,10 @@ import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.List;
 import java.util.Random;
@@ -39,12 +37,11 @@ public class EndLandType extends TerrainLandType
 	public static final String END = "minestuck.end";
 	public static final String DIMENSION = "minestuck.dimension";
 	
-	private static final Vec3 fogColor = new Vec3(0.0D, 0.4D, 0.2D);
-	private static final Vec3 skyColor = new Vec3(0.3D, 0.1D, 0.5D);
-	
 	public EndLandType()
 	{
-		super();
+		super(new Builder(() -> MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
+				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(() -> MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override
@@ -68,24 +65,6 @@ public class EndLandType extends TerrainLandType
 		registry.setBlockState("structure_wool_3", Blocks.PURPLE_WOOL.defaultBlockState());
 		registry.setBlockState("cruxite_ore", MSBlocks.END_STONE_CRUXITE_ORE.get().defaultBlockState());
 		registry.setBlockState("uranium_ore", MSBlocks.END_STONE_URANIUM_ORE.get().defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		return new String[]{END, DIMENSION};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.NO_RAIN_LAND;
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.BiomeCategory.THEEND;
 	}
 	
 	@Override
@@ -124,38 +103,14 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public Vec3 getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.NAKAGATOR;
-	}
-	
-	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addNakagatorVillageCenters(register);
+		NakagatorVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addNakagatorVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_END;
+		NakagatorVillagePieces.addPieces(register, random);
 	}
 }

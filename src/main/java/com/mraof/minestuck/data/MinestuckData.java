@@ -5,6 +5,7 @@ import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
+import com.mraof.minestuck.data.tag.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +27,7 @@ public class MinestuckData
 			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckFluidTagsProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckBiomeTagsProvider(gen, event.getExistingFileHelper()));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a task for updating blocks copied over into the entry.
@@ -20,6 +21,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
  */
 public class PostEntryTask
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	/**
 	 * The maximum amount of time (in milliseconds) to spend updating blocks,
 	 * before leaving the rest for the next game tick.
@@ -48,7 +50,7 @@ public class PostEntryTask
 		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
-			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
+			LOGGER.warn("Unable to load dimension type by name {}!", nbt.getString("dimension"));
 	}
 	
 	public CompoundTag write()
@@ -74,7 +76,7 @@ public class PostEntryTask
 		
 		if(world == null)
 		{
-			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			LOGGER.error("Couldn't find world for dimension {} when performing post entry preparations! Cancelling task.", dimension);
 			setDone();
 			return true;
 		}
@@ -108,12 +110,12 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %s.", dimension.location());
+			LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
 			setDone();
 			return true;
 		}
 		
-		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
+		LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
 		return index != preIndex;
 	}
 	
