@@ -146,9 +146,9 @@ public class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> CRUXITE_ORE = REGISTER.register("cruxite_ore", () -> placed(MSCFeatures.CRUXITE_ORE,
-			worldGenModifiers(CountPlacement.of(OreGeneration.cruxiteVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.cruxiteStratumMax)), BiomeFilter.biome())));
+			worldGenModifiers(CountPlacement.of(OreGeneration.cruxiteVeinsPerChunk), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.cruxiteStratumMax)))));
 	public static final RegistryObject<PlacedFeature> URANIUM_ORE = REGISTER.register("uranium_ore", () -> placed(MSCFeatures.URANIUM_ORE,
-			worldGenModifiers(CountPlacement.of(OreGeneration.uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.uraniumStratumMax)), BiomeFilter.biome())));
+			worldGenModifiers(CountPlacement.of(OreGeneration.uraniumVeinsPerChunk), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.uraniumStratumMax)))));
 	
 	private static PlacedFeature placed(Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
 	{

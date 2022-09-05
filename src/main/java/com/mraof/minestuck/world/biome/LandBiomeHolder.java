@@ -128,11 +128,15 @@ public class LandBiomeHolder implements ILandBiomeSet
 	{
 		if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 		{
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CRUXITE_ORE.getHolder().orElseThrow());
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
+					CountPlacement.of(cruxiteVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(cruxiteStratumMax)), BiomeFilter.biome()));
 		}
 		if(MinestuckConfig.SERVER.generateUraniumOre.get())
 		{
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.URANIUM_ORE.getHolder().orElseThrow());
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
+					CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(uraniumStratumMax)), BiomeFilter.biome()));
 		}
 	}
 }
