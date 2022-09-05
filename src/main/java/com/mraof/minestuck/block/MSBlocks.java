@@ -482,8 +482,9 @@ public class MSBlocks
 	
 	//Core Functional Land Blocks
 	public static final RegistryObject<Block> GATE = REGISTER.register("gate", () -> new GateBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
+	public static final RegistryObject<Block> GATE_MAIN = REGISTER.register("gate_main", () -> new GateBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
 	public static final RegistryObject<Block> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
-	
+	public static final RegistryObject<Block> RETURN_NODE_MAIN = REGISTER.register("return_node_main", () -> new ReturnNodeBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
 	
 	
 	//Misc Functional Land Blocks

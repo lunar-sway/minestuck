@@ -1,5 +1,6 @@
 package com.mraof.minestuck.tileentity;
 
+import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.core.BlockPos;
@@ -46,6 +47,7 @@ public class ReturnNodeBlockEntity extends OnCollisionTeleporterTileEntity<Serve
 			player.setPortalCooldown();
 			player.setDeltaMovement(Vec3.ZERO);
 			player.fallDistance = 0;
+			MSCriteriaTriggers.RETURN_NODE.trigger(player);
 		}
 	}
 	

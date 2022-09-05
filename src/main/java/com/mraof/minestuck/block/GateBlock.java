@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
-public class GateBlock extends AbstractGateBlock implements EntityBlock
+public class GateBlock extends AbstractGateBlock
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -31,41 +31,15 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 		super(properties);
 	}
 	
-	@Nullable
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-	{
-		return state.getValue(MAIN) ? new GateTileEntity(pos, state) : null;
-	}
-	
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
-	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.GATE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
-	{
-		if(state.getValue(MAIN) && entityIn instanceof ServerPlayer player)
-		{
-			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof GateTileEntity gate)
-				gate.onCollision(player);
-		}
-	}
-	
-	@Override
-	protected boolean isValid(BlockPos pos, Level level)
+	protected final boolean isValid(BlockPos mainPos, Level level)
 	{
 		for(int x = -1; x <= 1; x++)
 			for(int z = -1; z <= 1; z++)
 				if(x != 0 || z != 0)
 				{
-					BlockState block = level.getBlockState(pos.offset(x, 0, z));
-					if(block.getBlock() != this || block.getValue(MAIN))
+					BlockState block = level.getBlockState(mainPos.offset(x, 0, z));
+					if(!block.is(MSBlocks.GATE.get()))
 						return false;
 				}
 		
@@ -73,7 +47,6 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 	}
 	
 	@Nullable
-	@Override
 	protected BlockPos findMainComponent(BlockPos pos, Level level)
 	{
 		for(int x = -1; x <= 1; x++)
@@ -81,7 +54,7 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 				if(x != 0 || z != 0)
 				{
 					BlockState block = level.getBlockState(pos.offset(x, 0, z));
-					if(block.is(this) && block.getValue(MAIN))
+					if(block.is(MSBlocks.GATE_MAIN.get()))
 						return pos.offset(x, 0, z);
 				}
 		
@@ -89,12 +62,12 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 	}
 	
 	@Override
-	protected void removePortal(BlockPos pos, Level level)
+	protected final void removePortal(BlockPos mainPos, Level level)
 	{
 		for(int x = -1; x <= 1; x++)
 			for(int z = -1; z <= 1; z++)
-				if(level.getBlockState(pos.offset(x, 0, z)).is(this))
-					level.removeBlock(pos.offset(x, 0, z), false);
+				if(level.getBlockState(mainPos.offset(x, 0, z)).is(this))
+					level.removeBlock(mainPos.offset(x, 0, z), false);
 	}
 	
 	@Override
@@ -105,6 +78,47 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 		else return 3600000.0F;
 	}
 	
+	public static class Main extends GateBlock implements EntityBlock
+	{
+		public Main(Properties properties)
+		{
+			super(properties);
+		}
+		
+		@Nullable
+		@Override
+		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+		{
+			return new GateTileEntity(pos, state);
+		}
+		
+		@Nullable
+		@Override
+		public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+		{
+			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.GATE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+		}
+		
+		@Nullable
+		@Override
+		protected BlockPos findMainComponent(BlockPos pos, Level level)
+		{
+			return pos;
+		}
+		
+		@Override
+		@SuppressWarnings("deprecation")
+		public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
+		{
+			if(entityIn instanceof ServerPlayer player)
+			{
+				BlockEntity blockEntity = level.getBlockEntity(pos);
+				if(blockEntity instanceof GateTileEntity gate)
+					gate.onCollision(player);
+			}
+		}
+	}
+	
 	public static void placeGate(CommonLevelAccessor level, BlockPos centerPos, GateHandler.Type type, int blockFlag)
 	{
 		for(int offsetX = -1; offsetX <= 1; offsetX++)
@@ -113,7 +127,7 @@ public class GateBlock extends AbstractGateBlock implements EntityBlock
 			{
 				if(offsetX == 0 && offsetZ == 0)
 				{
-					level.setBlock(centerPos, MSBlocks.GATE.get().defaultBlockState().setValue(GateBlock.MAIN, true), blockFlag);
+					level.setBlock(centerPos, MSBlocks.GATE_MAIN.get().defaultBlockState(), blockFlag);
 					BlockEntity tileEntity = level.getBlockEntity(centerPos);
 					if(tileEntity instanceof GateTileEntity gate)
 						gate.gateType = type;
