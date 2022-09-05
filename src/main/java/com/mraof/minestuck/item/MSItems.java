@@ -440,7 +440,7 @@ public class MSItems
 	public static final RegistryObject<Item> CARVING_TOOL = REGISTER.register("carving_tool", () -> new Item(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<MSArmorItem> CRUMPLY_HAT = REGISTER.register("crumply_hat", () -> new MSArmorItem(MSItemTypes.CLOTH_ARMOR, EquipmentSlot.HEAD, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS)));
-	public static final RegistryObject<Item> STONE_SLAB = REGISTER.register("stone_slab", () -> new StoneTabletItem(MSBlocks.STONE_SLAB.get(), new Item.Properties().tab(MSItemGroup.LANDS)));
+	public static final RegistryObject<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS))); //not used
 	
 	

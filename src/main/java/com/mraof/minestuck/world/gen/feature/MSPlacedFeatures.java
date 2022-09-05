@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.world.gen.OreGeneration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
@@ -143,6 +144,11 @@ public class MSPlacedFeatures
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> SMALL_RABBIT_PLACEMENT = REGISTER.register("small_rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
+	
+	public static final RegistryObject<PlacedFeature> CRUXITE_ORE = REGISTER.register("cruxite_ore", () -> placed(MSCFeatures.CRUXITE_ORE,
+			worldGenModifiers(CountPlacement.of(OreGeneration.cruxiteVeinsPerChunk), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.cruxiteStratumMax)))));
+	public static final RegistryObject<PlacedFeature> URANIUM_ORE = REGISTER.register("uranium_ore", () -> placed(MSCFeatures.URANIUM_ORE,
+			worldGenModifiers(CountPlacement.of(OreGeneration.uraniumVeinsPerChunk), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(OreGeneration.uraniumStratumMax)))));
 	
 	private static PlacedFeature placed(Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
 	{

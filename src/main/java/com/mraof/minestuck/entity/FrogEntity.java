@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -152,7 +153,7 @@ public class FrogEntity extends PathfinderMob
 		
 		this.goalSelector.addGoal(1, new FloatGoal(this));
 		this.goalSelector.addGoal(1, new PanicGoal(this, 2.2D));
-		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSItems.CONE_OF_FLIES.get(), MSItems.BUG_ON_A_STICK.get(), MSItems.GRASSHOPPER.get(), MSItems.JAR_OF_BUGS.get()), false));	//TODO use bug item tag
+		this.goalSelector.addGoal(3, new TemptGoal(this, 1.0D, Ingredient.of(MSTags.Items.BUGS), false));
 		this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.6D));
 		this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 10.0F));
 		

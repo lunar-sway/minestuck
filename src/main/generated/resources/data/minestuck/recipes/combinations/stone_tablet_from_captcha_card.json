@@ -8,6 +8,6 @@
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:stone_slab"
+    "item": "minestuck:stone_tablet"
   }
 }

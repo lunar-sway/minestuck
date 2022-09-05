@@ -1,11 +1,10 @@
 package com.mraof.minestuck.entity.consort;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.mraof.minestuck.entity.consort.EnumConsort.MerchantType;
 import com.mraof.minestuck.entity.consort.MessageType.*;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -16,8 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +28,7 @@ import static com.mraof.minestuck.item.loot.MSLootTables.CONSORT_GENERAL_STOCK;
 /**
  * Handles message registry, message selection and contains the main message
  * class, which combines conditioning and a MessageType
- * 
+ *
  * @author Kirderf1
  */
 public class ConsortDialogue
@@ -222,7 +219,7 @@ public class ConsortDialogue
 		addMessage("sharp_slide").landTerrain(FLORA);
 		addMessage(new ChainMessage(new SingleMessage("immortality_herb.1"), new SingleMessage("immortality_herb.2"), new ExplosionMessage("immortality_herb.3"))).landTerrain(FLORA).lockToConsort();
 		addMessage(new ChainMessage(new SingleMessage("spices.1"), new SingleMessage("spices.2", "land_name"))).landTerrain(FLORA);
-
+		
 		//Misc
 		addMessage("denizen_mention").reqLand();
 		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level.getLevelData().getXSpawn(), consort.level.getLevelData().getYSpawn(), consort.level.getLevelData().getZSpawn())) < 65536).reqLand();
@@ -301,22 +298,22 @@ public class ConsortDialogue
 		addMessage(new ChainMessage(0, new SingleMessage("college.1"), new SingleMessage("college.2")));
 		addMessage(new ChainMessage(1, new SingleMessage("unknown.1"), new SingleMessage("unknown.2"))).consort(EnumConsort.TURTLE);
 		addMessage(new ChainMessage(1, new SingleMessage("cult.1", "player_title"), new SingleMessage("cult.2"))).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
-
+		
 		addMessage(new ChoiceMessage(new DescriptionMessage("peppy_offer"),
-				new SingleMessage[] { new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny") },
-				new MessageType[] {
+				new SingleMessage[]{new SingleMessage("peppy_offer.buy"), new SingleMessage("peppy_offer.deny")},
+				new MessageType[]{
 						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1, new SingleMessage("peppy_offer.item"), new SingleMessage("peppy_offer.purchase"))),
 						new ChoiceMessage(new SingleMessage("peppy_offer.next"),
-								new SingleMessage[] { new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2") },
-								new MessageType[] { new SingleMessage("dots"),
+								new SingleMessage[]{new SingleMessage("peppy_offer.deny_again"), new SingleMessage("peppy_offer.buy_2")},
+								new MessageType[]{new SingleMessage("dots"),
 										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-												new SingleMessage("peppy_offer.purchase")) }) })).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
-
-
+												new SingleMessage("peppy_offer.purchase"))})})).type(MerchantType.SHADY).consort(EnumConsort.NAKAGATOR, EnumConsort.IGUANA);
+		
+		
 		addMessage(new ChoiceMessage(true, new SingleMessage("title_presence", "player_title"),
-				new SingleMessage[] { new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree") },
-				new MessageType[] { new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks") })).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
+				new SingleMessage[]{new SingleMessage("title_presence.iam", "player_title"), new SingleMessage("title_presence.agree")},
+				new MessageType[]{new SingleMessage("title_presence.iam_answer", "consort_sound_2"), new SingleMessage("thanks")})).consort(EnumConsort.IGUANA, EnumConsort.SALAMANDER).reqLand();
 		
 		addMessage(new ChoiceMessage(new DescriptionMessage("shady_offer"),
 				new SingleMessage[]
@@ -324,8 +321,8 @@ public class ConsortDialogue
 								new SingleMessage("shady_offer.buy"),
 								new SingleMessage("shady_offer.deny")
 						},
-				new MessageType[] {
-						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15,"purchase",
+				new MessageType[]{
+						new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 1000, -15, "purchase",
 								new ChainMessage(1,
 										new SingleMessage("shady_offer.item"),
 										new SingleMessage("shady_offer.purchase")
@@ -333,34 +330,31 @@ public class ConsortDialogue
 						),
 						new ChoiceMessage(new SingleMessage("shady_offer.next", "consort_sound"),
 								new SingleMessage[]
-								{
-										new SingleMessage("shady_offer.deny_again"),
-										new SingleMessage("shady_offer.buy_2")
-								},
+										{
+												new SingleMessage("shady_offer.deny_again"),
+												new SingleMessage("shady_offer.buy_2")
+										},
 								new MessageType[]
-								{
-										new SingleMessage("dots"),
-										new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
-												new SingleMessage("shady_offer.purchase")
-										)
-								}
+										{
+												new SingleMessage("dots"),
+												new PurchaseMessage(false, MSLootTables.CONSORT_JUNK_REWARD, 500, -35, "purchase",
+														new SingleMessage("shady_offer.purchase")
+												)
+										}
 						)
 				}
 		)).type(MerchantType.SHADY).consort(EnumConsort.SALAMANDER, EnumConsort.TURTLE);
 		
 		addMessage(new ChoiceMessage(true, new SingleMessage("denizen", "denizen"),
-				new SingleMessage[] { new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment") },
-				new MessageType[] { new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment") })).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
+				new SingleMessage[]{new SingleMessage("denizen.what"), new SingleMessage("denizen.ask_alignment")},
+				new MessageType[]{new SingleMessage("denizen.explain", "player_class_land"), new SingleMessage("denizen.alignment")})).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.TURTLE).reqLand();
 		
-		List<ItemStack> hungryList = ImmutableList.of(new ItemStack(Items.COOKIE), new ItemStack(MSItems.BUG_ON_A_STICK.get()),
-				new ItemStack(MSItems.GRASSHOPPER.get()), new ItemStack(MSItems.CHOCOLATE_BEETLE.get()),	//TODO Use item tags for these kind of things
-				new ItemStack(MSItems.CONE_OF_FLIES.get()));
-		addMessage(new ItemRequirement(hungryList, false, true, new SingleMessage("hungry"),
+		addMessage(new ItemRequirement(MSTags.Items.CONSORT_SNACKS, false, true, new SingleMessage("hungry"),
 						new ChoiceMessage(new SingleMessage("hungry.ask_food", "nbt_item:hungry.item"),
 								new SingleMessage[] { new SingleMessage("hungry.accept"), new SingleMessage("hungry.deny") },
 								new MessageType[] { new GiveItemMessage("hungry.thanks", "hungry.item", 0, 15, new SingleMessage("hungry.thanks")),
 										new SingleMessage("sadface") }))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
-		addMessage(new ItemRequirement("hungry2", hungryList, false, true, false,
+		addMessage(new ItemRequirement("hungry2", MSTags.Items.CONSORT_SNACKS, false, true, false,
 						new SingleMessage(
 								"hungry"),
 						new ChoiceMessage(

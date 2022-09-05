@@ -115,7 +115,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		
 		needsWoodPickaxe(PETRIFIED_GRASS.get(), PETRIFIED_POPPY.get());
 		tag(MINEABLE_WITH_SHOVEL).add(GLOWY_GOOP.get(), COAGULATED_BLOOD.get());
-		needsWoodPickaxe(PIPE.get(), PIPE_INTERSECTION.get(), STONE_SLAB.get());
+		needsWoodPickaxe(PIPE.get(), PIPE_INTERSECTION.get(), STONE_TABLET.get());
 		
 		needsWoodPickaxe(BLACK_CHESS_BRICK_STAIRS.get(), DARK_GRAY_CHESS_BRICK_STAIRS.get(), LIGHT_GRAY_CHESS_BRICK_STAIRS.get(), WHITE_CHESS_BRICK_STAIRS.get());
 		needsWoodPickaxe(COARSE_STONE_STAIRS.get(), COARSE_STONE_BRICK_STAIRS.get());
@@ -202,7 +202,8 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS.get());
 		tag(ROTATOR_WHITELISTED).add(Blocks.REPEATER, Blocks.COMPARATOR, AND_GATE_BLOCK.get(), OR_GATE_BLOCK.get(), XOR_GATE_BLOCK.get(), NAND_GATE_BLOCK.get(), NOR_GATE_BLOCK.get(), XNOR_GATE_BLOCK.get(), AREA_EFFECT_BLOCK.get(), WIRELESS_REDSTONE_TRANSMITTER.get(), REMOTE_COMPARATOR.get(), PLATFORM_GENERATOR.get(), ITEM_MAGNET.get());
 		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
-		tag(PUSHABLE_BLOCK_REPLACABLE).addTags(SAPLINGS, FLOWERS);
+		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
+		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONE, Tags.Blocks.COBBLESTONE, Tags.Blocks.GRAVEL);
 	}
 	
 	private void needsWoodPickaxe(Block... blocks)
@@ -228,9 +229,9 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 	
 	private void assertRequiresTool(Block... blocks)
 	{
-		for (Block block : blocks)
+		for(Block block : blocks)
 		{
-			if (!block.defaultBlockState().requiresCorrectToolForDrops())
+			if(!block.defaultBlockState().requiresCorrectToolForDrops())
 				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block.getRegistryName()));
 		}
 	}

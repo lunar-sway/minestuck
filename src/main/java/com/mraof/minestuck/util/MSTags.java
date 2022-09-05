@@ -43,7 +43,8 @@ public class MSTags
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
-		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
+		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
+		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -80,6 +81,7 @@ public class MSTags
 		public static final TagKey<Item> MODUS_CARD = tag("modus_card");
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
+		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static TagKey<Item> tag(String name)

@@ -1,9 +1,12 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -28,18 +31,15 @@ public class OreGeneration
 		ResourceLocation name = event.getName();
 		if(name != null && BiomeDictionary.hasType(ResourceKey.create(Registry.BIOME_REGISTRY, name), BiomeDictionary.Type.OVERWORLD))
 		{
-			/*TODO
 			if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 			{
-				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_CRUXITE_ORE.defaultBlockState(), baseCruxiteVeinSize))
-						.range(cruxiteStratumMax).squared().count(cruxiteVeinsPerChunk));
+				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.CRUXITE_ORE.getHolder().orElseThrow());
 			}
+			
 			if(MinestuckConfig.SERVER.generateUraniumOre.get())
 			{
-				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_URANIUM_ORE.defaultBlockState(), baseUraniumVeinSize))
-						.range(uraniumStratumMax).squared().count(uraniumVeinsPerChunk));
+				event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.URANIUM_ORE.getHolder().orElseThrow());
 			}
-			*/
 		}
 	}
 }

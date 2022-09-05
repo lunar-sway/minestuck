@@ -12,14 +12,17 @@ import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -976,17 +979,17 @@ public abstract class MessageType
 		protected boolean random, held, repeat;
 		protected MessageType defaultMessage;
 		protected MessageType conditionedMessage;
-		protected List<ItemStack> possibleItems;
+		protected TagKey<Item> itemTag;
 		
-		public ItemRequirement(List<ItemStack> list, MessageType defaultMessage, MessageType nextMessage)
+		public ItemRequirement(TagKey<Item> itemTag, MessageType defaultMessage, MessageType nextMessage)
 		{
-			this(defaultMessage.getString(), list, true, true, false, defaultMessage, nextMessage);
+			this(defaultMessage.getString(), itemTag, true, true, false, defaultMessage, nextMessage);
 		}
 		
-		public ItemRequirement(List<ItemStack> list, boolean random, boolean held, MessageType defaultMessage,
+		public ItemRequirement(TagKey<Item> itemTag, boolean random, boolean held, MessageType defaultMessage,
 							   MessageType nextMessage)
 		{
-			this(defaultMessage.getString(), list, random, held, false, defaultMessage, nextMessage);
+			this(defaultMessage.getString(), itemTag, random, held, false, defaultMessage, nextMessage);
 		}
 		
 		/**
@@ -994,8 +997,8 @@ public abstract class MessageType
 		 * 
 		 * @param name
 		 *            Name used used for nbt data
-		 * @param list
-		 *            List of potential item requirements
+		 * @param itemTag
+		 *            TagKey(an item tag) of items that are allowed
 		 * @param random
 		 *            If the item required should be picked at random or be
 		 *            based on what the player has
@@ -1009,11 +1012,11 @@ public abstract class MessageType
 		 * @param nextMessage
 		 *            Message when requirement is met
 		 */
-		public ItemRequirement(String name, List<ItemStack> list, boolean random, boolean held, boolean repeat,
+		public ItemRequirement(String name, TagKey<Item> itemTag, boolean random, boolean held, boolean repeat,
 				MessageType defaultMessage, MessageType nextMessage)
 		{
 			this.nbtName = name;
-			this.possibleItems = list;
+			this.itemTag = itemTag;
 			this.defaultMessage = defaultMessage;
 			this.conditionedMessage = nextMessage;
 			this.random = random;
@@ -1036,30 +1039,41 @@ public abstract class MessageType
 						addTo(chainIdentifier, conditionedMessage.getString()));
 			
 			boolean hasItem = false;
+			List<ItemStack> stackListFromTag = new ArrayList<>();
+			Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
+			
 			if(random || repeat && nbt.contains(this.getString()))
 			{
-				int index;
+				String nbtString;
 				if(nbt.contains(this.getString()))
-					index = nbt.getInt(this.getString());
+				{
+					nbtString = nbt.getString(this.getString());
+				}
 				else
 				{
-					index = consort.level.random.nextInt(possibleItems.size());
-					nbt.putInt(this.getString(), index);
+					int index = consort.level.random.nextInt(stackListFromTag.size());
+					ItemStack randomStack = stackListFromTag.get(index);
+					nbtString = randomStack.getItem().getRegistryName().toString();
+					nbt.putString(this.getString(), nbtString);
 				}
 				
-				ItemStack stack = possibleItems.get(index);
-				nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
-				
-				hasItem = lookFor(stack, player);
+				Optional<Item> optionalItem = Registry.ITEM.getOptional(new ResourceLocation(nbtString));
+				if(optionalItem.isPresent())
+				{
+					ItemStack stack = new ItemStack(optionalItem.get());
+					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
+					
+					hasItem = lookFor(stack, player);
+				}
 			} else
 			{
-				List<ItemStack> list = new ArrayList<>(possibleItems);
+				List<ItemStack> list = new ArrayList<>(stackListFromTag);
 				while (!list.isEmpty())
 				{
 					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
-						nbt.putInt(this.getString(), possibleItems.indexOf(stack));
+						nbt.putString(this.getString(), stack.getItem().getRegistryName().toString());
 						nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 						hasItem = true;
 						break;
@@ -1099,15 +1113,25 @@ public abstract class MessageType
 		
 		private boolean lookFor(ItemStack stack, ServerPlayer player)
 		{
-			for(ItemStack held : player.getHandSlots())
+			for(ItemStack held : player.getHandSlots()) //prioritizes items in hands before items from the rest of the inventory
+			{
 				if(ItemStack.isSame(held, stack))
+				{
 					return true;
-				
+				}
+			}
+			
 			if(!held)
+			{
 				for(ItemStack held : player.getInventory().items)
+				{
 					if(ItemStack.isSame(held, stack))
+					{
 						return true;
-					
+					}
+				}
+			}
+			
 			return false;
 		}
 		

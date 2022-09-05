@@ -61,6 +61,6 @@ public class PushableBlock extends FallingBlock
 	
 	public static boolean isReplaceable(BlockState state)
 	{
-		return isFree(state) || state.is(MSTags.Blocks.PUSHABLE_BLOCK_REPLACABLE);
+		return isFree(state) || state.is(MSTags.Blocks.PUSHABLE_BLOCK_REPLACEABLE);
 	}
 }

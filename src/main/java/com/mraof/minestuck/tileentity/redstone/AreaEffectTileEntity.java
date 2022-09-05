@@ -49,7 +49,6 @@ public class AreaEffectTileEntity extends BlockEntity
 	
 	public void giveEntitiesEffect()
 	{
-		//TODO improve flow/reduce repetition of code by extracting repetitive components into another function
 		BlockPos tePos = getBlockPos();
 		Direction teFacing = getBlockState().getValue(AreaEffectBlock.FACING);
 		if(needsTranslation)
@@ -62,41 +61,29 @@ public class AreaEffectTileEntity extends BlockEntity
 		{
 			for(LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(minAreaPos, maxAreaPos)))
 			{
-				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
-				{
-					livingEntity.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
-				} else
-				{
-					if(livingEntity instanceof Player player)
-					{
-						if(player.isCreative() && !effect.isBeneficial())
-							break;
-					}
-					
-					addEffect(livingEntity);
-				}
+				iterateThroughEntities(livingEntity);
 			}
 		} else
 		{
 			for(Player playerEntity : level.getEntitiesOfClass(Player.class, new AABB(minAreaPos, maxAreaPos)))
 			{
-				if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
-				{
-					playerEntity.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
-				} else
-				{
-					if(playerEntity.isCreative() && !effect.isBeneficial())
-						break;
-					
-					addEffect(playerEntity);
-				}
+				iterateThroughEntities(playerEntity);
 			}
 		}
 	}
 	
-	private void addEffect(LivingEntity livingEntity)
+	private void iterateThroughEntities(LivingEntity entityIterate)
 	{
-		livingEntity.addEffect(new MobEffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
+		if(effect instanceof CreativeShockEffect) //skips later creative/harmful specific checks as the effect should always be given
+		{
+			entityIterate.addEffect(new MobEffectInstance(effect, 120, effectAmplifier, false, false));
+		} else
+		{
+			boolean ignoreEntity = entityIterate instanceof Player player && player.isCreative() && !effect.isBeneficial(); //if not a player, or it is a player but they are in creative and the effect is not beneficial, ignore
+			
+			if(!ignoreEntity)
+				entityIterate.addEffect(new MobEffectInstance(effect, effect.isInstantenous() ? 1 : 120, effectAmplifier, false, false));
+		}
 	}
 	
 	public void setEffect(MobEffect effectIn, int effectAmplifierIn)

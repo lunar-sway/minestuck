@@ -27,7 +27,7 @@ public interface ComputerReference
 		return nbt;
 	}
 	
-	//TODO look over usages to limit force loading of dimensions
+	//TODO look over usages to limit force loading of dimensions, it is used in the checkData function of SkaianetHandler which is itself called indirectly once per tick on the server side
 	ISburbComputer getComputer(MinecraftServer server);
 	
 	boolean matches(ISburbComputer computer);

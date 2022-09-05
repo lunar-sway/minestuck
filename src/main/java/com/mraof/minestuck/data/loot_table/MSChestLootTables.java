@@ -74,7 +74,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.GOLDEN_GRASSHOPPER.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.CARVING_TOOL.get()).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(MSItems.STONE_SLAB.get()).setWeight(2).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(MSItems.STONE_TABLET.get()).setWeight(2).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSItems.HASHMAP_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.QUEUE_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.QUEUESTACK_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
