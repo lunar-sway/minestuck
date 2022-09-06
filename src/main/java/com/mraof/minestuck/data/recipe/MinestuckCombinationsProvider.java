@@ -720,6 +720,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.SHADE_STONE_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.SHADE_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE_CRUXITE_ORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSBlocks.PINK_STONE.get()).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.STONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(MSBlocks.DEEPSLATE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.DEEPSLATE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.NETHERRACK_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.NETHERRACK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.COBBLESTONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.COBBLESTONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(MSBlocks.SANDSTONE_URANIUM_ORE.get()).input(MSItems.RAW_URANIUM.get()).and().input(Items.SANDSTONE).buildFor(consumer, Minestuck.MOD_ID);

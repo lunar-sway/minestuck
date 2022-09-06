@@ -136,7 +136,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
-					CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(uraniumStratumMax)), BiomeFilter.biome()));
+					CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(uraniumStratumMaxAboveBottom)), BiomeFilter.biome()));
 		}
 	}
 }

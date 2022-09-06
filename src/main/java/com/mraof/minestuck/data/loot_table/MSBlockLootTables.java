@@ -74,6 +74,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(RED_SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
