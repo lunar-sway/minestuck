@@ -113,6 +113,7 @@ public final class Session
 		gutter = new GristGutter();
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
+		gutter.setSession(this);
 	}
 	
 	/**
