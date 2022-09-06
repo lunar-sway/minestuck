@@ -28,9 +28,14 @@ import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
+import javax.annotation.Nullable;
+import java.util.function.Predicate;
+
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 {    //TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
+	
+	private static Session session;
 	
 	public int consumeDelay;
 	
@@ -130,10 +135,64 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		REJECT
 	}
 	
-	@Override
+	public class PlayerCanPickUpGristSelector implements Predicate<Entity>
+	{
+		private final GristEntity grist;
+		
+		public PlayerCanPickUpGristSelector(GristEntity gristEntity)
+		{
+			this.grist = gristEntity;
+		}
+		
+		@Override
+		public boolean test(@Nullable Entity player)
+		{
+			if(!(player instanceof Player))
+			{
+				return false;
+			}
+			
+			return grist.getPlayerCacheRoom((Player) player) >= grist.gristValue;
+		}
+	}
 	
+	public long getPlayerCacheRoom(Player entityIn)
+	{
+		if(entityIn instanceof ServerPlayer)
+		{
+			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
+			
+			long playerGristAmount;
+			long rung;
+			
+			playerGristAmount = PlayerSavedData.getData((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
+			rung = PlayerSavedData.getData((ServerPlayer) entityIn).getEcheladder().getRung();
+			
+			int gristCap = GristHelper.rungGrist[(int) rung];
+			int gutterCap = 0;
+			long gutterTotal = 0;
+			
+			if(playerSession != null)
+			{
+				gutterTotal = playerSession.getGristGutter().getGutterTotal();
+				gutterCap = (int) playerSession.getGristGutter().getGutterCapacity();
+			}
+			
+			long gutterRoom = gutterCap - gutterTotal;
+			long cacheRoom = gristCap - playerGristAmount;
+			
+			long hasRoom = gutterRoom + cacheRoom;
+			
+			return hasRoom;
+		}
+		return 0;
+	}
+	
+	@Override
 	public void tick()
 	{
+		long canPickUp = getPlayerCacheRoom(closestPlayer);
+		
 		if(this.level.isClientSide == true)
 		{
 			shaderAlpha = Math.max(shaderAlpha - 7, 0);
@@ -156,17 +215,23 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		//this.setPosition(this.getPosX(), (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.getPosZ());
 		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 		
-		if(this.targetCycle < this.cycle - 20 + this.getId() % 100 && shaderAlpha == 0) //Why should I care about the entityId
+		// Periodically re-evaluate whether the grist should be following this particular player
+		if(this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
 		{
-			if(this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
+			// If the grist isn't following anyone, or the player is out of range, or the player can't pick up the grist, pick someone else.
+			if(this.closestPlayer == null || canPickUp < gristValue || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
-				this.closestPlayer = this.level.getNearestPlayer(this, d0);
+				this.closestPlayer = this.level.getNearestPlayer(
+						this.getX(), this.getY(), this.getZ(),
+						d0,
+						new PlayerCanPickUpGristSelector(this));
 			}
 			
 			this.targetCycle = this.cycle;
 		}
 		
-		if(this.closestPlayer != null && shaderAlpha == 0)
+		// If the grist has someone to follow, move towards that player
+		if(this.closestPlayer != null)
 		{
 			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
 			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
@@ -256,31 +321,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		if(entityIn instanceof ServerPlayer)
 		{
-			Session playerSession = SessionHandler.get(level).
-					getPlayerSession(IdentifierHandler.encode(entityIn));
+			long canPickUp = getPlayerCacheRoom(entityIn);
 			
-			long playerGristAmount;
-			long rung;
-			
-			playerGristAmount = PlayerSavedData.getData((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
-			rung = PlayerSavedData.getData((ServerPlayer) entityIn).getEcheladder().getRung();
-			
-			int gristCap = GristHelper.rungGrist[(int) rung];
-			int gutterCap = 0;
-			long gutterTotal = 0;
-			
-			if(playerSession != null)
-			{
-				gutterTotal = playerSession.getGristGutter().getGutterTotal();
-				gutterCap = (int) playerSession.getGristGutter().getGutterCapacity();
-			}
-			
-			long gutterRoom = gutterCap - gutterTotal;
-			long cacheRoom = gristCap - playerGristAmount;
-			
-			boolean hasRoom = (gutterRoom + cacheRoom) >= (gristValue);
-			
-			if(hasRoom)
+			if(canPickUp >= gristValue)
 			{
 				consumeGrist(IdentifierHandler.encode(entityIn), true);
 			} else
@@ -288,7 +331,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				this.animation = Animation.REJECT;
 				GristEntityPacket packet = GristEntityPacket.createPacket(this, animation);
 				MSPacketHandler.sendToTracking(packet, this);
-				shaderAlpha = 255;
+				shaderAlpha = 255;//used as a timer to tick down how long the animation should play
 			}
 		}
 	}

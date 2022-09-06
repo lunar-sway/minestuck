@@ -174,11 +174,12 @@ public class GristHelper
 		return set.capGrist(gristCap);//returns the result of capGrist
 	}
 	
-	public static final int[] rungGrist =
-			{90,90,90,30,35,40,45,60,65,80,85,105,120,130,140,
+	public static final int[] rungGrist =//never set this below 20.
+			{20,40,60,120,125,40,45,60,65,80,85,105,120,130,140,
 					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365
 			,370,375,380,385,390,395,400,410,420,500,650,760,870,980,1090,1100,1200,13000,14000,15000};
-	
+	// the function that controls how much grist is spliced from the gutter
+	// will crash the game if set below 20
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())

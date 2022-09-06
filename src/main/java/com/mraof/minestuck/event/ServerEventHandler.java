@@ -268,8 +268,8 @@ public class ServerEventHandler
 			
 			Player player = event.player;
 			if(data.getTitle() != null)
-
-			IdentifierHandler.encode(player);
+				
+				IdentifierHandler.encode(player);
 			
 			Level level = player.level;
 			long gameTime = level.getGameTime();
@@ -277,17 +277,18 @@ public class ServerEventHandler
 			
 			NonNegativeGristSet playerCache = new NonNegativeGristSet
 					(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
-			
-			//every tick, the server will try to put some of the gutter's grist into each player's cache
+			if(session == null)
+			{
+				return;
+			}//every tick, the server will try to put some of the gutter's grist into each player's cache
 			if(gameTime % inputTime == 0)
 			{
 				int sPl = (int) session.getSessionPowerlevel(mcServer);
 				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
 				int spliceAmount = (int) (GristHelper.rungGrist[rung] / 20 * Math.max(sPl, 1.0));//determines the appropriate splice amount
 				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
-				if(session == null){
-					return;
-				}
+				
+				
 				GristGutter sessionGutter = session.getGristGutter();//get's the grist gutter
 				
 				playerCache.addGrist(sessionGutter.splice(spliceAmount));//adds splice some grist from the splice set
