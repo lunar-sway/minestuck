@@ -118,7 +118,6 @@ public final class Session
 	
 	/**
 	 * Checks if a certain player is in the connection list.
-	 *
 	 * @param player The username of the player.
 	 * @return If the player was found.
 	 */
@@ -136,7 +135,6 @@ public final class Session
 	
 	/**
 	 * Creates a list with all players in the session.
-	 *
 	 * @return Returns a list with the players identifiers.
 	 */
 	public Set<PlayerIdentifier> getPlayerList()
