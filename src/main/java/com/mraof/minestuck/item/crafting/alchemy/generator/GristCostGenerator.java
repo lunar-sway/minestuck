@@ -1,14 +1,16 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,14 +22,28 @@ public final class GristCostGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	//Hacky access to the recipe manager, which isn't otherwise accessible in TagsUpdatedEvent
+	private static RecipeManager recipes;
+	@SubscribeEvent
+	public static void onResourceReload(AddReloadListenerEvent event)
+	{
+		recipes = event.getServerResources().getRecipeManager();
+	}
+	@SubscribeEvent
+	public static void onServerStopped(ServerStoppedEvent event)
+	{
+		recipes = null;
+	}
+	
 	@SubscribeEvent
 	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD)
 		{
-			var server = ServerLifecycleHooks.getCurrentServer();
-			if(server != null)
-				run(server.getRecipeManager());
+			if(recipes != null)
+				run(recipes);
+			else
+				LOGGER.error("Failed to access recipe manager for grist cost generation!");
 		}
 	}
 	
@@ -81,6 +97,9 @@ public final class GristCostGenerator
 				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
 			}
 		}
+		
+		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
+			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 		
 		return cost != null ? cost.getCost() : null;
 	}
