@@ -201,6 +201,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 			String s = null;
 			if(playerTitle != null)
 			{
+				//this is all the clauses for the echeladder
 				String playerBoots = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(0));
 				String playerLeggings = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(1));
 				String playerChestplate = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(2));
@@ -211,7 +212,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				String playerBoon = String.valueOf(ClientPlayerData.getBoondollars());
 				String playerModus = String.valueOf(ClientPlayerData.getModus());
 				String consortRep = String.valueOf(ClientPlayerData.getConsortReputation());
-				String isWearingArmor = playerChestplate + playerBoots + playerHat + playerLeggings;
+				String wearingArmorSet = playerChestplate + playerBoots + playerHat + playerLeggings;
 				
 				if(I18n.exists("echeladder.rung." + rung + "." + playerAspect + "." + playerClass))
 				{
