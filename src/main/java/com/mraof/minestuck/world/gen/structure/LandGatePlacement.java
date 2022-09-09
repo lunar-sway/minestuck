@@ -47,8 +47,9 @@ public final class LandGatePlacement implements StructurePlacement
 	{
 		if(level.getChunkSource().getGenerator() instanceof LandChunkGenerator landGenerator)
 		{
-			// (Last checked mc 1.18) RegistryObject's refers to global instances, but builtin registries create world-specific instances
-			// We need specifically the world-specific instance for getStartForFeature() to work, so we get an instance from the world-specific registry
+			// (Last checked mc 1.18) RegistryObject's refers to objects in regular / builtin registries,
+			// but some registries also have separate dynamic registries that are world-specific
+			// We need a configured structure from the dynamic registry and not the builtin registry for getStartForFeature() to work
 			ConfiguredStructureFeature<?, ?> landGate = level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
 					.get(MSConfiguredStructures.LAND_GATE.getKey());
 			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
