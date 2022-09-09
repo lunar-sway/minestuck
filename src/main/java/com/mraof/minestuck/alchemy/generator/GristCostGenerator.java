@@ -11,6 +11,7 @@ import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,7 +47,6 @@ public final class GristCostGenerator
 				LOGGER.error("Failed to access recipe manager for grist cost generation!");
 		}
 	}
-	
 	private static void run(RecipeManager recipes)
 	{
 		GeneratorProcess process = new GeneratorProcess();
