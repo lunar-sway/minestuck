@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import net.minecraft.world.item.Item;
@@ -96,6 +97,9 @@ public final class GristCostGenerator
 				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
 			}
 		}
+		
+		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
+			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 		
 		return cost != null ? cost.getCost() : null;
 	}
