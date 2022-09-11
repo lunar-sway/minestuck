@@ -36,9 +36,9 @@ public class HieroglyphBlock extends Block
 			if(!level.isClientSide)
 			{
 				int amountInHandStack = itemStack.getCount();
-				worldIn.playSound(null, pos, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				level.playSound(null, pos, SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
 				
-				ItemStack newStack = MSItems.SBURB_CODE.getDefaultInstance();
+				ItemStack newStack = MSItems.SBURB_CODE.get().getDefaultInstance();
 				SburbCodeItem.addRecordedInfo(newStack, state.getBlock());
 				SburbCodeItem.setParadoxInfo(newStack, false); //since code is being recorded from scratch, it does not contain the paradoxically transferred component
 				newStack.setCount(amountInHandStack);

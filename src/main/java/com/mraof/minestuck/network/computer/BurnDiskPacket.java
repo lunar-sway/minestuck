@@ -3,14 +3,14 @@ package com.mraof.minestuck.network.computer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
@@ -31,13 +31,13 @@ public class BurnDiskPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(tePos);
 		buffer.writeInt(programId);
 	}
 	
-	public static BurnDiskPacket decode(PacketBuffer buffer)
+	public static BurnDiskPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos tePos = buffer.readBlockPos();
 		int programId = buffer.readInt();
@@ -45,26 +45,24 @@ public class BurnDiskPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		World world = player.level;
-		TileEntity tileEntity = world.getBlockEntity(tePos);
-		if(tileEntity instanceof ComputerTileEntity)
+		Level level = player.level;
+		BlockEntity tileEntity = level.getBlockEntity(tePos);
+		if(tileEntity instanceof ComputerTileEntity computerTileEntity)
 		{
-			ComputerTileEntity computerTileEntity = (ComputerTileEntity) tileEntity;
-			
 			ItemStack diskStack = ProgramData.getItem(programId);
 			if(diskStack != null && computerTileEntity.blankDisksStored > 0)
 			{
-				Random random = world.getRandom();
+				Random random = level.getRandom();
 				
 				float rx = random.nextFloat() * 0.8F + 0.1F;
 				float ry = random.nextFloat() * 0.8F + 0.1F;
 				float rz = random.nextFloat() * 0.8F + 0.1F;
 				
-				ItemEntity entityItem = new ItemEntity(world, tePos.getX() + rx, tePos.getY() + ry, tePos.getZ() + rz, diskStack);
+				ItemEntity entityItem = new ItemEntity(level, tePos.getX() + rx, tePos.getY() + ry, tePos.getZ() + rz, diskStack);
 				entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
-				world.addFreshEntity(entityItem);
+				level.addFreshEntity(entityItem);
 				
 				computerTileEntity.blankDisksStored--;
 				

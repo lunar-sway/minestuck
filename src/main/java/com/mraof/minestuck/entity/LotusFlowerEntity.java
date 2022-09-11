@@ -3,9 +3,9 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.SburbCodeItem;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.storage.loot.MSLootTables;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,19 +13,24 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -40,6 +45,8 @@ import java.util.List;
 
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	// Animation lengths
 	private static final int OPENING_LENGTH = 120;        //6 sec open animation * 20 ticks/sec = 120
 	private static final int OPEN_IDLE_LENGTH = 320;    //4 sec idle animation * 4 loops * 20 ticks/sec = 320
@@ -192,16 +199,16 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	{
 		if(!level.isClientSide)
 		{
-			ServerWorld serverWorld = (ServerWorld) level;
+			ServerLevel serverWorld = (ServerLevel) level;
 			
 			LootTable lootTable = serverWorld.getServer().getLootTables().get(MSLootTables.LOTUS_FLOWER_DEFAULT);
-			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootParameterSets.EMPTY));
+			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootContextParamSets.EMPTY));
 			if(loot.isEmpty())
 				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
 			
 			for(ItemStack itemStack : loot)
 			{
-				if(itemStack.getItem() == MSItems.SBURB_CODE)
+				if(itemStack.getItem() == MSItems.SBURB_CODE.get())
 					SburbCodeItem.setParadoxInfo(itemStack, true);
 				this.spawnAtLocation(itemStack, 1F);
 			}

@@ -39,8 +39,8 @@ import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
 import com.mraof.minestuck.tileentity.machine.*;
 import com.mraof.minestuck.tileentity.redstone.RedstoneClockTileEntity;
 import com.mraof.minestuck.util.MSDamageSources;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.GateHandler;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
@@ -1673,7 +1673,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
 		
-		add("filled_map."+MSFeatures.FROG_TEMPLE.getFeatureName().toLowerCase(Locale.ROOT), "Frog Temple");
+		add("filled_map." + MSTags.Structures.SCANNER_LOCATED.toString().toLowerCase(Locale.ROOT), "Frog Temple");
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");

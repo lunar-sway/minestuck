@@ -1,10 +1,11 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
-import com.mraof.minestuck.util.Debug;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * An extension of CustomShapeBlock that makes players less likely to take damage while traveling down the stairs at a walking pace
@@ -20,12 +21,12 @@ public class SteepStairsBlock extends CustomShapeBlock
 	}
 	
 	@Override
-	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance)
 	{
 		//Debug.debugf("%s", fallDistance);
 		if(fallDistance > 6)
-			super.fallOn(worldIn, pos, entityIn, fallDistance);
+			super.fallOn(level, state, pos, entity, fallDistance);
 		else
-			entityIn.causeFallDamage(0, 0.0F);
+			entity.causeFallDamage(0, 0.0F, DamageSource.FALL);
 	}
 }

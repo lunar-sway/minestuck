@@ -1,21 +1,19 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.gui.widget.button.ChangePageButton;
-import net.minecraft.resources.IResource;
+import net.minecraft.client.gui.screens.inventory.PageButton;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.*;
-import net.minecraft.util.text.*;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -23,7 +21,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,8 +33,8 @@ public class ReadableSburbCodeScreen extends Screen
 	private final List<Block> blockList;
 	private final boolean paradoxCode;
 
-	private ChangePageButton forwardButton;
-	private ChangePageButton backButton;
+	private PageButton forwardButton;
+	private PageButton backButton;
 	
 	public List<String> textList = null;
 	public int linesPerBlock = 1;
@@ -63,7 +60,7 @@ public class ReadableSburbCodeScreen extends Screen
 		this.blockList = blockList;
 		this.paradoxCode = paradoxCode;
 		
-		this.hieroglyphCount = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size() + (paradoxCode ? 1 : 0); //adds paradox code to total count
+		this.hieroglyphCount = /*MSTags.Blocks.GREEN_HIEROGLYPHS.getValues()*/MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + (paradoxCode ? 1 : 0); //adds paradox code to total count
 	}
 	
 	@Override
@@ -75,8 +72,8 @@ public class ReadableSburbCodeScreen extends Screen
 		
 		try
 		{
-			IResource iResource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 60 characters long to neatly fit within a block of text that avoids empty spaces
-			InputStream inputStream = iResource.getInputStream();
+			Resource resource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 60 characters long to neatly fit within a block of text that avoids empty spaces
+			InputStream inputStream = resource.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			textList = bufferedReader.lines().collect(Collectors.toList());
 			
@@ -91,7 +88,7 @@ public class ReadableSburbCodeScreen extends Screen
 	{
 		if(this.minecraft != null)
 		{
-			this.addButton(new Button(this.width / 2 - 100, 196, 200, 20, DialogTexts.GUI_DONE, (p_214161_1_) -> {
+			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, new TranslatableComponent("gui.done"), (p_214161_1_) -> {
 				this.minecraft.setScreen(null);
 			}));
 		}
@@ -100,10 +97,10 @@ public class ReadableSburbCodeScreen extends Screen
 	protected void createPageControlButtons()
 	{
 		int i = (this.width - 192) / 2;
-		this.forwardButton = this.addButton(new ChangePageButton(i + 116, 159, true, (p_214159_1_) -> {
+		this.forwardButton = this.addRenderableWidget(new PageButton(i + 116, 159, true, (p_214159_1_) -> {
 			this.pageForward();
 		}, true));
-		this.backButton = this.addButton(new ChangePageButton(i + 43, 159, false, (p_214158_1_) -> {
+		this.backButton = this.addRenderableWidget(new PageButton(i + 43, 159, false, (p_214158_1_) -> {
 			this.pageBack();
 		}, true));
 		this.updateButtonVisibility();
@@ -163,22 +160,23 @@ public class ReadableSburbCodeScreen extends Screen
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
 		this.setFocused(null);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bind(BOOK_TEXTURES);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		//this.minecraft.getTextureManager().bind(BOOK_TEXTURES);
+		RenderSystem.setShaderTexture(0, BOOK_TEXTURES);
 		
 		//TODO rendering error where seemingly bits of vanilla text are rendered onto the screen, such as the last displayed splash text
 		/*ITextComponent pageMsg = new TranslationTextComponent("book.pageIndicator", this.currentPage + 1, Math.max(totalPages, 1));
 		int pageMsgPos = (this.width - 192) / 2;
 		int pageMsgWidth = this.font.width(pageMsg);
-		this.font.draw(matrixStack, pageMsg, (float) (pageMsgPos - pageMsgWidth + 192 - 44), 18.0F, 0);*/
+		this.font.draw(poseStack, pageMsg, (float) (pageMsgPos - pageMsgWidth + 192 - 44), 18.0F, 0);*/
 		
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
-		this.blit(matrixStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		{
 			if(textList != null)
 			{
@@ -188,7 +186,8 @@ public class ReadableSburbCodeScreen extends Screen
 				float scale = (1 / subtractScale);
 				RenderSystem.scaled(subtractScale, subtractScale, subtractScale);
 				
-				List<Block> fullBlockList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
+				//List<Block> fullBlockList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
+				List<Block> fullBlockList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 				MutableInt lineY = new MutableInt();
 				boolean isPresent = false;
 				
@@ -216,8 +215,8 @@ public class ReadableSburbCodeScreen extends Screen
 								//limiting the length of the page via this if statement
 								if(stillValidLine(lineY.intValue()))
 								{
-									ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
-									font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
+									Component line = new TextComponent(text.substring(start, end)).setStyle(style);
+									font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
 									lineY.add(CUSTOM_LINE_HEIGHT);
 								}
 							});
@@ -226,8 +225,8 @@ public class ReadableSburbCodeScreen extends Screen
 							font.getSplitter().splitLines(EMPTY_SPACE, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 								if(stillValidLine(lineY.intValue()))
 								{
-									ITextComponent line = new StringTextComponent(EMPTY_SPACE.substring(start, end)).setStyle(style);
-									font.draw(matrixStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
+									Component line = new TextComponent(EMPTY_SPACE.substring(start, end)).setStyle(style);
+									font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x000000);
 									lineY.add(CUSTOM_LINE_HEIGHT);
 								}
 							});
@@ -241,7 +240,9 @@ public class ReadableSburbCodeScreen extends Screen
 		}
 		RenderSystem.popMatrix();
 		
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		
+		
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 
 	public boolean isValidBlock(int lineIterate)
