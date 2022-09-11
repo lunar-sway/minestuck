@@ -597,6 +597,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.SHADE_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> NETHERRACK_URANIUM_ORE = registerBlockItem(MSBlocks.NETHERRACK_URANIUM_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> COBBLESTONE_URANIUM_ORE = registerBlockItem(MSBlocks.COBBLESTONE_URANIUM_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> SANDSTONE_URANIUM_ORE = registerBlockItem(MSBlocks.SANDSTONE_URANIUM_ORE, MSItemGroup.LANDS);

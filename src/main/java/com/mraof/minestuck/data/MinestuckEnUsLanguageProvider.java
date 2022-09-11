@@ -95,6 +95,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.SANDSTONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.RED_SANDSTONE_URANIUM_ORE, "Uranium Ore");
