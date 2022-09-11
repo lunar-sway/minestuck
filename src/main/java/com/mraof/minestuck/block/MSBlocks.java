@@ -84,6 +84,7 @@ public class MSBlocks
 	private static final BlockBehaviour.Properties uraniumOre = Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3);
 	private static final UniformInt uraniumDrops = UniformInt.of(2, 5);
 	public static final RegistryObject<Block> STONE_URANIUM_ORE = REGISTER.register("stone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
+	public static final RegistryObject<Block> DEEPSLATE_URANIUM_ORE = REGISTER.register("deepslate_uranium_ore", () -> new OreBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().color(MaterialColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE), uraniumDrops));
 	public static final RegistryObject<Block> NETHERRACK_URANIUM_ORE = REGISTER.register("netherrack_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> COBBLESTONE_URANIUM_ORE = REGISTER.register("cobblestone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
 	public static final RegistryObject<Block> SANDSTONE_URANIUM_ORE = REGISTER.register("sandstone_uranium_ore", () -> new OreBlock(uraniumOre, uraniumDrops));
