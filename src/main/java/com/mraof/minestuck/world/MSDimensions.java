@@ -33,6 +33,11 @@ public class MSDimensions
 		return dimension == SKAIA;
 	}
 	
+	public static boolean isInMedium(MinecraftServer server, ResourceKey<Level> dimension)
+	{
+		return isLandDimension(server, dimension) || isSkaia(dimension);
+	}
+	
 	public static void sendLandTypesToAll(MinecraftServer server)
 	{
 		MSPacketHandler.sendToAll(createLandTypesPacket(server));

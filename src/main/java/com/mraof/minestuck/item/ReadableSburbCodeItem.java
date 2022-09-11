@@ -61,9 +61,6 @@ public class ReadableSburbCodeItem extends Item
 		if(stack.getItem() == MSItems.COMPLETED_SBURB_CODE.get())
 		{
 			return MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-			/*List<Block> blockList = new ArrayList<>();
-			Registry.BLOCK.getTagOrEmpty(MSTags.Blocks.GREEN_HIEROGLYPHS).forEach(itemHolder -> blockList.add());
-			return ;*/
 		}
 		
 		

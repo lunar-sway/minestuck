@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.MSDimensions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -78,8 +79,9 @@ public class MSLootEvents
 		
 		if(event.getType() == VillagerProfession.LIBRARIAN)
 		{
-			ItemStack[] bookTypes = new ItemStack[]{new ItemStack(MSItems.SBURB_CODE.get()), new ItemStack(MSItems.NONBINARY_CODE.get()), new ItemStack(MSItems.BINARY_CODE.get()), new ItemStack(MSItems.TILLDEATH_HANDBOOK.get()), new ItemStack(MSItems.TABLESTUCK_MANUAL.get()), new ItemStack(MSItems.WISEGUY.get()), new ItemStack(MSItems.SASSACRE_TEXT.get()), new ItemStack(MSItems.FLARP_MANUAL.get())};
-			trades.get(2).add((villager, random) -> new MerchantOffer(bookTypes[random.nextInt(bookTypes.length)], new ItemStack(Items.EMERALD, 3), 4, 2, 0.05F)); //TODO look into a way to only get this to occur if the librarian is in a Minestuck dimension or is trading with an entered player
+			ItemStack[] mediumBookTypes = new ItemStack[]{new ItemStack(MSItems.NONBINARY_CODE.get()), new ItemStack(MSItems.BINARY_CODE.get()), new ItemStack(MSItems.TILLDEATH_HANDBOOK.get()), new ItemStack(MSItems.TABLESTUCK_MANUAL.get()), new ItemStack(MSItems.WISEGUY.get()), new ItemStack(MSItems.SASSACRE_TEXT.get()), new ItemStack(MSItems.FLARP_MANUAL.get())};
+			ItemStack[] overworldBookTypes = new ItemStack[]{new ItemStack(MSItems.COMPLETED_SBURB_CODE.get())};
+			trades.get(2).add((villager, random) -> new MerchantOffer(MSDimensions.isInMedium(villager.getServer(), villager.level.dimension()) ? mediumBookTypes[random.nextInt(mediumBookTypes.length)] : overworldBookTypes[random.nextInt(overworldBookTypes.length)], new ItemStack(Items.EMERALD, 3), 4, 2, 0.05F));
 		}
 	}
 	
@@ -98,7 +100,7 @@ public class MSLootEvents
 				ItemStack itemstack = MapItem.create(serverLevel, templePos.getX(), templePos.getZ(), (byte) 2, true, true);
 				MapItem.renderBiomePreviewMap(serverLevel, itemstack);
 				MapItemSavedData.addTargetDecoration(itemstack, templePos, "+", MapDecoration.Type.RED_X);
-				itemstack.setHoverName(new TranslatableComponent("filled_map." + MSTags.Structures.SCANNER_LOCATED.toString().toLowerCase(Locale.ROOT))); //TODO have a proper name show up, either make a translatable text here or in lang file
+				itemstack.setHoverName(new TranslatableComponent("filled_map." + MSTags.Structures.SCANNER_LOCATED.toString().toLowerCase(Locale.ROOT)));
 				
 				return itemstack;
 			}

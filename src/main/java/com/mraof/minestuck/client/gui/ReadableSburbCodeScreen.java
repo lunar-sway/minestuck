@@ -60,7 +60,7 @@ public class ReadableSburbCodeScreen extends Screen
 		this.blockList = blockList;
 		this.paradoxCode = paradoxCode;
 		
-		this.hieroglyphCount = /*MSTags.Blocks.GREEN_HIEROGLYPHS.getValues()*/MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + (paradoxCode ? 1 : 0); //adds paradox code to total count
+		this.hieroglyphCount = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + (paradoxCode ? 1 : 0); //adds paradox code to total count
 	}
 	
 	@Override
@@ -165,7 +165,6 @@ public class ReadableSburbCodeScreen extends Screen
 		this.renderBackground(poseStack);
 		this.setFocused(null);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		//this.minecraft.getTextureManager().bind(BOOK_TEXTURES);
 		RenderSystem.setShaderTexture(0, BOOK_TEXTURES);
 		
 		//TODO rendering error where seemingly bits of vanilla text are rendered onto the screen, such as the last displayed splash text
@@ -180,13 +179,12 @@ public class ReadableSburbCodeScreen extends Screen
 		{
 			if(textList != null)
 			{
-				//push matrix function, followed by the scaled function and ending with the pop matrix function, allow the scale changes to only be applied to the text
-				RenderSystem.pushMatrix();
+				//pushPose function, followed by the scale function and ending with the popPose function, allow the scale changes to only be applied to the text
+				poseStack.pushPose();
 				float subtractScale = 0.4F;
 				float scale = (1 / subtractScale);
-				RenderSystem.scaled(subtractScale, subtractScale, subtractScale);
+				poseStack.scale(subtractScale, subtractScale, subtractScale);
 				
-				//List<Block> fullBlockList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
 				List<Block> fullBlockList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 				MutableInt lineY = new MutableInt();
 				boolean isPresent = false;
@@ -238,9 +236,8 @@ public class ReadableSburbCodeScreen extends Screen
 			}
 			
 		}
-		RenderSystem.popMatrix();
 		
-		
+		poseStack.popPose();
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}

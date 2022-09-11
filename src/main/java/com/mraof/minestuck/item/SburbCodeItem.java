@@ -73,11 +73,10 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	public ItemStack addCarvingsToCode(Block hieroglyphBlock, ItemStack stackInUse)
 	{
 		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		if(MSTags.blockExistsInList(hieroglpyhsList, hieroglyphBlock)/*hieroglyphBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS)*/)
+		
+		if(MSTags.blockExistsInList(hieroglpyhsList, hieroglyphBlock))
 		{
-			//List<Block> hieroglpyhsList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
-			
-			for(Block block : hieroglpyhsList/*Block block : hieroglpyhsList*/)
+			for(Block block : hieroglpyhsList)
 			{
 				if(block == hieroglyphBlock)
 				{

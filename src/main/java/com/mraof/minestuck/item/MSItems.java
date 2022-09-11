@@ -17,6 +17,9 @@ import com.mraof.minestuck.item.foods.HealingFoodItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
 import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.weapon.*;
+import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
+import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
@@ -346,7 +349,7 @@ public class MSItems
 	public static final RegistryObject<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON))); //TODO have to fix Cruxite artifact classes
 	public static final RegistryObject<Item> CRUXITE_POTION = REGISTER.register("cruxite_potion", () -> new CruxitePotionItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	
-	public static final RegistryObject<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new SburbCodeItem(new Item.Properties().stacksTo(1).defaultDurability(100).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new SburbCodeItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> COMPLETED_SBURB_CODE = REGISTER.register("completed_sburb_code", () -> new ReadableSburbCodeItem(new Item.Properties().tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> COMPUTER_PARTS = REGISTER.register("computer_parts", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> BLANK_DISK = REGISTER.register("blank_disk", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
