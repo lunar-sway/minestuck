@@ -34,10 +34,10 @@ public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, L
 		);
 		
 		lootProcessor.accept(MSLootTables.LOTUS_FLOWER_DEFAULT, LootTable.lootTable()
-				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantRange.exactly(1))
-						.add(ItemLootEntry.lootTableItem(MSItems.COMPUTER_PARTS).setWeight(10).setQuality(3)))
-				.withPool(LootPool.lootPool().name("code").setRolls(ConstantRange.exactly(1))
-						.add(ItemLootEntry.lootTableItem(MSItems.SBURB_CODE).setWeight(10).setQuality(3)))
+				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1))
+						.add(LootItem.lootTableItem(MSItems.COMPUTER_PARTS.get()).setWeight(10).setQuality(3)))
+				.withPool(LootPool.lootPool().name("code").setRolls(ConstantValue.exactly(1))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)))
 		);
 	}
 }

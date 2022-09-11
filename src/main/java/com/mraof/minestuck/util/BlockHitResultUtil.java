@@ -1,12 +1,11 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 
 public class BlockHitResultUtil
@@ -14,30 +13,30 @@ public class BlockHitResultUtil
 	/**
 	 * Based on the Item class function of the same name, without the FluidMode context
 	 */
-	public static BlockRayTraceResult getPlayerPOVHitResult(World world, PlayerEntity playerEntity)
+	public static BlockHitResult getPlayerPOVHitResult(Level level, Player playerEntity)
 	{
-		float xRot = playerEntity.xRot;
-		float yRot = playerEntity.yRot;
-		Vector3d eyeVec = playerEntity.getEyePosition(1.0F);
-		float f2 = MathHelper.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
-		float f3 = MathHelper.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
-		float f4 = -MathHelper.cos(-xRot * ((float) Math.PI / 180F));
-		float yComponent = MathHelper.sin(-xRot * ((float) Math.PI / 180F));
+		float xRot = playerEntity.xRotO;
+		float yRot = playerEntity.yRotO;
+		Vec3 eyeVec = playerEntity.getEyePosition(1.0F);
+		float f2 = (float) Math.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f3 = (float) Math.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f4 = (float) -Math.cos(-xRot * ((float) Math.PI / 180F));
+		float yComponent = (float) Math.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
 		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
-		Vector3d endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
-		return world.clip(new RayTraceContext(eyeVec, endVec, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, playerEntity));
+		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
+		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
 	
-	public static BlockState collidedBlockState(World world, PlayerEntity playerEntity)
+	public static BlockState collidedBlockState(Level level, Player playerEntity)
 	{
-		BlockRayTraceResult rayTraceResult = getPlayerPOVHitResult(world, playerEntity);
+		BlockHitResult rayTraceResult = getPlayerPOVHitResult(level, playerEntity);
 		
 		return collidedBlockState(playerEntity, rayTraceResult);
 	}
 	
-	public static BlockState collidedBlockState(PlayerEntity playerEntity, BlockRayTraceResult rayTraceResult)
+	public static BlockState collidedBlockState(Player playerEntity, BlockHitResult rayTraceResult)
 	{
 		return playerEntity.level.getBlockState(rayTraceResult.getBlockPos());
 	}

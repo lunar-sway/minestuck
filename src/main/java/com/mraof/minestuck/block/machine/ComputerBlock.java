@@ -118,14 +118,14 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack stackInHand = player.getItemInHand(handIn);
 		int id = ProgramData.getProgramID(stackInHand);
 		
-		if(stackInHand.getItem() == MSItems.BLANK_DISK)
+		if(stackInHand.getItem() == MSItems.BLANK_DISK.get())
 		{
 			if(tileEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
 			{
 				stackInHand.shrink(1);
 				tileEntity.blankDisksStored++;
 				tileEntity.setChanged();
-				worldIn.sendBlockUpdated(pos, state, state, 3);
+				level.sendBlockUpdated(pos, state, state, 3);
 				return true;
 			}
 		}
@@ -148,7 +148,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		return false;
 	}
 	
-	private boolean inputCode(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
+	private boolean inputCode(ComputerTileEntity tileEntity, BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		ItemStack heldStack = player.getItemInHand(handIn);
 		if(heldStack.getItem() instanceof ReadableSburbCodeItem)
@@ -156,7 +156,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
 			boolean newInfo = false;
 			
-			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE || (SburbCodeItem.getParadoxInfo(heldStack) && !tileEntity.hasParadoxInfoStored))
+			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (SburbCodeItem.getParadoxInfo(heldStack) && !tileEntity.hasParadoxInfoStored))
 			{
 				newInfo = true;
 				tileEntity.hasParadoxInfoStored = true;
@@ -166,7 +166,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities list should it not exist yet
 				{
-					if(tileEntity.hieroglyphsStored != null && MSTags.Blocks.GREEN_HIEROGLYPHS.contains(iterateBlock) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
+					if(tileEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
 					{
 						tileEntity.hieroglyphsStored.add(iterateBlock);
 						newInfo = true;
@@ -193,7 +193,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			if(newInfo)
 			{
 				tileEntity.setChanged();
-				worldIn.sendBlockUpdated(pos, state, state, 3);
+				levelIn.sendBlockUpdated(pos, state, state, 3);
 				
 				return true;
 			}
@@ -206,7 +206,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ComputerTileEntity te = new ComputerTileEntity();
+		ComputerTileEntity te = new ComputerTileEntity(pos, state);
 		te.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
 		return te;
 		//return state.getValue(STATE) != State.OFF ? new ComputerTileEntity(pos, state) : null;
@@ -243,9 +243,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			ItemStack diskStack = ProgramData.getItem(program);
 			if(diskStack != null)
 			{
-				ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, diskStack);
+				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
 				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-				world.addFreshEntity(entityItem);
+				level.addFreshEntity(entityItem);
 			}
 		}
 		
@@ -254,9 +254,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, MSItems.BLANK_DISK.getDefaultInstance());
+			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, MSItems.BLANK_DISK.get().getDefaultInstance());
 			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addFreshEntity(entityItem);
+			level.addFreshEntity(entityItem);
 		}
 		
 		if(state.getValue(STATE) == State.BROKEN)
@@ -267,9 +267,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			ItemStack diskStack = ProgramData.getItem(-1);
 			if(diskStack != null)
 			{
-				ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, diskStack);
+				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
 				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-				world.addFreshEntity(entityItem);
+				level.addFreshEntity(entityItem);
 			}
 		}
 	}

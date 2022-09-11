@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.StairBlock;
@@ -134,6 +135,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
+			//TODO occasionally the stairs are in the flipped direction, it was noticed in the public server with an unknown cardinal direction and in testing when the structure opens up into the north(with the stairs instead facing south)
 			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base
 			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs top
 			generateBox(level, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), false); //stairs base fill in
@@ -264,38 +266,20 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		@Override
 		public void next(Random rand, int x, int y, int z, boolean wall)
 		{
-			int randomBlock = rand.nextInt(14);
-			if(randomBlock == 12 || randomBlock == 13)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_FROG.get().defaultBlockState();
-			} else if(randomBlock == 10 || randomBlock == 11)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_TURTLE.get().defaultBlockState();
-			} else if(randomBlock == 8 || randomBlock == 9)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SKAIA.get().defaultBlockState();
-			} else if(randomBlock == 6 || randomBlock == 7)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_LOTUS.get().defaultBlockState();
-			} else if(randomBlock == 5)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get().defaultBlockState();
-			} else if(randomBlock == 4)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get().defaultBlockState();
-			} else if(randomBlock == 3)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get().defaultBlockState();
-			} else if(randomBlock == 2)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get().defaultBlockState();
-			} else if(randomBlock == 1)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get().defaultBlockState();
-			} else
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get().defaultBlockState();
-			}
+			Block[] blockArray = new Block[]{
+					MSBlocks.GREEN_STONE_BRICK_FROG.get(), //only one frog hieroglyph in order to have a component more difficult to find
+					MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(),
+					MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(),
+					MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(),
+					MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(),
+					MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(),
+					MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(),
+					MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(),
+					MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(),
+					MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get()
+			};
+			
+			this.next = blockArray[rand.nextInt(blockArray.length)].defaultBlockState();
 		}
 	}
 }

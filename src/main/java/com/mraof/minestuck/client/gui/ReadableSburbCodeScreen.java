@@ -9,11 +9,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.DialogTexts;
 import net.minecraft.client.gui.chat.NarratorChatListener;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.gui.widget.button.ChangePageButton;
 import net.minecraft.resources.IResource;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.*;
 import net.minecraft.util.text.*;
+import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.io.BufferedReader;

@@ -7,6 +7,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.storage.PlayerData;
 import com.mraof.minestuck.world.storage.PlayerSavedData;
@@ -1039,8 +1040,8 @@ public abstract class MessageType
 						addTo(chainIdentifier, conditionedMessage.getString()));
 			
 			boolean hasItem = false;
-			List<ItemStack> stackListFromTag = new ArrayList<>();
-			Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
+			List<ItemStack> stackListFromTag = MSTags.getItemStacksFromTag(itemTag);
+			//Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
 			
 			if(random || repeat && nbt.contains(this.getString()))
 			{

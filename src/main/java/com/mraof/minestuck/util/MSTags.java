@@ -1,6 +1,7 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -9,10 +10,15 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MSTags
 {
@@ -159,5 +165,44 @@ public class MSTags
 		{
 			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
+	}
+	
+	public static boolean blockExistsInTag(TagKey<Block> blockTag, Block block)
+	{
+		/*for(Holder<Block> holder : Registry.BLOCK.getTagOrEmpty(blockTag)) {
+			if(block.getRegistryName() != null && holder.is(block.getRegistryName()))
+				return true;
+		}*/
+		for(Block blockIterate : getBlocksFromTag(blockTag))
+			if(blockIterate == block)
+				return true;
+		
+		return false;
+	}
+	
+	/**
+	 * Used when getBlocksFromTag has already been called to avoid redundancy
+	 */
+	public static boolean blockExistsInList(List<Block> blockList, Block block)
+	{
+		for(Block blockIterate : blockList)
+			if(blockIterate == block)
+				return true;
+		
+		return false;
+	}
+	
+	public static List<Block> getBlocksFromTag(TagKey<Block> itemTag)
+	{
+		List<Block> blockListFromTag = new ArrayList<>();
+		Registry.BLOCK.getTagOrEmpty(itemTag).forEach(blockHolder -> blockListFromTag.add(blockHolder.value()));
+		return blockListFromTag;
+	}
+	
+	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
+	{
+		List<ItemStack> stackListFromTag = new ArrayList<>();
+		Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
+		return stackListFromTag;
 	}
 }

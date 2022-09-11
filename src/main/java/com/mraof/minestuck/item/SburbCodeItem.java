@@ -2,24 +2,28 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.util.BlockHitResultUtil;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.*;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -33,18 +37,18 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	}
 	
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
 		ItemStack stackInUse = context.getItemInHand();
-		World worldIn = context.getLevel();
-		PlayerEntity player = context.getPlayer();
-		Hand handIn = context.getHand();
+		Level worldIn = context.getLevel();
+		Player player = context.getPlayer();
+		InteractionHand handIn = context.getHand();
 		
 		if(!worldIn.isClientSide && player != null)
 		{
-			BlockRayTraceResult blockRayTraceResult = BlockHitResultUtil.getPlayerPOVHitResult(worldIn, player);
+			BlockHitResult blockRayTraceResult = BlockHitResultUtil.getPlayerPOVHitResult(worldIn, player);
 			
-			if(blockRayTraceResult.getType() == RayTraceResult.Type.BLOCK)
+			if(blockRayTraceResult.getType() == HitResult.Type.BLOCK)
 			{
 				BlockState raytraceState = BlockHitResultUtil.collidedBlockState(player, blockRayTraceResult);
 				
@@ -53,14 +57,14 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 				List<Block> postProcessBlockList = getRecordedBlocks(processedStack);
 				if(!preProcessBlockList.containsAll(postProcessBlockList))
 				{
-					worldIn.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					worldIn.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
 				}
 			}
 			
 			attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
 	/**
@@ -68,11 +72,12 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	 */
 	public ItemStack addCarvingsToCode(Block hieroglyphBlock, ItemStack stackInUse)
 	{
-		if(MSTags.Blocks.GREEN_HIEROGLYPHS.contains(hieroglyphBlock))
+		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+		if(MSTags.blockExistsInList(hieroglpyhsList, hieroglyphBlock)/*hieroglyphBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS)*/)
 		{
-			List<Block> hieroglpyhsList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
+			//List<Block> hieroglpyhsList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
 			
-			for(Block block : hieroglpyhsList)
+			for(Block block : hieroglpyhsList/*Block block : hieroglpyhsList*/)
 			{
 				if(block == hieroglyphBlock)
 				{
@@ -92,12 +97,12 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	{
 		String blockRegistryString = String.valueOf(block.getRegistryName());
 		
-		CompoundNBT nbt = stack.getOrCreateTag();
+		CompoundTag nbt = stack.getOrCreateTag();
 		
-		ListNBT hieroglyphList = nbt.getList("recordedHieroglyphs", Constants.NBT.TAG_STRING);
+		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
 		if(!getRecordedBlocks(stack).contains(block))
 		{
-			hieroglyphList.add(StringNBT.valueOf(blockRegistryString));
+			hieroglyphList.add(StringTag.valueOf(blockRegistryString));
 			nbt.put("recordedHieroglyphs", hieroglyphList);
 		}
 		
@@ -105,35 +110,35 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 		return stack;
 	}
 	
-	public static void attemptConversionToCompleted(PlayerEntity player, Hand hand)
+	public static void attemptConversionToCompleted(Player player, InteractionHand hand)
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
 		List<Block> recordedList = getRecordedBlocks(stackInHand);
 		
 		if(hasAllBlocks(recordedList) && getParadoxInfo(stackInHand))
 		{
-			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.getDefaultInstance());
+			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.get().getDefaultInstance());
 		}
 	}
 	
 	public static boolean hasAllBlocks(List<Block> blockList)
 	{
-		List<Block> completeList = MSTags.Blocks.GREEN_HIEROGLYPHS.getValues();
+		List<Block> completeList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 		
 		return blockList.containsAll(completeList);
 	}
 	
 	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
 	{
-		CompoundNBT nbt = stack.getOrCreateTag();
+		CompoundTag nbt = stack.getOrCreateTag();
 		nbt.putBoolean("hasParadoxInfo", hasInfo);
 		stack.setTag(nbt);
 	}
 	
 	public ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
 	{
-		CompoundNBT nbt = stack.getOrCreateTag();
-		ListNBT hieroglyphList = nbt.getList("recordedHieroglyphs", Constants.NBT.TAG_STRING);
+		CompoundTag nbt = stack.getOrCreateTag();
+		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
 		hieroglyphList.clear();
 		nbt.put("recordedHieroglyphs", hieroglyphList);
 		
@@ -149,23 +154,23 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	{
 		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of 1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
 		float sizeOfList = getRecordedBlocks(stack).size();
-		return ((sizeOfList + mod) / (MSTags.Blocks.GREEN_HIEROGLYPHS.getValues().size() + mod)) * 100;
+		return ((sizeOfList + mod) / (MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + mod)) * 100;
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
 	{
 		if(level != null)
 		{
-			tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.completion", (byte) percentCompletion(stack)));
+			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.completion", (byte) percentCompletion(stack)));
 			if(hasAllBlocks(getRecordedBlocks(stack)))
-				tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.paradox_hint"));
+				tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.paradox_hint"));
 		}
 		
 		if(Screen.hasShiftDown())
 		{
-			tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.additional_info"));
+			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.additional_info"));
 		} else
-			tooltip.add(new TranslationTextComponent("item.minestuck.sburb_code.shift_for_more_info"));
+			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.shift_for_more_info"));
 	}
 }

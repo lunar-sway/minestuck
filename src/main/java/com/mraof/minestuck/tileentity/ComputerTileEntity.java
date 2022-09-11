@@ -13,12 +13,15 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -76,7 +79,7 @@ public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 			gui.updateGui();
 		
 		if(nbt.contains("hieroglyphsStored"))
-			hieroglyphsStored = ReadableSburbCodeItem.getRecordedBlocks(nbt.getList("hieroglyphsStored", Constants.NBT.TAG_STRING));
+			hieroglyphsStored = ReadableSburbCodeItem.getRecordedBlocks(nbt.getList("hieroglyphsStored", Tag.TAG_STRING));
 		if(nbt.contains("hasParadoxInfoStored"))
 			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
 		if(nbt.contains("blankDisksStored"))
@@ -104,16 +107,14 @@ public class ComputerTileEntity extends BlockEntity implements ISburbComputer
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		ListNBT hieroglyphListNBT = ReadableSburbCodeItem.getListNBTFromBlockList(hieroglyphsStored);
-		if(!hieroglyphListNBT.isEmpty())
+		ListTag hieroglyphListTag = ReadableSburbCodeItem.getListTagFromBlockList(hieroglyphsStored);
+		if(!hieroglyphListTag.isEmpty())
 		{
-			compound.put("hieroglyphsStored", hieroglyphListNBT);
+			compound.put("hieroglyphsStored", hieroglyphListTag);
 		}
 		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
-		
-		return compound;
 	}
 	
 	@Override
