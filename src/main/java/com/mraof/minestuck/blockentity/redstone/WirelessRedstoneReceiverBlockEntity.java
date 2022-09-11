@@ -13,17 +13,17 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class WirelessRedstoneReceiverTileEntity extends BlockEntity
+public class WirelessRedstoneReceiverBlockEntity extends BlockEntity
 {
 	private BlockPos lastTransmitterBlockPos;
 	private int lastTransmission;
 	
-	public WirelessRedstoneReceiverTileEntity(BlockPos pos, BlockState state)
+	public WirelessRedstoneReceiverBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.WIRELESS_REDSTONE_RECEIVER.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, WirelessRedstoneReceiverTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, WirelessRedstoneReceiverBlockEntity blockEntity)
 	{
 		if(!level.isAreaLoaded(pos, 1))
 			return;
@@ -62,10 +62,10 @@ public class WirelessRedstoneReceiverTileEntity extends BlockEntity
 			
 			if(lastTransmitterBlockPos != null && level.isAreaLoaded(lastTransmitterBlockPos, 1))
 			{
-				if(level.getBlockEntity(lastTransmitterBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity te)
+				if(level.getBlockEntity(lastTransmitterBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity be)
 				{
 					
-					te.sendUpdateToPosition(level, getBlockPos());
+					be.sendUpdateToPosition(level, getBlockPos());
 				} else
 				{
 					if(state != unpoweredState)

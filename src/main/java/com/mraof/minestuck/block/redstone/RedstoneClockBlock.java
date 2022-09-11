@@ -3,7 +3,7 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.blockentity.redstone.RedstoneClockTileEntity;
+import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * Generates a redstone pulse through its tile entity at a modifiable increment. Used as a compact means of creating redstone clocks
+ * Generates a redstone pulse through its block entity at a modifiable increment. Used as a compact means of creating redstone clocks
  */
 public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBlock
 {
@@ -44,17 +44,17 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(level.getBlockEntity(pos) instanceof RedstoneClockTileEntity te) //does not check for creative shock to anticipate use cases in timing puzzle designs
+		if(level.getBlockEntity(pos) instanceof RedstoneClockBlockEntity be) //does not check for creative shock to anticipate use cases in timing puzzle designs
 		{
 			
 			if(!player.isCrouching())
 			{
-				te.incrementClockSpeed(player);
+				be.incrementClockSpeed(player);
 				
 				return InteractionResult.SUCCESS;
 			} else
 			{
-				te.decrementClockSpeed(player);
+				be.decrementClockSpeed(player);
 				
 				return InteractionResult.SUCCESS;
 			}
@@ -99,14 +99,14 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new RedstoneClockTileEntity(pos, state);
+		return new RedstoneClockBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.REDSTONE_CLOCK.get(), RedstoneClockTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.REDSTONE_CLOCK.get(), RedstoneClockBlockEntity::serverTick) : null;
 	}
 	
 	@Override

@@ -80,11 +80,11 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	@Override
 	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		HolopadBlockEntity te = (HolopadBlockEntity) level.getBlockEntity(pos);
+		HolopadBlockEntity be = (HolopadBlockEntity) level.getBlockEntity(pos);
 		
-		if(te != null && !level.isClientSide)
+		if(be != null && !level.isClientSide)
 		{
-			te.dropItem(true, level, pos, te.getCard());
+			be.dropItem(true, level, pos, be.getCard());
 		}
 		
 		super.playerWillDestroy(level, pos, state, player);

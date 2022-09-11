@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RemoteObserverPacket;
-import com.mraof.minestuck.blockentity.redstone.RemoteObserverTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -24,8 +24,8 @@ public class RemoteObserverScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	private final RemoteObserverTileEntity te;
-	private RemoteObserverTileEntity.ActiveType activeType;
+	private final RemoteObserverBlockEntity be;
+	private RemoteObserverBlockEntity.ActiveType activeType;
 	private int observingRange;
 	
 	private Button typeButton;
@@ -36,13 +36,13 @@ public class RemoteObserverScreen extends Screen
 	
 	private EditBox entityTypeTextField;
 	
-	RemoteObserverScreen(RemoteObserverTileEntity te)
+	RemoteObserverScreen(RemoteObserverBlockEntity be)
 	{
 		super(new TextComponent("Stat Storer"));
 		
-		this.te = te;
-		this.activeType = te.getActiveType();
-		this.observingRange = te.getObservingRange();
+		this.be = be;
+		this.activeType = be.getActiveType();
+		this.observingRange = be.getObservingRange();
 	}
 	
 	@Override
@@ -53,9 +53,9 @@ public class RemoteObserverScreen extends Screen
 		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 5, 135, 20, new TextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		
 		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.entityTypeTextField.setValue(EntityType.getKey(te.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
+		this.entityTypeTextField.setValue(EntityType.getKey(be.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
 		addRenderableWidget(entityTypeTextField);
-		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
+		entityTypeTextField.setVisible(activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT);
 		
 		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("+"), button -> changeRange(1)));
 		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
@@ -70,10 +70,10 @@ public class RemoteObserverScreen extends Screen
 	 */
 	private void changeActiveType()
 	{
-		activeType = RemoteObserverTileEntity.ActiveType.fromInt(activeType.ordinal() < RemoteObserverTileEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
+		activeType = RemoteObserverBlockEntity.ActiveType.fromInt(activeType.ordinal() < RemoteObserverBlockEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
 		typeButton.setMessage(new TextComponent(activeType.getNameNoSpaces()));
 		
-		entityTypeTextField.setVisible(activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT);
+		entityTypeTextField.setVisible(activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT);
 	}
 	
 	/**
@@ -107,16 +107,16 @@ public class RemoteObserverScreen extends Screen
 	{
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		
-		boolean isCurrentEntityActiveType = activeType == RemoteObserverTileEntity.ActiveType.CURRENT_ENTITY_PRESENT;
-		boolean isValidAndObservableEntityType = attemptedEntityType.isPresent() && RemoteObserverTileEntity.entityCanBeObserved(attemptedEntityType.get());
+		boolean isCurrentEntityActiveType = activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT;
+		boolean isValidAndObservableEntityType = attemptedEntityType.isPresent() && RemoteObserverBlockEntity.entityCanBeObserved(attemptedEntityType.get());
 		
 		if(!isCurrentEntityActiveType || isValidAndObservableEntityType)
 		{
-			EntityType<?> entityType = te.getCurrentEntityType();
+			EntityType<?> entityType = be.getCurrentEntityType();
 			if(isValidAndObservableEntityType)
 				entityType = attemptedEntityType.get();
 			
-			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, te.getBlockPos(), entityType));
+			MSPacketHandler.sendToServer(new RemoteObserverPacket(activeType, observingRange, be.getBlockPos(), entityType));
 			onClose();
 		} else
 		{

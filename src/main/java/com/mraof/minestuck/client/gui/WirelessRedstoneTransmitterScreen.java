@@ -20,17 +20,17 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	WirelessRedstoneTransmitterBlockEntity te;
+	WirelessRedstoneTransmitterBlockEntity be;
 	private EditBox destinationTextFieldX;
 	private EditBox destinationTextFieldY;
 	private EditBox destinationTextFieldZ;
 	
 	
-	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity te)
+	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity be)
 	{
 		super(new TextComponent("Wireless Redstone"));
 		
-		this.te = te;
+		this.be = be;
 	}
 	
 	@Override
@@ -39,15 +39,15 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
 		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new TextComponent("X value of destination block pos")); //TODO make these translatable
-		this.destinationTextFieldX.setValue(String.valueOf(te.getDestinationBlockPosFromOffset().getX()));
+		this.destinationTextFieldX.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getX()));
 		addRenderableWidget(destinationTextFieldX);
 		
 		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, new TextComponent("Y value of destination block pos"));
-		this.destinationTextFieldY.setValue(String.valueOf(te.getDestinationBlockPosFromOffset().getY()));
+		this.destinationTextFieldY.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getY()));
 		addRenderableWidget(destinationTextFieldY);
 		
 		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new TextComponent("Z value of destination block pos"));
-		this.destinationTextFieldZ.setValue(String.valueOf(te.getDestinationBlockPosFromOffset().getZ()));
+		this.destinationTextFieldZ.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getZ()));
 		addRenderableWidget(destinationTextFieldZ);
 		
 		addRenderableWidget(new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, new TextComponent("Find Receiver"), button -> findReceiver()));
@@ -71,7 +71,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void findReceiver()
 	{
-		BlockPos receiverPos = te.findReceiver();
+		BlockPos receiverPos = be.findReceiver();
 		if(receiverPos != null)
 		{
 			destinationTextFieldX.setValue(String.valueOf(receiverPos.getX()));
@@ -82,7 +82,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new WirelessRedstoneTransmitterPacket(parseBlockPos(), te.getBlockPos()));
+		MSPacketHandler.sendToServer(new WirelessRedstoneTransmitterPacket(parseBlockPos(), be.getBlockPos()));
 		onClose();
 	}
 	

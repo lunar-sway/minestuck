@@ -74,15 +74,15 @@ public class TransportalizerBlock extends MachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		TransportalizerBlockEntity tileEntity = (TransportalizerBlockEntity) level.getBlockEntity(pos);
+		TransportalizerBlockEntity blockEntity = (TransportalizerBlockEntity) level.getBlockEntity(pos);
 
-		if (tileEntity == null || player.isShiftKeyDown())
+		if (blockEntity == null || player.isShiftKeyDown())
 		{
 			return InteractionResult.PASS;
 		}
 
 		if(level.isClientSide)
-			MSScreenFactories.displayTransportalizerScreen(tileEntity);
+			MSScreenFactories.displayTransportalizerScreen(blockEntity);
 
 		return InteractionResult.SUCCESS;
 	}

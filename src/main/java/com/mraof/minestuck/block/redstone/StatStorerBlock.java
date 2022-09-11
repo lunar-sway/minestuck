@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.blockentity.redstone.StatStorerTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * Outputs a redstone signal proportional to the recorded value its tile entity is currently set to, divided by the divide by value stored also stored in the tile entity.
+ * Outputs a redstone signal proportional to the recorded value its block entity is currently set to, divided by the divide by value stored also stored in the block entity.
  * Stats are increased when the relevant event(in ServerEventHandler) occurs within 16 blocks of a stat storer. GUI is limited by creative shock
  */
 public class StatStorerBlock extends Block implements EntityBlock
@@ -44,7 +44,7 @@ public class StatStorerBlock extends Block implements EntityBlock
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			if(level.getBlockEntity(pos) instanceof StatStorerTileEntity statStorer)
+			if(level.getBlockEntity(pos) instanceof StatStorerBlockEntity statStorer)
 			{
 				if(level.isClientSide)
 				{
@@ -82,7 +82,7 @@ public class StatStorerBlock extends Block implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new StatStorerTileEntity(pos, state);
+		return new StatStorerBlockEntity(pos, state);
 	}
 	
 	@Override

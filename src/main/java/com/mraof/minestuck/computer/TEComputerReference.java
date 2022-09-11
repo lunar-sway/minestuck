@@ -43,9 +43,9 @@ class TEComputerReference implements ComputerReference
 		Level level = server.getLevel(location.dimension());
 		if(level == null)
 			return null;
-		BlockEntity te = level.getBlockEntity(location.pos());
-		if(te instanceof ISburbComputer)
-			return (ISburbComputer) te;
+		BlockEntity be = level.getBlockEntity(location.pos());
+		if(be instanceof ISburbComputer)
+			return (ISburbComputer) be;
 		else return null;
 	}
 	

@@ -27,14 +27,14 @@ import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.machine.MachineBlock.FACING;
 
-public class PunchDesignixTileEntity extends BlockEntity
+public class PunchDesignixBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private boolean broken = false;
 	private ItemStack card = ItemStack.EMPTY;
 	
-	public PunchDesignixTileEntity(BlockPos pos, BlockState state)
+	public PunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.PUNCH_DESIGNIX.get(), pos, state);
 	}

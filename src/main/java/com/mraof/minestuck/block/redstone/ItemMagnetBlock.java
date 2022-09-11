@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.blockentity.redstone.ItemMagnetTileEntity;
+import com.mraof.minestuck.blockentity.redstone.ItemMagnetBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * When powered, the tile entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true)
+ * When powered, the block entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true)
  */
 public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements EntityBlock
 {
@@ -66,14 +66,14 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new ItemMagnetTileEntity(pos, state);
+		return new ItemMagnetBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.ITEM_MAGNET.get(), ItemMagnetTileEntity::tick);
+		return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.ITEM_MAGNET.get(), ItemMagnetBlockEntity::tick);
 	}
 	
 	@SuppressWarnings("deprecation")

@@ -29,7 +29,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
-public class GristWidgetTileEntity extends MachineProcessTileEntity implements MenuProvider, IOwnable
+public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -39,7 +39,7 @@ public class GristWidgetTileEntity extends MachineProcessTileEntity implements M
 	private PlayerIdentifier owner;
 	private boolean hasItem;
 	
-	public GristWidgetTileEntity(BlockPos pos, BlockState state)
+	public GristWidgetBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.GRIST_WIDGET.get(), pos, state);
 	}

@@ -27,13 +27,13 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniCruxtruderTileEntity extends MachineProcessTileEntity implements MenuProvider
+public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final RunType TYPE = RunType.AUTOMATIC;
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
-	public MiniCruxtruderTileEntity(BlockPos pos, BlockState state)
+	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.MINI_CRUXTRUDER.get(), pos, state);
 	}

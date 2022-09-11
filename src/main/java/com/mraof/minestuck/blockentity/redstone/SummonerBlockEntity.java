@@ -20,18 +20,18 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-public class SummonerTileEntity extends BlockEntity
+public class SummonerBlockEntity extends BlockEntity
 {
 	private EntityType<?> summonType;
 	private int cooldownTimer;
 	private int summonRange = 8; //default is 8, but can be set(via gui) between 1 and 64
 	
-	public SummonerTileEntity(BlockPos pos, BlockState state)
+	public SummonerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.SUMMONER.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, SummonerTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, SummonerBlockEntity blockEntity)
 	{
 		if(level == null)
 			return;
@@ -48,7 +48,7 @@ public class SummonerTileEntity extends BlockEntity
 	public void summonEntity(Level levelIn, BlockPos summonerBlockPos, EntityType<?> type, boolean triggerActivate, boolean playParticles)
 	{
 		if(type == null)
-			throw new IllegalStateException("SummonerTileEntity unable to create a new entity. Entity factory returned null!");
+			throw new IllegalStateException("SummonerBlockEntity unable to create a new entity. Entity factory returned null!");
 		
 		if(cooldownTimer == 0 && levelIn instanceof ServerLevel level)
 		{

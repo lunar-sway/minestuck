@@ -22,16 +22,16 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class ItemMagnetTileEntity extends BlockEntity
+public class ItemMagnetBlockEntity extends BlockEntity
 {
 	private int gatherLength;
 	
-	public ItemMagnetTileEntity(BlockPos pos, BlockState state)
+	public ItemMagnetBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.ITEM_MAGNET.get(), pos, state);
 	}
 	
-	public static void tick(Level level, BlockPos pos, BlockState state, ItemMagnetTileEntity blockEntity)
+	public static void tick(Level level, BlockPos pos, BlockState state, ItemMagnetBlockEntity blockEntity)
 	{
 		if(!level.isAreaLoaded(pos, 1))
 			return;

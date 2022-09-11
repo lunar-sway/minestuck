@@ -128,11 +128,11 @@ public class GateBlock extends AbstractGateBlock
 				if(offsetX == 0 && offsetZ == 0)
 				{
 					level.setBlock(centerPos, MSBlocks.GATE_MAIN.get().defaultBlockState(), blockFlag);
-					BlockEntity tileEntity = level.getBlockEntity(centerPos);
-					if(tileEntity instanceof GateBlockEntity gate)
+					BlockEntity blockEntity = level.getBlockEntity(centerPos);
+					if(blockEntity instanceof GateBlockEntity gate)
 						gate.gateType = type;
 					else
-						LOGGER.error("Expected a gate tile entity after placing a gate block, but got {}!", tileEntity);
+						LOGGER.error("Expected a gate block entity after placing a gate block, but got {}!", blockEntity);
 				} else
 					level.setBlock(centerPos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.get().defaultBlockState(), blockFlag);
 			}

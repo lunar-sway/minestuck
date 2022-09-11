@@ -9,7 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.blockentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,17 +27,17 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
-	private final AlchemiterTileEntity alchemiter;
+	private final AlchemiterBlockEntity alchemiter;
 	private int itemQuantity;
 	
-	AlchemiterScreen(AlchemiterTileEntity te)
+	AlchemiterScreen(AlchemiterBlockEntity be)
 	{
 		super(new TranslatableComponent(TITLE));
-		alchemiter = te;
+		alchemiter = be;
 		itemQuantity = 1;
 	}
 	
-	public AlchemiterTileEntity getAlchemiter() {
+	public AlchemiterBlockEntity getAlchemiter() {
 		return alchemiter;
 	}
 	

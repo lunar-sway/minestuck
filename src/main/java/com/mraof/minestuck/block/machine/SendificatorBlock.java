@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.blockentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,7 +42,7 @@ public class SendificatorBlock extends MachineProcessBlock implements EntityBloc
 	{
 		if(player instanceof ServerPlayer serverPlayer)
 		{
-			if(level.getBlockEntity(pos) instanceof SendificatorTileEntity sendificator)
+			if(level.getBlockEntity(pos) instanceof SendificatorBlockEntity sendificator)
 			{
 				sendificator.openMenu(serverPlayer);
 			}
@@ -54,6 +54,6 @@ public class SendificatorBlock extends MachineProcessBlock implements EntityBloc
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new SendificatorTileEntity(pos, state);
+		return new SendificatorBlockEntity(pos, state);
 	}
 }

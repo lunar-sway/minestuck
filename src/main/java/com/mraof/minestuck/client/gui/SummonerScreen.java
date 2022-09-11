@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SummonerPacket;
-import com.mraof.minestuck.blockentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -26,7 +26,7 @@ public class SummonerScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	private final SummonerTileEntity te;
+	private final SummonerBlockEntity be;
 	private boolean isUntriggerable;
 	private int summonRange;
 	
@@ -38,13 +38,13 @@ public class SummonerScreen extends Screen
 	
 	private EditBox entityTypeTextField;
 	
-	SummonerScreen(SummonerTileEntity te)
+	SummonerScreen(SummonerBlockEntity be)
 	{
 		super(new TextComponent("Summoner")); //TODO convert to translatable text string
 		
-		this.te = te;
-		this.summonRange = te.getSummonRange();
-		this.isUntriggerable = te.getBlockState().getValue(SummonerBlock.UNTRIGGERABLE);
+		this.be = be;
+		this.summonRange = be.getSummonRange();
+		this.isUntriggerable = be.getBlockState().getValue(SummonerBlock.UNTRIGGERABLE);
 	}
 	
 	@Override
@@ -58,7 +58,7 @@ public class SummonerScreen extends Screen
 		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
 		
 		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
-		this.entityTypeTextField.setValue(EntityType.getKey(te.getSummonedEntity()).toString());
+		this.entityTypeTextField.setValue(EntityType.getKey(be.getSummonedEntity()).toString());
 		addRenderableWidget(entityTypeTextField);
 		
 		addRenderableWidget(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
@@ -112,7 +112,7 @@ public class SummonerScreen extends Screen
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(entityTypeTextField.getValue());
 		if(attemptedEntityType.isPresent())
 		{
-			MSPacketHandler.sendToServer(new SummonerPacket(isUntriggerable, summonRange, te.getBlockPos(), attemptedEntityType.get()));
+			MSPacketHandler.sendToServer(new SummonerPacket(isUntriggerable, summonRange, be.getBlockPos(), attemptedEntityType.get()));
 			onClose();
 		} else
 		{

@@ -29,14 +29,14 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniTotemLatheTileEntity extends MachineProcessTileEntity implements MenuProvider
+public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
 	
-	public MiniTotemLatheTileEntity(BlockPos pos, BlockState state)
+	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.MINI_TOTEM_LATHE.get(), pos, state);
 	}

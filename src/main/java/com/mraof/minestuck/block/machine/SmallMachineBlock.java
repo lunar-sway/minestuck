@@ -2,7 +2,7 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.machine.IOwnable;
-import com.mraof.minestuck.blockentity.machine.MachineProcessTileEntity;
+import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class SmallMachineBlock<T extends MachineProcessTileEntity> extends MachineProcessBlock implements EntityBlock
+public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends MachineProcessBlock implements EntityBlock
 {
 	private final Map<Direction, VoxelShape> shape;
 	private final Supplier<BlockEntityType<T>> entityType;

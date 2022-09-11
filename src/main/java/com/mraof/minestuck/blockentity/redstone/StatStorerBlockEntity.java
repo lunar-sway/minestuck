@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class StatStorerTileEntity extends BlockEntity
+public class StatStorerBlockEntity extends BlockEntity
 {
 	private float damageStored;
 	private int deathsStored;
@@ -73,13 +73,13 @@ public class StatStorerTileEntity extends BlockEntity
 		}
 	}
 	
-	public StatStorerTileEntity(BlockPos pos, BlockState state)
+	public StatStorerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.STAT_STORER.get(), pos, state);
 	}
 	
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, StatStorerTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, StatStorerBlockEntity blockEntity)
 	{
 		if(!level.isAreaLoaded(pos, 1))
 			return;
@@ -279,7 +279,7 @@ public class StatStorerTileEntity extends BlockEntity
 		
 	}
 	
-	public static void attemptStatUpdate(float eventAmount, StatStorerTileEntity.ActiveType activeType, BlockPos eventPos, Level level)
+	public static void attemptStatUpdate(float eventAmount, StatStorerBlockEntity.ActiveType activeType, BlockPos eventPos, Level level)
 	{
 		if(level != null && !level.isClientSide())
 		{
@@ -288,7 +288,7 @@ public class StatStorerTileEntity extends BlockEntity
 				if(!level.isAreaLoaded(blockPos, 0))
 					return;
 				
-				if(level.getBlockEntity(blockPos) instanceof StatStorerTileEntity statStorer)
+				if(level.getBlockEntity(blockPos) instanceof StatStorerBlockEntity statStorer)
 				{
 					
 					if(activeType == statStorer.getActiveType())
@@ -301,57 +301,57 @@ public class StatStorerTileEntity extends BlockEntity
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityHeal(LivingHealEvent event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerTileEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onSaplingGrow(SaplingGrowTreeEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getWorld());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getWorld());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityStruck(EntityStruckByLightningEvent event)
 	{
 		if(event.getLightning().tickCount == 1)
-			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().blockPosition(), event.getEntity().level);
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityBred(BabyEntitySpawnEvent event)
 	{
 		if(!event.isCanceled())
-			attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
 	}
 	
 	@SubscribeEvent
 	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onAlchemy(AlchemyEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getBlockPos(), event.getLevel());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.ALCHEMY_ACTIVATED, event.getAlchemiter().getBlockPos(), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onGristDrop(GristDropsEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.GRIST_DROPS, event.getUnderling().blockPosition(), event.getUnderling().level);
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.GRIST_DROPS, event.getUnderling().blockPosition(), event.getUnderling().level);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDamage(LivingHurtEvent event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerTileEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		attemptStatUpdate(1, StatStorerTileEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);
 	}
 	
 	@Override

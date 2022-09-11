@@ -34,7 +34,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class UraniumCookerTileEntity extends MachineProcessTileEntity implements MenuProvider
+public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -60,7 +60,7 @@ public class UraniumCookerTileEntity extends MachineProcessTileEntity implements
 	private short fuel = 0;
 	public static final short MAX_FUEL = 128;
 	
-	public UraniumCookerTileEntity(BlockPos pos, BlockState state)
+	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.URANIUM_COOKER.get(), pos, state);
 		maxProgress = DEFAULT_MAX_PROGRESS;

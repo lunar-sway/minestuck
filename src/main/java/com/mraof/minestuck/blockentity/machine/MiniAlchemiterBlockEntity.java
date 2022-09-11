@@ -32,7 +32,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implements MenuProvider, IOwnable, GristWildcardHolder
+public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
@@ -60,7 +60,7 @@ public class MiniAlchemiterTileEntity extends MachineProcessTileEntity implement
 	private PlayerIdentifier owner;
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	
-	public MiniAlchemiterTileEntity(BlockPos pos, BlockState state)
+	public MiniAlchemiterBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.MINI_ALCHEMITER.get(), pos, state);
 	}

@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-public class AreaEffectTileEntity extends BlockEntity
+public class AreaEffectBlockEntity extends BlockEntity
 {
 	//TODO deserialize/reserialize function + triggering of all summoners
 	
@@ -30,12 +30,12 @@ public class AreaEffectTileEntity extends BlockEntity
 	private BlockPos maxAreaOffset;
 	private boolean needsTranslation = false;
 	
-	public AreaEffectTileEntity(BlockPos pos, BlockState state)
+	public AreaEffectBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.AREA_EFFECT.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, AreaEffectTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, AreaEffectBlockEntity blockEntity)
 	{
 		
 		if(!level.isAreaLoaded(pos, 0))
@@ -49,13 +49,13 @@ public class AreaEffectTileEntity extends BlockEntity
 	
 	public void giveEntitiesEffect()
 	{
-		BlockPos tePos = getBlockPos();
-		Direction teFacing = getBlockState().getValue(AreaEffectBlock.FACING);
+		BlockPos bePos = getBlockPos();
+		Direction beFacing = getBlockState().getValue(AreaEffectBlock.FACING);
 		if(needsTranslation)
-			translateAbsoluteOffsetToDirectional(teFacing);
+			translateAbsoluteOffsetToDirectional(beFacing);
 		
-		BlockPos minAreaPos = tePos.relative(teFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(teFacing.getClockWise(), minAreaOffset.getZ());
-		BlockPos maxAreaPos = tePos.relative(teFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(teFacing.getClockWise(), maxAreaOffset.getZ());
+		BlockPos minAreaPos = bePos.relative(beFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(beFacing.getClockWise(), minAreaOffset.getZ());
+		BlockPos maxAreaPos = bePos.relative(beFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(beFacing.getClockWise(), maxAreaOffset.getZ());
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
@@ -198,15 +198,15 @@ public class AreaEffectTileEntity extends BlockEntity
 	/**
 	 * Checks to make sure that the minimum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
 	 */
-	public static BlockPos parseMinBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	public static BlockPos parseMinBlockPos(AreaEffectBlockEntity be, int x, int y, int z)
 	{
-		BlockPos tePos = te.getBlockPos();
+		BlockPos bePos = be.getBlockPos();
 		
 		x = Math.max(x, -64);
 		y = Math.max(y, -64);
 		z = Math.max(z, -64);
 		
-		y = Mth.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		y = Mth.clamp(y, -bePos.getY(), be.getLevel().getMaxBuildHeight() - bePos.getY());
 		
 		return new BlockPos(x, y, z);
 	}
@@ -214,15 +214,15 @@ public class AreaEffectTileEntity extends BlockEntity
 	/**
 	 * Checks to make sure that the maximum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
 	 */
-	public static BlockPos parseMaxBlockPos(AreaEffectTileEntity te, int x, int y, int z)
+	public static BlockPos parseMaxBlockPos(AreaEffectBlockEntity be, int x, int y, int z)
 	{
-		BlockPos tePos = te.getBlockPos();
+		BlockPos bePos = be.getBlockPos();
 		
 		x = Math.min(x, 64);
 		y = Math.min(y, 64);
 		z = Math.min(z, 64);
 		
-		y = Mth.clamp(y, -tePos.getY(), te.getLevel().getMaxBuildHeight() - tePos.getY());
+		y = Mth.clamp(y, -bePos.getY(), be.getLevel().getMaxBuildHeight() - bePos.getY());
 		
 		return new BlockPos(x, y, z);
 	}

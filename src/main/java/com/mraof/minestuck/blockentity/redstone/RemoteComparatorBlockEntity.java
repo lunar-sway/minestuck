@@ -9,16 +9,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class RemoteComparatorTileEntity extends BlockEntity
+public class RemoteComparatorBlockEntity extends BlockEntity
 {
 	private int tickCycle;
 	
-	public RemoteComparatorTileEntity(BlockPos pos, BlockState state)
+	public RemoteComparatorBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.REMOTE_COMPARATOR.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteComparatorTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteComparatorBlockEntity blockEntity)
 	{
 		if(blockEntity.tickCycle >= MinestuckConfig.SERVER.puzzleBlockTickRate.get())
 		{

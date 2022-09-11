@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.renderer.tileentity;
+package com.mraof.minestuck.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -23,14 +23,14 @@ public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEn
 	{}
 	
 	@Override
-	public void render(ReturnNodeBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(ReturnNodeBlockEntity blockEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
-		int color = tileEntityIn.color;
+		int color = blockEntityIn.color;
 		int r = ((color >> 16) & 255);
 		int g = ((color >> 8) & 255);
 		int b = (color & 255);
 
-		float tick = tileEntityIn.getLevel().getGameTime() + partialTicks;
+		float tick = blockEntityIn.getLevel().getGameTime() + partialTicks;
 		
 		poseStack.pushPose();
 		poseStack.mulPose(Vector3f.YP.rotation(tick / 75));

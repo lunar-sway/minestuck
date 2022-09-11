@@ -77,17 +77,17 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return InteractionResult.SUCCESS;
 		} else
 		{
-			ComputerBlockEntity tileEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
+			ComputerBlockEntity blockEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
 			
 			
-			if(tileEntity == null)
+			if(blockEntity == null)
 				return InteractionResult.FAIL;
 			
-			if(insertDisk(tileEntity, state, level, pos, player, handIn))
+			if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
 			
-			if(level.isClientSide && SkaiaClient.requestData(tileEntity))
-				MSScreenFactories.displayComputerScreen(tileEntity);
+			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
+				MSScreenFactories.displayComputerScreen(blockEntity);
 			
 			return InteractionResult.SUCCESS;
 		}
@@ -106,21 +106,21 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		}
 	}
 	
-	private boolean insertDisk(ComputerBlockEntity tileEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
+	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
-		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
+		if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 2 && !blockEntity.hasProgram(-1))
 		{
 			if(level.isClientSide)
 				return true;
 			player.setItemInHand(handIn, ItemStack.EMPTY);
 			if(id == -1)
 			{
-				tileEntity.closeAll();
+				blockEntity.closeAll();
 				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
 			}
-			else tileEntity.installedPrograms.put(id, true);
-			tileEntity.setChanged();
+			else blockEntity.installedPrograms.put(id, true);
+			blockEntity.setChanged();
 			level.sendBlockUpdated(pos, state, state, 3);
 			return true;
 		} else return false;
@@ -144,15 +144,15 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		ComputerBlockEntity te = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if (te == null)
+		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
+		if (be == null)
 		{
 			return;
 		}
-		te.closeAll();
+		be.closeAll();
 		float factor = 0.05F;
 		
-		for(Map.Entry<Integer, Boolean> pairs : te.installedPrograms.entrySet())
+		for(Map.Entry<Integer, Boolean> pairs : be.installedPrograms.entrySet())
 		{
 			if(!pairs.getValue())
 				continue;

@@ -24,8 +24,8 @@ public class TransportalizerItem extends BlockItem
 	{
 		if(stack.hasCustomHoverName() && stack.getHoverName().getString().length() == 4)
 		{
-			BlockEntity te = level.getBlockEntity(pos);
-			if(te instanceof TransportalizerBlockEntity transportalizer)
+			BlockEntity be = level.getBlockEntity(pos);
+			if(be instanceof TransportalizerBlockEntity transportalizer)
 				transportalizer.setId(stack.getHoverName().getString().toUpperCase());
 		}
 		return true;

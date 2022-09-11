@@ -9,7 +9,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.blockentity.machine.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -35,7 +35,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 	
 	public MiniAlchemiterScreen(MiniAlchemiterContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniAlchemiterTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(MiniAlchemiterBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 54;
@@ -100,7 +100,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer>
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0,PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniAlchemiterTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniAlchemiterBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}

@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
-public class RemoteObserverTileEntity extends BlockEntity
+public class RemoteObserverBlockEntity extends BlockEntity
 {
 	private int tickCycle;
 	@Nonnull
@@ -51,9 +51,9 @@ public class RemoteObserverTileEntity extends BlockEntity
 		IS_ENTITY_ON_GROUND((entity, observer) -> entity.isOnGround()),
 		IS_SPRINTING((entity, observer) -> entity.isSprinting()); //TODO IS_BOSS_PRESENT
 		
-		private final BiPredicate<Entity, RemoteObserverTileEntity> typeConditions;
+		private final BiPredicate<Entity, RemoteObserverBlockEntity> typeConditions;
 		
-		ActiveType(BiPredicate<Entity, RemoteObserverTileEntity> typeConditions)
+		ActiveType(BiPredicate<Entity, RemoteObserverBlockEntity> typeConditions)
 		{
 			this.typeConditions = typeConditions;
 		}
@@ -72,13 +72,13 @@ public class RemoteObserverTileEntity extends BlockEntity
 		}
 	}
 	
-	public RemoteObserverTileEntity(BlockPos pos, BlockState state)
+	public RemoteObserverBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.REMOTE_OBSERVER.get(), pos, state);
 		activeType = ActiveType.IS_LIVING_ENTITY_PRESENT;
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteObserverTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, RemoteObserverBlockEntity blockEntity)
 	{
 		if(!level.isAreaLoaded(pos, 1))
 			return;

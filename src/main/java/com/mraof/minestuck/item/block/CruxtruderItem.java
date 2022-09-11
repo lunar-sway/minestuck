@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.machine.CruxtruderMultiblock;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.blockentity.machine.CruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -35,8 +35,8 @@ public class CruxtruderItem extends MultiblockItem
 	{
 		if(player == null)
 			return false;
-		BlockEntity te = level.getBlockEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
-		if(te instanceof CruxtruderTileEntity)
+		BlockEntity be = level.getBlockEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
+		if(be instanceof CruxtruderBlockEntity)
 		{
 			int color;
 			EditData editData = ServerEditHandler.getData(player);
@@ -44,9 +44,9 @@ public class CruxtruderItem extends MultiblockItem
 				color = ColorHandler.getColorForPlayer(editData.getConnection().getClientIdentifier(), level);
 			else color =  ColorHandler.getColorForPlayer((ServerPlayer) player);
 			
-			((CruxtruderTileEntity) te).setColor(color);
+			((CruxtruderBlockEntity) be).setColor(color);
 			return true;
-		} else LOGGER.warn("Placed cruxtruder, but can't find tile entity. Instead found {}.", te);
+		} else LOGGER.warn("Placed cruxtruder, but can't find block entity. Instead found {}.", be);
 		return false;
 	}
 }

@@ -2,7 +2,7 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -53,7 +53,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 	{
 		BlockPos mainPos = getMainPos(state, pos, level);
 		
-		if (level.getBlockEntity(mainPos) instanceof AlchemiterTileEntity alchemiter)
+		if (level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
 		{
 			alchemiter.onRightClick(level, player, state, hit.getDirection());
 		}
@@ -68,7 +68,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 		if(state.getBlock() != newState.getBlock())
 		{
 			BlockPos mainPos = getMainPos(state, pos, level);
-			if(level.getBlockEntity(mainPos) instanceof AlchemiterTileEntity alchemiter)
+			if(level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
 			{
 				alchemiter.breakMachine();
 				if(mainPos.equals(pos))
@@ -81,7 +81,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 	
     /**
      * returns the block position of the "Main" block
-     * aka the block with the TileEntity for the machine
+     * aka the block with the BlockEntity for the machine
      */
 	public BlockPos getMainPos(BlockState state, BlockPos pos, BlockGetter level)
 	{
@@ -120,7 +120,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new AlchemiterTileEntity(pos, state);
+			return new AlchemiterBlockEntity(pos, state);
 		}
 		
 		@Override

@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.blockentity.redstone.RemoteComparatorTileEntity;
+import com.mraof.minestuck.blockentity.redstone.RemoteComparatorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -85,14 +85,14 @@ public class RemoteComparatorBlock extends MSDirectionalBlock implements EntityB
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new RemoteComparatorTileEntity(pos, state);
+		return new RemoteComparatorBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.REMOTE_COMPARATOR.get(), RemoteComparatorTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.REMOTE_COMPARATOR.get(), RemoteComparatorBlockEntity::serverTick) : null;
 	}
 	
 	public static boolean isMatch(Level level, BlockPos comparatorPos)

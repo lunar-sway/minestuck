@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.UraniumCookerContainer;
-import com.mraof.minestuck.blockentity.machine.UraniumCookerTileEntity;
+import com.mraof.minestuck.blockentity.machine.UraniumCookerBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -24,7 +24,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 	
 	public UraniumCookerScreen(UraniumCookerContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(UraniumCookerTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(UraniumCookerBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67;
@@ -58,7 +58,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.MAX_FUEL, progressHeight);
+		int height = getScaledValue(menu.getFuel(), UraniumCookerBlockEntity.MAX_FUEL, progressHeight);
 		blit(poseStack, x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 	

@@ -17,19 +17,19 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class RedstoneClockTileEntity extends BlockEntity
+public class RedstoneClockBlockEntity extends BlockEntity
 {
 	private int tickCycle;
 	private int clockSpeed;
 	
 	public static final String TIME_CHANGE = "block.minestuck.redstone_clock.time_change";
 	
-	public RedstoneClockTileEntity(BlockPos pos, BlockState state)
+	public RedstoneClockBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.REDSTONE_CLOCK.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, RedstoneClockTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, RedstoneClockBlockEntity blockEntity)
 	{
 		if(blockEntity.clockSpeed < 20)
 			blockEntity.setClockSpeed(20);

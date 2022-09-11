@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SendificatorTileEntity extends MachineProcessTileEntity implements MenuProvider
+public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
@@ -58,7 +58,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	};
 	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
 	
-	public SendificatorTileEntity(BlockPos pos, BlockState state)
+	public SendificatorBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.SENDIFICATOR.get(), pos, state);
 		maxProgress = DEFAULT_MAX_PROGRESS;
@@ -115,11 +115,11 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessTileEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
-	public MachineProcessTileEntity.RunType getRunType()
+	public MachineProcessBlockEntity.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -138,7 +138,7 @@ public class SendificatorTileEntity extends MachineProcessTileEntity implements 
 	}
 	
 	/**
-	 * With the given container possessing tile entity system our mod uses, this is the function that connects to the GoButton found in it's screen(SendificatorScreen in this example)
+	 * With the given container possessing block entity system our mod uses, this is the function that connects to the GoButton found in it's screen({@link com.mraof.minestuck.client.gui.SendificatorScreen} in this example)
 	 */
 	@Override
 	public void processContents()

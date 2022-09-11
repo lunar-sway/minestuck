@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.renderer.tileentity;
+package com.mraof.minestuck.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
@@ -18,16 +18,16 @@ public class HolopadRenderer implements BlockEntityRenderer<HolopadBlockEntity>
 	}
 
 	@Override
-	public void render(HolopadBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(HolopadBlockEntity blockEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
-		if(tileEntityIn.hasCard())
+		if(blockEntityIn.hasCard())
 		{
-			ItemStack item = tileEntityIn.getHoloItem();
-			float f = (float) tileEntityIn.innerRotation + partialTicks;
+			ItemStack item = blockEntityIn.getHoloItem();
+			float f = (float) blockEntityIn.innerRotation + partialTicks;
 			poseStack.pushPose();
 			poseStack.translate(0.5F, 0.6F, 0.5F);
 			poseStack.mulPose(Vector3f.YP.rotation((f / 20.0F * 57.295776F) / 75));
-			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, (int)tileEntityIn.getBlockPos().asLong());
+			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemTransforms.TransformType.GROUND, combinedLightIn, combinedOverlayIn, poseStack, bufferIn, (int)blockEntityIn.getBlockPos().asLong());
 			poseStack.popPose();
 		}
 	}

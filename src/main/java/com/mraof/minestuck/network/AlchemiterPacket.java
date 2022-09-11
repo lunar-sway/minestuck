@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.blockentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +36,7 @@ public class AlchemiterPacket implements PlayToServerPacket
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof AlchemiterTileEntity alchemiter)
+			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof AlchemiterBlockEntity alchemiter)
 			{
 				alchemiter.processContents(quantity, player);
 			}

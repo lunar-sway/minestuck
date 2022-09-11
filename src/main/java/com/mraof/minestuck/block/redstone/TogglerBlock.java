@@ -3,7 +3,7 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.redstone.StatStorerTileEntity;
+import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -93,7 +93,7 @@ public class TogglerBlock extends MSDirectionalBlock
 	
 	private void toggle(Level level, BlockPos pos, BlockState state, BlockPos facingPos, BlockState facingState)
 	{
-		//TODO consider allowing the active type of RemoteObserverTileEntity and StatStorerTileEntity to be iterated while in toggle mode
+		//TODO consider allowing the active type of RemoteObserverBlockEntity and StatStorerBlockEntity to be iterated while in toggle mode
 		if(facingState.hasProperty(MSProperties.MACHINE_TOGGLE))
 		{
 			level.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Block.UPDATE_ALL);
@@ -123,7 +123,7 @@ public class TogglerBlock extends MSDirectionalBlock
 		}
 		
 		//setting the active stat type for stat storers to 0
-		if(level.getBlockEntity(facingPos) instanceof StatStorerTileEntity statStorer)
+		if(level.getBlockEntity(facingPos) instanceof StatStorerBlockEntity statStorer)
 		{
 			statStorer.setActiveStoredStatValue(0);
 		}

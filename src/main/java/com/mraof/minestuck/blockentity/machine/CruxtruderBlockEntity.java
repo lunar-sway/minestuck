@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CruxtruderTileEntity extends BlockEntity    //TODO check if it is broken
+public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is broken
 {
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
@@ -25,7 +25,7 @@ public class CruxtruderTileEntity extends BlockEntity    //TODO check if it is b
 	private boolean broken = false;
 	private int material = 0;
 	
-	public CruxtruderTileEntity(BlockPos pos, BlockState state)
+	public CruxtruderBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.CRUXTRUDER.get(), pos, state);
 	}

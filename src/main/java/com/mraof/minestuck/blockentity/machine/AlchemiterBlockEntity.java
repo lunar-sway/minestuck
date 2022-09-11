@@ -32,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AlchemiterTileEntity extends BlockEntity implements IColored, GristWildcardHolder
+public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -40,7 +40,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	protected boolean broken = false;
 	protected ItemStack dowel = ItemStack.EMPTY;
 	
-	public AlchemiterTileEntity(BlockPos pos, BlockState state)
+	public AlchemiterBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.ALCHEMITER.get(), pos, state);
 	}
@@ -89,7 +89,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 		return broken;
 	}
 	
-	//tells the tile entity to stop working
+	//tells the block entity to stop working
 	public void breakMachine()
 	{
 		broken = true;
@@ -100,7 +100,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 		}
 	}
 
-	//tells the tile entity to not stop working
+	//tells the block entity to not stop working
 		public void unbreakMachine()
 		{
 			broken = false;
@@ -115,7 +115,7 @@ public class AlchemiterTileEntity extends BlockEntity implements IColored, Grist
 	{
 		if(level == null)
 		{
-			LOGGER.warn("Tried to drop alchemiter dowel before the tile entity was given a world!");
+			LOGGER.warn("Tried to drop alchemiter dowel before the block entity was given a world!");
 			return;
 		}
 		BlockPos dropPos = direction == null ? this.worldPosition : this.worldPosition.relative(direction);

@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.blockentity.machine.MiniCruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -28,10 +28,10 @@ public class MiniCruxtruderItem extends BlockItem implements AlchemizedColored
 	{
 		if(stack.hasTag() && stack.getTag().contains("color"))
 		{
-			BlockEntity te = level.getBlockEntity(pos);
-			if(te instanceof MiniCruxtruderTileEntity blockEntity)
+			BlockEntity be = level.getBlockEntity(pos);
+			if(be instanceof MiniCruxtruderBlockEntity blockEntity)
 				blockEntity.color = stack.getTag().getInt("color");
-			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate tile entity was created. Instead found {}.", te);
+			else LogManager.getLogger().warn("Placed miniature cruxtruder, but no appropriate block entity was created. Instead found {}.", be);
 		}
 		return true;
 	}

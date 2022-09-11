@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.redstone.StatStorerBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StatStorerPacket;
-import com.mraof.minestuck.blockentity.redstone.StatStorerTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -22,20 +22,20 @@ public class StatStorerScreen extends Screen
 	
 	private static final String DIVIDE_VALUE_MESSAGE = "Divide power output by:"; //TODO make this translatable
 	
-	private final StatStorerTileEntity te;
-	private StatStorerTileEntity.ActiveType activeType;
+	private final StatStorerBlockEntity be;
+	private StatStorerBlockEntity.ActiveType activeType;
 	
 	private Button typeButton;
 	
 	private EditBox divideTextField;
 	
 	
-	StatStorerScreen(StatStorerTileEntity te)
+	StatStorerScreen(StatStorerBlockEntity be)
 	{
 		super(new TextComponent("Stat Storer"));
 		
-		this.te = te;
-		this.activeType = te.getActiveType();
+		this.be = be;
+		this.activeType = be.getActiveType();
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class StatStorerScreen extends Screen
 		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 15, 135, 20, new TextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		this.divideTextField = new EditBox(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new TextComponent("Divide comparator output strength")); //TODO make these translatable
-		this.divideTextField.setValue(String.valueOf(te.getDivideValueBy()));
+		this.divideTextField.setValue(String.valueOf(be.getDivideValueBy()));
 		addRenderableWidget(divideTextField);
 		setInitialFocus(divideTextField);
 		
@@ -56,7 +56,7 @@ public class StatStorerScreen extends Screen
 	 */
 	private void changeActiveType()
 	{
-		activeType = StatStorerTileEntity.ActiveType.fromInt(activeType.ordinal() < StatStorerTileEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
+		activeType = StatStorerBlockEntity.ActiveType.fromInt(activeType.ordinal() < StatStorerBlockEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
 		typeButton.setMessage(new TextComponent(activeType.getNameNoSpaces()));
 	}
 	
@@ -77,7 +77,7 @@ public class StatStorerScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new StatStorerPacket(activeType, te.getBlockPos(), textToInt()));
+		MSPacketHandler.sendToServer(new StatStorerPacket(activeType, be.getBlockPos(), textToInt()));
 		onClose();
 	}
 	

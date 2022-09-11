@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.BiPredicate;
 
-public abstract class MachineProcessTileEntity extends BlockEntity
+public abstract class MachineProcessBlockEntity extends BlockEntity
 {
 	protected final ItemStackHandler itemHandler = createItemHandler();
 	private final LazyOptional<IItemHandler> itemOptional = LazyOptional.of(() -> itemHandler);
@@ -34,9 +34,9 @@ public abstract class MachineProcessTileEntity extends BlockEntity
 	
 	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
 	
-	protected MachineProcessTileEntity(BlockEntityType<?> tileEntityTypeIn, BlockPos pos, BlockState state)
+	protected MachineProcessBlockEntity(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState state)
 	{
-		super(tileEntityTypeIn, pos, state);
+		super(blockEntityType, pos, state);
 	}
 	
 	protected abstract ItemStackHandler createItemHandler();
@@ -81,7 +81,7 @@ public abstract class MachineProcessTileEntity extends BlockEntity
 		return super.getCapability(cap, side);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, MachineProcessTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, MachineProcessBlockEntity blockEntity)
 	{
 		if ((!blockEntity.ready && blockEntity.getRunType() != RunType.AUTOMATIC) || !blockEntity.contentsValid())
 		{
@@ -143,28 +143,28 @@ public abstract class MachineProcessTileEntity extends BlockEntity
 		@Override
 		protected void onContentsChanged(int slot)
 		{
-			MachineProcessTileEntity.this.setChanged();
+			MachineProcessBlockEntity.this.setChanged();
 		}
 	}
 	
 	private static class ProgressIntArray implements ContainerData
 	{
-		private final MachineProcessTileEntity tileEntity;
+		private final MachineProcessBlockEntity blockEntity;
 		
-		private ProgressIntArray(MachineProcessTileEntity tileEntity)
+		private ProgressIntArray(MachineProcessBlockEntity blockEntity)
 		{
-			this.tileEntity = tileEntity;
+			this.blockEntity = blockEntity;
 		}
 		
 		@Override
 		public int get(int index)
 		{
 			if(index == 0)
-				return tileEntity.progress;
+				return blockEntity.progress;
 			else if(index == 1)
-				return tileEntity.overrideStop ? 1 : 0;
+				return blockEntity.overrideStop ? 1 : 0;
 			else if(index == 2)
-				return tileEntity.ready ? 1 : 0;
+				return blockEntity.ready ? 1 : 0;
 			return 0;
 		}
 		
@@ -172,11 +172,11 @@ public abstract class MachineProcessTileEntity extends BlockEntity
 		public void set(int index, int value)
 		{
 			if(index == 0)
-				tileEntity.progress = value;
+				blockEntity.progress = value;
 			else if(index == 1)
-				tileEntity.overrideStop = value != 0;
+				blockEntity.overrideStop = value != 0;
 			else if(index == 2)
-				tileEntity.ready = value != 0;
+				blockEntity.ready = value != 0;
 		}
 		
 		@Override

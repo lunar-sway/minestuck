@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.MiniCruxtruderContainer;
-import com.mraof.minestuck.blockentity.machine.MiniCruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class MiniCruxtruderScreen extends MachineScreen<MiniCruxtruderContainer>
 	
 	public MiniCruxtruderScreen(MiniCruxtruderContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniCruxtruderTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(MiniCruxtruderBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 82;
@@ -56,7 +56,7 @@ public class MiniCruxtruderScreen extends MachineScreen<MiniCruxtruderContainer>
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getProgress(), MiniCruxtruderTileEntity.DEFAULT_MAX_PROGRESS, progressHeight);
+		int height = getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.DEFAULT_MAX_PROGRESS, progressHeight);
 		blit(matrixStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
 	}
 }

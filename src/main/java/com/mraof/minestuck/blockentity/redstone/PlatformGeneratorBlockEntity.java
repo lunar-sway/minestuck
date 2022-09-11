@@ -17,17 +17,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 
-public class PlatformGeneratorTileEntity extends BlockEntity
+public class PlatformGeneratorBlockEntity extends BlockEntity
 {
 	private int tickCycle;
 	private int platformLength;
 	
-	public PlatformGeneratorTileEntity(BlockPos pos, BlockState state)
+	public PlatformGeneratorBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.PLATFORM_GENERATOR.get(), pos, state);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, PlatformGeneratorTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, PlatformGeneratorBlockEntity blockEntity)
 	{
 		if(!level.isAreaLoaded(pos, 1))
 			return;

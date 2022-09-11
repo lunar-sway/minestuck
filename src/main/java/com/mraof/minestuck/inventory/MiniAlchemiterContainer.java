@@ -5,7 +5,7 @@ import com.mraof.minestuck.inventory.slot.InputSlot;
 import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.blockentity.machine.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -46,8 +46,8 @@ public class MiniAlchemiterContainer extends MachineContainer
 		assertItemHandlerSize(inventory, 2);
 		this.wildcardHolder = wildcardHolder;
 		
-		addSlot(new InputSlot(inventory, MiniAlchemiterTileEntity.INPUT, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.get().asItem()));
-		addSlot(new OutputSlot(inventory, MiniAlchemiterTileEntity.OUTPUT, OUTPUT_X, OUTPUT_Y));
+		addSlot(new InputSlot(inventory, MiniAlchemiterBlockEntity.INPUT, INPUT_X, INPUT_Y, MSBlocks.CRUXITE_DOWEL.get().asItem()));
+		addSlot(new OutputSlot(inventory, MiniAlchemiterBlockEntity.OUTPUT, OUTPUT_X, OUTPUT_Y));
 		addDataSlot(wildcardHolder);
 		
 		bindPlayerInventory(playerInventory);

@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StructureCorePacket;
-import com.mraof.minestuck.blockentity.redstone.StructureCoreTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,8 +20,8 @@ public class StructureCoreScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	private final StructureCoreTileEntity te;
-	private StructureCoreTileEntity.ActionType actionType;
+	private final StructureCoreBlockEntity be;
+	private StructureCoreBlockEntity.ActionType actionType;
 	private int shutdownRange;
 	
 	private Button incrementButton;
@@ -31,13 +31,13 @@ public class StructureCoreScreen extends Screen
 	private Button typeButton;
 	
 	
-	StructureCoreScreen(StructureCoreTileEntity te)
+	StructureCoreScreen(StructureCoreBlockEntity be)
 	{
 		super(new TextComponent("Structure Core"));
 		
-		this.te = te;
-		this.actionType = te.getActionType();
-		this.shutdownRange = te.getShutdownRange();
+		this.be = be;
+		this.actionType = be.getActionType();
+		this.shutdownRange = be.getShutdownRange();
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class StructureCoreScreen extends Screen
 	 */
 	private void changeActionType()
 	{
-		actionType = StructureCoreTileEntity.ActionType.fromInt(actionType.ordinal() < StructureCoreTileEntity.ActionType.values().length - 1 ? actionType.ordinal() + 1 : 0);
+		actionType = StructureCoreBlockEntity.ActionType.fromInt(actionType.ordinal() < StructureCoreBlockEntity.ActionType.values().length - 1 ? actionType.ordinal() + 1 : 0);
 		typeButton.setMessage(new TextComponent(actionType.getNameNoSpaces()));
 	}
 	
@@ -95,7 +95,7 @@ public class StructureCoreScreen extends Screen
 	
 	private void finish()
 	{
-		MSPacketHandler.sendToServer(new StructureCorePacket(actionType, shutdownRange, te.getBlockPos()));
+		MSPacketHandler.sendToServer(new StructureCorePacket(actionType, shutdownRange, be.getBlockPos()));
 		onClose();
 	}
 }

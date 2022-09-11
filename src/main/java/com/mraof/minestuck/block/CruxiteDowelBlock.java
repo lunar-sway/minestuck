@@ -52,9 +52,9 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ItemStackBlockEntity te = new ItemStackBlockEntity(pos, state);
-		te.setStack(new ItemStack(this));
-		return te;
+		ItemStackBlockEntity be = new ItemStackBlockEntity(pos, state);
+		be.setStack(new ItemStack(this));
+		return be;
 	}
 	
 	@Override

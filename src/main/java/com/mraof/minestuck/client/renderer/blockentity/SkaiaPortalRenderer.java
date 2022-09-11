@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.renderer.tileentity;
+package com.mraof.minestuck.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
@@ -18,7 +18,7 @@ public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalBlock
 	{}
 
 	@Override
-	public void render(SkaiaPortalBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(SkaiaPortalBlockEntity blockEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
 		/* TODO Restore this carefully. Make sure you understand the original renderer before attempting this
 		Vec3 position = this.renderer.camera.getPosition();
@@ -55,11 +55,11 @@ public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalBlock
                 var16 = 0.5F;
             }
 
-            float var18 = (float) (-(tileEntityIn.getBlockPos().getY() + var13));
+            float var18 = (float) (-(blockEntityIn.getBlockPos().getY() + var13));
 			float var19 = var18 + (float) position.y;
 			float var20 = var18 + var15 + (float) position.y;
 			float var21 = var19 / var20;
-			var21 += (float) (tileEntityIn.getBlockPos().getY() + var13);
+			var21 += (float) (blockEntityIn.getBlockPos().getY() + var13);
 			RenderSystem.translatef(var9, var21, var11);
 			GlStateManager._texGenMode(GlStateManager.TexGen.S, GL11.GL_OBJECT_LINEAR);
 			GlStateManager._texGenMode(GlStateManager.TexGen.T, GL11.GL_OBJECT_LINEAR);
@@ -99,10 +99,10 @@ public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalBlock
             }
 			
 			RenderSystem.color4f(var21 * var17, var22 * var17, var23 * var17, 1.0F);
-			var24.vertex(tileEntityIn.getBlockPos().getX(), tileEntityIn.getBlockPos().getY() + var13, tileEntityIn.getBlockPos().getZ()).uv(0, 0).endVertex();
-			var24.vertex(tileEntityIn.getBlockPos().getX(), tileEntityIn.getBlockPos().getY() + var13, tileEntityIn.getBlockPos().getZ() + 1.0D).uv(0, 1).endVertex();
-			var24.vertex(tileEntityIn.getBlockPos().getX() + 1.0D, tileEntityIn.getBlockPos().getY() + var13, tileEntityIn.getBlockPos().getZ() + 1.0D).uv(1, 1).endVertex();
-			var24.vertex(tileEntityIn.getBlockPos().getX() + 1.0D, tileEntityIn.getBlockPos().getY() + var13, tileEntityIn.getBlockPos().getZ()).uv(1, 0).endVertex();
+			var24.vertex(blockEntityIn.getBlockPos().getX(), blockEntityIn.getBlockPos().getY() + var13, blockEntityIn.getBlockPos().getZ()).uv(0, 0).endVertex();
+			var24.vertex(blockEntityIn.getBlockPos().getX(), blockEntityIn.getBlockPos().getY() + var13, blockEntityIn.getBlockPos().getZ() + 1.0D).uv(0, 1).endVertex();
+			var24.vertex(blockEntityIn.getBlockPos().getX() + 1.0D, blockEntityIn.getBlockPos().getY() + var13, blockEntityIn.getBlockPos().getZ() + 1.0D).uv(1, 1).endVertex();
+			var24.vertex(blockEntityIn.getBlockPos().getX() + 1.0D, blockEntityIn.getBlockPos().getY() + var13, blockEntityIn.getBlockPos().getZ()).uv(1, 0).endVertex();
 			Tessellator.getInstance().end();
 			RenderSystem.popMatrix();
 			RenderSystem.matrixMode(GL11.GL_MODELVIEW);

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class StructureCoreTileEntity extends BlockEntity
+public class StructureCoreBlockEntity extends BlockEntity
 {
 	private int tickCycle;
 	@Nonnull
@@ -60,13 +60,13 @@ public class StructureCoreTileEntity extends BlockEntity
 		}
 	}
 	
-	public StructureCoreTileEntity(BlockPos pos, BlockState state)
+	public StructureCoreBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.STRUCTURE_CORE.get(), pos, state);
 		actionType = ActionType.READ_AND_REDSTONE;
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, StructureCoreTileEntity blockEntity)
+	public static void serverTick(Level level, BlockPos pos, BlockState state, StructureCoreBlockEntity blockEntity)
 	{
 		int cycleRate = (blockEntity.hasWiped && blockEntity.actionType == ActionType.READ_AND_WIPE) ? 600 : 100;
 		if(blockEntity.tickCycle >= cycleRate)

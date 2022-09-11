@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
-import com.mraof.minestuck.blockentity.machine.MachineProcessTileEntity;
+import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;
@@ -27,7 +27,7 @@ public abstract class MachineProcessBlock extends MachineBlock
 		if(state.getBlock() != newState.getBlock())
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof MachineProcessTileEntity)
+			if(blockEntity instanceof MachineProcessBlockEntity)
 			{
 				blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler ->
 				{
@@ -42,7 +42,7 @@ public abstract class MachineProcessBlock extends MachineBlock
 	}
 	
 	@Nullable
-	protected static <T extends BlockEntity> BlockEntityTicker<T> createMachineTicker(Level level, BlockEntityType<T> placedType, BlockEntityType<? extends MachineProcessTileEntity> blockType) {
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, blockType, MachineProcessTileEntity::serverTick) : null;
+	protected static <T extends BlockEntity> BlockEntityTicker<T> createMachineTicker(Level level, BlockEntityType<T> placedType, BlockEntityType<? extends MachineProcessBlockEntity> blockType) {
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, blockType, MachineProcessBlockEntity::serverTick) : null;
 	}
 }

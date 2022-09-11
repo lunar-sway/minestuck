@@ -21,16 +21,16 @@ public class TransportalizerScreen extends Screen
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
 
-	TransportalizerBlockEntity te;
+	TransportalizerBlockEntity be;
 	private EditBox destinationTextField;
 	private Button doneButton;
 	
 	
-	TransportalizerScreen(TransportalizerBlockEntity te)
+	TransportalizerScreen(TransportalizerBlockEntity be)
 	{
 		super(new TextComponent("Transportalizer"));
 
-		this.te = te;
+		this.be = be;
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class TransportalizerScreen extends Screen
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, new TextComponent("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.destinationTextField.setMaxLength(4);
-		this.destinationTextField.setValue(te.getDestId());
+		this.destinationTextField.setValue(be.getDestId());
 		this.destinationTextField.setFocus(true);
 		destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addRenderableWidget(destinationTextField);
@@ -61,7 +61,7 @@ public class TransportalizerScreen extends Screen
 		RenderSystem.setShaderTexture(0, guiBackground);
 		this.blit(poseStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
 		
-		font.draw(poseStack, te.getId(), (this.width / 2F) - font.width(te.getId()) / 2F, yOffset + 10, te.isActive() ? 0x404040 : 0xFF0000);
+		font.draw(poseStack, be.getId(), (this.width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 
@@ -70,7 +70,7 @@ public class TransportalizerScreen extends Screen
 		if(this.destinationTextField.getValue().length() == 4)
 		{
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket packet = new TransportalizerPacket(te.getBlockPos(), destinationTextField.getValue().toUpperCase());
+			TransportalizerPacket packet = new TransportalizerPacket(be.getBlockPos(), destinationTextField.getValue().toUpperCase());
 			MSPacketHandler.sendToServer(packet);
 			this.minecraft.setScreen(null);
 		}

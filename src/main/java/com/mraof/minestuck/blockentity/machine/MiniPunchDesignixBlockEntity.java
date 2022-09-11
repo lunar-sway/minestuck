@@ -27,14 +27,14 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MiniPunchDesignixTileEntity extends MachineProcessTileEntity implements MenuProvider
+public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final RunType TYPE = RunType.BUTTON;
 	
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
-	public MiniPunchDesignixTileEntity(BlockPos pos, BlockState state)
+	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.MINI_PUNCH_DESIGNIX.get(), pos, state);
 	}

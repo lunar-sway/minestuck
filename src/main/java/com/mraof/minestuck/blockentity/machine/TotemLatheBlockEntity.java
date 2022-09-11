@@ -28,7 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 
-public class TotemLatheTileEntity extends BlockEntity
+public class TotemLatheBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -37,7 +37,7 @@ public class TotemLatheTileEntity extends BlockEntity
 	private ItemStack card1 = ItemStack.EMPTY;
 	private ItemStack card2 = ItemStack.EMPTY;
 	
-	public TotemLatheTileEntity(BlockPos pos, BlockState state)
+	public TotemLatheBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.TOTEM_LATHE.get(), pos, state);
 	}
@@ -135,11 +135,11 @@ public class TotemLatheTileEntity extends BlockEntity
 			//TODO clean up the following code block
 			if(isValidDowelRod(state, facing))
 			{
-				BlockEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackBlockEntity teItem))
+				BlockEntity be = level.getBlockEntity(pos);
+				if(!(be instanceof ItemStackBlockEntity beItem))
 					return false;
 				
-				teItem.setStack(stack);
+				beItem.setStack(stack);
 				if(!state.equals(newState))
 					level.setBlockAndUpdate(pos, newState);
 				else level.sendBlockUpdated(pos, state, state, 2);
@@ -147,11 +147,11 @@ public class TotemLatheTileEntity extends BlockEntity
 			} else if(state.isAir())
 			{
 				level.setBlockAndUpdate(pos, newState);
-				BlockEntity te = level.getBlockEntity(pos);
-				if(!(te instanceof ItemStackBlockEntity teItem))
+				BlockEntity be = level.getBlockEntity(pos);
+				if(!(be instanceof ItemStackBlockEntity beItem))
 					return false;
 				
-				teItem.setStack(stack);
+				beItem.setStack(stack);
 				
 				return true;
 			}
