@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
-import com.mraof.minestuck.tileentity.HolopadTileEntity;
+import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 
-public class HolopadRenderer implements BlockEntityRenderer<HolopadTileEntity>
+public class HolopadRenderer implements BlockEntityRenderer<HolopadBlockEntity>
 {
 	public HolopadRenderer(BlockEntityRendererProvider.Context context)
 	{
@@ -18,7 +18,7 @@ public class HolopadRenderer implements BlockEntityRenderer<HolopadTileEntity>
 	}
 
 	@Override
-	public void render(HolopadTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(HolopadBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
 		if(tileEntityIn.hasCard())
 		{

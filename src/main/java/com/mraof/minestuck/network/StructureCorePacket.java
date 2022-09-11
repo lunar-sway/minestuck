@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
-import com.mraof.minestuck.tileentity.redstone.StructureCoreTileEntity;
+import com.mraof.minestuck.blockentity.redstone.StructureCoreTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

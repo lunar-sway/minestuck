@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -15,7 +15,7 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEnt
 {
 	public MiniAlchemiterBlock(Properties properties)
 	{
-		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), MSTileEntityTypes.MINI_ALCHEMITER, properties);
+		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), MSBlockEntityTypes.MINI_ALCHEMITER, properties);
 	}
 	
 	@Override

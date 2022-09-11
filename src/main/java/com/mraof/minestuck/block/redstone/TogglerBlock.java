@@ -3,7 +3,7 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.redstone.StatStorerTileEntity;
+import com.mraof.minestuck.blockentity.redstone.StatStorerTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;

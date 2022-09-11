@@ -8,8 +8,8 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -187,9 +187,9 @@ public class EntryProcess
 					{
 						player.displayClientMessage(new TextComponent("You are not allowed to move command blocks."), false);
 						return false;
-					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
+					} else if(te instanceof ComputerBlockEntity)		//If the block is a computer
 					{
-						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode(player)))	//You can't Enter with someone else's computer
+						if(!((ComputerBlockEntity)te).owner.equals(IdentifierHandler.encode(player)))	//You can't Enter with someone else's computer
 						{
 							player.displayClientMessage(new TextComponent("You are not allowed to move other players' computers."), false);
 							return false;
@@ -366,9 +366,9 @@ public class EntryProcess
 				}
 			} else
 			{
-				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerTileEntity) tileEntity).programData = new CompoundTag();
-				else if(tileEntity instanceof TransportalizerTileEntity)
+				if(tileEntity instanceof ComputerBlockEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
+					((ComputerBlockEntity) tileEntity).programData = new CompoundTag();
+				else if(tileEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}
 		}

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.inventory.SendificatorContainer;
-import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.machine.SendificatorTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

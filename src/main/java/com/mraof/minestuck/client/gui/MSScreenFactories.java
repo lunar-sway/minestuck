@@ -7,10 +7,10 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.redstone.*;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
@@ -51,12 +51,12 @@ public class MSScreenFactories
 		SYLLADEX_FACTORIES.put(type, factory);
 	}
 	
-	public static void displayComputerScreen(ComputerTileEntity tileEntity)
+	public static void displayComputerScreen(ComputerBlockEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
 	}
 	
-	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
+	public static void displayTransportalizerScreen(TransportalizerBlockEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new TransportalizerScreen(tileEntity));
 	}
@@ -66,7 +66,7 @@ public class MSScreenFactories
 		Minecraft.getInstance().setScreen(new AreaEffectScreen(tileEntity));
 	}
 	
-	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)
+	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity tileEntity)
 	{
 		Minecraft.getInstance().setScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
 	}

@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.tileentity.machine.MiniCruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniCruxtruderTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

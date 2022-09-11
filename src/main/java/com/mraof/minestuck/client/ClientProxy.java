@@ -2,6 +2,7 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.ArmorModels;
@@ -22,7 +23,6 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -41,10 +41,10 @@ public class ClientProxy
 {
 	private static void registerRenderers()
 	{
-		BlockEntityRenderers.register(MSTileEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
-		BlockEntityRenderers.register(MSTileEntityTypes.GATE.get(), GateRenderer::new);
-		BlockEntityRenderers.register(MSTileEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
-		BlockEntityRenderers.register(MSTileEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.SKAIA_PORTAL.get(), SkaiaPortalRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	

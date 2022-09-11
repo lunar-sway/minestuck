@@ -2,8 +2,8 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.blockentity.machine.TotemLatheTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -141,7 +141,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new ItemStackTileEntity(pos, state);
+			return new ItemStackBlockEntity(pos, state);
 		}
 		
 		@Override

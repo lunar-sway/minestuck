@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -52,7 +52,7 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ItemStackTileEntity te = new ItemStackTileEntity(pos, state);
+		ItemStackBlockEntity te = new ItemStackBlockEntity(pos, state);
 		te.setStack(new ItemStack(this));
 		return te;
 	}
@@ -61,9 +61,9 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackTileEntity stackEntity)
+		if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
 		{
-			builder = builder.withDynamicDrop(ItemStackTileEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(stackEntity.getStack()));
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(stackEntity.getStack()));
 		}
 		
 		return super.getDrops(state, builder);
@@ -88,7 +88,7 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		if (level.getBlockEntity(pos) instanceof ItemStackTileEntity stackEntity)
+		if (level.getBlockEntity(pos) instanceof ItemStackBlockEntity stackEntity)
 		{
 			ItemStack dowel = stackEntity.getStack();
 			if(!dowel.isEmpty())
@@ -99,7 +99,7 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	
 	public static void dropDowel(Level level, BlockPos pos)
 	{
-		if (level.getBlockEntity(pos) instanceof ItemStackTileEntity stackEntity)
+		if (level.getBlockEntity(pos) instanceof ItemStackBlockEntity stackEntity)
 		{
 			ItemStack stack = stackEntity.getStack();
 			popResource(level, pos, stack);

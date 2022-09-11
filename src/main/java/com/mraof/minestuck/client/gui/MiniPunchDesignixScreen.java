@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.tileentity.machine.MiniPunchDesignixTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixTileEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;

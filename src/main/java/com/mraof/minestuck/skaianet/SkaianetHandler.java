@@ -9,7 +9,7 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -466,7 +466,7 @@ public final class SkaianetHandler extends SavedData
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
 	}
 	
-	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
+	public void movingComputer(ComputerBlockEntity oldTE, ComputerBlockEntity newTE)
 	{
 		ComputerReference oldRef = ComputerReference.of(oldTE), newRef = ComputerReference.of(newTE);
 		if(!oldTE.owner.equals(newTE.owner))

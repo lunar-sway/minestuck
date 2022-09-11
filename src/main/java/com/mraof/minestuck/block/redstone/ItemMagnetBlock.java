@@ -3,9 +3,9 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.ItemMagnetTileEntity;
+import com.mraof.minestuck.blockentity.redstone.ItemMagnetTileEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,7 +73,7 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.ITEM_MAGNET.get(), ItemMagnetTileEntity::tick);
+		return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.ITEM_MAGNET.get(), ItemMagnetTileEntity::tick);
 	}
 	
 	@SuppressWarnings("deprecation")

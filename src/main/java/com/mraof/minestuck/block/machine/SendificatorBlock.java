@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.machine.SendificatorTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

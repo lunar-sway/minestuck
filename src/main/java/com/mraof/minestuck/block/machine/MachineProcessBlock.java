@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
-import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
+import com.mraof.minestuck.blockentity.machine.MachineProcessTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.level.Level;

@@ -2,8 +2,8 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterTileEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;

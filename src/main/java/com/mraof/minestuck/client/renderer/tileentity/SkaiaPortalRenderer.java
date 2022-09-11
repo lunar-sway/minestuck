@@ -1,13 +1,13 @@
 package com.mraof.minestuck.client.renderer.tileentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
+import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 
-public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalTileEntity>
+public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalBlockEntity>
 {
 	private static final ResourceLocation tunnel = new ResourceLocation("minestuck","textures/tunnel.png");
     private static final ResourceLocation particlefield = new ResourceLocation("minestuck","textures/particlefield.png");
@@ -18,7 +18,7 @@ public class SkaiaPortalRenderer implements BlockEntityRenderer<SkaiaPortalTileE
 	{}
 
 	@Override
-	public void render(SkaiaPortalTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(SkaiaPortalBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
 		/* TODO Restore this carefully. Make sure you understand the original renderer before attempting this
 		Vec3 position = this.renderer.camera.getPosition();

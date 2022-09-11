@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,12 +21,12 @@ public class TransportalizerScreen extends Screen
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
 
-	TransportalizerTileEntity te;
+	TransportalizerBlockEntity te;
 	private EditBox destinationTextField;
 	private Button doneButton;
 	
 	
-	TransportalizerScreen(TransportalizerTileEntity te)
+	TransportalizerScreen(TransportalizerBlockEntity te)
 	{
 		super(new TextComponent("Transportalizer"));
 

@@ -8,7 +8,7 @@ import com.mraof.minestuck.network.computer.OpenSburbServerPacket;
 import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class SburbServer extends ButtonListProgram
 	public static final String RESUME_SERVER = "minestuck.resume_server_message";
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
+	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity te)
 	{
 		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
 		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
@@ -58,7 +58,7 @@ public class SburbServer extends ButtonListProgram
 	}
 	
 	@Override
-	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data) {
+	public void onButtonPressed(ComputerBlockEntity te, String buttonName, Object[] data) {
 		switch(buttonName)
 		{
 			case EDIT_BUTTON:

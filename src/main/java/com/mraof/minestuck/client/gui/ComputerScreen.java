@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
@@ -32,10 +32,10 @@ public class ComputerScreen extends Screen
 	private Button programButton;
 	
 	public final Minecraft mc;
-	public final ComputerTileEntity te;
+	public final ComputerBlockEntity te;
 	private ComputerProgram program;
 	
-	ComputerScreen(Minecraft mc, ComputerTileEntity te)
+	ComputerScreen(Minecraft mc, ComputerBlockEntity te)
 	{
 		super(new TextComponent("Computer"));
 		

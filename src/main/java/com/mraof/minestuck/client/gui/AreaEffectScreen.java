@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.network.AreaEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
+import com.mraof.minestuck.blockentity.redstone.AreaEffectTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;

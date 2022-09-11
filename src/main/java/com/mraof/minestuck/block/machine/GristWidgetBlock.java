@@ -2,8 +2,8 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.GristWidgetTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
 	
 	public GristWidgetBlock(Properties properties)
 	{
-		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSTileEntityTypes.GRIST_WIDGET, properties);
+		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSBlockEntityTypes.GRIST_WIDGET, properties);
 		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HAS_CARD, false));
 	}
 	

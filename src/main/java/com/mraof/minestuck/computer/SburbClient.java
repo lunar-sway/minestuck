@@ -8,7 +8,7 @@ import com.mraof.minestuck.network.computer.ConnectToSburbServerPacket;
 import com.mraof.minestuck.network.computer.ResumeSburbConnectionPacket;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 
@@ -28,7 +28,7 @@ public class SburbClient extends ButtonListProgram
 	public static final String RESUME_CLIENT = "minestuck.resume_client_message";
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te)
+	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity te)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		CompoundTag nbt = te.getData(getId());
@@ -61,7 +61,7 @@ public class SburbClient extends ButtonListProgram
 	}
 	
 	@Override
-	public void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data)
+	public void onButtonPressed(ComputerBlockEntity te, String buttonName, Object[] data)
 	{
 		if(buttonName.equals(RESUME_BUTTON))
 			MSPacketHandler.sendToServer(ResumeSburbConnectionPacket.asClient(te));

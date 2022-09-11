@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -52,7 +52,7 @@ class TEComputerReference implements ComputerReference
 	@Override
 	public boolean matches(ISburbComputer computer)
 	{
-		if(computer instanceof ComputerTileEntity te)
+		if(computer instanceof ComputerBlockEntity te)
 		{
 			return location.dimension() == Objects.requireNonNull(te.getLevel()).dimension() && location.pos().equals(te.getBlockPos());
 		} else return false;

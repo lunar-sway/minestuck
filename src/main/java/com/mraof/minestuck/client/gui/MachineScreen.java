@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mraof.minestuck.inventory.MachineContainer;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
+import com.mraof.minestuck.blockentity.machine.MachineProcessTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;

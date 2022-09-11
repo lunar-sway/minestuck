@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public interface ComputerReference
 {
-	static ComputerReference of(ComputerTileEntity te)
+	static ComputerReference of(ComputerBlockEntity te)
 	{
 		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(te.getLevel()).dimension(), te.getBlockPos()));
 	}

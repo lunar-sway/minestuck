@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
@@ -36,7 +36,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * button and down.
 	 * @param te The TileEntityComputer this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te);
+	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity te);
 	
 	/**
 	 * Performs the action caused by pressing a button.
@@ -44,7 +44,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
 	 * @param data Format data provided by getStringList().
 	 */
-	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
+	protected abstract void onButtonPressed(ComputerBlockEntity te, String buttonName, Object[] data);
 	
 	public final void onButtonPressed(ComputerScreen screen, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
@@ -120,7 +120,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerTileEntity te)
+	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity te)
 	{
 		
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
-import com.mraof.minestuck.tileentity.GateTileEntity;
+import com.mraof.minestuck.blockentity.GateBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
-public class GateRenderer implements BlockEntityRenderer<GateTileEntity>
+public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 {
 	private static final ResourceLocation TEXTURE = ReturnNodeRenderer.INNER_NODE;
 	
@@ -21,7 +21,7 @@ public class GateRenderer implements BlockEntityRenderer<GateTileEntity>
 	{}
 	
 	@Override
-	public void render(GateTileEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
+	public void render(GateBlockEntity tileEntityIn, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn)
 	{
 		int color = tileEntityIn.color;
 		int r = ((color >> 16) & 255);

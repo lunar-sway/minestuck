@@ -2,7 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.blockentity.redstone.SummonerTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

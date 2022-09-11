@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +36,7 @@ public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 	{
 		if(player.level.isAreaLoaded(tileBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(tileBlockPos) instanceof WirelessRedstoneTransmitterTileEntity transmitter)
+			if(player.level.getBlockEntity(tileBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
 			{
 				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
 				{

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SummonerPacket;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.blockentity.redstone.SummonerTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;

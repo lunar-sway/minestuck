@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.tileentity.machine.IOwnable;
-import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
+import com.mraof.minestuck.blockentity.machine.IOwnable;
+import com.mraof.minestuck.blockentity.machine.MachineProcessTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;

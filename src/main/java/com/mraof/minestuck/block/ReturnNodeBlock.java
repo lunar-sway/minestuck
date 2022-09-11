@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.OnCollisionTeleporterTileEntity;
-import com.mraof.minestuck.tileentity.ReturnNodeBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.OnCollisionTeleporterBlockEntity;
+import com.mraof.minestuck.blockentity.ReturnNodeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -101,7 +101,7 @@ public class ReturnNodeBlock extends AbstractGateBlock
 		@Override
 		public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 		{
-			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.RETURN_NODE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.RETURN_NODE.get(), OnCollisionTeleporterBlockEntity::serverTick) : null;
 		}
 		
 		@Override

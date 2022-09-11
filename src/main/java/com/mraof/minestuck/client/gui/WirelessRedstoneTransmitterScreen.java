@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.WirelessRedstoneTransmitterPacket;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -20,13 +20,13 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 98;
 	
-	WirelessRedstoneTransmitterTileEntity te;
+	WirelessRedstoneTransmitterBlockEntity te;
 	private EditBox destinationTextFieldX;
 	private EditBox destinationTextFieldY;
 	private EditBox destinationTextFieldZ;
 	
 	
-	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity te)
+	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity te)
 	{
 		super(new TextComponent("Wireless Redstone"));
 		

@@ -6,7 +6,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -77,7 +77,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return InteractionResult.SUCCESS;
 		} else
 		{
-			ComputerTileEntity tileEntity = (ComputerTileEntity) level.getBlockEntity(pos);
+			ComputerBlockEntity tileEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
 			
 			
 			if(tileEntity == null)
@@ -100,13 +100,13 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			BlockState newState = state.setValue(STATE, State.ON);
 			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 			
-			if(level.getBlockEntity(pos) instanceof ComputerTileEntity computer)
+			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 				computer.owner = IdentifierHandler.encode(player);
 			newState.use(level, player, handIn, hit);
 		}
 	}
 	
-	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
+	private boolean insertDisk(ComputerBlockEntity tileEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
 		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
@@ -130,7 +130,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return state.getValue(STATE) != State.OFF ? new ComputerTileEntity(pos, state) : null;
+		return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
 	}
 	
 	@Override
@@ -144,7 +144,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		ComputerTileEntity te = (ComputerTileEntity) level.getBlockEntity(new BlockPos(x, y, z));
+		ComputerBlockEntity te = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
 		if (te == null)
 		{
 			return;

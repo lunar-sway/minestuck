@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StructureCorePacket;
-import com.mraof.minestuck.tileentity.redstone.StructureCoreTileEntity;
+import com.mraof.minestuck.blockentity.redstone.StructureCoreTileEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;

@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +33,7 @@ public class SkaiaClient
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
 	private static final Map<ResourceKey<Level>, List<ResourceKey<Level>>> landChainMap = new HashMap<>();
-	private static ComputerTileEntity te = null;
+	private static ComputerBlockEntity te = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
 	@SubscribeEvent
@@ -53,7 +53,7 @@ public class SkaiaClient
 	 * @param computer The computer. Will save this variable for later if it sends a request.
 	 * @return If it currently has the necessary information.
 	 */
-	public static boolean requestData(ComputerTileEntity computer)
+	public static boolean requestData(ComputerBlockEntity computer)
 	{
 		boolean b = openServers.get(computer.ownerId) != null;
 		if(!b)
