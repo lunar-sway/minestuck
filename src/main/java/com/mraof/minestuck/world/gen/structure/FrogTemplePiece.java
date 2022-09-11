@@ -1,9 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mraof.minestuck.block.CustomShapeBlock;
-import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
@@ -186,7 +183,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		generateBox(level, boundingBox, 14, 16, 24, 14, 16, 25, MSBlocks.CHISELED_GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.get().defaultBlockState(), false); //sixth step
 		
 		//lower room ladder
-		generateBox(level, boundingBox, 20, 5, 48, 21, 16, 48, Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, Direction.SOUTH), Blocks.LADDER.defaultBlockState(), false);
+		generateBox(level, boundingBox, 20, 5, 49, 21, 16, 49, MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get().defaultBlockState().setValue(CustomShapeBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get().defaultBlockState(), false);
 	}
 	
 	private void carveRooms(WorldGenLevel level, BoundingBox boundingBox)

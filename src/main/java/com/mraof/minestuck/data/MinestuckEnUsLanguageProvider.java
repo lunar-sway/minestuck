@@ -196,6 +196,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
 		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
 		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		addBlock(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, "Green Stone Brick Embedded Ladder");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, "Green Stone Brick Iguana Left Hieroglyph");

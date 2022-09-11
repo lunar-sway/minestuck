@@ -706,6 +706,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHISELED_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.CHISELED_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> HORIZONTAL_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> VERTICAL_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_EMBEDDED_LADDER = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_TRIM = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_TRIM, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_FROG = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_FROG, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_IGUANA_LEFT = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, MSItemGroup.MAIN);
