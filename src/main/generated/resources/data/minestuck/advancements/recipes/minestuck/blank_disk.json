@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:blank_disk"
+    ]
+  },
+  "criteria": {
+    "has_raw_cruxite": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:raw_cruxite"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:blank_disk"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_raw_cruxite",
+      "has_the_recipe"
+    ]
+  ]
+}
