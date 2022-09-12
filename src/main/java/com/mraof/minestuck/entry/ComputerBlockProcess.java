@@ -12,9 +12,9 @@ import javax.annotation.Nullable;
 public class ComputerBlockProcess implements EntryBlockProcessing
 {
 	@Override
-	public void copyOver(ServerLevel oldWorld, BlockPos oldPos, ServerLevel newWorld, BlockPos newPos, BlockState state, @Nullable BlockEntity oldTE, @Nullable BlockEntity newTE)
+	public void copyOver(ServerLevel oldWorld, BlockPos oldPos, ServerLevel newWorld, BlockPos newPos, BlockState state, @Nullable BlockEntity oldBE, @Nullable BlockEntity newBE)
 	{
-		if(oldTE instanceof ComputerBlockEntity && newTE instanceof ComputerBlockEntity)
-			SkaianetHandler.get(oldWorld).movingComputer((ComputerBlockEntity) oldTE, (ComputerBlockEntity) newTE);
+		if(oldBE instanceof ComputerBlockEntity && newBE instanceof ComputerBlockEntity)
+			SkaianetHandler.get(oldWorld).movingComputer((ComputerBlockEntity) oldBE, (ComputerBlockEntity) newBE);
 	}
 }

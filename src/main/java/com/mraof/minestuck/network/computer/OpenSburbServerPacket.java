@@ -16,9 +16,9 @@ public class OpenSburbServerPacket implements PlayToServerPacket
 		this.pos = pos;
 	}
 	
-	public static OpenSburbServerPacket create(ComputerBlockEntity te)
+	public static OpenSburbServerPacket create(ComputerBlockEntity be)
 	{
-		return new OpenSburbServerPacket(te.getBlockPos());
+		return new OpenSburbServerPacket(be.getBlockPos());
 	}
 	
 	@Override

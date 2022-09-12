@@ -34,17 +34,17 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Creates an ArrayList of UnlocalizedString and returns it.
 	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
 	 * button and down.
-	 * @param te The TileEntityComputer this program is associated with, for access to related data.
+	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity te);
+	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be);
 	
 	/**
 	 * Performs the action caused by pressing a button.
-	 * @param te The computer, if needed.
+	 * @param be The computer, if needed.
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
 	 * @param data Format data provided by getStringList().
 	 */
-	protected abstract void onButtonPressed(ComputerBlockEntity te, String buttonName, Object[] data);
+	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
 	
 	public final void onButtonPressed(ComputerScreen screen, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
@@ -120,7 +120,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity te)
+	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be)
 	{
 		
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
@@ -131,10 +131,10 @@ public abstract class ButtonListProgram extends ComputerProgram
 		gui.blit(poseStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
 		
 		Font font = Minecraft.getInstance().font;
-		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
+		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
 			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 		else 
-			font.draw(poseStack, I18n.get(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**

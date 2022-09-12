@@ -98,7 +98,7 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	}
 	
 	/**
-	 * Used for cases in which the action type of the TE would benefit from instant change
+	 * Used for cases in which the action type of the BE would benefit from instant change
 	 */
 	public void updateBlockEntityWithBlock(Level level, BlockPos pos)
 	{

@@ -75,12 +75,12 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		BlockEntity te = level.getBlockEntity(pos);
-		if(te instanceof ItemStackBlockEntity)
+		BlockEntity be = level.getBlockEntity(pos);
+		if(be instanceof ItemStackBlockEntity)
 		{
 			ItemStack newStack = stack.copy();
 			newStack.setCount(1);
-			((ItemStackBlockEntity) te).setStack(newStack);
+			((ItemStackBlockEntity) be).setStack(newStack);
 		}
 		return true;
 	}

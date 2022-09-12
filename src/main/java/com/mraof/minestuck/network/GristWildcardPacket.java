@@ -46,7 +46,7 @@ public class GristWildcardPacket implements PlayToServerPacket
 			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof GristWildcardHolder blockEntity)
 				blockEntity.setWildcardGrist(gristType);
 			else
-				LOGGER.warn("No tile entity found at {} for packet sent by player {}!", pos, player.getName());
+				LOGGER.warn("No block entity found at {} for packet sent by player {}!", pos, player.getName());
 		}
 	}
 }

@@ -9,15 +9,15 @@ import java.util.Objects;
 
 public interface ComputerReference
 {
-	static ComputerReference of(ComputerBlockEntity te)
+	static ComputerReference of(ComputerBlockEntity be)
 	{
-		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(te.getLevel()).dimension(), te.getBlockPos()));
+		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(be.getLevel()).dimension(), be.getBlockPos()));
 	}
 	
 	static ComputerReference read(CompoundTag nbt)
 	{
 		String type = nbt.getString("type");
-		if(type.equals("tile_entity"))
+		if(type.equals("block_entity"))
 			return TEComputerReference.create(nbt);
 		else throw new IllegalStateException("Invalid computer type: " + type);
 	}

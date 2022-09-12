@@ -54,16 +54,16 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	{
 		if(player.level.isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(beBlockPos) instanceof RemoteObserverBlockEntity observerTE)
+			if(player.level.getBlockEntity(beBlockPos) instanceof RemoteObserverBlockEntity observerBE)
 			{
 				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
-					observerTE.setActiveType(activeType);
+					observerBE.setActiveType(activeType);
 					if(entityType != null)
-						observerTE.setCurrentEntityType(entityType);
-					observerTE.setObservingRange(observingRange);
+						observerBE.setCurrentEntityType(entityType);
+					observerBE.setObservingRange(observingRange);
 					//Imitates the structure block to ensure that changes are sent client-side
-					observerTE.setChanged();
+					observerBE.setChanged();
 					BlockState state = player.level.getBlockState(beBlockPos);
 					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
 				}

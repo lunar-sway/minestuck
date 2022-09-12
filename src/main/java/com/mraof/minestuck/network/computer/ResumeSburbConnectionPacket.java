@@ -18,14 +18,14 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
-	public static ResumeSburbConnectionPacket asClient(ComputerBlockEntity te)
+	public static ResumeSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), true);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), true);
 	}
 	
-	public static ResumeSburbConnectionPacket asServer(ComputerBlockEntity te)
+	public static ResumeSburbConnectionPacket asServer(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), false);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), false);
 	}
 	
 	@Override

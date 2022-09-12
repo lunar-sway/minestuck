@@ -72,15 +72,15 @@ public class ProgramData
 		return disks.get(id).copy();
 	}
 	
-	public static void onClientClosed(ComputerBlockEntity te)
+	public static void onClientClosed(ComputerBlockEntity be)
 	{
-		Objects.requireNonNull(te.getLevel());
-		SkaianetHandler.get(te.getLevel()).closeClientConnection(te);	//Can safely be done even if this computer isn't in a connection
+		Objects.requireNonNull(be.getLevel());
+		SkaianetHandler.get(be.getLevel()).closeClientConnection(be);	//Can safely be done even if this computer isn't in a connection
 	}
 	
-	public static void onServerClosed(ComputerBlockEntity te)
+	public static void onServerClosed(ComputerBlockEntity be)
 	{
-		Objects.requireNonNull(te.getLevel());
-		SkaianetHandler.get(te.getLevel()).closeServerConnection(te);
+		Objects.requireNonNull(be.getLevel());
+		SkaianetHandler.get(be.getLevel()).closeServerConnection(be);
 	}
 }

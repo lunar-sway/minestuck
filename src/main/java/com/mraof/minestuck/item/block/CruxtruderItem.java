@@ -35,7 +35,7 @@ public class CruxtruderItem extends MultiblockItem
 	{
 		if(player == null)
 			return false;
-		BlockEntity be = level.getBlockEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
+		BlockEntity be = level.getBlockEntity(multiblock.getBEPos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
 		if(be instanceof CruxtruderBlockEntity)
 		{
 			int color;

@@ -19,9 +19,9 @@ public class ConnectToSburbServerPacket implements PlayToServerPacket
 		this.server = server;
 	}
 	
-	public static ConnectToSburbServerPacket create(ComputerBlockEntity te, int server)
+	public static ConnectToSburbServerPacket create(ComputerBlockEntity be, int server)
 	{
-		return new ConnectToSburbServerPacket(te.getBlockPos(), server);
+		return new ConnectToSburbServerPacket(be.getBlockPos(), server);
 	}
 	
 	@Override

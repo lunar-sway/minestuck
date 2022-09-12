@@ -36,7 +36,7 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.get().defaultBlockState(), (state1, state2) -> true);
 	}
 	
-	public BlockPos getTilePos(BlockPos placementPos, Rotation rotation)
+	public BlockPos getBEPos(BlockPos placementPos, Rotation rotation)
 	{
 		return tubePlacement.getPos(placementPos, rotation);
 	}

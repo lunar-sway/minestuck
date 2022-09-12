@@ -18,14 +18,14 @@ public class CloseSburbConnectionPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
-	public static CloseSburbConnectionPacket asClient(ComputerBlockEntity te)
+	public static CloseSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new CloseSburbConnectionPacket(te.getBlockPos(), true);
+		return new CloseSburbConnectionPacket(be.getBlockPos(), true);
 	}
 	
-	public static CloseSburbConnectionPacket asServer(ComputerBlockEntity te)
+	public static CloseSburbConnectionPacket asServer(ComputerBlockEntity be)
 	{
-		return new CloseSburbConnectionPacket(te.getBlockPos(), false);
+		return new CloseSburbConnectionPacket(be.getBlockPos(), false);
 	}
 	
 	@Override

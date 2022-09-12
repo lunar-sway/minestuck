@@ -33,7 +33,7 @@ public class SkaiaClient
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
 	private static final Map<ResourceKey<Level>, List<ResourceKey<Level>>> landChainMap = new HashMap<>();
-	private static ComputerBlockEntity te = null;
+	private static ComputerBlockEntity be = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
 	@SubscribeEvent
@@ -60,7 +60,7 @@ public class SkaiaClient
 		{
 			SkaianetInfoPacket packet = SkaianetInfoPacket.request(computer.ownerId);
 			MSPacketHandler.sendToServer(packet);
-			te = computer;
+			be = computer;
 		}
 		return b;
 	}
@@ -153,11 +153,11 @@ public class SkaiaClient
 		Screen gui = Minecraft.getInstance().screen;
 		if(gui instanceof ComputerScreen computerScreen)
 			computerScreen.updateGui();
-		else if(te != null && te.ownerId == data.playerId)
+		else if(be != null && be.ownerId == data.playerId)
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
-				MSScreenFactories.displayComputerScreen(te);
-			te = null;
+				MSScreenFactories.displayComputerScreen(be);
+			be = null;
 		}
 	}
 }

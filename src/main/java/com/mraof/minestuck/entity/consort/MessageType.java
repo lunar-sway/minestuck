@@ -200,6 +200,7 @@ public abstract class MessageType
 		@Override
 		protected void debugAddAllMessages(List<Component> list)
 		{
+			//noinspection RedundantCast
 			list.add(new TranslatableComponent("consort." + unlocalizedMessage, (Object[]) args));
 		}
 	}

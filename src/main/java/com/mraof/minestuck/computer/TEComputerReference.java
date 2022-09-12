@@ -32,7 +32,7 @@ class TEComputerReference implements ComputerReference
 	@Override
 	public CompoundTag write(CompoundTag nbt)
 	{
-		nbt.putString("type", "tile_entity");
+		nbt.putString("type", "block_entity");
 		GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("pos", tag));
 		return nbt;
 	}
@@ -52,9 +52,9 @@ class TEComputerReference implements ComputerReference
 	@Override
 	public boolean matches(ISburbComputer computer)
 	{
-		if(computer instanceof ComputerBlockEntity te)
+		if(computer instanceof ComputerBlockEntity be)
 		{
-			return location.dimension() == Objects.requireNonNull(te.getLevel()).dimension() && location.pos().equals(te.getBlockPos());
+			return location.dimension() == Objects.requireNonNull(be.getLevel()).dimension() && location.pos().equals(be.getBlockPos());
 		} else return false;
 	}
 	

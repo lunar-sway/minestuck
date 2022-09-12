@@ -26,11 +26,11 @@ public class SburbServer extends ButtonListProgram
 	public static final String RESUME_SERVER = "minestuck.resume_server_message";
 	
 	@Override
-	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity te)
+	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
-		int clientId = te.getData(1).contains("connectedClient")?te.getData(1).getInt("connectedClient"):-1;
+		int clientId = be.getData(1).contains("connectedClient")? be.getData(1).getInt("connectedClient"):-1;
 		ReducedConnection connection = clientId != -1 ? SkaiaClient.getClientConnection(clientId) : null;
-		if(connection != null && connection.getServerId() != te.ownerId)
+		if(connection != null && connection.getServerId() != be.ownerId)
 			connection = null;
 		
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
@@ -40,40 +40,40 @@ public class SburbServer extends ButtonListProgram
 			list.add(new UnlocalizedString(CONNECT, displayPlayer));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
 			list.add(new UnlocalizedString(MinestuckConfig.SERVER.giveItems.get() ? GIVE_BUTTON : EDIT_BUTTON));
-		} else if (te.getData(getId()).getBoolean("isOpen"))
+		} else if (be.getData(getId()).getBoolean("isOpen"))
 		{
 			list.add(new UnlocalizedString(RESUME_SERVER));
 			list.add(new UnlocalizedString(CLOSE_BUTTON));
-		} else if(SkaiaClient.isActive(te.ownerId, false))
+		} else if(SkaiaClient.isActive(be.ownerId, false))
 			list.add(new UnlocalizedString(SERVER_ACTIVE));
 		else
 		{
 			list.add(new UnlocalizedString(OFFLINE));
-			if(MinestuckConfig.SERVER.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(te.ownerId, false) == -1)
+			if(MinestuckConfig.SERVER.allowSecondaryConnections.get() || SkaiaClient.getAssociatedPartner(be.ownerId, false) == -1)
 				list.add(new UnlocalizedString(OPEN_BUTTON));
-			if(SkaiaClient.getAssociatedPartner(te.ownerId, false) != -1)
+			if(SkaiaClient.getAssociatedPartner(be.ownerId, false) != -1)
 				list.add(new UnlocalizedString(RESUME_BUTTON));
 		}
 		return list;
 	}
 	
 	@Override
-	public void onButtonPressed(ComputerBlockEntity te, String buttonName, Object[] data) {
+	public void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data) {
 		switch(buttonName)
 		{
 			case EDIT_BUTTON:
 			case GIVE_BUTTON:
-				ClientEditPacket packet = ClientEditPacket.activate(te.ownerId, te.getData(getId()).getInt("connectedClient"));
+				ClientEditPacket packet = ClientEditPacket.activate(be.ownerId, be.getData(getId()).getInt("connectedClient"));
 				MSPacketHandler.sendToServer(packet);
 				break;
 			case RESUME_BUTTON:
-				MSPacketHandler.sendToServer(ResumeSburbConnectionPacket.asServer(te));
+				MSPacketHandler.sendToServer(ResumeSburbConnectionPacket.asServer(be));
 				break;
 			case OPEN_BUTTON:
-				MSPacketHandler.sendToServer(OpenSburbServerPacket.create(te));
+				MSPacketHandler.sendToServer(OpenSburbServerPacket.create(be));
 				break;
 			case CLOSE_BUTTON:
-				MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asServer(te));
+				MSPacketHandler.sendToServer(CloseSburbConnectionPacket.asServer(be));
 				break;
 		}
 	}

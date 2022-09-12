@@ -50,9 +50,9 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemTE)
+		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
-			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemTE.getStack()));
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemBE.getStack()));
 		}
 		
 		return super.getDrops(state, builder);
@@ -64,9 +64,9 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	{
 		if(!player.isShiftKeyDown())
 		{
-			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackTE)
+			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
 			{
-				String text = StoneTabletItem.hasText(itemStackTE.getStack()) ? itemStackTE.getStack().getTag().getString("text") : "";
+				String text = StoneTabletItem.hasText(itemStackBE.getStack()) ? itemStackBE.getStack().getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);
 			}
 		} else

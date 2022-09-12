@@ -287,7 +287,7 @@ public class EntryProcess
 			LOGGER.debug("Removing original blocks");
 			for(BlockMove move : blockMoves)
 			{
-				removeTileEntity(level0, move.source, creative);	//Tile entities need special treatment
+				removeBlockEntity(level0, move.source, creative);	//Block entities need special treatment
 				
 				if(MinestuckConfig.SERVER.entryCrater.get() && level0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
@@ -342,18 +342,18 @@ public class EntryProcess
 	}
 	
 	/**
-	 * Determines if it is appropriate to remove the tile entity in the specified location,
-	 * and removes both the tile entity and its corresponding block if so.
+	 * Determines if it is appropriate to remove the block entity in the specified location,
+	 * and removes both the block entity and its corresponding block if so.
 	 * This method is expressly designed to prevent drops from appearing when the block is removed.
-	 * It will also deliberately trigger block updates based on the removal of the tile entity's block.
-	 * @param level The world where the tile entity is located
-	 * @param pos The position at which the tile entity is located
+	 * It will also deliberately trigger block updates based on the removal of the block entity's block.
+	 * @param level The world where the block entity is located
+	 * @param pos The position at which the block entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	private static void removeTileEntity(ServerLevel level, BlockPos pos, boolean creative)
+	private static void removeBlockEntity(ServerLevel level, BlockPos pos, boolean creative)
 	{
-		BlockEntity tileEntity = level.getBlockEntity(pos);
-		if(tileEntity != null)
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+		if(blockEntity != null)
 		{
 			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
@@ -362,13 +362,13 @@ public class EntryProcess
 					level.removeBlockEntity(pos);
 					level.removeBlock(pos, true);
 				} catch (Exception e) {
-					LOGGER.warn("Exception encountered when removing tile entity " + name + " during entry:", e);
+					LOGGER.warn("Exception encountered when removing block entity " + name + " during entry:", e);
 				}
 			} else
 			{
-				if(tileEntity instanceof ComputerBlockEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerBlockEntity) tileEntity).programData = new CompoundTag();
-				else if(tileEntity instanceof TransportalizerBlockEntity)
+				if(blockEntity instanceof ComputerBlockEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
+					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}
 		}
@@ -484,24 +484,24 @@ public class EntryProcess
 				copyBlockDirect(level, chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
-			BlockEntity tileEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
-			BlockEntity newTE = null;
-			if(tileEntity != null)
+			BlockEntity blockEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
+			BlockEntity newBE = null;
+			if(blockEntity != null)
 			{
-				CompoundTag nbt = tileEntity.saveWithId();
+				CompoundTag nbt = blockEntity.saveWithId();
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				newTE = BlockEntity.loadStatic(dest, block, nbt);
-				if(newTE != null)
-					level.setBlockEntity(newTE);
-				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
+				newBE = BlockEntity.loadStatic(dest, block, nbt);
+				if(newBE != null)
+					level.setBlockEntity(newBE);
+				else LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", blockEntity.getType().getRegistryName());
 				
 			}
 			
 			for(EntryBlockProcessing processing : blockProcessors)
 			{
-				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, tileEntity, newTE);
+				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, blockEntity, newBE);
 			}
 		}
 	}
