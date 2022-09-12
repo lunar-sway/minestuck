@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,14 +18,14 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
-	public static ResumeSburbConnectionPacket asClient(ComputerTileEntity te)
+	public static ResumeSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), true);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), true);
 	}
 	
-	public static ResumeSburbConnectionPacket asServer(ComputerTileEntity te)
+	public static ResumeSburbConnectionPacket asServer(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), false);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), false);
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos,
+		ComputerBlockEntity.forNetworkIfPresent(player, pos,
 				computer -> SkaianetHandler.get(player.server).resumeConnection(computer, isClient));
 	}
 }

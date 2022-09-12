@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -43,7 +43,7 @@ public class ClearMessagePacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos, computer -> {
+		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
 			computer.latestmessage.put(program, "");
 			computer.markBlockForUpdate();
 		});

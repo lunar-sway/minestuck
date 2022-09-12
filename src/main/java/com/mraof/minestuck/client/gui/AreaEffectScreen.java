@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.network.AreaEffectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
+import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -29,7 +29,7 @@ public class AreaEffectScreen extends Screen
 	private static final String MIN_POS_MESSAGE = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
 	private static final String MAX_POS_MESSAGE = "Max Pos Facing Offset";
 	
-	private final AreaEffectTileEntity te;
+	private final AreaEffectBlockEntity be;
 	private EditBox minPosDestinationTextFieldX;
 	private EditBox minPosDestinationTextFieldY;
 	private EditBox minPosDestinationTextFieldZ;
@@ -44,12 +44,12 @@ public class AreaEffectScreen extends Screen
 	private Button allMobsButton;
 	
 	
-	AreaEffectScreen(AreaEffectTileEntity te)
+	AreaEffectScreen(AreaEffectBlockEntity be)
 	{
 		super(new TextComponent("Area Effect Block"));
 		
-		this.te = te;
-		this.isAllMobs = te.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);
+		this.be = be;
+		this.isAllMobs = be.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);
 	}
 	
 	@Override
@@ -58,36 +58,36 @@ public class AreaEffectScreen extends Screen
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
 		this.minPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, new TextComponent("X value of min effect pos")); //TODO make these translatable
-		this.minPosDestinationTextFieldX.setValue(String.valueOf(te.getMinAreaOffset().getX()));
+		this.minPosDestinationTextFieldX.setValue(String.valueOf(be.getMinAreaOffset().getX()));
 		addRenderableWidget(minPosDestinationTextFieldX);
 		
 		this.minPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, new TextComponent("Y value of min effect pos"));
-		this.minPosDestinationTextFieldY.setValue(String.valueOf(te.getMinAreaOffset().getY()));
+		this.minPosDestinationTextFieldY.setValue(String.valueOf(be.getMinAreaOffset().getY()));
 		addRenderableWidget(minPosDestinationTextFieldY);
 		
 		this.minPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, new TextComponent("Z value of min effect pos"));
-		this.minPosDestinationTextFieldZ.setValue(String.valueOf(te.getMinAreaOffset().getZ()));
+		this.minPosDestinationTextFieldZ.setValue(String.valueOf(be.getMinAreaOffset().getZ()));
 		addRenderableWidget(minPosDestinationTextFieldZ);
 		
 		this.maxPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, new TextComponent("X value of max effect pos"));
-		this.maxPosDestinationTextFieldX.setValue(String.valueOf(te.getMaxAreaOffset().getX()));
+		this.maxPosDestinationTextFieldX.setValue(String.valueOf(be.getMaxAreaOffset().getX()));
 		addRenderableWidget(maxPosDestinationTextFieldX);
 		
 		this.maxPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, new TextComponent("Y value of max effect pos"));
-		this.maxPosDestinationTextFieldY.setValue(String.valueOf(te.getMaxAreaOffset().getY()));
+		this.maxPosDestinationTextFieldY.setValue(String.valueOf(be.getMaxAreaOffset().getY()));
 		addRenderableWidget(maxPosDestinationTextFieldY);
 		
 		this.maxPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, new TextComponent("Z value of max effect pos"));
-		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(te.getMaxAreaOffset().getZ()));
+		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(be.getMaxAreaOffset().getZ()));
 		addRenderableWidget(maxPosDestinationTextFieldZ);
 		
 		
 		this.effectTextField = new EditBox(this.font, this.width / 2 - 65, yOffset + 79, 105, 18, new TextComponent("Current Effect"));
-		this.effectTextField.setValue(te.getEffect().getRegistryName().toString());
+		this.effectTextField.setValue(be.getEffect().getRegistryName().toString());
 		addRenderableWidget(effectTextField);
 		
 		this.effectAmplifierTextField = new EditBox(this.font, this.width / 2 + 45, yOffset + 79, 20, 18, new TextComponent("Current Effect Amplifier"));
-		this.effectAmplifierTextField.setValue(String.valueOf(te.getEffectAmplifier()));
+		this.effectAmplifierTextField.setValue(String.valueOf(be.getEffectAmplifier()));
 		addRenderableWidget(effectAmplifierTextField);
 		
 		addRenderableWidget(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, getAllMobsButtonMessage(), button -> cycleIsAllMobs()));
@@ -148,7 +148,7 @@ public class AreaEffectScreen extends Screen
 		
 		if(validInput)
 		{
-			MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, te.getBlockPos()));
+			MSPacketHandler.sendToServer(new AreaEffectPacket(getEffect(effectTextField.getValue()), Mth.clamp(parseInt(effectAmplifierTextField), 0, 255), isAllMobs, minOffsetPos, maxOffsetPos, be.getBlockPos()));
 			onClose();
 		}
 		

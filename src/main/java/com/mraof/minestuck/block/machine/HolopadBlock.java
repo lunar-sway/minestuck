@@ -2,8 +2,8 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.HolopadTileEntity;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.blockentity.HolopadBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -54,14 +54,14 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new HolopadTileEntity(pos, state);
+		return new HolopadBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.HOLOPAD.get(), HolopadTileEntity::clientTick) : null;
+		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HOLOPAD.get(), HolopadBlockEntity::clientTick) : null;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -72,7 +72,7 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 		if(level.isClientSide)
 			return InteractionResult.SUCCESS;
 		
-		if(level.getBlockEntity(pos) instanceof HolopadTileEntity holopad)
+		if(level.getBlockEntity(pos) instanceof HolopadBlockEntity holopad)
 			holopad.onRightClick(player);
 		return InteractionResult.SUCCESS;
 	}
@@ -80,11 +80,11 @@ public class HolopadBlock extends MachineBlock implements EntityBlock
 	@Override
 	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		HolopadTileEntity te = (HolopadTileEntity) level.getBlockEntity(pos);
+		HolopadBlockEntity be = (HolopadBlockEntity) level.getBlockEntity(pos);
 		
-		if(te != null && !level.isClientSide)
+		if(be != null && !level.isClientSide)
 		{
-			te.dropItem(true, level, pos, te.getCard());
+			be.dropItem(true, level, pos, be.getCard());
 		}
 		
 		super.playerWillDestroy(level, pos, state, player);

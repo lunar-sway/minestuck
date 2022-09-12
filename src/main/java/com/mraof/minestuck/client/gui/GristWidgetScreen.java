@@ -6,7 +6,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
+import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import com.mraof.minestuck.world.storage.ClientPlayerData;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -28,7 +28,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 	
 	public GristWidgetScreen(GristWidgetContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(GristWidgetTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(GristWidgetBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets prgress bar information
 		progressX = 54;
@@ -56,11 +56,11 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			GristSet set = GristWidgetTileEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
+			GristSet set = GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
 
 			GuiUtil.drawGristBoard(poseStack, set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			
-			int cost = GristWidgetTileEntity.getGristWidgetBoondollarValue(set);
+			int cost = GristWidgetBlockEntity.getGristWidgetBoondollarValue(set);
 			long has = ClientPlayerData.getBoondollars();
 			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
 			font.draw(poseStack, costText, imageWidth - 9 - font.width(costText), imageHeight - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
@@ -94,7 +94,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), GristWidgetTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), GristWidgetBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}

@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.tileentity.GateTileEntity;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.OnCollisionTeleporterTileEntity;
+import com.mraof.minestuck.blockentity.GateBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.OnCollisionTeleporterBlockEntity;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -89,14 +89,14 @@ public class GateBlock extends AbstractGateBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new GateTileEntity(pos, state);
+			return new GateBlockEntity(pos, state);
 		}
 		
 		@Nullable
 		@Override
 		public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 		{
-			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.GATE.get(), OnCollisionTeleporterTileEntity::serverTick) : null;
+			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.GATE.get(), OnCollisionTeleporterBlockEntity::serverTick) : null;
 		}
 		
 		@Nullable
@@ -113,7 +113,7 @@ public class GateBlock extends AbstractGateBlock
 			if(entityIn instanceof ServerPlayer player)
 			{
 				BlockEntity blockEntity = level.getBlockEntity(pos);
-				if(blockEntity instanceof GateTileEntity gate)
+				if(blockEntity instanceof GateBlockEntity gate)
 					gate.onCollision(player);
 			}
 		}
@@ -128,11 +128,11 @@ public class GateBlock extends AbstractGateBlock
 				if(offsetX == 0 && offsetZ == 0)
 				{
 					level.setBlock(centerPos, MSBlocks.GATE_MAIN.get().defaultBlockState(), blockFlag);
-					BlockEntity tileEntity = level.getBlockEntity(centerPos);
-					if(tileEntity instanceof GateTileEntity gate)
+					BlockEntity blockEntity = level.getBlockEntity(centerPos);
+					if(blockEntity instanceof GateBlockEntity gate)
 						gate.gateType = type;
 					else
-						LOGGER.error("Expected a gate tile entity after placing a gate block, but got {}!", tileEntity);
+						LOGGER.error("Expected a gate block entity after placing a gate block, but got {}!", blockEntity);
 				} else
 					level.setBlock(centerPos.offset(offsetX, 0, offsetZ), MSBlocks.GATE.get().defaultBlockState(), blockFlag);
 			}

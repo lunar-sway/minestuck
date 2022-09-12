@@ -4,8 +4,8 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.PlatformGeneratorTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.redstone.PlatformGeneratorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * When powered, the tile entity creates a line of platform blocks in the direction it is facing.
+ * When powered, the block entity creates a line of platform blocks in the direction it is facing.
  * These blocks will generate even if there is a physical barrier between the generator and the end of the line, but only replace air or fluid blocks.
  * Right clicking the block toggles whether the generated platform blocks are visible
  */
@@ -68,14 +68,14 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock implements Entity
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new PlatformGeneratorTileEntity(pos, state);
+		return new PlatformGeneratorBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.PLATFORM_GENERATOR.get(), PlatformGeneratorTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.PLATFORM_GENERATOR.get(), PlatformGeneratorBlockEntity::serverTick) : null;
 	}
 	
 	@SuppressWarnings("deprecation")

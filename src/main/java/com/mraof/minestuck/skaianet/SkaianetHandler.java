@@ -9,7 +9,7 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -466,17 +466,17 @@ public final class SkaianetHandler extends SavedData
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
 	}
 	
-	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
+	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
 	{
-		ComputerReference oldRef = ComputerReference.of(oldTE), newRef = ComputerReference.of(newTE);
-		if(!oldTE.owner.equals(newTE.owner))
-			throw new IllegalStateException("Moving computers with different owners! ("+oldTE.owner+" and "+newTE.owner+")");
+		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
+		if(!oldBE.owner.equals(newBE.owner))
+			throw new IllegalStateException("Moving computers with different owners! ("+oldBE.owner+" and "+newBE.owner+")");
 		
-		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldTE, newRef));
+		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		resumingClients.replace(oldTE.owner, oldRef, newRef);
-		resumingServers.replace(oldTE.owner, oldRef, newRef);
-		openedServers.replace(oldTE.owner, oldRef, newRef);
+		resumingClients.replace(oldBE.owner, oldRef, newRef);
+		resumingServers.replace(oldBE.owner, oldRef, newRef);
+		openedServers.replace(oldBE.owner, oldRef, newRef);
 	}
 	
 	public static SkaianetHandler get(Level level)

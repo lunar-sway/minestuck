@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer;
 
-import com.mraof.minestuck.tileentity.IColored;
+import com.mraof.minestuck.blockentity.IColored;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;

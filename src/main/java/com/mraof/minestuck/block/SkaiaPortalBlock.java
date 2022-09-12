@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.SkaiaPortalTileEntity;
+import com.mraof.minestuck.blockentity.SkaiaPortalBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -28,7 +28,7 @@ public class SkaiaPortalBlock extends BaseEntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new SkaiaPortalTileEntity(pos, state);
+		return new SkaiaPortalBlockEntity(pos, state);
 	}
 	
 	@Override
@@ -44,7 +44,7 @@ public class SkaiaPortalBlock extends BaseEntityBlock
 	{
 		if (!entityIn.isPassenger() && !entityIn.isVehicle() && !level.isClientSide && !entityIn.isOnPortalCooldown())
 		{
-			if(level.getBlockEntity(pos) instanceof  SkaiaPortalTileEntity portal)
+			if(level.getBlockEntity(pos) instanceof  SkaiaPortalBlockEntity portal)
 				portal.teleportEntity(entityIn);
 		}
 	}

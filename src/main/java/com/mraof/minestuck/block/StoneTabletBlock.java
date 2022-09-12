@@ -2,7 +2,7 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.block.StoneTabletItem;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -41,18 +41,18 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ItemStackTileEntity te = new ItemStackTileEntity(pos, state);
-		te.setStack(new ItemStack(this));
-		return te;
+		ItemStackBlockEntity be = new ItemStackBlockEntity(pos, state);
+		be.setStack(new ItemStack(this));
+		return be;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackTileEntity itemTE)
+		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
-			builder = builder.withDynamicDrop(ItemStackTileEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemTE.getStack()));
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemBE.getStack()));
 		}
 		
 		return super.getDrops(state, builder);
@@ -64,9 +64,9 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	{
 		if(!player.isShiftKeyDown())
 		{
-			if(level.getBlockEntity(pos) instanceof ItemStackTileEntity itemStackTE)
+			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
 			{
-				String text = StoneTabletItem.hasText(itemStackTE.getStack()) ? itemStackTE.getStack().getTag().getString("text") : "";
+				String text = StoneTabletItem.hasText(itemStackBE.getStack()) ? itemStackBE.getStack().getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);
 			}
 		} else
@@ -88,7 +88,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	@SuppressWarnings("deprecation")
 	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state)
 	{
-		if(level.getBlockEntity(pos) instanceof ItemStackTileEntity blockEntity)
+		if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 		{
 			ItemStack tabletItemStack = blockEntity.getStack();
 			if(!tabletItemStack.isEmpty())
@@ -99,7 +99,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	
 	public static void dropTablet(Level level, BlockPos pos)
 	{
-		if(level.getBlockEntity(pos) instanceof ItemStackTileEntity blockEntity)
+		if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 		{
 			ItemStack stack = blockEntity.getStack();
 			popResource(level, pos, stack);
