@@ -11,14 +11,14 @@ public interface ComputerReference
 {
 	static ComputerReference of(ComputerBlockEntity be)
 	{
-		return new TEComputerReference(GlobalPos.of(Objects.requireNonNull(be.getLevel()).dimension(), be.getBlockPos()));
+		return new BEComputerReference(GlobalPos.of(Objects.requireNonNull(be.getLevel()).dimension(), be.getBlockPos()));
 	}
 	
 	static ComputerReference read(CompoundTag nbt)
 	{
 		String type = nbt.getString("type");
 		if(type.equals("block_entity"))
-			return TEComputerReference.create(nbt);
+			return BEComputerReference.create(nbt);
 		else throw new IllegalStateException("Invalid computer type: " + type);
 	}
 	

@@ -12,21 +12,21 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
-class TEComputerReference implements ComputerReference
+class BEComputerReference implements ComputerReference
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	protected final GlobalPos location;
 	
-	TEComputerReference(GlobalPos location)
+	BEComputerReference(GlobalPos location)
 	{
 		this.location = location;
 	}
 	
-	static TEComputerReference create(CompoundTag nbt)
+	static BEComputerReference create(CompoundTag nbt)
 	{
 		GlobalPos location = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get("pos")).resultOrPartial(LOGGER::error).orElse(null);
-		return new TEComputerReference(location);
+		return new BEComputerReference(location);
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ class TEComputerReference implements ComputerReference
 	{
 		if(this == o) return true;
 		if(o == null || getClass() != o.getClass()) return false;
-		TEComputerReference that = (TEComputerReference) o;
+		BEComputerReference that = (BEComputerReference) o;
 		return location.equals(that.location);
 	}
 	
