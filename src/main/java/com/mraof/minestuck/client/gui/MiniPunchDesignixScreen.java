@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.tileentity.machine.MiniPunchDesignixTileEntity;
+import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -24,7 +24,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 	
 	public MiniPunchDesignixScreen(MiniPunchDesignixContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniPunchDesignixTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(MiniPunchDesignixBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 63;
@@ -57,7 +57,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}

@@ -7,10 +7,10 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.redstone.*;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
@@ -51,49 +51,49 @@ public class MSScreenFactories
 		SYLLADEX_FACTORIES.put(type, factory);
 	}
 	
-	public static void displayComputerScreen(ComputerTileEntity tileEntity)
+	public static void displayComputerScreen(ComputerBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new ComputerScreen(Minecraft.getInstance(), tileEntity));
+		Minecraft.getInstance().setScreen(new ComputerScreen(Minecraft.getInstance(), blockEntity));
 	}
 	
-	public static void displayTransportalizerScreen(TransportalizerTileEntity tileEntity)
+	public static void displayTransportalizerScreen(TransportalizerBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new TransportalizerScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new TransportalizerScreen(blockEntity));
 	}
 	
-	public static void displayAreaEffectScreen(AreaEffectTileEntity tileEntity)
+	public static void displayAreaEffectScreen(AreaEffectBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new AreaEffectScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new AreaEffectScreen(blockEntity));
 	}
 	
-	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterTileEntity tileEntity)
+	public static void displayWirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new WirelessRedstoneTransmitterScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new WirelessRedstoneTransmitterScreen(blockEntity));
 	}
 	
-	public static void displayStatStorerScreen(StatStorerTileEntity tileEntity)
+	public static void displayStatStorerScreen(StatStorerBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new StatStorerScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new StatStorerScreen(blockEntity));
 	}
 	
-	public static void displayRemoteObserverScreen(RemoteObserverTileEntity tileEntity)
+	public static void displayRemoteObserverScreen(RemoteObserverBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new RemoteObserverScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new RemoteObserverScreen(blockEntity));
 	}
 	
-	public static void displaySummonerScreen(SummonerTileEntity tileEntity)
+	public static void displaySummonerScreen(SummonerBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new SummonerScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new SummonerScreen(blockEntity));
 	}
 	
-	public static void displayStructureCoreScreen(StructureCoreTileEntity tileEntity)
+	public static void displayStructureCoreScreen(StructureCoreBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new StructureCoreScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new StructureCoreScreen(blockEntity));
 	}
 	
-	public static void displayAlchemiterScreen(AlchemiterTileEntity tileEntity)
+	public static void displayAlchemiterScreen(AlchemiterBlockEntity blockEntity)
 	{
-		Minecraft.getInstance().setScreen(new AlchemiterScreen(tileEntity));
+		Minecraft.getInstance().setScreen(new AlchemiterScreen(blockEntity));
 	}
 	
 	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)

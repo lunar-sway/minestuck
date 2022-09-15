@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.block.redstone.StructureCoreBlock;
-import com.mraof.minestuck.tileentity.redstone.StructureCoreTileEntity;
+import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,15 +10,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class StructureCorePacket implements PlayToServerPacket
 {
-	private final StructureCoreTileEntity.ActionType actionType;
+	private final StructureCoreBlockEntity.ActionType actionType;
 	private final int shutdownRange;
-	private final BlockPos tileBlockPos;
+	private final BlockPos beBlockPos;
 	
-	public StructureCorePacket(StructureCoreTileEntity.ActionType actionType, int shutdownRange, BlockPos tileBlockPos)
+	public StructureCorePacket(StructureCoreBlockEntity.ActionType actionType, int shutdownRange, BlockPos beBlockPos)
 	{
 		this.actionType = actionType;
 		this.shutdownRange = shutdownRange;
-		this.tileBlockPos = tileBlockPos;
+		this.beBlockPos = beBlockPos;
 	}
 	
 	@Override
@@ -26,35 +26,35 @@ public class StructureCorePacket implements PlayToServerPacket
 	{
 		buffer.writeEnum(actionType);
 		buffer.writeInt(shutdownRange);
-		buffer.writeBlockPos(tileBlockPos);
+		buffer.writeBlockPos(beBlockPos);
 	}
 	
 	public static StructureCorePacket decode(FriendlyByteBuf buffer)
 	{
-		StructureCoreTileEntity.ActionType actionType = buffer.readEnum(StructureCoreTileEntity.ActionType.class);
+		StructureCoreBlockEntity.ActionType actionType = buffer.readEnum(StructureCoreBlockEntity.ActionType.class);
 		int summonRange = buffer.readInt();
-		BlockPos tileBlockPos = buffer.readBlockPos();
+		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new StructureCorePacket(actionType, summonRange, tileBlockPos);
+		return new StructureCorePacket(actionType, summonRange, beBlockPos);
 	}
 	
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(tileBlockPos, 0))
+		if(player.level.isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(tileBlockPos) instanceof StructureCoreTileEntity structureCore)
+			if(player.level.getBlockEntity(beBlockPos) instanceof StructureCoreBlockEntity structureCore)
 			{
-				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
 					structureCore.setActionType(actionType);
 					structureCore.setShutdownRange(shutdownRange);
 					structureCore.setHasWiped(false);
 					//Imitates the structure block to ensure that changes are sent client-side
 					structureCore.setChanged();
-					player.level.setBlock(tileBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
-					BlockState state = player.level.getBlockState(tileBlockPos);
-					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
+					player.level.setBlock(beBlockPos, structureCore.getBlockState().setValue(StructureCoreBlock.POWERED, false), Block.UPDATE_ALL);
+					BlockState state = player.level.getBlockState(beBlockPos);
+					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

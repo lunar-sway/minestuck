@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.machine.PunchDesignixTileEntity;
+import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -52,7 +52,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		if (level.isClientSide)
 			return InteractionResult.SUCCESS;
 		BlockPos mainPos = getMainPos(state, pos);
-		if (level.getBlockEntity(mainPos) instanceof PunchDesignixTileEntity designix)
+		if (level.getBlockEntity(mainPos) instanceof PunchDesignixBlockEntity designix)
 			designix.onRightClick((ServerPlayer) player, state);
 		return InteractionResult.SUCCESS;
 	}
@@ -64,7 +64,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		if(state.getBlock() != newState.getBlock())
 		{
 			BlockPos mainPos = getMainPos(state, pos);
-			if(level.getBlockEntity(mainPos) instanceof PunchDesignixTileEntity designix)
+			if(level.getBlockEntity(mainPos) instanceof PunchDesignixBlockEntity designix)
 			{
 				designix.breakMachine();
 				if(pos.equals(mainPos))
@@ -77,7 +77,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	
     /**
      *returns the block position of the "Main" block
-     *aka the block with the TileEntity for the machine
+     *aka the block with the BlockEntity for the machine
      *@param state the state of the block
      *@param pos the position the block
      */
@@ -110,7 +110,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new PunchDesignixTileEntity(pos, state);
+			return new PunchDesignixBlockEntity(pos, state);
 		}
 	}
 }
