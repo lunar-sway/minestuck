@@ -16,12 +16,14 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.NewRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -33,14 +35,8 @@ public class LandTypes
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final ResourceLocation TERRAIN_GROUP = new ResourceLocation(Minestuck.MOD_ID, "terrain_group_map");
-	private static final ResourceLocation TITLE_GROUP = new ResourceLocation(Minestuck.MOD_ID, "title_group_map");
-	
 	public static IForgeRegistry<TerrainLandType> TERRAIN_REGISTRY;
 	public static IForgeRegistry<TitleLandType> TITLE_REGISTRY;
-	
-	private static Map<ResourceLocation, List<TerrainLandType>> terrainGroupMap;
-	private static Map<ResourceLocation, List<TitleLandType>> titleGroupMap;
 	
 	@ObjectHolder(Minestuck.MOD_ID+":null")
 	public static final TerrainLandType TERRAIN_NULL = getNull();
@@ -89,25 +85,17 @@ public class LandTypes
 		return null;
 	}
 	
-	@SubscribeEvent	@SuppressWarnings("unchecked")
+	@SubscribeEvent
 	public static void onRegistryNewRegistry(final NewRegistryEvent event)
 	{
 		event.create(new RegistryBuilder<TerrainLandType>()
 						.setName(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"))
-						.setType(TerrainLandType.class)
-						.addCallback(TerrainCallbacks.INSTANCE),
-				registry -> {
-					TERRAIN_REGISTRY = registry;
-					terrainGroupMap = TERRAIN_REGISTRY.getSlaveMap(TERRAIN_GROUP, Map.class);
-				});
+						.setType(TerrainLandType.class),
+				registry -> TERRAIN_REGISTRY = registry);
 		event.create(new RegistryBuilder<TitleLandType>()
 						.setName(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"))
-						.setType(TitleLandType.class)
-						.addCallback(TitleCallbacks.INSTANCE),
-				registry -> {
-					TITLE_REGISTRY = registry;
-					titleGroupMap = TITLE_REGISTRY.getSlaveMap(TITLE_GROUP, Map.class);
-				});
+						.setType(TitleLandType.class),
+				registry -> TITLE_REGISTRY = registry);
 	}
 
 	@SubscribeEvent
@@ -169,7 +157,7 @@ public class LandTypes
 	 */
 	public TerrainLandType getTerrainAspect(TitleLandType aspect2, List<TerrainLandType> usedAspects)
 	{
-		TerrainLandType aspect = selectRandomAspect(usedAspects, terrainGroupMap, aspect2::isAspectCompatible);
+		TerrainLandType aspect = selectRandomAspect(usedAspects, createByGroupMap(TERRAIN_REGISTRY), aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
 		else
@@ -184,15 +172,27 @@ public class LandTypes
 		TitleLandType landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
-		} else landAspect = selectRandomAspect(usedAspects, titleGroupMap, aspect -> aspect.getAspect() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, createByGroupMap(TITLE_REGISTRY), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+		} else
+			landAspect = selectRandomAspect(usedAspects, createByGroupMap(TITLE_REGISTRY), aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return TITLE_NULL;
 	}
 	
-	private <A extends ILandType<?>> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType<A>> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)
+	{
+		Map<ResourceLocation, List<A>> groupMap = Maps.newHashMap();
+		for(A landType : registry)
+		{
+			if(landType.canBePickedAtRandom())
+				groupMap.computeIfAbsent(landType.getGroup(), _landType -> Lists.newArrayList()).add(landType);
+		}
+		return groupMap;
+	}
+	
+	private <A extends ILandType<A>> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
 		for(List<A> aspects : groupMap.values())
@@ -209,7 +209,7 @@ public class LandTypes
 		return pickOneFromUsage(groupList, usedAspects, Object::equals);
 	}
 	
-	private <A extends ILandType<?>, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
+	private <A extends ILandType<A>, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
 		if(list.isEmpty())
 			return null;
@@ -274,78 +274,5 @@ public class LandTypes
 	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)
 	{
 		return TITLE_REGISTRY.getValues().stream().filter(landType -> landType.isAspectCompatible(terrain) && landType.canBePickedAtRandom()).collect(Collectors.toSet());
-	}
-	
-	private static class TerrainCallbacks implements IForgeRegistry.AddCallback<TerrainLandType>, IForgeRegistry.ClearCallback<TerrainLandType>, IForgeRegistry.CreateCallback<TerrainLandType>
-	{
-		private static final TerrainCallbacks INSTANCE = new TerrainCallbacks();
-		@Override
-		public void onAdd(IForgeRegistryInternal<TerrainLandType> owner, RegistryManager stage, int id, TerrainLandType obj, @Nullable TerrainLandType oldObj)
-		{
-			if(oldObj != null)
-			{
-				@SuppressWarnings("unchecked")
-				Map<ResourceLocation, List<TerrainLandType>> terrainGroupMap = owner.getSlaveMap(TERRAIN_GROUP, Map.class);
-				terrainGroupMap.getOrDefault(oldObj.getGroup(), Collections.emptyList()).remove(oldObj);
-				if(terrainGroupMap.containsKey(oldObj.getGroup()) && terrainGroupMap.get(oldObj.getGroup()).isEmpty())
-					terrainGroupMap.remove(oldObj.getGroup());
-			}
-			
-			if(obj.canBePickedAtRandom())
-			{
-				@SuppressWarnings("unchecked")
-				Map<ResourceLocation, List<TerrainLandType>> terrainGroupMap = owner.getSlaveMap(TERRAIN_GROUP, Map.class);
-				terrainGroupMap.computeIfAbsent(obj.getGroup(), terrainLandAspect -> Lists.newArrayList()).add(obj);
-			}
-		}
-		
-		@Override
-		public void onClear(IForgeRegistryInternal<TerrainLandType> owner, RegistryManager stage)
-		{
-			owner.getSlaveMap(TERRAIN_GROUP, Map.class).clear();
-		}
-		
-		@Override
-		public void onCreate(IForgeRegistryInternal<TerrainLandType> owner, RegistryManager stage)
-		{
-			owner.setSlaveMap(TERRAIN_GROUP, Maps.newHashMap());
-		}
-	}
-	
-	private static class TitleCallbacks implements IForgeRegistry.AddCallback<TitleLandType>, IForgeRegistry.ClearCallback<TitleLandType>, IForgeRegistry.CreateCallback<TitleLandType>
-	{
-		private static final TitleCallbacks INSTANCE = new TitleCallbacks();
-		
-		@Override
-		public void onAdd(IForgeRegistryInternal<TitleLandType> owner, RegistryManager stage, int id, TitleLandType obj, @Nullable TitleLandType oldObj)
-		{
-			if(oldObj != null)
-			{
-				@SuppressWarnings("unchecked")
-				Map<ResourceLocation, List<TitleLandType>> titleGroupMap = owner.getSlaveMap(TITLE_GROUP, Map.class);
-				titleGroupMap.getOrDefault(oldObj.getGroup(), Collections.emptyList()).remove(oldObj);
-				if(titleGroupMap.containsKey(oldObj.getGroup()) && titleGroupMap.get(oldObj.getGroup()).isEmpty())
-					titleGroupMap.remove(oldObj.getGroup());
-			}
-			
-			if(obj.canBePickedAtRandom())
-			{
-				@SuppressWarnings("unchecked")
-				Map<ResourceLocation, List<TitleLandType>> titleGroupMap = owner.getSlaveMap(TITLE_GROUP, Map.class);
-				titleGroupMap.computeIfAbsent(obj.getGroup(), titleLandAspect -> Lists.newArrayList()).add(obj);
-			}
-		}
-		
-		@Override
-		public void onClear(IForgeRegistryInternal<TitleLandType> owner, RegistryManager stage)
-		{
-			owner.getSlaveMap(TITLE_GROUP, Map.class).clear();
-		}
-		
-		@Override
-		public void onCreate(IForgeRegistryInternal<TitleLandType> owner, RegistryManager stage)
-		{
-			owner.setSlaveMap(TITLE_GROUP, Maps.newHashMap());
-		}
 	}
 }
