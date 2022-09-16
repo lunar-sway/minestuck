@@ -10,6 +10,7 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -33,17 +34,25 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
-
+	
+	@Override
+	public RecipeType<JeiCombination> getRecipeType()
+	{
+		return MinestuckJeiPlugin.LATHE;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiCombination> getRecipeClass()
 	{
-		return JeiCombination.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.LATHE_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override
