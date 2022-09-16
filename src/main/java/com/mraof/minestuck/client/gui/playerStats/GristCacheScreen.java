@@ -34,7 +34,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 	{
 		super.init();
 		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, new TextComponent("<"), button -> prevPage());
-		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, new TranslatableComponent(">"), button -> nextPage());
+		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, new TextComponent(">"), button -> nextPage());
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		previousButton.visible = false;
