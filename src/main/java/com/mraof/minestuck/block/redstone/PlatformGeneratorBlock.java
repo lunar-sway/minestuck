@@ -98,11 +98,11 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock implements Entity
 	{
 		if(!level.isClientSide)
 		{
-			BlockState receiverState = level.getBlockState(pos);
+			BlockState oldState = level.getBlockState(pos);
 			int newPower = level.getBestNeighborSignal(pos);
 			
-			BlockState newState = setPower(receiverState, newPower);
-			if(receiverState != newState)
+			BlockState newState = setPower(oldState, newPower);
+			if(oldState != newState)
 				level.setBlockAndUpdate(pos, newState);
 		}
 	}
