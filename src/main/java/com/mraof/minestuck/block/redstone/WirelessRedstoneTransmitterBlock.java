@@ -105,14 +105,18 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	{
 		if(!level.isClientSide)
 		{
-			BlockState state = level.getBlockState(pos);
-			int powerInt = level.getBestNeighborSignal(pos);
-			level.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			BlockState receiverState = level.getBlockState(pos);
+			int newPower = level.getBestNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != powerInt > 0)
-				level.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
-			else level.sendBlockUpdated(pos, state, state, 2);
+			BlockState newState = setPower(receiverState, newPower);
+			if(receiverState != newState)
+				level.setBlockAndUpdate(pos, newState);
 		}
+	}
+	
+	public static BlockState setPower(BlockState state, int newPower)
+	{
+		return state.setValue(POWER, newPower).setValue(POWERED, newPower > 0);
 	}
 	
 	@Override
