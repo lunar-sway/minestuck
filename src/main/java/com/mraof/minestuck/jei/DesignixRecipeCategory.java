@@ -8,6 +8,7 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -31,17 +32,25 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
-
+	
+	@Override
+	public RecipeType<JeiCombination> getRecipeType()
+	{
+		return MinestuckJeiPlugin.DESIGNIX;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiCombination> getRecipeClass()
 	{
-		return JeiCombination.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.DESIGNIX_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override

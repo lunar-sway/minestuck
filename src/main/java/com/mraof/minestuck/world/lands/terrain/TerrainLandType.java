@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  */
 public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType> implements ILandType<TerrainLandType>
 {
-	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TERRAIN_REGISTRY);
+	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
 	private final ResourceLocation groupName;
 	private final boolean pickedAtRandom;
 	private final String[] names;

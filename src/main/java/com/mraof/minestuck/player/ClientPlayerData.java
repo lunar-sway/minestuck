@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.storage;
+package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
@@ -9,7 +9,6 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;
-import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -23,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  * @author kirderf1
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class ClientPlayerData
+public final class ClientPlayerData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
