@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
  */
 public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> implements ILandType<TitleLandType>
 {
-	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(() -> LandTypes.TITLE_REGISTRY);
+	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(LandTypes.TITLE_REGISTRY);
 	private final ResourceLocation groupName;
 	private final EnumAspect aspectType;
 	private final boolean pickedAtRandom;

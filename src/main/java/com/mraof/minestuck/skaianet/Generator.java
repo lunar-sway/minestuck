@@ -4,6 +4,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -84,11 +85,11 @@ public class Generator
 	static TitleLandType generateWeightedTitleLandType(MinecraftServer server, Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
-		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
 		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(server, ignore);
 		
-		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS);
+		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS.get());
 		
 		//if(aspect == EnumAspect.SPACE && !hasFrogs)
 		//Maybe force it if we so want?
@@ -99,7 +100,7 @@ public class Generator
 	static TerrainLandType generateWeightedTerrainLandType(MinecraftServer server, Session session, TitleLandType titleType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
-		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
 		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(server, ignore);
 		

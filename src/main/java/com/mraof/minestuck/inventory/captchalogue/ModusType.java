@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;

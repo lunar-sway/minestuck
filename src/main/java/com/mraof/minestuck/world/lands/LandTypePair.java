@@ -62,8 +62,8 @@ public final class LandTypePair
 	{
 		String terrainName = nbt.getString("terrain_aspect");
 		String titleName = nbt.getString("title_aspect");
-		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.getValue(new ResourceLocation(terrainName));
-		TitleLandType title = LandTypes.TITLE_REGISTRY.getValue(new ResourceLocation(titleName));
+		TerrainLandType terrain = LandTypes.TERRAIN_REGISTRY.get().getValue(new ResourceLocation(terrainName));
+		TitleLandType title = LandTypes.TITLE_REGISTRY.get().getValue(new ResourceLocation(titleName));
 		Objects.requireNonNull(terrain, "Could not find terrain land aspect by name " + terrainName);
 		Objects.requireNonNull(title, "Could not find title land aspect by name " + titleName);
 		
@@ -83,7 +83,7 @@ public final class LandTypePair
 	public static LandTypePair getTypesOrDefaulted(ChunkGenerator generator)
 	{
 		return getNamed(generator).map(Named::landTypes)
-				.orElseGet(() -> new LandTypePair(LandTypes.TERRAIN_NULL, LandTypes.TITLE_NULL));
+				.orElseGet(() -> new LandTypePair(LandTypes.TERRAIN_NULL.get(), LandTypes.TITLE_NULL.get()));
 	}
 	
 	public static Optional<Named> getNamed(MinecraftServer server, ResourceKey<Level> levelKey)

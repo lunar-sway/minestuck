@@ -1,8 +1,6 @@
-package com.mraof.minestuck.world.storage;
+package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -24,7 +22,7 @@ import java.util.Objects;
  * This class is for server-side use only.
  * @author kirderf1
  */
-public class PlayerSavedData extends SavedData
+public final class PlayerSavedData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_player_data";

@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
