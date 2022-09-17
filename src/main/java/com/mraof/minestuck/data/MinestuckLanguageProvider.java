@@ -100,7 +100,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(((TranslatableComponent)key.getDisplayName()).getKey(), value);
 	}
-	protected void addEntityTypeExtra(Supplier<EntityType<?>> key, String type, String value)
+	protected void addEntityTypeExtra(Supplier<? extends EntityType<?>> key, String type, String value)
 	{
 		addExtra(key.get(), type, value);
 	}
