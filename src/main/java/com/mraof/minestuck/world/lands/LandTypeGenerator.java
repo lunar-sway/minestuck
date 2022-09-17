@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public final class LandTypeGenerator
 {
@@ -38,13 +37,13 @@ public final class LandTypeGenerator
 	 */
 	public TerrainLandType getTerrainAspect(TitleLandType aspect2, List<TerrainLandType> usedAspects)
 	{
-		TerrainLandType aspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TERRAIN_REGISTRY), aspect2::isAspectCompatible);
+		TerrainLandType aspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TERRAIN_REGISTRY.get()), aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
 		else
 		{
 			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", aspect2.getRegistryName());
-			return LandTypes.TERRAIN_NULL;
+			return LandTypes.TERRAIN_NULL.get();
 		}
 	}
 	
@@ -53,13 +52,13 @@ public final class LandTypeGenerator
 		TitleLandType landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
 		} else
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY), aspect -> aspect.getAspect() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;
-		else return LandTypes.TITLE_NULL;
+		else return LandTypes.TITLE_NULL.get();
 	}
 	
 	private <A extends ILandType<A>> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)

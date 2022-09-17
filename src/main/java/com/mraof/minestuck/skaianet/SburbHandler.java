@@ -165,13 +165,13 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS) &&
-					(terrainLandType == null || LandTypes.FROGS.isAspectCompatible(terrainLandType)))
-				titleLandType = LandTypes.FROGS;
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS.get()) &&
+					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
+				titleLandType = LandTypes.FROGS.get();
 			else
 			{
 				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
-				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
+				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
 					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());

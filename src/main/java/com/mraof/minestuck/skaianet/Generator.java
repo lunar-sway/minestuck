@@ -89,7 +89,7 @@ public class Generator
 		
 		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(server, ignore);
 		
-		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS);
+		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS.get());
 		
 		//if(aspect == EnumAspect.SPACE && !hasFrogs)
 		//Maybe force it if we so want?
