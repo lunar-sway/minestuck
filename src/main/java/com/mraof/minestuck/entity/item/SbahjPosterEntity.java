@@ -63,18 +63,32 @@ public class SbahjPosterEntity extends HangingArtEntity<SbahjPosterEntity.SbahjA
 		
 		@Override
 		public String getTitle()
-		{return title;}
+		{
+			return title;
+		}
+		
 		@Override
 		public int getSizeX()
-		{return sizeX;}
+		{
+			return sizeX;
+		}
+		
 		@Override
 		public int getSizeY()
-		{return sizeY;}
+		{
+			return sizeY;
+		}
+		
 		@Override
 		public int getOffsetX()
-		{return offsetX;}
+		{
+			return offsetX;
+		}
+		
 		@Override
 		public int getOffsetY()
-		{return offsetY;}
+		{
+			return offsetY;
+		}
 	}
 }

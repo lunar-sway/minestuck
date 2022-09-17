@@ -18,7 +18,7 @@ import net.minecraftforge.network.NetworkHooks;
 
 public class HologramEntity extends Entity
 {
-
+	
 	private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(HologramEntity.class, EntityDataSerializers.ITEM_STACK);
 	public int innerRotation;
 	
@@ -33,29 +33,29 @@ public class HologramEntity extends Entity
 		this.innerRotation = this.random.nextInt(100000);
 		entityData.set(ITEM, item);
 	}
-
+	
 	public HologramEntity(EntityType<? extends HologramEntity> type, Level level)
 	{
 		this(type, level, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
 	}
 	
 	public void onUpdate()
-    {
-        this.xo = this.getX();
-        this.yo = this.getY();
-        this.zo = this.getZ();
-        ++this.innerRotation;
-
-        if (!this.level.isClientSide)
-        {
-            BlockPos blockpos = blockPosition();
-
-            if (this.level.dimension() == Level.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
-            {
-                this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
-            }
-        }
-    }
+	{
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
+		++this.innerRotation;
+		
+		if(!this.level.isClientSide)
+		{
+			BlockPos blockpos = blockPosition();
+			
+			if(this.level.dimension() == Level.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
+			{
+				this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
+			}
+		}
+	}
 	
 	@Override
 	protected void defineSynchedData()
@@ -75,7 +75,7 @@ public class HologramEntity extends Entity
 	{
 		compound.put("Item", this.getItem().save(new CompoundTag()));
 	}
-
+	
 	public ItemStack getItem()
 	{
 		return entityData.get(ITEM);
@@ -88,7 +88,7 @@ public class HologramEntity extends Entity
 	
 	public void setItem(ItemStack item)
 	{
-		entityData.set(ITEM,item);
+		entityData.set(ITEM, item);
 	}
 	
 	public void setItem(int id)
