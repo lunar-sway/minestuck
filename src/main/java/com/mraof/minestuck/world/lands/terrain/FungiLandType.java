@@ -40,7 +40,7 @@ public class FungiLandType extends TerrainLandType
 	
 	public FungiLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.SALAMANDER).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
+		super(new Builder(MSEntityTypes.SALAMANDER::get).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
 				.fogColor(0.69, 0.76, 0.61).skyColor(0.69, 0.76, 0.61)
 				.category(Biome.BiomeCategory.MUSHROOM).music(() -> MSSoundEvents.MUSIC_FUNGI));
 	}

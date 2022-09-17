@@ -193,7 +193,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		
 		if(maxY - minY < 3)
 		{
-			OgreEntity ogre = MSEntityTypes.OGRE.create(level.getLevel());
+			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
 			if(ogre == null)
 				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
 			ogre.setPersistenceRequired();

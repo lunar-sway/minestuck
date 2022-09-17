@@ -24,7 +24,7 @@ public class HologramEntity extends Entity
 	
 	public HologramEntity(Level level, ItemStack item)
 	{
-		this(MSEntityTypes.HOLOGRAM, level, item);
+		this(MSEntityTypes.HOLOGRAM.get(), level, item);
 	}
 	
 	public HologramEntity(EntityType<? extends HologramEntity> type, Level level, ItemStack item)

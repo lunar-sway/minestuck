@@ -44,7 +44,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public GristEntity(Level level, double x, double y, double z, GristAmount gristData)
 	{
-		super(MSEntityTypes.GRIST, level);
+		super(MSEntityTypes.GRIST.get(), level);
 		this.gristValue = gristData.getAmount();
 //		this.yOffset = this.height / 2.0F;
 		this.setPos(x, y, z);

@@ -41,7 +41,7 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	
 	public MetalBoatEntity(Level level, double x, double y, double z, @Nonnull Type type)
 	{
-		super(MSEntityTypes.METAL_BOAT, level);
+		super(MSEntityTypes.METAL_BOAT.get(), level);
 		this.blocksBuilding = false;
 		this.setPos(x, y, z);
 		this.setDeltaMovement(Vec3.ZERO);

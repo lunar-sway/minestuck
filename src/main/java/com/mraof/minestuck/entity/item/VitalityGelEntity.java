@@ -34,7 +34,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	
 	public VitalityGelEntity(Level level, double x, double y, double z, int healAmount)
 	{
-		this(MSEntityTypes.VITALITY_GEL, level, x, y, z, healAmount);
+		this(MSEntityTypes.VITALITY_GEL.get(), level, x, y, z, healAmount);
 	}
 	
 	protected VitalityGelEntity(EntityType<? extends VitalityGelEntity> type, Level level, double x, double y, double z, int healAmount)

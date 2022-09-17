@@ -97,7 +97,7 @@ public class SummonerBlockEntity extends BlockEntity
 	public EntityType<?> getSummonedEntity()
 	{
 		if(summonType == null)
-			summonType = MSEntityTypes.IMP;
+			summonType = MSEntityTypes.IMP.get();
 		return this.summonType;
 	}
 	

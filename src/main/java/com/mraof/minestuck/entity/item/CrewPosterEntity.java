@@ -20,7 +20,7 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 	
 	public CrewPosterEntity(Level level, BlockPos pos, Direction direction)
 	{
-		super(MSEntityTypes.MIDNIGHT_CREW_POSTER, level, pos, direction);
+		super(MSEntityTypes.MIDNIGHT_CREW_POSTER.get(), level, pos, direction);
 	}
 	
 	@Override

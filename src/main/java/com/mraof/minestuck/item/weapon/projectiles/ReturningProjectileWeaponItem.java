@@ -43,7 +43,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get())
 				noBlockCollision = true;
 			
-			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, level, maxTick, noBlockCollision);
+			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE.get(), playerIn, level, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);
 			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);

@@ -20,7 +20,7 @@ public class SbahjPosterEntity extends HangingArtEntity<SbahjPosterEntity.SbahjA
 	
 	public SbahjPosterEntity(Level level, BlockPos pos, Direction direction)
 	{
-		super(MSEntityTypes.SBAHJ_POSTER, level, pos, direction);
+		super(MSEntityTypes.SBAHJ_POSTER.get(), level, pos, direction);
 	}
 	
 	@Override

@@ -50,7 +50,7 @@ public class FrogEntity extends PathfinderMob
 	
 	public FrogEntity(Level level)
 	{
-		this(MSEntityTypes.FROG, level);
+		this(MSEntityTypes.FROG.get(), level);
 	}
 	
 	public FrogEntity(EntityType<? extends FrogEntity> type, Level level)

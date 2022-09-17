@@ -28,7 +28,7 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	
 	public ShopPosterEntity(Level level, BlockPos pos, Direction direction, ItemStack stack)
 	{
-		super(MSEntityTypes.SHOP_POSTER, level, pos, direction);
+		super(MSEntityTypes.SHOP_POSTER.get(), level, pos, direction);
 		//setPosterType(meta);
 	}
 	

@@ -35,7 +35,7 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 		
 		if(!level.isClientSide)
 		{
-			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE, playerIn, level);
+			ConsumableProjectileEntity projectileEntity = new ConsumableProjectileEntity(MSEntityTypes.CONSUMABLE_PROJECTILE.get(), playerIn, level);
 			projectileEntity.setItem(item);
 			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
 			level.addFreshEntity(projectileEntity);

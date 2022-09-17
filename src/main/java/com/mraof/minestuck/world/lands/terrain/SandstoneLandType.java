@@ -41,14 +41,14 @@ public class SandstoneLandType extends TerrainLandType
 	
 	public static TerrainLandType createSandstone()
 	{
-		return new SandstoneLandType(Variant.SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+		return new SandstoneLandType(Variant.SANDSTONE, new Builder(MSEntityTypes.TURTLE::get).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.9, 0.7, 0.05).skyColor(0.8, 0.6, 0.2)
 				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
 	}
 	
 	public static TerrainLandType createRedSandstone()
 	{
-		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(() -> MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(MSEntityTypes.TURTLE::get).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.7, 0.4, 0.05).skyColor(0.8, 0.5, 0.1)
 				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
 	}

@@ -46,7 +46,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	
 	public DecoyEntity(Level level)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, level);
+		super(MSEntityTypes.PLAYER_DECOY.get(), level);
 		inventory = new Inventory(null);
 		if(!level.isClientSide)	//If not spawned the way it should
 			markedForDespawn = true;
@@ -54,7 +54,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	
 	public DecoyEntity(ServerLevel level, ServerPlayer player)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, level);
+		super(MSEntityTypes.PLAYER_DECOY.get(), level);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(level, this, player);
 		for(String key : player.getPersistentData().getAllKeys())
