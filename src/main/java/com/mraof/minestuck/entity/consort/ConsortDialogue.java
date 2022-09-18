@@ -6,6 +6,7 @@ import com.mraof.minestuck.entity.consort.MessageType.*;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -66,11 +67,11 @@ public class ConsortDialogue
 		addMessage("bunny_birthday").landTitle(RABBITS).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
 		addMessage("rabbit_eating").landTitle(RABBITS).consort(EnumConsort.TURTLE, EnumConsort.SALAMANDER);
 		addMessage("edgy_life_hatred").landTitle(RABBITS).consort(EnumConsort.IGUANA, EnumConsort.NAKAGATOR);
-		addMessage("rabbit.food_shortage.1").landTitle(RABBITS).landTerrain(SAND.get(), SANDSTONE.get());
+		addMessage("rabbit.food_shortage.1").landTitle(RABBITS).landTerrain(SAND, SANDSTONE);
 		addMessage(new ChainMessage(0, "rabbit.foodShortage.2", new SingleMessage("rabbit.food_shortage.1"), new SingleMessage("rabbit.food_shortage.2"))).landTitle(RABBITS).landTerrain(ROCK);
-		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).landTitle(RABBITS).landTerrain(ROCK.get(), SANDSTONE.get());
+		addMessage(new ChainMessage(0, "rabbit.food.1", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"))).landTitle(RABBITS).landTerrain(ROCK, SANDSTONE);
 		addMessage(new ChainMessage(0, "rabbit.food.2", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2a"), new SingleMessage("rabbit.food.3a"))).landTitle(RABBITS).landTerrain(SAND);
-		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(RABBITS).landTerrain(WOOD.get(), SHADE.get());
+		addMessage(new ChainMessage(0, "rabbit.food.3", new SingleMessage("rabbit.food.1"), new SingleMessage("rabbit.food.2b"))).landTitle(RABBITS).landTerrain(WOOD, SHADE);
 		
 		//Monsters
 		addMessage(new SingleMessage("pet_zombie")).landTitle(MONSTERS).consort(EnumConsort.NAKAGATOR, EnumConsort.SALAMANDER);
@@ -132,7 +133,7 @@ public class ConsortDialogue
 		addMessage("calmness").landTitle(SILENCE).consort(EnumConsort.TURTLE, EnumConsort.IGUANA);
 		
 		//Towers
-		addMessage("climb_high").landTitle(TOWERS.get(), WIND.get()).consort(EnumConsort.IGUANA);
+		addMessage("climb_high").landTitle(TOWERS, WIND).consort(EnumConsort.IGUANA);
 		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.towers.1"), new SingleMessage("height_fear.towers.2")),
 				new SingleMessage("height_fear.panic"))).landTitle(TOWERS).consort(EnumConsort.TURTLE);
 		addMessage(new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> consort.getY() < 78, new ChainMessage(new SingleMessage("height_fear.rock.1"), new SingleMessage("height_fear.rock.2")),
@@ -145,7 +146,7 @@ public class ConsortDialogue
 		addMessage(new ChoiceMessage(new SingleMessage("mushroom_pizza"),
 				new SingleMessage[]{new SingleMessage("mushroom_pizza.on"), new SingleMessage("mushroom_pizza.off")},
 				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).landTerrain(SHADE);
-		addMessage("fire_hazard").landTerrain(SHADE).landTitle(allExcept(THUNDER));
+		addMessage("fire_hazard").landTerrain(SHADE).landTitle(allExcept(THUNDER.get()));
 		
 		//Heat
 		addMessage("getting_hot").landTerrain(HEAT);
@@ -162,8 +163,8 @@ public class ConsortDialogue
 				new MessageType[]{new SingleMessage("camel.no_camel"), new SingleMessage("camel.dancing_camel")})).landTerrain(SAND);
 		addMessage("knockoff").landTerrain(SANDSTONE);
 		addMessage(new ChainMessage(new SingleMessage("sandless.1", "denizen"), new SingleMessage("sandless.2"))).landTerrain(SANDSTONE);
-		addMessage("red_better").landTerrainSpecific(RED_SAND.get(), RED_SANDSTONE.get());
-		addMessage("yellow_better").landTerrainSpecific(SAND.get(), SANDSTONE.get());
+		addMessage("red_better").landTerrainSpecific(RED_SAND, RED_SANDSTONE);
+		addMessage("yellow_better").landTerrainSpecific(SAND, SANDSTONE);
 		
 		//Frost
 		addMessage(new ChainMessage(new SingleMessage("frozen.1"), new DescriptionMessage("frozen.2"))).landTerrain(FROST);
@@ -385,7 +386,7 @@ public class ConsortDialogue
 		addMessage(new MerchantGuiMessage(new SingleMessage("frog_leg_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("frog_food_shop", "land_name"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(FROGS).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("time_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK).lockToConsort();
-		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK.get(), THOUGHT.get()).lockToConsort();
+		addMessage(new MerchantGuiMessage(new SingleMessage("thyme_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CLOCKWORK, THOUGHT).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("library_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(THOUGHT).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("cake_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(CAKE).lockToConsort();
 		addMessage(new MerchantGuiMessage(new SingleMessage("light_food_shop"), CONSORT_FOOD_STOCK)).type(MerchantType.FOOD).landTitle(LIGHT).lockToConsort();
@@ -441,6 +442,7 @@ public class ConsortDialogue
 		return msg;
 	}
 	
+	@Deprecated
 	public static TitleLandType[] allExceptSpecific(TitleLandType... aspects)
 	{
 		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.get().getValues());
@@ -450,6 +452,7 @@ public class ConsortDialogue
 		return set.toArray(new TitleLandType[0]);
 	}
 	
+	@Deprecated
 	public static TitleLandType[] allExcept(TitleLandType... aspects)
 	{
 		Set<TitleLandType> set = new HashSet<>(TITLE_REGISTRY.get().getValues());
@@ -457,11 +460,6 @@ public class ConsortDialogue
 			set.removeIf(aspect -> aspect.getGroup().equals(exceptedAspect.getGroup()));
 		
 		return set.toArray(new TitleLandType[0]);
-	}
-	
-	public static TitleLandType[] allExcept(Supplier<TitleLandType> landType)
-	{
-		return allExcept(landType.get());
 	}
 	
 	public static DialogueWrapper getRandomMessage(ConsortEntity consort, boolean hasHadMessage)
@@ -542,70 +540,45 @@ public class ConsortDialogue
 			return lockToConsort;
 		}
 		
-		public DialogueWrapper landTerrain(TerrainLandType... aspects)
+		@SafeVarargs
+		public final DialogueWrapper landTerrain(Supplier<TerrainLandType>... landTypes)
 		{
-			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect1Requirement = Sets.newHashSet();
-			for(TerrainLandType aspect : aspects)
-			{
-				if(aspect != null)
-					aspect1Requirement.add(aspect.getGroup());
-			}
+			aspect1Requirement = Sets.newHashSet(Arrays.stream(landTypes).map(Supplier::get).map(ILandType::getGroup).iterator());
 			
 			return this;
 		}
 		
-		public DialogueWrapper landTerrain(Supplier<TerrainLandType> landType)
+		@SafeVarargs
+		public final DialogueWrapper landTerrainSpecific(Supplier<TerrainLandType>... landTypes)
 		{
-			return this.landTerrain(landType.get());
-		}
-		
-		public DialogueWrapper landTerrainSpecific(TerrainLandType... aspects)
-		{
-			
-			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect1RequirementS = Sets.newHashSet(aspects);
+			aspect1RequirementS = Sets.newHashSet(Arrays.stream(landTypes).map(Supplier::get).iterator());
 			return this;
 		}
 		
-		public DialogueWrapper landTerrainSpecific(Supplier<TerrainLandType> landType)
+		@Deprecated
+		public DialogueWrapper landTitle(TitleLandType... landTypes)
 		{
-			return landTerrainSpecific(landType.get());
-		}
-		
-		public DialogueWrapper landTitle(TitleLandType... aspects)
-		{
-			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect2Requirement = Sets.newHashSet();
-			for(TitleLandType aspect : aspects)
-				if(aspect != null)
-					aspect2Requirement.add(aspect.getGroup());
+			aspect2Requirement = Sets.newHashSet(Arrays.stream(landTypes).map(ILandType::getGroup).iterator());
 			return this;
 		}
 		
-		public DialogueWrapper landTitle(Supplier<TitleLandType> landType)
+		@SafeVarargs
+		public final DialogueWrapper landTitle(Supplier<TitleLandType>... landTypes)
 		{
-			return this.landTitle(landType.get());
-		}
-		
-		public DialogueWrapper landTitleSpecific(TitleLandType... aspects)
-		{
-			if(isAnyNull(aspects))
-				LOGGER.warn("Land aspect is null for consort message {}, this is probably not intended", messageStart.getString());
 			reqLand = true;
-			aspect2RequirementS = Sets.newHashSet(aspects);
+			aspect2Requirement = Sets.newHashSet(Arrays.stream(landTypes).map(Supplier::get).map(ILandType::getGroup).iterator());
 			return this;
 		}
 		
-		public DialogueWrapper landTitleSpecific(Supplier<TitleLandType> landType)
+		@SafeVarargs
+		public final DialogueWrapper landTitleSpecific(Supplier<TitleLandType>... landTypes)
 		{
-			return landTitleSpecific(landType.get());
+			reqLand = true;
+			aspect2RequirementS = Sets.newHashSet(Arrays.stream(landTypes).map(Supplier::get).iterator());
+			return this;
 		}
 		
 		public DialogueWrapper consort(EnumConsort... types)
@@ -643,16 +616,6 @@ public class ConsortDialogue
 		
 	}
 	
-	private static boolean isAnyNull(Object[] objects)
-	{
-		for(Object obj : objects)
-		{
-			if(obj == null)
-				return true;
-		}
-		return false;
-	}
-	
 	public interface ConsortRequirement
 	{
 		boolean apply(ConsortEntity consort);
@@ -663,6 +626,7 @@ public class ConsortDialogue
 		//debugPrintAll();
 	}
 	
+	@SuppressWarnings("unused")
 	private static void debugPrintAll()
 	{
 		List<Component> list = new ArrayList<>();
