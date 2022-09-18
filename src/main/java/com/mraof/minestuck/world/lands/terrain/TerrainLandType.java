@@ -31,7 +31,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	private final boolean pickedAtRandom;
 	private final String[] names;
 	
-	private final Supplier<EntityType<? extends ConsortEntity>> consortType;
+	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
 	private final float skylightBase;
 	private final Vec3 fogColor, skyColor;
 	
@@ -132,7 +132,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private ResourceLocation group = null;
 		private String[] names;
 		
-		private final Supplier<EntityType<? extends ConsortEntity>> consortType;
+		private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
 		private float skylightBase = 1F;
 		private Vec3 fogColor = new Vec3(0, 0, 0);
 		private Vec3 skyColor = new Vec3(0, 0, 0);
@@ -140,7 +140,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private Biome.BiomeCategory biomeCategory = Biome.BiomeCategory.NONE;
 		private Supplier<SoundEvent> backgroundMusic = () -> MSSoundEvents.MUSIC_DEFAULT;
 		
-		public Builder(Supplier<EntityType<? extends ConsortEntity>> consortType)
+		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
 		{
 			this.consortType = consortType;
 		}

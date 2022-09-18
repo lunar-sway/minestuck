@@ -38,7 +38,7 @@ public class RainbowLandType extends TerrainLandType
 	
 	public RainbowLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.TURTLE).names(RAINBOW, COLORS)
+		super(new Builder(MSEntityTypes.TURTLE).names(RAINBOW, COLORS)
 				.fogColor(0.0, 0.6, 0.8).skyColor(0.9, 0.6, 0.8)
 				.category(Biome.BiomeCategory.PLAINS).music(() -> MSSoundEvents.MUSIC_RAINBOW));
 	}

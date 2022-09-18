@@ -40,14 +40,14 @@ public class ForestLandType extends TerrainLandType
 	
 	public static TerrainLandType createForest()
 	{
-		return new ForestLandType(Variant.FOREST, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
+		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
 				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FOREST));
 	}
 	
 	public static TerrainLandType createTaiga()
 	{
-		return new ForestLandType(Variant.TAIGA, new Builder(() -> MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
+		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
 				.category(Biome.BiomeCategory.TAIGA).music(() -> MSSoundEvents.MUSIC_TAIGA));
 	}

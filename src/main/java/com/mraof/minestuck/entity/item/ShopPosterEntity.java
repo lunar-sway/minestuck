@@ -28,7 +28,7 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	
 	public ShopPosterEntity(Level level, BlockPos pos, Direction direction, ItemStack stack)
 	{
-		super(MSEntityTypes.SHOP_POSTER, level, pos, direction);
+		super(MSEntityTypes.SHOP_POSTER.get(), level, pos, direction);
 		//setPosterType(meta);
 	}
 	
@@ -59,10 +59,10 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	}
 	
 	private void setPosterType(int i)
-    {
-    	this.entityData.set(TYPE, i);
+	{
+		this.entityData.set(TYPE, i);
 	}
-
+	
 	public int getPosterType()
 	{
 		return this.entityData.get(TYPE);
@@ -107,21 +107,34 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 		}
 		
 		
-		
 		@Override
 		public String getTitle()
-		{return title;}
+		{
+			return title;
+		}
+		
 		@Override
 		public int getSizeX()
-		{return sizeX;}
+		{
+			return sizeX;
+		}
+		
 		@Override
 		public int getSizeY()
-		{return sizeY;}
+		{
+			return sizeY;
+		}
+		
 		@Override
 		public int getOffsetX()
-		{return offsetX;}
+		{
+			return offsetX;
+		}
+		
 		@Override
 		public int getOffsetY()
-		{return offsetY;}
+		{
+			return offsetY;
+		}
 	}
 }

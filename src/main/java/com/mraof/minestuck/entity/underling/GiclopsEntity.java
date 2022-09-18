@@ -158,7 +158,7 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	
 	
 	@Override
-	public void move(MoverType typeIn, Vec3 pos)	//TODO probably doesn't work as originally intended anymore. What was this meant to do?
+	public void move(MoverType typeIn, Vec3 pos)    //TODO probably doesn't work as originally intended anymore. What was this meant to do?
 	{
 		AABB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
