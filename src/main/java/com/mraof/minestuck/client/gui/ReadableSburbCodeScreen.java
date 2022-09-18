@@ -21,24 +21,30 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Code is modified components of, or inspired by, WinGameScreen/ReadBookScreen/StoneTabletScreen
+ * Code is modified components of, or inspired by, WinGameScreen/ReadBookScreen/StoneTabletScreen.
+ * It reads the nucleotide sequence stored in rana_temporaria_sec22b.txt and associates a number of lines of the text to each hieroglyph from the block tag with one extra psuedo-hieroglpyh in the form of the paradox code
  */
 public class ReadableSburbCodeScreen extends Screen
 {
 	public static final ResourceLocation BOOK_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book.png");
 	private final List<Block> blockList;
 	private final boolean paradoxCode;
+	public final int validHieroglyphCount;
+	public final boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
 	
 	private PageButton forwardButton;
 	private PageButton backButton;
 	
 	public List<String> textList = null;
-	public int linesPerBlock = 1;
-	public int hieroglyphCount;
+	/**
+	 * With 298 lines of text the default is 27 per block
+	 */
+	public int linesPerBlock = 27;
 	public int totalPages = 8;
 	public int currentPage = 0;
 	
@@ -51,7 +57,9 @@ public class ReadableSburbCodeScreen extends Screen
 	public static final int CUSTOM_LINE_HEIGHT = 3;
 	public static final int LINES_PER_PAGE = 40; //how many lines can be fit neatly on a page, at 48 character per line
 	
-	//public final static String EMPTY_SPACE = "                                                                            "; //76 characters
+	public static final List<Block> FULL_HIEROGLYPH_LIST = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+	public static final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
+	
 	public final static String EMPTY_SPACE = "                                                            "; //60 characters
 	
 	public ReadableSburbCodeScreen(List<Block> blockList, boolean paradoxCode)
@@ -60,7 +68,15 @@ public class ReadableSburbCodeScreen extends Screen
 		this.blockList = blockList;
 		this.paradoxCode = paradoxCode;
 		
-		this.hieroglyphCount = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + (paradoxCode ? 1 : 0); //adds paradox code to total count
+		this.hieroglyphValidityArray = checkForValidity(blockList, paradoxCode);
+		
+		int numberOfValidBits = 0;
+		for(boolean isValidHieroglyph : hieroglyphValidityArray)
+		{
+			if(isValidHieroglyph)
+				numberOfValidBits++;
+		}
+		this.validHieroglyphCount = numberOfValidBits;
 	}
 	
 	@Override
@@ -77,7 +93,7 @@ public class ReadableSburbCodeScreen extends Screen
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			textList = bufferedReader.lines().collect(Collectors.toList());
 			
-			linesPerBlock = textList.size() / hieroglyphCount;
+			linesPerBlock = textList.size() / MAX_HIEROGLYPH_COUNT;
 			totalPages = Math.round((float) (textList.size() + 1) / (float) LINES_PER_PAGE);
 		} catch(Exception ignored)
 		{
@@ -167,12 +183,6 @@ public class ReadableSburbCodeScreen extends Screen
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, BOOK_TEXTURES);
 		
-		//TODO rendering error where seemingly bits of vanilla text are rendered onto the screen, such as the last displayed splash text
-		/*ITextComponent pageMsg = new TranslationTextComponent("book.pageIndicator", this.currentPage + 1, Math.max(totalPages, 1));
-		int pageMsgPos = (this.width - 192) / 2;
-		int pageMsgWidth = this.font.width(pageMsg);
-		this.font.draw(poseStack, pageMsg, (float) (pageMsgPos - pageMsgWidth + 192 - 44), 18.0F, 0);*/
-		
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
 		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
@@ -185,12 +195,67 @@ public class ReadableSburbCodeScreen extends Screen
 				float scale = (1 / subtractScale);
 				poseStack.scale(subtractScale, subtractScale, subtractScale);
 				
-				List<Block> fullBlockList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+				//List<Block> fullBlockList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 				MutableInt lineY = new MutableInt();
-				boolean isPresent = false;
+				//boolean isPresent = false;
 				
-				for(int lineIterate = 0; lineIterate < hieroglyphCount; lineIterate++)
+				List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
+				
+				//processes through textList and if the line falls under a given section of hieroglyph count it decides whether that hieroglyph component is not present, which would eliminate it
+				for(int sectionIterate = 0; sectionIterate < hieroglyphValidityArray.length; sectionIterate++)
 				{
+					//int fromSectionIndex = Math.min((sectionIterate * linesPerBlock), textList.size());
+					int fromSectionIndex = sectionIterate * linesPerBlock;
+					int toSectionIndex = Math.min((sectionIterate * linesPerBlock + linesPerBlock - 1), textList.size() - 1); //uses min as the last page is not full length TODO make sure textList.size() - 1 is valid
+					
+					if(!hieroglyphValidityArray[sectionIterate]) //if there was no valid hieroglyph for that element
+					{
+						for(int iterate = fromSectionIndex; iterate < toSectionIndex + 1; iterate++)
+						{
+							textList.set(iterate, EMPTY_SPACE);
+						}
+					}
+				}
+				
+				//groups the processed textList lines into pages
+				for(int pageIterate = 0; pageIterate < totalPages + 1; pageIterate++)
+				{
+					int fromIndex = Math.min(LINES_PER_PAGE * pageIterate, textList.size());
+					int toIndex = Math.min(LINES_PER_PAGE * pageIterate + LINES_PER_PAGE, textList.size());
+					
+					listOfPages.add(textList.subList(fromIndex, toIndex));
+				}
+				
+				//takes the necessary page from the group of pages and then reads out each of the 40 lines stored for that page(with lines being made blank if the associated hieroglyph component isnt recorded)
+				for(String text : listOfPages.get(currentPage))
+				{
+					font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+						//limiting the length of the page via this if statement
+						if(stillValidLine(lineY.intValue()))
+						{
+							Component line = new TextComponent(text.substring(start, end)).setStyle(style);
+							font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300);
+							lineY.add(CUSTOM_LINE_HEIGHT);
+						}
+					});
+				}
+				
+				
+				
+					/*int fromIndex = Math.min(((sectionIterate * linesPerBlock + sectionIterate + (currentPage == 0 ? 0 : 1)) + (LINES_PER_PAGE * currentPage)), textList.size());
+					int toIndex = Math.min(((sectionIterate * linesPerBlock + linesPerBlock) + (LINES_PER_PAGE * currentPage)), textList.size());
+					
+					if(!((isValidBlock(sectionIterate) && fullBlockList.contains(blockList.get(sectionIterate)))
+							|| (sectionIterate == hieroglyphCount - 1 && paradoxCode)))
+					{
+						for(int iterate = fromIndex; iterate < toIndex + 1; iterate++)
+						{
+							textList.set(iterate, EMPTY_SPACE);
+						}
+					}
+					
+					List<String> blockTextList = textList.subList(fromIndex, toIndex);
+					/*
 					//allows the rendered code to be made in chunks proportional to the size of the full sequence
 					//TODO after the second page, the starting line of the page(set through fromIndex) shows both the last line of the previous page and the line before the last one
 					int fromIndex = Math.min(((lineIterate * linesPerBlock + lineIterate + (currentPage == 0 ? 0 : 1)) + (LINES_PER_PAGE * currentPage)), textList.size());
@@ -203,16 +268,15 @@ public class ReadableSburbCodeScreen extends Screen
 							|| (lineIterate == hieroglyphCount - 1 && paradoxCode))
 					{
 						isPresent = true;
-					}
+					}*/
 					
-					for(String text : blockTextList)
+					/*for(String text : blockTextList)
 					{
-						String toInsert = isPresent ? text : EMPTY_SPACE;
-						font.getSplitter().splitLines(toInsert, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+						font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 							//limiting the length of the page via this if statement
 							if(stillValidLine(lineY.intValue()))
 							{
-								Component line = new TextComponent(toInsert.substring(start, end)).setStyle(style);
+								Component line = new TextComponent(text.substring(start, end)).setStyle(style);
 								font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300);
 								lineY.add(CUSTOM_LINE_HEIGHT);
 							}
@@ -239,13 +303,12 @@ public class ReadableSburbCodeScreen extends Screen
 									lineY.add(CUSTOM_LINE_HEIGHT);
 								}
 							});
-						}*/
+						}
 					}
 					
-					isPresent = false;
-				}
+					//isPresent = false;
+				}*/
 			}
-			
 		}
 		
 		poseStack.popPose();
@@ -253,9 +316,20 @@ public class ReadableSburbCodeScreen extends Screen
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 	
-	public boolean isValidBlock(int lineIterate)
+	public boolean[] checkForValidity(List<Block> blockList, boolean paradoxCode)
 	{
-		return !blockList.isEmpty() && blockList.size() > lineIterate && blockList.get(lineIterate) != null;
+		boolean[] set = new boolean[MAX_HIEROGLYPH_COUNT];
+		for(int iterate = 0; iterate < MAX_HIEROGLYPH_COUNT; iterate++)
+		{
+			set[iterate] = (isValidBlock(iterate) && FULL_HIEROGLYPH_LIST.contains(blockList.get(iterate))) || (iterate == MAX_HIEROGLYPH_COUNT - 1 && paradoxCode);
+		}
+		
+		return set;
+	}
+	
+	public boolean isValidBlock(int elementOfList)
+	{
+		return !blockList.isEmpty() && blockList.size() > elementOfList && blockList.get(elementOfList) != null;
 	}
 	
 	public boolean stillValidLine(int lineY)
