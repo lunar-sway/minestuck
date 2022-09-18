@@ -6,9 +6,9 @@ import com.mraof.minestuck.block.fluid.FlowingWaterColorsBlock;
 import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.plant.*;
 import com.mraof.minestuck.block.redstone.*;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -470,7 +470,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> SPIKES = REGISTER.register("spikes", () -> new SpikeBlock(Block.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(2).sound(SoundType.METAL), MSBlockShapes.SPIKES));
 	public static final RegistryObject<Block> RETRACTABLE_SPIKES = REGISTER.register("retractable_spikes", () -> new RetractableSpikesBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> BLOCK_PRESSURE_PLATE = REGISTER.register("block_pressure_plate", () -> new BlockPressurePlateBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.STONE)));
-	public static final RegistryObject<Block> PUSHABLE_BLOCK = REGISTER.register("pushable_block", () -> new PushableBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.GILDED_BLACKSTONE)));
+	public static final RegistryObject<Block> PUSHABLE_BLOCK = REGISTER.register("pushable_block", () -> new PushableBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(1).sound(SoundType.GILDED_BLACKSTONE), PushableBlock.Maneuverability.PUSH_AND_PULL));
 	
 	private static final BlockBehaviour.Properties logicGate = Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(1).sound(SoundType.METAL);
 	public static final RegistryObject<Block> AND_GATE_BLOCK = REGISTER.register("and_gate_block", () -> new LogicGateBlock(logicGate, LogicGateBlock.State.AND));
@@ -500,10 +500,10 @@ public class MSBlocks
 	public static final AlchemiterMultiblock ALCHEMITER = new AlchemiterMultiblock(Minestuck.MOD_ID);
 	public static final PunchDesignixMultiblock PUNCH_DESIGNIX = new PunchDesignixMultiblock(Minestuck.MOD_ID);
 	
-	public static final RegistryObject<Block> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSTileEntityTypes.MINI_CRUXTRUDER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
-	public static final RegistryObject<Block> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSTileEntityTypes.MINI_TOTEM_LATHE, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
+	public static final RegistryObject<Block> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_CRUXTRUDER.createRotatedShapes(), MSBlockEntityTypes.MINI_CRUXTRUDER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
+	public static final RegistryObject<Block> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_TOTEM_LATHE.createRotatedShapes(), MSBlockEntityTypes.MINI_TOTEM_LATHE, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	public static final RegistryObject<Block> MINI_ALCHEMITER = REGISTER.register("mini_alchemiter", () -> new MiniAlchemiterBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
-	public static final RegistryObject<Block> MINI_PUNCH_DESIGNIX = REGISTER.register("mini_punch_designix", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSTileEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
+	public static final RegistryObject<Block> MINI_PUNCH_DESIGNIX = REGISTER.register("mini_punch_designix", () -> new SmallMachineBlock<>(MSBlockShapes.SMALL_PUNCH_DESIGNIX.createRotatedShapes(), MSBlockEntityTypes.MINI_PUNCH_DESIGNIX, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	
 	public static final RegistryObject<Block> HOLOPAD = REGISTER.register("holopad", () -> new HolopadBlock(Block.Properties.of(Material.METAL, MaterialColor.SNOW).requiresCorrectToolForDrops().strength(3.0F)));
 	
@@ -520,7 +520,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> TRANS_PORTALIZER = REGISTER.register("trans_portalizer", () -> new TransportalizerBlock(metalMechanicalBlock));
 	public static final RegistryObject<Block> SENDIFICATOR = REGISTER.register("sendificator", () -> new SendificatorBlock(metalMechanicalBlock));
 	public static final RegistryObject<Block> GRIST_WIDGET = REGISTER.register("grist_widget", () -> new GristWidgetBlock(metalMechanicalBlock));
-	public static final RegistryObject<Block> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSTileEntityTypes.URANIUM_COOKER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
+	public static final RegistryObject<Block> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new SmallMachineBlock<>(new CustomVoxelShape(new double[]{4, 0, 4, 12, 6, 12}).createRotatedShapes(), MSBlockEntityTypes.URANIUM_COOKER, Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.0F)));
 	
 	
 	

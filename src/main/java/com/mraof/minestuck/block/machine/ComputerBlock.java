@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.ReadableSburbCodeItem;
 import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
@@ -82,19 +83,19 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return InteractionResult.SUCCESS;
 		} else
 		{
-			ComputerTileEntity tileEntity = (ComputerTileEntity) level.getBlockEntity(pos);
+			ComputerBlockEntity blockEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
 			
 			
-			if(tileEntity == null)
+			if(blockEntity == null)
 				return InteractionResult.FAIL;
 			
-			if(inputCode(tileEntity, state, level, pos, player, handIn))
+			if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
-			else if(insertDisk(tileEntity, state, level, pos, player, handIn))
+			else if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
 			
-			if(level.isClientSide && SkaiaClient.requestData(tileEntity))
-				MSScreenFactories.displayComputerScreen(tileEntity);
+			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
+				MSScreenFactories.displayComputerScreen(blockEntity);
 			
 			return InteractionResult.SUCCESS;
 		}
@@ -107,40 +108,40 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			BlockState newState = state.setValue(STATE, State.ON);
 			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 			
-			if(level.getBlockEntity(pos) instanceof ComputerTileEntity computer)
+			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 				computer.owner = IdentifierHandler.encode(player);
 			newState.use(level, player, handIn, hit);
 		}
 	}
 	
-	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
+	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		ItemStack stackInHand = player.getItemInHand(handIn);
 		int id = ProgramData.getProgramID(stackInHand);
 		
 		if(stackInHand.getItem() == MSItems.BLANK_DISK.get())
 		{
-			if(tileEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
 			{
 				stackInHand.shrink(1);
-				tileEntity.blankDisksStored++;
-				tileEntity.setChanged();
+				blockEntity.blankDisksStored++;
+				blockEntity.setChanged();
 				level.sendBlockUpdated(pos, state, state, 3);
 				return true;
 			}
 		}
-		else if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 3 && !tileEntity.hasProgram(-1))
+		else if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 3 && !blockEntity.hasProgram(-1))
 		{
 			if(level.isClientSide)
 				return true;
 			player.setItemInHand(handIn, ItemStack.EMPTY);
 			if(id == -1)
 			{
-				tileEntity.closeAll();
+				blockEntity.closeAll();
 				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
 			}
-			else tileEntity.installedPrograms.put(id, true);
-			tileEntity.setChanged();
+			else blockEntity.installedPrograms.put(id, true);
+			blockEntity.setChanged();
 			level.sendBlockUpdated(pos, state, state, 3);
 			return true;
 		}
@@ -148,7 +149,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		return false;
 	}
 	
-	private boolean inputCode(ComputerTileEntity tileEntity, BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn)
+	private boolean inputCode(ComputerBlockEntity blockEntity, BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		ItemStack heldStack = player.getItemInHand(handIn);
 		if(heldStack.getItem() instanceof ReadableSburbCodeItem)
@@ -156,32 +157,32 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
 			boolean newInfo = false;
 			
-			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (SburbCodeItem.getParadoxInfo(heldStack) && !tileEntity.hasParadoxInfoStored))
+			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (SburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
 			{
 				newInfo = true;
-				tileEntity.hasParadoxInfoStored = true;
+				blockEntity.hasParadoxInfoStored = true;
 			}
 			
 			if(!hieroglyphList.isEmpty())
 			{
-				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities list should it not exist yet
+				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities block should it not exist yet
 				{
-					if(tileEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !tileEntity.hieroglyphsStored.contains(iterateBlock))
+					if(blockEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
 					{
 						tileEntity.hieroglyphsStored.add(iterateBlock);
 						newInfo = true;
 					}
 				}
 				
-				//checks additionally if the item is also a SburbCodeItem, and does the reverse process of adding any new blocks from the tile entities list to the item's
+				//checks additionally if the item is also a SburbCodeItem, and does the reverse process of adding any new blocks from the block entities list to the item's
 				if(heldStack.getItem() instanceof SburbCodeItem)
 				{
-					if(tileEntity.hasParadoxInfoStored)
+					if(blockEntity.hasParadoxInfoStored)
 						SburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
 					
-					if(tileEntity.hieroglyphsStored != null)
+					if(blockEntity.hieroglyphsStored != null)
 					{
-						for(Block iterateBlock : tileEntity.hieroglyphsStored)
+						for(Block iterateBlock : blockEntity.hieroglyphsStored)
 						{
 							SburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
 							SburbCodeItem.attemptConversionToCompleted(player, handIn);
@@ -192,7 +193,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(newInfo)
 			{
-				tileEntity.setChanged();
+				blockEntity.setChanged();
 				levelIn.sendBlockUpdated(pos, state, state, 3);
 				
 				return true;
@@ -206,10 +207,10 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ComputerTileEntity te = new ComputerTileEntity(pos, state);
-		te.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
-		return te;
-		//return state.getValue(STATE) != State.OFF ? new ComputerTileEntity(pos, state) : null;
+		ComputerBlockEntity be = new ComputerBlockEntity(pos, state);
+		be.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
+		return be;
+		//return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
 	}
 	
 	@Override
@@ -223,15 +224,15 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		ComputerTileEntity te = (ComputerTileEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if (te == null)
+		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
+		if (be == null)
 		{
 			return;
 		}
-		te.closeAll();
+		be.closeAll();
 		float factor = 0.05F;
 		
-		for(Map.Entry<Integer, Boolean> pairs : te.installedPrograms.entrySet())
+		for(Map.Entry<Integer, Boolean> pairs : be.installedPrograms.entrySet())
 		{
 			if(!pairs.getValue())
 				continue;

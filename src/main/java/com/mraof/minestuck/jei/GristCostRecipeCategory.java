@@ -7,12 +7,13 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -39,17 +40,25 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.ALCHEMITER));
 	}
-
+	
+	@Override
+	public RecipeType<JeiGristCost> getRecipeType()
+	{
+		return MinestuckJeiPlugin.GRIST_COST;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiGristCost> getRecipeClass()
 	{
-		return JeiGristCost.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.GRIST_COST_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override

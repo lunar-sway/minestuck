@@ -47,9 +47,9 @@ public final class PredefineData
 		lockedToSession = nbt.getBoolean("locked");
 		title = Title.tryRead(nbt, "title");
 		if(nbt.contains("landTerrain", Tag.TAG_STRING))
-			terrainLandType = LandTypes.TERRAIN_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
+			terrainLandType = LandTypes.TERRAIN_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTerrain")));
 		if(nbt.contains("landTitle", Tag.TAG_STRING))
-			titleLandType = LandTypes.TITLE_REGISTRY.getValue(ResourceLocation.tryParse(nbt.getString("landTitle")));
+			titleLandType = LandTypes.TITLE_REGISTRY.get().getValue(ResourceLocation.tryParse(nbt.getString("landTitle")));
 		
 		return this;
 	}

@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -541,7 +541,7 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	protected static LootTable.Builder droppingWithTEItem(Block block)
 	{
-		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackTileEntity.ITEM_DYNAMIC))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
 	protected static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
 	{

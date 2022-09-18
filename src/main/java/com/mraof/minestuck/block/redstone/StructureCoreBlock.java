@@ -2,10 +2,10 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.redstone.StructureCoreBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.StructureCoreTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * When ACTIVE is true, the tile entity will perform one of several tasks outlined in its ActionType enum to either send nbt to a CoreCompatibleScatteredStructurePiece or act on nbt it receives from said Piece type.
+ * When ACTIVE is true, the block entity will perform one of several tasks outlined in its ActionType enum to either send nbt to a CoreCompatibleScatteredStructurePiece or act on nbt it receives from said Piece type.
  * It is made to work with various structures in which recording whether it has been completed or not will be important, such as for updating quest completion(quest system pending) or preventing area effect blocks/summoners from remaining in use after completion of a dungeon
  */
 public class StructureCoreBlock extends HorizontalDirectionalBlock implements EntityBlock
@@ -52,7 +52,7 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			if(level.getBlockEntity(pos) instanceof StructureCoreTileEntity structureCore)
+			if(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCore)
 			{
 				if(player.isCrouching())
 				{
@@ -86,7 +86,7 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
 		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
-		updateTileEntityWithBlock(level, pos);
+		updateBlockEntityWithBlock(level, pos);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -94,20 +94,20 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		super.onPlace(state, level, pos, oldState, isMoving);
-		updateTileEntityWithBlock(level, pos);
+		updateBlockEntityWithBlock(level, pos);
 	}
 	
 	/**
-	 * Used for cases in which the action type of the TE would benefit from instant change
+	 * Used for cases in which the action type of the BE would benefit from instant change
 	 */
-	public void updateTileEntityWithBlock(Level level, BlockPos pos)
+	public void updateBlockEntityWithBlock(Level level, BlockPos pos)
 	{
-		if(level.getBlockEntity(pos) instanceof StructureCoreTileEntity structureCoreTileEntity)
+		if(level.getBlockEntity(pos) instanceof StructureCoreBlockEntity structureCoreBlockEntity)
 		{
 			//having the variable hasBeenCompleted changed to true as soon as possible will improve the response speed of READ_AND_WIPE functionality
-			if(structureCoreTileEntity.getBlockState().getValue(ACTIVE) && structureCoreTileEntity.getActionType() == StructureCoreTileEntity.ActionType.WRITE)
+			if(structureCoreBlockEntity.getBlockState().getValue(ACTIVE) && structureCoreBlockEntity.getActionType() == StructureCoreBlockEntity.ActionType.WRITE)
 			{
-				structureCoreTileEntity.prepForUpdate();
+				structureCoreBlockEntity.prepForUpdate();
 			}
 		}
 	}
@@ -136,14 +136,14 @@ public class StructureCoreBlock extends HorizontalDirectionalBlock implements En
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new StructureCoreTileEntity(pos, state);
+		return new StructureCoreBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.STRUCTURE_CORE.get(), StructureCoreTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.STRUCTURE_CORE.get(), StructureCoreBlockEntity::serverTick) : null;
 	}
 	
 	@Override

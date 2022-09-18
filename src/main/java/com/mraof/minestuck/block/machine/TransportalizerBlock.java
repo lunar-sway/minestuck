@@ -2,9 +2,9 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -45,21 +45,21 @@ public class TransportalizerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new TransportalizerTileEntity(pos, state);
+		return new TransportalizerBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.TRANSPORTALIZER.get(), TransportalizerTileEntity::transportalizerTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.TRANSPORTALIZER.get(), TransportalizerBlockEntity::transportalizerTick) : null;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
-		if(level.getBlockEntity(pos) instanceof TransportalizerTileEntity transportalizer)
+		if(level.getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
 			transportalizer.onCollision(entityIn);
 	}
 	
@@ -74,15 +74,15 @@ public class TransportalizerBlock extends MachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		TransportalizerTileEntity tileEntity = (TransportalizerTileEntity) level.getBlockEntity(pos);
+		TransportalizerBlockEntity blockEntity = (TransportalizerBlockEntity) level.getBlockEntity(pos);
 
-		if (tileEntity == null || player.isShiftKeyDown())
+		if (blockEntity == null || player.isShiftKeyDown())
 		{
 			return InteractionResult.PASS;
 		}
 
 		if(level.isClientSide)
-			MSScreenFactories.displayTransportalizerScreen(tileEntity);
+			MSScreenFactories.displayTransportalizerScreen(blockEntity);
 
 		return InteractionResult.SUCCESS;
 	}

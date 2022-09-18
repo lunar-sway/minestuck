@@ -2,10 +2,10 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.AreaEffectTileEntity;
+import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * When powered, the tile entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
+ * When powered, the block entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
  * Only creative mode players(who are not under the effects of Creative Shock) can change the effect
  */
 public class AreaEffectBlock extends HorizontalDirectionalBlock implements EntityBlock
@@ -57,14 +57,14 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new AreaEffectTileEntity(pos, state);
+		return new AreaEffectBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.AREA_EFFECT.get(), AreaEffectTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.AREA_EFFECT.get(), AreaEffectBlockEntity::serverTick) : null;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -73,17 +73,17 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 	{
 		if(player.isCreative() && !CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			if(level.getBlockEntity(pos) instanceof AreaEffectTileEntity te)
+			if(level.getBlockEntity(pos) instanceof AreaEffectBlockEntity be)
 			{
 				
 				ItemStack heldItemStack = player.getItemInHand(hand);
 				
 				if(heldItemStack.getItem() instanceof PotionItem)
 				{
-					clickWithPotion(level, pos, player, te, heldItemStack);
+					clickWithPotion(level, pos, player, be, heldItemStack);
 				} else
 				{
-					MSScreenFactories.displayAreaEffectScreen(te);
+					MSScreenFactories.displayAreaEffectScreen(be);
 				}
 				
 				return InteractionResult.sidedSuccess(level.isClientSide);
@@ -93,12 +93,12 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		return InteractionResult.PASS;
 	}
 	
-	private void clickWithPotion(Level level, BlockPos pos, Player player, AreaEffectTileEntity te, ItemStack potionStack)
+	private void clickWithPotion(Level level, BlockPos pos, Player player, AreaEffectBlockEntity be, ItemStack potionStack)
 	{
 		MobEffectInstance firstEffect = PotionUtils.getPotion(potionStack).getEffects().get(0);
 		if(firstEffect != null && !level.isClientSide)
 		{
-			te.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
+			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
 			player.displayClientMessage(new TranslatableComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);

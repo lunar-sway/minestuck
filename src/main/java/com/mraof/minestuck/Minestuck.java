@@ -18,12 +18,13 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
 import com.mraof.minestuck.world.gen.feature.*;
 import com.mraof.minestuck.world.gen.structure.*;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.commands.synchronization.ArgumentSerializer;
 import net.minecraft.commands.synchronization.ArgumentTypes;
 import net.minecraft.world.item.ItemStack;
@@ -61,9 +62,11 @@ public class Minestuck
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
-		MSTileEntityTypes.REGISTER.register(eventBus);
+		MSBlockEntityTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
+		LandTypes.TERRAIN_REGISTER.register(eventBus);
+		LandTypes.TITLE_REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
 		MSFeatures.REGISTER.register(eventBus);
