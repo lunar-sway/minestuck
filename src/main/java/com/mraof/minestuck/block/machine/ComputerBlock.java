@@ -10,7 +10,6 @@ import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -165,11 +164,11 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(!hieroglyphList.isEmpty())
 			{
-				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the tile entities block should it not exist yet
+				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the block entities block should it not exist yet
 				{
 					if(blockEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
 					{
-						tileEntity.hieroglyphsStored.add(iterateBlock);
+						blockEntity.hieroglyphsStored.add(iterateBlock);
 						newInfo = true;
 					}
 				}
@@ -250,7 +249,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			}
 		}
 		
-		for(int iterate = 0; iterate < te.blankDisksStored; iterate++)
+		for(int iterate = 0; iterate < be.blankDisksStored; iterate++)
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
