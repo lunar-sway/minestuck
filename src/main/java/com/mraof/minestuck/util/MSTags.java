@@ -169,10 +169,6 @@ public class MSTags
 	
 	public static boolean blockExistsInTag(TagKey<Block> blockTag, Block block)
 	{
-		/*for(Holder<Block> holder : Registry.BLOCK.getTagOrEmpty(blockTag)) {
-			if(block.getRegistryName() != null && holder.is(block.getRegistryName()))
-				return true;
-		}*/
 		for(Block blockIterate : getBlocksFromTag(blockTag))
 			if(blockIterate == block)
 				return true;

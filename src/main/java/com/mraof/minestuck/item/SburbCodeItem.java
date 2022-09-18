@@ -153,7 +153,7 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 	{
 		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of 1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
 		float sizeOfList = getRecordedBlocks(stack).size();
-		return ((sizeOfList + mod) / (MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + mod)) * 100;
+		return ((sizeOfList + mod) / (MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS).size() + 1)) * 100;
 	}
 	
 	@Override

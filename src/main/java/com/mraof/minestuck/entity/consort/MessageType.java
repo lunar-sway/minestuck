@@ -1041,7 +1041,6 @@ public abstract class MessageType
 			
 			boolean hasItem = false;
 			List<ItemStack> stackListFromTag = MSTags.getItemStacksFromTag(itemTag);
-			//Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
 			
 			if(random || repeat && nbt.contains(this.getString()))
 			{

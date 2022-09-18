@@ -409,8 +409,9 @@ public class MSBlocks
 	public static final RegistryObject<Block> DEAD_PLANKS_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), deadPlanks));
 	public static final RegistryObject<Block> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), treatedPlanks));
 	
-	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new SteepStairsBlock(greenStone, MSBlockShapes.STEEP_STAIRS_BASE));
-	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = REGISTER.register("steep_green_stone_brick_stairs_top", () -> new SteepStairsBlock(greenStone, MSBlockShapes.STEEP_STAIRS_TOP));
+	//TODO when walking down steep stairs, players take fall damage that cannot be circumvented by the fallOn function. This includes when there is only an air block underneath them
+	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_BASE));
+	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = REGISTER.register("steep_green_stone_brick_stairs_top", () -> new CustomShapeBlock(greenStone, MSBlockShapes.STEEP_STAIRS_TOP));
 	
 	public static final RegistryObject<Block> BLACK_CHESS_BRICK_SLAB = REGISTER.register("black_chess_brick_slab", () -> new SlabBlock(blackChessBricks));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICK_SLAB = REGISTER.register("dark_gray_chess_brick_slab", () -> new SlabBlock(darkGrayChessBricks));

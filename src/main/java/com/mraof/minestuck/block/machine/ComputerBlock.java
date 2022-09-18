@@ -90,7 +90,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
-			else if(insertDisk(blockEntity, state, level, pos, player, handIn))
+			else if(inputCode(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
 			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
