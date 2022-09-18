@@ -38,7 +38,7 @@ public class SummonerPacket implements PlayToServerPacket
 		{
 			buffer.writeUtf(EntityType.getKey(entityType).toString());
 		} else
-			buffer.writeUtf(EntityType.getKey(MSEntityTypes.IMP).toString());
+			buffer.writeUtf(EntityType.getKey(MSEntityTypes.IMP.get()).toString());
 		
 	}
 	

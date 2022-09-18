@@ -43,12 +43,12 @@ public class FrogsLandType extends TitleLandType
 	{
 		if(type == LandBiomeType.NORMAL)
 		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG, 1, 0, 1));
+			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 1, 0, 1));
 		}
 		
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG, 10, 1, 6));
+			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 10, 1, 6));
 		}
 	}
 	

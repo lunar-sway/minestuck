@@ -16,7 +16,7 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpawnData
 {
 	public IEntityMultiPart baseEntity;
-
+	
 	public int id = -1;
 	private int headId = -1;
 	private EntityDimensions size;
@@ -61,7 +61,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	{
 		return true;
 	}
-
+	
 	/**
 	 * Called when the entity is attacked.
 	 */
@@ -77,14 +77,13 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	public void tick()
 	{
 		super.tick();
-		if(this.baseEntity == null || ((Entity)this.baseEntity).isRemoved())
+		if(this.baseEntity == null || ((Entity) this.baseEntity).isRemoved())
 		{
 			this.discard();
-		}
-		else
+		} else
 			this.setBaseById(headId);
 	}
-
+	
 	@Override
 	public void remove(Entity.RemovalReason reason)
 	{
@@ -92,6 +91,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 		if(this.baseEntity != null)
 			baseEntity.onPartDeath(this, this.id);
 	}
+	
 	/**
 	 * Returns true if Entity argument is equal to this Entity
 	 */
@@ -112,7 +112,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	{
 		buffer.writeInt(this.id);
 		if(this.baseEntity != null)
-			buffer.writeInt(((Entity)this.baseEntity).getId());
+			buffer.writeInt(((Entity) this.baseEntity).getId());
 		else
 			buffer.writeInt(-1);
 	}

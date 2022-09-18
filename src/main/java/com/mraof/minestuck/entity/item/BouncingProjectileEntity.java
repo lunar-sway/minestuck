@@ -174,7 +174,8 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 		return MSItems.SORCERERS_PINBALL.get();
 	}
 	
-	public ItemStack getItemFromItemStack() {
+	public ItemStack getItemFromItemStack()
+	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}

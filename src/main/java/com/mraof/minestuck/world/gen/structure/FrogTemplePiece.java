@@ -110,7 +110,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		Vec3i entityVec = new Vec3i(getEntityXWithOffset(21, 21 + 14), this.getWorldY(50), getEntityZWithOffset(21, 21 + 14)); //BlockPos also suitable instead of Vec3i
 		if(!createRan && box.isInside(entityVec))
 		{
-			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.create(level.getLevel());
+			LotusFlowerEntity lotusFlowerEntity = MSEntityTypes.LOTUS_FLOWER.get().create(level.getLevel());
 			if(lotusFlowerEntity == null)
 				throw new IllegalStateException("Unable to create a new lotus flower. Entity factory returned null!");
 			lotusFlowerEntity.moveTo(entityVec.getX(), entityVec.getY(), entityVec.getZ(), 0F, 0);
