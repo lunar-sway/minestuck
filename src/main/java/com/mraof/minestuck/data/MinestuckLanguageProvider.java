@@ -153,9 +153,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("subtitles."+modid+"."+key, value);
 	}
-	protected void addEntitySubtitles(EntityType<?> type, String key, String value)
+	protected void addEntitySubtitles(Supplier<? extends EntityType<?>> type, String key, String value)
 	{
-		add("subtitles."+type.getDescriptionId()+"."+key, value);
+		add("subtitles."+type.get().getDescriptionId()+"."+key, value);
 	}
 	protected void addColor(String key, String value)
 	{
