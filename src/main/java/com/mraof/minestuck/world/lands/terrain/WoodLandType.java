@@ -33,7 +33,7 @@ public class WoodLandType extends TerrainLandType
 	
 	public WoodLandType()
 	{
-		super(new Builder(MSEntityTypes.SALAMANDER::get).names(WOOD, OAK, LUMBER)
+		super(new Builder(MSEntityTypes.SALAMANDER).names(WOOD, OAK, LUMBER)
 				.skylight(1/2F).fogColor(0.0, 0.16, 0.38).skyColor(0.0, 0.3, 0.4)
 				.music(() -> MSSoundEvents.MUSIC_WOOD));
 	}

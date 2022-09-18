@@ -270,7 +270,7 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<EntityType<?>> targetEntity)
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<? extends EntityType<?>> targetEntity)
 	{
 		return (stack, target, attacker) -> {
 			float damage = additionalDamage * 3.3F;

@@ -36,7 +36,7 @@ public class FrostLandType extends TerrainLandType
 	
 	public FrostLandType()
 	{
-		super(new Builder(MSEntityTypes.IGUANA::get).names(FROST, ICE, SNOW)
+		super(new Builder(MSEntityTypes.IGUANA).names(FROST, ICE, SNOW)
 				.skylight(7/8F).fogColor(0.5, 0.6, 0.98).skyColor(0.6, 0.7, 0.9)
 				.biomeSet(MSBiomes.SNOW_LAND).category(Biome.BiomeCategory.ICY).music(() -> MSSoundEvents.MUSIC_FROST));
 	}

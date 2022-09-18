@@ -8,7 +8,7 @@ public class NullTerrainLandType extends TerrainLandType
 	
 	public NullTerrainLandType()
 	{
-		super(new Builder(MSEntityTypes.SALAMANDER::get).unavailable().names("null")
+		super(new Builder(MSEntityTypes.SALAMANDER).unavailable().names("null")
 				.fogColor(1, 1, 1));
 	}
 	
