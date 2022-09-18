@@ -128,8 +128,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				level.sendBlockUpdated(pos, state, state, 3);
 				return true;
 			}
-		}
-		else if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 3 && !blockEntity.hasProgram(-1))
+		} else if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 3 && !blockEntity.hasProgram(-1))
 		{
 			if(level.isClientSide)
 				return true;
@@ -224,7 +223,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	{
 		Random rand = new Random();
 		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if (be == null)
+		if(be == null)
 		{
 			return;
 		}

@@ -59,8 +59,9 @@ public class ComputerScreen extends Screen
 		
 		if(!bsod && program != null)
 			program.paintGui(poseStack, this, be);
-		else {
-			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+		else
+		{
+			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F + 15, (height - ySize) / 2F + 45, 4210752);
 		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
@@ -80,12 +81,12 @@ public class ComputerScreen extends Screen
 		if(be.programSelected == -1 && !be.hasProgram(-1))
 			for(Entry<Integer, Boolean> entry : be.installedPrograms.entrySet())
 				if(entry.getValue() && (be.programSelected == -1 || be.programSelected > entry.getKey()))
-						be.programSelected = entry.getKey();
+					be.programSelected = entry.getKey();
 		
 		if(be.programSelected != -1 && (program == null || program.getId() != be.programSelected))
 			program = ComputerProgram.getProgram(be.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, TextComponent.EMPTY, button -> changeProgram());
+		programButton = new ExtendedButton((width - xSize) / 2 + 95, (height - ySize) / 2 + 10, 70, 20, TextComponent.EMPTY, button -> changeProgram());
 		addRenderableWidget(programButton);
 		if(be.programSelected != -1)
 			program.onInitGui(this);

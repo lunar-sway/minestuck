@@ -36,8 +36,7 @@ public class DiskBurner extends ButtonListProgram
 		if(buttonName.equals(BURN_CLIENT_DISK))
 		{
 			MSPacketHandler.sendToServer(BurnDiskPacket.create(be, 0));
-		}
-		else if(buttonName.equals(BURN_SERVER_DISK))
+		} else if(buttonName.equals(BURN_SERVER_DISK))
 		{
 			MSPacketHandler.sendToServer(BurnDiskPacket.create(be, 1));
 		}

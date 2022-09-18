@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
  */
 public class ReadableSburbCodeScreen extends Screen
 {
-	public static final ResourceLocation BOOK_TEXTURES = new ResourceLocation("textures/gui/book.png");
+	public static final ResourceLocation BOOK_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book.png");
 	private final List<Block> blockList;
 	private final boolean paradoxCode;
-
+	
 	private PageButton forwardButton;
 	private PageButton backButton;
 	
@@ -207,7 +207,18 @@ public class ReadableSburbCodeScreen extends Screen
 					
 					for(String text : blockTextList)
 					{
-						if(isPresent)
+						String toInsert = isPresent ? text : EMPTY_SPACE;
+						font.getSplitter().splitLines(toInsert, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+							//limiting the length of the page via this if statement
+							if(stillValidLine(lineY.intValue()))
+							{
+								Component line = new TextComponent(toInsert.substring(start, end)).setStyle(style);
+								font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300);
+								lineY.add(CUSTOM_LINE_HEIGHT);
+							}
+						});
+						
+						/*if(isPresent)
 						{
 							font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
 								//limiting the length of the page via this if statement
@@ -228,7 +239,7 @@ public class ReadableSburbCodeScreen extends Screen
 									lineY.add(CUSTOM_LINE_HEIGHT);
 								}
 							});
-						}
+						}*/
 					}
 					
 					isPresent = false;
@@ -241,7 +252,7 @@ public class ReadableSburbCodeScreen extends Screen
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
-
+	
 	public boolean isValidBlock(int lineIterate)
 	{
 		return !blockList.isEmpty() && blockList.size() > lineIterate && blockList.get(lineIterate) != null;
