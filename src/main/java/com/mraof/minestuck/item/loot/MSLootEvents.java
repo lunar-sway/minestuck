@@ -38,14 +38,21 @@ import java.util.Set;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class MSLootEvents
 {
-	private static final Set<ResourceLocation> LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.SIMPLE_DUNGEON, BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.DESERT_PYRAMID, BuiltInLootTables.JUNGLE_TEMPLE, BuiltInLootTables.WOODLAND_MANSION, BuiltInLootTables.UNDERWATER_RUIN_BIG, BuiltInLootTables.SPAWN_BONUS_CHEST);
+	private static final Set<ResourceLocation> BLANK_DISK_DUNGEON_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.SIMPLE_DUNGEON, BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.DESERT_PYRAMID, BuiltInLootTables.JUNGLE_TEMPLE, BuiltInLootTables.WOODLAND_MANSION, BuiltInLootTables.UNDERWATER_RUIN_BIG, BuiltInLootTables.SPAWN_BONUS_CHEST);
+	private static final Set<ResourceLocation> SBURB_CODE_LIBRARY_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.STRONGHOLD_LIBRARY, BuiltInLootTables.LIBRARIAN_GIFT, BuiltInLootTables.STRONGHOLD_CORRIDOR);
 	
 	@SubscribeEvent
 	public static void onLootLoad(LootTableLoadEvent event) //created using Upgrade Aquatic "LootEvents" and Mystical World "LootHandler" for reference
 	{
-		if(LOOT_INJECT.contains(event.getName()))
+		inject(event, BLANK_DISK_DUNGEON_LOOT_INJECT, MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, "blank_disk_dungeon_inject");
+		inject(event, SBURB_CODE_LIBRARY_LOOT_INJECT, MSLootTables.SBURB_CODE_LIBRARY_LOOT_INJECT, "sburb_code_library_inject");
+	}
+	
+	private static void inject(LootTableLoadEvent event, Set<ResourceLocation> lootTableSet, ResourceLocation injectionLootTable, String address)
+	{
+		if(lootTableSet.contains(event.getName()))
 		{
-			LootPool pool = LootPool.lootPool().add(LootTableReference.lootTableReference(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT)).name("blank_disk_dungeon_loot_inject").build();
+			LootPool pool = LootPool.lootPool().add(LootTableReference.lootTableReference(injectionLootTable)).name(address).build();
 			event.getTable().addPool(pool);
 		}
 	}

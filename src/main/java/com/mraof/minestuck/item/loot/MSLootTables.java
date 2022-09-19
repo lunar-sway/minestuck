@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.item.loot.conditions.LandTypeLootCondition;
 import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
+import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.Serializer;
@@ -17,9 +18,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 public class MSLootTables
 {
 	public static final ResourceLocation BLANK_DISK_DUNGEON_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/blank_disk_dungeon_inject");
-	;;;;
-	//TODO sburb code inject for overworld libraries
-	;;;;
+	public static final ResourceLocation SBURB_CODE_LIBRARY_LOOT_INJECT = new ResourceLocation("minestuck", "chests/injections/sburb_code_library_inject");
 	public static final ResourceLocation FROG_TEMPLE_CHEST = new ResourceLocation("minestuck", "chests/frog_temple");
 	public static final ResourceLocation BASIC_MEDIUM_CHEST = new ResourceLocation("minestuck", "chests/medium_basic");
 	public static final ResourceLocation CONSORT_JUNK_REWARD = new ResourceLocation("minestuck", "gameplay/consort_junk");
@@ -28,6 +27,7 @@ public class MSLootTables
 	public static final ResourceLocation KUNDLER_SUPRISES = new ResourceLocation("minestuck", "gameplay/kundler_suprises");
 	public static final ResourceLocation LOTUS_FLOWER_DEFAULT = new ResourceLocation("minestuck", "gameplay/lotus_flower_default");
 	
+	private static LootItemFunctionType SET_SBURB_CODE_FRAGMENT_FUNCTION;
 	private static LootItemConditionType LAND_TYPE_CONDITION;
 	private static LootItemConditionType CONSORT_CONDITION;
 	private static LootItemFunctionType SET_BOONDOLLAR_FUNCTION;
@@ -35,10 +35,16 @@ public class MSLootTables
 	
 	public static void registerLootSerializers()
 	{
+		SET_SBURB_CODE_FRAGMENT_FUNCTION = registerFunction("set_sburb_code_fragments", new SetSburbCodeFragments.Serializer());
 		LAND_TYPE_CONDITION = registerCondition("land_aspect", new LandTypeLootCondition.Serializer());
 		CONSORT_CONDITION = registerCondition("consort", new ConsortLootCondition.Serializer());
 		SET_BOONDOLLAR_FUNCTION = registerFunction("set_boondollar_count", new SetBoondollarCount.Serializer());
 		LAND_TABLE_ENTRY = registerEntry("land_table", new LandTableLootEntry.SerializerImpl());
+	}
+	
+	public static LootItemFunctionType setSburbCodeFragmentType()
+	{
+		return SET_SBURB_CODE_FRAGMENT_FUNCTION;
 	}
 	
 	public static LootItemConditionType landTypeConditionType()

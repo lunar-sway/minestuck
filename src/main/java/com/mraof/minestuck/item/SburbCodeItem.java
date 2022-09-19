@@ -134,7 +134,7 @@ public class SburbCodeItem extends ReadableSburbCodeItem
 		stack.setTag(nbt);
 	}
 	
-	public ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
+	public static ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
 	{
 		CompoundTag nbt = stack.getOrCreateTag();
 		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);

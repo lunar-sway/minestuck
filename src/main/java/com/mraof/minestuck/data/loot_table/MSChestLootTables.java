@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -39,6 +40,10 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
 						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))));
+		
+		lootProcessor.accept(MSLootTables.SBURB_CODE_LIBRARY_LOOT_INJECT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))).apply(SetSburbCodeFragments.builder()))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(UniformGenerator.between(0, 2))
