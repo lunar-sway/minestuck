@@ -31,7 +31,8 @@ import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
-{	//TODO The implementation of this class need a serious rewrite
+{
+	//TODO The implementation of this class need a serious rewrite
 	public ComputerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
@@ -56,10 +57,10 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
-		if (nbt.contains("programs"))
+		if(nbt.contains("programs"))
 		{
 			CompoundTag programs = nbt.getCompound("programs");
-			for (Object name : programs.getAllKeys())
+			for(Object name : programs.getAllKeys())
 			{
 				installedPrograms.put(programs.getInt((String) name), true);
 			}
@@ -144,12 +145,12 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public boolean hasProgram(int id)
 	{
-		return installedPrograms.get(id) == null ? false : installedPrograms.get(id);
+		return installedPrograms.get(id) != null && installedPrograms.get(id);
 	}
-
+	
 	public CompoundTag getData(int id)
 	{
-		if(!programData.contains("program_"+id))
+		if(!programData.contains("program_" + id))
 			programData.put("program_" + id, new CompoundTag());
 		return programData.getCompound("program_" + id);
 	}

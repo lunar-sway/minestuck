@@ -207,8 +207,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	{
 		ComputerBlockEntity be = new ComputerBlockEntity(pos, state);
 		be.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
-		return be;
-		//return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
+		return state.getValue(STATE) != State.OFF ? be : null;
 	}
 	
 	@Override

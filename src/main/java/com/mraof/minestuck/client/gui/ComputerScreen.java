@@ -16,8 +16,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class ComputerScreen extends Screen
@@ -130,34 +132,50 @@ public class ComputerScreen extends Screen
 		updateGui();
 	}
 	
-	//TODO when both server and client programs are installed, disk burner is no longer iterated to
+	//TODO when all three programs exist there is no problem but if only server disk and disk burner exist then there is a crash
 	private int getNextProgram()
 	{
-		if(be.installedPrograms.size() == 1)
+		/*if(be.installedPrograms.size() == 1)
 		{
 			return be.programSelected;
-		}
-		Iterator<Entry<Integer, Boolean>> it = be.installedPrograms.entrySet().iterator();
-		//int place = 0;
-		boolean found = false;
-		int lastProgram = be.programSelected;
-		while(it.hasNext())
+		}*/
+		
+		List<Integer> installedProgramOrdinals = new ArrayList<>();
+		int highestNumberedProgram = 0;
+		int nextInstalledProgram = be.programSelected;
+		int lowestNumberedProgram = 0;
+		
+		for(Iterator<Integer> iterator = be.installedPrograms.keySet().iterator(); iterator.hasNext(); )
 		{
-			Map.Entry<Integer, Boolean> pairs = it.next();
-			int program = pairs.getKey();
-			if(found)
-			{
-				return program;
-			} else if(program == be.programSelected)
-			{
-				found = true;
-			} else
-			{
-				lastProgram = program;
-			}
-			//place++;
+			int key = iterator.next();
+			installedProgramOrdinals.add(key);
+			
+			if(highestNumberedProgram < key)
+				highestNumberedProgram = key;
+			
+			if(key == be.programSelected + 1)
+				nextInstalledProgram = key;
+			
+			if(lowestNumberedProgram > key)
+				lowestNumberedProgram = key;
 		}
-		return lastProgram;
+		
+		if(installedProgramOrdinals.get(0) > installedProgramOrdinals.get(Math.max(0, installedProgramOrdinals.size() - 1)))
+			Collections.reverse(installedProgramOrdinals); //for some reason, programs are added in reverse with the highest numbered program being the first element
+		
+		if(nextInstalledProgram <= be.programSelected)
+		{
+			for(int ordinal : installedProgramOrdinals)
+			{
+				if(ordinal > be.programSelected)
+				{
+					nextInstalledProgram = ordinal;
+					break;
+				}
+			}
+		}
+		
+		return be.programSelected >= highestNumberedProgram ? lowestNumberedProgram : nextInstalledProgram;
 	}
 	
 	@Override
