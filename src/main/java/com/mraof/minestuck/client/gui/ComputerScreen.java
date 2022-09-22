@@ -16,11 +16,9 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class ComputerScreen extends Screen
 {
@@ -132,50 +130,13 @@ public class ComputerScreen extends Screen
 		updateGui();
 	}
 	
-	//TODO when all three programs exist there is no problem but if only server disk and disk burner exist then there is a crash
 	private int getNextProgram()
 	{
-		/*if(be.installedPrograms.size() == 1)
-		{
-			return be.programSelected;
-		}*/
+		List<Integer> installedProgramIdList = new ArrayList<>(be.installedPrograms.keySet()).stream().sorted().collect(Collectors.toList()); //turned into a list for ease of manipulation and getting information from, immediately sorted so that the keys are in order
 		
-		List<Integer> installedProgramOrdinals = new ArrayList<>();
-		int highestNumberedProgram = 0;
-		int nextInstalledProgram = be.programSelected;
-		int lowestNumberedProgram = 0;
+		int selectedProgramIndex = installedProgramIdList.indexOf(be.programSelected);
 		
-		for(Iterator<Integer> iterator = be.installedPrograms.keySet().iterator(); iterator.hasNext(); )
-		{
-			int key = iterator.next();
-			installedProgramOrdinals.add(key);
-			
-			if(highestNumberedProgram < key)
-				highestNumberedProgram = key;
-			
-			if(key == be.programSelected + 1)
-				nextInstalledProgram = key;
-			
-			if(lowestNumberedProgram > key)
-				lowestNumberedProgram = key;
-		}
-		
-		if(installedProgramOrdinals.get(0) > installedProgramOrdinals.get(Math.max(0, installedProgramOrdinals.size() - 1)))
-			Collections.reverse(installedProgramOrdinals); //for some reason, programs are added in reverse with the highest numbered program being the first element
-		
-		if(nextInstalledProgram <= be.programSelected)
-		{
-			for(int ordinal : installedProgramOrdinals)
-			{
-				if(ordinal > be.programSelected)
-				{
-					nextInstalledProgram = ordinal;
-					break;
-				}
-			}
-		}
-		
-		return be.programSelected >= highestNumberedProgram ? lowestNumberedProgram : nextInstalledProgram;
+		return selectedProgramIndex < installedProgramIdList.size() - 1 ? installedProgramIdList.get(selectedProgramIndex + 1) : installedProgramIdList.get(0);
 	}
 	
 	@Override
