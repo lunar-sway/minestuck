@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.data.MinestuckStartingModusProvider;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -26,14 +25,15 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class StartingModusManager extends SimplePreparableReloadListener<List<String>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(BoondollarPricing.class, new BoondollarPricing.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().create();
+	
+	public static final String PATH = "minestuck/config/starting_modus.json";
 	
 	private static StartingModusManager INSTANCE;
 	private List<ModusType<?>> startingModusTypes;
@@ -41,7 +41,7 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 	@Override
 	protected List<String> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, MinestuckStartingModusProvider.PATH);
+		ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, PATH);
 		if(!resourceManager.hasResource(location))
 			return null;
 		
@@ -59,7 +59,7 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 			LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
 		}
 		
-		return null;
+		return new ArrayList<>();
 	}
 	
 	@Override
@@ -75,18 +75,18 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 		if(name == null)
 			LOGGER.error("Unable to parse starting modus type {} as a resource location!", key);
 		
-		return ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> modusType = ModusTypes.REGISTRY.getValue(name);
+		
+		if(modusType == null)
+			LOGGER.error("Unable to get the modus type '{}' from the registry", name);
+		
+		return modusType;
 	}
 	
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
 		event.addListener(INSTANCE = new StartingModusManager());
-	}
-	
-	public static StartingModusManager getInstance()
-	{
-		return Objects.requireNonNull(INSTANCE);
 	}
 	
 	public static List<ModusType<?>> getStartingModusTypes()

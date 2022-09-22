@@ -7,7 +7,6 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -18,10 +17,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.mraof.minestuck.util.StartingModusManager.PATH;
+
 public class MinestuckStartingModusProvider implements DataProvider
 {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	public static String PATH = "minestuck/config/starting_modus.json";
 	private final DataGenerator generator;
 	
 	public MinestuckStartingModusProvider(DataGenerator generator)
