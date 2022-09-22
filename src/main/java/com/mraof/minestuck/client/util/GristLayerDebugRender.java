@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.Mod;
 public class GristLayerDebugRender
 {
 	private static final boolean RENDER = true;
-	private static final int RADIUS =  16;
+	private static final int RADIUS =  30;
 	
 	@SubscribeEvent
 	public static void onRenderTick(RenderLevelStageEvent event)
@@ -58,7 +58,7 @@ public class GristLayerDebugRender
 				GristType type = layer.getTypeAt(x, z);
 				RenderSystem.setShaderTexture(0, type.getIcon());
 				stack.pushPose();
-				stack.translate(x - camera.getPosition().x, 100 - camera.getPosition().y, z - camera.getPosition().z);
+				stack.translate(x - camera.getPosition().x, 135 - camera.getPosition().y, z - camera.getPosition().z);
 				Matrix4f pose = stack.last().pose();
 				
 				BufferBuilder render = Tesselator.getInstance().getBuilder();
