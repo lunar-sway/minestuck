@@ -29,7 +29,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	@Override
 	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
-		return state.is(MSBlocks.END_GRASS);
+		return state.is(MSBlocks.END_GRASS.get());
 	}
 	
 	@Override

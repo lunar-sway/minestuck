@@ -64,16 +64,13 @@ public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 		StructurePlaceSettings settings = new StructurePlaceSettings().setBoundingBox(new BoundingBox(pos.getX() - 8, 0, pos.getZ() - 8, pos.getX() + 24 - 1, 255, pos.getZ() + 24 - 1)).setRandom(rand);
 		
 		Vec3i hiltSize = hiltTemplate.getSize(hiltRotation);
-		int xOffset = rand.nextInt(32 - hiltSize.getX()) - 8;
-		int zOffset = rand.nextInt(32 - hiltSize.getZ()) - 8;
-		BlockPos hiltPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos.offset(xOffset + hiltSize.getX()/2, 0, zOffset + hiltSize.getZ()/2));
-		hiltPos = hiltTemplate.getZeroPositionWithTransform(hiltPos.offset(-hiltSize.getX()/2, -(2 + rand.nextInt(3)), -hiltSize.getZ()/2), Mirror.NONE, hiltRotation);
+		BlockPos hiltPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos).below(2 + rand.nextInt(3));
+		hiltPos = hiltTemplate.getZeroPositionWithTransform(hiltPos.offset(-hiltSize.getX()/2, 0, -hiltSize.getZ()/2), Mirror.NONE, hiltRotation);
 		
 		Vec3i bladeSize = bladeTemplate.getSize(bladeRotation);
-		xOffset = rand.nextInt(32 - bladeSize.getX()) - 8;
-		zOffset = rand.nextInt(32 - bladeSize.getZ()) - 8;
-		BlockPos bladePos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos.offset(xOffset + bladeSize.getX()/2, 0, zOffset + bladeSize.getZ()/2));
-		bladePos = bladeTemplate.getZeroPositionWithTransform(bladePos.offset(-bladeSize.getX()/2, -rand.nextInt(3), -bladeSize.getZ()/2), bladeMirror, bladeRotation);
+		BlockPos bladePos = pos.offset(rand.nextInt(8), 0, rand.nextInt(8));
+		bladePos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, bladePos).below(rand.nextInt(3));
+		bladePos = bladeTemplate.getZeroPositionWithTransform(bladePos.offset(-bladeSize.getX()/2, 0, -bladeSize.getZ()/2), bladeMirror, bladeRotation);
 		
 		settings.setRotation(hiltRotation);
 		hiltTemplate.placeInWorld(level, hiltPos, hiltPos, settings, rand, Block.UPDATE_INVISIBLE);

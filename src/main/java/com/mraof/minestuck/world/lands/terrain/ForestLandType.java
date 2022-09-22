@@ -3,18 +3,27 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.Random;
 
@@ -29,143 +38,113 @@ public class ForestLandType extends TerrainLandType
 	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
-	public ForestLandType(Variant variation)
+	public static TerrainLandType createForest()
 	{
-		super(GROUP_NAME);
+		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FOREST));
+	}
+	
+	public static TerrainLandType createTaiga()
+	{
+		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
+				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
+				.category(Biome.BiomeCategory.TAIGA).music(() -> MSSoundEvents.MUSIC_TAIGA));
+	}
+	
+	private ForestLandType(Variant variation, Builder builder)
+	{
+		super(builder);
 		type = variation;
 	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", type == Variant.TAIGA ? Blocks.PODZOL.defaultBlockState() : Blocks.GRASS_BLOCK.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
+		registry.setBlock("surface", type == Variant.TAIGA ? Blocks.PODZOL : Blocks.GRASS_BLOCK);
+		registry.setBlock("upper", Blocks.DIRT);
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_primary", Blocks.SPRUCE_WOOD.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FROST_WOOD.defaultBlockState());
+			registry.setBlock("structure_primary", Blocks.SPRUCE_WOOD);
+			registry.setBlock("structure_primary_decorative", MSBlocks.FROST_WOOD);
 		} else {
-			registry.setBlockState("structure_primary", MSBlocks.VINE_WOOD.defaultBlockState());
-			registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD.defaultBlockState());
+			registry.setBlock("structure_primary", MSBlocks.VINE_WOOD);
+			registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_VINE_WOOD);
 		}
-		registry.setBlockState("structure_secondary", Blocks.STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.DIRT_PATH.defaultBlockState());
-		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.GREEN_WOOL.defaultBlockState());
+		registry.setBlock("structure_secondary", Blocks.STONE_BRICKS);
+		registry.setBlock("structure_secondary_decorative", Blocks.CHISELED_STONE_BRICKS);
+		registry.setBlock("structure_secondary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("bush", Blocks.FERN);
+		registry.setBlock("structure_wool_1", Blocks.GREEN_WOOL);
 		if(type == Variant.TAIGA) {
-			registry.setBlockState("structure_wool_3", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
+			registry.setBlock("structure_wool_3", Blocks.LIGHT_BLUE_WOOL);
 		} else {
-			registry.setBlockState("structure_wool_3", Blocks.BROWN_WOOL.defaultBlockState());
-		}
-	}
-	
-	@Override
-	public String[] getNames()
-	{
-		if(type == Variant.FOREST) {
-			return new String[] {FORESTS, TREES};
-		} else {
-			return new String[] {TAIGAS, BOREAL_FORESTS, COLD_FORESTS};
+			registry.setBlock("structure_wool_3", Blocks.BROWN_WOOL);
 		}
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = this.type == Variant.TAIGA ? Biome.BiomeCategory.TAIGA : Biome.BiomeCategory.FOREST;
 		properties.forceRain = LandProperties.ForceType.DEFAULT;
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*if(type == LandBiomeType.NORMAL)
+		if(type == LandBiomeType.NORMAL)
 		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_GRASS_FOREST);
+			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST);
 			
 			switch(this.type)
 			{
-				case FOREST:
-					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
-							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.BIRCH.weighted(0.2F), Features.FANCY_OAK.weighted(0.1F)), Features.OAK))
-							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
-					break;
-				case TAIGA:
-					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
-							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.PINE.weighted(1/3F)), Features.SPRUCE))
-							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(5, 0.1F, 1))));
-					break;
+				case FOREST ->
+						builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.FOREST_LAND_TREES.getHolder().orElseThrow());
+				case TAIGA ->
+						builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TAIGA_LAND_TREES.getHolder().orElseThrow());
 			}
 		} else if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH
-					.configured(Features.Configs.JUNGLE_GRASS_CONFIG).decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).count(4));
+			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_JUNGLE_GRASS_PATCH.getHolder().orElseThrow());
 			
 			switch(this.type)
 			{
-				case FOREST:
-					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_SELECTOR
-							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.BIRCH.weighted(0.2F), Features.FANCY_OAK.weighted(0.1F)), Features.OAK))
-							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
-					break;
-				case TAIGA:
-					builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION,Feature.RANDOM_SELECTOR
-							.configured(new MultipleRandomFeatureConfig(ImmutableList.of(Features.PINE.weighted(1/3F)), Features.SPRUCE))
-							.decorated(Features.Placements.HEIGHTMAP_SQUARE).decorated(Placement.COUNT_EXTRA.configured(new AtSurfaceWithExtraConfig(10, 0.1F, 1))));
-					break;
+				case FOREST ->
+						builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_FOREST_LAND_TREES.getHolder().orElseThrow());
+				case TAIGA ->
+						builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DENSE_TAIGA_LAND_TREES.getHolder().orElseThrow());
 			}
 		} else if(type == LandBiomeType.OCEAN)
 		{
-			DefaultBiomeFeatures.addSwampClayDisk(builder);
+			BiomeDefaultFeatures.addSwampClayDisk(builder);
 		}
 		
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33))
-				.range(256).squared().count(10));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
-				.range(256).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17))
-				.range(128).squared().count(20));
-		DefaultBiomeFeatures.addExtraEmeralds(builder);
-		*/
-	}
-	@Override
-	public Vec3 getFogColor()
-	{
-		return new Vec3(0.0D, 1.0D, 0.6D);
-	}
-	
-	@Override
-	public Vec3 getSkyColor()
-	{
-		return new Vec3(0.4D, 0.7D, 1.0D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33),
+				CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
+				CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+				new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17),
+				CountPlacement.of(20), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128)), BiomeFilter.biome()));
+		BiomeDefaultFeatures.addExtraEmeralds(builder);
+		
 	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
+		IguanaVillagePieces.addPieces(register, random);
 	}
 	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return type == Variant.TAIGA ? MSSoundEvents.MUSIC_TAIGA : MSSoundEvents.MUSIC_FOREST;
-	}
-	
-	public enum Variant
+	private enum Variant
 	{
 		FOREST,
 		TAIGA

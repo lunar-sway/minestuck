@@ -15,11 +15,10 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -80,6 +79,7 @@ import java.util.*;
 public final class ServerEditHandler	//TODO Consider splitting this class into two
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final ArrayList<String> commands = new ArrayList<>(Arrays.asList("effect", "gamemode", "defaultgamemode", "enchant", "xp", "tp", "spreadplayers", "kill", "clear", "spawnpoint", "setworldspawn", "give"));
 	
 	static final Map<SburbConnection, Vec3> lastEditmodePos = new HashMap<>();
@@ -195,7 +195,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		SburbConnection c = SkaianetHandler.get(player.getServer()).getActiveConnection(computerTarget);
 		if(c != null && c.getServerIdentifier().equals(computerOwner) && getData(player.server, c) == null && getData(player) == null)
 		{
-			Debug.info("Activating edit mode on player \""+player.getName().getString()+"\", target player: \""+computerTarget+"\".");
+			LOGGER.info("Activating edit mode on player \"{}\", target player: \"{}\".", player.getName().getString(), computerTarget);
 			DecoyEntity decoy = new DecoyEntity((ServerLevel) player.level, player);
 			EditData data = new EditData(decoy, player, c);
 

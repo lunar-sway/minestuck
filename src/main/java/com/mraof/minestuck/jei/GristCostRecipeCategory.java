@@ -7,12 +7,13 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -39,17 +40,25 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.ALCHEMITER));
 	}
-
+	
+	@Override
+	public RecipeType<JeiGristCost> getRecipeType()
+	{
+		return MinestuckJeiPlugin.GRIST_COST;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiGristCost> getRecipeClass()
 	{
-		return JeiGristCost.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.GRIST_COST_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override
@@ -85,7 +94,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		recipeLayout.getItemStacks().init(0, true, 18, 4);
 		recipeLayout.getItemStacks().init(1, false, 126, 4);
 		Stream<ItemStack> inputDowels = ingredients.getOutputs(VanillaTypes.ITEM).get(0).stream();
-		inputDowels = inputDowels.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL)));
+		inputDowels = inputDowels.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())));
 		inputDowels = inputDowels.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor()));
 		recipeLayout.getItemStacks().set(0, inputDowels.collect(Collectors.toList()));
 		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));

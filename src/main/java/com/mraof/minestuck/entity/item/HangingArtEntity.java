@@ -1,7 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.util.Debug;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,12 +16,16 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Set;
 
 public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityAdditionalSpawnData
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public T art;
 	
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level)
@@ -53,7 +56,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		artList.removeIf(art -> art.getSizeX() * art.getSizeY() < maxSize);
 		
 		if(!artList.isEmpty())
-				this.art = artList.get(this.random.nextInt(artList.size()));
+			this.art = artList.get(this.random.nextInt(artList.size()));
 		
 		
 		this.setDirection(direction);
@@ -97,10 +100,10 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		if(this.art == null)
 		{
 			this.art = this.getDefault();
-			Debug.warnf("Could not load art %s for type %s, resorting to the default type.", s, this.getType().getDescriptionId());
+			LOGGER.warn("Could not load art {} for type {}, resorting to the default type.", s, this.getType().getDescriptionId());
 		}
 		super.readAdditionalSaveData(compound);
-		recalculateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
+		recalculateBoundingBox();    //Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
 	}
 	
 	@Override
@@ -127,7 +130,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			
 			this.spawnAtLocation(this.getStackDropped());
 		}
-			
+		
 	}
 	
 	@Override
@@ -144,7 +147,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	
 	@Override
 	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
-			boolean teleport)
+					   boolean teleport)
 	{
 		BlockPos blockpos = this.pos.offset(x - this.getX(), y - this.getY(), z - this.getZ());
 		this.setPos((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
@@ -168,7 +171,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	@Override
 	public void readSpawnData(FriendlyByteBuf data)
 	{
-		Direction facing = Direction.values()[data.readByte()%Direction.values().length];
+		Direction facing = Direction.values()[data.readByte() % Direction.values().length];
 		
 		this.pos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
 		
@@ -205,11 +208,16 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		String getTitle();
 		
 		int getSizeX();
+		
 		int getSizeY();
 		
 		int getOffsetX();
+		
 		int getOffsetY();
 	}
-
-	public Direction getFacingDirection() {return direction;}
+	
+	public Direction getFacingDirection()
+	{
+		return direction;
+	}
 }

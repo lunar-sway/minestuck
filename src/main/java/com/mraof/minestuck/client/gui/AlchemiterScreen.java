@@ -9,7 +9,7 @@ import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,17 +27,17 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/large_alchemiter.png");
 	private static final int guiWidth = 159, guiHeight = 102;
-	private final AlchemiterTileEntity alchemiter;
+	private final AlchemiterBlockEntity alchemiter;
 	private int itemQuantity;
 	
-	AlchemiterScreen(AlchemiterTileEntity te)
+	AlchemiterScreen(AlchemiterBlockEntity be)
 	{
 		super(new TranslatableComponent(TITLE));
-		alchemiter = te;
+		alchemiter = be;
 		itemQuantity = 1;
 	}
 	
-	public AlchemiterTileEntity getAlchemiter() {
+	public AlchemiterBlockEntity getAlchemiter() {
 		return alchemiter;
 	}
 	
@@ -97,7 +97,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 		GristSet set;
 		set = alchemiter.getGristCost(itemQuantity);
 		//draw the grist board	//TODO Handle select mode correctly
-		GuiUtil.drawGristBoard(poseStack, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
+		GuiUtil.drawGristBoard(poseStack, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
 		Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
 		if(tooltip != null)
@@ -131,7 +131,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
 		if(mouseButton == 0
-				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD
+				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get()
 				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{
 			minecraft.screen = new GristSelectorScreen<>(this);

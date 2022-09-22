@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,9 +16,9 @@ public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 		this.pos = pos;
 	}
 	
-	public static CloseRemoteSburbConnectionPacket asClient(ComputerTileEntity te)
+	public static CloseRemoteSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new CloseRemoteSburbConnectionPacket(te.getBlockPos());
+		return new CloseRemoteSburbConnectionPacket(be.getBlockPos());
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos,
+		ComputerBlockEntity.forNetworkIfPresent(player, pos,
 				computer -> SkaianetHandler.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

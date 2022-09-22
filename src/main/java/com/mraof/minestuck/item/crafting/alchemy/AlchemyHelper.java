@@ -5,7 +5,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -81,12 +81,12 @@ public class AlchemyHelper
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD && item.hasTag() && item.getTag().getBoolean("punched");
+		return item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && item.getTag().getBoolean("punched");
 	}
 	
 	public static boolean isGhostCard(ItemStack item)
 	{
-		return item.getItem() == MSItems.CAPTCHA_CARD && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
+		return item.getItem() == MSItems.CAPTCHA_CARD.get() && hasDecodedItem(item) && item.getTag().getInt("contentSize") <= 0;
 	}
 	
 	public static boolean hasDecodedItem(ItemStack item)
@@ -104,7 +104,7 @@ public class AlchemyHelper
 		
 		if (card.isEmpty()) {return ItemStack.EMPTY;}
 		
-		if (card.getItem().equals(CAPTCHA_CARD) && card.hasTag() && card.getTag().contains("contentID"))
+		if (card.getItem().equals(CAPTCHA_CARD.get()) && card.hasTag() && card.getTag().contains("contentID"))
 		{
 			return getDecodedItem(card);
 		}
@@ -123,7 +123,7 @@ public class AlchemyHelper
 			nbt = new CompoundTag();
 			nbt.putString("contentID", item.getItem().getRegistryName().toString());
 		}
-		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD : CRUXITE_DOWEL);
+		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get());
 		stack.setTag(nbt);
 		return stack;
 	}
@@ -193,7 +193,7 @@ public class AlchemyHelper
 	
 	public static ItemStack createShunt(ItemStack item)
 	{
-		ItemStack stack = createEncodedItem(item, SHUNT);
+		ItemStack stack = createEncodedItem(item, SHUNT.get());
 		stack.getOrCreateTag().putBoolean("punched", true);
 		
 		if(item.hasTag())

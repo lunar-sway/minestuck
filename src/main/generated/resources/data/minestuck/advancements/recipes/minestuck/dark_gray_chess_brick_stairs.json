@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:dark_gray_chess_brick_stairs"
+    ]
+  },
+  "criteria": {
+    "has_dark_gray_chess_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:dark_gray_chess_bricks"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:dark_gray_chess_brick_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dark_gray_chess_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

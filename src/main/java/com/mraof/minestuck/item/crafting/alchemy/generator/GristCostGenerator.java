@@ -1,56 +1,59 @@
 package com.mraof.minestuck.item.crafting.alchemy.generator;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public final class GristCostGenerator extends SimplePreparableReloadListener<Void>
+public final class GristCostGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final RecipeManager recipes;
-	
-	private GristCostGenerator(RecipeManager recipes)
+	//Hacky access to the recipe manager, which isn't otherwise accessible in TagsUpdatedEvent
+	private static RecipeManager recipes;
+	@SubscribeEvent
+	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		this.recipes = recipes;
+		recipes = event.getServerResources().getRecipeManager();
+	}
+	@SubscribeEvent
+	public static void onServerStopped(ServerStoppedEvent event)
+	{
+		recipes = null;
 	}
 	
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void addListener(AddReloadListenerEvent event)
+	@SubscribeEvent
+	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
-		event.addListener(new GristCostGenerator(event.getServerResources().getRecipeManager()));
+		if(event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD)
+		{
+			if(recipes != null)
+				run(recipes);
+			else
+				LOGGER.error("Failed to access recipe manager for grist cost generation!");
+		}
 	}
 	
-	@Override
-	protected Void prepare(ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
-	{
-		return null;
-	}
-	
-	@Override
-	protected void apply(Void splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn)
+	private static void run(RecipeManager recipes)
 	{
 		GeneratorProcess process = new GeneratorProcess();
 		
 		//Collect providers
 		Stream<GristCostRecipe> stream = recipes.getRecipes().stream().filter(recipe -> recipe instanceof GristCostRecipe).map(recipe -> (GristCostRecipe) recipe);
-		for(GristCostRecipe recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).collect(Collectors.toList()))
+		for(GristCostRecipe recipe : stream.sorted(Comparator.comparingInt(value -> -value.getPriority())).toList())
 		{
 			recipe.addCostProvider((item, provider) ->
 			{
@@ -79,7 +82,7 @@ public final class GristCostGenerator extends SimplePreparableReloadListener<Voi
 		LOGGER.debug("Finished grist cost generation");
 	}
 	
-	private GristSet lookupCost(GeneratorProcess process, GenerationContext context)
+	private static GristSet lookupCost(GeneratorProcess process, GenerationContext context)
 	{
 		Item item = context.getCurrentItem();
 		GristCostResult cost = null;
@@ -94,6 +97,9 @@ public final class GristCostGenerator extends SimplePreparableReloadListener<Voi
 				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
 			}
 		}
+		
+		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
+			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 		
 		return cost != null ? cost.getCost() : null;
 	}

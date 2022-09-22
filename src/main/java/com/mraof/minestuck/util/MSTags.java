@@ -43,7 +43,8 @@ public class MSTags
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
-		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
+		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
+		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -80,6 +81,7 @@ public class MSTags
 		public static final TagKey<Item> MODUS_CARD = tag("modus_card");
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
+		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static TagKey<Item> tag(String name)
@@ -124,11 +126,21 @@ public class MSTags
 	
 	public static class Biomes
 	{
-		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
+		// Overworld
 		public static final TagKey<Biome> HAS_FROG_TEMPLE = tag("has_structure/frog_temple");
+		
+		// Land
+		public static final TagKey<Biome> LAND_NORMAL = tag("land/normal");
+		public static final TagKey<Biome> LAND_OCEAN = tag("land/ocean");
+		public static final TagKey<Biome> LAND_ROUGH = tag("land/rough");
+		public static final TagKey<Biome> LAND = tag("land");
+		
+		public static final TagKey<Biome> HAS_LAND_GATE = tag("has_structure/land_gate");
 		public static final TagKey<Biome> HAS_SMALL_RUIN = tag("has_structure/small_ruin");
 		public static final TagKey<Biome> HAS_IMP_DUNGEON = tag("has_structure/imp_dungeon");
 		public static final TagKey<Biome> HAS_CONSORT_VILLAGE = tag("has_structure/consort_village");
+		
+		// Skaia
 		public static final TagKey<Biome> HAS_SKAIA_CASTLE = tag("has_structure/skaia_castle");
 		
 		private static TagKey<Biome> tag(String name)
@@ -137,7 +149,7 @@ public class MSTags
 		}
 	}
 	
-	public static class ConfiguredFeatures
+	public static class Structures
 	{
 		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");	//TODO should contain frog temple
 		

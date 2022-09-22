@@ -2,9 +2,9 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneReceiverTileEntity;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneReceiverBlockEntity;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,14 +56,14 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new WirelessRedstoneReceiverTileEntity(pos, state);
+		return new WirelessRedstoneReceiverBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.WIRELESS_REDSTONE_RECEIVER.get(), WirelessRedstoneReceiverTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.WIRELESS_REDSTONE_RECEIVER.get(), WirelessRedstoneReceiverBlockEntity::serverTick) : null;
 	}
 	
 	@Override
@@ -107,9 +107,9 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 		if(receiverState != newState)
 			level.setBlockAndUpdate(posIn, newState);
 		
-		if(level.getBlockEntity(posIn) instanceof WirelessRedstoneReceiverTileEntity te)
+		if(level.getBlockEntity(posIn) instanceof WirelessRedstoneReceiverBlockEntity be)
 		{
-			te.setLastTransmitterBlockPos(transmitterPos);
+			be.setLastTransmitterBlockPos(transmitterPos);
 		}
 	}
 	

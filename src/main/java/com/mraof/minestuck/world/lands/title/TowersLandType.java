@@ -3,11 +3,18 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 public class TowersLandType extends TitleLandType
 {
@@ -27,25 +34,26 @@ public class TowersLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_BLUE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.YELLOW_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.LIGHT_BLUE_WOOL);
+		registry.setBlock("carpet", Blocks.YELLOW_CARPET);
 	}
 	
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
+		
 		if(type != LandBiomeType.OCEAN)
 		{
-			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.TOWER.configured(IFeatureConfig.NONE).chance(20));
+			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TOWER.getHolder().orElseThrow());
 		}
 		
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.LARGE_PILLAR
-					.configured(new BlockStateFeatureConfig(blocks.getBlockState("structure_primary"))).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE));
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR.get(),
+					new BlockStateConfiguration(blocks.getBlockState("structure_primary")),
+					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}
-		*/
+		
 	}
 	
 	@Override

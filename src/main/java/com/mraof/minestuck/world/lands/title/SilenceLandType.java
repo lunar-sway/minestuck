@@ -3,13 +3,15 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.phys.Vec3;
 
 public class SilenceLandType extends TitleLandType
@@ -30,13 +32,13 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLACK_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.BLUE_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.BLACK_WOOL);
+		registry.setBlock("carpet", Blocks.BLUE_CARPET);
 		
-		if(registry.getCustomBlock("torch") == null)
-			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		if(registry.getCustomBlock("wall_torch") == null)
-			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
+		if(registry.isUsingDefault("torch"))
+			registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		if(registry.isUsingDefault("wall_torch"))
+			registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
 	}
 	
 	@Override
@@ -51,12 +53,9 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{
-		/*
-		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.SIMPLE_BLOCK
-				.configured(new BlockWithContextConfig(Blocks.PUMPKIN.defaultBlockState(), Lists.newArrayList(blocks.getBlockState("surface")),
-								Lists.newArrayList(Blocks.AIR.defaultBlockState()), Lists.newArrayList(Blocks.AIR.defaultBlockState())))
-				.decorated(Features.Placements.HEIGHTMAP_SQUARE).chance(128));
-		*/
+		
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PUMPKIN.getHolder().orElseThrow());
+		
 	}
 	
 	@Override

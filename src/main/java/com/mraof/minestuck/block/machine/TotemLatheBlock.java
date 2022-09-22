@@ -2,8 +2,8 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -56,7 +56,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			return InteractionResult.SUCCESS;
 		
 		BlockPos mainPos = getMainPos(state, pos);
-		if(level.getBlockEntity(mainPos) instanceof TotemLatheTileEntity totemLathe)
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe)
 			totemLathe.onRightClick(player, state);
 		return InteractionResult.SUCCESS;
 	}
@@ -67,7 +67,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
-		if(level.getBlockEntity(mainPos) instanceof TotemLatheTileEntity totemLathe
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.setBroken();
@@ -80,13 +80,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		if(level.getBlockEntity(pos) instanceof TotemLatheTileEntity totemLathe)
+		if(level.getBlockEntity(pos) instanceof TotemLatheBlockEntity totemLathe)
 			totemLathe.checkStates();
 	}
 	
     /**
      *returns the block position of the "Main" block
-     *aka the block with the TileEntity for the machine
+     *aka the block with the BlockEntity for the machine
      */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
@@ -141,7 +141,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new ItemStackTileEntity(pos, state);
+			return new ItemStackBlockEntity(pos, state);
 		}
 		
 		@Override
@@ -171,7 +171,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new TotemLatheTileEntity(pos, state);
+			return new TotemLatheBlockEntity(pos, state);
 		}
 		
 		@Override

@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,7 +35,7 @@ public class StructureBlockRegistryProcessor extends StructureProcessor
 	@Override
 	protected StructureProcessorType<StructureBlockRegistryProcessor> getType()
 	{
-		return MSStructureProcessorTypes.BLOCK_REGISTRY;
+		return MSStructureProcessorTypes.BLOCK_REGISTRY.get();
 	}
 	
 }

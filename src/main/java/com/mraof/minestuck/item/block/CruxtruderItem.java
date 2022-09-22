@@ -3,9 +3,8 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.machine.CruxtruderMultiblock;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,11 +13,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 public class CruxtruderItem extends MultiblockItem
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final CruxtruderMultiblock multiblock;
 	
 	public CruxtruderItem(CruxtruderMultiblock multiblock, Properties properties)
@@ -32,8 +35,8 @@ public class CruxtruderItem extends MultiblockItem
 	{
 		if(player == null)
 			return false;
-		BlockEntity te = level.getBlockEntity(multiblock.getTilePos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
-		if(te instanceof CruxtruderTileEntity)
+		BlockEntity be = level.getBlockEntity(multiblock.getBEPos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
+		if(be instanceof CruxtruderBlockEntity)
 		{
 			int color;
 			EditData editData = ServerEditHandler.getData(player);
@@ -41,9 +44,9 @@ public class CruxtruderItem extends MultiblockItem
 				color = ColorHandler.getColorForPlayer(editData.getConnection().getClientIdentifier(), level);
 			else color =  ColorHandler.getColorForPlayer((ServerPlayer) player);
 			
-			((CruxtruderTileEntity) te).setColor(color);
+			((CruxtruderBlockEntity) be).setColor(color);
 			return true;
-		} else Debug.warnf("Placed cruxtruder, but can't find tile entity. Instead found %s.", te);
+		} else LOGGER.warn("Placed cruxtruder, but can't find block entity. Instead found {}.", be);
 		return false;
 	}
 }

@@ -2,10 +2,10 @@ package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
@@ -30,7 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 /**
- * Summons an entity stored in tile entity when powered by redstone. If the blockstate untriggerable is set to true, it can summon an entity multiple times
+ * Summons an entity stored in block entity when powered by redstone. If the blockstate untriggerable is set to true, it can summon an entity multiple times
  * Only creative mode players(who are not under the effects of Creative Shock) can change the set mob
  */
 public class SummonerBlock extends Block implements EntityBlock
@@ -55,7 +55,7 @@ public class SummonerBlock extends Block implements EntityBlock
 			
 			if(stackIn.getItem() instanceof SpawnEggItem eggItem)
 			{
-				if(level.getBlockEntity(pos) instanceof SummonerTileEntity summonerTE)
+				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity summonerTE)
 				{
 					
 					if(!level.isClientSide)
@@ -68,9 +68,9 @@ public class SummonerBlock extends Block implements EntityBlock
 				}
 			} else if(level.isClientSide)
 			{
-				if(level.getBlockEntity(pos) instanceof SummonerTileEntity te)
+				if(level.getBlockEntity(pos) instanceof SummonerBlockEntity be)
 				{
-					MSScreenFactories.displaySummonerScreen(te);
+					MSScreenFactories.displaySummonerScreen(be);
 				}
 			}
 			
@@ -92,7 +92,7 @@ public class SummonerBlock extends Block implements EntityBlock
 	@Override
 	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		checkSummon(state, level, pos); //made to work with the iterateTracker check in SummonerTileEntity
+		checkSummon(state, level, pos); //made to work with the iterateTracker check in SummonerBlockEntity
 	}
 	
 	private void checkSummon(BlockState state, Level level, BlockPos pos)
@@ -101,7 +101,7 @@ public class SummonerBlock extends Block implements EntityBlock
 		
 		if(!level.isClientSide && blockPowered && (!state.getValue(TRIGGERED) || state.getValue(UNTRIGGERABLE)))
 		{
-			if(level.getBlockEntity(pos) instanceof SummonerTileEntity summoner)
+			if(level.getBlockEntity(pos) instanceof SummonerBlockEntity summoner)
 			{
 				summoner.summonEntity(level, pos, summoner.getSummonedEntity(), !state.getValue(UNTRIGGERABLE), true);
 			}
@@ -112,14 +112,14 @@ public class SummonerBlock extends Block implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new SummonerTileEntity(pos, state);
+		return new SummonerBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.SUMMONER.get(), SummonerTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.SUMMONER.get(), SummonerBlockEntity::serverTick) : null;
 	}
 	
 	@Override

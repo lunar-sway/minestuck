@@ -3,13 +3,14 @@ package com.mraof.minestuck.jei;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -33,17 +34,25 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
 		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
-
+	
+	@Override
+	public RecipeType<JeiCombination> getRecipeType()
+	{
+		return MinestuckJeiPlugin.LATHE;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiCombination> getRecipeClass()
 	{
-		return JeiCombination.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.LATHE_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override
@@ -94,7 +103,7 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		}
 		stackGroup.set(1, second);
 
-		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL), ClientPlayerData.getPlayerColor()));
+		stackGroup.set(2, ColorHandler.setColor(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), ClientPlayerData.getPlayerColor()));
 
 		List<ItemStack> outputs = new ArrayList<>(ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 		ItemStack outputDowel = ColorHandler.setColor(AlchemyHelper.createEncodedItem(outputs.get(0), false), ClientPlayerData.getPlayerColor());

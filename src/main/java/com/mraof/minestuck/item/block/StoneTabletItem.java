@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.block;
 import com.mraof.minestuck.block.StoneTabletBlock;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		if(level.getBlockEntity(pos) instanceof ItemStackTileEntity blockEntity)
+		if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 		{
 			ItemStack newStack = stack.copy();
 			newStack.setCount(1);
@@ -82,7 +82,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 			//Display the stone tablet screen
 			if(level.isClientSide)
 			{
-				boolean canEdit = playerIn.getItemInHand(handIn == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL;
+				boolean canEdit = playerIn.getItemInHand(handIn == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND).getItem() == MSItems.CARVING_TOOL.get();
 				String text = hasText(itemStackIn) ? itemStackIn.getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(playerIn, handIn, text, canEdit);
 			}

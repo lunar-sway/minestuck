@@ -14,6 +14,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraftforge.common.IPlantable;
 
 import java.util.Random;
 
@@ -32,7 +33,7 @@ public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		BlockPos position = context.origin();
 		BlockPos soilPos = position.below();
-		if(level.getBlockState(soilPos).canSustainPlant(level, soilPos, Direction.UP, MSBlocks.END_SAPLING))
+		if(level.getBlockState(soilPos).canSustainPlant(level, soilPos, Direction.UP, MSBlocks.END_SAPLING.get()))
 		{
 			if(subGenerate(level, context.random(), position, position, EndLeavesBlock.LEAF_SUSTAIN_DISTANCE, 0, 4))
 			{
@@ -159,7 +160,7 @@ public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 	{
 		if(TreeFeature.validTreePos(level, pos))
 		{
-			BlockState log = MSBlocks.END_LOG.defaultBlockState().setValue(DoubleLogBlock.AXIS_2, axis);
+			BlockState log = MSBlocks.END_LOG.get().defaultBlockState().setValue(DoubleLogBlock.AXIS_2, axis);
 			level.setBlock(pos, log, Block.UPDATE_KNOWN_SHAPE + Block.UPDATE_CLIENTS + Block.UPDATE_NEIGHBORS);
 		}
 	}
@@ -167,6 +168,6 @@ public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 	private void setLeaf(WorldGenLevel level, BlockPos pos)
 	{
 		if(TreeFeature.validTreePos(level, pos))
-			level.setBlock(pos, MSBlocks.END_LEAVES.defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS | Block.UPDATE_NEIGHBORS);
+			level.setBlock(pos, MSBlocks.END_LEAVES.get().defaultBlockState(), Block.UPDATE_KNOWN_SHAPE | Block.UPDATE_CLIENTS | Block.UPDATE_NEIGHBORS);
 	}
 }

@@ -2,11 +2,11 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorContainer;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SendificatorPacket;
-import com.mraof.minestuck.tileentity.machine.MachineProcessTileEntity;
-import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.GameRenderer;
@@ -42,7 +42,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	
 	SendificatorScreen(SendificatorContainer screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MachineProcessTileEntity.RunType.BUTTON, screenContainer, inv, titleIn);
+		super(MachineProcessBlockEntity.RunType.BUTTON, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67 - 15;
@@ -77,7 +77,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		addRenderableWidget(destinationTextFieldZ);
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
-		//activates processContents() in SendificatorTileEntity
+		//activates processContents() in SendificatorBlockEntity
 		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new TextComponent(menu.overrideStop() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 		
@@ -129,7 +129,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), SendificatorTileEntity.MAX_FUEL, progressHeight);
+		int height = getScaledValue(menu.getFuel(), SendificatorBlockEntity.MAX_FUEL, progressHeight);
 		blit(poseStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
 	}
 	

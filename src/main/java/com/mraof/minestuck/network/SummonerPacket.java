@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.block.redstone.SummonerBlock;
+import com.mraof.minestuck.blockentity.redstone.SummonerBlockEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.SummonerTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,14 +17,14 @@ public class SummonerPacket implements PlayToServerPacket
 {
 	private final boolean isUntriggerable;
 	private final int summonRange;
-	private final BlockPos tileBlockPos;
+	private final BlockPos beBlockPos;
 	private final EntityType<?> entityType;
 	
-	public SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos tileBlockPos, @Nullable EntityType<?> entityType)
+	public SummonerPacket(boolean isUntriggerable, int summonRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType)
 	{
 		this.isUntriggerable = isUntriggerable;
 		this.summonRange = summonRange;
-		this.tileBlockPos = tileBlockPos;
+		this.beBlockPos = beBlockPos;
 		this.entityType = entityType;
 	}
 	
@@ -33,12 +33,12 @@ public class SummonerPacket implements PlayToServerPacket
 	{
 		buffer.writeBoolean(isUntriggerable);
 		buffer.writeInt(summonRange);
-		buffer.writeBlockPos(tileBlockPos);
+		buffer.writeBlockPos(beBlockPos);
 		if(entityType != null)
 		{
 			buffer.writeUtf(EntityType.getKey(entityType).toString());
 		} else
-			buffer.writeUtf(EntityType.getKey(MSEntityTypes.IMP).toString());
+			buffer.writeUtf(EntityType.getKey(MSEntityTypes.IMP.get()).toString());
 		
 	}
 	
@@ -46,29 +46,29 @@ public class SummonerPacket implements PlayToServerPacket
 	{
 		boolean isUntriggerable = buffer.readBoolean();
 		int summonRange = buffer.readInt();
-		BlockPos tileBlockPos = buffer.readBlockPos();
+		BlockPos beBlockPos = buffer.readBlockPos();
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
-		return new SummonerPacket(isUntriggerable, summonRange, tileBlockPos, attemptedEntityType.orElse(null));
+		return new SummonerPacket(isUntriggerable, summonRange, beBlockPos, attemptedEntityType.orElse(null));
 	}
 	
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(tileBlockPos, 0))
+		if(player.level.isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(tileBlockPos) instanceof SummonerTileEntity summoner)
+			if(player.level.getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner)
 			{
-				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
 					if(entityType != null)
 						summoner.setSummonedEntity(entityType);
 					summoner.setSummonRange(summonRange);
 					//Imitates the structure block to ensure that changes are sent client-side
 					summoner.setChanged();
-					player.level.setBlock(tileBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
-					BlockState state = player.level.getBlockState(tileBlockPos);
-					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
+					player.level.setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
+					BlockState state = player.level.getBlockState(beBlockPos);
+					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

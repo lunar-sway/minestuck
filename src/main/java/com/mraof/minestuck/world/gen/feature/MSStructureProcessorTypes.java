@@ -4,21 +4,13 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class MSStructureProcessorTypes
 {
-	static StructureProcessorType<StructureBlockRegistryProcessor> BLOCK_REGISTRY;
+	public static final DeferredRegister<StructureProcessorType<?>> REGISTER = DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, Minestuck.MOD_ID);
 	
-	/**
-	 * Should only be called by {@link com.mraof.minestuck.world.gen.feature.MSFeatures} on feature registry.
-	 */
-	static void init()
-	{
-		BLOCK_REGISTRY = register("block_registry", () -> StructureBlockRegistryProcessor.CODEC);
-	}
+	public static final RegistryObject<StructureProcessorType<StructureBlockRegistryProcessor>> BLOCK_REGISTRY = REGISTER.register("block_entity", () -> () -> StructureBlockRegistryProcessor.CODEC);
 	
-	private static <T extends StructureProcessor> StructureProcessorType<T> register(String name, StructureProcessorType<T> type)
-	{
-		return Registry.register(Registry.STRUCTURE_PROCESSOR, Minestuck.MOD_ID+":"+name, type);
-	}
 }

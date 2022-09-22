@@ -7,9 +7,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 
 public abstract class LandBiome
 {
-	public static final float DEFAULT_NORMAL_DEPTH = 0.125F, DEFAULT_NORMAL_SCALE = 0.05F;
-	public static final float DEFAULT_ROUGH_DEPTH = 0.45F, DEFAULT_ROUGH_SCALE = 0.3F;
-	public static final float DEFAULT_OCEAN_DEPTH = -1.0F, DEFAULT_OCEAN_SCALE = 0.1F;
 	
 	public static Biome createNormalBiome(Biome.Precipitation precipitation, float temperature, float downfall)
 	{
@@ -42,8 +39,7 @@ public abstract class LandBiome
 		BiomeSpecialEffects.Builder effects = new BiomeSpecialEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533)
 				.fogColor(0xC0D8FF).skyColor(0x7AA4FF);
 		
-		BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder()/*TODO look at surface rules
-				.surfaceBuilder(() -> SurfaceBuilder.DEFAULT.configured(SurfaceBuilder.CONFIG_GRASS))*/;
+		BiomeGenerationSettings.Builder generation = new BiomeGenerationSettings.Builder();
 		
 		return builder.specialEffects(effects.build()).mobSpawnSettings(new MobSpawnSettings.Builder().build())
 				.generationSettings(generation.build());

@@ -9,10 +9,9 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -28,12 +27,16 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CaptchaDeckHandler
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final int EMPTY_SYLLADEX = -1;
 	public static final int EMPTY_CARD = -2;
 	
@@ -60,7 +63,7 @@ public class CaptchaDeckHandler
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
 	{
-		if(item.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.hasDecodedItem(item))
+		if(item.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.hasDecodedItem(item))
 			while(item.getCount() > 0)
 			{
 				if(getModus(player).increaseSize(player))
@@ -94,7 +97,7 @@ public class CaptchaDeckHandler
 			ItemStack newItem = changeModus(player, stack, modus, type);
 			container.setContainerItem(newItem);
 		}
-		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD) && !AlchemyHelper.isPunchedCard(stack)
+		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
 		{
 			consumeCards(player, stack, modus);
@@ -187,7 +190,7 @@ public class CaptchaDeckHandler
 	{
 		Modus modus = getModus(player);
 		
-		if(stack.getItem() == MSItems.BOONDOLLARS)
+		if(stack.getItem() == MSItems.BOONDOLLARS.get())
 		{
 			PlayerSavedData.getData(player).addBoondollars(BoondollarsItem.getCount(stack));
 			stack.shrink(1);
@@ -196,7 +199,7 @@ public class CaptchaDeckHandler
 		
 		if(modus != null && !stack.isEmpty())
 		{
-			if(stack.getItem() == MSItems.CAPTCHA_CARD && AlchemyHelper.hasDecodedItem(stack)
+			if(stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack)
 					&& !AlchemyHelper.isPunchedCard(stack))
 				handleCardCaptchalogue(player, modus, stack);
 			else putInModus(player, modus, stack);
@@ -219,7 +222,7 @@ public class CaptchaDeckHandler
 			
 			if(captchaloguedItem && !spentCard)
 			{	//Item was captchalogued, but the card remained
-				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD, 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
+				launchAnyItem(player, new ItemStack(MSItems.CAPTCHA_CARD.get(), 1));    //TODO split existing stack and instead remove the content to keep any other nbt data
 				card.shrink(1);
 			} else if(!captchaloguedItem && spentCard)
 			{	//The card was used, but the item failed to captchalogue
@@ -308,9 +311,9 @@ public class CaptchaDeckHandler
 					size--;
 				} else player.drop(stack, true, false);
 		
-		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD).getMaxStackSize();
+		int stackLimit = new ItemStack(MSItems.CAPTCHA_CARD.get()).getMaxStackSize();
 		for(; size > cardsToKeep; size = Math.max(size - stackLimit, cardsToKeep))
-			player.drop(new ItemStack(MSItems.CAPTCHA_CARD, Math.min(stackLimit, size - cardsToKeep)), true, false);
+			player.drop(new ItemStack(MSItems.CAPTCHA_CARD.get(), Math.min(stackLimit, size - cardsToKeep)), true, false);
 		
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
@@ -351,7 +354,7 @@ public class CaptchaDeckHandler
 			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
 			if(modus == null)
 			{
-				Debug.warnf("Failed to load modus from nbt with the name \"%s\"", name.toString());
+				LOGGER.warn("Failed to load modus from nbt with the name \"{}\"", name.toString());
 				return null;
 			}
 		}

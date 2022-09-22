@@ -9,7 +9,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
-	private int eventTimer = -1;	//TODO use the interface mentioned in the todo above to implement consort explosion instead
+	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
 	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, Level level)
 	{
@@ -204,7 +204,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 	
 	private void explode()
 	{
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
@@ -309,7 +309,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 		{
 			merchantType = EnumConsort.MerchantType.SHADY;
 			if(hasRestriction())
-				restrictTo(getRestrictCenter(), (int) (getRestrictRadius()*0.4F));
+				restrictTo(getRestrictCenter(), (int) (getRestrictRadius() * 0.4F));
 		}
 		
 		homeDimension = level.dimension();

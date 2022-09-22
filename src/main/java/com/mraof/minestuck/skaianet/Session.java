@@ -4,13 +4,15 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.lands.LandInfo;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -21,6 +23,7 @@ import java.util.*;
  */
 public final class Session
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
@@ -75,7 +78,7 @@ public final class Session
 	}
 	
 	/**
-	 * Checks if the variable completed should be true or false.
+	 * Sets `completed` to true if everyone in the session has entered and has completed connections.
 	 */
 	void checkIfCompleted()
 	{
@@ -84,28 +87,22 @@ public final class Session
 			completed = false;
 			return;
 		}
-		PlayerIdentifier start = connections.stream().findAny().get().getClientIdentifier();
-		PlayerIdentifier current = start;
-		main: while(true){
-			for(SburbConnection c : connections)
-			{
-				if(!c.hasEntered())
-				{
-					completed = false;
-					return;
-				}
-				if(c.getServerIdentifier().equals(current))
-				{
-					current = c.getClientIdentifier();
-					if(start.equals(current)) {
-						completed = true;
-						return;
-					} else continue main;
-				}
-			}
+		if(connections.stream().anyMatch(c -> !c.hasServerPlayer()))
+		{
 			completed = false;
 			return;
 		}
+		Set<PlayerIdentifier> players = this.getPlayerList();
+		for(PlayerIdentifier player : players)
+		{
+			if(connections.stream().noneMatch(c ->
+					c.getClientIdentifier().equals(player) && c.hasEntered()))
+			{
+				completed = false;
+				return;
+			}
+		}
+		completed = true;
 	}
 	
 	Session()
@@ -189,21 +186,20 @@ public final class Session
 		return titles;
 	}
 	
-	List<TitleLandType> getUsedTitleLandTypes()
+	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server)
 	{
-		return getUsedTitleLandTypes(null);
+		return getUsedTitleLandTypes(server, null);
 	}
 	
-	List<TitleLandType> getUsedTitleLandTypes(PlayerIdentifier ignore)
+	List<TitleLandType> getUsedTitleLandTypes(MinecraftServer server, PlayerIdentifier ignore)
 	{
 		List<TitleLandType> types = new ArrayList<>();
 		for(SburbConnection c : connections)
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandInfo landInfo = c.getLandInfo();
-				if(landInfo != null)
-					types.add(landInfo.getLandAspects().getTitle());
+				LandTypePair.getTypes(server, c.getClientDimension())
+						.ifPresent(landTypes -> types.add(landTypes.getTitle()));
 			}
 		}
 		
@@ -214,21 +210,20 @@ public final class Session
 		return types;
 	}
 	
-	List<TerrainLandType> getUsedTerrainLandTypes()
+	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server)
 	{
-		return getUsedTerrainLandTypes(null);
+		return getUsedTerrainLandTypes(server, null);
 	}
 	
-	List<TerrainLandType> getUsedTerrainLandTypes(PlayerIdentifier ignore)
+	List<TerrainLandType> getUsedTerrainLandTypes(MinecraftServer server, PlayerIdentifier ignore)
 	{
 		List<TerrainLandType> types = new ArrayList<>();
 		for(SburbConnection c : connections)
 		{
 			if(!c.getClientIdentifier().equals(ignore))
 			{
-				LandInfo landInfo = c.getLandInfo();
-				if(landInfo != null)
-					types.add(landInfo.getLandAspects().getTerrain());
+				LandTypePair.getTypes(server, c.getClientDimension())
+						.ifPresent(landTypes -> types.add(landTypes.getTerrain()));
 			}
 		}
 		
@@ -293,7 +288,7 @@ public final class Session
 					s.connections.add(c);
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read sburb connection from tag "+list.getCompound(i)+". Forced to skip connection. Caused by:", e);
+				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
 			}
 		}
 		

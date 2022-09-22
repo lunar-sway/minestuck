@@ -90,7 +90,7 @@ public class MachineOutlineRenderer
 			
 			placeable = item.canPlaceAt(context, pos, placedFacing);
 
-			if(item == MSItems.ALCHEMITER)//Alchemiter
+			if(item == MSItems.ALCHEMITER.get())//Alchemiter
 			{
 				AABB rod = GuiUtil.rotateAround(new AABB(3.25, 1, 3.25, 3.75, 4, 3.75), 0.5, 0.5, rotation).move(pos).move(-d1, -d2, -d3).deflate(0.002);
 				AABB pad = GuiUtil.rotateAround(new AABB(0, 0, 0, 4, 1, 4), 0.5, 0.5, rotation).move(pos).move(-d1, -d2, -d3).deflate(0.002);
