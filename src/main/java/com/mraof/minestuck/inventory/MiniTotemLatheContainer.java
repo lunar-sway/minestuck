@@ -78,7 +78,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -87,7 +87,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 4, allSlots, false);
-			} else if(slotNumber > 3)
+			} else
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get())
@@ -99,8 +99,8 @@ public class MiniTotemLatheContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

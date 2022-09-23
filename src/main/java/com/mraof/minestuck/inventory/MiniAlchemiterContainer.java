@@ -80,7 +80,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 		
 		if(slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -88,7 +88,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
-			} else if(slotNumber > 1)
+			} else
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
@@ -98,8 +98,8 @@ public class MiniAlchemiterContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

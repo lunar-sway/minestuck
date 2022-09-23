@@ -71,7 +71,7 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 		int slotCount = slots.size();
 		if(slot.hasItem())
 		{
-			ItemStack stack1 = slot.getItem();
+			ItemStack stack1 = slot.getItem().copy();
 			ItemStack stack2 = stack1.copy();
 			if(index == slotCount - 1)
 			{
@@ -83,9 +83,8 @@ public class CaptchaDeckContainer extends AbstractContainerMenu
 					return ItemStack.EMPTY;
 			}
 			
-			if (stack1.isEmpty())
-				slot.set(ItemStack.EMPTY);
-			else slot.setChanged();
+			if(!ItemStack.matches(stack1, slot.getItem()))
+				slot.set(stack1);
 			return stack2;
 		}
 		return ItemStack.EMPTY;
