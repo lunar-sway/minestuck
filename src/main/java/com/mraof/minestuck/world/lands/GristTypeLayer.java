@@ -6,6 +6,7 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -16,29 +17,36 @@ public class GristTypeLayer
 	private final int weightSum;
 	@Nullable
 	private final GristType baseType;
+	private final int areaSize;
 	
+	private final NormalNoise xShift, zShift;
 	private final PositionalRandomFactory selectionRandom;
 	
-	private GristTypeLayer(GristType.SpawnCategory category, int index, long seed, @Nullable GristType baseType)
+	private GristTypeLayer(GristType.SpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
-		gristTypes = GristTypes.values().stream().filter(GristType::isUnderlingType)
+		this.gristTypes = GristTypes.values().stream().filter(GristType::isUnderlingType)
 				.filter(gristType -> gristType.isInCategory(category))
 				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
+		this.weightSum = WeightedRandom.getTotalWeight(gristTypes);
 		this.baseType = baseType;
-		weightSum = WeightedRandom.getTotalWeight(gristTypes);
+		this.areaSize = 1 << zoomLevel;
 		
-		selectionRandom = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(seed).forkPositional()
-				.fromHashOf("minestuck:grist_layer_" + index).forkPositional();
+		PositionalRandomFactory randomFactory = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(seed).forkPositional();
+		this.xShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_x_shift_" + index), -6, 1);
+		this.zShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_z_shift_" + index), -6, 1);
+		this.selectionRandom = randomFactory.fromHashOf("minestuck:grist_layer_" + index).forkPositional();
 	}
 	
 	public static GristTypeLayer createLayer(GristType.SpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
-		return new GristTypeLayer(category, index, seed, baseType);
+		return new GristTypeLayer(category, index, seed, zoomLevel, baseType);
 	}
 	
 	public GristType getTypeAt(int posX, int posZ)
 	{
-		return pickGristWithoutZoom(Math.floorDiv(posX, 8), Math.floorDiv(posZ, 8));
+		double shiftedX = posX/(double) areaSize + 0.2 * this.xShift.getValue(posX, 0, posZ);
+		double shiftedZ = posZ/(double) areaSize + 0.2 * this.zShift.getValue(posX, 0, posZ);
+		return pickGristWithoutZoom((int) Math.round(shiftedX), (int) Math.round(shiftedZ));
 	}
 	
 	private GristType pickGristWithoutZoom(int x, int z)
