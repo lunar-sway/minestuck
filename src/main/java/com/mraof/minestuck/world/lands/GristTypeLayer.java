@@ -32,8 +32,8 @@ public class GristTypeLayer
 		this.areaSize = 1 << zoomLevel;
 		
 		PositionalRandomFactory randomFactory = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(seed).forkPositional();
-		this.xShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_x_shift_" + index), -6, 1);
-		this.zShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_z_shift_" + index), -6, 1);
+		this.xShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_x_shift_" + index), -(zoomLevel - 1), 1);
+		this.zShift = NormalNoise.create(randomFactory.fromHashOf("minestuck:grist_z_shift_" + index), -(zoomLevel - 1), 1);
 		this.selectionRandom = randomFactory.fromHashOf("minestuck:grist_layer_" + index).forkPositional();
 	}
 	
