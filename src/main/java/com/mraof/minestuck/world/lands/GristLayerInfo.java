@@ -123,6 +123,16 @@ public class GristLayerInfo
 		return new TranslatableComponent(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
 	}
 	
+	public GristTypeLayer getCommonGristLayer()
+	{
+		return commonGristLayer;
+	}
+	
+	public GristTypeLayer getUncommonGristLayer()
+	{
+		return uncommonGristLayer;
+	}
+	
 	public GristTypeLayer getAnyGristLayer()
 	{
 		return anyGristLayer;

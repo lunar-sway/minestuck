@@ -42,12 +42,15 @@ public class GristLayerDebugRender
 			if(level == null)
 				return;
 			
-			GristLayerInfo.get(level).ifPresent(gristLayerInfo ->
-					renderGristLayer(event.getPoseStack(), event.getCamera(), minecraft.player, gristLayerInfo.getAnyGristLayer()));
+			GristLayerInfo.get(level).ifPresent(gristLayerInfo -> {
+				renderGristLayer(event.getPoseStack(), event.getCamera(), minecraft.player, gristLayerInfo.getCommonGristLayer(), 165);
+				renderGristLayer(event.getPoseStack(), event.getCamera(), minecraft.player, gristLayerInfo.getUncommonGristLayer(), 150);
+				renderGristLayer(event.getPoseStack(), event.getCamera(), minecraft.player, gristLayerInfo.getAnyGristLayer(), 135);
+			});
 		}
 	}
 	
-	private static void renderGristLayer(PoseStack stack, Camera camera, Player player, GristTypeLayer layer)
+	private static void renderGristLayer(PoseStack stack, Camera camera, Player player, GristTypeLayer layer, int y)
 	{
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		
@@ -58,7 +61,7 @@ public class GristLayerDebugRender
 				GristType type = layer.getTypeAt(x, z);
 				RenderSystem.setShaderTexture(0, type.getIcon());
 				stack.pushPose();
-				stack.translate(x - camera.getPosition().x, 135 - camera.getPosition().y, z - camera.getPosition().z);
+				stack.translate(x - camera.getPosition().x, y - camera.getPosition().y, z - camera.getPosition().z);
 				Matrix4f pose = stack.last().pose();
 				
 				BufferBuilder render = Tesselator.getInstance().getBuilder();
