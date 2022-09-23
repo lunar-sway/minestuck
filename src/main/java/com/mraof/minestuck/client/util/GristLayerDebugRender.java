@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(Dist.CLIENT)
 public class GristLayerDebugRender
 {
-	private static final boolean RENDER = true;
+	private static final boolean RENDER = false;
 	private static final int RADIUS =  30;
 	
 	@SubscribeEvent
