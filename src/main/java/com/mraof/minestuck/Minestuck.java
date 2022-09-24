@@ -84,6 +84,7 @@ public class Minestuck
 		
 		MSStructureProcessorTypes.REGISTER.register(eventBus);
 		MSSurfaceRules.REGISTER.register(eventBus);
+		MSWorldGenTypes.REGISTER.register(eventBus);
 	}
 	
 	/**
@@ -106,7 +107,6 @@ public class Minestuck
 	{
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
-		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();
 		
