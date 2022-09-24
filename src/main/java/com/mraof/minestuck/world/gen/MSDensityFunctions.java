@@ -65,20 +65,22 @@ public class MSDensityFunctions
 	
 	private static DensityFunction base2dNoise(RegistryObject<NormalNoise.NoiseParameters> noise)
 	{
-		return DensityFunctions.noise(noise.getHolder().orElseThrow(), 0.25, 0);
+		return DensityFunctions.flatCache(DensityFunctions.noise(noise.getHolder().orElseThrow(), 0.25, 0));
 	}
 	
 	@SuppressWarnings("deprecation")
 	private static DensityFunction depth(Supplier<DensityFunction> continents, Supplier<DensityFunction> erosion, Supplier<DensityFunction> weirdness)
 	{
 		return DensityFunctions.add(DensityFunctions.yClampedGradient(0, 256, 1, -1),
-				DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(), DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5));
+				DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(),
+						DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5))));
 	}
 	
 	@SuppressWarnings("deprecation")
 	private static DensityFunction factor(Supplier<DensityFunction> continents, Supplier<DensityFunction> erosion, Supplier<DensityFunction> weirdness)
 	{
-		return DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(), DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0, 8);
+		return DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(),
+				DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0, 8)));
 	}
 	
 	private static DensityFunction initialDensity(Supplier<DensityFunction> depth, Supplier<DensityFunction> factor)
