@@ -1,8 +1,7 @@
-package com.mraof.minestuck.world.gen;
+package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
