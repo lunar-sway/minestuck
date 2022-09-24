@@ -11,6 +11,7 @@ import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
@@ -94,7 +95,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	}
 	
 	@Override
-	public void draw(JeiGristCost recipe, PoseStack poseStack, double mouseX, double mouseY)
+	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY)
 	{
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
 			GuiUtil.drawGristBoard(poseStack, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
@@ -104,7 +105,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	
 	
 	@Override
-	public List<Component> getTooltipStrings(JeiGristCost recipe, double mouseX, double mouseY)
+	public List<Component> getTooltipStrings(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY)
 	{
 		Component text = null;
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
@@ -114,6 +115,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		
 		if(text != null)
 			return Collections.singletonList(text);
-		else return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+		else
+			return Collections.emptyList();
 	}
 }
