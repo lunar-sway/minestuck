@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
+import net.minecraft.world.level.levelgen.NoiseRouterWithOnlyNoises;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -50,5 +51,14 @@ public class MSDensityFunctions
 	public static DensityFunction from(Registry<DensityFunction> registry, RegistryObject<DensityFunction> builtinFunction)
 	{
 		return registry.getOrThrow(Objects.requireNonNull(builtinFunction.getKey()));
+	}
+	
+	public static NoiseRouterWithOnlyNoises makeLandNoiseRouter(Registry<DensityFunction> registry)
+	{
+		return new NoiseRouterWithOnlyNoises(
+				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifier info
+				DensityFunctions.zero(), DensityFunctions.zero(), from(registry, LAND_CONTINENTS), from(registry, LAND_EROSION), from(registry, LAND_DEPTH), DensityFunctions.zero(), // biome parameters
+				from(registry, LAND_INITIAL_DENSITY), from(registry, LAND_FINAL_DENSITY),	// terrain and surface height
+				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
 	}
 }

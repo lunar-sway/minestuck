@@ -15,7 +15,6 @@ import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
-import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 
 public final class LandGenSettings
 {
@@ -90,14 +89,8 @@ public final class LandGenSettings
 		
 		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, landTypes.getTerrain().getSurfaceRule(blockRegistry));
 		
-		DensityFunction continents = MSDensityFunctions.from(densityFunctions, MSDensityFunctions.LAND_CONTINENTS);
-		DensityFunction erosion = MSDensityFunctions.from(densityFunctions, MSDensityFunctions.LAND_EROSION);
-		DensityFunction depth = MSDensityFunctions.from(densityFunctions, MSDensityFunctions.LAND_DEPTH);
-		DensityFunction initialDensity = MSDensityFunctions.from(densityFunctions, MSDensityFunctions.LAND_INITIAL_DENSITY);
-		DensityFunction finalDensity = MSDensityFunctions.from(densityFunctions, MSDensityFunctions.LAND_FINAL_DENSITY);
-		
 		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
-				new NoiseRouterWithOnlyNoises(DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), continents, erosion, depth, DensityFunctions.zero(), initialDensity, finalDensity, DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero()),
+				MSDensityFunctions.makeLandNoiseRouter(densityFunctions),
 				surfaceRule, 64, false, false, false, false);
 		
 		return Holder.direct(settings);
