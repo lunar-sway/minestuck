@@ -19,6 +19,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.world.gen.MSDensityFunctions;
 import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
@@ -70,6 +71,7 @@ public class Minestuck
 		LandTypes.TITLE_REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
+		MSDensityFunctions.REGISTER.register(eventBus);
 		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
 		MSPlacedFeatures.REGISTER.register(eventBus);
