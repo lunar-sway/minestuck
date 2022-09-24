@@ -25,6 +25,7 @@ import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
@@ -41,6 +42,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> commonCodec(instance).and(instance.group(
 					RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).forGetter(generator -> generator.noises),
+					RegistryOps.retrieveRegistry(Registry.DENSITY_FUNCTION_REGISTRY).forGetter(generator -> generator.densityFunctions),
 					Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.seed),
 					LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
 					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.registry)))
@@ -53,27 +55,29 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	private final Registry<Biome> registry;
 	
 	private ChunkPos landGatePosition;
+	protected final Registry<DensityFunction> densityFunctions;
 	
-	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair.Named namedTypes, Registry<Biome> registry)
+	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, long seed, LandTypePair.Named namedTypes, Registry<Biome> registry)
 	{
 		LandBiomeSetWrapper biomeSetWrapper = new LandBiomeSetWrapper(namedTypes.landTypes().getTerrain().getBiomeSet(), registry);
 		LandGenSettings genSettings = new LandGenSettings(namedTypes.landTypes());
 		
 		LandBiomeHolder biomeHolder = new LandBiomeHolder(biomeSetWrapper, genSettings);
 		
-		return new LandChunkGenerator(structureSets, noises, seed, namedTypes, biomeHolder, registry, genSettings);
+		return new LandChunkGenerator(structureSets, noises, densityFunctions, seed, namedTypes, biomeHolder, registry, genSettings);
 	}
 	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, long seed, LandTypePair.Named namedTypes, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
+	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, long seed, LandTypePair.Named namedTypes, LandBiomeHolder biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
 		super(structureSets, noises, Optional.empty(), new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
-				seed, genSettings.createDimensionSettings());
+				seed, genSettings.createDimensionSettings(densityFunctions));
 		
+		this.densityFunctions = densityFunctions;
 		this.biomes = biomes;
 		this.registry = registry;
 		this.namedTypes = namedTypes;
-		blockRegistry = genSettings.getBlockRegistry();
-		gatePiece = genSettings.getGatePiece();
+		this.blockRegistry = genSettings.getBlockRegistry();
+		this.gatePiece = genSettings.getGatePiece();
 	}
 	
 	@Override
@@ -85,7 +89,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	@Override
 	public ChunkGenerator withSeed(long seed)
 	{
-		return LandChunkGenerator.create(this.structureSets, this.noises, seed, namedTypes, registry);
+		return LandChunkGenerator.create(this.structureSets, this.noises, this.densityFunctions, seed, namedTypes, registry);
 	}
 	
 	@Override
