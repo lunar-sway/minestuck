@@ -144,9 +144,6 @@ public class SandLandType extends TerrainLandType
 			}
 		}
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
-				new DiskConfiguration(blocks.getBlockState("upper"), UniformInt.of(2, 6), 2, List.of(blocks.getBlockState("ground"))),
-				CountPlacement.of(8), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		if(this.type != Variant.RED_SAND)
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
