@@ -83,6 +83,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putString("Motive", this.art.getTitle());
+		compound.putByte("Facing", (byte) this.direction.get2DDataValue());
 	}
 	
 	@Override
@@ -103,7 +104,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			LOGGER.warn("Could not load art {} for type {}, resorting to the default type.", s, this.getType().getDescriptionId());
 		}
 		super.readAdditionalSaveData(compound);
-		recalculateBoundingBox();    //Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
+		this.setDirection(Direction.from2DDataValue(compound.getByte("Facing")));
 	}
 	
 	@Override
@@ -214,10 +215,5 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		int getOffsetX();
 		
 		int getOffsetY();
-	}
-	
-	public Direction getFacingDirection()
-	{
-		return direction;
 	}
 }
