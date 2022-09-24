@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -30,13 +31,13 @@ import java.util.List;
  */
 public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 {
-	private IDrawable background, icon;
+	private final IDrawable background, icon;
 
 	GristCostRecipeCategory(IGuiHelper guiHelper)
 	{
 		ResourceLocation alchemiterBackground = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.ALCHEMITER));
+		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.ALCHEMITER));
 	}
 	
 	@Override

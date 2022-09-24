@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -21,13 +22,13 @@ import net.minecraft.world.item.ItemStack;
  */
 public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 {
-	private IDrawable background, icon;
+	private final IDrawable background, icon;
 
 	TotemLatheRecipeCategory(IGuiHelper guiHelper)
 	{
 		ResourceLocation totemLatheBackground = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
 		background = guiHelper.createDrawable(totemLatheBackground, 25, 24, 130, 36);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.TOTEM_LATHE));
+		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.TOTEM_LATHE));
 	}
 	
 	@Override

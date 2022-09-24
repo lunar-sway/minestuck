@@ -2,6 +2,7 @@ package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
@@ -19,13 +20,13 @@ import net.minecraft.world.item.ItemStack;
  */
 public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 {
-    private IDrawable background, icon;
+    private final IDrawable background, icon;
 
     DesignixRecipeCategory(IGuiHelper guiHelper)
     {
         ResourceLocation punchDesignixBackground = new ResourceLocation("minestuck:textures/gui/designix.png");
         background = guiHelper.createDrawable(punchDesignixBackground, 43, 25, 94, 42);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.PUNCH_DESIGNIX));
+		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.PUNCH_DESIGNIX));
     }
 	
 	@Override
