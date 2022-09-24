@@ -2,22 +2,17 @@ package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by mraof on 2017 January 23 at 6:50 AM.
@@ -70,32 +65,13 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 	{
 		return icon;
 	}
-
+	
 	@Override
-	public void setIngredients(JeiCombination jeiCombination, IIngredients ingredients)
+	public void setRecipe(IRecipeLayoutBuilder builder, JeiCombination recipe, IFocusGroup focuses)
 	{
-		ingredients.setInputLists(VanillaTypes.ITEM, Arrays.asList(Arrays.asList(jeiCombination.getInput1().getItems()), Arrays.asList(jeiCombination.getInput2().getItems())));
-		ingredients.setOutput(VanillaTypes.ITEM, jeiCombination.getOutput());
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getInput1());
+		builder.addSlot(RecipeIngredientRole.INPUT, 1, 25).addIngredients(recipe.getInput2());
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 73, 12).addItemStack(recipe.getOutput())
+				.addItemStack(AlchemyHelper.createCard(recipe.getOutput(), true));
 	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, JeiCombination jeiCombination, IIngredients ingredients)
-	{
-        IGuiItemStackGroup stackGroup = recipeLayout.getItemStacks();
-        stackGroup.init(0, true, 0, 0);
-        stackGroup.init(1, true, 0, 24);
-        stackGroup.init(2, false, 72, 11);
-        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
-        stackGroup.set(0, inputs.get(0));
-
-        List<ItemStack> second = new ArrayList<>();
-        for(ItemStack stack : inputs.get(1))
-        {
-            second.add(AlchemyHelper.createCard(stack, true));
-        }
-        stackGroup.set(1, second);
-        List<ItemStack> outputs = new ArrayList<>(ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-        outputs.add(AlchemyHelper.createCard(outputs.get(0), true));
-        stackGroup.set(2, outputs);
-    }
 }

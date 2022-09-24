@@ -6,13 +6,13 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import com.mraof.minestuck.util.ColorHandler;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
@@ -24,8 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
@@ -78,26 +76,20 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	{
 		return icon;
 	}
-
+	
 	@Override
-	public void setIngredients(JeiGristCost recipe, IIngredients ingredients)
+	public void setRecipe(IRecipeLayoutBuilder builder, JeiGristCost recipe, IFocusGroup focuses)
 	{
-		ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(recipe.getIngredient().getItems())));
+		builder.addSlot(RecipeIngredientRole.CATALYST, 19, 5)
+				.addItemStacks(Arrays.stream(recipe.getIngredient().getItems())
+						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
+						.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor())).toList());
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 127, 5)
+				.addIngredients(recipe.getIngredient());
+		
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			ingredients.setInputs(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
+			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
 		//TODO Wildcard grist cost
-	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, JeiGristCost recipe, IIngredients ingredients)
-	{
-		recipeLayout.getItemStacks().init(0, true, 18, 4);
-		recipeLayout.getItemStacks().init(1, false, 126, 4);
-		Stream<ItemStack> inputDowels = ingredients.getOutputs(VanillaTypes.ITEM).get(0).stream();
-		inputDowels = inputDowels.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())));
-		inputDowels = inputDowels.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor()));
-		recipeLayout.getItemStacks().set(0, inputDowels.collect(Collectors.toList()));
-		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
 	}
 	
 	@Override
