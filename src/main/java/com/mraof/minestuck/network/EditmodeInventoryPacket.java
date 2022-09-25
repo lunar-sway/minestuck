@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
-import com.mraof.minestuck.inventory.EditmodeContainer;
+import com.mraof.minestuck.inventory.EditmodeMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -77,8 +77,8 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof EditmodeContainer)
-			((EditmodeContainer)player.containerMenu).updateScroll(b1);
+		if(player.containerMenu instanceof EditmodeMenu)
+			((EditmodeMenu)player.containerMenu).updateScroll(b1);
 	}
 	
 	public List<ItemStack> getInventory()

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
-public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckContainer>
+public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMenu>
 {
 	public static final String TITLE = "minestuck.captcha_deck";
 	public static final String SYLLADEX = SylladexScreen.TITLE;
@@ -34,7 +34,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	
 	public CaptchaDeckScreen(int windowId, Inventory playerInventory)
 	{
-		super(new CaptchaDeckContainer(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
+		super(new CaptchaDeckMenu(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
 		guiWidth = 178;
 		guiHeight= 145;
 	}
@@ -46,14 +46,14 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, new TranslatableComponent(USE_ITEM), button -> use()));
 		sylladexMap = addRenderableWidget(new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, new TranslatableComponent(SYLLADEX), button -> sylladex()));
 		sylladexMap.active = ClientPlayerData.getModus() != null;
-		modusButton.active = !menu.getContainerItem().isEmpty();
+		modusButton.active = !menu.getMenuItem().isEmpty();
 	}
 	
 	@Override
 	protected void renderBg(PoseStack poseStack, float partialTicks, int mouseX, int mouseY)
 	{
 		sylladexMap.active = ClientPlayerData.getModus() != null;
-		modusButton.active = !menu.getContainerItem().isEmpty();
+		modusButton.active = !menu.getMenuItem().isEmpty();
 		
 		drawTabs(poseStack);
 		
@@ -75,7 +75,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	}
 	
 	private void use() {
-		ItemStack stack = menu.getContainerItem();
+		ItemStack stack = menu.getMenuItem();
 		if(!stack.isEmpty())
 		{
 			if(!(stack.getItem() instanceof CaptchaCardItem))
@@ -114,7 +114,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckCon
 	
 	private void onConfirm(boolean result)
 	{
-		if(result && !menu.getContainerItem().isEmpty())
+		if(result && !menu.getMenuItem().isEmpty())
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.modus());
 		minecraft.screen = this;
 	}

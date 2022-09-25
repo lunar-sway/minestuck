@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
-import com.mraof.minestuck.inventory.SendificatorContainer;
+import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SendificatorPacket;
 import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
@@ -19,7 +19,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.Nullable;
 
-public class SendificatorScreen extends MachineScreen<SendificatorContainer>
+public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/sendificator.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
@@ -40,7 +40,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorContainer>
 	private BlockPos parsedPos;
 	
 	
-	SendificatorScreen(SendificatorContainer screenContainer, Inventory inv, Component titleIn)
+	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(MachineProcessBlockEntity.RunType.BUTTON, screenContainer, inv, titleIn);
 		

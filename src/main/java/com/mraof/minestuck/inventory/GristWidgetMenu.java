@@ -17,23 +17,23 @@ import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
 import javax.annotation.Nonnull;
 
-public class GristWidgetContainer extends MachineContainer
+public class GristWidgetMenu extends MachineContainerMenu
 {
 	
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
-	public GristWidgetContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public GristWidgetMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public GristWidgetContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess position, BlockPos machinePos)
+	public GristWidgetMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
+		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
-	public GristWidgetContainer(MenuType<? extends GristWidgetContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public GristWidgetMenu(MenuType<? extends GristWidgetMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		

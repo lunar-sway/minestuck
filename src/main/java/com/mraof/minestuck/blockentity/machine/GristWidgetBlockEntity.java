@@ -3,7 +3,7 @@ package com.mraof.minestuck.blockentity.machine;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.GristWidgetContainer;
+import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
@@ -172,7 +172,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new GristWidgetContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new GristWidgetMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override
