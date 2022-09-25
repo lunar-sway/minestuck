@@ -100,7 +100,11 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 			{
 				BlockPos groundPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
 				if(!level.getBlockState(groundPos).getMaterial().isLiquid())
-					setBlock(level, groundPos.below(), fluid);
+				{
+					BlockPos fluidPos = groundPos.below();
+					setBlock(level, fluidPos, fluid);
+					level.getChunk(fluidPos).markPosForPostprocessing(fluidPos);
+				}
 			}
 		}
 		
