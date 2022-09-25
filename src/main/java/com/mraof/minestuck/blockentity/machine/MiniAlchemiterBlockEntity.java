@@ -3,7 +3,7 @@ package com.mraof.minestuck.blockentity.machine;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
-import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -228,7 +228,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniAlchemiterContainer(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()

@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.EditmodeMenu;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import com.mraof.minestuck.inventory.EditmodeContainer;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -57,9 +57,9 @@ public class MiscContainerPacket implements PlayToServerPacket
 			int id = PlayerStatsScreen.WINDOW_ID_START + index;
 			AbstractContainerMenu menu;
 			if(!isInEditmode)
-				menu = new CaptchaDeckMenu(id, player.getInventory());
+				menu = new CaptchaDeckContainer(id, player.getInventory());
 			else
-				menu = new EditmodeMenu(id, player.getInventory());
+				menu = new EditmodeContainer(id, player.getInventory());
 			
 			player.containerMenu = menu;
 			player.initMenu(menu);

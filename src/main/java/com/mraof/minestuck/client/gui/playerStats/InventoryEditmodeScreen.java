@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.inventory.EditmodeMenu;
+import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.renderer.GameRenderer;
@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import java.time.LocalDate;
 import java.time.Month;
 
-public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeMenu>
+public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeContainer>
 {
 	public static final String TITLE = "minestuck.deploy_list";
 
@@ -29,7 +29,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	
 	public InventoryEditmodeScreen(int windowId, Inventory playerInventory)
 	{
-		super(new EditmodeMenu(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
+		super(new EditmodeContainer(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
 	}

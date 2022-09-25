@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.SimpleTexturedEntity;
-import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.inventory.ConsortMerchantContainer;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -375,13 +375,13 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantMenu(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayer) player));
+			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayer) player));
 		else return null;
 	}
 	
 	protected void writeShopContainerBuffer(FriendlyByteBuf buffer)
 	{
-		ConsortMerchantMenu.write(buffer, this);
+		ConsortMerchantContainer.write(buffer, this);
 	}
 	
 	@Nullable

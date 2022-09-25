@@ -84,9 +84,9 @@ public class CaptchaDeckHandler
 	
 	public static void useItem(ServerPlayer player)
 	{
-		if(!(player.containerMenu instanceof CaptchaDeckMenu containerMenu) || !canPlayerUseModus(player))
+		if(!(player.containerMenu instanceof CaptchaDeckContainer container) || !canPlayerUseModus(player))
 			 return;
-		ItemStack stack = containerMenu.getMenuItem();
+		ItemStack stack = container.getContainerItem();
 		if(stack.isEmpty())
 			return;
 		Modus modus = getModus(player);
@@ -95,7 +95,7 @@ public class CaptchaDeckHandler
 		if(type != null)
 		{
 			ItemStack newItem = changeModus(player, stack, modus, type);
-			containerMenu.setMenuItem(newItem);
+			container.setContainerItem(newItem);
 		}
 		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)

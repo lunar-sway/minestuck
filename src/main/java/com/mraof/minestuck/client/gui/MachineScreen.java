@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.inventory.MachineContainerMenu;
+import com.mraof.minestuck.inventory.MachineContainer;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 /**
  * Created by mraof on 2017 December 07 at 12:55 AM.
  */
-public abstract class MachineScreen<T extends MachineContainerMenu> extends AbstractContainerScreen<T>
+public abstract class MachineScreen<T extends MachineContainer> extends AbstractContainerScreen<T>
 {
 	public static final String GO = "minestuck.button.go";
 	public static final String STOP = "minestuck.button.stop";

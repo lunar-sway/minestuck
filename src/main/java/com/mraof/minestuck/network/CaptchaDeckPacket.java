@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -125,7 +125,7 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 		if(ServerEditHandler.getData(player) != null)
 			return;
 		
-		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckMenu)
+		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckContainer)
 			CaptchaDeckHandler.useItem(player);
 		else if(this.type == CAPTCHALOGUE && !player.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
 			CaptchaDeckHandler.captchalogueItem(player);

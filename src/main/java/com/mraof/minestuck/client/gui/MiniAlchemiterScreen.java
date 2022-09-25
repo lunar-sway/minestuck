@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.inventory.MiniAlchemiterContainer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
-public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> implements Positioned
+public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterContainer> implements Positioned
 {
 	
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
@@ -33,7 +33,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> impl
 	private int goX;
 	private int goY;
 	
-	public MiniAlchemiterScreen(MiniAlchemiterMenu screenContainer, Inventory inv, Component titleIn)
+	public MiniAlchemiterScreen(MiniAlchemiterContainer screenContainer, Inventory inv, Component titleIn)
 	{
 		super(MiniAlchemiterBlockEntity.TYPE, screenContainer, inv, titleIn);
 		

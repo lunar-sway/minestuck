@@ -20,7 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EditmodeMenu extends AbstractContainerMenu
+public class EditmodeContainer extends AbstractContainerMenu
 {
 	
 	private final Player player;
@@ -28,9 +28,9 @@ public class EditmodeMenu extends AbstractContainerMenu
 	private List<ItemStack> items  = new ArrayList<>();
 	private int scroll;
 	
-	public EditmodeMenu(int windowId, Inventory playerInventory)
+	public EditmodeContainer(int windowId, Inventory playerInventory)
 	{
-		super(MSMenuTypes.EDIT_MODE, windowId);
+		super(MSContainerTypes.EDIT_MODE, windowId);
 		this.player = playerInventory.player;
 		addSlots();
 		if(player instanceof ServerPlayer)
@@ -92,7 +92,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 	{
 		EditData editData = ServerEditHandler.getData(player);
 		if(editData == null)
-			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
+			throw new IllegalStateException("Creating an editmode inventory container, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
 		SburbConnection c = editData.getConnection();
 		List<ItemStack> tools = DeployList.getEditmodeTools();
@@ -143,7 +143,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
 	{
 		if(!player.level.isClientSide)
-			throw new IllegalStateException("Should not receive update packet here for server-side menu");
+			throw new IllegalStateException("Should not receive update packet here for server-side container");
 		for(int i = 0; i < packet.getInventory().size(); i++)
 		{
 			inventory.setItem(i, packet.getInventory().get(i));

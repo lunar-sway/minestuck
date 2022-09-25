@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 
-public class MiniAlchemiterMenu extends MachineContainerMenu
+public class MiniAlchemiterContainer extends MachineContainer
 {
 	
 	private static final int INPUT_X = 27;
@@ -29,17 +29,17 @@ public class MiniAlchemiterMenu extends MachineContainerMenu
 	
 	private final DataSlot wildcardHolder;
 	
-	public MiniAlchemiterMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, access, machinePos);
+		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, access, machinePos);
 	}
 	
-	public MiniAlchemiterMenu(MenuType<? extends MiniAlchemiterMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniAlchemiterContainer(MenuType<? extends MiniAlchemiterContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		

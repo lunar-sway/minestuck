@@ -17,7 +17,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class UraniumCookerMenu extends MachineContainerMenu
+public class UraniumCookerContainer extends MachineContainer
 {
 	
 	private static final int uraniumInputX = 38;
@@ -29,17 +29,17 @@ public class UraniumCookerMenu extends MachineContainerMenu
 	
 	private final DataSlot fuelHolder;
 	
-	public UraniumCookerMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public UraniumCookerContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public UraniumCookerMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public UraniumCookerContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
+		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
 	}
 	
-	public UraniumCookerMenu(MenuType<? extends UraniumCookerMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public UraniumCookerContainer(MenuType<? extends UraniumCookerContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		

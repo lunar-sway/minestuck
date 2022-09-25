@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
-import com.mraof.minestuck.inventory.SendificatorMenu;
+import com.mraof.minestuck.inventory.SendificatorContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,7 +34,7 @@ public class SendificatorPacket implements PlayToServerPacket
 	public void execute(ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
-		if(playerContainer instanceof SendificatorMenu sendificatorMenu)
+		if(playerContainer instanceof SendificatorContainer sendificatorMenu)
 		{
 			sendificatorMenu.getPosition().execute((level, machinePos) -> {
 				SendificatorBlockEntity blockEntity = (SendificatorBlockEntity) level.getBlockEntity(machinePos);

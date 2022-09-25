@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.inventory.MachineContainerMenu;
+import com.mraof.minestuck.inventory.MachineContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -34,7 +34,7 @@ public class GoButtonPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof MachineContainerMenu container)
+		if(player.containerMenu instanceof MachineContainer container)
 		{
 			container.setReady(newMode);
 			container.setOverrideStop(overrideStop);

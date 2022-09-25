@@ -15,7 +15,7 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public class ConsortMerchantMenu extends AbstractContainerMenu
+public class ConsortMerchantContainer extends AbstractContainerMenu
 {
 	private final EnumConsort consortType;
 	private final EnumConsort.MerchantType merchantType;
@@ -23,9 +23,9 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 	
 	private final Player player;
 	
-	public ConsortMerchantMenu(int windowId, Inventory playerInventory, Container storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, ContainerData prices)
+	public ConsortMerchantContainer(int windowId, Inventory playerInventory, Container storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, ContainerData prices)
 	{
-		super(MSMenuTypes.CONSORT_MERCHANT, windowId);
+		super(MSContainerTypes.CONSORT_MERCHANT, windowId);
 		this.player = playerInventory.player;
 		this.consortType = consortType;
 		this.merchantType = merchantType;
@@ -40,12 +40,12 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 			this.addSlot(new ConsortMerchantSlot(player, storeInv, i, 17 + 35*(i%3), 35 + 33*(i/3)));
 	}
 	
-	public static ConsortMerchantMenu load(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public static ConsortMerchantContainer load(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
 		EnumConsort consortType = EnumConsort.getFromName(buffer.readUtf());
 		EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.getFromName(buffer.readUtf());
 		
-		return new ConsortMerchantMenu(windowId, playerInventory, new SimpleContainer(9), consortType, merchantType, new SimpleContainerData(9));
+		return new ConsortMerchantContainer(windowId, playerInventory, new SimpleContainer(9), consortType, merchantType, new SimpleContainerData(9));
 	}
 	
 	public static void write(FriendlyByteBuf buffer, ConsortEntity consort)

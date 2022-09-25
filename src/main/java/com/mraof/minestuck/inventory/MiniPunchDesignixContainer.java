@@ -18,7 +18,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class MiniPunchDesignixMenu extends MachineContainerMenu
+public class MiniPunchDesignixContainer extends MachineContainer
 {
 	
 	private static final int designixInputX = 44;
@@ -28,17 +28,17 @@ public class MiniPunchDesignixMenu extends MachineContainerMenu
 	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniPunchDesignixMenu(MenuType<? extends MiniPunchDesignixMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniPunchDesignixContainer(MenuType<? extends MiniPunchDesignixContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		

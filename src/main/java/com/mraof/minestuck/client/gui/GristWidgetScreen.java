@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.GristWidgetMenu;
+import com.mraof.minestuck.inventory.GristWidgetContainer;
 import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -14,7 +14,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
+public class GristWidgetScreen extends MachineScreen<GristWidgetContainer>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/widget.png");
@@ -26,7 +26,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	private int goX;
 	private int goY;
 	
-	public GristWidgetScreen(GristWidgetMenu screenContainer, Inventory inv, Component titleIn)
+	public GristWidgetScreen(GristWidgetContainer screenContainer, Inventory inv, Component titleIn)
 	{
 		super(GristWidgetBlockEntity.TYPE, screenContainer, inv, titleIn);
 		

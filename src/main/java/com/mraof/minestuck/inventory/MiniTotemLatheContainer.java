@@ -16,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class MiniTotemLatheMenu extends MachineContainerMenu
+public class MiniTotemLatheContainer extends MachineContainer
 {
 	private static final int CARD_1_X = 26;
 	private static final int CARD_1_Y = 25;
@@ -27,17 +27,17 @@ public class MiniTotemLatheMenu extends MachineContainerMenu
 	private static final int OUTPUT_X = 134;
 	private static final int OUTPUT_Y = 34;
 	
-	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniTotemLatheContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniTotemLatheContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniTotemLatheMenu(MenuType<? extends MiniTotemLatheMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniTotemLatheContainer(MenuType<? extends MiniTotemLatheContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
