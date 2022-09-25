@@ -26,12 +26,12 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 	
 	public MiniCruxtruderMenu(int windowId, Inventory inventoryPlayer, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_CRUXTRUDER.get(), windowId, inventoryPlayer, new ItemStackHandler(2), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniCruxtruderMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_CRUXTRUDER.get(), windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
 	public MiniCruxtruderMenu(MenuType<? extends MiniCruxtruderMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)

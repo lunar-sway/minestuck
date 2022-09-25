@@ -31,12 +31,12 @@ public class UraniumCookerMenu extends MachineContainerMenu
 	
 	public UraniumCookerMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.URANIUM_COOKER.get(), windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
 	public UraniumCookerMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
+		this(MSMenuTypes.URANIUM_COOKER.get(), windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
 	}
 	
 	public UraniumCookerMenu(MenuType<? extends UraniumCookerMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)

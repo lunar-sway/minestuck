@@ -30,12 +30,12 @@ public class MiniPunchDesignixMenu extends MachineContainerMenu
 	
 	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_PUNCH_DESIGNIX.get(), windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_PUNCH_DESIGNIX.get(), windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
 	public MiniPunchDesignixMenu(MenuType<? extends MiniPunchDesignixMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)

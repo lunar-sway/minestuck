@@ -25,7 +25,7 @@ public class ConsortMerchantMenu extends AbstractContainerMenu
 	
 	public ConsortMerchantMenu(int windowId, Inventory playerInventory, Container storeInv, EnumConsort consortType, EnumConsort.MerchantType merchantType, ContainerData prices)
 	{
-		super(MSMenuTypes.CONSORT_MERCHANT, windowId);
+		super(MSMenuTypes.CONSORT_MERCHANT.get(), windowId);
 		this.player = playerInventory.player;
 		this.consortType = consortType;
 		this.merchantType = merchantType;

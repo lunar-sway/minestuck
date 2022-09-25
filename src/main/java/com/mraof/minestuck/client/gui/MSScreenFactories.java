@@ -29,14 +29,14 @@ public class MSScreenFactories
 	
 	public static void registerScreenFactories()
 	{
-		MenuScreens.register(MSMenuTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
-		MenuScreens.register(MSMenuTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
-		MenuScreens.register(MSMenuTypes.SENDIFICATOR, SendificatorScreen::new);
-		MenuScreens.register(MSMenuTypes.GRIST_WIDGET, GristWidgetScreen::new);
-		MenuScreens.register(MSMenuTypes.URANIUM_COOKER, UraniumCookerScreen::new);
-		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_CRUXTRUDER.get(), MiniCruxtruderScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_TOTEM_LATHE.get(), MiniTotemLatheScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_ALCHEMITER.get(), MiniAlchemiterScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_PUNCH_DESIGNIX.get(), MiniPunchDesignixScreen::new);
+		MenuScreens.register(MSMenuTypes.SENDIFICATOR.get(), SendificatorScreen::new);
+		MenuScreens.register(MSMenuTypes.GRIST_WIDGET.get(), GristWidgetScreen::new);
+		MenuScreens.register(MSMenuTypes.URANIUM_COOKER.get(), UraniumCookerScreen::new);
+		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
