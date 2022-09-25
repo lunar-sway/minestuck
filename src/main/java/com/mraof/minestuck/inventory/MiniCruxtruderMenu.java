@@ -16,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class MiniCruxtruderContainer extends MachineContainer
+public class MiniCruxtruderMenu extends MachineContainerMenu
 {
 	
 	private static final int INPUT_X = 79;
@@ -24,17 +24,17 @@ public class MiniCruxtruderContainer extends MachineContainer
 	private static final int OUTPUT_X = 79;
 	private static final int OUTPUT_Y = 19;
 	
-	public MiniCruxtruderContainer(int windowId, Inventory inventoryPlayer, FriendlyByteBuf buffer)
+	public MiniCruxtruderMenu(int windowId, Inventory inventoryPlayer, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_CRUXTRUDER, windowId, inventoryPlayer, new ItemStackHandler(2), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniCruxtruderContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniCruxtruderMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_CRUXTRUDER, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniCruxtruderContainer(MenuType<? extends MiniCruxtruderContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniCruxtruderMenu(MenuType<? extends MiniCruxtruderMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -73,7 +73,7 @@ public class MiniCruxtruderContainer extends MachineContainer
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -82,13 +82,11 @@ public class MiniCruxtruderContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
-			} else if(slotNumber > 1)
+			} else
 			{
 				//if it's an inventory slot with valid contents
-				//Debug.print("item ID of " + itemstackOrig.itemID + ". Expected " + Minestuck.rawCruxite.itemID);
 				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE.get())
 				{
-					//Debug.print("Transferring...");
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 				}
 			}

@@ -17,23 +17,23 @@ import net.minecraftforge.items.wrapper.PlayerMainInvWrapper;
 
 import javax.annotation.Nonnull;
 
-public class GristWidgetContainer extends MachineContainer
+public class GristWidgetMenu extends MachineContainerMenu
 {
 	
 	private static final int gristWidgetInputX = 27;
 	private static final int gristWidgetInputY = 20;
 	
-	public GristWidgetContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public GristWidgetMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public GristWidgetContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess position, BlockPos machinePos)
+	public GristWidgetMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
+		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
-	public GristWidgetContainer(MenuType<? extends GristWidgetContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public GristWidgetMenu(MenuType<? extends GristWidgetMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -74,34 +74,35 @@ public class GristWidgetContainer extends MachineContainer
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotNumber)
 	{
-		ItemStack itemstack = ItemStack.EMPTY;
+		ItemStack comparing = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
-			itemstack = itemstackOrig.copy();
+			ItemStack itemstackOrig = slot.getItem().copy();
+			comparing = itemstackOrig.copy();
 			boolean result = false;
 			
 			
-			if(slotNumber <= 0)
+			if(slotNumber == 0) //if it's the card slot, move item to the inventory
 			{
-				//if it's a machine slot
-				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
-			} else if(slotNumber > 0 && getSlot(0).mayPlace(itemstackOrig))
+				
+				result = moveItemStackTo(itemstackOrig, 1, allSlots, false);
+			} else //if it's an inventory slot, move item to the card slot if possible
 			{
-				//if it's an inventory slot with valid contents
-				result = moveItemStackTo(itemstackOrig, 0, 1, false);
+				
+				if(getSlot(0).mayPlace(itemstackOrig))
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 			}
 			
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
-		return itemstack;
+		return comparing;
 	}
 }

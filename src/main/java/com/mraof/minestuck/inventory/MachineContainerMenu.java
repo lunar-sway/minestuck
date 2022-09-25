@@ -11,15 +11,15 @@ import net.minecraftforge.items.IItemHandler;
 
 import java.util.Objects;
 
-public abstract class MachineContainer extends AbstractContainerMenu
+public abstract class MachineContainerMenu extends AbstractContainerMenu
 {
 	
 	private final ContainerData parameters;
 	@Deprecated
-	public final BlockPos machinePos;	//TODO replace this by a check to the open container server-side
+	public final BlockPos machinePos;	//TODO replace this by a check to the open container menu server-side
 	protected final ContainerLevelAccess access;
 	
-	protected MachineContainer(MenuType<?> type, int id, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	protected MachineContainerMenu(MenuType<?> type, int id, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, id);
 		this.machinePos = Objects.requireNonNull(machinePos);

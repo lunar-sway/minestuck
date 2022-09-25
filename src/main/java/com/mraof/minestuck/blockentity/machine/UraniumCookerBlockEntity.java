@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.UraniumCookerContainer;
+import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.item.crafting.IrradiatingRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -182,7 +182,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new UraniumCookerContainer(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

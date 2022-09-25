@@ -18,7 +18,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class MiniPunchDesignixContainer extends MachineContainer
+public class MiniPunchDesignixMenu extends MachineContainerMenu
 {
 	
 	private static final int designixInputX = 44;
@@ -28,17 +28,17 @@ public class MiniPunchDesignixContainer extends MachineContainer
 	private static final int designixOutputX = 116;
 	private static final int designixOutputY = 37;
 	
-	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniPunchDesignixContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniPunchDesignixMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_PUNCH_DESIGNIX, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniPunchDesignixContainer(MenuType<? extends MiniPunchDesignixContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniPunchDesignixMenu(MenuType<? extends MiniPunchDesignixMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -78,7 +78,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -87,7 +87,7 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);
-			} else if(slotNumber > 2)
+			} else
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get() && (!AlchemyHelper.hasDecodedItem(itemstackOrig) || AlchemyHelper.isPunchedCard(itemstackOrig)))
@@ -98,8 +98,8 @@ public class MiniPunchDesignixContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

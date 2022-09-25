@@ -24,7 +24,7 @@ import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.List;
 
-import static com.mraof.minestuck.world.gen.OreGeneration.*;
+import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
 
 public class LandBiomeHolder implements ILandBiomeSet
 {

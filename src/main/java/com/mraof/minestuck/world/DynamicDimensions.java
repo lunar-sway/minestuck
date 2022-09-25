@@ -50,7 +50,7 @@ public class DynamicDimensions
 		WorldGenSettings genSettings = worldData.worldGenSettings();
 		
 		LandTypePair.Named named = landTypes.createNamedRandomly(new Random());	//TODO consider handling random differently
-		ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY),
+		ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), server.registryAccess().registryOrThrow(Registry.DENSITY_FUNCTION_REGISTRY),
 				genSettings.seed() + worldKey.location().getPath().hashCode(), named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
 		LevelStem dimension = new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolder(LAND_TYPE), chunkGenerator);
 		

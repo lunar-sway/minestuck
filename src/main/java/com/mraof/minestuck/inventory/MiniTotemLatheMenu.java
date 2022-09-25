@@ -16,7 +16,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class MiniTotemLatheContainer extends MachineContainer
+public class MiniTotemLatheMenu extends MachineContainerMenu
 {
 	private static final int CARD_1_X = 26;
 	private static final int CARD_1_Y = 25;
@@ -27,17 +27,17 @@ public class MiniTotemLatheContainer extends MachineContainer
 	private static final int OUTPUT_X = 134;
 	private static final int OUTPUT_Y = 34;
 	
-	public MiniTotemLatheContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniTotemLatheContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
-	public MiniTotemLatheContainer(MenuType<? extends MiniTotemLatheContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniTotemLatheMenu(MenuType<? extends MiniTotemLatheMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -78,7 +78,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -87,7 +87,7 @@ public class MiniTotemLatheContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 4, allSlots, false);
-			} else if(slotNumber > 3)
+			} else
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSItems.CAPTCHA_CARD.get())
@@ -99,8 +99,8 @@ public class MiniTotemLatheContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

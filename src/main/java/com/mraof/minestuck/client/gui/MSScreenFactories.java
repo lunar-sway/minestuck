@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.google.common.collect.Maps;
 import com.mraof.minestuck.client.gui.captchalouge.*;
-import com.mraof.minestuck.inventory.MSContainerTypes;
+import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
@@ -31,14 +31,14 @@ public class MSScreenFactories
 	
 	public static void registerScreenFactories()
 	{
-		MenuScreens.register(MSContainerTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
-		MenuScreens.register(MSContainerTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
-		MenuScreens.register(MSContainerTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
-		MenuScreens.register(MSContainerTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
-		MenuScreens.register(MSContainerTypes.SENDIFICATOR, SendificatorScreen::new);
-		MenuScreens.register(MSContainerTypes.GRIST_WIDGET, GristWidgetScreen::new);
-		MenuScreens.register(MSContainerTypes.URANIUM_COOKER, UraniumCookerScreen::new);
-		MenuScreens.register(MSContainerTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_CRUXTRUDER, MiniCruxtruderScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_TOTEM_LATHE, MiniTotemLatheScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_ALCHEMITER, MiniAlchemiterScreen::new);
+		MenuScreens.register(MSMenuTypes.MINI_PUNCH_DESIGNIX, MiniPunchDesignixScreen::new);
+		MenuScreens.register(MSMenuTypes.SENDIFICATOR, SendificatorScreen::new);
+		MenuScreens.register(MSMenuTypes.GRIST_WIDGET, GristWidgetScreen::new);
+		MenuScreens.register(MSMenuTypes.URANIUM_COOKER, UraniumCookerScreen::new);
+		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT, ConsortShopScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);

@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 
-public class MiniAlchemiterContainer extends MachineContainer
+public class MiniAlchemiterMenu extends MachineContainerMenu
 {
 	
 	private static final int INPUT_X = 27;
@@ -29,17 +29,17 @@ public class MiniAlchemiterContainer extends MachineContainer
 	
 	private final DataSlot wildcardHolder;
 	
-	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public MiniAlchemiterMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_ALCHEMITER, windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public MiniAlchemiterContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniAlchemiterMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, access, machinePos);
+		this(MSMenuTypes.MINI_ALCHEMITER, windowId, playerInventory, inventory, parameters, wildcardHolder, access, machinePos);
 	}
 	
-	public MiniAlchemiterContainer(MenuType<? extends MiniAlchemiterContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public MiniAlchemiterMenu(MenuType<? extends MiniAlchemiterMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot wildcardHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -80,7 +80,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 		
 		if(slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -88,7 +88,7 @@ public class MiniAlchemiterContainer extends MachineContainer
 			{
 				//if it's a machine slot
 				result = moveItemStackTo(itemstackOrig, 2, allSlots, false);
-			} else if(slotNumber > 1)
+			} else
 			{
 				//if it's an inventory slot with valid contents
 				if(itemstackOrig.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
@@ -98,8 +98,8 @@ public class MiniAlchemiterContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

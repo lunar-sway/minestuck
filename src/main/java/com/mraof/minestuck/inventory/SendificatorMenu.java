@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class SendificatorContainer extends MachineContainer
+public class SendificatorMenu extends MachineContainerMenu
 {
 	private static final int uraniumInputX = 23;
 	private static final int uraniumInputY = 51;
@@ -43,27 +43,27 @@ public class SendificatorContainer extends MachineContainer
 		};
 	}
 	
-	public static SendificatorContainer newFromPacket(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public static SendificatorMenu newFromPacket(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		BlockPos dest = buffer.readBoolean() ? buffer.readBlockPos() : null;
 		
-		return new SendificatorContainer(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2),
+		return new SendificatorMenu(MSMenuTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2),
 				new SimpleContainerData(3), DataSlot.standalone(), OptionalPosHolder.dummy(dest),
 				ContainerLevelAccess.NULL, pos);
 	}
 	
-	public SendificatorContainer(int windowId, Inventory playerInventory, IItemHandler inventory,
-								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
-								 ContainerLevelAccess position, BlockPos machinePos)
+	public SendificatorMenu(int windowId, Inventory playerInventory, IItemHandler inventory,
+							ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
+							ContainerLevelAccess position, BlockPos machinePos)
 	{
-		this(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, inventory,
+		this(MSMenuTypes.SENDIFICATOR, windowId, playerInventory, inventory,
 				parameters, fuelHolder, destinationHolder, position, machinePos);
 	}
 	
-	public SendificatorContainer(MenuType<? extends SendificatorContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory,
-								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
-								 ContainerLevelAccess position, BlockPos machinePos)
+	public SendificatorMenu(MenuType<? extends SendificatorMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory,
+							ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
+							ContainerLevelAccess position, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, position, machinePos);
 		
@@ -106,7 +106,7 @@ public class SendificatorContainer extends MachineContainer
 		
 		if(slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result;
 			
@@ -131,8 +131,8 @@ public class SendificatorContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

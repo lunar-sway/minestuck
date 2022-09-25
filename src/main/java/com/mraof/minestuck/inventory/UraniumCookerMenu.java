@@ -17,7 +17,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class UraniumCookerContainer extends MachineContainer
+public class UraniumCookerMenu extends MachineContainerMenu
 {
 	
 	private static final int uraniumInputX = 38;
@@ -29,17 +29,17 @@ public class UraniumCookerContainer extends MachineContainer
 	
 	private final DataSlot fuelHolder;
 	
-	public UraniumCookerContainer(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public UraniumCookerMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public UraniumCookerContainer(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public UraniumCookerMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSContainerTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
+		this(MSMenuTypes.URANIUM_COOKER, windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
 	}
 	
-	public UraniumCookerContainer(MenuType<? extends UraniumCookerContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public UraniumCookerMenu(MenuType<? extends UraniumCookerMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
@@ -81,7 +81,7 @@ public class UraniumCookerContainer extends MachineContainer
 		
 		if (slot.hasItem())
 		{
-			ItemStack itemstackOrig = slot.getItem();
+			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
 			
@@ -113,8 +113,8 @@ public class UraniumCookerContainer extends MachineContainer
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

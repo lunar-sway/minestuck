@@ -107,9 +107,9 @@ public class SandstoneLandType extends TerrainLandType
 		if(type != LandBiomeType.OCEAN)
 		{
 			BiomeDefaultFeatures.addDesertVegetation(builder);
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
-					new DiskConfiguration(sand, UniformInt.of(2, 6), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
-					CountPlacement.of(4), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
+			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
+					new DiskConfiguration(sand, UniformInt.of(2, 5), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
+					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		}
 		
 		if(type == LandBiomeType.NORMAL)

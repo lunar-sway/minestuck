@@ -16,11 +16,11 @@ import java.util.Random;
  * INTRODUCES randomized edges to the feature to look more natural
  * If shouldCheckBlockAbove is true, blocks will only be placed is the block above is non-solid
  */
-public class SurfaceDiskFeature extends Feature<DiskConfiguration>
+public class MSDiskFeature extends Feature<DiskConfiguration>
 {
 	private final boolean shouldCheckBlockAbove;
 	
-	public SurfaceDiskFeature(Codec<DiskConfiguration> codec, boolean shouldCheckBlockAbove)
+	public MSDiskFeature(Codec<DiskConfiguration> codec, boolean shouldCheckBlockAbove)
 	{
 		super(codec);
 		this.shouldCheckBlockAbove = shouldCheckBlockAbove;

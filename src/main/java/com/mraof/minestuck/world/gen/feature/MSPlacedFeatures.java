@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.gen.feature;
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.world.gen.OreGeneration;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;

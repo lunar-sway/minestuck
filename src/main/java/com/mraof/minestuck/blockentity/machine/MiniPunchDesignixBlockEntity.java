@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
+import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import net.minecraft.core.BlockPos;
@@ -151,6 +151,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniPunchDesignixContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniPunchDesignixMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

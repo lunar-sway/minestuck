@@ -34,8 +34,8 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new OceanRundownFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> FIRE_FIELD = REGISTER.register("fire_field", () -> new FireFieldFeature(NoneFeatureConfiguration.CODEC));
-	public static final RegistryObject<Feature<DiskConfiguration>> SURFACE_DISK = REGISTER.register("surface_disk", () -> new SurfaceDiskFeature(DiskConfiguration.CODEC, false));
-	public static final RegistryObject<Feature<DiskConfiguration>> GRASSY_SURFACE_DISK = REGISTER.register("grassy_surface_disk", () -> new SurfaceDiskFeature(DiskConfiguration.CODEC, true));
+	public static final RegistryObject<Feature<DiskConfiguration>> DISK = REGISTER.register("disk", () -> new MSDiskFeature(DiskConfiguration.CODEC, false));
+	public static final RegistryObject<Feature<DiskConfiguration>> GRASSY_SURFACE_DISK = REGISTER.register("grassy_surface_disk", () -> new MSDiskFeature(DiskConfiguration.CODEC, true));
 	
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> MESA = REGISTER.register("mesa", () -> new MesaFeature(NoneFeatureConfiguration.CODEC));

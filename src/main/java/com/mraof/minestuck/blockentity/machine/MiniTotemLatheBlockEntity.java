@@ -2,7 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
+import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.util.ColorHandler;
@@ -158,6 +158,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerIn)
 	{
-		return new MiniTotemLatheContainer(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniTotemLatheMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }
