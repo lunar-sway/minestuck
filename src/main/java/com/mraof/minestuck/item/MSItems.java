@@ -315,7 +315,7 @@ public class MSItems
 	public static final RegistryObject<Item> EMERALD_PICKAXE = REGISTER.register("emerald_pickaxe", () -> new PickaxeItem(MSItemTypes.EMERALD_TIER, 1, -2.8F, new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> EMERALD_SHOVEL = REGISTER.register("emerald_shovel", () -> new ShovelItem(MSItemTypes.EMERALD_TIER, 1.5F, -3.0F, new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> EMERALD_HOE = REGISTER.register("emerald_hoe", () -> new HoeItem(MSItemTypes.EMERALD_TIER, -3, 0.0F, new Item.Properties().tab(MSItemGroup.WEAPONS)));
-	public static final RegistryObject<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new PickaxeItem(Tiers.DIAMOND, 1, -2.8F, new Item.Properties().tab(MSItemGroup.WEAPONS))); //grist mining functionality handled by onBlockBreak SubscribeEvent in ServerEventHandler
+	public static final RegistryObject<Item> MINE_AND_GRIST = REGISTER.register("mine_and_grist", () -> new PickaxeItem(Tiers.DIAMOND, 1, -2.8F, new Item.Properties()/*.tab(MSItemGroup.WEAPONS)*/));
 	
 	
 	

@@ -379,7 +379,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 		else return null;
 	}
 	
-	protected void writeShopContainerBuffer(FriendlyByteBuf buffer)
+	protected void writeShopMenuBuffer(FriendlyByteBuf buffer)
 	{
 		ConsortMerchantMenu.write(buffer, this);
 	}
