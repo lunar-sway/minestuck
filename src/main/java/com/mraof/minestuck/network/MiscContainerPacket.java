@@ -6,6 +6,9 @@ import com.mraof.minestuck.inventory.EditmodeContainer;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -51,13 +54,16 @@ public class MiscContainerPacket implements PlayToServerPacket
 			ServerEditHandler.resendEditmodeStatus(player);
 		} else
 		{
+			int id = PlayerStatsScreen.WINDOW_ID_START + index;
+			AbstractContainerMenu menu;
 			if(!isInEditmode)
-			{
-				player.initMenu(new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.getInventory()));//ContainerHandler.windowIdStart + i;
-			} else
-			{
-				player.initMenu(new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.getInventory()));
-			}
+				menu = new CaptchaDeckContainer(id, player.getInventory());
+			else
+				menu = new EditmodeContainer(id, player.getInventory());
+			
+			player.containerMenu = menu;
+			player.initMenu(menu);
+			MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
 		}
 	}
 }

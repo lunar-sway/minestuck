@@ -71,11 +71,11 @@ public abstract class SylladexScreen extends Screen
 	{
 		this.renderBackground(poseStack);
 		
-		emptySylladex.x = (width - GUI_WIDTH)/2 + 140;
-		emptySylladex.y = (height - GUI_HEIGHT)/2 + 175;
-		
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
+		
+		emptySylladex.x = xOffset + 140;
+		emptySylladex.y = yOffset + 175;
 		
 		if(mousePressed)
 		{
@@ -97,9 +97,11 @@ public abstract class SylladexScreen extends Screen
 			mousePosY = -1;
 		}
 		
-		poseStack.pushPose();
-		poseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
-		poseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
+		PoseStack modelPoseStack = RenderSystem.getModelViewStack();
+		modelPoseStack.pushPose();
+		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
+		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
+		RenderSystem.applyModelViewMatrix();
 		
 		drawGuiMap(poseStack, xcor, ycor);
 		
@@ -115,7 +117,9 @@ public abstract class SylladexScreen extends Screen
 		for(GuiCard card : visibleCards)
 			card.drawItem(poseStack);
 		
-		poseStack.popPose();
+		modelPoseStack.popPose();
+		RenderSystem.applyModelViewMatrix();
+		RenderSystem.disableDepthTest();
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);

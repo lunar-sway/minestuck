@@ -29,7 +29,7 @@ public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRende
 	public void render(T entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
 		poseStack.pushPose();
 		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
-		HangingArtEntity.IArt art = entityIn.art;
+		HangingArtEntity.IArt art = entityIn.getArt();
 		poseStack.scale(0.0625F, 0.0625F, 0.0625F);
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(this.getTextureLocation(entityIn)));
 		this.renderPainting(poseStack, ivertexbuilder, entityIn, art.getSizeX(), art.getSizeY(), art.getOffsetX(), art.getOffsetY());

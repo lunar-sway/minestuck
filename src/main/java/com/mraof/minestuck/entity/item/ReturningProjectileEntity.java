@@ -133,7 +133,8 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
 		maxTick = compound.getInt("maxTick");
-		inBlockTicks = compound.getInt("inBlockTicks");;
+		inBlockTicks = compound.getInt("inBlockTicks");
+		;
 		noBlockCollision = compound.getBoolean("noBlockCollision");
 	}
 	
@@ -159,7 +160,8 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		return MSItems.CHAKRAM.get();
 	}
 	
-	public ItemStack getItemFromItemStack() {
+	public ItemStack getItemFromItemStack()
+	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}

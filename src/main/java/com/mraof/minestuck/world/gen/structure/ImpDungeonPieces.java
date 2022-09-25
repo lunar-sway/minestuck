@@ -1035,7 +1035,7 @@ public class ImpDungeonPieces
 		private void spawnOgre(int xPos, int yPos, int zPos, WorldGenLevel level, Random rand)
 		{
 			BlockPos pos = new BlockPos(getWorldX(xPos, zPos), getWorldY(yPos), getWorldZ(xPos, zPos));
-			OgreEntity ogre = MSEntityTypes.OGRE.create(level.getLevel());
+			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
 			ogre.moveTo(pos.getX(), pos.getY(), pos.getZ(), rand.nextFloat()*360F, 0);
 			ogre.finalizeSpawn(level, null, MobSpawnType.STRUCTURE, null, null);
 			ogre.restrictTo(pos, 2);
@@ -1157,7 +1157,7 @@ public class ImpDungeonPieces
 	
 	private static EntityType<?> getTypeForSpawners()
 	{
-		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH : MSEntityTypes.IMP;
+		return MinestuckConfig.SERVER.hardMode.get() ? MSEntityTypes.LICH.get() : MSEntityTypes.IMP.get();
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
+import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
@@ -43,7 +44,7 @@ public class RainLandType extends TerrainLandType
 	
 	public RainLandType()
 	{
-		super(new Builder(() -> MSEntityTypes.TURTLE).unavailable().names(RAIN, ISLANDS, SKY)
+		super(new Builder(MSEntityTypes.TURTLE).unavailable().names(RAIN, ISLANDS, SKY)
 				.fogColor(0.9, 0.8, 0.6).skyColor(0.3, 0.5, 0.98)
 				.biomeSet(MSBiomes.HIGH_HUMID_LAND).category(Biome.BiomeCategory.BEACH).music(() -> MSSoundEvents.MUSIC_RAIN));
 	}
@@ -93,9 +94,6 @@ public class RainLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.EXTRA_DEAD_TREE.getHolder().orElseThrow());
 		}
 		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
-				new DiskConfiguration(MSBlocks.POLISHED_PINK_STONE.get().defaultBlockState(), UniformInt.of(2, 3), 1, List.of(blocks.getBlockState("ground"))),
-				CountPlacement.of(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 				new OreConfiguration(blocks.getGroundType(), MSBlocks.PINK_STONE_COAL_ORE.get().defaultBlockState(), 17),
 				CountPlacement.of(13), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()));

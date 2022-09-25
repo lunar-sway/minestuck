@@ -22,12 +22,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable
 {
@@ -47,7 +49,26 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(1, this::isItemValid);
+		return new CustomHandler(1, this::isItemValid)
+		{
+			@Override
+			protected void onContentsChanged(int slot)
+			{
+				super.onContentsChanged(slot);
+				checkAndUpdateState();
+			}
+		};
+	}
+	
+	private void checkAndUpdateState()
+	{
+		Objects.requireNonNull(this.level);
+		boolean hasCard = !this.itemHandler.getStackInSlot(0).isEmpty();
+		BlockState newState = this.getBlockState().setValue(GristWidgetBlock.HAS_CARD, hasCard);
+		
+		if(newState != this.getBlockState())
+			this.level.setBlock(this.getBlockPos(), newState, Block.UPDATE_CLIENTS);
+			
 	}
 	
 	private boolean isItemValid(int slot, ItemStack stack)
@@ -164,10 +185,5 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	public PlayerIdentifier getOwner()
 	{
 		return owner;
-	}
-	
-	public void resendState()
-	{
-		GristWidgetBlock.updateItem(hasItem, level, this.getBlockPos());
 	}
 }
