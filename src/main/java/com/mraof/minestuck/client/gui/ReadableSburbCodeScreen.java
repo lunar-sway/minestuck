@@ -31,7 +31,10 @@ import java.util.stream.Collectors;
  */
 public class ReadableSburbCodeScreen extends Screen
 {
-	public static final ResourceLocation BOOK_TEXTURES = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book.png");
+	public static final ResourceLocation BOOK_TEXTURES01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book01a.png");
+	public static final ResourceLocation BOOK_TEXTURES01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book01b.png");
+	public static final ResourceLocation BOOK_TEXTURES02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book02.png");
+	public static final ResourceLocation BOOK_TEXTURES03 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book03.png");
 	public final int validHieroglyphCount;
 	public boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
 	public List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
@@ -142,7 +145,16 @@ public class ReadableSburbCodeScreen extends Screen
 		this.renderBackground(poseStack);
 		this.setFocused(null);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, BOOK_TEXTURES);
+		int pageModulo = currentPage % 3;
+		if(currentPage == 0) //specifically if its the first page
+			RenderSystem.setShaderTexture(0, BOOK_TEXTURES01A);
+		else if(pageModulo == 0)
+			RenderSystem.setShaderTexture(0, BOOK_TEXTURES01B);
+		else if(pageModulo == 1)
+			RenderSystem.setShaderTexture(0, BOOK_TEXTURES02);
+		else if(pageModulo == 2)
+			RenderSystem.setShaderTexture(0, BOOK_TEXTURES03);
+		
 		
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
