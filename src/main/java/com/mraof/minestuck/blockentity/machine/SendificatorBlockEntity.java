@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.inventory.OptionalPosHolder;
-import com.mraof.minestuck.inventory.SendificatorContainer;
+import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.core.BlockPos;
@@ -214,14 +214,14 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	
 	public void openMenu(ServerPlayer player)
 	{
-		NetworkHooks.openGui(player, this, SendificatorContainer.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
+		NetworkHooks.openGui(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
 	}
 	
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new SendificatorContainer(windowId, playerInventory, itemHandler,
+		return new SendificatorMenu(windowId, playerInventory, itemHandler,
 				parameters, fuelHolder, destinationHolder,
 				ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
