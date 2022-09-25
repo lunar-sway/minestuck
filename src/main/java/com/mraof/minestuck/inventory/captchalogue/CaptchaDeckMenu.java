@@ -19,7 +19,7 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 	
 	public CaptchaDeckMenu(int windowId, Inventory playerInventory)
 	{
-		super(MSMenuTypes.CAPTCHA_DECK, windowId);
+		super(MSMenuTypes.CAPTCHA_DECK.get(), windowId);
 		this.owner = playerInventory.player;
 		addSlots(playerInventory);
 	}

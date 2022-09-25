@@ -48,7 +48,7 @@ public class SendificatorMenu extends MachineContainerMenu
 		BlockPos pos = buffer.readBlockPos();
 		BlockPos dest = buffer.readBoolean() ? buffer.readBlockPos() : null;
 		
-		return new SendificatorMenu(MSMenuTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2),
+		return new SendificatorMenu(MSMenuTypes.SENDIFICATOR.get(), windowId, playerInventory, new ItemStackHandler(2),
 				new SimpleContainerData(3), DataSlot.standalone(), OptionalPosHolder.dummy(dest),
 				ContainerLevelAccess.NULL, pos);
 	}
@@ -57,7 +57,7 @@ public class SendificatorMenu extends MachineContainerMenu
 							ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
 							ContainerLevelAccess position, BlockPos machinePos)
 	{
-		this(MSMenuTypes.SENDIFICATOR, windowId, playerInventory, inventory,
+		this(MSMenuTypes.SENDIFICATOR.get(), windowId, playerInventory, inventory,
 				parameters, fuelHolder, destinationHolder, position, machinePos);
 	}
 	

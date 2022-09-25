@@ -29,12 +29,12 @@ public class MiniTotemLatheMenu extends MachineContainerMenu
 	
 	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.MINI_TOTEM_LATHE.get(), windowId, playerInventory, new ItemStackHandler(4), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
 	public MiniTotemLatheMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.MINI_TOTEM_LATHE, windowId, playerInventory, inventory, parameters, access, machinePos);
+		this(MSMenuTypes.MINI_TOTEM_LATHE.get(), windowId, playerInventory, inventory, parameters, access, machinePos);
 	}
 	
 	public MiniTotemLatheMenu(MenuType<? extends MiniTotemLatheMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)
