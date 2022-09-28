@@ -119,7 +119,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.REDSTONE_ORE).input(Items.REDSTONE).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		//Ores
 		CombinationRecipeBuilder.of(Items.RAW_COPPER).input(Items.RAW_IRON).and().namedInput(Items.CLOCK).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.RAW_GOLD).input(Items.PORKCHOP).and().namedInput(Items.IRON_NUGGET).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.RAW_GOLD).input(Items.PORKCHOP).and().namedInput(Items.LIGHTNING_ROD).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.RAW_IRON).input(Items.RAW_COPPER).or().namedInput(Items.CLOCK).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DIAMOND).input(Items.EMERALD).and().namedInput(Items.COAL).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DIAMOND).input(Items.EMERALD).and().namedInput(Items.LAPIS_LAZULI).buildFor(consumer, Minestuck.MOD_ID);
