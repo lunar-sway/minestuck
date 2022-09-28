@@ -307,7 +307,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.EXPOSED_COPPER).grist(RUST, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.OXIDIZED_COPPER).grist(RUST, 9).grist(URANIUM, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.WEATHERED_COPPER).grist(RUST, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
-		
+		GristCostRecipeBuilder.of(Items.MOSS_BLOCK).grist(CAULK, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
 		//Music Discs
 		GristCostRecipeBuilder.of(Items.MUSIC_DISC_11).grist(BUILD, 10).grist(CAULK, 5).grist(TAR, 2).grist(MERCURY, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.MUSIC_DISC_13).grist(BUILD, 15).grist(CAULK, 8).grist(AMBER, 5).grist(CHALK, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
