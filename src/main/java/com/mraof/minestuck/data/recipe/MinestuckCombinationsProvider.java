@@ -101,6 +101,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.QUARTZ_BLOCK).input(Items.QUARTZ).or().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.REDSTONE_BLOCK).input(Items.REDSTONE).or().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.NETHERITE_BLOCK).input(Items.NETHERITE_INGOT).or().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.CUT_COPPER_STAIRS).input(Items.COPPER_INGOT).or().input(Items.STONE_STAIRS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.CUT_COPPER_SLAB).input(Items.COPPER_INGOT).or().input(Items.BRICK_SLAB).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.CUT_COPPER).input(Items.COPPER_INGOT).or().input(Items.COPPER_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.RAW_GOLD_BLOCK).input(Items.RAW_GOLD).and().namedInput(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.RAW_IRON_BLOCK).input(Items.RAW_IRON).and().namedInput(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.RAW_COPPER_BLOCK).input(Items.RAW_COPPER).and().namedInput(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		//Ore blocks
 		CombinationRecipeBuilder.of(Items.COAL_ORE).input(Items.COAL).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DIAMOND_ORE).input(Items.DIAMOND).and().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
