@@ -18,13 +18,15 @@ public class MSDensityFunctions
 {
 	public static final DeferredRegister<DensityFunction> REGISTER = DeferredRegister.create(Registry.DENSITY_FUNCTION_REGISTRY, Minestuck.MOD_ID);
 	
+	public static final RegistryObject<DensityFunction> SKAIA_CONTINENTS = REGISTER.register("skaia/continents", DensityFunctions::zero);
+	public static final RegistryObject<DensityFunction> SKAIA_EROSION = REGISTER.register("skaia/erosion", DensityFunctions::zero);
 	public static final RegistryObject<DensityFunction> SKAIA_RIDGES = REGISTER.register("skaia/ridges",
 			() -> base2dNoise(MSNoiseParameters.SKAIA_RIDGES));
 	
 	public static final RegistryObject<DensityFunction> SKAIA_DEPTH = REGISTER.register("skaia/depth",
-			() -> depth(DensityFunctions::zero, DensityFunctions::zero, SKAIA_RIDGES));
+			() -> depth(SKAIA_CONTINENTS, SKAIA_EROSION, SKAIA_RIDGES));
 	public static final RegistryObject<DensityFunction> SKAIA_FACTOR = REGISTER.register("skaia/factor",
-			() -> factor(DensityFunctions::zero, DensityFunctions::zero, SKAIA_RIDGES));
+			() -> factor(SKAIA_CONTINENTS, SKAIA_EROSION, SKAIA_RIDGES));
 	
 	public static final RegistryObject<DensityFunction> SKAIA_INITIAL_DENSITY = REGISTER.register("skaia/initial_density",
 			() -> initialDensity(SKAIA_DEPTH, SKAIA_FACTOR));
@@ -36,11 +38,12 @@ public class MSDensityFunctions
 			() -> base2dNoise(MSNoiseParameters.LAND_CONTINENTS));
 	public static final RegistryObject<DensityFunction> LAND_EROSION = REGISTER.register("land/erosion",
 			() -> base2dNoise(MSNoiseParameters.LAND_EROSION));
+	public static final RegistryObject<DensityFunction> LAND_RIDGES = REGISTER.register("land/ridges", DensityFunctions::zero);
 	
 	public static final RegistryObject<DensityFunction> LAND_DEPTH = REGISTER.register("land/depth",
-			() -> depth(LAND_CONTINENTS, LAND_EROSION, DensityFunctions::zero));
+			() -> depth(LAND_CONTINENTS, LAND_EROSION, LAND_RIDGES));
 	public static final RegistryObject<DensityFunction> LAND_FACTOR = REGISTER.register("land/factor",
-			() -> factor(LAND_CONTINENTS, LAND_EROSION, DensityFunctions::zero));
+			() -> factor(LAND_CONTINENTS, LAND_EROSION, LAND_RIDGES));
 	
 	public static final RegistryObject<DensityFunction> LAND_INITIAL_DENSITY = REGISTER.register("land/initial_density",
 			() -> initialDensity(LAND_DEPTH, LAND_FACTOR));
@@ -51,7 +54,7 @@ public class MSDensityFunctions
 	{
 		return new NoiseRouterWithOnlyNoises(
 				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
-				DensityFunctions.zero(), DensityFunctions.zero(), from(registry, LAND_CONTINENTS), from(registry, LAND_EROSION), from(registry, LAND_DEPTH), DensityFunctions.zero(), // biome parameters
+				DensityFunctions.zero(), DensityFunctions.zero(), from(registry, LAND_CONTINENTS), from(registry, LAND_EROSION), from(registry, LAND_DEPTH), from(registry, LAND_RIDGES), // biome parameters
 				from(registry, LAND_INITIAL_DENSITY), from(registry, LAND_FINAL_DENSITY),	// terrain and surface height
 				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
 	}
