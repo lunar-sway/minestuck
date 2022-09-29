@@ -166,17 +166,16 @@ public class EcheladderScreen extends PlayerStatsScreen
 		RenderSystem.setShaderTexture(0, guiEcheladder);
 		int scroll = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
-			blit(poseStack, xOffset + 90, yOffset + 175 + scroll - i * 14, 7, 242, 146, 14);
+			blit(poseStack, xOffset + 90, yOffset + 175 + scroll - i*14, 7, 242, 146, 14);
 		
 		Random rand = new Random(452619373);
-		for(int i = 0; i < scrollIndex / 14; i++)
+		for(int i = 0; i < scrollIndex/14; i++)
 			rand.nextInt(0xFFFFFF);
 		Title playerTitle = ClientPlayerData.getTitle();
-		
 		for(int i = 0; i < rows; i++)
 		{
-			int y = yOffset + 177 + scroll - i * 14;
-			int rung = scrollIndex / 14 + i;
+			int y = yOffset + 177 + scroll - i*14;
+			int rung = scrollIndex/14 + i;
 			if(rung > Echeladder.RUNG_COUNT)
 				break;
 			
