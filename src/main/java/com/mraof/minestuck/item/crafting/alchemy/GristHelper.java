@@ -19,6 +19,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -74,6 +75,16 @@ public class GristHelper
 		Random random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
+		double effectivePowerLevel = 0;
+		for(PlayerIdentifier id : damageMap.keySet())
+		{
+			MinecraftServer server = entity.getServer();
+			Level level = entity.getLevel();
+			Session session = SessionHandler.get(level).getPlayerSession(id);
+			int sesPL = (int) session.getSessionPowerlevel(server) / 20;
+			effectivePowerLevel += sesPL;
+		}
+		multiplier = (multiplier * effectivePowerLevel / damageMap.keySet().size());
 		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
@@ -175,9 +186,10 @@ public class GristHelper
 	}
 	
 	public static final int[] rungGrist =//never set this below 20.
-			{20,40,60,120,125,40,45,60,65,80,85,105,120,130,140,
-					150,160,170,180,190,200,220,240,260,280,300,320,340,360,365
-			,370,375,380,385,390,395,400,410,420,500,650,760,870,980,1090,1100,1200,13000,14000,15000};
+			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
+					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
+					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
+					8000,9000,10000,20000,30000,40000,50000,500000};
 	// the function that controls how much grist is spliced from the gutter
 	// will crash the game if set below 20
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
