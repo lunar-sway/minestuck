@@ -75,13 +75,13 @@ public class GristHelper
 		Random random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
-		double effectivePowerLevel = 0;
+		double effectivePowerLevel = 1;
 		for(PlayerIdentifier id : damageMap.keySet())
 		{
 			MinecraftServer server = entity.getServer();
 			Level level = entity.getLevel();
 			Session session = SessionHandler.get(level).getPlayerSession(id);
-			int sesPL = (int) session.getSessionPowerlevel(server) / 20;
+			int sesPL = (int) session.getSessionPowerlevel(server);
 			effectivePowerLevel += sesPL;
 		}
 		multiplier = (multiplier * effectivePowerLevel / damageMap.keySet().size());
