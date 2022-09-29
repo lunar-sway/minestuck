@@ -35,11 +35,13 @@ public class MSDensityFunctions
 			() -> depth(SKAIA_CONTINENTS, SKAIA_EROSION, SKAIA_RIDGES));
 	public static final RegistryObject<DensityFunction> SKAIA_FACTOR = REGISTER.register("skaia/factor",
 			() -> factor(SKAIA_CONTINENTS, SKAIA_EROSION, SKAIA_RIDGES));
+	public static final RegistryObject<DensityFunction> SKAIA_JAGGEDNESS = REGISTER.register("skaia/jaggedness",
+			() -> jaggedness(SKAIA_CONTINENTS, SKAIA_EROSION, SKAIA_RIDGES));
 	
 	public static final RegistryObject<DensityFunction> SKAIA_INITIAL_DENSITY = REGISTER.register("skaia/initial_density",
 			() -> initialDensity(SKAIA_DEPTH, SKAIA_FACTOR));
 	public static final RegistryObject<DensityFunction> SKAIA_FINAL_DENSITY = REGISTER.register("skaia/final_density",
-			() -> finalDensity(SKAIA_INITIAL_DENSITY));
+			() -> finalDensity(SKAIA_DEPTH, SKAIA_FACTOR, SKAIA_JAGGEDNESS));
 	
 	
 	public static final RegistryObject<DensityFunction> LAND_CONTINENTS = REGISTER.register("land/continents",
@@ -52,11 +54,14 @@ public class MSDensityFunctions
 			() -> depth(LAND_CONTINENTS, LAND_EROSION, LAND_RIDGES));
 	public static final RegistryObject<DensityFunction> LAND_FACTOR = REGISTER.register("land/factor",
 			() -> factor(LAND_CONTINENTS, LAND_EROSION, LAND_RIDGES));
+	public static final RegistryObject<DensityFunction> LAND_JAGGEDNESS = REGISTER.register("land/jaggedness",
+			() -> jaggedness(LAND_CONTINENTS, LAND_EROSION, LAND_RIDGES));
+	
 	
 	public static final RegistryObject<DensityFunction> LAND_INITIAL_DENSITY = REGISTER.register("land/initial_density",
 			() -> initialDensity(LAND_DEPTH, LAND_FACTOR));
 	public static final RegistryObject<DensityFunction> LAND_FINAL_DENSITY = REGISTER.register("land/final_density",
-			() -> finalDensity(LAND_INITIAL_DENSITY));
+			() -> finalDensity(LAND_DEPTH, LAND_FACTOR, LAND_JAGGEDNESS));
 	
 	public static NoiseRouterWithOnlyNoises makeLandNoiseRouter(Registry<DensityFunction> registry)
 	{
@@ -94,15 +99,27 @@ public class MSDensityFunctions
 				DensityFunctions.TerrainShaperSpline.SplineType.FACTOR, 0, 8)));
 	}
 	
+	@SuppressWarnings("deprecation")
+	private static DensityFunction jaggedness(Supplier<DensityFunction> continents, Supplier<DensityFunction> erosion, Supplier<DensityFunction> weirdness)
+	{
+		// Uses vanilla noise settings because I'm lazy + we're not using jaggedness at the time of writing
+		DensityFunction noise = DensityFunctions.noise(BuiltinRegistries.NOISE.getHolderOrThrow(Noises.JAGGED), 1500, 0);
+		DensityFunction jaggednessFactor = DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.terrainShaperSpline(
+				continents.get(), erosion.get(), weirdness.get(), DensityFunctions.TerrainShaperSpline.SplineType.JAGGEDNESS, 0, 1.28)));
+		return DensityFunctions.mul(jaggednessFactor, noise.halfNegative());
+	}
+	
 	private static DensityFunction initialDensity(Supplier<DensityFunction> depth, Supplier<DensityFunction> factor)
 	{
 		return DensityFunctions.mul(DensityFunctions.constant(4), DensityFunctions.mul(depth.get(), factor.get()).quarterNegative());
 	}
 	
 	@SuppressWarnings("ConstantConditions")
-	private static DensityFunction finalDensity(Supplier<DensityFunction> initialDensity)
+	private static DensityFunction finalDensity(Supplier<DensityFunction> depth, Supplier<DensityFunction> factor, Supplier<DensityFunction> jaggedness)
 	{
+		DensityFunction modifiedDepth = DensityFunctions.add(depth.get(), jaggedness.get());
+		DensityFunction baseDensity = initialDensity(() -> modifiedDepth, factor);
 		return DensityFunctions.mul(DensityFunctions.constant(0.64), DensityFunctions.interpolated(DensityFunctions.blendDensity(
-				DensityFunctions.slide(null, DensityFunctions.add(BlendedNoise.UNSEEDED, initialDensity.get()))))).squeeze();
+				DensityFunctions.slide(null, DensityFunctions.add(BlendedNoise.UNSEEDED, baseDensity))))).squeeze();
 	}
 }
