@@ -92,7 +92,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 		
 		MobSpawnSettings spawnInfo = createMobSpawnInfo(landTypes, type);
 		
-		BiomeGenerationSettings generation = createGenerationSettings(base, blocks, landTypes, type);
+		BiomeGenerationSettings generation = createGenerationSettings(blocks, landTypes, type);
 		
 		return builder.generationSettings(generation).mobSpawnSettings(spawnInfo);
 	}
@@ -109,7 +109,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 		return builder.build();
 	}
 	
-	private static BiomeGenerationSettings createGenerationSettings(Biome base, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
+	private static BiomeGenerationSettings createGenerationSettings(StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
 	{
 		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();
 		
@@ -118,8 +118,8 @@ public class LandBiomeHolder implements ILandBiomeSet
 		
 		addDefaultOres(builder, blocks);
 		
-		landTypes.getTerrain().setBiomeGeneration(builder, blocks, type, base);
-		landTypes.getTitle().setBiomeGeneration(builder, blocks, type, base);
+		landTypes.getTerrain().setBiomeGeneration(builder, blocks, type, landTypes.getTerrain().getBiomeSet());
+		landTypes.getTitle().setBiomeGeneration(builder, blocks, type, landTypes.getTerrain().getBiomeSet());
 		
 		return builder.build();
 	}

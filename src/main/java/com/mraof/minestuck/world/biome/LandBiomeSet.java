@@ -44,4 +44,9 @@ public class LandBiomeSet
 	{
 		return precipitation;
 	}
+	
+	public float getTemperature()
+	{
+		return temperature;
+	}
 }
