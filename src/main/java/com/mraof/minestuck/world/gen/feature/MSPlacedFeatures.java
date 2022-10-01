@@ -85,6 +85,12 @@ public class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> placed(MSCFeatures.LARGE_RANDOM_ROCK_BLOCK_BLOB,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> PILLAR = REGISTER.register("pillar", () -> placed(MSCFeatures.PILLAR,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> LARGE_PILLAR = REGISTER.register("large_pillar", () -> placed(MSCFeatures.LARGE_PILLAR,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> LARGE_PILLAR_EXTRA = REGISTER.register("large_pillar_extra", () -> placed(MSCFeatures.LARGE_PILLAR,
+			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	
 	public static final RegistryObject<PlacedFeature> DARK_OAK = REGISTER.register("dark_oak", () -> placed(TreeFeatures.DARK_OAK,
 			worldGenModifiers(CountPlacement.of(10), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING))));
