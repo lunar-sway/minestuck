@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -99,7 +98,7 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,

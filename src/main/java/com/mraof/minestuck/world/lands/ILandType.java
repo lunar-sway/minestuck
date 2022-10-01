@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -60,9 +59,6 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	 * @param type the type of biome that the spawn info builder is for.
 	 */
 	default void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
-	{}
-	
-	default void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
 	{}
 	
 	/**

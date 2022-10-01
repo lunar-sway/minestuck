@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
@@ -79,7 +78,7 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
 				new DiskConfiguration(Blocks.COARSE_DIRT.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),

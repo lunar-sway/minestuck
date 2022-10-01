@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -70,7 +69,7 @@ public class ShadeLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_MUSHROOM_PATCH, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_TREE, LandBiomeType.NORMAL);

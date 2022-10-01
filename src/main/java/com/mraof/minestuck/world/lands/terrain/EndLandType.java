@@ -3,7 +3,6 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.feature.MSCFeatures;
@@ -68,7 +67,7 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacementUtils.inlinePlaced(MSCFeatures.END_TREE.getHolder().orElseThrow(),
 						PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()),

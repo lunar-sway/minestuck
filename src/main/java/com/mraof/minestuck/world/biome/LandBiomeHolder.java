@@ -117,7 +117,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 					LandBiomeType.any());
 		}
 		
-		landTypes.getTerrain().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
+		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
 	}
 	
@@ -132,8 +132,6 @@ public class LandBiomeHolder implements ILandBiomeSet
 		@Override
 		public void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, LandBiomeType... types)
 		{
-			if(types.length == 0)
-				throw new IllegalArgumentException("Missing land biome types!");
 			for(LandBiomeType type : types)
 				settings.get(type).addFeature(step, feature);
 		}
@@ -141,8 +139,6 @@ public class LandBiomeHolder implements ILandBiomeSet
 		@Override
 		public void addCarver(GenerationStep.Carving step, Holder<? extends ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
 		{
-			if(types.length == 0)
-				throw new IllegalArgumentException("Missing land biome types!");
 			for(LandBiomeType type : types)
 				settings.get(type).addCarver(step, carver);
 		}
