@@ -21,7 +21,7 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class MSPlacedFeatures
+public final class MSPlacedFeatures
 {
 	public static final DeferredRegister<PlacedFeature> REGISTER = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, Minestuck.MOD_ID);
 	
@@ -66,6 +66,36 @@ public class MSPlacedFeatures
 			worldGenModifiers(CountPlacement.of(7), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)))));
 	public static final RegistryObject<PlacedFeature> EXTRA_FIRE_FIELD = REGISTER.register("extra_fire_field", () -> placed(MSCFeatures.FIRE_FIELD,
 			worldGenModifiers(CountPlacement.of(10), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)))));
+	public static final RegistryObject<PlacedFeature> COARSE_DIRT_DISK = REGISTER.register("coarse_dirt_disk", () -> placed(MSCFeatures.COARSE_DIRT_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> SNOW_BLOCK_DISK = REGISTER.register("snow_block_disk", () -> placed(MSCFeatures.SNOW_BLOCK_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> SMALL_SNOW_BLOCK_DISK = REGISTER.register("small_snow_block_disk", () -> placed(MSCFeatures.SMALL_SNOW_BLOCK_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> ICE_DISK = REGISTER.register("ice_disk", () -> placed(MSCFeatures.ICE_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> SAND_DISK = REGISTER.register("sand_disk", () -> placed(MSCFeatures.SAND_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> RED_SAND_DISK = REGISTER.register("red_sand_disk", () -> placed(MSCFeatures.RED_SAND_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> SLIME_DISK = REGISTER.register("slime_disk", () -> placed(MSCFeatures.SLIME_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> EXTRA_SLIME_DISK = REGISTER.register("extra_slime_disk", () -> placed(MSCFeatures.SLIME_DISK,
+			worldGenModifiers(CountPlacement.of(2), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> NETHERRACK_DISK = REGISTER.register("netherrack_disk", () -> placed(MSCFeatures.NETHERRACK_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> OAK_LEAVES_DISK = REGISTER.register("oak_leaves_disk", () -> placed(MSCFeatures.OAK_LEAVES_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> COAGULATED_BLOOD_DISK = REGISTER.register("coagulated_blood_disk", () -> placed(MSCFeatures.COAGULATED_BLOOD_DISK,
+			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> COBBLESTONE_SURFACE_DISK = REGISTER.register("cobblestone_surface_disk", () -> placed(MSCFeatures.COBBLESTONE_SURFACE_DISK,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> STONE_SURFACE_DISK = REGISTER.register("stone_surface_disk", () -> placed(MSCFeatures.STONE_SURFACE_DISK,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> END_GRASS_SURFACE_DISK = REGISTER.register("end_grass_surface_disk", () -> placed(MSCFeatures.END_GRASS_SURFACE_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+	public static final RegistryObject<PlacedFeature> END_STONE_SURFACE_DISK = REGISTER.register("end_stone_surface_disk", () -> placed(MSCFeatures.END_STONE_SURFACE_DISK,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	
 	public static final RegistryObject<PlacedFeature> MESA = REGISTER.register("mesa", () -> placed(MSCFeatures.MESA,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(25), PlacementUtils.HEIGHTMAP)));
