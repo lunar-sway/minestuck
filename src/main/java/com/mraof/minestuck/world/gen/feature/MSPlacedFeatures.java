@@ -9,6 +9,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.data.worldgen.features.TreeFeatures;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
@@ -68,8 +69,18 @@ public class MSPlacedFeatures
 	
 	public static final RegistryObject<PlacedFeature> MESA = REGISTER.register("mesa", () -> placed(MSCFeatures.MESA,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(25), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> STONE_MOUND = REGISTER.register("stone_mound", () -> placed(MSCFeatures.STONE_MOUND,
+			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> COBBLESTONE_BLOCK_BLOB = REGISTER.register("cobblestone_block_blob", () -> placed(MSCFeatures.COBBLESTONE_BLOCK_BLOB,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> SANDSTONE_BLOCK_BLOB = REGISTER.register("sandstone_block_blob", () -> placed(MSCFeatures.SANDSTONE_BLOCK_BLOB,
+			worldGenModifiers(CountPlacement.of(UniformInt.of(0, 3)), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> EXTRA_SANDSTONE_BLOCK_BLOB = REGISTER.register("extra_sandstone_block_blob", () -> placed(MSCFeatures.SANDSTONE_BLOCK_BLOB,
+			worldGenModifiers(CountPlacement.of(UniformInt.of(0, 5)), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> RED_SANDSTONE_BLOCK_BLOB = REGISTER.register("red_sandstone_block_blob", () -> placed(MSCFeatures.RED_SANDSTONE_BLOCK_BLOB,
+			worldGenModifiers(CountPlacement.of(UniformInt.of(0, 3)), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> EXTRA_RED_SANDSTONE_BLOCK_BLOB = REGISTER.register("extra_red_sandstone_block_blob", () -> placed(MSCFeatures.RED_SANDSTONE_BLOCK_BLOB,
+			worldGenModifiers(CountPlacement.of(UniformInt.of(0, 5)), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("random_rock_block_blob", () -> placed(MSCFeatures.RANDOM_ROCK_BLOCK_BLOB,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> placed(MSCFeatures.LARGE_RANDOM_ROCK_BLOCK_BLOB,
@@ -81,6 +92,8 @@ public class MSPlacedFeatures
 			worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
 	public static final RegistryObject<PlacedFeature> EXTRA_RAINBOW_TREE = REGISTER.register("extra_rainbow_tree", () -> placed(MSCFeatures.RAINBOW_TREE,
 			worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
+	public static final RegistryObject<PlacedFeature> END_TREE = REGISTER.register("end_tree", () -> placed(MSCFeatures.END_TREE,
+			worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.END_SAPLING.get()))));
 	public static final RegistryObject<PlacedFeature> GLOWING_TREE = REGISTER.register("glowing_tree", () -> placed(MSCFeatures.GLOWING_TREE,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlock(MSBlocks.BLUE_DIRT.get(), Vec3i.ZERO.below())))));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> placed(MSCFeatures.PETRIFIED_TREE,
