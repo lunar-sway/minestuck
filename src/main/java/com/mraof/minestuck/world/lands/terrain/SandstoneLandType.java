@@ -9,13 +9,13 @@ import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
-import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -100,41 +100,38 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
 	{
 		BlockState sand = blocks.getBlockState("sand");
 		BlockState sandstone = blocks.getBlockState("upper");
 		
-		if(type != LandBiomeType.OCEAN)
-		{
-			BiomeDefaultFeatures.addDesertVegetation(builder);
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
-					new DiskConfiguration(sand, UniformInt.of(2, 5), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
-					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-		}
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_DEAD_BUSH_2, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
+						new DiskConfiguration(sand, UniformInt.of(2, 5), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
+						InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
+				LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.BLOCK_BLOB.get(),
-					new BlockStateConfiguration(sandstone),
-					CountPlacement.of(UniformInt.of(0, 3)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-		} else if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.BLOCK_BLOB.get(),
-					new BlockStateConfiguration(sandstone),
-					CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-		}
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.BLOCK_BLOB.get(),
+						new BlockStateConfiguration(sandstone),
+						CountPlacement.of(UniformInt.of(0, 3)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()),
+				LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.BLOCK_BLOB.get(),
+						new BlockStateConfiguration(sandstone),
+						CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()),
+				LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(OreFeatures.NATURAL_STONE, sandstone, 28),
-				CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()));
+						new OreConfiguration(OreFeatures.NATURAL_STONE, sandstone, 28),
+						CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(OreFeatures.NATURAL_STONE, Blocks.IRON_ORE.defaultBlockState(), 9),
-				CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()));
+						new OreConfiguration(OreFeatures.NATURAL_STONE, Blocks.IRON_ORE.defaultBlockState(), 9),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(OreFeatures.NATURAL_STONE, Blocks.REDSTONE_ORE.defaultBlockState(), 8),
-				CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()));
-		 
+						new OreConfiguration(OreFeatures.NATURAL_STONE, Blocks.REDSTONE_ORE.defaultBlockState(), 8),
+						CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
 	}
 	
 	@Override

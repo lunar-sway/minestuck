@@ -11,12 +11,12 @@ import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -68,38 +68,35 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, LandBiomeSet biomeSet)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSet biomeSet)
 	{
-		if(type != LandBiomeType.OCEAN)
-		{
-			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacementUtils.inlinePlaced(MSCFeatures.END_TREE.getHolder().orElseThrow(),
-					PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()));
-		}
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, PlacementUtils.inlinePlaced(MSCFeatures.END_TREE.getHolder().orElseThrow(),
+						PlacementUtils.countExtra(2, 0.1F, 1), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome()),
+				LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
-					new DiskConfiguration(MSBlocks.END_GRASS.get().defaultBlockState(), UniformInt.of(2, 4), 1, List.of(blocks.getBlockState("surface"), MSBlocks.END_GRASS.get().defaultBlockState())),
-					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH.getHolder().orElseThrow());
-		} else if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
-					new DiskConfiguration(Blocks.END_STONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(blocks.getBlockState("surface_rough"), Blocks.END_STONE.defaultBlockState())),
-					InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, EndPlacements.CHORUS_PLANT);
-			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH.getHolder().orElseThrow());
-		}
+		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
+				new DiskConfiguration(MSBlocks.END_GRASS.get().defaultBlockState(), UniformInt.of(2, 4), 1, List.of(blocks.getBlockState("surface"), MSBlocks.END_GRASS.get().defaultBlockState())),
+				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()), LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH, LandBiomeType.NORMAL);
+		
+		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, PlacementUtils.inlinePlaced(MSFeatures.GRASSY_SURFACE_DISK.get(),
+				new DiskConfiguration(Blocks.END_STONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(blocks.getBlockState("surface_rough"), Blocks.END_STONE.defaultBlockState())),
+				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()), LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, EndPlacements.CHORUS_PLANT, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_IRON_ORE.get().defaultBlockState(), 9),
-				CountPlacement.of(20), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()));
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_IRON_ORE.get().defaultBlockState(), 9),
+						CountPlacement.of(20), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_REDSTONE_ORE.get().defaultBlockState(), 8),
-				CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()));
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_REDSTONE_ORE.get().defaultBlockState(), 8),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-				new OreConfiguration(blocks.getGroundType(), Blocks.END_STONE.defaultBlockState(), 36),
-				CountPlacement.of(40), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()));
+						new OreConfiguration(blocks.getGroundType(), Blocks.END_STONE.defaultBlockState(), 36),
+						CountPlacement.of(40), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
 	}
 	
 	@Override
