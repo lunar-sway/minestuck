@@ -1,4 +1,4 @@
-package com.mraof.minestuck.world.gen.structure;
+package com.mraof.minestuck.world.gen.structure.gate;
 
 import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.world.GateHandler;

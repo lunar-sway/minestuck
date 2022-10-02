@@ -7,7 +7,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
+import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
