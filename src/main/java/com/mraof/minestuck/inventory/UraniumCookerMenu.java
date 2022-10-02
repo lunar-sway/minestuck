@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.slot.InputSlot;
+import com.mraof.minestuck.inventory.slot.OutputSlot;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,66 +16,40 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.function.Consumer;
 
-public class SendificatorContainer extends MachineContainer
+public class UraniumCookerMenu extends MachineContainerMenu
 {
-	private static final int uraniumInputX = 23;
+	
+	private static final int uraniumInputX = 38;
 	private static final int uraniumInputY = 51;
-	private static final int itemInputX = 23;
+	private static final int itemInputX = 38;
 	private static final int itemInputY = 22;
+	private static final int itemOutputX = 117;
+	private static final int itemOutputY = 35;
 	
 	private final DataSlot fuelHolder;
-	private final OptionalPosHolder destinationHolder;
 	
-	public static Consumer<FriendlyByteBuf> makeExtraDataWriter(BlockPos position, @Nullable BlockPos destination)
+	public UraniumCookerMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		return buffer -> {
-			buffer.writeBlockPos(position);
-			if(destination == null)
-			{
-				buffer.writeBoolean(false);
-			} else
-			{
-				buffer.writeBoolean(true);
-				buffer.writeBlockPos(destination);
-			}
-		};
+		this(MSMenuTypes.URANIUM_COOKER.get(), windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public static SendificatorContainer newFromPacket(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public UraniumCookerMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		BlockPos pos = buffer.readBlockPos();
-		BlockPos dest = buffer.readBoolean() ? buffer.readBlockPos() : null;
+		this(MSMenuTypes.URANIUM_COOKER.get(), windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
+	}
+	
+	public UraniumCookerMenu(MenuType<? extends UraniumCookerMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	{
+		super(type, windowId, parameters, access, machinePos);
 		
-		return new SendificatorContainer(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, new ItemStackHandler(2),
-				new SimpleContainerData(3), DataSlot.standalone(), OptionalPosHolder.dummy(dest),
-				ContainerLevelAccess.NULL, pos);
-	}
-	
-	public SendificatorContainer(int windowId, Inventory playerInventory, IItemHandler inventory,
-								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
-								 ContainerLevelAccess position, BlockPos machinePos)
-	{
-		this(MSContainerTypes.SENDIFICATOR, windowId, playerInventory, inventory,
-				parameters, fuelHolder, destinationHolder, position, machinePos);
-	}
-	
-	public SendificatorContainer(MenuType<? extends SendificatorContainer> type, int windowId, Inventory playerInventory, IItemHandler inventory,
-								 ContainerData parameters, DataSlot fuelHolder, OptionalPosHolder destinationHolder,
-								 ContainerLevelAccess position, BlockPos machinePos)
-	{
-		super(type, windowId, parameters, position, machinePos);
-		
-		assertItemHandlerSize(inventory, 2);
+		assertItemHandlerSize(inventory, 3);
 		this.fuelHolder = fuelHolder;
-		this.destinationHolder = destinationHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
 		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
+		addSlot(new OutputSlot(inventory, 2, itemOutputX, itemOutputY));
 		addDataSlot(fuelHolder);
-		addDataSlots(destinationHolder.getIntArray());
 		
 		bindPlayerInventory(playerInventory);
 	}
@@ -82,17 +57,17 @@ public class SendificatorContainer extends MachineContainer
 	@Override
 	protected Block getValidBlock()
 	{
-		return MSBlocks.SENDIFICATOR.get();
+		return MSBlocks.URANIUM_COOKER.get();
 	}
 	
 	protected void bindPlayerInventory(Inventory playerInventory)
 	{
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 9; j++)
+		for (int i = 0; i < 3; i++)
+			for (int j = 0; j < 9; j++)
 				addSlot(new Slot(playerInventory, j + i * 9 + 9,
 						8 + j * 18, 84 + i * 18));
 		
-		for(int i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++)
 			addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 	}
 	
@@ -104,11 +79,11 @@ public class SendificatorContainer extends MachineContainer
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if(slot.hasItem())
+		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem().copy();
 			itemstack = itemstackOrig.copy();
-			boolean result;
+			boolean result = false;
 			
 			if(slotNumber == 0)    //Shift-clicking from the item input
 			{
@@ -117,6 +92,13 @@ public class SendificatorContainer extends MachineContainer
 			} else if(slotNumber == 1)    //Shift-clicking from the Uranium input
 			{
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
+			} else if(slotNumber == 2)    //Shift-clicking from the output slot
+			{
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
+					result = moveItemStackTo(itemstackOrig, 0, 1, false);    //Send the uranium back to the uranium input
+				else
+					result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send the non-uranium to the inventory
+				
 			} else    //Shift-clicking from the inventory
 			{
 				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
@@ -141,16 +123,5 @@ public class SendificatorContainer extends MachineContainer
 	public int getFuel()
 	{
 		return fuelHolder.get();
-	}
-	
-	public boolean hasDestination()
-	{
-		return destinationHolder.getBlockPos().isPresent();
-	}
-	
-	@Nullable
-	public BlockPos getDestination()
-	{
-		return destinationHolder.getBlockPos().orElse(null);
 	}
 }

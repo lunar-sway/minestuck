@@ -14,6 +14,7 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.entry.TransportalizerBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -65,6 +66,7 @@ public class Minestuck
 		MSFluids.REGISTER.register(eventBus);
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
+		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
 		LandTypes.TERRAIN_REGISTER.register(eventBus);

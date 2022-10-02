@@ -134,14 +134,14 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
-			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base
-			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs top
+			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, Direction.SOUTH)); //stairs base
+			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get().defaultBlockState().setValue(CustomShapeBlock.FACING, Direction.SOUTH)); //stairs top
 			generateBox(level, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), false); //stairs base fill in
 			generateBox(level, boundingBox, 17, pushUp + 1, i + 1, 24, pushUp + 1, 26, MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), false); //stairs top fill in
 			pushUp = pushUp + 2; //allows the stairs height to increment twice as fast as sideways placement
 		}
 		
-		fillWithBlocksCheckWater(level, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base at top
+		fillWithBlocksCheckWater(level, boundingBox, 17, 48, 24, 24, 48, 24, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, Direction.SOUTH)); //stairs base at top
 		generateBox(level, boundingBox, 17, -10, 0, 24, -1, 24, MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), false); //underneath stairs
 		
 		generateBox(level, boundingBox, 0, -10, 14, 41, 0, 55, block, block, false); //underneath main platform

@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -15,14 +16,14 @@ import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.*;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
 
@@ -35,15 +36,19 @@ public class LandBiomeHolder implements ILandBiomeSet
 	public LandBiomeHolder(LandBiomeSetWrapper biomes, LandGenSettings settings)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
-		Biome.BiomeCategory category = settings.getLandTypes().getTerrain().getBiomeCategory();
+		LandTypePair landTypes = settings.getLandTypes();
+		Biome.BiomeCategory category = landTypes.getTerrain().getBiomeCategory();
 		
 		baseBiomes = biomes;
 		
-		normalBiome = Holder.direct(createNormal(biomes, blocks, category, settings.getLandTypes())
+		GenerationBuilder generationBuilder = new GenerationBuilder();
+		addBiomeGeneration(generationBuilder, blocks, landTypes);
+		
+		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).biomeCategory(category).build()
 				.setRegistryName(biomes.NORMAL.value().getRegistryName()));
-		roughBiome = Holder.direct(createRough(biomes, blocks, category, settings.getLandTypes())
+		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).biomeCategory(category).build()
 				.setRegistryName(biomes.ROUGH.value().getRegistryName()));
-		oceanBiome = Holder.direct(createOcean(biomes, blocks, settings.getLandTypes())
+		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.BiomeCategory.OCEAN).build()
 				.setRegistryName(biomes.OCEAN.value().getRegistryName()));
 	}
 	
@@ -69,22 +74,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 				};
 	}
 	
-	private static Biome createNormal(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, Biome.BiomeCategory category, LandTypePair landTypes)
-	{
-		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.NORMAL).biomeCategory(category).build();
-	}
-	
-	private static Biome createRough(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, Biome.BiomeCategory category, LandTypePair landTypes)
-	{
-		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.ROUGH).biomeCategory(category).build();
-	}
-	
-	private static Biome createOcean(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandTypePair landTypes)
-	{
-		return createBiomeBase(baseBiomes, blocks, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.BiomeCategory.OCEAN).build();
-	}
-	
-	private static Biome.BiomeBuilder createBiomeBase(LandBiomeSetWrapper baseBiomes, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
+	private static Biome.BiomeBuilder createBiomeBase(LandBiomeSetWrapper baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
 	{
 		Biome base = baseBiomes.fromType(type).value();
 		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().precipitation(base.getPrecipitation())
@@ -92,9 +82,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 		
 		MobSpawnSettings spawnInfo = createMobSpawnInfo(landTypes, type);
 		
-		BiomeGenerationSettings generation = createGenerationSettings(base, blocks, landTypes, type);
-		
-		return builder.generationSettings(generation).mobSpawnSettings(spawnInfo);
+		return builder.generationSettings(generationBuilder.settings.get(type).build()).mobSpawnSettings(spawnInfo);
 	}
 	
 	private static MobSpawnSettings createMobSpawnInfo(LandTypePair landTypes, LandBiomeType type)
@@ -109,35 +97,50 @@ public class LandBiomeHolder implements ILandBiomeSet
 		return builder.build();
 	}
 	
-	private static BiomeGenerationSettings createGenerationSettings(Biome base, StructureBlockRegistry blocks, LandTypePair landTypes, LandBiomeType type)
+	private static void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandTypePair landTypes)
 	{
-		BiomeGenerationSettings.Builder builder = new BiomeGenerationSettings.Builder();
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		if(type != LandBiomeType.OCEAN)
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE.getHolder().orElseThrow());
-		
-		addDefaultOres(builder, blocks);
-		
-		landTypes.getTerrain().setBiomeGeneration(builder, blocks, type, base);
-		landTypes.getTitle().setBiomeGeneration(builder, blocks, type, base);
-		
-		return builder.build();
-	}
-	
-	private static void addDefaultOres(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks)
-	{
 		//TODO change these if land world heights are modified
 		if(MinestuckConfig.SERVER.generateCruxiteOre.get())
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
-					CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(60)), BiomeFilter.biome()));
+							new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
+							CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(60)), BiomeFilter.biome()),
+					LandBiomeType.any());
 		}
 		if(MinestuckConfig.SERVER.generateUraniumOre.get())
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-					new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
-					CountPlacement.of(5), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(35)), BiomeFilter.biome()));
+							new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
+							CountPlacement.of(5), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(35)), BiomeFilter.biome()),
+					LandBiomeType.any());
+		}
+		
+		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
+		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
+	}
+	
+	private static class GenerationBuilder implements LandBiomeGenBuilder
+	{
+		private final Map<LandBiomeType, BiomeGenerationSettings.Builder> settings = new EnumMap<>(LandBiomeType.class);
+		{
+			for(LandBiomeType type : LandBiomeType.values())
+				settings.put(type, new BiomeGenerationSettings.Builder());
+		}
+		
+		@Override
+		public void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, LandBiomeType... types)
+		{
+			for(LandBiomeType type : types)
+				settings.get(type).addFeature(step, feature);
+		}
+		
+		@Override
+		public void addCarver(GenerationStep.Carving step, Holder<? extends ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
+		{
+			for(LandBiomeType type : types)
+				settings.get(type).addCarver(step, carver);
 		}
 	}
 }

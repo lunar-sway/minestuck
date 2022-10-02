@@ -1267,7 +1267,7 @@ public abstract class MessageType
 				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level.random));
 			}
 			
-			NetworkHooks.openGui(player, new SimpleMenuProvider(consort, new TextComponent("Consort shop")), consort::writeShopContainerBuffer);
+			NetworkHooks.openGui(player, new SimpleMenuProvider(consort, new TextComponent("Consort shop")), consort::writeShopMenuBuffer);
 			
 			return initMessage.getMessage(consort, player, chainIdentifier);
 		}
