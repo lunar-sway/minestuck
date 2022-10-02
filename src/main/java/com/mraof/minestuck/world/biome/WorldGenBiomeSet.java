@@ -27,13 +27,18 @@ import java.util.Map;
 
 import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
 
-public class LandBiomeHolder implements ILandBiomeSet
+/**
+ * A dimension-specific biome set with biomes created based on a specific land type pair.
+ * Biomes in this set are not present in the biome registry,
+ * and should thus not be used in a situation where they need to be serialized.
+ */
+public final class WorldGenBiomeSet implements LandBiomeAccess
 {
 	private final Holder<Biome> normalBiome, oceanBiome, roughBiome;
-	public final LandBiomeSetWrapper baseBiomes;
+	public final RegistryBackedBiomeSet baseBiomes;
 	
 	@SuppressWarnings("ConstantConditions")
-	public LandBiomeHolder(LandBiomeSetWrapper biomes, LandGenSettings settings)
+	public WorldGenBiomeSet(RegistryBackedBiomeSet biomes, LandGenSettings settings)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
@@ -74,7 +79,7 @@ public class LandBiomeHolder implements ILandBiomeSet
 				};
 	}
 	
-	private static Biome.BiomeBuilder createBiomeBase(LandBiomeSetWrapper baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
+	private static Biome.BiomeBuilder createBiomeBase(RegistryBackedBiomeSet baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
 	{
 		Biome base = baseBiomes.fromType(type).value();
 		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().precipitation(base.getPrecipitation())

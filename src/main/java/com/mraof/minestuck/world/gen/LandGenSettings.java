@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import com.mraof.minestuck.world.biome.ILandBiomeSet;
+import com.mraof.minestuck.world.biome.LandBiomeAccess;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -136,7 +136,7 @@ public final class LandGenSettings
 		return new TerrainShaper(offsetSpline.build(), factorSpline.build(), CubicSpline.constant(0));
 	}
 	
-	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(ILandBiomeSet biomes)
+	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(LandBiomeAccess biomes)
 	{
 		ImmutableList.Builder<Pair<Climate.ParameterPoint, Holder<Biome>>> builder = ImmutableList.builder();
 		

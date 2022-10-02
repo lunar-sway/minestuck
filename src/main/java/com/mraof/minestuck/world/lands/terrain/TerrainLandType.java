@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.CodecUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
@@ -36,7 +36,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	private final float skylightBase;
 	private final Vec3 fogColor, skyColor;
 	
-	private final LandBiomeSet biomeSet;
+	private final LandBiomeSetType biomeSet;
 	private final Biome.BiomeCategory biomeCategory;
 	private final Supplier<SoundEvent> backgroundMusic;
 	
@@ -95,7 +95,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		return this.consortType.get();
 	}
 	
-	public final LandBiomeSet getBiomeSet()
+	public final LandBiomeSetType getBiomeSet()
 	{
 		return this.biomeSet;
 	}
@@ -140,7 +140,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private float skylightBase = 1F;
 		private Vec3 fogColor = new Vec3(0, 0, 0);
 		private Vec3 skyColor = new Vec3(0, 0, 0);
-		private LandBiomeSet biomeSet = MSBiomes.DEFAULT_LAND;
+		private LandBiomeSetType biomeSet = MSBiomes.DEFAULT_LAND;
 		private Biome.BiomeCategory biomeCategory = Biome.BiomeCategory.NONE;
 		private Supplier<SoundEvent> backgroundMusic = () -> MSSoundEvents.MUSIC_DEFAULT;
 		
@@ -185,7 +185,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 			return this;
 		}
 		
-		public Builder biomeSet(LandBiomeSet biomeSet)
+		public Builder biomeSet(LandBiomeSetType biomeSet)
 		{
 			this.biomeSet = biomeSet;
 			return this;
