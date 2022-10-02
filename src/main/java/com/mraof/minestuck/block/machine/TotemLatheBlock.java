@@ -65,12 +65,15 @@ public class TotemLatheBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		BlockPos mainPos = getMainPos(state, pos);
-		BlockState otherState = level.getBlockState(mainPos);
-		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
-				&& otherState.getValue(FACING) == state.getValue(FACING))
+		if (!state.hasBlockEntity())
 		{
-			totemLathe.setBroken();
+			BlockPos mainPos = getMainPos(state, pos);
+			BlockState otherState = level.getBlockState(mainPos);
+			if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+					&& otherState.getValue(FACING) == state.getValue(FACING))
+			{
+				totemLathe.setBroken();
+			}
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
