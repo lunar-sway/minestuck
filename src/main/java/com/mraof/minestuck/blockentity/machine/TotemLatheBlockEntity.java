@@ -115,48 +115,77 @@ public class TotemLatheBlockEntity extends BlockEntity
 		broken = true;
 	}
 	
-	public boolean setDowel(ItemStack stack)
+	public void removeDowel()
 	{
 		if(level == null)
-			return false;
+			return;
 		Direction facing = getFacing();
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState state = level.getBlockState(pos);
-		if(stack.isEmpty())
+		
+		if(isValidDowelRod(state, facing))
+			level.removeBlock(pos, false);
+	}
+	
+	public boolean setDowel(ItemStack dowelStack)
+	{
+		if(level == null || !dowelStack.is(MSItems.CRUXITE_DOWEL.get()))
+			return false;
+		
+		Direction facing = getFacing();
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
+		BlockState oldState = level.getBlockState(pos);
+		
+		if(!oldState.isAir())
+			return false;	// Something is in the way that we shouldn't replace
+		
+		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
+				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
+				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
+		
+		level.setBlockAndUpdate(pos, newState);
+		
+		BlockEntity be = level.getBlockEntity(pos);
+		if(be instanceof ItemStackBlockEntity beItem)
 		{
-			if(isValidDowelRod(state, facing))
-				level.removeBlock(pos, false);
+			beItem.setStack(dowelStack);
 			return true;
-		} else if(stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
+		} else
+			return false;
+	}
+	
+	private boolean setCarvedItem(ItemStack output)
+	{
+		if(level == null)
+			return false;
+		
+		Direction facing = getFacing();
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
+		BlockState oldState = level.getBlockState(pos);
+		
+		if(!isValidDowelRod(oldState, facing))
+			return false;	// This is not our dowel rod block!
+		
+		BlockEntity be = level.getBlockEntity(pos);
+		if(be instanceof ItemStackBlockEntity beItem)
 		{
+			ItemStack oldDowel = beItem.getStack();
+			ItemStack newDowel = output.is(MSItems.GENERIC_OBJECT.get()) ? new ItemStack(MSItems.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
+			ColorHandler.setColor(newDowel, ColorHandler.getColorFromStack(oldDowel));
+			beItem.setStack(newDowel);
+			
 			BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 					.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
-					.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(stack));
-			//TODO clean up the following code block
-			if(isValidDowelRod(state, facing))
-			{
-				BlockEntity be = level.getBlockEntity(pos);
-				if(!(be instanceof ItemStackBlockEntity beItem))
-					return false;
-				
-				beItem.setStack(stack);
-				if(!state.equals(newState))
-					level.setBlockAndUpdate(pos, newState);
-				else level.sendBlockUpdated(pos, state, state, 2);
-				return true;
-			} else if(state.isAir())
-			{
+					.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(newDowel));
+			
+			if(!oldState.equals(newState))
 				level.setBlockAndUpdate(pos, newState);
-				BlockEntity be = level.getBlockEntity(pos);
-				if(!(be instanceof ItemStackBlockEntity beItem))
-					return false;
-				
-				beItem.setStack(stack);
-				
-				return true;
-			}
-		}
-		return false;
+			else
+				level.sendBlockUpdated(pos, oldState, newState, 2);	// Make sure the new dowel item is synced to client
+			
+			return true;
+		} else
+			return false;
 	}
 	
 	public ItemStack getDowel()
@@ -244,7 +273,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			else if(!player.getInventory().add(dowel))
 				dropItem(true, getBlockPos().above().relative(getFacing().getCounterClockWise(), 2), dowel);
 			else player.inventoryMenu.broadcastChanges();
-			setDowel(ItemStack.EMPTY);
+			removeDowel();
 		}
 	}
 	
@@ -328,13 +357,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			}
 			
 			if(!output.isEmpty())
-			{
-				ItemStack outputDowel = output.getItem().equals(MSBlocks.GENERIC_OBJECT.get().asItem()) ? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
-				ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowel));
-				
-				setDowel(outputDowel);
-				success = true;
-			}
+				success = setCarvedItem(output);
 		}
 		
 		effects(success);
