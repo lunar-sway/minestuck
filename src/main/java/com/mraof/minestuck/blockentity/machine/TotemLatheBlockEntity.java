@@ -44,7 +44,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 	
 	private boolean tryAddCard(ItemStack stack)
 	{
-		if(!isBroken() && stack.getItem() == MSItems.CAPTCHA_CARD.get())
+		if(!isBroken() && stack.is(MSItems.CAPTCHA_CARD.get()))
 		{
 			if(card1.isEmpty())
 				card1 = stack;
@@ -190,7 +190,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 	
 	public ItemStack getDowel()
 	{
-		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
+		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
 			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
@@ -202,7 +202,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 	
 	private boolean isValidDowelRod(BlockState state, Direction facing)
 	{
-		return state.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get() && state.getValue(TotemLatheBlock.FACING) == facing;
+		return state.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()) && state.getValue(TotemLatheBlock.FACING) == facing;
 	}
 	
 	public Direction getFacing()
@@ -219,11 +219,11 @@ public class TotemLatheBlockEntity extends BlockEntity
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.getBlock() == MSBlocks.TOTEM_LATHE.ROD.get() || clickedState.getBlock() == MSBlocks.TOTEM_LATHE.DOWEL_ROD.get())
+		if(clickedState.is(MSBlocks.TOTEM_LATHE.ROD.get()) || clickedState.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()))
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.getBlock() == MSBlocks.TOTEM_LATHE.CARVER.get())
+		if(working && clickedState.is(MSBlocks.TOTEM_LATHE.CARVER.get()))
 		{
 			//carve the dowel.
 			processContents();
@@ -257,7 +257,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		ItemStack dowel = getDowel();
 		if (dowel.isEmpty())
 		{
-			if(isWorking && heldStack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem())
+			if(isWorking && heldStack.is(MSItems.CRUXITE_DOWEL.get()))
 			{
 				ItemStack copy = heldStack.copy();
 				copy.setCount(1);
@@ -346,13 +346,13 @@ public class TotemLatheBlockEntity extends BlockEntity
 		{
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
-					output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!AlchemyHelper.isPunchedCard(input))
-					output = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
+					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
