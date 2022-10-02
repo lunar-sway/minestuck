@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class TotemLatheBlockEntity extends BlockEntity
 {
@@ -117,19 +118,23 @@ public class TotemLatheBlockEntity extends BlockEntity
 	
 	public void removeDowel()
 	{
-		if(level == null)
-			return;
+		Objects.requireNonNull(this.level);
+		
 		Direction facing = getFacing();
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState state = level.getBlockState(pos);
 		
 		if(isValidDowelRod(state, facing))
+		{
 			level.removeBlock(pos, false);
+			setActiveRod(false);
+		}
 	}
 	
 	public boolean setDowel(ItemStack dowelStack)
 	{
-		if(level == null || !dowelStack.is(MSItems.CRUXITE_DOWEL.get()))
+		Objects.requireNonNull(this.level);
+		if(!dowelStack.is(MSItems.CRUXITE_DOWEL.get()))
 			return false;
 		
 		Direction facing = getFacing();
@@ -144,6 +149,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
 		
 		level.setBlockAndUpdate(pos, newState);
+		setActiveRod(true);
 		
 		BlockEntity be = level.getBlockEntity(pos);
 		if(be instanceof ItemStackBlockEntity beItem)
@@ -156,8 +162,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 	
 	private boolean setCarvedItem(ItemStack output)
 	{
-		if(level == null)
-			return false;
+		Objects.requireNonNull(this.level);
 		
 		Direction facing = getFacing();
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
@@ -186,6 +191,22 @@ public class TotemLatheBlockEntity extends BlockEntity
 			return true;
 		} else
 			return false;
+	}
+	
+	private void setActiveRod(boolean active)
+	{
+		Objects.requireNonNull(this.level);
+		Direction facing = this.getFacing();
+		
+		BlockPos rodPos = MSBlocks.TOTEM_LATHE.getRodPos(getBlockPos(), getBlockState());
+		BlockState rodState = this.level.getBlockState(rodPos);
+		if(rodState.is(MSBlocks.TOTEM_LATHE.ROD.get()) && rodState.getValue(TotemLatheBlock.FACING) == facing)
+			this.level.setBlockAndUpdate(rodPos, rodState.setValue(TotemLatheBlock.Rod.ACTIVE, active));
+		
+		BlockPos wheelPos = MSBlocks.TOTEM_LATHE.getWheelPos(getBlockPos(), getBlockState());
+		BlockState wheelState = this.level.getBlockState(wheelPos);
+		if(wheelState.is(MSBlocks.TOTEM_LATHE.WHEEL.get()) && wheelState.getValue(TotemLatheBlock.FACING) == facing)
+			this.level.setBlockAndUpdate(wheelPos, wheelState.setValue(TotemLatheBlock.Rod.ACTIVE, active));
 	}
 	
 	public ItemStack getDowel()
