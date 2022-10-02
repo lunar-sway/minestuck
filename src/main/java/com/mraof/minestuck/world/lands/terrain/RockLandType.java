@@ -113,8 +113,8 @@ public class RockLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_RANDOM_ROCK_BLOCK_BLOB, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_GRASS_PATCH, LandBiomeType.NORMAL);
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.PETRIFIED_GRASS_PATCH, LandBiomeType.ROUGH);
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.COBBLESTONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
-			builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.STONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.COBBLESTONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
+			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_MOUND, LandBiomeType.ROUGH);
 		} else if(this.type == Variant.PETRIFICATION)
 		{

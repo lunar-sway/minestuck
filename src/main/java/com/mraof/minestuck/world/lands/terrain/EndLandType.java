@@ -67,10 +67,10 @@ public class EndLandType extends TerrainLandType
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.END_TREE,
 				LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.END_GRASS_SURFACE_DISK, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.END_GRASS_SURFACE_DISK, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.END_STONE_SURFACE_DISK, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.END_STONE_SURFACE_DISK, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, EndPlacements.CHORUS_PLANT, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.TALL_END_GRASS_PATCH, LandBiomeType.ROUGH);
 		

@@ -64,7 +64,7 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
+		builder.addFeature(GenerationStep.Decoration.FLUID_SPRINGS, MSPlacedFeatures.OCEAN_RUNDOWN, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.FIRE_FIELD, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.EXTRA_FIRE_FIELD, LandBiomeType.ROUGH);
