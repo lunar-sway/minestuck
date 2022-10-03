@@ -40,7 +40,7 @@ public class MinestuckStartingModusProvider implements DataProvider
 	@Override
 	public void run(HashCache pCache) throws IOException
 	{
-		Path path = this.generator.getOutputFolder().resolve(PATH);
+		Path path = this.generator.getOutputFolder().resolve("data/minestuck/" + PATH);
 		List<ModusType<?>> modusTypes = createDefaultModusTypes();
 		
 		String data = GSON.toJson(modusTypes.stream().map(modusType -> modusType.getRegistryName().toString()).collect(Collectors.toList()));

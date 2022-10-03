@@ -24,6 +24,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,10 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 	{
 		ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, PATH);
 		if(!resourceManager.hasResource(location))
-			return null;
+		{
+			LOGGER.warn("Resource not found '{}'", location.toString());
+			return Collections.emptyList();
+		}
 		
 		try(Resource resource = resourceManager.getResource(location);
 			InputStream stream = resource.getInputStream();
@@ -59,7 +63,7 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 			LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
 		}
 		
-		return new ArrayList<>();
+		return Collections.emptyList();
 	}
 	
 	@Override
