@@ -32,3 +32,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+    - name: Data Generation
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: :runData
+    - name: Has File Changes
+      uses: UnicornGlobal/has-changes-action@v1.0.11
