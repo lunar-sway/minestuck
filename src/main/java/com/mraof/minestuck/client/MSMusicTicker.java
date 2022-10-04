@@ -100,10 +100,10 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 	{
 		int randomPick = rand.nextInt(3);
 		if(randomPick == 2)
-			return MSSoundEvents.MUSIC_SICKEST_FIRES;
+			return MSSoundEvents.MUSIC_SICKEST_FIRES.get();
 		else if(randomPick == 1)
-			return MSSoundEvents.MUSIC_RANCOROUS_GAMBLIGANT;
+			return MSSoundEvents.MUSIC_RANCOROUS_GAMBLIGANT.get();
 		else
-			return MSSoundEvents.MUSIC_WHAT_GOES_UP;
+			return MSSoundEvents.MUSIC_WHAT_GOES_UP.get();
 	}
 }

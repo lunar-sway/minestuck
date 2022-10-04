@@ -43,21 +43,21 @@ public class SandLandType extends TerrainLandType
 	{
 		return new SandLandType(Variant.SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	public static TerrainLandType createLushDeserts()
 	{
 		return new SandLandType(Variant.LUSH_DESERTS, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(LUSH_DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_LUSH_DESERTS));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
 	}
 	
 	public static TerrainLandType createRedSand()
 	{
 		return new SandLandType(Variant.RED_SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.6, 0.05).skyColor(0.8, 0.6, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	private SandLandType(Variant variation, Builder builder)

@@ -20,6 +20,7 @@ import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.MSDensityFunctions;
 import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
@@ -69,6 +70,7 @@ public class Minestuck
 		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
+		MSSoundEvents.REGISTER.register(eventBus);
 		LandTypes.TERRAIN_REGISTER.register(eventBus);
 		LandTypes.TITLE_REGISTER.register(eventBus);
 		

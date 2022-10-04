@@ -27,7 +27,7 @@ public class RightClickMusicItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		SoundEvent sound = new SoundEvent(MSSoundEvents.ITEM_ELECTRIC_AUTOHARP_STROKE); //autoharp by default
+		SoundEvent sound = MSSoundEvents.ITEM_ELECTRIC_AUTOHARP_STROKE.get(); //autoharp by default
 		/*if(type == Type.ACOUSTIC_GUITAR)
 		{
 		}*/

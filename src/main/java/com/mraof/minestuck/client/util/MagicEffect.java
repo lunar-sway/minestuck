@@ -97,7 +97,7 @@ public class MagicEffect
 		//if a block or entity has been hit and the wand is true for explosiveFinish boolean, adds a sound and flash
 		if(explosiveFinish)
 		{
-			level.playLocalSound(vecPos.x, vecPos.y, vecPos.z, MSSoundEvents.ITEM_MAGIC_HIT, SoundSource.BLOCKS, 1.2F, 0.6F, false);
+			level.playLocalSound(vecPos.x, vecPos.y, vecPos.z, MSSoundEvents.ITEM_MAGIC_HIT.get(), SoundSource.BLOCKS, 1.2F, 0.6F, false);
 			
 			level.addParticle(ParticleTypes.FLASH, vecPos.x, vecPos.y, vecPos.z, 0.0D, 0.0D, 0.0D);
 			for(int a = 0; a < particles; a++)

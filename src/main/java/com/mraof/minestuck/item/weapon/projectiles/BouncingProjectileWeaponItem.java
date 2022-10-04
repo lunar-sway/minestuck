@@ -23,7 +23,7 @@ public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW, SoundSource.PLAYERS, 1.0F, 1.2F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
 		if(!level.isClientSide)
 		{

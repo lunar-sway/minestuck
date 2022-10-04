@@ -68,6 +68,6 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_SILENCE;
+		return MSSoundEvents.MUSIC_SILENCE.get();
 	}
 }

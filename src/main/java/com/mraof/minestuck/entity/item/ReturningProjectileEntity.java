@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -83,7 +82,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 				if(!level.isClientSide)
 				{
 					++bounce;
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE, SoundSource.NEUTRAL, 0.6F, 2.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
 				}
 			}
 			

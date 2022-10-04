@@ -35,7 +35,7 @@ public class EndLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
 				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(() -> MSSoundEvents.MUSIC_END));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override

@@ -12,7 +12,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -136,7 +135,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			setEventTimer(OPEN_START);
 			
 			Vec3 posVec = position();
-			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_OPEN, SoundSource.NEUTRAL, 1.0F, 1.0F);
+			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_OPEN.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 	
@@ -249,14 +248,14 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	{
 		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_RESTORE, SoundSource.NEUTRAL, 1.0F, 1.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_RESTORE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	protected void addLootSpawnEffects()
 	{
 		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_LOOT_SPAWN, SoundSource.NEUTRAL, 1.0F, 1.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_LOOT_SPAWN.get(), SoundSource.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	@Override

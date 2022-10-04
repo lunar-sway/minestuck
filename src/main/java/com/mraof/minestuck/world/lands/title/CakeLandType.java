@@ -55,6 +55,6 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_CAKE;
+		return MSSoundEvents.MUSIC_CAKE.get();
 	}
 }

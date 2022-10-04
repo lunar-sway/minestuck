@@ -51,14 +51,14 @@ public class RockLandType extends TerrainLandType
 	{
 		return new RockLandType(Variant.ROCK, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(ROCK, STONE, ORE)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
-				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_ROCK));
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_ROCK));
 	}
 	
 	public static TerrainLandType createPetrification()
 	{
 		return new RockLandType(Variant.PETRIFICATION, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
-				.category(Biome.BiomeCategory.EXTREME_HILLS).music(() -> MSSoundEvents.MUSIC_PETRIFICATION));
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_PETRIFICATION::get));
 	}
 	
 	private RockLandType(Variant variation, Builder builder)

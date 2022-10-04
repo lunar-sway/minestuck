@@ -8,7 +8,7 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -31,7 +31,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW, SoundSource.PLAYERS, 1.0F, 1.2F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
 		if(!level.isClientSide)
 		{
