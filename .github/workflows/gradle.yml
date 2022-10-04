@@ -37,4 +37,4 @@ jobs:
       with:
         arguments: :runData
     - name: Has File Changes
-      uses: UnicornGlobal/has-changes-action@v1.0.11
+      uses: mskri/check-uncommitted-changes-action@v1.0.1
