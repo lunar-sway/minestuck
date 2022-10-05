@@ -7,6 +7,7 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
@@ -106,7 +107,6 @@ public final class CommandActionHandler
 	
 	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes, CommandSourceStack source) throws CommandSyntaxException
 	{
-		SessionHandler sessions = SessionHandler.get(player.server);
 		SkaianetHandler skaianet = SkaianetHandler.get(player.server);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
@@ -144,7 +144,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -159,7 +159,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+					c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -169,14 +169,16 @@ public final class CommandActionHandler
 			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
 		
+		// Several new lands may have been created through calls to createDebugLand(). Send potentially new land types to players
+		MSDimensions.sendLandTypesToAll(source.getServer());
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.setLand(landTypes, dimensionName);
+		c.setLand(dimensionName);
 		c.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);

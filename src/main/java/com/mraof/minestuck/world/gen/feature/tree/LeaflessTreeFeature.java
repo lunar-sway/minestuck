@@ -14,6 +14,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfi
 
 import java.util.Random;
 
+/**
+ * A feature which places a set of branches in a similar manner to fancy oak trees,
+ * but without any leaves.
+ */
 public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 {
 	public LeaflessTreeFeature(Codec<BlockStateConfiguration> codec)
@@ -29,23 +33,22 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		Random rand = context.random();
 		BlockState state = context.config().state;
 		
-		//TODO Define which blocks that it is allowed to place on
 		int size = rand.nextInt(3);
 		int height = 4 + size;
 		
-		int min = size < 2 ? 1 : 2;
+		int branchMinHeight = size < 2 ? 1 : 2;
 		
-		int count = size + (rand.nextBoolean() ? 2 : 3);
+		int branchCount = size + (rand.nextBoolean() ? 2 : 3);
 		
-		for(int i = 0; i < count; i++)
+		for(int i = 0; i < branchCount; i++)
 		{
-			int h = min + rand.nextInt(height - min);
-			float modifier = (h+3)*0.2F;
+			int branchHeightStart = branchMinHeight + rand.nextInt(height - branchMinHeight);
+			float modifier = (branchHeightStart+3)*0.2F;
 			int xOffset = Math.round((rand.nextFloat() - rand.nextFloat())*4*modifier);
-			int yOffset = h + Math.round(rand.nextFloat()*2*modifier);
+			int yOffset = branchHeightStart + Math.round(rand.nextFloat()*2*modifier);
 			int zOffset = Math.round((rand.nextFloat() - rand.nextFloat())*4*modifier);
 			
-			genBranch(pos.above(h), pos.offset(xOffset, yOffset, zOffset), level, state);
+			genBranch(pos.above(branchHeightStart), pos.offset(xOffset, yOffset, zOffset), level, state);
 		}
 		
 		genBranch(pos, pos.above(height), level, state);
@@ -53,6 +56,10 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		return true;
 	}
 	
+	/**
+	 * Generates blocks in a straight line from pos0 to pos1,
+	 * and sets the blockstate axis to the axis that the line travels the furthest along.
+	 */
 	protected void genBranch(BlockPos pos0, BlockPos pos1, LevelAccessor level, BlockState logState)
 	{
 		final int xDiff = pos1.getX() - pos0.getX();
@@ -84,7 +91,7 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		{
 			float f = i/(float) (length);
 			BlockPos pos = pos0.offset(xDiff*f, yDiff*f, zDiff*f);
-			if(level.isStateAtPosition(pos, (blockState) -> TreeFeature.validTreePos(level, pos)))
+			if(TreeFeature.isFree(level, pos))
 				setBlock(level, pos, state);
 			else return;
 		}

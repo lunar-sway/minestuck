@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;

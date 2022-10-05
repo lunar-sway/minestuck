@@ -1,6 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.tileentity.machine.CruxtruderTileEntity;
+import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -24,14 +24,14 @@ import java.util.Map;
 public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
-	protected final boolean hasTileEntity;
+	protected final boolean hasBlockEntity;
 	protected final BlockPos mainPos;
 	
-	public CruxtruderBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean tileEntity, BlockPos mainPos, Properties properties)
+	public CruxtruderBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
-		this.hasTileEntity = tileEntity;
+		this.hasBlockEntity = blockEntity;
 		this.mainPos = mainPos;
 	}
 	
@@ -46,12 +46,12 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(hasTileEntity && (state.getValue(FACING) == hit.getDirection() || hit.getDirection() == Direction.UP))
+		if(hasBlockEntity && (state.getValue(FACING) == hit.getDirection() || hit.getDirection() == Direction.UP))
 		{
 			if(level.isClientSide)
 				return InteractionResult.SUCCESS;
 			
-			if(level.getBlockEntity(pos) instanceof CruxtruderTileEntity cruxtruder)
+			if(level.getBlockEntity(pos) instanceof CruxtruderBlockEntity cruxtruder)
 				cruxtruder.onRightClick(player, hit.getDirection() == Direction.UP);
 			return InteractionResult.SUCCESS;
 		}
@@ -62,8 +62,8 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		if(hasTileEntity)
-			return new CruxtruderTileEntity(pos, state);
+		if(hasBlockEntity)
+			return new CruxtruderBlockEntity(pos, state);
 		else return null;
 	}
 	
@@ -72,7 +72,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		BlockPos MainPos = getMainPos(state, pos);
-		if(level.getBlockEntity(MainPos) instanceof CruxtruderTileEntity cruxtruder)
+		if(level.getBlockEntity(MainPos) instanceof CruxtruderBlockEntity cruxtruder)
 		{
 			cruxtruder.destroy();
 		}

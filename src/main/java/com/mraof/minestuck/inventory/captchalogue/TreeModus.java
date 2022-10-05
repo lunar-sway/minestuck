@@ -4,7 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -129,7 +129,7 @@ public class TreeModus extends Modus
 				return ItemStack.EMPTY;
 			size--;
 			markDirty();
-			return new ItemStack(MSItems.CAPTCHA_CARD);
+			return new ItemStack(MSItems.CAPTCHA_CARD.get());
 		}
 		if(node == null)
 			return ItemStack.EMPTY;

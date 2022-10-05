@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -149,7 +149,7 @@ public class StackModus extends Modus
 			{
 				size--;
 				markDirty();
-				return new ItemStack(MSItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD.get());
 			} else return ItemStack.EMPTY;
 		}
 		

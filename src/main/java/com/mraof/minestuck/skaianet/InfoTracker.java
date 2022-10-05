@@ -7,7 +7,6 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -21,6 +20,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,6 +32,8 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public final class InfoTracker
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final SkaianetHandler skaianet;
 	
 	private final Map<PlayerIdentifier, Set<PlayerIdentifier>> listenerMap = new HashMap<>();
@@ -100,7 +103,7 @@ public final class InfoTracker
 		}
 		if(!getSet(p1).add(p0))
 		{
-			Debug.warnf("[Skaianet] Player %s already got the requested data.", player.getName());
+			LOGGER.warn("[Skaianet] Player {} already got the requested data.", player.getName());
 		}
 		
 		SkaianetInfoPacket packet = generateClientInfoPacket(p1);

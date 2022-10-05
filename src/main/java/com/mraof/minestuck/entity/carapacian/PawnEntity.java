@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy
 {
-	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5/4F, 20, 10.0F);
+	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
 	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, Level level)
@@ -45,6 +45,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		return new PawnEntity(type, EnumEntityKingdom.DERSITE, level);
 	}
+	
 	public static AttributeSupplier.Builder pawnAttributes()
 	{
 		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE)
@@ -62,7 +63,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty)
 	{
 		super.populateDefaultEquipmentSlots(difficulty);
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD : random.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD.get() : random.nextDouble() < .02 ? MSItems.SORD.get() : Items.STONE_SWORD));
 	}
 	
 	@Override
@@ -70,23 +71,23 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		Arrow arrow = new Arrow(this.level, this);
 		double d0 = target.getX() - this.getX();
-		double d1 = target.getBoundingBox().minY + (double)(target.getBbHeight() / 3.0F) - arrow.getY();
+		double d1 = target.getBoundingBox().minY + (double) (target.getBbHeight() / 3.0F) - arrow.getY();
 		double d2 = target.getZ() - this.getZ();
 		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, this);
 		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH_ARROWS, this);
-
+		
 		if(power > 0)
 		{
-			arrow.setBaseDamage(arrow.getBaseDamage() + (double)power * 0.5D + 0.5D);
+			arrow.setBaseDamage(arrow.getBaseDamage() + (double) power * 0.5D + 0.5D);
 		}
-
+		
 		if(punch > 0)
 		{
 			arrow.setKnockback(punch);
 		}
-
+		
 		if(EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAMING_ARROWS, this) > 0)
 		{
 			arrow.setSecondsOnFire(100);
@@ -100,7 +101,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
 		this.level.addFreshEntity(arrow);
 	}
-
+	
 	/**
 	 * Returns the amount of damage a mob should deal.
 	 */
@@ -108,31 +109,31 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		ItemStack weapon = this.getMainHandItem();
 		float damage = 2;
-
-		if (!weapon.isEmpty())
-			damage += (float)this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+		
+		if(!weapon.isEmpty())
+			damage += (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 		
 		damage += EnchantmentHelper.getDamageBonus(this.getMainHandItem(), ((LivingEntity) par1Entity).getMobType());
 		
 		return damage;
 	}
-
+	
 	@Override
 	public boolean doHurtTarget(Entity par1Entity)
 	{
 		float damage = this.getAttackStrength(par1Entity);
 		int fireAspectLevel = EnchantmentHelper.getFireAspect(this);
 		int knockback = EnchantmentHelper.getKnockbackBonus(this);
-
-		if (fireAspectLevel > 0 && !par1Entity.isOnFire())
+		
+		if(fireAspectLevel > 0 && !par1Entity.isOnFire())
 			par1Entity.setSecondsOnFire(1);
-
-		if (knockback > 0)
-			par1Entity.push(-Mth.sin(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockback * 0.5F, 0.1D, (double)(Mth.cos(this.getYRot() * (float)Math.PI / 180.0F) * (float)knockback * 0.5F));
-
+		
+		if(knockback > 0)
+			par1Entity.push(-Mth.sin(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (Mth.cos(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
+		
 		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
-	
+
 //	/**
 //	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 //	 */
@@ -174,7 +175,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		super.setItemSlot(slotIn, stack);
 		
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			this.setCombatTask();
 		}

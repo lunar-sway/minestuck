@@ -4,9 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.features.FeatureUtils;
+import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -20,12 +22,14 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Holds minestuck configured features. Also creates and registers them when appropriate.
  * See {@link MSFeatures} for minestuck features.
  * (Configured features are world-gen features that has been configured with blocks, sizes or whatever else features may be configured with)
+ * Check {@link MSPlacedFeatures} for utilizations of these configured features
  */
 public final class MSCFeatures
 {
@@ -43,7 +47,7 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> BROKEN_SWORD = REGISTER.register("broken_sword", () -> new ConfiguredFeature<>(MSFeatures.BROKEN_SWORD.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> BUCKET = REGISTER.register("bucket", () -> new ConfiguredFeature<>(MSFeatures.BUCKET.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> CAKE_PEDESTAL = REGISTER.register("cake_pedestal", () -> new ConfiguredFeature<>(MSFeatures.CAKE_PEDESTAL.get(), FeatureConfiguration.NONE));
-		public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new ConfiguredFeature<>(MSFeatures.SMALL_LIBRARY.get(), FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_LIBRARY = REGISTER.register("small_library", () -> new ConfiguredFeature<>(MSFeatures.SMALL_LIBRARY.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> TOWER = REGISTER.register("tower", () -> new ConfiguredFeature<>(MSFeatures.TOWER.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> new ConfiguredFeature<>(MSFeatures.PARCEL_PYXIS.get(), FeatureConfiguration.NONE));
 	
@@ -53,16 +57,49 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new ConfiguredFeature<>(MSFeatures.OCEAN_RUNDOWN.get(), FeatureConfiguration.NONE));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> FIRE_FIELD = REGISTER.register("fire_field", () -> new ConfiguredFeature<>(MSFeatures.FIRE_FIELD.get(), FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> COARSE_DIRT_DISK = REGISTER.register("coarse_dirt_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.COARSE_DIRT.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SNOW_BLOCK_DISK = REGISTER.register("snow_block_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.SNOW_BLOCK.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_SNOW_BLOCK_DISK = REGISTER.register("small_snow_block_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.SNOW_BLOCK.defaultBlockState(), UniformInt.of(2, 3), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> ICE_DISK = REGISTER.register("ice_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.ICE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SAND_DISK = REGISTER.register("sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.SAND.defaultBlockState(), UniformInt.of(2, 5), 2, List.of(Blocks.SANDSTONE.defaultBlockState(), Blocks.SAND.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> RED_SAND_DISK = REGISTER.register("red_sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.RED_SAND.defaultBlockState(), UniformInt.of(2, 5), 2, List.of(Blocks.RED_SANDSTONE.defaultBlockState(), Blocks.RED_SAND.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SLIME_DISK = REGISTER.register("slime_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.SLIME_BLOCK.defaultBlockState(), UniformInt.of(2, 6), 2, List.of(Blocks.MYCELIUM.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> NETHERRACK_DISK = REGISTER.register("netherrack_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.NETHERRACK.defaultBlockState(), UniformInt.of(2, 3), 1, Collections.emptyList())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> OAK_LEAVES_DISK = REGISTER.register("oak_leaves_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(Blocks.OAK_LEAVES.defaultBlockState(), UniformInt.of(2, 3), 2, Collections.emptyList())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> COAGULATED_BLOOD_DISK = REGISTER.register("coagulated_blood_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
+			new DiskConfiguration(MSBlocks.COAGULATED_BLOOD.get().defaultBlockState(), UniformInt.of(2, 5), 2, Collections.emptyList())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> COBBLESTONE_SURFACE_DISK = REGISTER.register("cobblestone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
+			new DiskConfiguration(Blocks.COBBLESTONE.defaultBlockState(), UniformInt.of(2, 5), 1, List.of(Blocks.GRAVEL.defaultBlockState(), Blocks.COBBLESTONE.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> STONE_SURFACE_DISK = REGISTER.register("stone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
+			new DiskConfiguration(Blocks.STONE.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRAVEL.defaultBlockState(), Blocks.STONE.defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> END_GRASS_SURFACE_DISK = REGISTER.register("end_grass_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
+			new DiskConfiguration(MSBlocks.END_GRASS.get().defaultBlockState(), UniformInt.of(2, 4), 1, List.of(Blocks.END_STONE.defaultBlockState(), MSBlocks.END_GRASS.get().defaultBlockState()))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> END_STONE_SURFACE_DISK = REGISTER.register("end_stone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
+			new DiskConfiguration(Blocks.END_STONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(MSBlocks.END_GRASS.get().defaultBlockState(), Blocks.END_STONE.defaultBlockState()))));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> MESA = REGISTER.register("mesa", () -> new ConfiguredFeature<>(MSFeatures.MESA.get(), FeatureConfiguration.NONE));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> STONE_MOUND = REGISTER.register("stone_mound", () -> new ConfiguredFeature<>(MSFeatures.STONE_MOUND.get(), new BlockStateConfiguration(Blocks.STONE.defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COBBLESTONE_BLOCK_BLOB = REGISTER.register("cobblestone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(Blocks.COBBLESTONE.defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SANDSTONE_BLOCK_BLOB = REGISTER.register("sandstone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(Blocks.SANDSTONE.defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> RED_SANDSTONE_BLOCK_BLOB = REGISTER.register("red_sandstone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(Blocks.RED_SANDSTONE.defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(3)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(5)));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> PILLAR = REGISTER.register("pillar", () -> new ConfiguredFeature<>(MSFeatures.PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_PILLAR = REGISTER.register("large_pillar", () -> new ConfiguredFeature<>(MSFeatures.LARGE_PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RAINBOW_TREE = REGISTER.register("rainbow_tree", () -> new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
 			BlockStateProvider.simple(MSBlocks.RAINBOW_LOG.get().defaultBlockState()), new StraightTrunkPlacer(4, 2, 0),
 			BlockStateProvider.simple(MSBlocks.RAINBOW_LEAVES.get().defaultBlockState()), new BlobFoliagePlacer(ConstantInt.of(2), ConstantInt.of(0), 3),
-			new TwoLayersFeatureSize(1, 0, 1)).ignoreVines().build()));
+			new TwoLayersFeatureSize(1, 0, 1)).dirt(BlockStateProvider.simple(Blocks.WHITE_WOOL)).ignoreVines().build()));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> END_TREE = REGISTER.register("end_tree", () -> new ConfiguredFeature<>(MSFeatures.END_TREE.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> GLOWING_TREE = REGISTER.register("glowing_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 			new BlockStateConfiguration(MSBlocks.GLOWING_LOG.get().defaultBlockState())));
@@ -95,4 +132,14 @@ public final class MSCFeatures
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> new ConfiguredFeature<>(MSFeatures.RABBIT_PLACEMENT.get(), FeatureConfiguration.NONE));
 	
+	/**
+	 * The OreConfiguration uses an inlined list that matches ores to the stone type they should replace
+	 */
+	public static final RegistryObject<ConfiguredFeature<?, ?>> CRUXITE_ORE = REGISTER.register("cruxite_ore", () -> new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+					OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_CRUXITE_ORE.get().defaultBlockState())),
+					OreGeneration.baseCruxiteVeinSize)));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> URANIUM_ORE = REGISTER.register("uranium_ore", () -> new ConfiguredFeature<>(Feature.ORE, new OreConfiguration(List.of(
+					OreConfiguration.target(OreFeatures.STONE_ORE_REPLACEABLES, MSBlocks.STONE_URANIUM_ORE.get().defaultBlockState()),
+					OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, MSBlocks.DEEPSLATE_URANIUM_ORE.get().defaultBlockState())),
+					OreGeneration.baseUraniumVeinSize)));
 }

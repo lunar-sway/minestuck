@@ -12,8 +12,7 @@ import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.gen.feature.structure.MSConfiguredStructures;
+import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
@@ -26,6 +25,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -36,6 +37,8 @@ import java.util.function.Consumer;
 
 public class MSAdvancementProvider implements DataProvider
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String ROOT = "minestuck.root";
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
@@ -65,24 +68,24 @@ public class MSAdvancementProvider implements DataProvider
 	
 	protected void buildAdvancements(Consumer<Advancement> advancementSaver)
 	{
-		Advancement root = Advancement.Builder.advancement().display(MSItems.RAW_CRUXITE, new TranslatableComponent(title(ROOT)), new TranslatableComponent(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/root");
-		Advancement searching = Advancement.Builder.advancement().parent(root).display(Items.COMPASS, new TranslatableComponent(title(SEARCHING)), new TranslatableComponent(desc(SEARCHING)), null, FrameType.TASK, true, true, false).addCriterion("possess_scanner", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.TEMPLE_SCANNER)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/searching");
-		Advancement longTimeComing = Advancement.Builder.advancement().parent(root).display(MSItems.SBURB_CODE, new TranslatableComponent(title(LONG_TIME_COMING)), new TranslatableComponent(desc(LONG_TIME_COMING)), null, FrameType.TASK, true, true, false).addCriterion("possess_code", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.SBURB_CODE)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/long_time_coming");
-		Advancement connect = Advancement.Builder.advancement().parent(root).display(MSItems.CLIENT_DISK, new TranslatableComponent(title(CONNECT)), new TranslatableComponent(desc(CONNECT)), null, FrameType.TASK, true, true, false).addCriterion("connection", EventTrigger.Instance.sburbConnection()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/connect");
-		Advancement entry = Advancement.Builder.advancement().parent(connect).display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE)), new TranslatableComponent(title(ENTRY)), new TranslatableComponent(desc(ENTRY)), null, FrameType.TASK, true, true, false).addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/entry");
-		Advancement alchemy = Advancement.Builder.advancement().parent(entry).display(MSItems.CAPTCHA_CARD, new TranslatableComponent(title(ALCHEMY)), new TranslatableComponent(desc(ALCHEMY)), null, FrameType.TASK, true, true, false).addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/alchemy");
-		Advancement newModus = Advancement.Builder.advancement().parent(alchemy).display(MSItems.HASHMAP_MODUS_CARD, new TranslatableComponent(title(NEW_MODUS)), new TranslatableComponent(desc(NEW_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("change_modus_type", ChangeModusTrigger.Instance.any()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/new_modus");
-		Advancement allModi = changeModusCriteria(Advancement.Builder.advancement().parent(newModus).display(MSItems.QUEUESTACK_MODUS_CARD, new TranslatableComponent(title(ALL_MODI)), new TranslatableComponent(desc(ALL_MODI)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/all_modi");
+		Advancement root = Advancement.Builder.advancement().display(MSItems.RAW_CRUXITE.get(), new TranslatableComponent(title(ROOT)), new TranslatableComponent(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/root");
+		Advancement searching = Advancement.Builder.advancement().parent(root).display(Items.COMPASS, new TranslatableComponent(title(SEARCHING)), new TranslatableComponent(desc(SEARCHING)), null, FrameType.TASK, true, true, false).addCriterion("possess_scanner", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.TEMPLE_SCANNER.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/searching");
+		Advancement longTimeComing = Advancement.Builder.advancement().parent(root).display(MSItems.SBURB_CODE.get(), new TranslatableComponent(title(LONG_TIME_COMING)), new TranslatableComponent(desc(LONG_TIME_COMING)), null, FrameType.TASK, true, true, false).addCriterion("possess_code", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.SBURB_CODE.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/long_time_coming");
+		Advancement connect = Advancement.Builder.advancement().parent(root).display(MSItems.CLIENT_DISK.get(), new TranslatableComponent(title(CONNECT)), new TranslatableComponent(desc(CONNECT)), null, FrameType.TASK, true, true, false).addCriterion("connection", EventTrigger.Instance.sburbConnection()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/connect");
+		Advancement entry = Advancement.Builder.advancement().parent(connect).display(ColorHandler.setDefaultColor(new ItemStack(MSItems.CRUXITE_APPLE.get())), new TranslatableComponent(title(ENTRY)), new TranslatableComponent(desc(ENTRY)), null, FrameType.TASK, true, true, false).addCriterion("use_artifact", EventTrigger.Instance.cruxiteArtifact()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/entry");
+		Advancement alchemy = Advancement.Builder.advancement().parent(entry).display(MSItems.CAPTCHA_CARD.get(), new TranslatableComponent(title(ALCHEMY)), new TranslatableComponent(desc(ALCHEMY)), null, FrameType.TASK, true, true, false).addCriterion("use_punch_designix", PunchDesignixTrigger.Instance.any()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/alchemy");
+		Advancement newModus = Advancement.Builder.advancement().parent(alchemy).display(MSItems.HASHMAP_MODUS_CARD.get(), new TranslatableComponent(title(NEW_MODUS)), new TranslatableComponent(desc(NEW_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("change_modus_type", ChangeModusTrigger.Instance.any()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/new_modus");
+		Advancement allModi = changeModusCriteria(Advancement.Builder.advancement().parent(newModus).display(MSItems.QUEUESTACK_MODUS_CARD.get(), new TranslatableComponent(title(ALL_MODI)), new TranslatableComponent(desc(ALL_MODI)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/all_modi");
 		Advancement goldSeeds = Advancement.Builder.advancement().parent(alchemy).display(MSBlocks.GOLD_SEEDS.get(), new TranslatableComponent(title(GOLD_SEEDS)), new TranslatableComponent(desc(GOLD_SEEDS)), null, FrameType.TASK, true, true, false).addCriterion("plant_gold_seeds", PlacedBlockTrigger.TriggerInstance.placedBlock(MSBlocks.GOLD_SEEDS.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/gold_seeds");
-		Advancement frenchFry = Advancement.Builder.advancement().parent(alchemy).display(MSItems.FRENCH_FRY, new TranslatableComponent(title(FRENCH_FRY)), new TranslatableComponent(desc(FRENCH_FRY)), null, FrameType.TASK, true, true, false).addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/french_fry");
-		Advancement melonOverload = Advancement.Builder.advancement().parent(alchemy).display(MSItems.MELONSBANE, new TranslatableComponent(title(MELON_OVERLOAD)), new TranslatableComponent(desc(MELON_OVERLOAD)), null, FrameType.TASK, true, true, true).addCriterion("melon_overload", EventTrigger.Instance.melonOverload()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/melon_overload");
-		Advancement treeModus = Advancement.Builder.advancement().parent(newModus).display(MSItems.TREE_MODUS_CARD, new TranslatableComponent(title(TREE_MODUS)), new TranslatableComponent(desc(TREE_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/tree_modus");
-		Advancement killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER, new TranslatableComponent(title(KILL_OGRE)), new TranslatableComponent(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/kill_ogre");
-		Advancement returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, new TranslatableComponent(title(RETURN_NODE)), new TranslatableComponent(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EnterBlockTrigger.TriggerInstance.entersBlock(MSBlocks.RETURN_NODE.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/return_node");
+		Advancement frenchFry = Advancement.Builder.advancement().parent(alchemy).display(MSItems.FRENCH_FRY.get(), new TranslatableComponent(title(FRENCH_FRY)), new TranslatableComponent(desc(FRENCH_FRY)), null, FrameType.TASK, true, true, false).addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/french_fry");
+		Advancement melonOverload = Advancement.Builder.advancement().parent(alchemy).display(MSItems.MELONSBANE.get(), new TranslatableComponent(title(MELON_OVERLOAD)), new TranslatableComponent(desc(MELON_OVERLOAD)), null, FrameType.TASK, true, true, true).addCriterion("melon_overload", EventTrigger.Instance.melonOverload()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/melon_overload");
+		Advancement treeModus = Advancement.Builder.advancement().parent(newModus).display(MSItems.TREE_MODUS_CARD.get(), new TranslatableComponent(title(TREE_MODUS)), new TranslatableComponent(desc(TREE_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/tree_modus");
+		Advancement killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER.get(), new TranslatableComponent(title(KILL_OGRE)), new TranslatableComponent(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE.get()))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/kill_ogre");
+		Advancement returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, new TranslatableComponent(title(RETURN_NODE)), new TranslatableComponent(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/return_node");
 		Advancement dungeon = Advancement.Builder.advancement().parent(returnNode).display(MSBlocks.FROST_BRICKS.get(), new TranslatableComponent(title(DUNGEON)), new TranslatableComponent(desc(DUNGEON)), null, FrameType.TASK, true, true, false).addCriterion("imp_dungeon", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.IMP_DUNGEON.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/dungeon");
-		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_SLAB, new TranslatableComponent(title(COMMUNE)), new TranslatableComponent(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.CONSORT_VILLAGE.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
-		Advancement bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE, new TranslatableComponent(title(BUGS)), new TranslatableComponent(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.OR)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/bugs");
-		Advancement shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE, new TranslatableComponent(title(SHADY_BUYER)), new TranslatableComponent(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/shady_buyer");
+		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), new TranslatableComponent(title(COMMUNE)), new TranslatableComponent(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.CONSORT_VILLAGE.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
+		Advancement bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), new TranslatableComponent(title(BUGS)), new TranslatableComponent(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.OR)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/bugs");
+		Advancement shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE.get(), new TranslatableComponent(title(SHADY_BUYER)), new TranslatableComponent(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/shady_buyer");
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
@@ -96,7 +99,7 @@ public class MSAdvancementProvider implements DataProvider
 	
 	private static Advancement.Builder consumeBugCriteria(Advancement.Builder builder)
 	{
-		for(ItemLike item : Arrays.asList(MSItems.BUG_ON_A_STICK, MSItems.CHOCOLATE_BEETLE, MSItems.CONE_OF_FLIES, MSItems.GRASSHOPPER, MSItems.JAR_OF_BUGS))
+		for(ItemLike item : Arrays.asList(MSItems.BUG_ON_A_STICK.get(), MSItems.CHOCOLATE_BEETLE.get(), MSItems.CONE_OF_FLIES.get(), MSItems.GRASSHOPPER.get(), MSItems.JAR_OF_BUGS.get()))
 		{
 			builder = builder.addCriterion(item.asItem().getRegistryName().getPath(), ConsumeItemTrigger.TriggerInstance.usedItem(item));
 		}
@@ -135,7 +138,7 @@ public class MSAdvancementProvider implements DataProvider
 				DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), jsonPath);
 			} catch(IOException e)
 			{
-				Debug.logger.error("Couldn't save advancement {}", jsonPath, e);
+				LOGGER.error("Couldn't save advancement {}", jsonPath, e);
 			}
 		}
 	}

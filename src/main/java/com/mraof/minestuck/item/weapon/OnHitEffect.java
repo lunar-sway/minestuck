@@ -5,15 +5,17 @@ import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -30,14 +32,14 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
@@ -71,25 +73,24 @@ public interface OnHitEffect
 			target.hurt(DamageSource.playerAttack(player), 2);
 			stack.hurtAndBreak(2, attacker, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			
-			ItemEntity shardEntity = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD, 1));
+			ItemEntity shardEntity = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), new ItemStack(MSItems.ICE_SHARD.get(), 1));
 			target.level.addFreshEntity(shardEntity);
 		}
 	};
 	OnHitEffect KUNDLER_SURPRISE = (stack, target, attacker) -> {
 		if(!attacker.level.isClientSide && target.getHealth() <= 0 && attacker.getRandom().nextFloat() <= 0.20)
 		{
-			Random ran = new Random();
-			//TODO Make this a loot table
-			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
-					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.REDSTONE),
-					new ItemStack(MSItems.SURPRISE_EMBRYO), new ItemStack(MSItems.GAMEGRL_MAGAZINE), new ItemStack(MSItems.GAMEBRO_MAGAZINE),
-					new ItemStack(Blocks.DEAD_HORN_CORAL)};
-			int num = ran.nextInt(items.length);
-			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), items[num].copy());
-			target.level.addFreshEntity(item);
-			
-			TranslatableComponent message = new TranslatableComponent(stack.getDescriptionId() + ".message", items[num].getHoverName());
-			attacker.sendMessage(message.withStyle(ChatFormatting.GOLD), Util.NIL_UUID);
+			ServerLevel serverWorld = (ServerLevel) target.level;
+			LootTable lootTable = serverWorld.getServer().getLootTables().get(MSLootTables.KUNDLER_SUPRISES);
+			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootContextParamSets.EMPTY));
+			if(!loot.isEmpty())
+			{
+				ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), loot.get(0).copy());
+				target.level.addFreshEntity(item);
+				
+				TranslatableComponent message = new TranslatableComponent(stack.getDescriptionId() + ".message", loot.get(0).getHoverName());
+				attacker.sendMessage(message.withStyle(ChatFormatting.GOLD), Util.NIL_UUID);
+			}
 		}
 	};
 	
@@ -115,7 +116,7 @@ public interface OnHitEffect
 	OnHitEffect SPAWN_BREADCRUMBS = (stack, target, attacker) -> {
 		if(!target.level.isClientSide)
 		{
-			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, 1);
+			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), 1);
 			ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), crumbs);
 			target.level.addFreshEntity(item);
 		}
@@ -269,7 +270,7 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<EntityType<?>> targetEntity)
+	static OnHitEffect targetSpecificAdditionalDamage(float additionalDamage, Supplier<? extends EntityType<?>> targetEntity)
 	{
 		return (stack, target, attacker) -> {
 			float damage = additionalDamage * 3.3F;

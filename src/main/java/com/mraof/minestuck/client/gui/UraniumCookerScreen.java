@@ -2,15 +2,15 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.inventory.UraniumCookerContainer;
-import com.mraof.minestuck.tileentity.machine.UraniumCookerTileEntity;
+import com.mraof.minestuck.inventory.UraniumCookerMenu;
+import com.mraof.minestuck.blockentity.machine.UraniumCookerBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
+public class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/uranium_cooker.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
@@ -22,9 +22,9 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 	private int goX;
 	private int goY;
 	
-	public UraniumCookerScreen(UraniumCookerContainer screenContainer, Inventory inv, Component titleIn)
+	public UraniumCookerScreen(UraniumCookerMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(UraniumCookerTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(UraniumCookerBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67;
@@ -58,7 +58,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerContainer>
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
 		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), UraniumCookerTileEntity.MAX_FUEL, progressHeight);
+		int height = getScaledValue(menu.getFuel(), UraniumCookerBlockEntity.MAX_FUEL, progressHeight);
 		blit(poseStack, x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
 	}
 	

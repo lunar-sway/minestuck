@@ -1,6 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 
 public class NullTitleLandType extends TitleLandType
 {

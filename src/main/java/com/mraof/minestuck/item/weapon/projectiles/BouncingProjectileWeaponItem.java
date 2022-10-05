@@ -27,7 +27,7 @@ public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 		
 		if(!level.isClientSide)
 		{
-			BouncingProjectileEntity projectileEntity = new BouncingProjectileEntity(MSEntityTypes.BOUNCING_PROJECTILE, playerIn, level, maxTick);
+			BouncingProjectileEntity projectileEntity = new BouncingProjectileEntity(MSEntityTypes.BOUNCING_PROJECTILE.get(), playerIn, level, maxTick);
 			projectileEntity.setItem(item);
 			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.CassetteItem;
-import com.mraof.minestuck.tileentity.CassettePlayerTileEntity;
+import com.mraof.minestuck.blockentity.CassettePlayerBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
@@ -45,7 +45,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 		{
 			state = state.cycle(OPEN);
 			level.setBlock(pos, state, 2);
-			if(level.getBlockEntity(pos) instanceof CassettePlayerTileEntity cassettePlayer)
+			if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 			{
 				if(!state.getValue(OPEN))
 				{
@@ -72,7 +72,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	
 	public void insertCassette(LevelAccessor level, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
-		if(level.getBlockEntity(pos) instanceof CassettePlayerTileEntity cassettePlayer
+		if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer
 				&& state.getValue(OPEN) && state.getValue(CASSETTE) == EnumCassetteType.NONE)
 		{
 			cassettePlayer.setCassette(cassetteStack.copy());
@@ -87,7 +87,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	{
 		if(!level.isClientSide)
 		{
-			if(level.getBlockEntity(pos) instanceof CassettePlayerTileEntity cassettePlayer)
+			if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 			{
 				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
@@ -122,7 +122,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new CassettePlayerTileEntity(pos, state);
+		return new CassettePlayerBlockEntity(pos, state);
 	}
 	
 	@Override
@@ -136,7 +136,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
-		if(level.getBlockEntity(pos) instanceof CassettePlayerTileEntity cassettePlayer)
+		if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 		{
 			Item item = cassettePlayer.getCassette().getItem();
 			if(item instanceof CassetteItem cassette)

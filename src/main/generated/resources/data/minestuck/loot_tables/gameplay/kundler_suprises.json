@@ -1,0 +1,67 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "name": "computer",
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:melon_slice"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:stick"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:egg"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:dirt"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:pumpkin"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:cobblestone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:redstone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:surprise_embryo"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:gamegrl_magazine"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minestuck:gamebro_magazine"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "minecraft:dead_horn_coral"
+        }
+      ]
+    }
+  ]
+}

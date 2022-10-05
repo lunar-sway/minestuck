@@ -15,17 +15,22 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.chunk.ProtoChunk;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Helper class that behaves similarly to {@link NoiseBasedChunkGenerator}, but extendable with additional features.
@@ -87,15 +92,18 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	}
 	
 	/**
-	 * Not as optimised as the usual implementation for applyBiomeDecoration(), and does not yet place structures.
+	 * Not as optimised as the usual implementation for applyBiomeDecoration().
 	 * But it does properly work when the two biome sources provide different biomes.
 	 */
 	@Override
 	public void applyBiomeDecoration(WorldGenLevel level, ChunkAccess chunk, StructureFeatureManager structureManager)
 	{
-		SectionPos sectionPos = SectionPos.of(chunk.getPos(), level.getMinSection());
+		ChunkPos chunkPos = chunk.getPos();
+		SectionPos sectionPos = SectionPos.of(chunkPos, level.getMinSection());
 		BlockPos pos = sectionPos.origin();
-		WorldgenRandom worldgenrandom = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.seedUniquifier()));
+		BoundingBox writeableBox = new BoundingBox(chunkPos.getMinBlockX(), chunk.getMinBuildHeight() + 1, chunkPos.getMinBlockZ(),
+				chunkPos.getMaxBlockX(), chunk.getMaxBuildHeight() - 1, chunkPos.getMaxBlockZ());
+		WorldgenRandom random = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.seedUniquifier()));
 		//Override WorldGenLevel.getBiome() in order to control the biome checked in BiomeFilter
 		WorldGenLevel customBiomeLevel = new WorldGenLevelWrapper(level)
 		{
@@ -105,15 +113,29 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 				return AbstractChunkGenerator.this.getWorldGenBiome(super.getBiome(pos));
 			}
 		};
-		long seed = worldgenrandom.setDecorationSeed(level.getSeed(), pos.getX(), pos.getZ());
+		long decorationSeed = random.setDecorationSeed(level.getSeed(), pos.getX(), pos.getZ());
+		
+		Registry<ConfiguredStructureFeature<?, ?>> registry = level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY);
+		Map<Integer, List<ConfiguredStructureFeature<?, ?>>> structuresByStep = registry.stream().collect(Collectors.groupingBy(configured -> configured.feature.step().ordinal()));
 		
 		for(int decorationStep = 0; decorationStep < this.biomeSource.featuresPerStep().size(); decorationStep++)
 		{
+			if(structureManager.shouldGenerateFeatures())
+			{
+				List<ConfiguredStructureFeature<?, ?>> configuredStructures = structuresByStep.getOrDefault(decorationStep, Collections.emptyList());
+				for(int index = 0; index < configuredStructures.size(); index++)
+				{
+					random.setFeatureSeed(decorationSeed, index, decorationStep);
+					structureManager.startsForFeature(sectionPos, configuredStructures.get(index)).forEach(
+							structureStart -> structureStart.placeInChunk(customBiomeLevel, structureManager, this, random, writeableBox, chunkPos));
+				}
+			}
+			
 			BiomeSource.StepFeatureData featureStep = this.biomeSource.featuresPerStep().get(decorationStep);
 			for(PlacedFeature feature : featureStep.features())
 			{
-				worldgenrandom.setFeatureSeed(seed, featureStep.indexMapping().applyAsInt(feature), decorationStep);
-				feature.placeWithBiomeCheck(customBiomeLevel, this, worldgenrandom, pos);
+				random.setFeatureSeed(decorationSeed, featureStep.indexMapping().applyAsInt(feature), decorationStep);
+				feature.placeWithBiomeCheck(customBiomeLevel, this, random, pos);
 			}
 		}
 	}

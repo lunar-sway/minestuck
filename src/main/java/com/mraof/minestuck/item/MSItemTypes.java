@@ -27,17 +27,17 @@ public class MSItemTypes
 	public static final Tier CANDY_TIER = new ModItemTier(0, 450, 4.0F, 0.0F, 15, () -> Ingredient.EMPTY);
 	public static final Tier BOOK_TIER = new ModItemTier(0, 250, 5.0F, 0.0F, 15, () -> Ingredient.of(Items.BOOK));
 	public static final Tier CACTUS_TIER = new ModItemTier(0, 104, 2.0F, 1.0F, 5, () -> Ingredient.of(Blocks.CACTUS));
-	public static final Tier ICE_TIER = new ModItemTier(0, 60, 11.0F, 1.0F, 25, () -> Ingredient.of(MSItems.ICE_SHARD));
+	public static final Tier ICE_TIER = new ModItemTier(0, 60, 11.0F, 1.0F, 25, () -> Ingredient.of(MSItems.ICE_SHARD.get()));
 	public static final Tier POGO_TIER = new ModItemTier(1, 450, 2.0F, 2.0F, 8, () -> Ingredient.of(Items.SLIME_BALL));
 	public static final Tier EMERALD_TIER = new ModItemTier(3, 1024, 10.0F, 2.0F, 20, () -> Ingredient.of(Items.EMERALD));
 	public static final Tier PRISMARINE_TIER = new ModItemTier(2, 300, 4.0F, 3.0F, 10, () -> Ingredient.of(Items.PRISMARINE_SHARD));
 	public static final Tier CORUNDUM_TIER = new ModItemTier(3, 1536, 6.0F, 3.0F, 16, () -> Ingredient.EMPTY);
 	public static final Tier REGI_TIER = new ModItemTier(4, 3072, 13.0F, 3.0F, 10, () -> Ingredient.EMPTY);
 	public static final Tier HORRORTERROR_TIER = new ModItemTier(3, 2048, 4.0F, 4.0F, 15, () -> Ingredient.EMPTY);
-	public static final Tier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 4.0F, 5, () -> Ingredient.of(MSItems.RAW_URANIUM));
+	public static final Tier URANIUM_TIER = new ModItemTier(2, 512, 5.0F, 4.0F, 5, () -> Ingredient.of(MSItems.RAW_URANIUM.get()));
 	public static final Tier DENIZEN_TIER = new ModItemTier(5, 4096, 14.0F, 4.0F, 25, () -> Ingredient.EMPTY);
 	public static final Tier ZILLY_TIER = new ModItemTier(5, 5120, 12.0F, 5.0F, 30, () -> Ingredient.EMPTY);
-	public static final Tier WELSH_TIER = new ModItemTier(5, 5120, 15.0F, 5.0F, 25, () -> Ingredient.of(MSItems.CUEBALL));
+	public static final Tier WELSH_TIER = new ModItemTier(5, 5120, 15.0F, 5.0F, 25, () -> Ingredient.of(MSItems.CUEBALL.get()));
 	
 	public static final ArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
 	public static final ArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);

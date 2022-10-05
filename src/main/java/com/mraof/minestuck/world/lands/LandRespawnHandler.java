@@ -26,11 +26,9 @@ public class LandRespawnHandler
 			if (player.getRespawnPosition() == null)
 			{
 				Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(IdentifierHandler.encode(player), true);
-				if(c.isPresent() && c.get().getLandInfo() != null)
+				if(c.isPresent() && c.get().getClientDimension() != null)
 				{
-					LandInfo info = c.get().getLandInfo();
-					ServerLevel destination = player.server.getLevel(info.getDimensionType());
-					BlockPos spawn = info.getSpawn();
+					ServerLevel destination = player.server.getLevel(c.get().getClientDimension());
 					
 					if (destination == null)
 						return;
@@ -38,7 +36,7 @@ public class LandRespawnHandler
 					int spawnFuzz = 12;	//TODO spawn explicitly within the entry area
 					int spawnFuzzHalf = spawnFuzz / 2;
 					
-					spawn = spawn.offset(player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf,
+					BlockPos spawn = new BlockPos(player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf,
 							0, player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf);
 					
 					int y = destination.getChunk(spawn).getHeight(Heightmap.Types.MOTION_BLOCKING, spawn.getX() & 15, spawn.getZ() & 15) + 1;

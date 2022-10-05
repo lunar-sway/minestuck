@@ -3,13 +3,11 @@ package com.mraof.minestuck.world.lands;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillageCenter;
-import com.mraof.minestuck.world.gen.feature.structure.village.ConsortVillagePieces;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
+import com.mraof.minestuck.world.gen.structure.village.ConsortVillagePieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -61,12 +59,6 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	 * @param type the type of biome that the spawn info builder is for.
 	 */
 	default void setSpawnInfo(MobSpawnSettings.Builder builder, LandBiomeType type)
-	{}
-	
-	/**
-	 * Override this to set biome generation settings.
-	 */
-	default void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
 	{}
 	
 	/**

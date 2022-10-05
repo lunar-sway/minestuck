@@ -28,6 +28,7 @@ public class MinestuckData
 			gen.addProvider(new MinestuckFluidTagsProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckBiomeTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MSStructureTagsProvider(gen, event.getExistingFileHelper()));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));

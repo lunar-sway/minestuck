@@ -3,7 +3,7 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -182,7 +182,7 @@ public class HashMapModus extends Modus
 			list.remove(id);
 			markDirty();
 			if(item.isEmpty())
-				return new ItemStack(MSItems.CAPTCHA_CARD);
+				return new ItemStack(MSItems.CAPTCHA_CARD.get());
 			else return AlchemyHelper.createCard(item, false);
 		} else
 		{

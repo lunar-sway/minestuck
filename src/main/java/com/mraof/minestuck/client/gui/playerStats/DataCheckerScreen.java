@@ -10,21 +10,24 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +35,8 @@ import java.util.List;
 
 public class DataCheckerScreen extends Screen
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/data_check.png");
 	private static final int GUI_WIDTH = 210, GUI_HEIGHT = 140;
@@ -321,18 +326,37 @@ public class DataCheckerScreen extends Screen
 		}
 	}
 	
-	public static class LocalizedTextField extends TextField
+	public record LocalizedTextField(Component component) implements IDataComponent
 	{
-		Object[] params;
 		public LocalizedTextField(String message, Object... params)
 		{
-			super(message);
-			this.params = params;
+			this(new TranslatableComponent(message, params));
+		}
+		
+		@Override
+		public IDataComponent getParentComponent()
+		{
+			return null;
+		}
+		@Override
+		public List<IDataComponent> getComponentList()
+		{
+			return null;
+		}
+		@Override
+		public IDataComponent onButtonPressed()
+		{
+			return null;
+		}
+		@Override
+		public boolean isButton()
+		{
+			return false;
 		}
 		@Override
 		public String getName()
 		{
-			return I18n.get(message, params);
+			return this.component.getString();
 		}
 	}
 	
@@ -471,8 +495,11 @@ public class DataCheckerScreen extends Screen
 			if(isMain)
 			{
 				list.add(new TextField("Land dim: %s", (!landDim.isEmpty() ? landDim : "Pre-entry")));
-				if(!landDim.isEmpty() && connectionTag.contains("landType1"))
-					list.add(new LocalizedTextField(LandTypePair.FORMAT, new TranslatableComponent("land."+connectionTag.getString("landType1")).getString(), new TranslatableComponent("land."+connectionTag.getString("landType2")).getString()));
+				
+				if(!landDim.isEmpty() && connectionTag.contains("landTypes"))
+					LandTypePair.Named.CODEC.parse(NbtOps.INSTANCE, connectionTag.get("landTypes")).resultOrPartial(LOGGER::error)
+							.ifPresent(namedTypes -> list.add(new LocalizedTextField(namedTypes.asComponent())));
+				
 				if(connectionTag.contains("class"))
 				{
 					byte cl = connectionTag.getByte("class"), as = connectionTag.getByte("aspect");

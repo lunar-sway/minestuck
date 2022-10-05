@@ -80,7 +80,7 @@ public class MusicPlayerItem extends WeaponItem
 				if(item instanceof CassetteItem cassette)
 				{
 					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
-					MSPacketHandler.sendToTracking(packet, playerIn);
+					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
 				}
 			}
 			//open the GUI if right-clicked

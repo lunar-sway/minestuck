@@ -2,15 +2,15 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.inventory.MiniPunchDesignixContainer;
-import com.mraof.minestuck.tileentity.machine.MiniPunchDesignixTileEntity;
+import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
+import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixContainer>
+public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/designix.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/designix.png");
@@ -22,9 +22,9 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 	private int goX;
 	private int goY;
 	
-	public MiniPunchDesignixScreen(MiniPunchDesignixContainer screenContainer, Inventory inv, Component titleIn)
+	public MiniPunchDesignixScreen(MiniPunchDesignixMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniPunchDesignixTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(MiniPunchDesignixBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 63;
@@ -57,7 +57,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixCont
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}

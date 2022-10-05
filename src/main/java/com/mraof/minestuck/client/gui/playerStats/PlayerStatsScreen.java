@@ -11,7 +11,7 @@ import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
