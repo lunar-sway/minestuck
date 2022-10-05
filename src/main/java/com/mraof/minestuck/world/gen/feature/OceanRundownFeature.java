@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.WorldGenLevel;
@@ -100,7 +100,11 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 			{
 				BlockPos groundPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
 				if(!level.getBlockState(groundPos).getMaterial().isLiquid())
-					setBlock(level, groundPos.below(), fluid);
+				{
+					BlockPos fluidPos = groundPos.below();
+					setBlock(level, fluidPos, fluid);
+					level.getChunk(fluidPos).markPosForPostprocessing(fluidPos);
+				}
 			}
 		}
 		

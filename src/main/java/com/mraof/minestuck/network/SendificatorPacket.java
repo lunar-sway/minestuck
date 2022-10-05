@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.inventory.SendificatorContainer;
-import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
+import com.mraof.minestuck.inventory.SendificatorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,15 +34,15 @@ public class SendificatorPacket implements PlayToServerPacket
 	public void execute(ServerPlayer player)
 	{
 		AbstractContainerMenu playerContainer = player.containerMenu;
-		if(playerContainer instanceof SendificatorContainer sendificatorMenu)
+		if(playerContainer instanceof SendificatorMenu sendificatorMenu)
 		{
 			sendificatorMenu.getPosition().execute((level, machinePos) -> {
-				SendificatorTileEntity tileEntity = (SendificatorTileEntity) level.getBlockEntity(machinePos);
-				if(tileEntity != null)
+				SendificatorBlockEntity blockEntity = (SendificatorBlockEntity) level.getBlockEntity(machinePos);
+				if(blockEntity != null)
 				{
-					tileEntity.setDestinationBlockPos(destinationBlockPos);
+					blockEntity.setDestinationBlockPos(destinationBlockPos);
 					//Imitates the structure block to ensure that changes are sent client-side
-					tileEntity.setChanged();
+					blockEntity.setChanged();
 					BlockState state = level.getBlockState(machinePos);
 					level.sendBlockUpdated(machinePos, state, state, 3);
 				}

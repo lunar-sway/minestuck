@@ -1,8 +1,7 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
 import com.mraof.minestuck.inventory.ContainerHelper;
-import com.mraof.minestuck.inventory.MSContainerTypes;
-import com.mraof.minestuck.inventory.musicplayer.ItemStackHandlerMusicPlayer;
+import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +20,7 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 	
 	public MusicPlayerContainer(int windowId, Inventory playerInventory, IItemHandler itemStackHandler)
 	{
-		super(MSContainerTypes.MUSIC_PLAYER, windowId);
+		super(MSMenuTypes.MUSIC_PLAYER.get(), windowId);
 		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y));
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}

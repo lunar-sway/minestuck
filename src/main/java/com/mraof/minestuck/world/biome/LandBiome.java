@@ -7,9 +7,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 
 public abstract class LandBiome
 {
-	public static final float DEFAULT_NORMAL_DEPTH = 0.125F, DEFAULT_NORMAL_SCALE = 0.05F;
-	public static final float DEFAULT_ROUGH_DEPTH = 0.45F, DEFAULT_ROUGH_SCALE = 0.3F;
-	public static final float DEFAULT_OCEAN_DEPTH = -1.0F, DEFAULT_OCEAN_SCALE = 0.1F;
 	
 	public static Biome createNormalBiome(Biome.Precipitation precipitation, float temperature, float downfall)
 	{

@@ -50,6 +50,9 @@
         {   "when": { "facing": "north", "cassette": "mellohi" },
             "apply": { "model": "minestuck:block/cassette/cassette_mellohi"}
         },
+        {   "when": { "facing": "north", "cassette": "far" },
+            "apply": { "model": "minestuck:block/cassette/cassette_far"}
+        },
         {   "when": { "facing": "north", "cassette": "emissary_of_dance" },
             "apply": { "model": "minestuck:block/cassette/cassette_emissary"}
         },
@@ -76,6 +79,9 @@
         },
         {   "when": { "facing": "south", "cassette": "mellohi" },
             "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 180 }
+        },
+        {   "when": { "facing": "south", "cassette": "far" },
+            "apply": { "model": "minestuck:block/cassette/cassette_far", "y": 180 }
         },
         {   "when": { "facing": "south", "cassette": "emissary_of_dance" },
             "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 180 }
@@ -104,6 +110,9 @@
         {   "when": { "facing": "west", "cassette": "mellohi" },
             "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 270 }
         },
+        {   "when": { "facing": "west", "cassette": "far" },
+            "apply": { "model": "minestuck:block/cassette/cassette_far", "y": 270 }
+        },
         {   "when": { "facing": "west", "cassette": "emissary_of_dance" },
             "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 270 }
         },
@@ -130,6 +139,9 @@
         },
         {   "when": { "facing": "east", "cassette": "mellohi" },
             "apply": { "model": "minestuck:block/cassette/cassette_mellohi", "y": 90 }
+        },
+        {   "when": { "facing": "east", "cassette": "far" },
+            "apply": { "model": "minestuck:block/cassette/cassette_far", "y": 90 }
         },
         {   "when": { "facing": "east", "cassette": "emissary_of_dance" },
             "apply": { "model": "minestuck:block/cassette/cassette_emissary", "y": 90 }

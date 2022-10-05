@@ -1,8 +1,6 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;

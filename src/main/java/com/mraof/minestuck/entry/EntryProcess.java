@@ -2,16 +2,14 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.GateTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -24,7 +22,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -172,7 +169,7 @@ public class EntryProcess
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
-				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+				for(blockY = Math.max(level.getMinBuildHeight(), y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
@@ -190,9 +187,9 @@ public class EntryProcess
 					{
 						player.displayClientMessage(new TextComponent("You are not allowed to move command blocks."), false);
 						return false;
-					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
+					} else if(te instanceof ComputerBlockEntity)		//If the block is a computer
 					{
-						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode(player)))	//You can't Enter with someone else's computer
+						if(!((ComputerBlockEntity)te).owner.equals(IdentifierHandler.encode(player)))	//You can't Enter with someone else's computer
 						{
 							player.displayClientMessage(new TextComponent("You are not allowed to move other players' computers."), false);
 							return false;
@@ -290,7 +287,7 @@ public class EntryProcess
 			LOGGER.debug("Removing original blocks");
 			for(BlockMove move : blockMoves)
 			{
-				removeTileEntity(level0, move.source, creative);	//Tile entities need special treatment
+				removeBlockEntity(level0, move.source, creative);	//Block entities need special treatment
 				
 				if(MinestuckConfig.SERVER.entryCrater.get() && level0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
@@ -340,25 +337,23 @@ public class EntryProcess
 			
 			MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
 			
-			MSDimensions.getLandInfo(level1).setSpawn(Mth.floor(player.getY()));
-			
 			LOGGER.info("Entry finished");
 		}
 	}
 	
 	/**
-	 * Determines if it is appropriate to remove the tile entity in the specified location,
-	 * and removes both the tile entity and its corresponding block if so.
+	 * Determines if it is appropriate to remove the block entity in the specified location,
+	 * and removes both the block entity and its corresponding block if so.
 	 * This method is expressly designed to prevent drops from appearing when the block is removed.
-	 * It will also deliberately trigger block updates based on the removal of the tile entity's block.
-	 * @param level The world where the tile entity is located
-	 * @param pos The position at which the tile entity is located
+	 * It will also deliberately trigger block updates based on the removal of the block entity's block.
+	 * @param level The world where the block entity is located
+	 * @param pos The position at which the block entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	private static void removeTileEntity(ServerLevel level, BlockPos pos, boolean creative)
+	private static void removeBlockEntity(ServerLevel level, BlockPos pos, boolean creative)
 	{
-		BlockEntity tileEntity = level.getBlockEntity(pos);
-		if(tileEntity != null)
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+		if(blockEntity != null)
 		{
 			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
@@ -367,13 +362,13 @@ public class EntryProcess
 					level.removeBlockEntity(pos);
 					level.removeBlock(pos, true);
 				} catch (Exception e) {
-					LOGGER.warn("Exception encountered when removing tile entity " + name + " during entry:", e);
+					LOGGER.warn("Exception encountered when removing block entity " + name + " during entry:", e);
 				}
 			} else
 			{
-				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerTileEntity) tileEntity).programData = new CompoundTag();
-				else if(tileEntity instanceof TransportalizerTileEntity)
+				if(blockEntity instanceof ComputerBlockEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
+					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}
 		}
@@ -400,8 +395,8 @@ public class EntryProcess
 	private static void copyBlockDirect(LevelAccessor levelAccessor, ChunkAccess cSrc, ChunkAccess cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
 		BlockPos dest = new BlockPos(xDst, yDst, zDst);
-		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
-		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc);
+		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst);
 		int y = yDst;
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
@@ -419,7 +414,7 @@ public class EntryProcess
 	
 	private static LevelChunkSection getBlockStorage(ChunkAccess c, int y)
 	{
-		return c.getSections()[y];
+		return c.getSection(c.getSectionIndex(y));
 	}
 	
 	/**
@@ -448,22 +443,10 @@ public class EntryProcess
 		return maxY;
 	}
 	
-	public static void placeGates(ServerLevel world)
+	public static void placeGates(ServerLevel level)
 	{
-		placeGate(GateHandler.Type.GATE_1, new BlockPos(0, GateHandler.gateHeight1, 0), world);
-		placeGate(GateHandler.Type.GATE_2, new BlockPos(0, GateHandler.gateHeight2, 0), world);
-	}
-	
-	private static void placeGate(GateHandler.Type gateType, BlockPos pos, ServerLevel world)
-	{
-		for(int i = 0; i < 9; i++)
-			if(i == 4)
-			{
-				world.setBlock(pos, MSBlocks.GATE.get().defaultBlockState().cycle(GateBlock.MAIN), 0);
-				GateTileEntity tileEntity = (GateTileEntity) world.getBlockEntity(pos);
-				tileEntity.gateType = gateType;
-			}
-			else world.setBlock(pos.offset((i % 3) - 1, 0, i/3 - 1), MSBlocks.GATE.get().defaultBlockState(), 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight1, 0), GateHandler.Type.GATE_1, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight2, 0), GateHandler.Type.GATE_2, 0);
 	}
 	
 	private static class BlockMove
@@ -501,24 +484,24 @@ public class EntryProcess
 				copyBlockDirect(level, chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
-			BlockEntity tileEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
-			BlockEntity newTE = null;
-			if(tileEntity != null)
+			BlockEntity blockEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
+			BlockEntity newBE = null;
+			if(blockEntity != null)
 			{
-				CompoundTag nbt = tileEntity.saveWithId();
+				CompoundTag nbt = blockEntity.saveWithId();
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				newTE = BlockEntity.loadStatic(dest, block, nbt);
-				if(newTE != null)
-					level.setBlockEntity(newTE);
-				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
+				newBE = BlockEntity.loadStatic(dest, block, nbt);
+				if(newBE != null)
+					level.setBlockEntity(newBE);
+				else LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", blockEntity.getType().getRegistryName());
 				
 			}
 			
 			for(EntryBlockProcessing processing : blockProcessors)
 			{
-				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, tileEntity, newTE);
+				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, blockEntity, newBE);
 			}
 		}
 	}

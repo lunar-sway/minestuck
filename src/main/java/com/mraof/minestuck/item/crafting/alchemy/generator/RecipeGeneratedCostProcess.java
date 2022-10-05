@@ -48,7 +48,7 @@ class RecipeGeneratedCostProcess
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
 		{
-			GristSet result = costFromRecipes(item, true, context);
+			GristSet result = costFromRecipes(item, context);
 			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 			
 			if(context.isPrimary())
@@ -57,7 +57,7 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costFromRecipes(Item item, boolean isCostNull, GenerationContext context)
+	private GristSet costFromRecipes(Item item, GenerationContext context)
 	{
 		List<Pair<Recipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
@@ -73,8 +73,6 @@ class RecipeGeneratedCostProcess
 			return minCost;
 		} else
 		{
-			if(MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get() && isCostNull)
-				LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
 			return null;
 		}
 	}
@@ -95,7 +93,7 @@ class RecipeGeneratedCostProcess
 	{
 		if(MinestuckConfig.COMMON.logItemsWithRecipeAndCost.get())
 		{
-			GristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, false, context));
+			GristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, context));
 			
 			if(generatedCost != null)
 			{

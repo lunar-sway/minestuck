@@ -42,7 +42,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	protected <B extends Block> RegistryObject<B> register(String name, Supplier<B> constructor)
 	{
 		ResourceLocation key = new ResourceLocation(modId, name);
-		RegistryObject<B> obj = RegistryObject.of(key, ForgeRegistries.BLOCKS);
+		RegistryObject<B> obj = RegistryObject.create(key, ForgeRegistries.BLOCKS);
 		if(registryEntries.putIfAbsent((RegistryObject<Block>) obj, constructor) != null)
 			throw new IllegalArgumentException("Can't register "+name+" twice");
 		return obj;
@@ -97,7 +97,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	public BoundingBox getBoundingBox(Rotation rotation)
 	{
-		return BoundingBox.encapsulatingPositions(blockEntries.stream().map(entry -> entry.pos).toList()).orElseThrow();
+		return BoundingBox.encapsulatingPositions(blockEntries.stream().map(entry -> entry.pos.rotate(rotation)).toList()).orElseThrow();
 	}
 	
 	public void registerBlocks(IForgeRegistry<Block> registry)

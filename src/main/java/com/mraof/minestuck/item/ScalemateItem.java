@@ -26,34 +26,34 @@ public class ScalemateItem extends Item
         
         if(offhandItem.is(Tags.Items.DYES_RED))
         {
-            newItem = MSItems.SCALEMATE_APPLESCAB;
+            newItem = MSItems.SCALEMATE_APPLESCAB.get();
         } else if(offhandItem.is(Tags.Items.DYES_BLUE))
         {
-            newItem = MSItems.SCALEMATE_BERRYBREATH;
+            newItem = MSItems.SCALEMATE_BERRYBREATH.get();
         } else if(offhandItem.is(Tags.Items.DYES_BROWN))
         {
-            newItem = MSItems.SCALEMATE_CINNAMONWHIFF;
+            newItem = MSItems.SCALEMATE_CINNAMONWHIFF.get();
         } else if(offhandItem.is(Tags.Items.DYES_ORANGE))
         {
-            newItem = MSItems.SCALEMATE_HONEYTONGUE;
+            newItem = MSItems.SCALEMATE_HONEYTONGUE.get();
         } else if(offhandItem.is(Tags.Items.DYES_YELLOW))
         {
-            newItem = MSItems.SCALEMATE_LEMONSNOUT;
+            newItem = MSItems.SCALEMATE_LEMONSNOUT.get();
         } else if(offhandItem.is(Tags.Items.DYES_LIGHT_BLUE))
         {
-            newItem = MSItems.SCALEMATE_PINESNOUT;
+            newItem = MSItems.SCALEMATE_PINESNOUT.get();
         } else if(offhandItem.is(Tags.Items.DYES_PINK))
         {
-            newItem = MSItems.SCALEMATE_PUCEFOOT;
+            newItem = MSItems.SCALEMATE_PUCEFOOT.get();
         } else if(offhandItem.is(Items.PUMPKIN))
         {
-            newItem = MSItems.SCALEMATE_PUMPKINSNUFFLE;
+            newItem = MSItems.SCALEMATE_PUMPKINSNUFFLE.get();
         } else if(offhandItem.is(Tags.Items.DYES_WHITE))
         {
-            newItem = MSItems.SCALEMATE_PYRALSPITE;
+            newItem = MSItems.SCALEMATE_PYRALSPITE.get();
         } else if(offhandItem.is(Tags.Items.DYES_GREEN))
         {
-            newItem = MSItems.SCALEMATE_WITNESS;
+            newItem = MSItems.SCALEMATE_WITNESS.get();
         } else
         {
             return InteractionResultHolder.pass(mainhandItemStack);
