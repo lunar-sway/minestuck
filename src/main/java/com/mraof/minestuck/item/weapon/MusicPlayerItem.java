@@ -9,6 +9,8 @@ import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import com.mraof.minestuck.item.CassetteItem;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.nbt.CompoundTag;
@@ -17,9 +19,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -70,34 +72,42 @@ public class MusicPlayerItem extends WeaponItem
 		IMusicPlaying musicPlaying = getMusicPlaying(playerIn.getItemInHand(handIn));
 		IItemHandler itemStackHandlerMusicPlayer = getItemStackHandlerMusicPlayer(playerIn.getItemInHand(handIn));
 		
-		if(playerIn.isCrouching())
+		if(!level.isClientSide)
 		{
-			SoundManager soundManager = Minecraft.getInstance().getSoundManager();
-			MusicPlayerOnPlayerSoundInstance soundInstance;
-			Item item = itemStackHandlerMusicPlayer.getStackInSlot(0).getItem();
-			if(item instanceof CassetteItem cassette)
+			if(playerIn.isCrouching())
 			{
-				if(musicPlaying.getCurrentMusic() == null)
+				Item item = itemStackHandlerMusicPlayer.getStackInSlot(0).getItem();
+				if(item instanceof CassetteItem cassette)
 				{
-					musicPlaying.setCurrentMusic(cassette.cassetteID.getSoundEvent(), cassette.cassetteID);
-					soundInstance = new MusicPlayerOnPlayerSoundInstance(playerIn, musicPlaying.getCurrentMusic());
-					playerIn.addEffect(getEffect(musicPlaying.getCassetteType()).getEffect());
-					soundManager.play(soundInstance);
-				} else
-				{
-					musicPlaying.setCurrentMusic(null, null);
+					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
+					MSPacketHandler.sendToTracking(packet, playerIn);
 				}
 			}
-		}
-		
-		//open the GUI if right-clicked
-		else if(!level.isClientSide)
-		{
-			NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
-					new MusicPlayerContainer(pContainerId, pInventory, itemStackHandlerMusicPlayer),
-					new TextComponent("Music Player")));
+			//open the GUI if right-clicked
+			else
+			{
+				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
+						new MusicPlayerContainer(pContainerId, pInventory, itemStackHandlerMusicPlayer),
+						new TextComponent("Music Player")));
+			}
 		}
 		return super.use(level, playerIn, handIn);
+	}
+	
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
+	{
+		if(level.getGameTime() % 50 == 0)
+		{
+			super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+			IMusicPlaying musicPlaying = getMusicPlaying(stack);
+			if(musicPlaying.getCurrentMusic() != null)
+			{
+				EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
+				if(effectContainer != null && entityIn instanceof Player player && !effectContainer.onHit)
+					player.addEffect(effectContainer.effect);
+			}
+		}
 	}
 	
 	@Override
@@ -126,7 +136,7 @@ public class MusicPlayerItem extends WeaponItem
 			double attackerLuckValue;
 			double targetLuckValue;
 			
-			EffectContainer effect = getEffect(musicPlaying.getCassetteType());
+			EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
 			AttributeInstance attackerLuck = attacker.getAttribute(Attributes.LUCK);
 			AttributeInstance targetLuck = target.getAttribute(Attributes.LUCK);
 			
@@ -142,9 +152,9 @@ public class MusicPlayerItem extends WeaponItem
 			
 			chanceToHit = chanceToHit - (attackerLuckValue / 10) + (targetLuckValue / 10);
 			
-			if(effect != null && effect.getApplyingChance() > chanceToHit && effect.isOnHit())
+			if(effectContainer != null && effectContainer.applyingChance > chanceToHit && effectContainer.onHit)
 			{
-					target.addEffect(effect.getEffect());
+				target.addEffect(effectContainer.effect());
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
@@ -154,55 +164,39 @@ public class MusicPlayerItem extends WeaponItem
 	{
 		switch(cassetteType)
 		{
-			case MALL ->
-			{
-				return new EffectContainer(new MobEffectInstance(MobEffects.REGENERATION, 10, 0),
+			case MALL:
+				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
 						0.30F, true);
-			}
-			case MELLOHI ->
-			{
-				return new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 5, 0),
+			case ELEVEN:
+				return new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 80, 0),
+						0.10F, true);
+			case MELLOHI:
+				return new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
 						0.20F, true);
-			}
-			case CAT ->
-			{
-				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 200, 0),
+			case CAT:
+				return new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 50, 0,
+						false, false, false),
 						1F, false);
-			}
-			case NONE ->
-			{
+			case PIGSTEP:
+				return new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 50, 0,
+						false, false, false),
+						1F, false);
+			case FAR:
+				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 50, 0,
+						false, false, false),
+						1F, false);
+			case CHIRP:
+				return new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 50, 0,
+						false, false, false),
+						1F, false);
+			case NONE:
 				return null;
-			}
 		}
+		
 		throw new IllegalArgumentException(cassetteType + " is not a valid cassette type");
 	}
 	
-	static class EffectContainer
+	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
 	{
-		public MobEffectInstance effect;
-		private final float applyingChance;
-		private final boolean onHit;
-		
-		public EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
-		{
-			this.effect = effect;
-			this.applyingChance = applyingChance;
-			this.onHit = onHit;
-		}
-		
-		public float getApplyingChance()
-		{
-			return applyingChance;
-		}
-		
-		public MobEffectInstance getEffect()
-		{
-			return effect;
-		}
-		
-		public boolean isOnHit()
-		{
-			return onHit;
-		}
 	}
 }
