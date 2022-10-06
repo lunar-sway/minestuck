@@ -51,7 +51,7 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> MUSIC_SICKEST_FIRES = register("music.sickest_fires");
 	public static final RegistryObject<SoundEvent> MUSIC_RANCOROUS_GAMBLIGANT = register("music.rancorous_gambligant");
 	public static final RegistryObject<SoundEvent> MUSIC_WHAT_GOES_UP = register("music.what_goes_up");
-	public static final RegistryObject<SoundEvent> MUSIC_RISE_UP = register("music.rise_up");
+	public static final RegistryObject<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
 	
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_AMBIENT = register("entity.nakagator.ambient");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_HURT = register("entity.nakagator.hurt");
