@@ -34,17 +34,12 @@ public class ColorHandler
     {
         BlockColors colors = event.getBlockColors();
         colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), MSBlocks.CRUXITE_DOWEL.get());
-        colors.register((state, worldIn, pos, tintIndex) -> stemColor(state), MSBlocks.STRAWBERRY_STEM.get());
-        colors.register((state, worldIn, pos, tintIndex) -> stemColor(state), MSBlocks.ATTACHED_STRAWBERRY_STEM.get());
+        colors.register((state, worldIn, pos, tintIndex) -> stemColor(state.getValue(StemBlock.AGE)), MSBlocks.STRAWBERRY_STEM.get());
+        colors.register((state, worldIn, pos, tintIndex) -> stemColor(7), MSBlocks.ATTACHED_STRAWBERRY_STEM.get()); //7 is equivalent to a fully grown stem block
     }
     
-    public static int stemColor(BlockState stemBlockState)
+    public static int stemColor(int age)
     {
-        int age;
-        if(stemBlockState.getBlock() instanceof StemBlock)
-            age = stemBlockState.getValue(StemBlock.AGE);
-        else
-            age = 7; //assumed to be attached stem, equivalent to a fully grown stem block
         int red = age * 32;
         int green = 255 - age * 8;
         int blue = age * 4;
