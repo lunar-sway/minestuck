@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.item.crafting.alchemy.GristType.SpawnCategory;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -20,6 +21,16 @@ public final class MSGristTypeTagsProvider extends ForgeRegistryTagsProvider<Gri
 	@Override
 	protected void addTags()
 	{
+		tag(SpawnCategory.COMMON.getTagKey())
+				.add(AMBER.get(), CAULK.get(), CHALK.get(), IODINE.get(), SHALE.get(), TAR.get())
+				.add(COBALT.get(), MARBLE.get(), MERCURY.get(), QUARTZ.get(), SULFUR.get());
+		tag(SpawnCategory.UNCOMMON.getTagKey())
+				.add(COBALT.get(), MARBLE.get(), MERCURY.get(), QUARTZ.get(), SULFUR.get())
+				.add(AMETHYST.get(), GARNET.get(), RUBY.get(), RUST.get())
+				.add(DIAMOND.get(), GOLD.get(), URANIUM.get());
+		//noinspection unchecked
+		tag(SpawnCategory.ANY.getTagKey()).addTags(SpawnCategory.COMMON.getTagKey(), SpawnCategory.UNCOMMON.getTagKey());
+		
 		tag(AMBER.get().getSecondaryTypesTag()).add(RUST.get(), SULFUR.get());
 		tag(CAULK.get().getSecondaryTypesTag()).add(IODINE.get(), CHALK.get());
 		tag(CHALK.get().getSecondaryTypesTag()).add(SHALE.get(), MARBLE.get());
