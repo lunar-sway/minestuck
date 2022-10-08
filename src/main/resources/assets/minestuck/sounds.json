@@ -394,24 +394,16 @@
       }
     ]
   },
-  "music.sickest_fires": {
+  "music.universal": {
     "sounds": [
       {
         "name": "minestuck:music/miscellaneous/sickest_fires",
         "stream": true
-      }
-    ]
-  },
-  "music.rancorous_gambligant": {
-    "sounds": [
+      },
       {
         "name": "minestuck:music/miscellaneous/rancorous_gambligant",
         "stream": true
-      }
-    ]
-  },
-  "music.what_goes_up": {
-    "sounds": [
+      },
       {
         "name": "minestuck:music/miscellaneous/what_goes_up",
         "stream": true

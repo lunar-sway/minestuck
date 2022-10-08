@@ -61,11 +61,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 				ticksUntilMusic--;
 				if(ticksUntilMusic < 0)
 				{
-					if(mc.level.random.nextInt(5) == 0)
-					{
-						currentMusic = SimpleSoundInstance.forMusic(getGenericSoundEvent(mc.level.random));
-					} else
-						currentMusic = SimpleSoundInstance.forMusic(getLandSoundEvent(mc.level.random, types));
+					currentMusic = SimpleSoundInstance.forMusic(getLandSoundEvent(mc.level.random, types));
 					mc.getSoundManager().play(currentMusic);
 					LOGGER.debug("Land music started.");
 				}
@@ -91,19 +87,13 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 	
 	private static SoundEvent getLandSoundEvent(Random rand, LandTypePair pair)
 	{
+		if(rand.nextInt(5) == 0)
+		{
+			return MSSoundEvents.MUSIC_UNIVERSAL.get(); //TODO once there is more questing infrastructure to keep track of where a player is and what they are doing, make these tracks play more conditionally
+		}
+		
 		if(rand.nextBoolean())
 			return pair.getTerrain().getBackgroundMusic();
 		else return pair.getTitle().getBackgroundMusic();
-	}
-	
-	private static SoundEvent getGenericSoundEvent(Random rand)
-	{
-		int randomPick = rand.nextInt(3);
-		if(randomPick == 2)
-			return MSSoundEvents.MUSIC_SICKEST_FIRES.get();
-		else if(randomPick == 1)
-			return MSSoundEvents.MUSIC_RANCOROUS_GAMBLIGANT.get();
-		else
-			return MSSoundEvents.MUSIC_WHAT_GOES_UP.get();
 	}
 }
