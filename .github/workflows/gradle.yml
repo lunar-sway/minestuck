@@ -36,7 +36,13 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: :runData
-    - name: Git ownership hack # Workaround for actions/runner#2033. This step should be removed/replaced once the issue has been fixed proper
-      run: chown -R $(id -u):$(id -g) $PWD
     - name: Has File Changes
-      uses: mskri/check-uncommitted-changes-action@v1.0.1
+      run: |
+        if [[ -z "$(git status --porcelain)" ]];
+        then
+          echo "Files were changed after running "runData". Make sure to run and commit changes from runData!
+          exit 1
+        else
+          echo "No changes detected."
+          exit 0
+        fi
