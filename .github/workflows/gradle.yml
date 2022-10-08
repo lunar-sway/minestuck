@@ -40,7 +40,7 @@ jobs:
       run: |
         if [[ -z "$(git status --porcelain)" ]];
         then
-          echo "Files were changed after running "runData". Make sure to run and commit changes from runData!
+          echo "Files were changed after running runData. Make sure to run and commit changes from runData!"
           exit 1
         else
           echo "No changes detected."
