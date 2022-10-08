@@ -37,12 +37,4 @@ jobs:
       with:
         arguments: :runData
     - name: Has File Changes
-      run: |
-        if [[ -z "$(git status --porcelain)" ]];
-        then
-          echo "Files were changed after running runData. Make sure to run and commit changes from runData!"
-          exit 1
-        else
-          echo "No changes detected."
-          exit 0
-        fi
+      uses: anhpham1509/check-uncommitted-changes-action@d6774588ba954c53b7f01b78505d087e1b1a32f1
