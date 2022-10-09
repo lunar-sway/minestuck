@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.mraof.minestuck.util.StartingModusManager.PATH;
+import static com.mraof.minestuck.inventory.captchalogue.StartingModusManager.PATH;
 
 public class MinestuckStartingModusProvider implements DataProvider
 {

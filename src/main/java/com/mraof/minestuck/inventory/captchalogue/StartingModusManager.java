@@ -1,12 +1,10 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.inventory.captchalogue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.captchalogue.ModusType;
-import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
