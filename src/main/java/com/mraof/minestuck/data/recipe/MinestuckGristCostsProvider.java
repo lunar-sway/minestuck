@@ -56,6 +56,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		oreCost(Tags.Items.ORES_DIAMOND, Items.DIAMOND, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(Tags.Items.ORES_EMERALD, Items.EMERALD, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(Tags.Items.ORES_QUARTZ, Items.QUARTZ, 2, recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.COAL).grist(TAR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.RAW_COPPER).grist(RUST, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.RAW_IRON).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.RAW_GOLD).grist(GOLD, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -329,7 +330,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		ContainerGristCostBuilder.of(Items.WATER_BUCKET).grist(COBALT, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.LAVA_BUCKET).grist(TAR, 16).buildFor(recipeSaver, Minestuck.MOD_ID);
 		ContainerGristCostBuilder.of(Items.MILK_BUCKET).grist(CHALK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.POWDER_SNOW_BUCKET).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
+		ContainerGristCostBuilder.of(Items.POWDER_SNOW_BUCKET).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//------------------------MINESTUCK------------------------\\
 		
