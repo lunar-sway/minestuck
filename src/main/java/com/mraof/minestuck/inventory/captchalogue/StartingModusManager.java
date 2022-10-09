@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -22,12 +21,11 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class StartingModusManager extends SimplePreparableReloadListener<List<String>>
+public final class StartingModusManager extends SimplePreparableReloadListener<List<String>>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().create();
@@ -40,28 +38,30 @@ public class StartingModusManager extends SimplePreparableReloadListener<List<St
 	@Override
 	protected List<String> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, PATH);
-		if(!resourceManager.hasResource(location))
+		List<String> modusTypes = new ArrayList<>();
+		
+		for(String namespace : resourceManager.getNamespaces())
 		{
-			LOGGER.warn("Resource not found '{}'", location.toString());
-			return Collections.emptyList();
+			ResourceLocation location = new ResourceLocation(namespace, PATH);
+			if(resourceManager.hasResource(location))
+			{
+				try(Resource resource = resourceManager.getResource(location);
+					InputStream stream = resource.getInputStream();
+					Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+					JsonReader jsonreader = new JsonReader(reader))
+				{
+					modusTypes.addAll(GSON.getAdapter(new TypeToken<ArrayList<String>>()
+					{}).read(jsonreader));
+				} catch(IOException ignored)
+				{
+				} catch(RuntimeException runtimeexception)
+				{
+					LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+				}
+			}
 		}
 		
-		try(Resource resource = resourceManager.getResource(location);
-			InputStream stream = resource.getInputStream();
-			Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-			JsonReader jsonreader = new JsonReader(reader))
-		{
-			return GSON.getAdapter(new TypeToken<ArrayList<String>>()
-			{}).read(jsonreader);
-		} catch(IOException ignored)
-		{
-		} catch(RuntimeException runtimeexception)
-		{
-			LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
-		}
-		
-		return Collections.emptyList();
+		return modusTypes;
 	}
 	
 	@Override
