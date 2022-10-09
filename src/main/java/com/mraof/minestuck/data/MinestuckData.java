@@ -42,6 +42,8 @@ public class MinestuckData
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
 			
 			gen.addProvider(new MinestuckBiomeProvider(gen));
+			
+			gen.addProvider(new MinestuckStartingModusProvider(gen));
 		}
 	}
 }
