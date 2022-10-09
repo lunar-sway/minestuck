@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:spore_blossom"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 4,
+    "minestuck:iodine": 4
+  }
+}
