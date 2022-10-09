@@ -7,6 +7,6 @@
     "minestuck:build": 4
   },
   "sources": [
-    "#forge:ingots/copper"
+    "minecraft:raw_copper"
   ]
 }
