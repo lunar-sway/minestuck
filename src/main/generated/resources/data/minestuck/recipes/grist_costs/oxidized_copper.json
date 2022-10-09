@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:oxidized_copper"
+  },
+  "grist_cost": {
+    "minestuck:rust": 9,
+    "minestuck:uranium": 1
+  }
+}
