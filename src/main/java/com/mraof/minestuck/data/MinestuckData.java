@@ -43,7 +43,7 @@ public class MinestuckData
 			
 			gen.addProvider(new MinestuckBiomeProvider(gen));
 			
-			gen.addProvider(new MinestuckStartingModusProvider(gen));
+			gen.addProvider(new StartingModusProvider(gen, Minestuck.MOD_ID));
 		}
 	}
 }

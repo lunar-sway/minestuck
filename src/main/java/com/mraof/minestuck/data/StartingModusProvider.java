@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
+import com.mraof.minestuck.inventory.captchalogue.StartingModusManager;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -12,35 +13,31 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.mraof.minestuck.inventory.captchalogue.StartingModusManager.PATH;
-
-public class MinestuckStartingModusProvider implements DataProvider
+public class StartingModusProvider implements DataProvider
 {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private final DataGenerator generator;
+	private final String modid;
 	
-	public MinestuckStartingModusProvider(DataGenerator generator)
+	public StartingModusProvider(DataGenerator generator, String modid)
 	{
 		this.generator = generator;
+		this.modid = modid;
 	}
 	
-	private List<ModusType<?>> createDefaultModusTypes()
+	protected List<ModusType<?>> createDefaultModusTypes()
 	{
-		LinkedList<ModusType<?>> modusTypes = new LinkedList<>();
-		modusTypes.add(ModusTypes.STACK);
-		modusTypes.add(ModusTypes.QUEUE);
-		return modusTypes;
+		return List.of(ModusTypes.STACK, ModusTypes.QUEUE);
 	}
 	
 	@Override
-	public void run(HashCache pCache) throws IOException
+	public final void run(HashCache pCache) throws IOException
 	{
-		Path path = this.generator.getOutputFolder().resolve("data/minestuck/" + PATH);
+		Path path = this.generator.getOutputFolder().resolve("data/" + modid + "/" + StartingModusManager.PATH);
 		List<ModusType<?>> modusTypes = createDefaultModusTypes();
 		
 		String data = GSON.toJson(modusTypes.stream().map(modusType -> modusType.getRegistryName().toString()).collect(Collectors.toList()));
