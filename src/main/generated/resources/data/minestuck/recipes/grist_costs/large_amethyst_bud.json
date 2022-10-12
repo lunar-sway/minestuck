@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
   "ingredient": {
-    "item": "minecraft:exposed_copper"
+    "item": "minecraft:large_amethyst_bud"
   },
   "grist_cost": {
-    "minestuck:shale": 81
+    "minestuck:amethyst": 7
   }
 }

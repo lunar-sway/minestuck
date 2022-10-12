@@ -4,7 +4,7 @@
     "item": "minecraft:oxidized_copper"
   },
   "grist_cost": {
-    "minestuck:rust": 9,
+    "minestuck:shale": 81,
     "minestuck:uranium": 1
   }
 }

@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:soul_sand"
+    "item": "minecraft:copper_ingot"
   },
   "input2": {
-    "item": "minecraft:observer"
+    "item": "minecraft:stone"
   },
   "mode": "or",
   "output": {
-    "item": "minecraft:sculk_sensor"
+    "item": "minecraft:copper_block"
   }
 }
