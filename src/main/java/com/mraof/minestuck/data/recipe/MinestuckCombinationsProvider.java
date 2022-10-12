@@ -230,7 +230,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.ROSE_BUSH).input(Items.LARGE_FERN).or().input(Items.POPPY).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SUGAR_CANE).input(Items.BAMBOO).and().input(Items.SUGAR).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.AZALEA).input(Items.SPYGLASS).or().input(Items.DANDELION).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.FLOWERING_AZALEA).input(ItemTags.FLOWERS).and().input(Items.AZALEA).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.AZALEA_LEAVES).input(Items.AZALEA).and().input(Items.OAK_LEAVES).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.FLOWERING_AZALEA_LEAVES).input(ItemTags.FLOWERS).and().input(Items.AZALEA_LEAVES).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.BIG_DRIPLEAF).input(Items.SPYGLASS).or().input(Items.LILY_PAD).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SMALL_DRIPLEAF).input(Items.SPYGLASS).and().input(Items.LILY_PAD).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.MOSS_BLOCK).input(Items.GRASS_BLOCK).or().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
