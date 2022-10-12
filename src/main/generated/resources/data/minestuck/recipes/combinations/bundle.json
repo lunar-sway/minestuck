@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:leather"
+  },
+  "input2": {
+    "item": "minecraft:chest"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:bundle"
+  }
+}

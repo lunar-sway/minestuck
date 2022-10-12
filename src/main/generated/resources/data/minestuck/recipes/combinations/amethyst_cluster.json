@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:purple_dye"
+  },
+  "input2": {
+    "item": "minecraft:glass"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:amethyst_cluster"
+  }
+}

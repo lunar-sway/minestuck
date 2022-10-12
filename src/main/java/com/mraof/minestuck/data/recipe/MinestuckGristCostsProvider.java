@@ -47,13 +47,13 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.POINTED_DRIPSTONE).grist(BUILD, 20).grist(AMBER, 15).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Ore
-		oreCost(Tags.Items.ORES_COAL, Items.COAL, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_COPPER, Items.RAW_COPPER, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_IRON, Items.RAW_IRON, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_GOLD, Items.RAW_GOLD, 1, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_REDSTONE, Items.REDSTONE, 4, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_LAPIS, Items.LAPIS_LAZULI, 4, recipeSaver, Minestuck.MOD_ID);
-		oreCost(Tags.Items.ORES_DIAMOND, Items.DIAMOND, 1, recipeSaver, Minestuck.MOD_ID);
+		oreCost(Tags.Items.ORES_COAL, Items.COAL, 3, recipeSaver, Minestuck.MOD_ID); //2.5 coal per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_COPPER, Items.RAW_COPPER, 8, recipeSaver, Minestuck.MOD_ID); //7.7 raw copper per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_IRON, Items.RAW_IRON, 3, recipeSaver, Minestuck.MOD_ID); //2.5 raw iron per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_GOLD, Items.RAW_GOLD, 3, recipeSaver, Minestuck.MOD_ID); //2.5 raw gold per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_REDSTONE, Items.REDSTONE, 6, recipeSaver, Minestuck.MOD_ID); //6 redstone dust per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_LAPIS, Items.LAPIS_LAZULI, 20, recipeSaver, Minestuck.MOD_ID); //20 lapis per ore on avg with fortune 3
+		oreCost(Tags.Items.ORES_DIAMOND, Items.DIAMOND, 3, recipeSaver, Minestuck.MOD_ID); //2.2 diamonds per ore on avg with fortune 3
 		oreCost(Tags.Items.ORES_EMERALD, Items.EMERALD, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(Tags.Items.ORES_QUARTZ, Items.QUARTZ, 2, recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.COAL).grist(TAR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -61,7 +61,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.RAW_IRON).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.RAW_GOLD).grist(GOLD, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.CHARCOAL).grist(TAR, 6).grist(AMBER, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.COPPER_INGOT).grist(RUST, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.COPPER_INGOT).grist(SHALE, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.GOLD_INGOT).grist(GOLD, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.IRON_INGOT).grist(RUST, 9).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.REDSTONE).grist(GARNET, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -757,7 +757,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		WildcardGristCostBuilder.of(MSItems.CAPTCHA_CARD.get()).cost(1).build(recipeSaver);
 		
 		
-		GristCostRecipeBuilder.of(ExtraForgeTags.Items.COPPER_INGOTS).grist(RUST, 16).grist(COBALT, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ExtraForgeTags.Items.TIN_INGOTS).grist(RUST, 12).grist(CAULK, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ExtraForgeTags.Items.SILVER_INGOTS).grist(RUST, 12).grist(MERCURY, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ExtraForgeTags.Items.LEAD_INGOTS).grist(RUST, 12).grist(COBALT, 4).grist(SHALE, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -768,7 +767,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(ExtraForgeTags.Items.ARDITE_INGOTS).grist(GARNET, 12).grist(SULFUR, 8).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(ExtraForgeTags.Items.RED_ALLOY_INGOTS).grist(RUST, 18).grist(GARNET, 32).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
-		oreCost(ExtraForgeTags.Items.COPPER_ORES, ExtraForgeTags.Items.COPPER_INGOTS, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(ExtraForgeTags.Items.TIN_ORES, ExtraForgeTags.Items.TIN_INGOTS, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(ExtraForgeTags.Items.SILVER_ORES, ExtraForgeTags.Items.SILVER_INGOTS, 1, recipeSaver, Minestuck.MOD_ID);
 		oreCost(ExtraForgeTags.Items.LEAD_ORES, ExtraForgeTags.Items.LEAD_INGOTS, 1, recipeSaver, Minestuck.MOD_ID);

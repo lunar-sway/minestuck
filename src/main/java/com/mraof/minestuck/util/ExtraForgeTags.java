@@ -27,7 +27,6 @@ public class ExtraForgeTags
 	public static class Items
 	{
 		public static final TagKey<Item> URANIUM_ORES = tag("ores/uranium");
-		public static final TagKey<Item> COPPER_ORES = tag("ores/copper");
 		public static final TagKey<Item> TIN_ORES = tag("ores/tin");
 		public static final TagKey<Item> SILVER_ORES = tag("ores/silver");
 		public static final TagKey<Item> LEAD_ORES = tag("ores/lead");
@@ -38,7 +37,6 @@ public class ExtraForgeTags
 		public static final TagKey<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		public static final TagKey<Item> URANIUM_CHUNKS = tag("chunks/uranium");
 		public static final TagKey<Item> TERRACOTTA = tag("terracotta");
-		public static final TagKey<Item> COPPER_INGOTS = tag("ingots/copper");
 		public static final TagKey<Item> TIN_INGOTS = tag("ingots/tin");
 		public static final TagKey<Item> SILVER_INGOTS = tag("ingots/silver");
 		public static final TagKey<Item> LEAD_INGOTS = tag("ingots/lead");

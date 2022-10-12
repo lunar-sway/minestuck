@@ -8,5 +8,6 @@
   },
   "sources": [
     "minecraft:raw_iron"
-  ]
+  ],
+  "multiplier": 3.0
 }

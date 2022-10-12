@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ink_sac"
+  },
+  "input2": {
+    "item": "minecraft:stone_slab"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:deepslate_tile_slab"
+  }
+}

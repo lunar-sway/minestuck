@@ -8,5 +8,6 @@
   },
   "sources": [
     "minecraft:raw_copper"
-  ]
+  ],
+  "multiplier": 8.0
 }

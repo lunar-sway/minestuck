@@ -1,5 +1,5 @@
 {
-  "type": "minestuck:grist_cost",
+  "type": "minestuck:container_grist_cost",
   "ingredient": {
     "item": "minecraft:powder_snow_bucket"
   },

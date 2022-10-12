@@ -8,5 +8,6 @@
   },
   "sources": [
     "minecraft:raw_gold"
-  ]
+  ],
+  "multiplier": 3.0
 }

@@ -167,7 +167,6 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.LIGHTNING_ROD).input(Items.REDSTONE).and().input(Items.COPPER_INGOT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DRIPSTONE_BLOCK).input(Items.STONE).and().input(Items.BIG_DRIPLEAF).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.POWDER_SNOW_BUCKET).input(Items.ANVIL).or().input(Items.ICE).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.ROOTED_DIRT).input(Items.DIRT).and().input(Items.JUNGLE_SAPLING).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SMOOTH_BASALT).input(Items.INK_SAC).or().input(Items.BASALT).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.TINTED_GLASS).input(Items.INK_SAC).or().input(Items.FERMENTED_SPIDER_EYE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.TUFF).input(Items.FLINT_AND_STEEL).or().input(Items.BIRCH_WOOD).buildFor(consumer, Minestuck.MOD_ID);
