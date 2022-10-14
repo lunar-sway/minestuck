@@ -117,6 +117,8 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLOOMING_CACTUS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.PETRIFIED_GRASS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.PETRIFIED_POPPY.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.ATTACHED_STRAWBERRY_STEM.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.STRAWBERRY_STEM.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TALL_END_GRASS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GLOWFLOWER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS.get(), RenderType.translucent());

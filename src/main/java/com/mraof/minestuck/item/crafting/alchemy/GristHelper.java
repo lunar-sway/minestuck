@@ -15,6 +15,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -29,25 +31,10 @@ public class GristHelper
 	 */
 	public static GristType getPrimaryGrist(Random random)
 	{
-		float totalWeight = 0;
-		List<GristType> typeList = new ArrayList<>();
-		for(GristType type : GristTypes.values())
-		{
-			if(type.isUnderlingType() && type.isInCategory(GristType.SpawnCategory.ANY))
-			{
-				typeList.add(type);
-				totalWeight += type.getRarity();
-			}
-		}
+		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
+				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
 		
-		float weight = random.nextFloat() * totalWeight;
-		for(GristType type : typeList)
-		{
-			weight -= type.getRarity();
-			if(weight < 0)
-				return type;
-		}
-		throw new IllegalStateException("Should never get here.");
+		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();
 	}
 	
 	/**
