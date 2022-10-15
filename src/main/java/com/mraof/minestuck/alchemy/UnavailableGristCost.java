@@ -25,7 +25,7 @@ public class UnavailableGristCost extends GristCostRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.UNAVAILABLE_GRIST_COST;
+		return MSRecipeTypes.UNAVAILABLE_GRIST_COST.get();
 	}
 	
 	public static class Serializer extends AbstractSerializer<UnavailableGristCost>

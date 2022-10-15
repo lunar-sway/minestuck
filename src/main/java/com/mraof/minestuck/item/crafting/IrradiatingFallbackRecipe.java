@@ -56,13 +56,11 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.IRRADIATING_FALLBACK;
+		return MSRecipeTypes.IRRADIATING_FALLBACK.get();
 	}
 	
 	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IrradiatingFallbackRecipe>
 	{
-		private static final ResourceLocation NAME = new ResourceLocation("minestuck", "irradiating_fallback");
-		
 		@Override
 		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{

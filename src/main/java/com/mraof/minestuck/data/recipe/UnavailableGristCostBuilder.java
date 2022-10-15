@@ -100,7 +100,7 @@ public class UnavailableGristCostBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.UNAVAILABLE_GRIST_COST;
+			return MSRecipeTypes.UNAVAILABLE_GRIST_COST.get();
 		}
 		
 		@Nullable

@@ -137,7 +137,7 @@ public class SourceGristCostBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.SOURCE_GRIST_COST;
+			return MSRecipeTypes.SOURCE_GRIST_COST.get();
 		}
 	}
 }

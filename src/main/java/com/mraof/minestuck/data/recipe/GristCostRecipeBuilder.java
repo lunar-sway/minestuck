@@ -120,7 +120,7 @@ public class GristCostRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.GRIST_COST;
+			return MSRecipeTypes.GRIST_COST.get();
 		}
 		
 		@Nullable

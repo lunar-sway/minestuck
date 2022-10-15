@@ -159,7 +159,7 @@ public class CombinationRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.COMBINATION;
+			return MSRecipeTypes.COMBINATION.get();
 		}
 		
 		@Nullable

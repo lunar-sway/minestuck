@@ -95,7 +95,7 @@ public class ContainerGristCostBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.CONTAINER_GRIST_COST;
+			return MSRecipeTypes.CONTAINER_GRIST_COST.get();
 		}
 	}
 }

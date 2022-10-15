@@ -45,7 +45,7 @@ public class WildcardGristCost extends GristCostRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.WILDCARD_GRIST_COST;
+		return MSRecipeTypes.WILDCARD_GRIST_COST.get();
 	}
 	
 	public static class Serializer extends AbstractSerializer<WildcardGristCost>

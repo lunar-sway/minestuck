@@ -71,7 +71,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.COMBINATION;
+		return MSRecipeTypes.COMBINATION.get();
 	}
 	
 	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CombinationRecipe>

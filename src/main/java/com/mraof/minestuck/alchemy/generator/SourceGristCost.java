@@ -60,7 +60,7 @@ public class SourceGristCost extends GeneratedGristCost
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.SOURCE_GRIST_COST;
+		return MSRecipeTypes.SOURCE_GRIST_COST.get();
 	}
 	
 	public static class Serializer extends GeneratedCostSerializer<SourceGristCost>

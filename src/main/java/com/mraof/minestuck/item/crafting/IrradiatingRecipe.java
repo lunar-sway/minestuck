@@ -39,7 +39,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.IRRADIATING;
+		return MSRecipeTypes.IRRADIATING.get();
 	}
 	
 	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)

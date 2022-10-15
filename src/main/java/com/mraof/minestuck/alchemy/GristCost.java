@@ -38,7 +38,7 @@ public class GristCost extends GristCostRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.GRIST_COST;
+		return MSRecipeTypes.GRIST_COST.get();
 	}
 	
 	public static class Serializer extends AbstractSerializer<GristCost>

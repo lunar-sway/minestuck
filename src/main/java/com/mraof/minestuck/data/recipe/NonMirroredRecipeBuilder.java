@@ -59,7 +59,7 @@ public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.NON_MIRRORED;
+			return MSRecipeTypes.NON_MIRRORED.get();
 		}
 		
 		@Nullable
