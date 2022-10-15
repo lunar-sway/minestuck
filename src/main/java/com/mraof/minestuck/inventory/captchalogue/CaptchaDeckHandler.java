@@ -51,13 +51,13 @@ public class CaptchaDeckHandler
 	
 	public static Modus createClientModus(ResourceLocation name)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
 		return type != null ? type.createClientSide() : null;
 	}
 	
 	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
 		return type != null ? type.createServerSide(savedData) : null;
 	}
 	

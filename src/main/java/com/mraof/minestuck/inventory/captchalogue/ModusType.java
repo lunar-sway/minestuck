@@ -7,7 +7,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Objects;
 
-public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
+public final class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 {
 	private final ModusFactory<T> factory;
 	private final Item modusItem;

@@ -77,7 +77,7 @@ public final class StartingModusManager extends SimplePreparableReloadListener<L
 		if(name == null)
 			LOGGER.error("Unable to parse starting modus type {} as a resource location!", key);
 		
-		ModusType<?> modusType = ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> modusType = ModusTypes.REGISTRY.get().getValue(name);
 		
 		if(modusType == null)
 			LOGGER.error("Unable to get the modus type '{}' from the registry", name);

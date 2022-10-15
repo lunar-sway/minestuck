@@ -15,6 +15,7 @@ import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.entry.TransportalizerBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.generator.recipe.InterpreterSerializers;
@@ -80,6 +81,7 @@ public class Minestuck
 		MSLootTables.CONDITION_REGISTER.register(eventBus);
 		MSLootTables.FUNCTION_REGISTER.register(eventBus);
 		MSLootTables.ENTRY_REGISTER.register(eventBus);
+		ModusTypes.REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
 		MSDensityFunctions.REGISTER.register(eventBus);

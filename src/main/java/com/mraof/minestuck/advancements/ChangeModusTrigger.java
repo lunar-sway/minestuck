@@ -23,7 +23,7 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 	@Override
 	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
+		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.get().getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
 		return new Instance(predicate, modusType);
 	}
 	

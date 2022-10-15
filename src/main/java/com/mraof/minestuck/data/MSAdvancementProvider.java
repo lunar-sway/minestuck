@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class MSAdvancementProvider implements DataProvider
 {
@@ -90,9 +91,9 @@ public class MSAdvancementProvider implements DataProvider
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
 	{
-		for(ModusType<?> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
+		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
 		{
-			builder = builder.addCriterion(type.getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.getItem()));
+			builder = builder.addCriterion(type.get().getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.get().getItem()));
 		}
 		return builder;
 	}
