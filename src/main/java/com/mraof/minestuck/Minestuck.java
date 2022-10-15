@@ -19,6 +19,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.generator.recipe.InterpreterSerializers;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -76,6 +77,9 @@ public class Minestuck
 		InterpreterSerializers.REGISTER.register(eventBus);
 		MSRecipeTypes.RECIPE_TYPE_REGISTER.register(eventBus);
 		MSRecipeTypes.SERIALIZER_REGISTER.register(eventBus);
+		MSLootTables.CONDITION_REGISTER.register(eventBus);
+		MSLootTables.FUNCTION_REGISTER.register(eventBus);
+		MSLootTables.ENTRY_REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
 		MSDensityFunctions.REGISTER.register(eventBus);
