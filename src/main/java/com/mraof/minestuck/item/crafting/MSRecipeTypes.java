@@ -6,6 +6,8 @@ import com.mraof.minestuck.alchemy.generator.ContainerGristCost;
 import com.mraof.minestuck.alchemy.generator.recipe.RecipeGeneratedGristCost;
 import com.mraof.minestuck.alchemy.generator.SourceGristCost;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import net.minecraft.core.Registry;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleCookingSerializer;
@@ -17,9 +19,23 @@ import net.minecraftforge.registries.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSRecipeTypes
 {
-	public static RecipeType<IrradiatingRecipe> IRRADIATING_TYPE;
-	public static RecipeType<GristCostRecipe> GRIST_COST_TYPE;
-	public static RecipeType<AbstractCombinationRecipe> COMBINATION_TYPE;
+	public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTER = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, Minestuck.MOD_ID);
+	
+	public static final RegistryObject<RecipeType<IrradiatingRecipe>> IRRADIATING_TYPE = recipeType("irradiating");
+	public static final RegistryObject<RecipeType<GristCostRecipe>> GRIST_COST_TYPE = recipeType("grist_cost");
+	public static final RegistryObject<RecipeType<AbstractCombinationRecipe>> COMBINATION_TYPE = recipeType("combination");
+	
+	private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> recipeType(String name)
+	{
+		return RECIPE_TYPE_REGISTER.register(name, () -> new RecipeType<>()
+		{
+			@Override
+			public String toString()
+			{
+				return "minestuck:" + name;
+			}
+		});
+	}
 	
 	public static final DeferredRegister<RecipeSerializer<?>> SERIALIZER_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, Minestuck.MOD_ID);
 	
@@ -40,10 +56,6 @@ public class MSRecipeTypes
 	@SubscribeEvent
 	public static void registerSerializers(final RegistryEvent.Register<RecipeSerializer<?>> event)
 	{
-		IRRADIATING_TYPE = RecipeType.register(Minestuck.MOD_ID+":irradiating");
-		GRIST_COST_TYPE = RecipeType.register(Minestuck.MOD_ID+":grist_cost");
-		COMBINATION_TYPE = RecipeType.register(Minestuck.MOD_ID+":combination");
-		
 		MSLootTables.registerLootSerializers();	//Needs to be called somewhere, preferably during a registry event, and this is close enough
 	}
 }

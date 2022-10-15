@@ -40,7 +40,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
 	{
-		return recipeManager.getRecipesFor(MSRecipeTypes.GRIST_COST_TYPE, new SimpleContainer(input), level).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+		return recipeManager.getRecipesFor(MSRecipeTypes.GRIST_COST_TYPE.get(), new SimpleContainer(input), level).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
 	public final ResourceLocation id;
@@ -100,7 +100,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	@Override
 	public RecipeType<?> getType()
 	{
-		return MSRecipeTypes.GRIST_COST_TYPE;
+		return MSRecipeTypes.GRIST_COST_TYPE.get();
 	}
 	
 	public int getPriority()

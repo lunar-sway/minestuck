@@ -20,7 +20,7 @@ import java.util.List;
 public class CombinationRecipe extends AbstractCombinationRecipe
 {
 	public static ItemStack findResult(ItemCombiner combiner, Level level) {
-		return level.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE, combiner, level)
+		return level.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE.get(), combiner, level)
 				.map(recipe -> recipe.assemble(combiner)).orElse(ItemStack.EMPTY);
 	}
 	

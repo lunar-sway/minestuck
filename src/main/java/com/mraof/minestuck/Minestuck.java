@@ -74,6 +74,7 @@ public class Minestuck
 		LandTypes.TERRAIN_REGISTER.register(eventBus);
 		LandTypes.TITLE_REGISTER.register(eventBus);
 		InterpreterSerializers.REGISTER.register(eventBus);
+		MSRecipeTypes.RECIPE_TYPE_REGISTER.register(eventBus);
 		MSRecipeTypes.SERIALIZER_REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);

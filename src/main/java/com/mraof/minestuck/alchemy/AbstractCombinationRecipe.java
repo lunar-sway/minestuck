@@ -33,7 +33,7 @@ public abstract class AbstractCombinationRecipe implements Recipe<ItemCombiner>
 	@Override
 	public RecipeType<?> getType()
 	{
-		return MSRecipeTypes.COMBINATION_TYPE;
+		return MSRecipeTypes.COMBINATION_TYPE.get();
 	}
 	
 	public List<JeiCombination> getJeiCombinations()

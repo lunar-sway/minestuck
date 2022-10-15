@@ -112,7 +112,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 			return ItemStack.EMPTY;
 		
 		//List of all recipes that match to the current input
-		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE, recipeInventory, level).stream();
+		Stream<IrradiatingRecipe> stream = level.getRecipeManager().getRecipesFor(MSRecipeTypes.IRRADIATING_TYPE.get(), recipeInventory, level).stream();
 		//Sort the stream to get non-fallback recipes first, and fallback recipes second
 		stream = stream.sorted(Comparator.comparingInt(o -> (o.isFallback() ? 1 : 0)));
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
