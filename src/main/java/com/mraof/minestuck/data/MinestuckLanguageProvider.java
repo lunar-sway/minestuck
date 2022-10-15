@@ -1,6 +1,6 @@
 package com.mraof.minestuck.data;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;

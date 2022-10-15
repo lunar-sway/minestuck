@@ -6,7 +6,7 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;

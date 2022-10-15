@@ -1,7 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;

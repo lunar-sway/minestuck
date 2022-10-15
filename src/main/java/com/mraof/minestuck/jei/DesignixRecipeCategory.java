@@ -1,7 +1,7 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

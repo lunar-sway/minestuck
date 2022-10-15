@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
