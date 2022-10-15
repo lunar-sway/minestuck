@@ -36,7 +36,7 @@ public final class UnderlingController
 	public static WeightedRandomList<MobSpawnSettings.SpawnerData> getUnderlingList(BlockPos pos)
 	{
 		
-		BlockPos spawn = new BlockPos(0, 0, 0);//world.getSpawnPoint(); TODO
+		BlockPos spawn = new BlockPos(0, 0, 0);
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distSqr(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		

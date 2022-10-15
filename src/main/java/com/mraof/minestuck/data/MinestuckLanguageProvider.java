@@ -173,10 +173,4 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("death.attack." + key.getMsgId() + ".player", value);
 	}
-	/*protected void defaultLandBiomes(LandBiomeSet biomes)
-	{
-		addBiome(biomes.NORMAL, "Land");
-		addBiome(biomes.ROUGH, "Rough Land");
-		addBiome(biomes.OCEAN, "Ocean Land");
-	}*/
 }

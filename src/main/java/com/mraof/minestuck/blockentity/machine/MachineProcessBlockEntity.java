@@ -56,9 +56,7 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 		this.progress = nbt.getInt("progress");
 		if(getRunType() == RunType.BUTTON_OVERRIDE)
 			this.overrideStop = nbt.getBoolean("overrideStop");
-		if(nbt.contains("inventory", Tag.TAG_COMPOUND))
-			itemHandler.deserializeNBT(nbt.getCompound("inventory"));
-		else itemHandler.deserializeNBT(nbt);	//TODO reads save format from before the item handler. Remove when we don't care about backwards-compability to early mc1.15 versions
+		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 	
 	@Override

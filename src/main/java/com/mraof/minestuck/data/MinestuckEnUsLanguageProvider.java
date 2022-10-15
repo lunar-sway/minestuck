@@ -1224,13 +1224,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
-		/*TODO
-		addBiome(MSBiomes.SKAIA, "Skaia");
-		defaultLandBiomes(MSBiomes.DEFAULT_LAND);
-		defaultLandBiomes(MSBiomes.HIGH_HUMID_LAND);
-		defaultLandBiomes(MSBiomes.NO_RAIN_LAND);
-		defaultLandBiomes(MSBiomes.SNOW_LAND);
-		*/
+		
 		addEntityType(MSEntityTypes.FROG, "Frog");
 		addEntityType(MSEntityTypes.SALAMANDER, "Salamander");
 		addEntityTypeExtra(MSEntityTypes.SALAMANDER, "plural", "Salamanders");
