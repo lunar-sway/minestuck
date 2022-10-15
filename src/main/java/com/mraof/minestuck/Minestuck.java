@@ -17,6 +17,7 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.item.crafting.alchemy.generator.InterpreterSerializers;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -71,6 +72,7 @@ public class Minestuck
 		MSEffects.REGISTER.register(eventBus);
 		LandTypes.TERRAIN_REGISTER.register(eventBus);
 		LandTypes.TITLE_REGISTER.register(eventBus);
+		InterpreterSerializers.REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
 		MSDensityFunctions.REGISTER.register(eventBus);

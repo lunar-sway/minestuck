@@ -160,7 +160,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		Source source = deserializeSource(obj);
 		
 		ResourceLocation name = new ResourceLocation(GsonHelper.getAsString(obj, "interpreter_type"));
-		InterpreterSerializer<?> serializer = InterpreterSerializer.REGISTRY.getValue(name);
+		InterpreterSerializer<?> serializer = InterpreterSerializers.REGISTRY.get().getValue(name);
 		
 		if(serializer == null)
 		{

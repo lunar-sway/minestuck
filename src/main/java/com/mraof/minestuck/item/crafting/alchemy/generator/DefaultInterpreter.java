@@ -7,7 +7,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.registries.ObjectHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,9 +14,6 @@ import java.util.List;
 public class DefaultInterpreter implements RecipeInterpreter
 {
 	public static final DefaultInterpreter INSTANCE = new DefaultInterpreter();
-	
-	@ObjectHolder("minestuck:default")
-	public static final InterpreterSerializer<DefaultInterpreter> SERIALIZER = null;
 	
 	//TODO interpreter (perhaps setting) that makes the interpreter not remove container cost for ingredient
 	
@@ -51,7 +47,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	@Override
 	public InterpreterSerializer<?> getSerializer()
 	{
-		return SERIALIZER;
+		return InterpreterSerializers.DEFAULT.get();
 	}
 	
 	public static class Serializer extends InterpreterSerializer<DefaultInterpreter>

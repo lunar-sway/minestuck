@@ -8,7 +8,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.UpgradeRecipe;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ObjectHolder;
 
 import java.lang.reflect.Field;
 
@@ -18,10 +17,7 @@ public class SmithingInterpreter extends DefaultInterpreter
 
 	private static final Field baseField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44518_");
 	private static final Field additionField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44519_");
-
-	@ObjectHolder("minestuck:smithing")
-	public static final InterpreterSerializer<SmithingInterpreter> SERIALIZER = null;
-
+	
 	@Override
 	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
@@ -55,7 +51,7 @@ public class SmithingInterpreter extends DefaultInterpreter
 	@Override
 	public InterpreterSerializer<?> getSerializer()
 	{
-		return SERIALIZER;
+		return InterpreterSerializers.SMITHING.get();
 	}
 
 	public static class Serializer extends InterpreterSerializer<SmithingInterpreter>

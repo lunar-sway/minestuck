@@ -6,14 +6,10 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.registries.ObjectHolder;
 
 public class CookingCostInterpreter extends DefaultInterpreter
 {
 	private static final int STANDARD_COOKING_TIME = 200;
-	
-	@ObjectHolder("minestuck:cooking")
-	public static final InterpreterSerializer<CookingCostInterpreter> SERIALIZER = null;
 	
 	private final GristSet fuelCost;
 	
@@ -39,7 +35,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	@Override
 	public InterpreterSerializer<?> getSerializer()
 	{
-		return SERIALIZER;
+		return InterpreterSerializers.COOKING.get();
 	}
 	
 	public static class Serializer extends InterpreterSerializer<CookingCostInterpreter>
