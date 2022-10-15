@@ -23,7 +23,7 @@ public class MSLootTables
 	public static final ResourceLocation KUNDLER_SUPRISES = new ResourceLocation("minestuck", "gameplay/kundler_suprises");
 	
 	public static final DeferredRegister<LootItemConditionType> CONDITION_REGISTER = DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, Minestuck.MOD_ID);
-	public static final RegistryObject<LootItemConditionType> LAND_TYPE_CONDITION = CONDITION_REGISTER.register("land_aspect", () -> new LootItemConditionType(new LandTypeLootCondition.Serializer()));
+	public static final RegistryObject<LootItemConditionType> LAND_TYPE_CONDITION = CONDITION_REGISTER.register("land_type", () -> new LootItemConditionType(new LandTypeLootCondition.Serializer()));
 	public static final RegistryObject<LootItemConditionType> CONSORT_CONDITION = CONDITION_REGISTER.register("consort", () -> new LootItemConditionType(new ConsortLootCondition.Serializer()));
 	
 	public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, Minestuck.MOD_ID);
