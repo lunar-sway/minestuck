@@ -1,6 +1,5 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.google.common.collect.Maps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.resources.ResourceLocation;
@@ -8,19 +7,19 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.NewRegistryEvent;
+import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.RegistryBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Map;
 
 @ObjectHolder(Minestuck.MOD_ID)
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class ModusTypes
 {
-	private static final ResourceLocation ITEM_TO_MODUS = new ResourceLocation(Minestuck.MOD_ID, "item_to_modus_map");
 	public static IForgeRegistry<ModusType<?>> REGISTRY;
-	private static Map<Item, ModusType<?>> itemToModusMap;
 	
 	public static final ModusType<StackModus> STACK = getNull();
 	public static final ModusType<QueueModus> QUEUE = getNull();
@@ -36,9 +35,10 @@ public class ModusTypes
 		return null;
 	}
 	
+	@Nullable
 	public static ModusType<?> getTypeFromItem(Item item)
 	{
-		return itemToModusMap.get(item);
+		return REGISTRY.getValues().stream().filter(modusType -> modusType.getItem() == item).findAny().orElse(null);
 	}
 	
 	@SubscribeEvent
@@ -47,12 +47,8 @@ public class ModusTypes
 	{
 		event.create(new RegistryBuilder<ModusType<?>>()
 						.setName(new ResourceLocation(Minestuck.MOD_ID, "modus_type"))
-						.setType((Class<ModusType<?>>) (Class<?>) ModusType.class)
-						.addCallback(ModusCallbacks.INSTANCE),
-				registry -> {
-					REGISTRY = registry;
-					itemToModusMap = REGISTRY.getSlaveMap(ITEM_TO_MODUS, Map.class);
-				});
+						.setType((Class<ModusType<?>>) (Class<?>) ModusType.class),
+				registry -> REGISTRY = registry);
 	}
 	
 	@SubscribeEvent
@@ -64,39 +60,5 @@ public class ModusTypes
 		event.getRegistry().register(new ModusType<>(TreeModus::new, MSItems.TREE_MODUS_CARD.get()).setRegistryName("tree"));
 		event.getRegistry().register(new ModusType<>(HashMapModus::new, MSItems.HASHMAP_MODUS_CARD.get()).setRegistryName("hash_map"));
 		event.getRegistry().register(new ModusType<>(SetModus::new, MSItems.SET_MODUS_CARD.get()).setRegistryName("set"));
-	}
-	
-	private static class ModusCallbacks implements IForgeRegistry.AddCallback<ModusType<?>>, IForgeRegistry.ClearCallback<ModusType<?>>, IForgeRegistry.CreateCallback<ModusType<?>>
-	{
-		private static final ModusCallbacks INSTANCE = new ModusCallbacks();
-		
-		@Override
-		public void onAdd(IForgeRegistryInternal<ModusType<?>> owner, RegistryManager stage, int id, ModusType<?> obj, @Nullable ModusType<?> oldObj)
-		{
-			@SuppressWarnings("unchecked")
-			Map<Item, ModusType<?>> itemToModus = owner.getSlaveMap(ITEM_TO_MODUS, Map.class);
-			
-			if(oldObj != null && oldObj.getItem() != null)
-			{
-				itemToModus.remove(oldObj.getItem());
-			}
-			
-			if(obj.getItem() != null)
-			{
-				itemToModus.put(obj.getItem(), obj);
-			}
-		}
-		
-		@Override
-		public void onClear(IForgeRegistryInternal<ModusType<?>> owner, RegistryManager stage)
-		{
-			owner.getSlaveMap(ITEM_TO_MODUS, Map.class).clear();
-		}
-		
-		@Override
-		public void onCreate(IForgeRegistryInternal<ModusType<?>> owner, RegistryManager stage)
-		{
-			owner.setSlaveMap(ITEM_TO_MODUS, Maps.newHashMap());
-		}
 	}
 }
