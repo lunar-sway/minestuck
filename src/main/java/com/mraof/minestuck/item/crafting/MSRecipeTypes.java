@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.crafting;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.alchemy.generator.ContainerGristCost;
-import com.mraof.minestuck.alchemy.generator.RecipeGeneratedGristCost;
+import com.mraof.minestuck.alchemy.generator.recipe.RecipeGeneratedGristCost;
 import com.mraof.minestuck.alchemy.generator.SourceGristCost;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.world.item.crafting.RecipeSerializer;

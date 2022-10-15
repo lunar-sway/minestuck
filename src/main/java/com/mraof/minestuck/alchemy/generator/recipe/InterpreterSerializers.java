@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.generator.recipe;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;

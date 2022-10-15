@@ -1,6 +1,7 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.generator.recipe;
 
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 

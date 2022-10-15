@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.generator.recipe;
 
 import com.google.gson.JsonElement;
 import net.minecraftforge.registries.ForgeRegistryEntry;
