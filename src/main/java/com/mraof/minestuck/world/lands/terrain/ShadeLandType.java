@@ -31,7 +31,7 @@ public class ShadeLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.SALAMANDER).names(SHADE)
 				.skylight(0F).fogColor(0.16, 0.38, 0.54)
-				.category(Biome.BiomeCategory.MUSHROOM).music(() -> MSSoundEvents.MUSIC_SHADE));
+				.category(Biome.BiomeCategory.MUSHROOM).music(MSSoundEvents.MUSIC_SHADE));
 	}
 	
 	@Override

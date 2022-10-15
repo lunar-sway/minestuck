@@ -46,17 +46,17 @@ public class ImpEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_IMP_AMBIENT;
+		return MSSoundEvents.ENTITY_IMP_AMBIENT.get();
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_IMP_HURT;
+		return MSSoundEvents.ENTITY_IMP_HURT.get();
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_IMP_DEATH;
+		return MSSoundEvents.ENTITY_IMP_DEATH.get();
 	}
 	
 	@Override

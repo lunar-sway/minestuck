@@ -40,19 +40,19 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_AMBIENT;
+		return MSSoundEvents.ENTITY_LICH_AMBIENT.get();
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_LICH_HURT;
+		return MSSoundEvents.ENTITY_LICH_HURT.get();
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_DEATH;
+		return MSSoundEvents.ENTITY_LICH_DEATH.get();
 	}
 	
 	@Override

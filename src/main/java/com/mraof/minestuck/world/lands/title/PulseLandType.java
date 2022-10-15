@@ -77,6 +77,6 @@ public class PulseLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_PULSE;
+		return MSSoundEvents.MUSIC_PULSE.get();
 	}
 }

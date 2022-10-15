@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.weapon.projectiles;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.ConsumableProjectileEntity;
-import net.minecraft.sounds.SoundEvents;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +31,7 @@ public class ConsumableProjectileWeaponItem extends Item implements ProjectileDa
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 0.8F, 1.5F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 0.8F, 1.5F);
 		
 		if(!level.isClientSide)
 		{

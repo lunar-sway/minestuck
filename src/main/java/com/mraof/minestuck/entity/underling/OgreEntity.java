@@ -41,19 +41,19 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_OGRE_AMBIENT;
+		return MSSoundEvents.ENTITY_OGRE_AMBIENT.get();
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_OGRE_DEATH;
+		return MSSoundEvents.ENTITY_OGRE_DEATH.get();
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_OGRE_HURT;
+		return MSSoundEvents.ENTITY_OGRE_HURT.get();
 	}
 	
 	@Override

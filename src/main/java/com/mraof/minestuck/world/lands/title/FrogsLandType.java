@@ -69,6 +69,6 @@ public class FrogsLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_FROGS;
+		return MSSoundEvents.MUSIC_FROGS.get();
 	}
 }
