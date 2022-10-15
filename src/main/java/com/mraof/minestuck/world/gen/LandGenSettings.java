@@ -81,7 +81,8 @@ public final class LandGenSettings
 	
 	Holder<NoiseGeneratorSettings> createDimensionSettings(Registry<DensityFunction> densityFunctions)
 	{
-		NoiseSettings noiseSettings = NoiseSettings.create(0, 256, new NoiseSamplingSettings(1, 1, 80, 160),
+		//includes the y-range at which generation occurs, with the values used here set in resources/data/minestuck/dimension_type/land.json
+		NoiseSettings noiseSettings = NoiseSettings.create(-64, 384, new NoiseSamplingSettings(1, 1, 80, 160),
 				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
 				this.createTerrainShaper());
 		
