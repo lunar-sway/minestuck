@@ -58,7 +58,7 @@ public class RockLandType extends TerrainLandType
 	{
 		return new RockLandType(Variant.PETRIFICATION, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
-				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_PETRIFICATION::get));
+				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_PETRIFICATION));
 	}
 	
 	private RockLandType(Variant variation, Builder builder)

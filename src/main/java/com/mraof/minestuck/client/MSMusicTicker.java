@@ -89,7 +89,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 	{
 		if(rand.nextInt(5) == 0)
 		{
-			return MSSoundEvents.MUSIC_UNIVERSAL.get(); //TODO once there is more questing infrastructure to keep track of where a player is and what they are doing, make these tracks play more conditionally
+			return MSSoundEvents.MUSIC_UNIVERSAL.get();
 		}
 		
 		if(rand.nextBoolean())
