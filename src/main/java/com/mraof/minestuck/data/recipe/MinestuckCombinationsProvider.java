@@ -171,6 +171,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.CARTOGRAPHY_TABLE).input(Items.CRAFTING_TABLE).or().input(Items.MAP).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.COBWEB).input(Items.SLIME_BLOCK).or().input(Items.STRING).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.TORCH).input(Items.REDSTONE_TORCH).or().input(ItemTags.COALS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.AMETHYST_SHARD).input(Items.COAL).or().input(Items.PISTON).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.GLOW_INK_SAC).input(Items.LEATHER).or().input(Items.GLOWSTONE).buildFor(consumer, Minestuck.MOD_ID);
 		//Plants
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.WHEAT_SEEDS).buildFor(consumer, Minestuck.MOD_ID);
@@ -182,6 +184,17 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.VINE).input(ItemTags.LEAVES).and().input(Items.LADDER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.ROSE_BUSH).input(Items.LARGE_FERN).or().input(Items.POPPY).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SUGAR_CANE).input(Items.BAMBOO).and().input(Items.SUGAR).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.AZALEA).input(Items.SPYGLASS).or().input(Items.DANDELION).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.AZALEA_LEAVES).input(Items.AZALEA).and().input(Items.OAK_LEAVES).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.BIG_DRIPLEAF).input(Items.SPYGLASS).or().input(Items.LILY_PAD).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SMALL_DRIPLEAF).input(Items.SPYGLASS).and().input(Items.LILY_PAD).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.MOSS_BLOCK).input(Items.GRASS_BLOCK).or().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.ROOTED_DIRT).input(Items.VINE).and().input(Items.DIRT).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.MOSS_CARPET).input(Items.GRASS_BLOCK).and().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SPORE_BLOSSOM).input(Items.LILY_PAD).or().input(Items.BONE_MEAL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.GLOW_BERRIES).input(Items.GLOWSTONE_DUST).and().input(Items.SWEET_BERRIES).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.GLOW_LICHEN).input(Items.GLOWSTONE_DUST).or().input(Items.VINE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.HANGING_ROOTS).input(Items.VINE).or().input(Items.DEAD_BUSH).buildFor(consumer, Minestuck.MOD_ID);
 		//Transport
 		CombinationRecipeBuilder.of(Items.MINECART).input(ItemTags.BOATS).or().input(Items.RAIL).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CHEST_MINECART).input(Items.MINECART).and().input(Items.CHEST).buildFor(consumer, Minestuck.MOD_ID);
