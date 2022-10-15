@@ -4,13 +4,13 @@ import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
+import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,15 +20,18 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 public class AreaEffectBlockEntity extends BlockEntity
 {
-	//TODO deserialize/reserialize function + triggering of all summoners
-	
-	private MobEffect effect;
+	@Nonnull
+	private MobEffect effect = MSEffects.CREATIVE_SHOCK.get();
 	private int effectAmplifier;
-	private BlockPos minAreaOffset;
-	private BlockPos maxAreaOffset;
-	private boolean needsTranslation = false;
+	@Nonnull
+	private BlockPos minAreaOffset = new BlockPos(-16, -16, -16);
+	@Nonnull
+	private BlockPos maxAreaOffset = new BlockPos(16, 16, 16);
 	
 	public AreaEffectBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -49,13 +52,13 @@ public class AreaEffectBlockEntity extends BlockEntity
 	
 	public void giveEntitiesEffect()
 	{
+		Objects.requireNonNull(this.level);
 		BlockPos bePos = getBlockPos();
 		Direction beFacing = getBlockState().getValue(AreaEffectBlock.FACING);
-		if(needsTranslation)
-			translateAbsoluteOffsetToDirectional(beFacing);
 		
-		BlockPos minAreaPos = bePos.relative(beFacing, minAreaOffset.getX()).relative(Direction.UP, minAreaOffset.getY()).relative(beFacing.getClockWise(), minAreaOffset.getZ());
-		BlockPos maxAreaPos = bePos.relative(beFacing, maxAreaOffset.getX()).relative(Direction.UP, maxAreaOffset.getY()).relative(beFacing.getClockWise(), maxAreaOffset.getZ());
+		
+		BlockPos minAreaPos = bePos.offset(minAreaOffset.rotate(MSRotationUtil.rotationBetween(Direction.EAST, beFacing)));
+		BlockPos maxAreaPos = bePos.offset(maxAreaOffset.rotate(MSRotationUtil.rotationBetween(Direction.EAST, beFacing)));
 		
 		if(getBlockState().getValue(AreaEffectBlock.ALL_MOBS))
 		{
@@ -88,14 +91,13 @@ public class AreaEffectBlockEntity extends BlockEntity
 	
 	public void setEffect(MobEffect effectIn, int effectAmplifierIn)
 	{
-		this.effect = effectIn;
+		this.effect = Objects.requireNonNull(effectIn);
 		this.effectAmplifier = effectAmplifierIn;
+		this.setChanged();
 	}
 	
 	public MobEffect getEffect()
 	{
-		if(effect == null)
-			effect = MSEffects.CREATIVE_SHOCK.get();
 		return this.effect;
 	}
 	
@@ -106,133 +108,39 @@ public class AreaEffectBlockEntity extends BlockEntity
 	
 	public void setMinAndMaxEffectPosOffset(BlockPos minAreaOffsetIn, BlockPos maxAreaOffsetIn)
 	{
-		this.minAreaOffset = minAreaOffsetIn;
-		this.maxAreaOffset = maxAreaOffsetIn;
+		Objects.requireNonNull(this.level);
+		minAreaOffset = clampMinPos(minAreaOffsetIn.getX(), minAreaOffsetIn.getY(), minAreaOffsetIn.getZ());
+		maxAreaOffset = clampMaxPos(maxAreaOffsetIn.getX(), maxAreaOffsetIn.getY(), maxAreaOffsetIn.getZ());
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 0);
 	}
 	
-	/**
-	 * sets the area offset pos values from absolute coordinates of the destination block pos, these values will need further modification before use as it does not factor in rotational properties
-	 */
-	private void setAbsoluteOffsetFromDestinationBlockPos(BlockPos minDestinationPosIn, BlockPos maxDestinationPosIn)
-	{
-		int minOffsetX = minDestinationPosIn.getX() - worldPosition.getX();
-		int minOffsetY = minDestinationPosIn.getY() - worldPosition.getY();
-		int minOffsetZ = minDestinationPosIn.getZ() - worldPosition.getZ();
-		
-		int maxOffsetX = maxDestinationPosIn.getX() - worldPosition.getX();
-		int maxOffsetY = maxDestinationPosIn.getY() - worldPosition.getY();
-		int maxOffsetZ = maxDestinationPosIn.getZ() - worldPosition.getZ();
-		
-		this.minAreaOffset = new BlockPos(minOffsetX, minOffsetY, minOffsetZ);
-		this.maxAreaOffset = new BlockPos(maxOffsetX, maxOffsetY, maxOffsetZ);
-		this.needsTranslation = true;
-	}
-	
-	/**
-	 * if the current offset values were set through the backwards compatability function setAbsoluteOffsetFromDestinationBlockPos, this utilizes the blockstate facing direction now that it can be loaded
-	 */
-	private void translateAbsoluteOffsetToDirectional(Direction stateFacing)
-	{
-		int minOffsetX = minAreaOffset.getX();
-		int minOffsetZ = minAreaOffset.getZ();
-		int maxOffsetX = maxAreaOffset.getX();
-		int maxOffsetZ = maxAreaOffset.getZ();
-		
-		int minOffsetModX = minOffsetX;
-		int minOffsetModZ = minOffsetZ;
-		int maxOffsetModX = maxOffsetX;
-		int maxOffsetModZ = maxOffsetZ;
-		
-		if(stateFacing == Direction.NORTH)
-		{
-			minOffsetModX = -minOffsetZ;
-			maxOffsetModX = -maxOffsetZ;
-			minOffsetModZ = minOffsetX;
-			maxOffsetModZ = maxOffsetX;
-		} else if(stateFacing == Direction.SOUTH) //Direction.EAST is ignored because it is already as desired
-		{
-			minOffsetModX = minOffsetZ;
-			maxOffsetModX = maxOffsetZ;
-			minOffsetModZ = -minOffsetX;
-			maxOffsetModZ = -maxOffsetX;
-		} else if(stateFacing == Direction.WEST)
-		{
-			minOffsetModX = -minOffsetX;
-			maxOffsetModX = -maxOffsetX;
-			minOffsetModZ = -minOffsetZ;
-			maxOffsetModZ = -maxOffsetZ;
-		}
-		
-		this.minAreaOffset = new BlockPos(minOffsetModX, minAreaOffset.getY(), minOffsetModZ);
-		this.maxAreaOffset = new BlockPos(maxOffsetModX, maxAreaOffset.getY(), maxOffsetModZ);
-		
-		this.needsTranslation = false;
-	}
-	
+	@Nonnull
 	public BlockPos getMinAreaOffset()
 	{
-		if(minAreaOffset == null)
-		{
-			minAreaOffset = new BlockPos(-16, -16, -16);
-		}
-		
-		minAreaOffset = parseMinBlockPos(this, minAreaOffset.getX(), minAreaOffset.getY(), minAreaOffset.getZ());
-		
 		return this.minAreaOffset;
 	}
 	
+	@Nonnull
 	public BlockPos getMaxAreaOffset()
 	{
-		if(maxAreaOffset == null)
-		{
-			maxAreaOffset = new BlockPos(16, 16, 16);
-		}
-		
-		maxAreaOffset = parseMaxBlockPos(this, maxAreaOffset.getX(), maxAreaOffset.getY(), maxAreaOffset.getZ());
-		
 		return this.maxAreaOffset;
 	}
 	
 	/**
 	 * Checks to make sure that the minimum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
 	 */
-	public static BlockPos parseMinBlockPos(AreaEffectBlockEntity be, int x, int y, int z)
+	public static BlockPos clampMinPos(int x, int y, int z)
 	{
-		BlockPos bePos = be.getBlockPos();
-		
-		x = Math.max(x, -64);
-		y = Math.max(y, -64);
-		z = Math.max(z, -64);
-		
-		y = Mth.clamp(y, -bePos.getY(), be.getLevel().getMaxBuildHeight() - bePos.getY());
-		
-		return new BlockPos(x, y, z);
+		return new BlockPos(Math.max(x, -64), Math.max(y, -64), Math.max(z, -64));
 	}
 	
 	/**
 	 * Checks to make sure that the maximum effect pos is within legal bounds, defaults to the intended boundary if it is too far away from the block
 	 */
-	public static BlockPos parseMaxBlockPos(AreaEffectBlockEntity be, int x, int y, int z)
+	public static BlockPos clampMaxPos(int x, int y, int z)
 	{
-		BlockPos bePos = be.getBlockPos();
-		
-		x = Math.min(x, 64);
-		y = Math.min(y, 64);
-		z = Math.min(z, 64);
-		
-		y = Mth.clamp(y, -bePos.getY(), be.getLevel().getMaxBuildHeight() - bePos.getY());
-		
-		return new BlockPos(x, y, z);
-	}
-	
-	@Override
-	public void onLoad()
-	{
-		super.onLoad();
-		getMinAreaOffset(); //used only to update the boundaries in case they go too far
-		getMaxAreaOffset();
+		return new BlockPos(Math.min(x, 64), Math.min(y, 64), Math.min(z, 64));
 	}
 	
 	@Override
@@ -242,33 +150,19 @@ public class AreaEffectBlockEntity extends BlockEntity
 		
 		MobEffect effectRead = MobEffect.byId(compound.getInt("effect"));
 		if(effectRead != null)
-		{
 			effect = effectRead;
-		}
 		
 		effectAmplifier = compound.getInt("effectAmplifier");
 		
 		int minAreaOffsetX = compound.getInt("minAreaOffsetX");
 		int minAreaOffsetY = compound.getInt("minAreaOffsetY");
 		int minAreaOffsetZ = compound.getInt("minAreaOffsetZ");
-		this.minAreaOffset = new BlockPos(minAreaOffsetX, minAreaOffsetY, minAreaOffsetZ);
+		this.minAreaOffset = clampMinPos(minAreaOffsetX, minAreaOffsetY, minAreaOffsetZ);
 		
 		int maxAreaOffsetX = compound.getInt("maxAreaOffsetX");
 		int maxAreaOffsetY = compound.getInt("maxAreaOffsetY");
 		int maxAreaOffsetZ = compound.getInt("maxAreaOffsetZ");
-		this.maxAreaOffset = new BlockPos(maxAreaOffsetX, maxAreaOffsetY, maxAreaOffsetZ);
-		
-		if(compound.contains("minEffectPosX") && compound.contains("minEffectPosY") && compound.contains("minEffectPosZ") &&
-				compound.contains("maxEffectPosX") && compound.contains("maxEffectPosY") && compound.contains("maxEffectPosZ")) //backwards-portability to the destination based method first utilized
-		{
-			int minDestX = compound.getInt("minEffectPosX");
-			int minDestY = compound.getInt("minEffectPosY");
-			int minDestZ = compound.getInt("minEffectPosZ");
-			int maxDestX = compound.getInt("maxEffectPosX");
-			int maxDestY = compound.getInt("maxEffectPosY");
-			int maxDestZ = compound.getInt("maxEffectPosZ");
-			setAbsoluteOffsetFromDestinationBlockPos(new BlockPos(minDestX, minDestY, minDestZ), new BlockPos(maxDestX, maxDestY, maxDestZ));
-		}
+		this.maxAreaOffset = clampMaxPos(maxAreaOffsetX, maxAreaOffsetY, maxAreaOffsetZ);
 	}
 	
 	@Override
@@ -278,9 +172,6 @@ public class AreaEffectBlockEntity extends BlockEntity
 		
 		compound.putInt("effect", MobEffect.getId(getEffect()));
 		compound.putInt("effectAmplifier", effectAmplifier);
-		
-		getMinAreaOffset();
-		getMaxAreaOffset();
 		
 		compound.putInt("minAreaOffsetX", minAreaOffset.getX());
 		compound.putInt("minAreaOffsetY", minAreaOffset.getY());
