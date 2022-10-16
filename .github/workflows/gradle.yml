@@ -38,5 +38,9 @@ jobs:
         arguments: :runData
     - name: View light_water
       run: cat src/main/generated/resources/data/minestuck/tags/fluids/light_water.json
+    - name: View git status result
+      run: git status
+    - name: View git status result  with --porcelain
+      run: git status --porcelain
     - name: Has File Changes
       uses: anhpham1509/check-uncommitted-changes-action@d6774588ba954c53b7f01b78505d087e1b1a32f1
