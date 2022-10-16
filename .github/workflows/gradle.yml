@@ -42,5 +42,11 @@ jobs:
       run: git status
     - name: View git status result  with --porcelain
       run: git status --porcelain
-    - name: Has File Changes
-      uses: anhpham1509/check-uncommitted-changes-action@d6774588ba954c53b7f01b78505d087e1b1a32f1
+    - name: Detect Changes
+      id: changes
+      uses: ch4rl3x/has-changes-action@3058353091eb04bf2c56876af42fd5a286b41faa
+    - name: Did runData create changes?
+      if: steps.changes.outputs.changed == 1
+      run: |
+        echo "Files were changed after running runData. Make sure to run and commit changes from runData!"
+        exit 1
