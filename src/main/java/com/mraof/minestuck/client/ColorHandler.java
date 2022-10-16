@@ -10,6 +10,7 @@ import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.StemBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,14 +34,16 @@ public class ColorHandler
     {
         BlockColors colors = event.getBlockColors();
         colors.register(new BlockColorCruxite(), MSBlocks.ALCHEMITER.TOTEM_PAD.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), MSBlocks.CRUXITE_DOWEL.get());
-        colors.register((state, worldIn, pos, tintIndex) ->
-        {
-            int age = state.getValue(StemBlock.AGE);
-            int red = age * 32;
-            int green = 255 - age * 8;
-            int blue = age * 4;
-            return red << 16 | green << 8 | blue;
-        }, MSBlocks.STRAWBERRY_STEM.get());
+        colors.register((state, worldIn, pos, tintIndex) -> stemColor(state.getValue(StemBlock.AGE)), MSBlocks.STRAWBERRY_STEM.get());
+        colors.register((state, worldIn, pos, tintIndex) -> stemColor(7), MSBlocks.ATTACHED_STRAWBERRY_STEM.get()); //7 is equivalent to a fully grown stem block
+    }
+    
+    public static int stemColor(int age)
+    {
+        int red = age * 32;
+        int green = 255 - age * 8;
+        int blue = age * 4;
+        return red << 16 | green << 8 | blue;
     }
 
     protected static class FrogItemColor implements ItemColor

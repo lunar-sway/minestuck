@@ -7,11 +7,18 @@ import net.minecraft.world.level.biome.Biome;
 
 import java.util.List;
 
-public class LandBiomeSetWrapper implements ILandBiomeSet
+/**
+ * A land biome set that is backed by a registry.
+ * Should be used as a land biome access in a situation where the biome must be serializable,
+ * such as the biomes that get stored in a chunk and get saved to disk or synced to client side.
+ * <p>
+ * Is tied directly to an instance of {@link LandBiomeSetType}.
+ */
+public final class RegistryBackedBiomeSet implements LandBiomeAccess
 {
 	public final Holder<Biome> NORMAL, ROUGH, OCEAN;
 	
-	public LandBiomeSetWrapper(LandBiomeSet biomes, Registry<Biome> registry)
+	public RegistryBackedBiomeSet(LandBiomeSetType biomes, Registry<Biome> registry)
 	{
 		NORMAL = registry.getOrCreateHolder(biomes.NORMAL);
 		ROUGH = registry.getOrCreateHolder(biomes.ROUGH);

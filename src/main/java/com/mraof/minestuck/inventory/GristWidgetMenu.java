@@ -25,12 +25,12 @@ public class GristWidgetMenu extends MachineContainerMenu
 	
 	public GristWidgetMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.GRIST_WIDGET.get(), windowId, playerInventory, new ItemStackHandler(1), new SimpleContainerData(3), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
 	public GristWidgetMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess position, BlockPos machinePos)
 	{
-		this(MSMenuTypes.GRIST_WIDGET, windowId, playerInventory, inventory, parameters, position, machinePos);
+		this(MSMenuTypes.GRIST_WIDGET.get(), windowId, playerInventory, inventory, parameters, position, machinePos);
 	}
 	
 	public GristWidgetMenu(MenuType<? extends GristWidgetMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, ContainerLevelAccess access, BlockPos machinePos)

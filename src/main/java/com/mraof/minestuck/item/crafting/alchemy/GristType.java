@@ -1,7 +1,5 @@
 package com.mraof.minestuck.item.crafting.alchemy;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.Util;
@@ -9,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -17,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
@@ -30,8 +29,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	private final float value;
 	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
-	private final List<Supplier<GristType>> secondaryTypes;
-	private final Set<SpawnCategory> spawnCategories;
 	private String translationKey;
 	private ResourceLocation icon;
 	
@@ -41,8 +38,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		value = properties.value;
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
-		secondaryTypes = ImmutableList.copyOf(properties.secondaryGristTypes);
-		spawnCategories = ImmutableSet.copyOf(properties.categories);
 	}
 	
 	public Component getNameWithSuffix()
@@ -120,12 +115,15 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	
 	public List<GristType> getSecondaryTypes()
 	{
-		return secondaryTypes.stream().map(Supplier::get).collect(Collectors.toList());
+		return Objects.requireNonNull(GristTypes.getRegistry().tags())
+				.getTag(this.getSecondaryTypesTag()).stream().toList();
 	}
 	
-	public boolean isInCategory(SpawnCategory category)
+	public TagKey<GristType> getSecondaryTypesTag()
 	{
-		return spawnCategories.contains(category);
+		ResourceLocation name = GristTypes.getRegistry().getKey(this);
+		Objects.requireNonNull(name);
+		return GristTypes.GRIST_TYPES.createTagKey(new ResourceLocation(name.getNamespace(), "secondary/" + name.getPath()));
 	}
 	
 	/**
@@ -213,8 +211,6 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 		private final float rarity, value;
 		private boolean isUnderlingType = true;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
-		private final List<Supplier<GristType>> secondaryGristTypes = new ArrayList<>();
-		private final EnumSet<SpawnCategory> categories = EnumSet.noneOf(SpawnCategory.class);
 		
 		public Properties(float rarity)
 		{
@@ -244,24 +240,30 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			candyItem = Objects.requireNonNull(stack);
 			return this;
 		}
-		
-		public Properties secondary(Supplier<GristType> type)
-		{
-			secondaryGristTypes.add(type);
-			return this;
-		}
-		
-		public Properties spawnsFor(SpawnCategory... categories)
-		{
-			this.categories.addAll(Arrays.asList(categories));
-			return this;
-		}
 	}
 	
 	public enum SpawnCategory    //Which categories can a certain grist type appear under (for spawning underlings)
 	{
-		COMMON,
-		UNCOMMON,
-		ANY
+		COMMON("common"),
+		UNCOMMON("uncommon"),
+		ANY("any");
+		
+		private final TagKey<GristType> tagKey;
+		
+		SpawnCategory(String name)
+		{
+			this.tagKey = GristTypes.GRIST_TYPES.createTagKey("spawnable_" + name);
+		}
+		
+		public TagKey<GristType> getTagKey()
+		{
+			return this.tagKey;
+		}
+		
+		public Stream<GristType> gristTypes()
+		{
+			return Objects.requireNonNull(GristTypes.getRegistry().tags()).getTag(this.tagKey).stream()
+					.filter(GristType::isUnderlingType);
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 	
 	public EditmodeMenu(int windowId, Inventory playerInventory)
 	{
-		super(MSMenuTypes.EDIT_MODE, windowId);
+		super(MSMenuTypes.EDIT_MODE.get(), windowId);
 		this.player = playerInventory.player;
 		addSlots();
 		if(player instanceof ServerPlayer)

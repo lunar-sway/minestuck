@@ -508,8 +508,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 */
 	public static void updatePosition(Player player, double range, int centerX, int centerZ) {
 		double y = player.getY();
-		if(y < 0) {
-			y = 0;
+		if(y < player.level.getMinBuildHeight()) {
+			y = player.level.getMinBuildHeight();
 			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
 			player.getAbilities().flying = true;
 		}

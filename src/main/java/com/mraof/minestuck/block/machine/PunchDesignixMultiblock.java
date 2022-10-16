@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.mraof.minestuck.block.MSBlockShapes.*;
@@ -18,9 +19,9 @@ public class PunchDesignixMultiblock extends MachineMultiblock
 	
 	private final PlacementEntry slotPlacement;
 	
-	public PunchDesignixMultiblock(String modId)
+	public PunchDesignixMultiblock(DeferredRegister<Block> register)
 	{
-		super(modId);
+		super(register);
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(RIGHT_LEG, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 0, 0), applyDirection(LEFT_LEG, Direction.NORTH));
 		registerPlacement(new BlockPos(0, 1, 0), applyDirection(KEYBOARD, Direction.NORTH));

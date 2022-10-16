@@ -55,12 +55,14 @@ public class CustomShapeBlock extends Block implements SimpleWaterloggedBlock
 		return super.updateShape(stateIn, facing, facingState, level, currentPos, facingPos);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation direction)
+	public BlockState rotate(BlockState state, Rotation direction)
 	{
 		return state.setValue(FACING, direction.rotate(state.getValue(FACING)));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{

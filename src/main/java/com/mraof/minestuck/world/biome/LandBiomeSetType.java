@@ -10,13 +10,21 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-public class LandBiomeSet
+/**
+ * Reference to a set of land biomes in the biome registry.
+ * Defines the general properties of the biome set and refers to the biomes of the set as registry keys.
+ * The properties gets used during datagen to generate json data for the biomes in the set.
+ * <p>
+ * Useful when checking the characteristics of a land type,
+ * or to reference a biome set outside the context of a specific world.
+ */
+public final class LandBiomeSetType
 {
 	public final ResourceKey<Biome> NORMAL, ROUGH, OCEAN;
 	private final Biome.Precipitation precipitation;
 	private final float temperature, downfall;
 	
-	public LandBiomeSet(String mod, String name, Biome.Precipitation precipitation, float temperature, float downfall)
+	public LandBiomeSetType(String mod, String name, Biome.Precipitation precipitation, float temperature, float downfall)
 	{
 		this.precipitation = precipitation;
 		this.temperature = temperature;
@@ -33,7 +41,7 @@ public class LandBiomeSet
 		consumer.accept(OCEAN, LandBiome.createOceanBiome(precipitation, temperature, downfall));
 	}
 	
-	public static Optional<LandBiomeSetWrapper> getSet(ChunkGenerator generator)
+	public static Optional<RegistryBackedBiomeSet> getSet(ChunkGenerator generator)
 	{
 		if(generator instanceof LandChunkGenerator landGen)
 			return Optional.of(landGen.biomes.baseBiomes);
@@ -43,5 +51,10 @@ public class LandBiomeSet
 	public Biome.Precipitation getPrecipitation()
 	{
 		return precipitation;
+	}
+	
+	public float getTemperature()
+	{
+		return temperature;
 	}
 }
