@@ -13,9 +13,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -181,11 +181,7 @@ public class MSTags
 	 */
 	public static boolean blockExistsInList(List<Block> blockList, Block block)
 	{
-		for(Block blockIterate : blockList)
-			if(blockIterate == block)
-				return true;
-		
-		return false;
+		return blockList.contains(block);
 	}
 	
 	public static List<Block> getBlocksFromTag(TagKey<Block> itemTag)
