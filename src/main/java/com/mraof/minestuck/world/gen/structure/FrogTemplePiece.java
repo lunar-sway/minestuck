@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
+import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -9,10 +10,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -25,6 +26,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.Fluids;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
@@ -132,7 +135,6 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		int pushUp = 0;
 		for(int i = 0; i < 24; i++)
 		{
-			//TODO occasionally the stairs are in the flipped direction, it was noticed in the public server with an unknown cardinal direction and in testing when the structure opens up into the north(with the stairs instead facing south)
 			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp, i, 24, pushUp, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs base
 			fillWithBlocksCheckWater(level, boundingBox, 17, pushUp + 1, i, 24, pushUp + 1, i, MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get().defaultBlockState().setValue(CustomShapeBlock.FACING, this.getOrientation().getOpposite())); //stairs top
 			generateBox(level, boundingBox, 17, pushUp, i + 1, 24, pushUp, 26, MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState(), false); //stairs base fill in
@@ -263,20 +265,21 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		@Override
 		public void next(Random rand, int x, int y, int z, boolean wall)
 		{
-			Block[] blockArray = new Block[]{
-					MSBlocks.GREEN_STONE_BRICK_FROG.get(), //only one frog hieroglyph in order to have a component more difficult to find
-					MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), MSBlocks.GREEN_STONE_BRICK_TURTLE.get(),
-					MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), MSBlocks.GREEN_STONE_BRICK_SKAIA.get(),
-					MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), MSBlocks.GREEN_STONE_BRICK_LOTUS.get(),
-					MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(),
-					MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(),
-					MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(),
-					MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(),
-					MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(),
-					MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get()
-			};
+			List<WeightedEntry.Wrapper<Block>> weightedBlockList = Lists.newArrayList();
 			
-			this.next = blockArray[rand.nextInt(blockArray.length)].defaultBlockState();
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_FROG.get(), 1)); //only one frog hieroglyph in order to have a component more difficult to find
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 36));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 36));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 36));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 16));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 16));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 16));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 16));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 16));
+			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 16));
+			
+			Optional<WeightedEntry.Wrapper<Block>> optional = WeightedRandom.getRandomItem(rand, weightedBlockList);
+			optional.ifPresent(blockWrapper -> this.next = blockWrapper.getData().defaultBlockState()); //sets the next blockstate to an element of the weighted list as long as the optional is present
 		}
 	}
 }

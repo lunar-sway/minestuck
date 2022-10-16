@@ -48,28 +48,30 @@ public class BurnDiskPacket implements PlayToServerPacket
 	public void execute(ServerPlayer player)
 	{
 		Level level = player.level;
-		BlockEntity blockEntity = level.getBlockEntity(bePos);
-		if(blockEntity instanceof ComputerBlockEntity computerBlockEntity)
+		if(level.isAreaLoaded(bePos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
 		{
-			ItemStack diskStack = ProgramData.getItem(programId);
-			if(diskStack != null && computerBlockEntity.blankDisksStored > 0)
+			if(level.getBlockEntity(bePos) instanceof ComputerBlockEntity computerBlockEntity)
 			{
-				Random random = level.getRandom();
-				
-				float rx = random.nextFloat() * 0.8F + 0.1F;
-				float ry = random.nextFloat() * 0.8F + 0.1F;
-				float rz = random.nextFloat() * 0.8F + 0.1F;
-				
-				ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
-				entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
-				level.addFreshEntity(entityItem);
-				
-				computerBlockEntity.blankDisksStored--;
-				
-				//Imitates the structure block to ensure that changes are sent client-side
-				blockEntity.setChanged();
-				BlockState state = computerBlockEntity.getBlockState();
-				player.level.sendBlockUpdated(bePos, state, state, 3);
+				ItemStack diskStack = ProgramData.getItem(programId);
+				if(diskStack != null && computerBlockEntity.blankDisksStored > 0)
+				{
+					Random random = level.getRandom();
+					
+					float rx = random.nextFloat() * 0.8F + 0.1F;
+					float ry = random.nextFloat() * 0.8F + 0.1F;
+					float rz = random.nextFloat() * 0.8F + 0.1F;
+					
+					ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
+					entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
+					level.addFreshEntity(entityItem);
+					
+					computerBlockEntity.blankDisksStored--;
+					
+					//Imitates the structure block to ensure that changes are sent client-side
+					computerBlockEntity.setChanged();
+					BlockState state = computerBlockEntity.getBlockState();
+					player.level.sendBlockUpdated(bePos, state, state, 3);
+				}
 			}
 		}
 	}
