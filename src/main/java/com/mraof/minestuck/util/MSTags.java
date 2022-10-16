@@ -197,8 +197,6 @@ public class MSTags
 	
 	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
 	{
-		List<ItemStack> stackListFromTag = new ArrayList<>();
-		Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
-		return stackListFromTag;
+		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
 	}
 }
