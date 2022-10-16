@@ -1,11 +1,12 @@
 package com.mraof.minestuck.client.util;
 
+
 import com.mojang.math.Vector3f;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
@@ -96,7 +97,7 @@ public class MagicEffect
 		//if a block or entity has been hit and the wand is true for explosiveFinish boolean, adds a sound and flash
 		if(explosiveFinish)
 		{
-			level.playLocalSound(vecPos.x, vecPos.y, vecPos.z, SoundEvents.SHULKER_BULLET_HIT, SoundSource.BLOCKS, 1.2F, 0.6F, false);
+			level.playLocalSound(vecPos.x, vecPos.y, vecPos.z, MSSoundEvents.ITEM_MAGIC_HIT.get(), SoundSource.BLOCKS, 1.2F, 0.6F, false);
 			
 			level.addParticle(ParticleTypes.FLASH, vecPos.x, vecPos.y, vecPos.z, 0.0D, 0.0D, 0.0D);
 			for(int a = 0; a < particles; a++)

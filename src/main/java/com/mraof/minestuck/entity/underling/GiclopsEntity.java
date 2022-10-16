@@ -5,9 +5,9 @@ import com.mraof.minestuck.entity.EntityBigPart;
 import com.mraof.minestuck.entity.IBigEntity;
 import com.mraof.minestuck.entity.PartGroup;
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -57,19 +57,19 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT;
+		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT.get();
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_HURT;
+		return MSSoundEvents.ENTITY_GICLOPS_HURT.get();
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_DEATH;
+		return MSSoundEvents.ENTITY_GICLOPS_DEATH.get();
 	}
 	
 	@Override

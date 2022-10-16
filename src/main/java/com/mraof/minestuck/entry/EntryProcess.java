@@ -95,7 +95,7 @@ public class EntryProcess
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = new BlockPos(0, 100, 0);//landWorld.getDimension().getSpawnPoint(); TODO
+						BlockPos pos = new BlockPos(0, 100, 0);
 						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
 						
 						return;

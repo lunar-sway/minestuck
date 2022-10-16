@@ -267,10 +267,10 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		cookingRecipesFor(recipeBuilder, Ingredient.of(MSItems.BEEF_SWORD.get()), MSItems.STEAK_SWORD.get(), 0.5F, "has_beef_sword", has(MSItems.BEEF_SWORD.get()));
 		
-		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.BEEF), MSItems.IRRADIATED_STEAK.get(), 0.2F, 20, MSRecipeTypes.IRRADIATING).unlockedBy("has_beef", has(Items.BEEF)).save(skipAdvancement(recipeBuilder));
-		SimpleCookingRecipeBuilder.cooking(Ingredient.of(MSItems.BEEF_SWORD.get()), MSItems.IRRADIATED_STEAK_SWORD.get(), 0.35F, 20, MSRecipeTypes.IRRADIATING).unlockedBy("has_beef_sword", has(MSItems.BEEF_SWORD.get())).save(skipAdvancement(recipeBuilder));
-		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.STICK), MSItems.URANIUM_POWERED_STICK.get(), 0.1F, 100, MSRecipeTypes.IRRADIATING).unlockedBy("has_stick", has(Items.STICK)).save(skipAdvancement(recipeBuilder));
-		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING).unlockedBy("has_mushroom_stew", has(Items.MUSHROOM_STEW)).save(skipAdvancement(recipeBuilder), new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.BEEF), MSItems.IRRADIATED_STEAK.get(), 0.2F, 20, MSRecipeTypes.IRRADIATING.get()).unlockedBy("has_beef", has(Items.BEEF)).save(skipAdvancement(recipeBuilder));
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(MSItems.BEEF_SWORD.get()), MSItems.IRRADIATED_STEAK_SWORD.get(), 0.35F, 20, MSRecipeTypes.IRRADIATING.get()).unlockedBy("has_beef_sword", has(MSItems.BEEF_SWORD.get())).save(skipAdvancement(recipeBuilder));
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.STICK), MSItems.URANIUM_POWERED_STICK.get(), 0.1F, 100, MSRecipeTypes.IRRADIATING.get()).unlockedBy("has_stick", has(Items.STICK)).save(skipAdvancement(recipeBuilder));
+		SimpleCookingRecipeBuilder.cooking(Ingredient.of(Items.MUSHROOM_STEW), Items.SLIME_BALL, 0.1F, 20, MSRecipeTypes.IRRADIATING.get()).unlockedBy("has_mushroom_stew", has(Items.MUSHROOM_STEW)).save(skipAdvancement(recipeBuilder), new ResourceLocation(Minestuck.MOD_ID, "slimeball_from_irradiating"));
 		IrradiatingFallbackRecipeBuilder.fallback(RecipeType.SMOKING).build(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "irradiate_smoking_fallback"));
 		
 		SingleItemRecipeBuilder.stonecutting(Ingredient.of(MSBlocks.BLACK_CHESS_BRICKS.get()), MSBlocks.BLACK_CHESS_BRICK_STAIRS.get()).unlockedBy("has_black_chess_bricks", has(MSBlocks.BLACK_CHESS_BRICKS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "black_chess_brick_stairs_from_black_chess_bricks_stonecutting"));

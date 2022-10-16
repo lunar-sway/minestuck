@@ -10,7 +10,6 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -47,7 +46,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
 	public static final MagicAttackRightClickEffect STANDARD_MAGIC = new MagicAttackRightClickEffect(15, 3, null, null, 1.0F, MagicEffect.Type.ENCHANT);
 	public static final MagicAttackRightClickEffect POOL_CUE_MAGIC = new MagicAttackRightClickEffect(18, 4, null, null, 1.0F, MagicEffect.Type.RED);
-	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), () -> MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
+	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
 	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
 	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
 	
@@ -85,7 +84,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	{
 		if(sound != null && player.getRandom().nextFloat() < .1F) //optional sound effect adding
 			level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundSource.PLAYERS, 0.7F, pitch);
-		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.6F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
 		targetEffect(player);
 		

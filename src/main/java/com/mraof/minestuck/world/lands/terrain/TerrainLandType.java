@@ -142,7 +142,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private Vec3 skyColor = new Vec3(0, 0, 0);
 		private LandBiomeSetType biomeSet = MSBiomes.DEFAULT_LAND;
 		private Biome.BiomeCategory biomeCategory = Biome.BiomeCategory.NONE;
-		private Supplier<SoundEvent> backgroundMusic = () -> MSSoundEvents.MUSIC_DEFAULT;
+		private Supplier<SoundEvent> backgroundMusic = MSSoundEvents.MUSIC_DEFAULT;
 		
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
 		{

@@ -1,15 +1,15 @@
 package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristType.SpawnCategory;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType.SpawnCategory;
+import com.mraof.minestuck.alchemy.GristTypes;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
 import org.jetbrains.annotations.Nullable;
 
-import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.*;
+import static com.mraof.minestuck.alchemy.GristTypes.*;
 
 public final class MSGristTypeTagsProvider extends ForgeRegistryTagsProvider<GristType>
 {

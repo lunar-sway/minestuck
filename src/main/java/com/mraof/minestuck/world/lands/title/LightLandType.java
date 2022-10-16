@@ -70,6 +70,6 @@ public class LightLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_LIGHT;
+		return MSSoundEvents.MUSIC_LIGHT.get();
 	}
 }

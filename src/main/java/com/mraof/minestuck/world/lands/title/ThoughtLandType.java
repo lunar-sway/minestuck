@@ -70,6 +70,6 @@ public class ThoughtLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_THOUGHT;
+		return MSSoundEvents.MUSIC_THOUGHT.get();
 	}
 }

@@ -4,10 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.CombinationMode;
+import com.mraof.minestuck.alchemy.CombinationRecipe;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -81,12 +81,12 @@ public class MinestuckJeiPlugin implements IModPlugin
 	{
 		Level level = Minecraft.getInstance().level;
 		Collection<Recipe<?>> recipes = level.getRecipeManager().getRecipes();
-		registration.addRecipes(GRIST_COST, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE)
+		registration.addRecipes(GRIST_COST, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE.get())
 				.flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(level).stream()).toList());
-		registration.addRecipes(LATHE, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE)
+		registration.addRecipes(LATHE, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
 				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
 				.filter(combination -> combination.getMode() == CombinationMode.AND).toList());
-		registration.addRecipes(DESIGNIX, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE)
+		registration.addRecipes(DESIGNIX, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
 				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
 				.filter(combination -> combination.getMode() == CombinationMode.OR).toList());
 	}

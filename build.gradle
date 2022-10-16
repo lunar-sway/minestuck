@@ -109,6 +109,8 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
+            forceExit false
+
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
 

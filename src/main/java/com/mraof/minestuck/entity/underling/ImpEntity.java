@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -46,17 +46,17 @@ public class ImpEntity extends UnderlingEntity
 	
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_IMP_AMBIENT;
+		return MSSoundEvents.ENTITY_IMP_AMBIENT.get();
 	}
 	
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_IMP_HURT;
+		return MSSoundEvents.ENTITY_IMP_HURT.get();
 	}
 	
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_IMP_DEATH;
+		return MSSoundEvents.ENTITY_IMP_DEATH.get();
 	}
 	
 	@Override

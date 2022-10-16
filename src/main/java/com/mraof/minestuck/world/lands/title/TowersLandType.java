@@ -46,6 +46,6 @@ public class TowersLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_TOWERS;
+		return MSSoundEvents.MUSIC_TOWERS.get();
 	}
 }

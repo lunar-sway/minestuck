@@ -22,7 +22,7 @@ public class ConsortLootCondition implements LootItemCondition
 	@Override
 	public LootItemConditionType getType()
 	{
-		return MSLootTables.consortConditionType();
+		return MSLootTables.CONSORT_CONDITION.get();
 	}
 	
 	@Override
