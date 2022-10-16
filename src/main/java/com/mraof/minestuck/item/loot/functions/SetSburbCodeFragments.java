@@ -27,7 +27,7 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 	@Override
 	public LootItemFunctionType getType()
 	{
-		return MSLootTables.setSburbCodeFragmentType();
+		return MSLootTables.SET_SBURB_CODE_FRAGMENT_FUNCTION.get();
 	}
 	
 	@Override
