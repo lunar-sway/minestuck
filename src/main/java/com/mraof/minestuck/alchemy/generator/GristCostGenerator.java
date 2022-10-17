@@ -46,6 +46,7 @@ public final class GristCostGenerator
 				LOGGER.error("Failed to access recipe manager for grist cost generation!");
 		}
 	}
+
 	private static void run(RecipeManager recipes)
 	{
 		GeneratorProcess process = new GeneratorProcess();
