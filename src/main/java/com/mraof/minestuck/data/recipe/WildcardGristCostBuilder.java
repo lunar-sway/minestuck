@@ -112,7 +112,7 @@ public class WildcardGristCostBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.WILDCARD_GRIST_COST;
+			return MSRecipeTypes.WILDCARD_GRIST_COST.get();
 		}
 		
 		@Nullable

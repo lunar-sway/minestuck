@@ -53,6 +53,6 @@ public class WindLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_WIND;
+		return MSSoundEvents.MUSIC_WIND.get();
 	}
 }

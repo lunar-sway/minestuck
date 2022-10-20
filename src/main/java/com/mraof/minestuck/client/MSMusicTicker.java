@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
-public class MSMusicTicker	//TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
+public class MSMusicTicker    //TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -86,6 +87,11 @@ public class MSMusicTicker	//TODO Introduce types (something similar to vanilla)
 	
 	private static SoundEvent getLandSoundEvent(Random rand, LandTypePair pair)
 	{
+		if(rand.nextInt(5) == 0)
+		{
+			return MSSoundEvents.MUSIC_UNIVERSAL.get();
+		}
+		
 		if(rand.nextBoolean())
 			return pair.getTerrain().getBackgroundMusic();
 		else return pair.getTitle().getBackgroundMusic();

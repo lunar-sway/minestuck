@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;

@@ -31,7 +31,7 @@ public class StartingModusProvider implements DataProvider
 	
 	protected List<ModusType<?>> createDefaultModusTypes()
 	{
-		return List.of(ModusTypes.STACK, ModusTypes.QUEUE);
+		return List.of(ModusTypes.STACK.get(), ModusTypes.QUEUE.get());
 	}
 	
 	@Override

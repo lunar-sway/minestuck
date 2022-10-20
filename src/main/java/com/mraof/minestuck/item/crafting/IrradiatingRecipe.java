@@ -15,7 +15,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 {
 	public IrradiatingRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn)
 	{
-		super(MSRecipeTypes.IRRADIATING_TYPE, idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
+		super(MSRecipeTypes.IRRADIATING_TYPE.get(), idIn, groupIn, ingredientIn, resultIn, experienceIn, cookTimeIn);
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ public class IrradiatingRecipe extends AbstractCookingRecipe
 	@Override
 	public RecipeSerializer<?> getSerializer()
 	{
-		return MSRecipeTypes.IRRADIATING;
+		return MSRecipeTypes.IRRADIATING.get();
 	}
 	
 	public Optional<? extends AbstractCookingRecipe> getCookingRecipe(Container container, Level level)

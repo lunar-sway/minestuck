@@ -1,6 +1,6 @@
 package com.mraof.minestuck.data;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
@@ -173,10 +173,4 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add("death.attack." + key.getMsgId() + ".player", value);
 	}
-	/*protected void defaultLandBiomes(LandBiomeSet biomes)
-	{
-		addBiome(biomes.NORMAL, "Land");
-		addBiome(biomes.ROUGH, "Rough Land");
-		addBiome(biomes.OCEAN, "Ocean Land");
-	}*/
 }

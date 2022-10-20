@@ -26,7 +26,7 @@ public class SetBoondollarCount extends LootItemConditionalFunction
 	@Override
 	public LootItemFunctionType getType()
 	{
-		return MSLootTables.setBoondollarFunctionType();
+		return MSLootTables.SET_BOONDOLLAR_FUNCTION.get();
 	}
 	
 	@Override

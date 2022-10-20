@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen;
 
 import net.minecraft.core.*;
 import net.minecraft.server.level.WorldGenRegion;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
@@ -162,6 +163,11 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		
 		int minX = chunkPos.getMinBlockX();
 		int minZ = chunkPos.getMinBlockZ();
+		NoiseSettings noiseSettings = this.settings.value().noiseSettings();
+		int minY = Math.max(noiseSettings.minY(), chunk.getMinBuildHeight());
+		int maxY = Math.min(noiseSettings.minY() + noiseSettings.height(), chunk.getMaxBuildHeight());
+		int minSectY = Mth.intFloorDiv(minY, this.sectionHeight);
+		int sectionCountY = Mth.intFloorDiv(maxY - minY, this.sectionHeight);
 		
 		Heightmap oceanHeight = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR_WG);
 		Heightmap surfaceHeight = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE_WG);
@@ -175,8 +181,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 			
 			for(int sectZ = 0; sectZ < sectionCountXZ; ++sectZ)
 			{
-				//TODO need to be updated to account for configurable world height
-				LevelChunkSection section = chunk.getSection(15);
+				LevelChunkSection section = chunk.getSection(chunk.getSectionsCount() - 1);
 				section.acquire();
 				
 				for(int sectY = sectionCountY - 1; sectY >= 0; sectY--)
@@ -185,11 +190,11 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 					
 					for(int relY = sectionHeight - 1; relY >= 0; relY--)
 					{
-						int y = sectY * sectionHeight + relY;
+						int y = (minSectY + sectY) * sectionHeight + relY;
 						//cs as in chunk-section (section used for block storage in a chunk, and not the noise sections)
 						int csRelY = y & 15;
-						int csY = y >> 4;
-						if (section.bottomBlockY() >> 4 != csY) {
+						int csY = chunk.getSectionIndex(y);
+						if (chunk.getSectionIndex(section.bottomBlockY()) != csY) {
 							section.release();
 							section = chunk.getSection(csY);
 							section.acquire();
@@ -219,11 +224,11 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 								if(state == null)
 									state = defaultBlock;
 								
-								if (state != Blocks.AIR.defaultBlockState()) {
+								if (state != Blocks.AIR.defaultBlockState())
+								{
 									pos.set(x, y, z);
-									if (state.getLightEmission(chunk, pos) != 0 && chunk instanceof ProtoChunk) {
-										((ProtoChunk) chunk).addLight(pos);
-									}
+									if (state.getLightEmission(chunk, pos) != 0 && chunk instanceof ProtoChunk protoChunk)
+										protoChunk.addLight(pos);
 									
 									section.setBlockState(csRelX, csRelY, csRelZ, state, false);
 									oceanHeight.update(csRelX, y, csRelZ, state);
