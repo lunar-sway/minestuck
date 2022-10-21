@@ -45,7 +45,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	private final int sectionHeight;
 	private final int sectionWidth;
 	private final int sectionCountXZ;
-	private final int sectionCountY;
 	
 	protected final long seed;
 	protected final BlockState defaultBlock;
@@ -75,7 +74,6 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		sectionHeight = noiseSettings.getCellHeight();
 		sectionWidth = noiseSettings.getCellWidth();
 		sectionCountXZ = 16 / sectionWidth;
-		sectionCountY = noiseSettings.getCellCountY();
 		
 		this.noises = noises;
 		this.router = settings.createNoiseRouter(noises, seed);
@@ -252,14 +250,14 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	@Override
 	public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor height)
 	{
-		return iterateEarlyBlocks(x, z, null, type.isOpaque());
+		return iterateEarlyBlocks(x, z, height, null, type.isOpaque());
 	}
 	
 	@Override
 	public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height)
 	{
 		BlockState[] states = new BlockState[this.height];
-		iterateEarlyBlocks(x, z, states, null);
+		iterateEarlyBlocks(x, z, height, states, null);
 		return new NoiseColumn(0, states);
 	}
 	
@@ -270,7 +268,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 	 *                       If present, assumes that the list has the length of at least the world height
 	 * @param condition      If not null, will return the height just above the top block which the condition is true for
 	 */
-	private int iterateEarlyBlocks(int x, int z, @Nullable BlockState[] stateCollector, @Nullable Predicate<BlockState> condition)
+	private int iterateEarlyBlocks(int x, int z, LevelHeightAccessor height, @Nullable BlockState[] stateCollector, @Nullable Predicate<BlockState> condition)
 	{
 		int sectX = Math.floorDiv(x, sectionWidth);
 		int sectZ = Math.floorDiv(z, sectionWidth);
@@ -279,7 +277,13 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 		double modFracX = (double) modX / (double) sectionWidth;
 		double modFracZ = (double) modZ / (double) sectionWidth;
 		
-		NoiseChunk noiseChunk = NoiseChunk.forColumn(sectX * sectionWidth, sectZ * sectionWidth, 0, sectionCountY, this.router, this.settings.value(), this.globalFluidPicker);
+		NoiseSettings noiseSettings = this.settings.value().noiseSettings();
+		int minY = Math.max(noiseSettings.minY(), height.getMinBuildHeight());
+		int maxY = Math.min(noiseSettings.minY() + noiseSettings.height(), height.getMaxBuildHeight());
+		int minSectY = Mth.intFloorDiv(minY, this.sectionHeight);
+		int sectionCountY = Mth.intFloorDiv(maxY - minY, this.sectionHeight);
+		
+		NoiseChunk noiseChunk = NoiseChunk.forColumn(sectX * sectionWidth, sectZ * sectionWidth, minSectY, sectionCountY, this.router, this.settings.value(), this.globalFluidPicker);
 		noiseChunk.initializeForFirstCellX();
 		noiseChunk.advanceCellX(0);
 		
@@ -291,7 +295,7 @@ public abstract class AbstractChunkGenerator extends ChunkGenerator
 			{
 				double modFracY = (double) modY / (double) sectionHeight;
 				// interpolated noise for this block
-				int y = sectY * this.sectionHeight + modY;
+				int y = (minSectY + sectY) * this.sectionHeight + modY;
 				noiseChunk.updateForY(y, modFracY);
 				noiseChunk.updateForX(x, modFracX);
 				noiseChunk.updateForZ(z, modFracZ);
