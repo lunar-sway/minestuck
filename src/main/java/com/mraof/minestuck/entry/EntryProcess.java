@@ -445,8 +445,8 @@ public class EntryProcess
 	
 	public static void placeGates(ServerLevel level)
 	{
-		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight1, 0), GateHandler.Type.GATE_1, 0);
-		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight2, 0), GateHandler.Type.GATE_2, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.GATE_HEIGHT_1, 0), GateHandler.Type.GATE_1, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.GATE_HEIGHT_2, 0), GateHandler.Type.GATE_2, 0);
 	}
 	
 	private static class BlockMove
