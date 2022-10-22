@@ -32,7 +32,7 @@ public class GateHandler
 	public static final String DESTROYED = "minestuck.gate_destroyed";
 	public static final String MISSING_LAND = "minestuck.gate_missing_land";
 	
-	public static final int GATE_HEIGHT_1 = 144, GATE_HEIGHT_2 = 192;
+	public static final int GATE_HEIGHT_1 = 124, GATE_HEIGHT_2 = 154; //intervals of 30 blocks: 124/154/184/214/244/274/304
 	
 	public static void teleport(Type gateType, ServerLevel level, ServerPlayer player)
 	{
