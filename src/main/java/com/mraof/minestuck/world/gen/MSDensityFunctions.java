@@ -84,7 +84,7 @@ public class MSDensityFunctions
 	@SuppressWarnings("deprecation")
 	private static DensityFunction depth(Supplier<DensityFunction> continents, Supplier<DensityFunction> erosion, Supplier<DensityFunction> weirdness)
 	{
-		return DensityFunctions.add(DensityFunctions.yClampedGradient(0, 256, 1, -1),
+		return DensityFunctions.add(DensityFunctions.yClampedGradient(-64, 320, 1.5, -1.5),
 				DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(),
 						DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5))));
 	}
