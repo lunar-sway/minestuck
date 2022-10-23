@@ -5,10 +5,10 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -508,8 +508,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 */
 	public static void updatePosition(Player player, double range, int centerX, int centerZ) {
 		double y = player.getY();
-		if(y < 0) {
-			y = 0;
+		if(y < player.level.getMinBuildHeight()) {
+			y = player.level.getMinBuildHeight();
 			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
 			player.getAbilities().flying = true;
 		}

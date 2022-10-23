@@ -131,7 +131,7 @@ public class Echeladder
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundSource.AMBIENT, 1F, 1F);
+				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
 			}
 		}
 	}

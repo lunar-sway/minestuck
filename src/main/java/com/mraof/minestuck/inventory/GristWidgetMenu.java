@@ -2,7 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

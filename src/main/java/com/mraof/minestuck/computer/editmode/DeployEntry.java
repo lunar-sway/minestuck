@@ -1,7 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

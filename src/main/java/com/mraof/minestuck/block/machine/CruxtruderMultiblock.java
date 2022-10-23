@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.mraof.minestuck.block.MSBlockShapes.*;
@@ -19,9 +20,9 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	
 	private final PlacementEntry tubePlacement;
 	
-	public CruxtruderMultiblock(String modId)
+	public CruxtruderMultiblock(DeferredRegister<Block> register)
 	{
-		super(modId);
+		super(register);
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 0, 0), applyDirection(SIDE, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 0, 0), applyDirection(CORNER, Direction.EAST));

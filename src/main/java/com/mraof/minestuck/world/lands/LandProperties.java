@@ -1,13 +1,12 @@
 package com.mraof.minestuck.world.lands;
 
-import com.mraof.minestuck.world.biome.LandBiomeSet;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 
 public class LandProperties
 {
-	public final LandBiomeSet biomes;
+	public final LandBiomeSetType biomes;
 	public float skylightBase;
 	private Vec3 skyColor;
 	private Vec3 fogColor;

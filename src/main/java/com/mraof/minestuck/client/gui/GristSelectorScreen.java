@@ -2,8 +2,8 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.screens.Screen;

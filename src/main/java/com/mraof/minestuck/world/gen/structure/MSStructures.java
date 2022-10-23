@@ -2,6 +2,7 @@ package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
+import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;

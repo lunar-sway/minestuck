@@ -83,7 +83,8 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 					clickWithPotion(level, pos, player, be, heldItemStack);
 				} else
 				{
-					MSScreenFactories.displayAreaEffectScreen(be);
+					if(level.isClientSide)
+						MSScreenFactories.displayAreaEffectScreen(be);
 				}
 				
 				return InteractionResult.sidedSuccess(level.isClientSide);

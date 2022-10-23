@@ -1,9 +1,9 @@
 package com.mraof.minestuck.entity.item;
 
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;

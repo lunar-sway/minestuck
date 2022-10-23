@@ -51,7 +51,7 @@ public class LongForgottenWarhornItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE, SoundSource.AMBIENT, 1.5F, 1.0F);
+		level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_LONG_FORGOTTEN_WARHORN_USE.get(), SoundSource.AMBIENT, 1.5F, 1.0F);
 		
 		ItemStack item = playerIn.getItemInHand(handIn);
 		if(!level.isClientSide)

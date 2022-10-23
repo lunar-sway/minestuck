@@ -3,7 +3,7 @@ package com.mraof.minestuck.jei;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.GameRenderer;

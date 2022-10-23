@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;

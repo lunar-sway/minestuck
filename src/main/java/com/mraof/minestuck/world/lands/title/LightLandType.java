@@ -3,23 +3,18 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.FeatureModifier;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.phys.Vec3;
 
 public class LightLandType extends TitleLandType
@@ -55,21 +50,12 @@ public class LightLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		
 		BlockState lightBlock = blocks.getBlockState("light_block");
-		if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.LARGE_PILLAR.get(),
-					new BlockStateConfiguration(lightBlock),
-					CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-		} else
-		{
-			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.PILLAR.get(),
-					new BlockStateConfiguration(lightBlock),
-					RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-		}
+		
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_PILLAR_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
 		
 	}
 	
@@ -84,6 +70,6 @@ public class LightLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_LIGHT;
+		return MSSoundEvents.MUSIC_LIGHT.get();
 	}
 }

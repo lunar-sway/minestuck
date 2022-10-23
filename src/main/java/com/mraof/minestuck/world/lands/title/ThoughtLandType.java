@@ -3,15 +3,15 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.material.Material;
@@ -54,14 +54,9 @@ public class ThoughtLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SMALL_LIBRARY.getHolder().orElseThrow());
-		}
-		
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.SMALL_LIBRARY, LandBiomeType.NORMAL);
 	}
 	
 	@Override
@@ -75,6 +70,6 @@ public class ThoughtLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_THOUGHT;
+		return MSSoundEvents.MUSIC_THOUGHT.get();
 	}
 }

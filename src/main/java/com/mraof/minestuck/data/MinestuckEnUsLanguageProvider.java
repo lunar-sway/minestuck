@@ -25,10 +25,10 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
@@ -1224,13 +1224,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSItemGroup.MAIN, "Minestuck Main");
 		add(MSItemGroup.LANDS, "Minestuck Lands");
 		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
-		/*TODO
-		addBiome(MSBiomes.SKAIA, "Skaia");
-		defaultLandBiomes(MSBiomes.DEFAULT_LAND);
-		defaultLandBiomes(MSBiomes.HIGH_HUMID_LAND);
-		defaultLandBiomes(MSBiomes.NO_RAIN_LAND);
-		defaultLandBiomes(MSBiomes.SNOW_LAND);
-		*/
+		
 		addEntityType(MSEntityTypes.FROG, "Frog");
 		addEntityType(MSEntityTypes.SALAMANDER, "Salamander");
 		addEntityTypeExtra(MSEntityTypes.SALAMANDER, "plural", "Salamanders");
@@ -2058,15 +2052,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("screech", "Estrogen-empowered screech");
 		addSubtitles("upcheladder", "Echeladder levels up");
 		addSubtitles("electric_shock", "Electric Shock");
-		addSubtitles("amajor_electric_autoharp_stroke", "A Major plays on electric autoharp");
-		addSubtitles("bmajor_electric_autoharp_stroke", "B Major plays on electric autoharp");
-		addSubtitles("bbmajor_electric_autoharp_stroke", "Bb Major plays on electric autoharp");
-		addSubtitles("cmajor_electric_autoharp_stroke", "C Major plays on electric autoharp");
-		addSubtitles("dmajor_electric_autoharp_stroke", "D Major plays on electric autoharp");
-		addSubtitles("ebmajor_electric_autoharp_stroke", "Eb Major plays on electric autoharp");
-		addSubtitles("emajor_electric_autoharp_stroke", "E Major plays on electric autoharp");
-		addSubtitles("fmajor_electric_autoharp_stroke", "F Major plays on electric autoharp");
-		addSubtitles("gmajor_electric_autoharp_stroke", "G Major plays on electric autoharp");
+		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
+		addSubtitles("magic_cast", "Spell cast");
+		addSubtitles("magic_hit", "Spell hits something");
+		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
+		addSubtitles("lotus_flower_open", "Flower unfurls");
+		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("projectile_throw", "Projectile is thrown");
+		addSubtitles("projectile_bounce", "Projectile bounces");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

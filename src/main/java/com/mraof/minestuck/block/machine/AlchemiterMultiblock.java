@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 public class AlchemiterMultiblock extends MachineMultiblock
@@ -21,9 +22,9 @@ public class AlchemiterMultiblock extends MachineMultiblock
 	
 	private final PlacementEntry totemPadPos;
 	
-	public AlchemiterMultiblock(String modId)
+	public AlchemiterMultiblock(DeferredRegister<Block> register)
 	{
-		super(modId);
+		super(register);
 		
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CORNER, Direction.WEST));
 		registerPlacement(new BlockPos(0, 0, 1), applyDirection(LEFT_SIDE, Direction.WEST));

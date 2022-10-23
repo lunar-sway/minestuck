@@ -3,7 +3,10 @@ package com.mraof.minestuck.world.lands.title;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.CodecUtil;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.resources.ResourceLocation;
@@ -71,4 +74,7 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 	{
 		return aspectType;
 	}
+	
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	{}
 }

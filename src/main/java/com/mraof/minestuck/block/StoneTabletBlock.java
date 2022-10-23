@@ -64,7 +64,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	{
 		if(!player.isShiftKeyDown())
 		{
-			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
+			if(level.isClientSide && level.getBlockEntity(pos) instanceof ItemStackBlockEntity itemStackBE)
 			{
 				String text = StoneTabletItem.hasText(itemStackBE.getStack()) ? itemStackBE.getStack().getTag().getString("text") : "";
 				MSScreenFactories.displayStoneTabletScreen(player, hand, text, false);

@@ -70,7 +70,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
-			totemLathe.setBroken();
+			totemLathe.checkStates();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
@@ -104,6 +104,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
+			this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, false));
 		}
 		
 		@Override

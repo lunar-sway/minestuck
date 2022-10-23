@@ -2,15 +2,15 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
@@ -42,23 +42,19 @@ public class CakeLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		
-		if(type != LandBiomeType.OCEAN)
-		{
-			builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL.getHolder().orElseThrow());
-		}
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
-				new ProbabilityFeatureConfiguration(baseBiome.getBaseTemperature()/2),
-				CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-		
+						new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
+						CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
+				LandBiomeType.any());
 	}
 	
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_CAKE;
+		return MSSoundEvents.MUSIC_CAKE.get();
 	}
 }

@@ -3,23 +3,18 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
+import com.mraof.minestuck.world.gen.feature.FeatureModifier;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
-import net.minecraft.world.level.levelgen.placement.BiomeFilter;
-import net.minecraft.world.level.levelgen.placement.CountPlacement;
-import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
@@ -65,16 +60,10 @@ public class PulseLandType extends TitleLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		
-		if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(MSFeatures.DISK.get(),
-					new DiskConfiguration(MSBlocks.COAGULATED_BLOOD.get().defaultBlockState(), UniformInt.of(2, 5), 2, List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))),
-					CountPlacement.of(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()));
-		}
-		
+		builder.addModified(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
+				FeatureModifier.withTargets(List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))), LandBiomeType.ROUGH);
 	}
 	
 	@Override
@@ -88,6 +77,6 @@ public class PulseLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_PULSE;
+		return MSSoundEvents.MUSIC_PULSE.get();
 	}
 }

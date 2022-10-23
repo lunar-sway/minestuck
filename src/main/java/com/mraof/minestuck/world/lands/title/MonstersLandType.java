@@ -70,7 +70,7 @@ public class MonstersLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return type == Variant.UNDEAD ? MSSoundEvents.MUSIC_UNDEAD : MSSoundEvents.MUSIC_MONSTERS;
+		return type == Variant.UNDEAD ? MSSoundEvents.MUSIC_UNDEAD.get() : MSSoundEvents.MUSIC_MONSTERS.get();
 	}
 	
 	public enum Variant

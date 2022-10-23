@@ -4,8 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.UnderlingSpawnListEvent;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -36,7 +36,7 @@ public final class UnderlingController
 	public static WeightedRandomList<MobSpawnSettings.SpawnerData> getUnderlingList(BlockPos pos)
 	{
 		
-		BlockPos spawn = new BlockPos(0, 0, 0);//world.getSpawnPoint(); TODO
+		BlockPos spawn = new BlockPos(0, 0, 0);
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distSqr(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		
