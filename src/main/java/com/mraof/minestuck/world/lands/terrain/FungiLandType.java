@@ -7,7 +7,7 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.structure.GateMushroomPiece;
+import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
@@ -40,7 +40,7 @@ public class FungiLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.SALAMANDER).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
 				.fogColor(0.69, 0.76, 0.61).skyColor(0.69, 0.76, 0.61)
-				.category(Biome.BiomeCategory.MUSHROOM).music(() -> MSSoundEvents.MUSIC_FUNGI));
+				.category(Biome.BiomeCategory.MUSHROOM).music(MSSoundEvents.MUSIC_FUNGI));
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.renderer.GameRenderer;

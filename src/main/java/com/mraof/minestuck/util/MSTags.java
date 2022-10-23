@@ -151,7 +151,7 @@ public class MSTags
 	
 	public static class Structures
 	{
-		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");	//TODO should contain frog temple
+		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");
 		
 		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
 		{

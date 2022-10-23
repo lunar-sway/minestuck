@@ -25,7 +25,7 @@ public class UnknowableEggItem extends Item
 		{
 			player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 2));
 			player.addEffect(new MobEffectInstance(MobEffects.POISON, 160, 2));
-			player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundSource.AMBIENT, 1.0F, 0.8F);
+			player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE.get(), SoundSource.AMBIENT, 1.0F, 0.8F);
 		}
 		return super.finishUsingItem(stack, level, player);
 	}

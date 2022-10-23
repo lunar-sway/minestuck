@@ -67,6 +67,13 @@ Adds Homestuck to your Minecraft!
     ordering="NONE"
     side="BOTH"
 
+[[dependencies.minestuck]]
+modId="infiniverse"
+mandatory=true
+versionRange="[1.0,1.1)"
+ordering="NONE"
+side="BOTH"
+
 # Here's another dependency
 [[dependencies.minestuck]]
     modId="minecraft"

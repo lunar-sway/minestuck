@@ -6,16 +6,18 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.inventory.captchalogue.StartingModusManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -326,28 +328,24 @@ public final class PlayerData
 	
 	private void tryGiveStartingModus(ServerPlayer player)
 	{
-		List<String> startingTypes = MinestuckConfig.SERVER.startingModusTypes.get();
-		if(!startingTypes.isEmpty())
+		List<ModusType<?>> startingTypes = StartingModusManager.getStartingModusTypes();
+		
+		if(startingTypes.isEmpty())
+			return;
+		
+		ModusType<?> type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
+		if(type == null)
 		{
-			String type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
-			if(type.isEmpty())
-			{
-				setGivenModus();
-				return;
-			}
-			ResourceLocation name = ResourceLocation.tryParse(type);
-			if(name == null)
-				LOGGER.error("Unable to parse starting modus type {} as a resource location!", type);
-			else
-			{
-				Modus modus = CaptchaDeckHandler.createServerModus(name, savedData);
-				if(modus != null)
-				{
-					modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
-					setModus(modus);
-				} else LOGGER.warn("Couldn't create a starting modus type by name {}.", type);
-			}
+			setGivenModus();
+			return;
 		}
+		
+		Modus modus = type.createServerSide(savedData);
+		if(modus != null)
+		{
+			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
+			setModus(modus);
+		} else LOGGER.warn("Couldn't create a starting modus type {}.", type.getRegistryName());
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayer player)

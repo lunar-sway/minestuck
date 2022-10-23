@@ -62,6 +62,6 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_THUNDER;
+		return MSSoundEvents.MUSIC_THUNDER.get();
 	}
 }

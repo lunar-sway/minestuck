@@ -37,7 +37,7 @@ public class FloraLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.IGUANA).names(FLORA, FLOWERS, THORNS)
 				.fogColor(0.5, 0.6, 0.9).skyColor(0.6, 0.8, 0.6)
-				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FLORA));
+				.category(Biome.BiomeCategory.FOREST).music(MSSoundEvents.MUSIC_FLORA));
 	}
 	
 	@Override

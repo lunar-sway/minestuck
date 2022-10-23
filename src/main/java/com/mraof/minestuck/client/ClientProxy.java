@@ -22,7 +22,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -117,6 +117,8 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLOOMING_CACTUS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.PETRIFIED_GRASS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.PETRIFIED_POPPY.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.ATTACHED_STRAWBERRY_STEM.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.STRAWBERRY_STEM.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TALL_END_GRASS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GLOWFLOWER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CHECKERED_STAINED_GLASS.get(), RenderType.translucent());

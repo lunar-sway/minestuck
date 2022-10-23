@@ -33,7 +33,7 @@ public class HeatLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(HEAT, FLAME, FIRE)
 				.skylight(1/2F).fogColor(0.4, 0.0, 0.0)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.NETHER).music(() -> MSSoundEvents.MUSIC_HEAT));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.NETHER).music(MSSoundEvents.MUSIC_HEAT));
 	}
 	
 	@Override

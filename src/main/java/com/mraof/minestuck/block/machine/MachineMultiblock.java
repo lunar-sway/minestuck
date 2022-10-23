@@ -2,7 +2,6 @@ package com.mraof.minestuck.block.machine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
@@ -11,8 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -29,23 +27,20 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	//The above or states has the same block and direction
 	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.or((state1, state2) -> state2 != null && state1.getBlock() == state2.getBlock() && state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
-	private final String modId;
-	private final Map<RegistryObject<Block>, Supplier<? extends Block>> registryEntries = new LinkedHashMap<>();
+	private final DeferredRegister<Block> register;
+	private final Set<RegistryObject<? extends Block>> registryEntries = new HashSet<>();
 	private final List<PlacementEntry> blockEntries = new ArrayList<>();
 	
-	protected MachineMultiblock(String modId)
+	protected MachineMultiblock(DeferredRegister<Block> register)
 	{
-		this.modId = modId;
+		this.register = register;
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected <B extends Block> RegistryObject<B> register(String name, Supplier<B> constructor)
 	{
-		ResourceLocation key = new ResourceLocation(modId, name);
-		RegistryObject<B> obj = RegistryObject.create(key, ForgeRegistries.BLOCKS);
-		if(registryEntries.putIfAbsent((RegistryObject<Block>) obj, constructor) != null)
-			throw new IllegalArgumentException("Can't register "+name+" twice");
-		return obj;
+		RegistryObject<B> registryObject = register.register(name, constructor);
+		registryEntries.add(registryObject);
+		return registryObject;
 	}
 	
 	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier)
@@ -66,12 +61,12 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	public Block getMainBlock()
 	{
-		return !registryEntries.isEmpty() ? registryEntries.keySet().iterator().next().get() : null;
+		return !registryEntries.isEmpty() ? registryEntries.iterator().next().get() : null;
 	}
 	
 	public void forEachBlock(Consumer<Block> consumer)
 	{
-		registryEntries.keySet().forEach(blockRegistryObject -> blockRegistryObject.ifPresent(consumer));
+		registryEntries.forEach(blockRegistryObject -> blockRegistryObject.ifPresent(consumer));
 	}
 	
 	public void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
@@ -98,15 +93,6 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	public BoundingBox getBoundingBox(Rotation rotation)
 	{
 		return BoundingBox.encapsulatingPositions(blockEntries.stream().map(entry -> entry.pos.rotate(rotation)).toList()).orElseThrow();
-	}
-	
-	public void registerBlocks(IForgeRegistry<Block> registry)
-	{
-		for(Map.Entry<RegistryObject<Block>, Supplier<? extends Block>> entry : registryEntries.entrySet())
-		{
-			registry.register(entry.getValue().get().setRegistryName(entry.getKey().getId()));
-			entry.getKey().updateReference(registry);
-		}
 	}
 	
 	@Override

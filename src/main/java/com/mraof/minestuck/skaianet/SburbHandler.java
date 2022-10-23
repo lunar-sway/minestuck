@@ -4,12 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypeGenerator;
@@ -17,8 +13,6 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -34,7 +28,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -255,7 +248,7 @@ public final class SburbHandler
 	
 	static GristType generateGristType(Random rand)
 	{
-		List<GristType> types = GristTypes.values().stream().filter(type -> type.isInCategory(GristType.SpawnCategory.COMMON)).collect(Collectors.toList());
+		List<GristType> types = GristType.SpawnCategory.COMMON.gristTypes().toList();
 		return types.get(rand.nextInt(types.size()));
 	}
 	

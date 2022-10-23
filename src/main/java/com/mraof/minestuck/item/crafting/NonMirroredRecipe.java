@@ -19,7 +19,7 @@ public class NonMirroredRecipe extends ShapedRecipe
         super(id, group, width, height, ingredients, result);
     }
     public RecipeSerializer<?> getSerializer() {
-        return MSRecipeTypes.NON_MIRRORED;
+        return MSRecipeTypes.NON_MIRRORED.get();
     }
 
     @Override

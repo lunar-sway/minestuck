@@ -5,9 +5,9 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
+import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
+import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -63,11 +63,11 @@ public class GateHandler
 	private static GlobalPos findPosNearLandGate(ServerLevel level)
 	{
 		BlockPos pos = Type.LAND_GATE.getPosition(level);
-		Optional<LandBiomeSetWrapper> optional = LandBiomeSet.getSet(level.getChunkSource().getGenerator());
+		Optional<RegistryBackedBiomeSet> optional = LandBiomeSetType.getSet(level.getChunkSource().getGenerator());
 		if(pos != null && optional.isPresent())
 		{
 			Random rand = level.random;
-			LandBiomeSetWrapper biomes = optional.get();
+			RegistryBackedBiomeSet biomes = optional.get();
 			while(true)    //TODO replace with a more friendly version without a chance of freezing the game
 			{
 				int radius = 160 + rand.nextInt(60);
