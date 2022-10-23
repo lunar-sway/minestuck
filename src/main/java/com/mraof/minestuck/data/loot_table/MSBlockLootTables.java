@@ -86,13 +86,14 @@ public class MSBlockLootTables extends BlockLoot
 		add(NETHERRACK_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
 		add(PINK_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
-		dropSelf(SANDSTONE_IRON_ORE.get());
-		dropSelf(RED_SANDSTONE_IRON_ORE.get());
-		dropSelf(END_STONE_IRON_ORE.get());
-		dropSelf(SANDSTONE_GOLD_ORE.get());
-		dropSelf(RED_SANDSTONE_GOLD_ORE.get());
-		dropSelf(SHADE_STONE_GOLD_ORE.get());
-		dropSelf(PINK_STONE_GOLD_ORE.get());
+		
+		add(SANDSTONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
+		add(RED_SANDSTONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
+		add(END_STONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
+		add(SANDSTONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
+		add(RED_SANDSTONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
+		add(SHADE_STONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
+		add(PINK_STONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
 		add(END_STONE_REDSTONE_ORE.get(), MSBlockLootTables::redstoneOreDrop);
 		add(STONE_QUARTZ_ORE.get(), MSBlockLootTables::quartzOreDrop);
 		add(PINK_STONE_LAPIS_ORE.get(), MSBlockLootTables::lapisOreDrop);
@@ -449,6 +450,14 @@ public class MSBlockLootTables extends BlockLoot
 	private static LootTable.Builder coalOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.COAL);
+	}
+	private static LootTable.Builder goldOreDrop(Block block)
+	{
+		return createOreDrop(block, Items.RAW_GOLD);
+	}
+	private static LootTable.Builder ironOreDrop(Block block)
+	{
+		return createOreDrop(block, Items.RAW_IRON);
 	}
 	private static LootTable.Builder redstoneOreDrop(Block block)
 	{
