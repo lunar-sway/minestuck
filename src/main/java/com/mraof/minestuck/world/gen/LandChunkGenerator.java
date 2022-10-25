@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.Random;
 
-public class LandChunkGenerator extends AbstractChunkGenerator
+public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -69,7 +69,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	
 	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, long seed, LandTypePair.Named namedTypes, WorldGenBiomeSet biomes, Registry<Biome> registry, LandGenSettings genSettings)
 	{
-		super(structureSets, noises, Optional.empty(), new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
+		super(structureSets, noises, new LandBiomeSource(biomes, genSettings), new LandBiomeSource(biomes.baseBiomes, genSettings),
 				seed, genSettings.createDimensionSettings(densityFunctions));
 		
 		this.densityFunctions = densityFunctions;
@@ -81,7 +81,7 @@ public class LandChunkGenerator extends AbstractChunkGenerator
 	}
 	
 	@Override
-	protected Codec<? extends ChunkGenerator> codec()
+	protected Codec<? extends LandChunkGenerator> codec()
 	{
 		return CODEC;
 	}

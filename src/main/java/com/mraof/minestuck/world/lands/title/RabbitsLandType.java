@@ -54,6 +54,6 @@ public class RabbitsLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_RABBITS;
+		return MSSoundEvents.MUSIC_RABBITS.get();
 	}
 }

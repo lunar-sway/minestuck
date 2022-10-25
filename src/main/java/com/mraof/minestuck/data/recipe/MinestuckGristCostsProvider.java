@@ -3,8 +3,8 @@ package com.mraof.minestuck.data.recipe;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.data.DataGenerator;
@@ -19,7 +19,7 @@ import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
-import static com.mraof.minestuck.item.crafting.alchemy.GristTypes.*;
+import static com.mraof.minestuck.alchemy.GristTypes.*;
 
 public class MinestuckGristCostsProvider extends RecipeProvider
 {

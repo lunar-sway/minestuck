@@ -6,13 +6,11 @@ import com.mraof.minestuck.item.loot.conditions.LandTypeLootCondition;
 import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 public class MSLootTables
 {
@@ -24,53 +22,13 @@ public class MSLootTables
 	public static final ResourceLocation CONSORT_GENERAL_STOCK = new ResourceLocation("minestuck", "gameplay/consort_general");
 	public static final ResourceLocation KUNDLER_SUPRISES = new ResourceLocation("minestuck", "gameplay/kundler_suprises");
 	
-	private static LootItemConditionType LAND_TYPE_CONDITION;
-	private static LootItemConditionType CONSORT_CONDITION;
-	private static LootItemFunctionType SET_BOONDOLLAR_FUNCTION;
-	private static LootPoolEntryType LAND_TABLE_ENTRY;
+	public static final DeferredRegister<LootItemConditionType> CONDITION_REGISTER = DeferredRegister.create(Registry.LOOT_ITEM_REGISTRY, Minestuck.MOD_ID);
+	public static final RegistryObject<LootItemConditionType> LAND_TYPE_CONDITION = CONDITION_REGISTER.register("land_type", () -> new LootItemConditionType(new LandTypeLootCondition.Serializer()));
+	public static final RegistryObject<LootItemConditionType> CONSORT_CONDITION = CONDITION_REGISTER.register("consort", () -> new LootItemConditionType(new ConsortLootCondition.Serializer()));
 	
-	public static void registerLootSerializers()
-	{
-		LAND_TYPE_CONDITION = registerCondition("land_aspect", new LandTypeLootCondition.Serializer());
-		CONSORT_CONDITION = registerCondition("consort", new ConsortLootCondition.Serializer());
-		SET_BOONDOLLAR_FUNCTION = registerFunction("set_boondollar_count", new SetBoondollarCount.Serializer());
-		LAND_TABLE_ENTRY = registerEntry("land_table", new LandTableLootEntry.SerializerImpl());
-	}
+	public static final DeferredRegister<LootItemFunctionType> FUNCTION_REGISTER = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, Minestuck.MOD_ID);
+	public static final RegistryObject<LootItemFunctionType> SET_BOONDOLLAR_FUNCTION = FUNCTION_REGISTER.register("set_boondollar_count", () -> new LootItemFunctionType(new SetBoondollarCount.Serializer()));
 	
-	public static LootItemConditionType landTypeConditionType()
-	{
-		return LAND_TYPE_CONDITION;
-	}
-	
-	public static LootItemConditionType consortConditionType()
-	{
-		return CONSORT_CONDITION;
-	}
-	
-	public static LootItemFunctionType setBoondollarFunctionType()
-	{
-		return SET_BOONDOLLAR_FUNCTION;
-	}
-	
-	public static LootPoolEntryType landTableEntryType()
-	{
-		return LAND_TABLE_ENTRY;
-	}
-	
-	//Currently does not have a forge registry, so we'll have to register it this way
-	
-	private static LootItemConditionType registerCondition(String name, Serializer<? extends LootItemCondition> serializer)
-	{
-		return Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootItemConditionType(serializer));
-	}
-	
-	private static LootItemFunctionType registerFunction(String name, Serializer<? extends LootItemFunction> serializer)
-	{
-		return Registry.register(Registry.LOOT_FUNCTION_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootItemFunctionType(serializer));
-	}
-	
-	private static LootPoolEntryType registerEntry(String name, Serializer<? extends LootPoolEntryContainer> serializer)
-	{
-		return Registry.register(Registry.LOOT_POOL_ENTRY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name), new LootPoolEntryType(serializer));
-	}
+	public static final DeferredRegister<LootPoolEntryType> ENTRY_REGISTER = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, Minestuck.MOD_ID);
+	public static final RegistryObject<LootPoolEntryType> LAND_TABLE_ENTRY = ENTRY_REGISTER.register("land_table", () -> new LootPoolEntryType(new LandTableLootEntry.SerializerImpl()));
 }

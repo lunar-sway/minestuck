@@ -1,6 +1,6 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 
 public interface GristWildcardHolder
 {

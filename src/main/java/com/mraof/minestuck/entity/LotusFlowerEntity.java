@@ -4,6 +4,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -135,7 +135,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			setEventTimer(OPEN_START);
 			
 			Vec3 posVec = position();
-			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), SoundEvents.COMPOSTER_READY, SoundSource.NEUTRAL, 1.0F, 1.0F);
+			level.playSound(null, posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_OPEN.get(), SoundSource.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 	
@@ -248,16 +248,14 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	{
 		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BEEHIVE_EXIT, SoundSource.NEUTRAL, 1.0F, 1.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_RESTORE.get(), SoundSource.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	protected void addLootSpawnEffects()
 	{
 		Vec3 posVec = this.position();
 		this.level.addParticle(ParticleTypes.FLASH, posVec.x, posVec.y + 0.5D, posVec.z, 0.0D, 0.0D, 0.0D);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1.0F, 1.3F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.ITEM_PICKUP, SoundSource.NEUTRAL, 1.0F, 0.7F, false);
-		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), SoundEvents.BOAT_PADDLE_LAND, SoundSource.NEUTRAL, 2.0F, 2.0F, false);
+		this.level.playLocalSound(posVec.x(), posVec.y(), posVec.z(), MSSoundEvents.EVENT_LOTUS_FLOWER_LOOT_SPAWN.get(), SoundSource.NEUTRAL, 1.0F, 1.0F, false);
 	}
 	
 	@Override

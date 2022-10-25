@@ -1,6 +1,6 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;

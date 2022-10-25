@@ -47,7 +47,7 @@ public class GeneratedGristCostBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.RECIPE_GRIST_COST;
+			return MSRecipeTypes.RECIPE_GRIST_COST.get();
 		}
 		
 		@Nullable

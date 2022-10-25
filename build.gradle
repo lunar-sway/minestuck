@@ -47,6 +47,10 @@ repositories {
             password = "\u0067hp_oGjcDFCn8jeTzIj4Ke9pLoEVtpnZMP4VQgaX"
         }
     }
+    maven {
+        // maven that contains infiniverse
+        url "https://cubicinterpolation.net/maven/"
+    }
 }
 
 version = project.getProperty('mc_ms_version')
@@ -109,6 +113,8 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
+            forceExit false
+
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -137,6 +143,7 @@ dependencies {
     }
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-${project.getProperty('mc_gecko_version')}")
+    implementation fg.deobf("commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}")
 }
 
 sourceSets.main.resources {

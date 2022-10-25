@@ -3,9 +3,9 @@ package com.mraof.minestuck.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -120,7 +120,7 @@ public class GristCostRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.GRIST_COST;
+			return MSRecipeTypes.GRIST_COST.get();
 		}
 		
 		@Nullable

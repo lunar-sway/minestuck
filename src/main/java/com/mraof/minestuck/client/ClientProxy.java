@@ -22,7 +22,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
