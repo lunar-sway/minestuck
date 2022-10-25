@@ -130,21 +130,21 @@ public class SandLandType extends TerrainLandType
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.SANDSTONE_IRON_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+							CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 					LandBiomeType.any());
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.SANDSTONE_GOLD_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+							CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 					LandBiomeType.any());
 		} else
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_IRON_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+							CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 					LandBiomeType.any());
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_GOLD_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+							CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 					LandBiomeType.any());
 		}
 	}
