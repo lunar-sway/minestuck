@@ -4,21 +4,12 @@ import com.mraof.minestuck.block.EnumCassetteType;
 import net.minecraft.sounds.SoundEvent;
 
 public class MusicPlaying implements IMusicPlaying {
-	
-	private SoundEvent currentMusic;
-	private EnumCassetteType cassetteType;
+	private EnumCassetteType cassetteType = EnumCassetteType.NONE;
 	
 	@Override
-	public void setCurrentMusic(SoundEvent music, EnumCassetteType cassetteType)
+	public void setCassetteType(EnumCassetteType cassetteType)
 	{
-		currentMusic = music;
 		this.cassetteType = cassetteType;
-	}
-	
-	@Override
-	public SoundEvent getCurrentMusic()
-	{
-		return currentMusic;
 	}
 	
 	@Override

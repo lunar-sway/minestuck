@@ -3,7 +3,6 @@ package com.mraof.minestuck.item.weapon;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.client.sounds.MusicPlayerOnPlayerSoundInstance;
 import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
@@ -11,8 +10,6 @@ import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -69,18 +66,30 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		IMusicPlaying musicPlaying = getMusicPlaying(playerIn.getItemInHand(handIn));
-		IItemHandler itemStackHandlerMusicPlayer = getItemStackHandlerMusicPlayer(playerIn.getItemInHand(handIn));
+		ItemStack musicPlayer = playerIn.getItemInHand(handIn);
+		
+		IItemHandler itemStackHandlerMusicPlayer = getItemStackHandlerMusicPlayer(musicPlayer);
+		IMusicPlaying musicPlayingCap = getMusicPlaying(musicPlayer);
 		
 		if(!level.isClientSide)
 		{
 			if(playerIn.isCrouching())
 			{
-				Item item = itemStackHandlerMusicPlayer.getStackInSlot(0).getItem();
-				if(item instanceof CassetteItem cassette)
+				Item itemInMusicPlayer = itemStackHandlerMusicPlayer.getStackInSlot(0).getItem();
+				if(itemInMusicPlayer instanceof CassetteItem cassette)
 				{
-					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
-					MSPacketHandler.sendToTracking(packet, playerIn);
+					MusicPlayerPacket packet;
+					if(musicPlayingCap.getCassetteType() == EnumCassetteType.NONE)
+					{
+						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
+						musicPlayingCap.setCassetteType(cassette.cassetteID);
+					}
+					else
+					{
+						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
+						musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
+					}
+						MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
 				}
 			}
 			//open the GUI if right-clicked
@@ -97,15 +106,18 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		if(level.getGameTime() % 50 == 0)
+		if(entityIn instanceof Player player)
 		{
-			super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
-			IMusicPlaying musicPlaying = getMusicPlaying(stack);
-			if(musicPlaying.getCurrentMusic() != null)
+			if(level.getGameTime() % 50 == 0)
 			{
-				EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
-				if(effectContainer != null && entityIn instanceof Player player && !effectContainer.onHit)
-					player.addEffect(effectContainer.effect);
+				super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+				IMusicPlaying musicPlaying = getMusicPlaying(stack);
+				if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
+				{
+					EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
+					if(effectContainer != null && !effectContainer.onHit)
+						player.addEffect(effectContainer.effect);
+				}
 			}
 		}
 	}
@@ -114,7 +126,7 @@ public class MusicPlayerItem extends WeaponItem
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
 	{
 		IMusicPlaying musicPlaying = getMusicPlaying(stack);
-		if(musicPlaying.getCurrentMusic() != null)
+		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
 		{
 			ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
 			float attackSpeed = musicPlaying.getCassetteType().getAttackSpeed();
@@ -128,7 +140,7 @@ public class MusicPlayerItem extends WeaponItem
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		IMusicPlaying musicPlaying = getMusicPlaying(stack);
-		if(musicPlaying.getCurrentMusic() != null)
+		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
 		{
 			Random r = attacker.level.getRandom();
 			
@@ -162,41 +174,52 @@ public class MusicPlayerItem extends WeaponItem
 	
 	public EffectContainer getEffect(EnumCassetteType cassetteType)
 	{
-		switch(cassetteType)
-		{
-			case MALL:
-				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
-						0.30F, true);
-			case ELEVEN:
-				return new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 80, 0),
-						0.10F, true);
-			case MELLOHI:
-				return new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
-						0.20F, true);
-			case CAT:
-				return new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 50, 0,
-						false, false, false),
-						1F, false);
-			case PIGSTEP:
-				return new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 50, 0,
-						false, false, false),
-						1F, false);
-			case FAR:
-				return new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 50, 0,
-						false, false, false),
-						1F, false);
-			case CHIRP:
-				return new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 50, 0,
-						false, false, false),
-						1F, false);
-			case NONE:
-				return null;
-		}
-		
-		throw new IllegalArgumentException(cassetteType + " is not a valid cassette type");
+		return switch(cassetteType)
+				{
+					case ELEVEN -> new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 80, 0),
+							0.10F, true);
+					
+					//case THIRTEEN -> null;
+					
+					//case BLOCKS -> null;
+					
+					case CAT -> new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 50, 0,
+							false, false, false),1F, false);
+					
+					case CHIRP -> new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 50, 0,
+							false, false, false),
+							1F, false);
+					
+					//case DANCE_STAB_DANCE -> null;
+					
+					//case EMISSARY_OF_DANCE -> null;
+					
+					case FAR -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 50, 0,
+							false, false, false),
+							1F, false);
+					
+					case MALL -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
+							0.30F, true);
+					
+					case MELLOHI -> new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
+							0.20F, true);
+					
+					case PIGSTEP -> new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 50, 0,
+							false, false, false),
+							1F, false);
+					//case RETRO_BATTLE_THEME -> null;
+					
+					//case STAL -> null;
+					
+					//case STRAD -> null;
+					
+					//case WAIT -> null;
+					
+					//case WARD -> null;
+					
+					default -> null;
+				};
 	}
 	
-	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
-	{
-	}
+	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit) {}
 }

@@ -105,4 +105,9 @@ public class MSPacketHandler
 	{
 		INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
 	}
+	
+	public static <MSG> void sendToTrackingAndSelf(MSG message, Entity entity)
+	{
+		INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
+	}
 }

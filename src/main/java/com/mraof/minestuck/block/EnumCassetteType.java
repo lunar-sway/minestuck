@@ -49,6 +49,6 @@ public enum EnumCassetteType implements StringRepresentable
 	
 	public float getAttackSpeed()
 	{
-		return this.bpm / -60;
+		return (this.bpm /60) * -1.5f + 1;
 	}
 }

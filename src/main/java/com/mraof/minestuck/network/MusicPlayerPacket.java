@@ -45,9 +45,17 @@ public class MusicPlayerPacket implements PlayToClientPacket
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
 		if(entity instanceof Player){
 			SoundManager soundManager = Minecraft.getInstance().getSoundManager();
-			MusicPlayerOnPlayerSoundInstance soundInstance;
-			soundInstance = new MusicPlayerOnPlayerSoundInstance((Player) entity, cassetteType.getSoundEvent());
-			soundManager.play(soundInstance);
+			
+			if(MusicPlayerOnPlayerSoundInstance.getEntitiesMap().containsKey(entityID)){
+				soundManager.stop(MusicPlayerOnPlayerSoundInstance.getEntitiesMap().remove(entityID));
+			}
+			if (cassetteType != EnumCassetteType.NONE)
+			{
+				MusicPlayerOnPlayerSoundInstance soundInstance = new MusicPlayerOnPlayerSoundInstance((Player) entity, cassetteType.getSoundEvent());
+				
+				MusicPlayerOnPlayerSoundInstance.getEntitiesMap().put(entityID, soundInstance);
+				soundManager.play(soundInstance);
+			}
 		}
 	}
 }
