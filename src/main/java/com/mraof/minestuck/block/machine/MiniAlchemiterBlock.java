@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -11,11 +11,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEntity>
+public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterBlockEntity>
 {
 	public MiniAlchemiterBlock(Properties properties)
 	{
-		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), MSTileEntityTypes.MINI_ALCHEMITER, properties);
+		super(MSBlockShapes.SMALL_ALCHEMITER.createRotatedShapes(), MSBlockEntityTypes.MINI_ALCHEMITER, properties);
 	}
 	
 	@Override
@@ -31,7 +31,7 @@ public class MiniAlchemiterBlock extends SmallMachineBlock<MiniAlchemiterTileEnt
 	@SuppressWarnings("deprecation")
 	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
-		if(level.getBlockEntity(pos) instanceof MiniAlchemiterTileEntity alchemiter)
+		if(level.getBlockEntity(pos) instanceof MiniAlchemiterBlockEntity alchemiter)
 			return alchemiter.comparatorValue();
 		return 0;
 	}

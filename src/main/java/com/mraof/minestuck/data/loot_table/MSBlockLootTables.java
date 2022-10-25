@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -74,6 +74,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(RED_SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
@@ -284,8 +285,8 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
 		dropSelf(STRAWBERRY.get());
-		add(ATTACHED_STRAWBERRY_STEM.get(), noDrop());	//TODO vanilla has a different loot table for their attached stems, should we replicate?
-		add(STRAWBERRY_STEM.get(), MSBlockLootTables::strawberryStemDrop);
+		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
+		add(STRAWBERRY_STEM.get(), (stemBlock) -> createStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
 		add(TALL_END_GRASS.get(), noDrop());
 		dropSelf(GLOWFLOWER.get());
 		
@@ -295,7 +296,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(PIPE_INTERSECTION.get());
 		dropSelf(PARCEL_PYXIS.get());
 		dropSelf(PYXIS_LID.get());
-		add(STONE_SLAB.get(), MSBlockLootTables::droppingWithTEItem);
+		add(STONE_TABLET.get(), MSBlockLootTables::droppingWithTEItem);
 		dropSelf(NAKAGATOR_STATUE.get());
 		
 		dropSelf(BLACK_CHESS_BRICK_STAIRS.get());
@@ -439,11 +440,11 @@ public class MSBlockLootTables extends BlockLoot
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	private static LootTable.Builder uraniumOreDrop(Block block)
 	{
-		return createOreDrop(block, MSItems.RAW_URANIUM);
+		return createOreDrop(block, MSItems.RAW_URANIUM.get());
 	}
 	private static LootTable.Builder coalOreDrop(Block block)
 	{
@@ -531,11 +532,7 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
-		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
-	}
-	private static LootTable.Builder strawberryStemDrop(Block block)
-	{
-		return createStemDrops(block, MSItems.STRAWBERRY_CHUNK);
+		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
 	protected static LootTable.Builder droppingWithColor(Block block)
 	{
@@ -543,7 +540,7 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	protected static LootTable.Builder droppingWithTEItem(Block block)
 	{
-		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackTileEntity.ITEM_DYNAMIC))));
+		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
 	protected static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
 	{

@@ -16,10 +16,9 @@ import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +32,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -43,7 +41,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -75,7 +72,6 @@ public class ServerEventHandler
 	{
 		IdentifierHandler.clear();
 		SkaianetHandler.clear();
-		MSDimensions.clear();
 	}
 	
 	@SubscribeEvent
@@ -187,7 +183,7 @@ public class ServerEventHandler
 			ItemStack handItem = injuredPlayer.getMainHandItem();
 			float activateThreshold = ((injuredPlayer.getMaxHealth() / (injuredPlayer.getHealth() + 1)) / injuredPlayer.getMaxHealth()); //fraction of players health that rises dramatically the more injured they are
 			
-			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING)
+			if(handItem.getItem() == MSItems.LUCERNE_HAMMER_OF_UNDYING.get())
 			{
 				if(isDoom)
 					activateThreshold = activateThreshold * 1.5F;
@@ -210,7 +206,7 @@ public class ServerEventHandler
 				}
 			}
 			
-			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE)
+			if(handItem.getItem() == MSItems.CRUEL_FATE_CRUCIBLE.get())
 			{
 				activateThreshold = activateThreshold * 8 + injuredPlayer.getRandom().nextFloat() * .9F;
 				
@@ -250,18 +246,6 @@ public class ServerEventHandler
 			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
 	}
 	
-	//This functionality uses an event to maintain compatibility with mod items having hoe functionality but not extending ItemHoe, like TiCon mattocks.
-	@SubscribeEvent
-	public static void onPlayerUseHoe(UseHoeEvent event)	//TODO replace by an extension to block.getToolModifiedState()
-	{
-		if(event.getContext().getLevel().getBlockState(event.getContext().getClickedPos()).getBlock() == MSBlocks.COARSE_END_STONE.get())
-		{
-			event.getContext().getLevel().setBlockAndUpdate(event.getContext().getClickedPos(), Blocks.END_STONE.defaultBlockState());
-			event.getContext().getLevel().playSound(null, event.getContext().getClickedPos(), SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0F, 	1.0F);
-			event.setResult(Event.Result.ALLOW);
-		}
-	}
-	
 	@SubscribeEvent
 	public static void onGetItemBurnTime(FurnaceFuelBurnTimeEvent event)
 	{
@@ -285,7 +269,7 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntityItem();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE));
+			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level.addFreshEntity(stalebread);
 		}
 	}

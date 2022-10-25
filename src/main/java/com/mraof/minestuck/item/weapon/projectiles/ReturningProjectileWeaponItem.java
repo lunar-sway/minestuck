@@ -5,7 +5,7 @@ import com.mraof.minestuck.entity.item.ReturningProjectileEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -39,11 +39,11 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 			Title title = PlayerSavedData.getData((ServerPlayer) playerIn).getTitle();
 			if(title != null)
 			{
-				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR;
-			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR)
+				noBlockCollision = title.getHeroAspect() == EnumAspect.VOID && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get();
+			} else if(playerIn.isCreative() && item.getItem() == MSItems.UMBRAL_INFILTRATOR.get())
 				noBlockCollision = true;
 			
-			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE, playerIn, level, maxTick, noBlockCollision);
+			ReturningProjectileEntity projectileEntity = new ReturningProjectileEntity(MSEntityTypes.RETURNING_PROJECTILE.get(), playerIn, level, maxTick, noBlockCollision);
 			projectileEntity.setItem(item);
 			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);

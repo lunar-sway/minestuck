@@ -27,26 +27,26 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	private int health = 5;
 	
 	private Player closestPlayer;
-
+	
 	private int targetCycle;
 	
 	public float animationOffset;
 	
 	public VitalityGelEntity(Level level, double x, double y, double z, int healAmount)
 	{
-		this(MSEntityTypes.VITALITY_GEL, level, x, y, z, healAmount);
+		this(MSEntityTypes.VITALITY_GEL.get(), level, x, y, z, healAmount);
 	}
 	
 	protected VitalityGelEntity(EntityType<? extends VitalityGelEntity> type, Level level, double x, double y, double z, int healAmount)
 	{
 		super(type, level);
 		this.setPos(x, y, z);
-		this.setYRot((float)(Math.random() * 360.0D));
+		this.setYRot((float) (Math.random() * 360.0D));
 		this.setDeltaMovement(level.random.nextGaussian() * 0.2D - 0.1D, level.random.nextGaussian() * 0.2D, level.random.nextGaussian() * 0.2D - 0.1D);
 		
 		this.healAmount = healAmount;
 	}
-
+	
 	public VitalityGelEntity(EntityType<? extends VitalityGelEntity> type, Level level)
 	{
 		super(type, level);
@@ -66,15 +66,15 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public boolean hurt(DamageSource source, float amount)
 	{
-		if (this.isInvulnerableTo(source))
+		if(this.isInvulnerableTo(source))
 		{
 			return false;
 		} else
 		{
 			this.markHurt();
-			this.health = (int)((float)this.health - amount);
+			this.health = (int) ((float) this.health - amount);
 			
-			if (this.health <= 0)
+			if(this.health <= 0)
 			{
 				this.discard();
 			}
@@ -87,7 +87,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	protected void defineSynchedData()
 	{
 	}
-	
+
 //	@Override
 //	public int getBrightnessForRender()
 //	{
@@ -105,7 +105,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 //
 //		return j | k << 16;
 //	}
-
+	
 	/**
 	 * Called to update the entity's position/logic.
 	 */
@@ -119,7 +119,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		this.zo = this.getZ();
 		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
 		
-		if (this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
+		if(this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
 		{
 			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
@@ -127,30 +127,30 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		
 		double d0 = this.getDimensions(Pose.STANDING).width * 2.0D;
 		
-		if (this.targetCycle < this.cycle - 20 + this.getId() % 100)
+		if(this.targetCycle < this.cycle - 20 + this.getId() % 100)
 		{
-			if (this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
+			if(this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
 				this.closestPlayer = this.level.getNearestPlayer(this, d0);
 			}
 			
 			this.targetCycle = this.cycle;
 		}
-
-		if (this.closestPlayer != null)
+		
+		if(this.closestPlayer != null)
 		{
 			double d1 = (this.closestPlayer.getX() - this.getX()) / d0;
-			double d2 = (this.closestPlayer.getY() + (double)this.closestPlayer.getEyeHeight() - this.getY()) / d0;
+			double d2 = (this.closestPlayer.getY() + (double) this.closestPlayer.getEyeHeight() - this.getY()) / d0;
 			double d3 = (this.closestPlayer.getZ() - this.getZ()) / d0;
 			double d4 = Math.sqrt(d1 * d1 + d2 * d2 + d3 * d3);
 			double d5 = this.getDimensions(Pose.STANDING).width * 2.0D - d4;
-
-			if (d5 > 0.0D)
+			
+			if(d5 > 0.0D)
 			{
 				this.setDeltaMovement(this.getDeltaMovement().add(d1 / d4 * d5 * 0.1D, d2 / d4 * d5 * 0.1D, d3 / d4 * d5 * 0.1D));
 			}
 		}
-
+		
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		float f = 0.98F;
 		
@@ -162,21 +162,21 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		
 		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
 		
-		if (this.onGround)
+		if(this.onGround)
 		{
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
-
+		
 		++this.cycle;
 		++this.age;
-
-		if (this.age >= 6000)
+		
+		if(this.age >= 6000)
 		{
 			this.discard();
 		}
 		
 	}
-
+	
 	/*
 	 * Returns if this entity is in water and will end up adding the waters velocity to the entity
 	 */
@@ -189,9 +189,9 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	protected void addAdditionalSaveData(CompoundTag compound)
 	{
-		compound.putShort("health", (short)((byte)this.health));
-		compound.putShort("age", (short)this.age);
-		compound.putShort("amount", (short)this.healAmount);
+		compound.putShort("health", (short) ((byte) this.health));
+		compound.putShort("age", (short) this.age);
+		compound.putShort("amount", (short) this.healAmount);
 	}
 	
 	@Override
@@ -202,17 +202,17 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		if(compound.contains("amount", Tag.TAG_ANY_NUMERIC))
 			this.healAmount = compound.getShort("amount");
 	}
-
+	
 	/**
 	 * Called by a player entity when they collide with an entity
 	 */
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level.isClientSide?ClientEditHandler.isActive():ServerEditHandler.getData(player) != null)
+		if(this.level.isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(player) != null)
 			return;
 		
-		if (!this.level.isClientSide)
+		if(!this.level.isClientSide)
 		{
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);
@@ -231,9 +231,12 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	{
 		return super.getDimensions(poseIn).scale(healAmount);
 	}
-
-	public float getSizeByValue() {	return (float)this.healAmount / 4.0F; }
-
+	
+	public float getSizeByValue()
+	{
+		return (float) this.healAmount / 4.0F;
+	}
+	
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{

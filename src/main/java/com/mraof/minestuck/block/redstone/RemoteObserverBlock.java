@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * Gives off power if the boolean condition currently set in the tile entity is met. Checks for an entity meeting its condition in a 16 block radius.
+ * Gives off power if the boolean condition currently set in the block entity is met. Checks for an entity meeting its condition in a 16 block radius.
  * GUI is limited by creative shock
  */
 public class RemoteObserverBlock extends Block implements EntityBlock
@@ -47,11 +47,11 @@ public class RemoteObserverBlock extends Block implements EntityBlock
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			if(level.getBlockEntity(pos) instanceof RemoteObserverTileEntity te)
+			if(level.getBlockEntity(pos) instanceof RemoteObserverBlockEntity be)
 			{
 				if(level.isClientSide)
 				{
-					MSScreenFactories.displayRemoteObserverScreen(te);
+					MSScreenFactories.displayRemoteObserverScreen(be);
 				}
 				
 				return InteractionResult.SUCCESS;
@@ -85,14 +85,14 @@ public class RemoteObserverBlock extends Block implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new RemoteObserverTileEntity(pos, state);
+		return new RemoteObserverBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.REMOTE_OBSERVER.get(), RemoteObserverTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.REMOTE_OBSERVER.get(), RemoteObserverBlockEntity::serverTick) : null;
 	}
 	
 	@Override

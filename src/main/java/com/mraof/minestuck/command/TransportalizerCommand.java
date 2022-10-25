@@ -6,7 +6,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.commands.CommandSourceStack;
@@ -27,7 +27,7 @@ public class TransportalizerCommand
 	public static final String RESULT = "commands.minestuck.tpz.result";
 	public static final String FAILURE_RESULT = "commands.minestuck.tpz.failure_result";
 	private static final DynamicCommandExceptionType NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(o -> new TranslatableComponent(NOT_FOUND, o));
-	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(TransportalizerTileEntity.BLOCKED_DESTINATION));
+	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(TransportalizerBlockEntity.BLOCKED_DESTINATION));
 	private static final SimpleCommandExceptionType RESULT_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(FAILURE_RESULT));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
@@ -48,7 +48,7 @@ public class TransportalizerCommand
 		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER.get())
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		if(TransportalizerTileEntity.isBlocked(level, destination.pos()))
+		if(TransportalizerBlockEntity.isBlocked(level, destination.pos()))
 			throw BLOCKED_EXCEPTION.create();
 		
 		int count = 0;

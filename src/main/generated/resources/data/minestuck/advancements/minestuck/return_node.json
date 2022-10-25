@@ -17,10 +17,8 @@
   },
   "criteria": {
     "touch_return_node": {
-      "trigger": "minecraft:enter_block",
-      "conditions": {
-        "block": "minestuck:return_node"
-      }
+      "trigger": "minestuck:return_node",
+      "conditions": {}
     }
   },
   "requirements": [

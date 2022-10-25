@@ -34,7 +34,7 @@ public class BarbasolBombItem extends Item
 		if(!level.isClientSide)
 		{
 			
-			BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, level, playerIn.getAbilities().mayBuild);
+			BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB.get(), playerIn, level, playerIn.getAbilities().mayBuild);
 			bomb.setItem(item);
 			bomb.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), -20.0F, 0.7F, 1.0F);
 			level.addFreshEntity(bomb);

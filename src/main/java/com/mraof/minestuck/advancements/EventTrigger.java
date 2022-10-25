@@ -13,6 +13,7 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 {
 	public static final ResourceLocation SBURB_CONNECTION_ID = new ResourceLocation(Minestuck.MOD_ID, "sburb_connection");
 	public static final ResourceLocation CRUXITE_ARTIFACT_ID = new ResourceLocation(Minestuck.MOD_ID, "cruxite_artifact");
+	public static final ResourceLocation RETURN_NODE_ID = new ResourceLocation(Minestuck.MOD_ID, "return_node");
 	public static final ResourceLocation MELON_OVERLOAD_ID = new ResourceLocation(Minestuck.MOD_ID, "melon_overload");
 	
 	private final ResourceLocation id;
@@ -49,6 +50,11 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 		public static Instance cruxiteArtifact()
 		{
 			return new Instance(EntityPredicate.Composite.ANY, CRUXITE_ARTIFACT_ID);
+		}
+		
+		public static Instance returnNode()
+		{
+			return new Instance(EntityPredicate.Composite.ANY, RETURN_NODE_ID);
 		}
 		
 		public static Instance melonOverload()

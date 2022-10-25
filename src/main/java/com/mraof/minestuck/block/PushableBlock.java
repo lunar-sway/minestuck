@@ -21,16 +21,28 @@ import net.minecraft.world.phys.BlockHitResult;
  */
 public class PushableBlock extends FallingBlock
 {
-	protected PushableBlock(Properties properties)
+	public final Maneuverability maneuverability;
+	
+	public enum Maneuverability
+	{
+		PUSH,
+		PULL,
+		PUSH_AND_PULL //direction is determined by shift clicking, with shift clicking resulting in a pull
+	}
+	
+	protected PushableBlock(Properties properties, Maneuverability maneuverability)
 	{
 		super(properties);
+		this.maneuverability = maneuverability;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		Direction direction = hit.getDirection().getOpposite();
+		boolean willPush = ((!player.isShiftKeyDown() && maneuverability == Maneuverability.PUSH_AND_PULL) || maneuverability == Maneuverability.PUSH)||
+				!((player.isShiftKeyDown() && maneuverability == Maneuverability.PUSH_AND_PULL) || maneuverability == Maneuverability.PULL);
+		Direction direction = willPush ? hit.getDirection().getOpposite() : hit.getDirection();
 		if((direction.getAxis() == Direction.Axis.X || direction.getAxis() == Direction.Axis.Z) && isReplaceable(level.getBlockState(pos.relative(direction))))
 		{
 			if(!level.isClientSide)
@@ -61,6 +73,6 @@ public class PushableBlock extends FallingBlock
 	
 	public static boolean isReplaceable(BlockState state)
 	{
-		return isFree(state) || state.is(MSTags.Blocks.PUSHABLE_BLOCK_REPLACABLE);
+		return isFree(state) || state.is(MSTags.Blocks.PUSHABLE_BLOCK_REPLACEABLE);
 	}
 }
