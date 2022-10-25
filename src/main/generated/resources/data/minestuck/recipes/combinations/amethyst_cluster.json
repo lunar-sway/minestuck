@@ -1,12 +1,12 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:purple_dye"
+    "item": "minecraft:pointed_dripstone"
   },
   "input2": {
-    "item": "minecraft:glass"
+    "item": "minecraft:amethyst_shard"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:amethyst_cluster"
   }

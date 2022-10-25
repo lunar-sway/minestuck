@@ -313,9 +313,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.MEDIUM_AMETHYST_BUD).grist(AMETHYST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.LARGE_AMETHYST_BUD).grist(AMETHYST, 7).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.AMETHYST_CLUSTER).grist(AMETHYST, 9).buildFor(recipeSaver, Minestuck.MOD_ID); //8.8 amethyst shards per cluster on avg with fortune 3
-		GristCostRecipeBuilder.of(Items.EXPOSED_COPPER).grist(SHALE, 81).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.WEATHERED_COPPER).grist(SHALE, 81).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.OXIDIZED_COPPER).grist(SHALE, 81).grist(URANIUM, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.EXPOSED_COPPER).grist(SHALE, 81).grist(RUST, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.WEATHERED_COPPER).grist(SHALE, 81).grist(RUST, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.OXIDIZED_COPPER).grist(SHALE, 81).grist(RUST, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Music Discs
 		GristCostRecipeBuilder.of(Items.MUSIC_DISC_11).grist(BUILD, 10).grist(CAULK, 5).grist(TAR, 2).grist(MERCURY, 2).buildFor(recipeSaver, Minestuck.MOD_ID);

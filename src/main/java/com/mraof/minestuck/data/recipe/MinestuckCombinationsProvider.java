@@ -156,10 +156,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.MOSSY_COBBLESTONE_WALL).input(Items.COBBLESTONE_WALL).or().namedInput(Items.MOSSY_COBBLESTONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.MOSSY_STONE_BRICKS).input(Items.STONE_BRICKS).or().input(Items.WHEAT_SEEDS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CLAY).input(Items.SAND).and().input(Items.WATER_BUCKET).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.AMETHYST_CLUSTER).input(Items.PURPLE_DYE).and().input(Items.GLASS).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.LARGE_AMETHYST_BUD).input(Items.SPYGLASS).and().input(Items.MEDIUM_AMETHYST_BUD).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.MEDIUM_AMETHYST_BUD).input(Items.SPYGLASS).and().input(Items.AMETHYST_SHARD).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.SMALL_AMETHYST_BUD).input(Items.LAPIS_LAZULI).or().input(Items.AMETHYST_CLUSTER).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.AMETHYST_CLUSTER).input(Items.POINTED_DRIPSTONE).or().input(Items.AMETHYST_SHARD).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CALCITE).input(Items.AMETHYST_SHARD).or().input(Items.STONE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CANDLE).input(Items.BOOK).and().input(Items.TORCH).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.COBBLED_DEEPSLATE).input(Items.COBBLESTONE).and().input(Items.CHARCOAL).buildFor(consumer, Minestuck.MOD_ID);
@@ -229,7 +226,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.VINE).input(ItemTags.LEAVES).and().input(Items.LADDER).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.ROSE_BUSH).input(Items.LARGE_FERN).or().input(Items.POPPY).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.SUGAR_CANE).input(Items.BAMBOO).and().input(Items.SUGAR).buildFor(consumer, Minestuck.MOD_ID);
-		CombinationRecipeBuilder.of(Items.AZALEA).input(Items.SPYGLASS).or().input(Items.DANDELION).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.AZALEA).input(Items.ROOTED_DIRT).or().input(Items.OAK_SAPLING).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FLOWERING_AZALEA).input(ItemTags.FLOWERS).and().input(Items.AZALEA).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.AZALEA_LEAVES).input(Items.AZALEA).and().input(Items.OAK_LEAVES).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.FLOWERING_AZALEA_LEAVES).input(ItemTags.FLOWERS).and().input(Items.AZALEA_LEAVES).buildFor(consumer, Minestuck.MOD_ID);

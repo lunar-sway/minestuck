@@ -4,6 +4,7 @@
     "item": "minecraft:weathered_copper"
   },
   "grist_cost": {
-    "minestuck:shale": 81
+    "minestuck:shale": 81,
+    "minestuck:rust": 2
   }
 }
