@@ -4,7 +4,7 @@
     "item": "minecraft:pointed_dripstone"
   },
   "grist_cost": {
-    "minestuck:build": 20,
-    "minestuck:amber": 15
+    "minestuck:build": 4,
+    "minestuck:amber": 3
   }
 }

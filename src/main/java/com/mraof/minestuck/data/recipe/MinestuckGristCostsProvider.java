@@ -44,8 +44,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		SourceGristCostBuilder.of(ExtraForgeTags.Items.TERRACOTTA).source(Items.CLAY).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.CLAY_BALL).grist(SHALE, 1).grist(BUILD, 1).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.FLINT).grist(BUILD, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
-		GristCostRecipeBuilder.of(Items.POINTED_DRIPSTONE).grist(BUILD, 20).grist(AMBER, 15).buildFor(recipeSaver, Minestuck.MOD_ID); //TODO since 4 pointed dripstone can be crafted to make dripstone, dripstone cost 80 build and 60 amber(compared to most standard stones being just 2 build)
-		//TODO calcite
+		GristCostRecipeBuilder.of(Items.POINTED_DRIPSTONE).grist(BUILD, 4).grist(AMBER, 3).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(Items.CALCITE).grist(BUILD, 1).grist(CHALK, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Ore
 		oreCost(Tags.Items.ORES_COAL, Items.COAL, 3, recipeSaver, Minestuck.MOD_ID); //2.5 coal per ore on avg with fortune 3
@@ -77,7 +77,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(Items.DIRT).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.GRASS_BLOCK).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.PODZOL).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
-		//TODO rooted dirt
+		GristCostRecipeBuilder.of(Items.ROOTED_DIRT).grist(MERCURY, 1).grist(BUILD, 4).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(Items.MYCELIUM).grist(IODINE, 2).grist(RUBY, 2).grist(BUILD, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		//Snow/ice
