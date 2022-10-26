@@ -28,6 +28,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -83,13 +84,12 @@ public class MusicPlayerItem extends WeaponItem
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
 						musicPlayingCap.setCassetteType(cassette.cassetteID);
-					}
-					else
+					} else
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
 						musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
 					}
-						MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
+					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
 				}
 			}
 			//open the GUI if right-clicked
@@ -106,23 +106,30 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		if(entityIn instanceof Player player)
+		if(!level.isClientSide && entityIn instanceof Player player)
 		{
+			if(!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof MusicPlayerItem))
+			{
+				IMusicPlaying musicPlayingCap = getMusicPlaying(stack);
+				
+				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
+				musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
+				MSPacketHandler.sendToTrackingAndSelf(packet, player);
+			}
+			
 			if(level.getGameTime() % 50 == 0)
 			{
 				super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
-				IMusicPlaying musicPlaying = getMusicPlaying(stack);
-				if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
-				{
+				
+					IMusicPlaying musicPlaying = getMusicPlaying(stack);
 					EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
 					if(effectContainer != null && !effectContainer.onHit)
 						player.addEffect(effectContainer.effect);
-				}
 			}
 		}
 	}
 	
-	@Override
+	/*@Override TODO change Attack Speed to follow the BPM
 	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
 	{
 		IMusicPlaying musicPlaying = getMusicPlaying(stack);
@@ -134,7 +141,7 @@ public class MusicPlayerItem extends WeaponItem
 			return multimap.build();
 		}
 		return super.getAttributeModifiers(slot, stack);
-	}
+	}*/
 	
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
@@ -176,50 +183,67 @@ public class MusicPlayerItem extends WeaponItem
 	{
 		return switch(cassetteType)
 				{
-					case ELEVEN -> new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 80, 0),
+					case ELEVEN -> new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 60, 0),
 							0.10F, true);
 					
-					//case THIRTEEN -> null;
-					
-					//case BLOCKS -> null;
-					
-					case CAT -> new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 50, 0,
-							false, false, false),1F, false);
-					
-					case CHIRP -> new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 50, 0,
-							false, false, false),
-							1F, false);
-					
-					//case DANCE_STAB_DANCE -> null;
-					
-					//case EMISSARY_OF_DANCE -> null;
-					
-					case FAR -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 50, 0,
-							false, false, false),
-							1F, false);
-					
-					case MALL -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
+					case THIRTEEN -> new EffectContainer(new MobEffectInstance(MobEffects.HUNGER, 50, 0),
 							0.30F, true);
+					
+					case BLOCKS -> new EffectContainer(new MobEffectInstance(MobEffects.CONFUSION, 50, 0),
+							0.15F, true);
+					
+					case CAT -> new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 100, 0,
+							false, false, false), 1F, false);
+					
+					case CHIRP -> new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
+							false, false, false),
+							1F, false);
+					
+					case DANCE_STAB_DANCE -> new EffectContainer(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 0,
+							false, false, false),
+							1F, false);
+					
+					case EMISSARY_OF_DANCE -> new EffectContainer(new MobEffectInstance(MobEffects.POISON, 400, 0),
+							0.1F, true);
+					
+					case FAR -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0,
+							false, false, false),
+							1F, false);
+					
+					case MALL -> new EffectContainer(new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0,
+							false, false, false),
+							1F, false);
 					
 					case MELLOHI -> new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
 							0.20F, true);
 					
-					case PIGSTEP -> new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 50, 0,
+					case PIGSTEP -> new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0,
 							false, false, false),
 							1F, false);
-					//case RETRO_BATTLE_THEME -> null;
 					
-					//case STAL -> null;
+					case RETRO_BATTLE_THEME ->
+							new EffectContainer(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0,
+									false, false, false),
+									1F, false);
 					
-					//case STRAD -> null;
+					case STAL -> new EffectContainer(new MobEffectInstance(MobEffects.JUMP, 100, 1,
+							false, false, false),
+							1F, false);
 					
-					//case WAIT -> null;
+					case STRAD -> new EffectContainer(new MobEffectInstance(MobEffects.UNLUCK, 200, 0),
+							0.10F, true);
 					
-					//case WARD -> null;
+					case WAIT -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
+							0.30F, true);
+					
+					case WARD -> new EffectContainer(new MobEffectInstance(MobEffects.GLOWING, 750, 0),
+							1F, true);
 					
 					default -> null;
 				};
 	}
 	
-	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit) {}
+	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
+	{
+	}
 }
