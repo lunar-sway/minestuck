@@ -4,7 +4,7 @@
     "item": "minecraft:copper_ingot"
   },
   "input2": {
-    "item": "minecraft:copper_block"
+    "item": "minecraft:stone_bricks"
   },
   "mode": "or",
   "output": {

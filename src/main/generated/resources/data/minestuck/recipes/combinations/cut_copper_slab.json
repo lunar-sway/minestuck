@@ -4,7 +4,7 @@
     "item": "minecraft:copper_ingot"
   },
   "input2": {
-    "item": "minecraft:brick_slab"
+    "item": "minecraft:stone_brick_slab"
   },
   "mode": "or",
   "output": {
