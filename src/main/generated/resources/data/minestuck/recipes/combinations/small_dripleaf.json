@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:lily_pad"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:small_dripleaf"
   }

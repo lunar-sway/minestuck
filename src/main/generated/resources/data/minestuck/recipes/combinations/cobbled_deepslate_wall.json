@@ -4,7 +4,7 @@
     "item": "minecraft:ink_sac"
   },
   "input2": {
-    "item": "minecraft:cobblestone_slab"
+    "item": "minecraft:cobblestone_wall"
   },
   "mode": "or",
   "output": {

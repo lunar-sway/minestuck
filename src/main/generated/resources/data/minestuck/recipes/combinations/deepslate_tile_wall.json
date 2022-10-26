@@ -4,9 +4,9 @@
     "item": "minecraft:ink_sac"
   },
   "input2": {
-    "item": "minecraft:andesite_wall"
+    "item": "minecraft:nether_brick_wall"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:deepslate_tile_wall"
   }

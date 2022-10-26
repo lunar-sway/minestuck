@@ -4,9 +4,9 @@
     "item": "minecraft:ink_sac"
   },
   "input2": {
-    "item": "minecraft:cobblestone_stairs"
+    "item": "minecraft:cobblestone_slab"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:cobbled_deepslate_slab"
   }

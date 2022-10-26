@@ -4,8 +4,8 @@
     "item": "minecraft:small_dripleaf"
   },
   "grist_cost": {
-    "minestuck:uranium": 1,
+    "minestuck:build": 1,
     "minestuck:shale": 1,
-    "minestuck:mercury": 2
+    "minestuck:mercury": 1
   }
 }

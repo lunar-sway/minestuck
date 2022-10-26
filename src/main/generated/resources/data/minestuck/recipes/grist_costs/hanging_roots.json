@@ -4,7 +4,7 @@
     "item": "minecraft:hanging_roots"
   },
   "grist_cost": {
-    "minestuck:mercury": 10,
-    "minestuck:build": 5
+    "minestuck:mercury": 1,
+    "minestuck:build": 1
   }
 }

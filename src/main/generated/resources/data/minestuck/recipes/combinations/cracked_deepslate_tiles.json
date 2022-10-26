@@ -4,9 +4,9 @@
     "item": "minecraft:tnt"
   },
   "input2": {
-    "item": "minecraft:smooth_sandstone"
+    "item": "minecraft:deepslate_tiles"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:cracked_deepslate_tiles"
   }

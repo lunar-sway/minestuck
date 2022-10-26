@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:deepslate_tile_wall"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minecraft:polished_deepslate_wall"
   }

@@ -4,8 +4,7 @@
     "item": "minecraft:glow_berries"
   },
   "grist_cost": {
-    "minestuck:amber": 4,
-    "minestuck:sulfur": 3,
-    "minestuck:quartz": 2
+    "minestuck:amber": 1,
+    "minestuck:sulfur": 2
   }
 }
