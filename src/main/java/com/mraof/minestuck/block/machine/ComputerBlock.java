@@ -118,7 +118,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack stackInHand = player.getItemInHand(handIn);
 		int id = ProgramData.getProgramID(stackInHand);
 		
-		if(stackInHand.getItem() == MSItems.BLANK_DISK.get())
+		if(stackInHand.is(MSItems.BLANK_DISK.get().asItem()))
 		{
 			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
 			{
@@ -239,7 +239,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			ItemStack diskStack = ProgramData.getItem(program);
-			if(diskStack != null)
+			if(diskStack != null && !diskStack.isEmpty())
 			{
 				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
 				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);

@@ -53,7 +53,7 @@ public class BurnDiskPacket implements PlayToServerPacket
 			if(level.getBlockEntity(bePos) instanceof ComputerBlockEntity computerBlockEntity)
 			{
 				ItemStack diskStack = ProgramData.getItem(programId);
-				if(diskStack != null && computerBlockEntity.blankDisksStored > 0)
+				if(diskStack != null && !diskStack.isEmpty() && computerBlockEntity.blankDisksStored > 0)
 				{
 					Random random = level.getRandom();
 					
