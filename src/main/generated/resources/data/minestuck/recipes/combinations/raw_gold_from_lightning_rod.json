@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:porkchop"
+  },
+  "input2": {
+    "item": "minecraft:lightning_rod"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minecraft:raw_gold"
+  }
+}
