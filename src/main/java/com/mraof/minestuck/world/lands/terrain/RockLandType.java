@@ -11,24 +11,18 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
-import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.Carvers;
+import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.ConstantFloat;
-import net.minecraft.util.valueproviders.TrapezoidFloat;
-import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration;
-import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
-import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
@@ -116,6 +110,7 @@ public class RockLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.COBBLESTONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_MOUND, LandBiomeType.ROUGH);
+			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CavePlacements.GLOW_LICHEN, LandBiomeType.any());
 		} else if(this.type == Variant.PETRIFICATION)
 		{
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_TREE, LandBiomeType.NORMAL);
@@ -126,6 +121,8 @@ public class RockLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_GRASS_PATCH, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_POPPY_PATCH, LandBiomeType.ROUGH);
 		}
+		
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, CavePlacements.AMETHYST_GEODE, LandBiomeType.any());
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
@@ -164,11 +161,9 @@ public class RockLandType extends TerrainLandType
 						CountPlacement.of(7), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
-		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CANYON.configured(new CanyonCarverConfiguration(0.4F,
-						BiasedToBottomHeight.of(VerticalAnchor.aboveBottom(20), VerticalAnchor.absolute(67), 8),
-						ConstantFloat.of(3), VerticalAnchor.absolute(10), CarverDebugSettings.DEFAULT, UniformFloat.of(-0.125F, 0.125F),
-						new CanyonCarverConfiguration.CanyonShapeConfiguration(UniformFloat.of(0.75F, 1F), TrapezoidFloat.of(0, 6, 2), 3, UniformFloat.of(0.75F, 1F), 1F, 0F)))),
-				LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND, LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CANYON, LandBiomeType.any());
 	}
 	
 	@Override
