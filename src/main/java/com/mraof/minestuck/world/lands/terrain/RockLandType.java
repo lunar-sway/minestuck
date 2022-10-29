@@ -11,18 +11,24 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
+import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
@@ -161,6 +167,12 @@ public class RockLandType extends TerrainLandType
 						CountPlacement.of(7), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
+		//cave carver that creates more cavernous sections, may end up as just a placeholder for noise based cave generation
+		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
+						UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)),
+						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), CarverDebugSettings.DEFAULT,
+						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F)))),
+				LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND, LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CANYON, LandBiomeType.any());
