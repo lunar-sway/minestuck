@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:copper_ingot"
+  },
+  "input2": {
+    "item": "minecraft:stone_brick_stairs"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:cut_copper_stairs"
+  }
+}
