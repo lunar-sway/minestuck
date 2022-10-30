@@ -63,7 +63,7 @@ public class MSDensityFunctions
 	public static NoiseRouterWithOnlyNoises makeLandNoiseRouter(Registry<DensityFunction> registry)
 	{
 		return new NoiseRouterWithOnlyNoises(
-				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
+				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
 				DensityFunctions.zero(), DensityFunctions.zero(), from(registry, LAND_CONTINENTS), from(registry, LAND_EROSION), from(registry, LAND_DEPTH), DensityFunctions.zero(), // biome parameters
 				from(registry, LAND_INITIAL_DENSITY), from(registry, LAND_FINAL_DENSITY),	// terrain and surface height
 				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
