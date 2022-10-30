@@ -1,17 +1,14 @@
 package com.mraof.minestuck.item.weapon;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
-import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
-import com.mraof.minestuck.inventory.musicplayer.MusicPlayerCapabilityProvider;
-import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
+import com.mraof.minestuck.inventory.musicplayer.*;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -19,18 +16,18 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -38,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MusicPlayerItem extends WeaponItem
 {
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
@@ -46,17 +44,27 @@ public class MusicPlayerItem extends WeaponItem
 				new IllegalArgumentException("Expected an item handler for the music player item, but " + itemStack + " does not expose an item handler."));
 	}
 	
-	private static IMusicPlaying getMusicPlaying(ItemStack itemStack)
+	private static IMusicPlaying getMusicPlaying(LivingEntity entity)
 	{
-		return itemStack.getCapability(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
-				new IllegalArgumentException("Expected an music playing for the music player item, but " + itemStack + " does not expose a music playing."));
+		return entity.getCapability(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
+				new IllegalArgumentException("Expected an music playing for this entity, but " + entity + " does not expose a music playing."));
+	}
+	
+	@SubscribeEvent
+	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> attachCapabilitiesEvent)
+	{
+		if(attachCapabilitiesEvent.getObject() instanceof Player)
+		{
+			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "musicplaying"),
+					new MusicPlayingCapabilityProvider());
+		}
 	}
 	
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt)
 	{
-		return new MusicPlayerCapabilityProvider();
+		return new ItemHandlerCapabilityProvider();
 	}
 	
 	public MusicPlayerItem(Builder builder, Properties properties)
@@ -70,7 +78,7 @@ public class MusicPlayerItem extends WeaponItem
 		ItemStack musicPlayer = playerIn.getItemInHand(handIn);
 		
 		IItemHandler itemStackHandlerMusicPlayer = getItemStackHandlerMusicPlayer(musicPlayer);
-		IMusicPlaying musicPlayingCap = getMusicPlaying(musicPlayer);
+		IMusicPlaying musicPlayingCap = getMusicPlaying(playerIn);
 		
 		if(!level.isClientSide)
 		{
@@ -84,10 +92,12 @@ public class MusicPlayerItem extends WeaponItem
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
 						musicPlayingCap.setCassetteType(cassette.cassetteID);
+						musicPlayingCap.setCurrentMusicPlayer(musicPlayer);
 					} else
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
 						musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
+						musicPlayingCap.setCurrentMusicPlayer(ItemStack.EMPTY);
 					}
 					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
 				}
@@ -103,61 +113,49 @@ public class MusicPlayerItem extends WeaponItem
 		return super.use(level, playerIn, handIn);
 	}
 	
-	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
+	@SubscribeEvent
+	public static void playerTick(TickEvent.PlayerTickEvent tickEvent)
 	{
-		if(!level.isClientSide && entityIn instanceof Player player)
+		if(tickEvent.side.isServer() && tickEvent.phase == TickEvent.Phase.END)
 		{
-			if(!(player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof MusicPlayerItem))
+			Player player = tickEvent.player;
+			IMusicPlaying musicPlayingCap = getMusicPlaying(player);
+			
+			if(!(player.getItemInHand(InteractionHand.MAIN_HAND) == musicPlayingCap.getCurrentMusicPlayer() ||
+					player.getItemInHand(InteractionHand.OFF_HAND) == musicPlayingCap.getCurrentMusicPlayer()) ||
+					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
-				IMusicPlaying musicPlayingCap = getMusicPlaying(stack);
-				
 				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
 				musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
+				musicPlayingCap.setCurrentMusicPlayer(ItemStack.EMPTY);
 				MSPacketHandler.sendToTrackingAndSelf(packet, player);
 			}
 			
-			if(level.getGameTime() % 50 == 0)
+			if(player.level.getGameTime() % 50 == 0)
 			{
-				super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
-				
-					IMusicPlaying musicPlaying = getMusicPlaying(stack);
-					EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
-					if(effectContainer != null && !effectContainer.onHit)
-						player.addEffect(effectContainer.effect);
+				IMusicPlaying musicPlaying = getMusicPlaying(player);
+				EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
+				if(!effectContainer.onHit())
+					player.addEffect(effectContainer.effect());
 			}
 		}
 	}
 	
-	/*@Override TODO change Attack Speed to follow the BPM
-	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
-	{
-		IMusicPlaying musicPlaying = getMusicPlaying(stack);
-		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
-		{
-			ImmutableMultimap.Builder<Attribute, AttributeModifier> multimap = ImmutableMultimap.builder();
-			float attackSpeed = musicPlaying.getCassetteType().getAttackSpeed();
-			multimap.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeed, AttributeModifier.Operation.ADDITION));
-			return multimap.build();
-		}
-		return super.getAttributeModifiers(slot, stack);
-	}*/
-	
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		IMusicPlaying musicPlaying = getMusicPlaying(stack);
+		IMusicPlaying musicPlaying = getMusicPlaying(target);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
 		{
 			Random r = attacker.level.getRandom();
 			
-			double chanceToHit = r.nextFloat();
 			double attackerLuckValue;
 			double targetLuckValue;
 			
-			EffectContainer effectContainer = getEffect(musicPlaying.getCassetteType());
+			EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
 			AttributeInstance attackerLuck = attacker.getAttribute(Attributes.LUCK);
 			AttributeInstance targetLuck = target.getAttribute(Attributes.LUCK);
+			double chanceToHit = effectContainer.applyingChance();
 			
 			if(attackerLuck != null)
 				attackerLuckValue = attackerLuck.getValue();
@@ -169,81 +167,13 @@ public class MusicPlayerItem extends WeaponItem
 			else
 				targetLuckValue = 0.0D;
 			
-			chanceToHit = chanceToHit - (attackerLuckValue / 10) + (targetLuckValue / 10);
+			chanceToHit = chanceToHit + (attackerLuckValue / 10) - (targetLuckValue / 10);
 			
-			if(effectContainer != null && effectContainer.applyingChance > chanceToHit && effectContainer.onHit)
+			if(chanceToHit > r.nextFloat() && effectContainer.onHit())
 			{
 				target.addEffect(effectContainer.effect());
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
-	}
-	
-	public EffectContainer getEffect(EnumCassetteType cassetteType)
-	{
-		return switch(cassetteType)
-				{
-					case ELEVEN -> new EffectContainer(new MobEffectInstance(MobEffects.WITHER, 60, 0),
-							0.10F, true);
-					
-					case THIRTEEN -> new EffectContainer(new MobEffectInstance(MobEffects.HUNGER, 50, 0),
-							0.30F, true);
-					
-					case BLOCKS -> new EffectContainer(new MobEffectInstance(MobEffects.CONFUSION, 50, 0),
-							0.15F, true);
-					
-					case CAT -> new EffectContainer(new MobEffectInstance(MobEffects.NIGHT_VISION, 100, 0,
-							false, false, false), 1F, false);
-					
-					case CHIRP -> new EffectContainer(new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
-							false, false, false),
-							1F, false);
-					
-					case DANCE_STAB_DANCE -> new EffectContainer(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 0,
-							false, false, false),
-							1F, false);
-					
-					case EMISSARY_OF_DANCE -> new EffectContainer(new MobEffectInstance(MobEffects.POISON, 400, 0),
-							0.1F, true);
-					
-					case FAR -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 100, 0,
-							false, false, false),
-							1F, false);
-					
-					case MALL -> new EffectContainer(new MobEffectInstance(MobEffects.WATER_BREATHING, 100, 0,
-							false, false, false),
-							1F, false);
-					
-					case MELLOHI -> new EffectContainer(new MobEffectInstance(MobEffects.LEVITATION, 60, 0),
-							0.20F, true);
-					
-					case PIGSTEP -> new EffectContainer(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0,
-							false, false, false),
-							1F, false);
-					
-					case RETRO_BATTLE_THEME ->
-							new EffectContainer(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0,
-									false, false, false),
-									1F, false);
-					
-					case STAL -> new EffectContainer(new MobEffectInstance(MobEffects.JUMP, 100, 1,
-							false, false, false),
-							1F, false);
-					
-					case STRAD -> new EffectContainer(new MobEffectInstance(MobEffects.UNLUCK, 200, 0),
-							0.10F, true);
-					
-					case WAIT -> new EffectContainer(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0),
-							0.30F, true);
-					
-					case WARD -> new EffectContainer(new MobEffectInstance(MobEffects.GLOWING, 750, 0),
-							1F, true);
-					
-					default -> null;
-				};
-	}
-	
-	record EffectContainer(MobEffectInstance effect, float applyingChance, boolean onHit)
-	{
 	}
 }

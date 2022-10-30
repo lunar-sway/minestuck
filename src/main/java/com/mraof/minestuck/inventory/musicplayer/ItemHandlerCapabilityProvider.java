@@ -11,12 +11,10 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
+public class ItemHandlerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
 	private final LazyOptional<IItemHandler> lazyInitSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
-	private final LazyOptional<IMusicPlaying> lazyInitSupplierMusicPlaying = LazyOptional.of(this::getCachedMusicPlaying);
 	private ItemStackHandlerMusicPlayer itemStackHandlerMusicPlayer;
-	private MusicPlaying musicPlaying;
 	
 	@NotNull
 	@Override
@@ -24,8 +22,6 @@ public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTS
 	{
 		if(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap)
 			return (lazyInitSupplierItemHandler).cast();
-		if(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY == cap)
-			return (lazyInitSupplierMusicPlaying).cast();
 		return LazyOptional.empty();
 	}
 	
@@ -34,13 +30,6 @@ public class MusicPlayerCapabilityProvider implements ICapabilityProvider, INBTS
 			itemStackHandlerMusicPlayer = new ItemStackHandlerMusicPlayer(1);
 		}
 		return itemStackHandlerMusicPlayer;
-	}
-	
-	private @NotNull MusicPlaying getCachedMusicPlaying() {
-		if (musicPlaying == null) {
-			musicPlaying = new MusicPlaying();
-		}
-		return musicPlaying;
 	}
 	
 	@Override

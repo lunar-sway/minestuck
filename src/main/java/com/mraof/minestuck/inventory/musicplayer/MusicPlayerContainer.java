@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.util.MSTags;
@@ -42,17 +43,24 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 	{
 		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.slots.get(slotNumber);
+		int allSlots = this.slots.size();
 		
 		if (slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();
 			boolean result = false;
+			
+			if(slotNumber <= 0)
+			{
+				//if it's a cassette slot
+				result = moveItemStackTo(itemstackOrig, 1, allSlots, false);
+			} else
+			{
+				//if it's an inventory slot with valid contents
 				if(itemstackOrig.is(MSTags.Items.CASSETTES))
-				{
-					//Debug.print("Transferring...");
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);
-				}
+			}
 			
 			if(!result)
 				return ItemStack.EMPTY;
