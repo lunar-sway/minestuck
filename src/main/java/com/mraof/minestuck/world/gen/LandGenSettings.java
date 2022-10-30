@@ -92,7 +92,7 @@ public final class LandGenSettings
 		
 		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
 				MSDensityFunctions.makeLandNoiseRouter(densityFunctions),
-				surfaceRule, 64, false, false, false, false);
+				surfaceRule, 64, false, true, false, false);
 		
 		return Holder.direct(settings);
 	}
