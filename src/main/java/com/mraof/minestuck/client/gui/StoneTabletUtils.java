@@ -1,6 +1,5 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.client.gui.StoneTabletScreen;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
