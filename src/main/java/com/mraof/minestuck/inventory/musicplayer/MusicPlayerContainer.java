@@ -18,23 +18,27 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 {
 	private static final int CASSETTE_X = 80;
 	private static final int CASSETTE_Y = 36;
+	private final ItemStack musicPlayer;
 	
-	public MusicPlayerContainer(int windowId, Inventory playerInventory, IItemHandler itemStackHandler)
+	public MusicPlayerContainer(int windowId, Inventory playerInventory, IItemHandler itemStackHandler, ItemStack musicPlayer)
 	{
 		super(MSMenuTypes.MUSIC_PLAYER.get(), windowId);
+		this.musicPlayer = musicPlayer;
 		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y));
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
 	public MusicPlayerContainer(int windowId, Inventory playerInventory)
 	{
-		this(windowId, playerInventory, new ItemStackHandlerMusicPlayer(1));
+		this(windowId, playerInventory, new ItemStackHandlerMusicPlayer(1), ItemStack.EMPTY);
 	}
 	
 	@Override
 	public boolean stillValid(Player playerIn)
 	{
-		return true;
+		ItemStack main = playerIn.getMainHandItem();
+		ItemStack off = playerIn.getOffhandItem();
+		return !main.isEmpty() && main == musicPlayer || !off.isEmpty() && off == musicPlayer;
 	}
 	
 	@Nonnull

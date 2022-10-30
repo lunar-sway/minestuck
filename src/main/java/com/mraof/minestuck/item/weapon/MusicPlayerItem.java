@@ -106,7 +106,7 @@ public class MusicPlayerItem extends WeaponItem
 			else
 			{
 				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
-						new MusicPlayerContainer(pContainerId, pInventory, itemStackHandlerMusicPlayer),
+						new MusicPlayerContainer(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
 						new TextComponent("Music Player")));
 			}
 		}
@@ -131,10 +131,9 @@ public class MusicPlayerItem extends WeaponItem
 				MSPacketHandler.sendToTrackingAndSelf(packet, player);
 			}
 			
-			if(player.level.getGameTime() % 50 == 0)
+			if(player.level.getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
 			{
-				IMusicPlaying musicPlaying = getMusicPlaying(player);
-				EnumCassetteType.EffectContainer effectContainer = musicPlaying.getCassetteType().getEffectContainer();
+				EnumCassetteType.EffectContainer effectContainer = musicPlayingCap.getCassetteType().getEffectContainer();
 				if(!effectContainer.onHit())
 					player.addEffect(effectContainer.effect());
 			}
@@ -144,7 +143,7 @@ public class MusicPlayerItem extends WeaponItem
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
-		IMusicPlaying musicPlaying = getMusicPlaying(target);
+		IMusicPlaying musicPlaying = getMusicPlaying(attacker);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
 		{
 			Random r = attacker.level.getRandom();
