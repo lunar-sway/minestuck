@@ -14,8 +14,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilde
 
 import java.util.Random;
 
-//Note: placement is handled in a special way
-// Configured spacing should be 1, and separation should be 0, or else the gate might sometimes not generate
 public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 {
 	public GateStructure(Codec<NoneFeatureConfiguration> codec)

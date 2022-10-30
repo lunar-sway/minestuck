@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer.editmode;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

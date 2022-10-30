@@ -3,6 +3,8 @@ package com.mraof.minestuck.event;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
@@ -24,6 +26,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,6 +42,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -61,9 +65,6 @@ public class ServerEventHandler
 	public static void serverStarting(ServerStartingEvent event)
 	{
 		ConsortDialogue.serverStarting();
-		//if(!event.getServer().isDedicatedServer() && Minestuck.class.getAnnotation(Mod.class).version().startsWith("@")) TODO Find an alternative to detect dev environment
-		//event.getServer().setOnlineMode(false);	//Makes it possible to use LAN in a development environment
-		
 		lastDay = event.getServer().overworld().getGameTime() / 24000L;
 	}
 	
@@ -261,6 +262,27 @@ public class ServerEventHandler
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			if(data.getTitle() != null)
 				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
+	{
+		onEffectEnd(event.getEntityLiving(), event.getPotion());
+	}
+	
+	@SubscribeEvent
+	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	{
+		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getEffect());
+	}
+	
+	private static void onEffectEnd(LivingEntity entityLiving, MobEffect effect)
+	{
+		if(entityLiving instanceof ServerPlayer player)
+		{
+			if(effect == MSEffects.CREATIVE_SHOCK.get())
+				CreativeShockEffect.onEffectEnd(player);
 		}
 	}
 	

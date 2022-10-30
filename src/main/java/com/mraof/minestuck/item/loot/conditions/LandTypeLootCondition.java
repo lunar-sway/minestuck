@@ -41,7 +41,7 @@ public class LandTypeLootCondition implements LootItemCondition
 	@Override
 	public LootItemConditionType getType()
 	{
-		return MSLootTables.landTypeConditionType();
+		return MSLootTables.LAND_TYPE_CONDITION.get();
 	}
 	
 	@Override

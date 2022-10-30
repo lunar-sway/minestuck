@@ -5,7 +5,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;

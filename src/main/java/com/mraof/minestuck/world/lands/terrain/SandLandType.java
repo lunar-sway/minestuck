@@ -43,21 +43,21 @@ public class SandLandType extends TerrainLandType
 	{
 		return new SandLandType(Variant.SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	public static TerrainLandType createLushDeserts()
 	{
 		return new SandLandType(Variant.LUSH_DESERTS, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(LUSH_DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_LUSH_DESERTS));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
 	}
 	
 	public static TerrainLandType createRedSand()
 	{
 		return new SandLandType(Variant.RED_SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.6, 0.05).skyColor(0.8, 0.6, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(() -> MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	private SandLandType(Variant variation, Builder builder)
@@ -130,21 +130,21 @@ public class SandLandType extends TerrainLandType
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.SANDSTONE_IRON_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+							CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 					LandBiomeType.any());
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.SANDSTONE_GOLD_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+							CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 					LandBiomeType.any());
 		} else
 		{
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_IRON_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+							CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 					LandBiomeType.any());
 			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 							new OreConfiguration(blocks.getGroundType(), MSBlocks.RED_SANDSTONE_GOLD_ORE.get().defaultBlockState(), 9),
-							CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+							CountPlacement.of(18), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 					LandBiomeType.any());
 		}
 	}

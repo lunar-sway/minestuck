@@ -6,7 +6,7 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;

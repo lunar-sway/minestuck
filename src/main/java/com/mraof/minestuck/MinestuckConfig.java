@@ -80,7 +80,6 @@ public class MinestuckConfig
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
-		public final ConfigValue<List<String>> startingModusTypes;
 		public final IntValue modusMaxSize;
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
@@ -153,8 +152,6 @@ public class MinestuckConfig
 					.define("dropItemsInCards", true);
 			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex.")
 					.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-			startingModusTypes = builder.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hash_map\"")
-					.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 			modusMaxSize = builder.comment("The max size on a modus. Ignored if the value is 0.")
 					.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 			sylladexDropMode = builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
@@ -211,7 +208,7 @@ public class MinestuckConfig
 			builder.push("entry");
 			entryCrater = builder.comment("Disable this to prevent craters from people entering the medium.")
 					.define("entryCrater",true);
-			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
+			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:120. Makes entry take slightly longer.")
 					.define("adaptEntryBlockHeight",true);
 			stopSecondEntry = builder.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
 					.define("stopSecondEntry",false);

@@ -38,14 +38,14 @@ public class SandstoneLandType extends TerrainLandType
 	{
 		return new SandstoneLandType(Variant.SANDSTONE, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.9, 0.7, 0.05).skyColor(0.8, 0.6, 0.2)
-				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
+				.category(Biome.BiomeCategory.MESA).music(MSSoundEvents.MUSIC_SANDSTONE));
 	}
 	
 	public static TerrainLandType createRedSandstone()
 	{
 		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.7, 0.4, 0.05).skyColor(0.8, 0.5, 0.1)
-				.category(Biome.BiomeCategory.MESA).music(() -> MSSoundEvents.MUSIC_SANDSTONE));
+				.category(Biome.BiomeCategory.MESA).music(MSSoundEvents.MUSIC_SANDSTONE));
 	}
 	
 	private SandstoneLandType(Variant type, Builder builder)
@@ -116,15 +116,15 @@ public class SandstoneLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), sandstone, 28),
-						CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 9),
-						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 8),
-						CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+						CountPlacement.of(36), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 	}
 	

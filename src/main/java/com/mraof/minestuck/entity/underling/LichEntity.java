@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -40,19 +40,19 @@ public class LichEntity extends UnderlingEntity
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_AMBIENT;
+		return MSSoundEvents.ENTITY_LICH_AMBIENT.get();
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_LICH_HURT;
+		return MSSoundEvents.ENTITY_LICH_HURT.get();
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_DEATH;
+		return MSSoundEvents.ENTITY_LICH_DEATH.get();
 	}
 	
 	@Override

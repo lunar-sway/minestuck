@@ -35,7 +35,7 @@ public class EndLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
 				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(() -> MSSoundEvents.MUSIC_END));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override
@@ -76,15 +76,15 @@ public class EndLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_IRON_ORE.get().defaultBlockState(), 9),
-						CountPlacement.of(20), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(40), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.END_STONE_REDSTONE_ORE.get().defaultBlockState(), 8),
-						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.END_STONE.defaultBlockState(), 36),
-						CountPlacement.of(40), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(80), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 	}
 	

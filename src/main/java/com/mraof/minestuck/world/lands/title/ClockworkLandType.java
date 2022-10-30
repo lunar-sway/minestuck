@@ -55,6 +55,6 @@ public class ClockworkLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_CLOCKWORK;
+		return MSSoundEvents.MUSIC_CLOCKWORK.get();
 	}
 }

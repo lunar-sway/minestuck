@@ -57,7 +57,7 @@ public class IrradiatingFallbackRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.IRRADIATING_FALLBACK;
+			return MSRecipeTypes.IRRADIATING_FALLBACK.get();
 		}
 		
 		@Nullable

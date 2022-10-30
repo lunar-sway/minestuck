@@ -1,7 +1,7 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;

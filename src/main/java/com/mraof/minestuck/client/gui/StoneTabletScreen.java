@@ -6,8 +6,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StoneTabletPacket;
-import com.mraof.minestuck.util.StoneTabletUtils;
-import com.mraof.minestuck.util.StoneTabletUtils.Point;
+import com.mraof.minestuck.client.gui.StoneTabletUtils.Point;
 import net.minecraft.ChatFormatting;
 import net.minecraft.SharedConstants;
 import net.minecraft.Util;
@@ -117,7 +116,7 @@ public class StoneTabletScreen extends Screen
 		{
 			
 			MutableInt lineY = new MutableInt();
-			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, false, (style, start, end) -> {
 				Component line = new TextComponent(text.substring(start, end)).setStyle(style);
 				font.draw(poseStack, line, (this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF);
 				lineY.add(font.lineHeight);

@@ -43,14 +43,14 @@ public class ForestLandType extends TerrainLandType
 	{
 		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
-				.category(Biome.BiomeCategory.FOREST).music(() -> MSSoundEvents.MUSIC_FOREST));
+				.category(Biome.BiomeCategory.FOREST).music(MSSoundEvents.MUSIC_FOREST));
 	}
 	
 	public static TerrainLandType createTaiga()
 	{
 		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
-				.category(Biome.BiomeCategory.TAIGA).music(() -> MSSoundEvents.MUSIC_TAIGA));
+				.category(Biome.BiomeCategory.TAIGA).music(MSSoundEvents.MUSIC_TAIGA));
 	}
 	
 	private ForestLandType(Variant variation, Builder builder)
@@ -111,15 +111,15 @@ public class ForestLandType extends TerrainLandType
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33),
-						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+						CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
-						CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17),
-						CountPlacement.of(20), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(128)), BiomeFilter.biome()),
+						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(128)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_EMERALD, LandBiomeType.any());
 	}

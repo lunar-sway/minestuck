@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
+import com.mraof.minestuck.alchemy.CombinationMode;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -159,7 +159,7 @@ public class CombinationRecipeBuilder
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.COMBINATION;
+			return MSRecipeTypes.COMBINATION.get();
 		}
 		
 		@Nullable

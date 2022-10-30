@@ -82,7 +82,6 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
 		tag(RODS).add(URANIUM_POWERED_STICK.get());
 		tag(ExtraForgeTags.Items.URANIUM_CHUNKS).add(RAW_URANIUM.get());
-		tag(ExtraForgeTags.Items.COPPER_ORES);
 		tag(ExtraForgeTags.Items.TIN_ORES);
 		tag(ExtraForgeTags.Items.SILVER_ORES);
 		tag(ExtraForgeTags.Items.LEAD_ORES);
@@ -90,7 +89,6 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(ExtraForgeTags.Items.ALUMINIUM_ORES);
 		tag(ExtraForgeTags.Items.COBALT_ORES);
 		tag(ExtraForgeTags.Items.ARDITE_ORES);
-		tag(ExtraForgeTags.Items.COPPER_INGOTS);
 		tag(ExtraForgeTags.Items.TIN_INGOTS);
 		tag(ExtraForgeTags.Items.SILVER_INGOTS);
 		tag(ExtraForgeTags.Items.LEAD_INGOTS);

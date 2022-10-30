@@ -42,6 +42,6 @@ public class BucketsLandType extends TitleLandType    //Yes, buckets
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_BUCKETS;
+		return MSSoundEvents.MUSIC_BUCKETS.get();
 	}
 }
