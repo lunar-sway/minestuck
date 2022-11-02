@@ -12,23 +12,23 @@ import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.data.worldgen.Carvers;
+import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.valueproviders.ConstantFloat;
-import net.minecraft.util.valueproviders.TrapezoidFloat;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.carver.CanyonCarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
+import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.heightproviders.BiasedToBottomHeight;
+import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
@@ -116,6 +116,7 @@ public class RockLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.COBBLESTONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_SURFACE_DISK, LandBiomeType.NORMAL, LandBiomeType.ROUGH);
 			builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.STONE_MOUND, LandBiomeType.ROUGH);
+			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CavePlacements.GLOW_LICHEN, LandBiomeType.any());
 		} else if(this.type == Variant.PETRIFICATION)
 		{
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_TREE, LandBiomeType.NORMAL);
@@ -127,48 +128,54 @@ public class RockLandType extends TerrainLandType
 			builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_PETRIFIED_POPPY_PATCH, LandBiomeType.ROUGH);
 		}
 		
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_DECORATION, CavePlacements.AMETHYST_GEODE, LandBiomeType.any());
+		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
-						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+						CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.INFESTED_STONE.defaultBlockState(), 9),
-						CountPlacement.of(7), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(14), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 9),
-						CountPlacement.of(15), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 5),
-						CountPlacement.of(15), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+						CountPlacement.of(30), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 5),
-						CountPlacement.of(8), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.LAPIS_ORE.defaultBlockState(), 4),
-						CountPlacement.of(3), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
+						CountPlacement.of(11), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.get().defaultBlockState(), 4),
-						CountPlacement.of(3), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
+						CountPlacement.of(11), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.GOLD_ORE.defaultBlockState(), 5),
-						CountPlacement.of(3), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+						CountPlacement.of(9), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 4),
-						CountPlacement.of(2), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
+						CountPlacement.of(7), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
 				LandBiomeType.any());
 		
-		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CANYON.configured(new CanyonCarverConfiguration(0.4F,
-						BiasedToBottomHeight.of(VerticalAnchor.absolute(20), VerticalAnchor.absolute(67), 8),
-						ConstantFloat.of(3), VerticalAnchor.absolute(10), CarverDebugSettings.DEFAULT, UniformFloat.of(-0.125F, 0.125F),
-						new CanyonCarverConfiguration.CanyonShapeConfiguration(UniformFloat.of(0.75F, 1F), TrapezoidFloat.of(0, 6, 2), 3, UniformFloat.of(0.75F, 1F), 1F, 0F)))),
+		//cave carver that creates more cavernous sections, may end up as just a placeholder for noise based cave generation
+		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
+						UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)),
+						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), CarverDebugSettings.DEFAULT,
+						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F)))),
 				LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND, LandBiomeType.any());
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CANYON, LandBiomeType.any());
 	}
 	
 	@Override

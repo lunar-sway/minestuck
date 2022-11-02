@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:lily_pad"
+  },
+  "input2": {
+    "item": "minecraft:bone_meal"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:spore_blossom"
+  }
+}

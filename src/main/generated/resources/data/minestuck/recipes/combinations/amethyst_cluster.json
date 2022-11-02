@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:pointed_dripstone"
+  },
+  "input2": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:amethyst_cluster"
+  }
+}

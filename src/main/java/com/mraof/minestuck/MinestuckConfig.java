@@ -208,7 +208,7 @@ public class MinestuckConfig
 			builder.push("entry");
 			entryCrater = builder.comment("Disable this to prevent craters from people entering the medium.")
 					.define("entryCrater",true);
-			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
+			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:120. Makes entry take slightly longer.")
 					.define("adaptEntryBlockHeight",true);
 			stopSecondEntry = builder.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
 					.define("stopSecondEntry",false);

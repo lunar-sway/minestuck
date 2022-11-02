@@ -61,7 +61,7 @@ public class OasisFeature extends Feature<NoneFeatureConfiguration>
 		}
 		
 		//Figure out water level and if the ground is flat enough
-		int yMin = 256, yMax = 0;
+		int yMin = level.getMaxBuildHeight(), yMax = level.getMinBuildHeight();
 		for (int x = 1; x < 15; x++)
 		{
 			for (int z = 1; z < 15; z++)

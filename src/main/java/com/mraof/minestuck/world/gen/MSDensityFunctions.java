@@ -63,7 +63,7 @@ public class MSDensityFunctions
 	public static NoiseRouterWithOnlyNoises makeLandNoiseRouter(Registry<DensityFunction> registry)
 	{
 		return new NoiseRouterWithOnlyNoises(
-				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
+				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
 				DensityFunctions.zero(), DensityFunctions.zero(), from(registry, LAND_CONTINENTS), from(registry, LAND_EROSION), from(registry, LAND_DEPTH), DensityFunctions.zero(), // biome parameters
 				from(registry, LAND_INITIAL_DENSITY), from(registry, LAND_FINAL_DENSITY),	// terrain and surface height
 				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
@@ -84,7 +84,7 @@ public class MSDensityFunctions
 	@SuppressWarnings("deprecation")
 	private static DensityFunction depth(Supplier<DensityFunction> continents, Supplier<DensityFunction> erosion, Supplier<DensityFunction> weirdness)
 	{
-		return DensityFunctions.add(DensityFunctions.yClampedGradient(0, 256, 1, -1),
+		return DensityFunctions.add(DensityFunctions.yClampedGradient(-64, 320, 1.5, -1.5),
 				DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.terrainShaperSpline(continents.get(), erosion.get(), weirdness.get(),
 						DensityFunctions.TerrainShaperSpline.SplineType.OFFSET, -0.81, 2.5))));
 	}

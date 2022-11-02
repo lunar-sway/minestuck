@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:large_amethyst_bud"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 7
+  }
+}

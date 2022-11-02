@@ -63,9 +63,9 @@ public final class MSPlacedFeatures
 			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> FIRE_FIELD = REGISTER.register("fire_field", () -> placed(MSCFeatures.FIRE_FIELD,
-			worldGenModifiers(CountPlacement.of(7), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)))));
+			worldGenModifiers(CountPlacement.of(7), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)))));
 	public static final RegistryObject<PlacedFeature> EXTRA_FIRE_FIELD = REGISTER.register("extra_fire_field", () -> placed(MSCFeatures.FIRE_FIELD,
-			worldGenModifiers(CountPlacement.of(10), HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(256)))));
+			worldGenModifiers(CountPlacement.of(10), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)))));
 	public static final RegistryObject<PlacedFeature> COARSE_DIRT_DISK = REGISTER.register("coarse_dirt_disk", () -> placed(MSCFeatures.COARSE_DIRT_DISK,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> SNOW_BLOCK_DISK = REGISTER.register("snow_block_disk", () -> placed(MSCFeatures.SNOW_BLOCK_DISK,

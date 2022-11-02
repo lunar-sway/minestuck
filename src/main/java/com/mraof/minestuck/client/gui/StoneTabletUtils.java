@@ -1,6 +1,5 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.client.gui.StoneTabletScreen;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.Mth;
@@ -24,11 +23,13 @@ public class StoneTabletUtils
 	{
 		Point point = new Point();
 		
-		font.getSplitter().splitLines(pageText, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-			if(index >= end)
+		font.getSplitter().splitLines(pageText, StoneTabletScreen.TEXT_WIDTH, Style.EMPTY, false, (style, start, end) -> {
+			if(index > end)
+			{
 				point.y += font.lineHeight;
-			if(index >= start)
-				point.x = getTextWidth(font, pageText.substring(start, Math.min(index, end)));
+				point.x = 0;
+			} else if(index >= start)
+				point.x = getTextWidth(font, pageText.substring(start, index));
 		});
 		
 		return point;

@@ -39,7 +39,7 @@ public class SurfaceFossilsFeature extends AbstractTemplateFeature<NoneFeatureCo
 	@Override
 	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random)
 	{
-		int yMin = Integer.MAX_VALUE, yMax = 0;
+		int yMin = level.getMaxBuildHeight(), yMax = level.getMinBuildHeight();
 		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, templateSize.getX(), 0, templateSize.getZ()))
 		{
 			int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, pos.getX() + floorPos.getX(), pos.getZ() + floorPos.getZ());

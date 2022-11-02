@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:weathered_copper"
+  },
+  "grist_cost": {
+    "minestuck:shale": 81,
+    "minestuck:rust": 2
+  }
+}
