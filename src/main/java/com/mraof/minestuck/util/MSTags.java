@@ -186,9 +186,7 @@ public class MSTags
 	
 	public static List<Block> getBlocksFromTag(TagKey<Block> itemTag)
 	{
-		List<Block> blockListFromTag = new ArrayList<>();
-		Registry.BLOCK.getTagOrEmpty(itemTag).forEach(blockHolder -> blockListFromTag.add(blockHolder.value()));
-		return blockListFromTag;
+		return ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
 	}
 	
 	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
