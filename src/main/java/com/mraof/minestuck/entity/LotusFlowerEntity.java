@@ -208,8 +208,6 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			
 			for(ItemStack itemStack : loot)
 			{
-				if(itemStack.is(MSItems.SBURB_CODE.get()))
-					IncompleteSburbCodeItem.setParadoxInfo(itemStack, true);
 				this.spawnAtLocation(itemStack, 1F);
 			}
 		}

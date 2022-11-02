@@ -64,6 +64,7 @@ public class ProgramData
 		return -2;
 	}
 	
+	@Nonnull
 	public static ItemStack getItem(int id)
 	{
 		if(id == -1)

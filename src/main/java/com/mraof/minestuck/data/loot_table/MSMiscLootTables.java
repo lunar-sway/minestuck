@@ -2,11 +2,14 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.function.BiConsumer;
@@ -37,7 +40,17 @@ public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, L
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.COMPUTER_PARTS.get()).setWeight(10).setQuality(3)))
 				.withPool(LootPool.lootPool().name("code").setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)).apply(SetNbtFunction.setTag(giveParadoxFragment())))
 		);
+	}
+	
+	private static CompoundTag giveParadoxFragment()
+	{
+		ItemStack stack = new ItemStack(MSItems.SBURB_CODE.get());
+		CompoundTag nbt = stack.getOrCreateTag();
+		nbt.putBoolean("hasParadoxInfo", true);
+		stack.setTag(nbt);
+		
+		return nbt;
 	}
 }

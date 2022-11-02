@@ -25,6 +25,12 @@
           "quality": 3,
           "name": "minestuck:sburb_code"
         }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:set_nbt",
+          "tag": "{hasParadoxInfo:1b}"
+        }
       ]
     }
   ]

@@ -136,7 +136,7 @@ public class ReadableSburbCodeItem extends Item
 	
 	public static boolean getParadoxInfo(ItemStack stack)
 	{
-		if(stack.getItem() == MSItems.COMPLETED_SBURB_CODE.get())
+		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
 			return true;
 		else
 		{
@@ -149,7 +149,7 @@ public class ReadableSburbCodeItem extends Item
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
 	{
-		if(stack.getItem() == MSItems.COMPLETED_SBURB_CODE.get())
+		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
 		{
 			if(Screen.hasShiftDown())
 			{
