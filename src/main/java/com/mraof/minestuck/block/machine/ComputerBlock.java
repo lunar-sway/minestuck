@@ -4,9 +4,9 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.ReadableSburbCodeItem;
-import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
@@ -155,7 +155,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
 			boolean newInfo = false;
 			
-			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (SburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
+			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (IncompleteSburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
 			{
 				newInfo = true;
 				blockEntity.hasParadoxInfoStored = true;
@@ -172,18 +172,18 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 					}
 				}
 				
-				//checks additionally if the item is also a SburbCodeItem, and does the reverse process of adding any new blocks from the block entities list to the item's
-				if(heldStack.getItem() instanceof SburbCodeItem)
+				//checks additionally if the item is also a IncompleteSburbCodeItem, and does the reverse process of adding any new blocks from the block entities list to the item's
+				if(heldStack.getItem() instanceof IncompleteSburbCodeItem)
 				{
 					if(blockEntity.hasParadoxInfoStored)
-						SburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
+						IncompleteSburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
 					
 					if(blockEntity.hieroglyphsStored != null)
 					{
 						for(Block iterateBlock : blockEntity.hieroglyphsStored)
 						{
-							SburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
-							SburbCodeItem.attemptConversionToCompleted(player, handIn);
+							IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+							IncompleteSburbCodeItem.attemptConversionToCompleted(player, handIn);
 						}
 					}
 				}

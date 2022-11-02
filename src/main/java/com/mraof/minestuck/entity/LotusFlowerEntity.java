@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.SburbCodeItem;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -108,7 +108,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		{
 			ItemStack itemstack = player.getItemInHand(hand);
 			
-			if(player.distanceToSqr(this) < 36 && itemstack.getItem() == Items.BONE_MEAL && player.isCreative())
+			if(player.distanceToSqr(this) < 36 && itemstack.is(Items.BONE_MEAL) && player.isCreative())
 			{
 				restoreFromBonemeal();
 			} else if(level.isClientSide && player.distanceToSqr(this) < 36)
@@ -199,17 +199,17 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	{
 		if(!level.isClientSide)
 		{
-			ServerLevel serverWorld = (ServerLevel) level;
+			ServerLevel serverLevel = (ServerLevel) level;
 			
-			LootTable lootTable = serverWorld.getServer().getLootTables().get(MSLootTables.LOTUS_FLOWER_DEFAULT);
-			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverWorld).create(LootContextParamSets.EMPTY));
+			LootTable lootTable = serverLevel.getServer().getLootTables().get(MSLootTables.LOTUS_FLOWER_DEFAULT);
+			List<ItemStack> loot = lootTable.getRandomItems(new LootContext.Builder(serverLevel).create(LootContextParamSets.EMPTY));
 			if(loot.isEmpty())
 				LOGGER.warn("Tried to generate loot for Lotus Flower, but no items were generated!");
 			
 			for(ItemStack itemStack : loot)
 			{
-				if(itemStack.getItem() == MSItems.SBURB_CODE.get())
-					SburbCodeItem.setParadoxInfo(itemStack, true);
+				if(itemStack.is(MSItems.SBURB_CODE.get()))
+					IncompleteSburbCodeItem.setParadoxInfo(itemStack, true);
 				this.spawnAtLocation(itemStack, 1F);
 			}
 		}

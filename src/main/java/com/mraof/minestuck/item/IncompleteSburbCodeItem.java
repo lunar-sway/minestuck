@@ -29,9 +29,9 @@ import java.util.List;
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code. Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
  */
-public class SburbCodeItem extends ReadableSburbCodeItem
+public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 {
-	public SburbCodeItem(Properties properties)
+	public IncompleteSburbCodeItem(Properties properties)
 	{
 		super(properties);
 	}

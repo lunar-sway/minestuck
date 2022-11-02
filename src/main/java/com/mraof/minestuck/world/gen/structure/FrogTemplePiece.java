@@ -34,6 +34,8 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
+	private static final List<WeightedEntry.Wrapper<Block>> weightedBlockList = buildWeightedList();
+	private static final int totalWeight = WeightedRandom.getTotalWeight(weightedBlockList);
 	
 	public FrogTemplePiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int x, int z)
 	{
@@ -256,6 +258,24 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 	}
 	
+	private static List<WeightedEntry.Wrapper<Block>> buildWeightedList()
+	{
+		List<WeightedEntry.Wrapper<Block>> weightedBlockList = Lists.newArrayList();
+		
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_FROG.get(), 1)); //only one frog hieroglyph in order to have a component more difficult to find
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 36));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 36));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 36));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 16));
+		
+		return weightedBlockList;
+	}
+	
 	static class Selector extends StructurePiece.BlockSelector
 	{
 		private Selector()
@@ -265,21 +285,8 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		@Override
 		public void next(Random rand, int x, int y, int z, boolean wall)
 		{
-			List<WeightedEntry.Wrapper<Block>> weightedBlockList = Lists.newArrayList();
-			
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_FROG.get(), 1)); //only one frog hieroglyph in order to have a component more difficult to find
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 36));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 36));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 36));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 16));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 16));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 16));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 16));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 16));
-			weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 16));
-			
-			Optional<WeightedEntry.Wrapper<Block>> optional = WeightedRandom.getRandomItem(rand, weightedBlockList);
-			optional.ifPresent(blockWrapper -> this.next = blockWrapper.getData().defaultBlockState()); //sets the next blockstate to an element of the weighted list as long as the optional is present
+			WeightedEntry.Wrapper<Block> wrappedBlock = WeightedRandom.getRandomItem(rand, weightedBlockList, totalWeight).orElseThrow();
+			this.next = wrappedBlock.getData().defaultBlockState(); //sets the next blockstate to an element of the weighted list as long as the optional is present
 		}
 	}
 }
