@@ -135,7 +135,7 @@ public class MusicPlayerItem extends WeaponItem
 			{
 				EnumCassetteType.EffectContainer effectContainer = musicPlayingCap.getCassetteType().getEffectContainer();
 				if(!effectContainer.onHit())
-					player.addEffect(effectContainer.effect());
+					player.addEffect(effectContainer.effect().get());
 			}
 		}
 	}
@@ -170,7 +170,7 @@ public class MusicPlayerItem extends WeaponItem
 			
 			if(chanceToHit > r.nextFloat() && effectContainer.onHit())
 			{
-				target.addEffect(effectContainer.effect());
+				target.addEffect(effectContainer.effect().get());
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
