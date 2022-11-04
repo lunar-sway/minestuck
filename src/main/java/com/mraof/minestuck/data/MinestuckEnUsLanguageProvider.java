@@ -524,7 +524,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SCARLET_ZILLYHOO, "Scarlet Zillyhoo");
 		addItemTooltip(MSItems.SCARLET_ZILLYHOO, "A legendary weapon, forged from the most powerful of charmic destiny and..a red frog...");
 		addItem(MSItems.MWRTHWL, "Mwrthwl");
-		addItem(MSItems.MUSIC_HAMMER, "Music Hammer");
 		addItem(MSItems.SORD, "Sord.....");
 		addItemTooltip(MSItems.SORD, "A shitty sword. Not much more too it.");
 		addItemExtra(MSItems.SORD, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the sord made it phase through your hand");
@@ -581,6 +580,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SHATTER_BACON, "ShatterBacon");
 		addItemTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addItemExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		addItem(MSItems.MUSIC_SWORD, "Music Sword");
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.NIFE, "nife.");

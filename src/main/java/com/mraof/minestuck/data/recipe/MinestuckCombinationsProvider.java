@@ -400,6 +400,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON.get()).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BACON.get()).input(Items.PORKCHOP).and().input(MSItems.SHATTER_BEACON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH.get()).input(MSItems.ROYAL_DERINGER.get()).or().input(MSItems.CUEBALL.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).input(MSBlocks.CASSETTE_PLAYER.get()).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.NIFE.get()).input(MSItems.DAGGER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_OF_MY_KNIFE.get()).input(MSItems.DAGGER.get()).and().input(Items.LANTERN).build(consumer);

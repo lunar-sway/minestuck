@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cassette_player"
+  },
+  "input2": {
+    "item": "minestuck:claymore"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:music_sword"
+  }
+}
