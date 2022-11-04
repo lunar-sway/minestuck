@@ -14,7 +14,6 @@ public class ItemStackHandlerMusicPlayer extends ItemStackHandler
 	
 	@Override
 	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-		if (stack.isEmpty()) return false;
 		return stack.is(MSTags.Items.CASSETTES);
 	}
 }
