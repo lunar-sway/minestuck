@@ -13,13 +13,13 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class MusicPlayerContainer extends AbstractContainerMenu
+public class CassetteContainerMenu extends AbstractContainerMenu
 {
 	private static final int CASSETTE_X = 80;
 	private static final int CASSETTE_Y = 36;
 	private final ItemStack musicPlayer;
 	
-	public MusicPlayerContainer(int windowId, Inventory playerInventory, IItemHandler itemStackHandler, ItemStack musicPlayer)
+	public CassetteContainerMenu(int windowId, Inventory playerInventory, IItemHandler itemStackHandler, ItemStack musicPlayer)
 	{
 		super(MSMenuTypes.MUSIC_PLAYER.get(), windowId);
 		this.musicPlayer = musicPlayer;
@@ -27,7 +27,7 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
-	public MusicPlayerContainer(int windowId, Inventory playerInventory)
+	public CassetteContainerMenu(int windowId, Inventory playerInventory)
 	{
 		this(windowId, playerInventory, new CassetteItemHandler(1), ItemStack.EMPTY);
 	}

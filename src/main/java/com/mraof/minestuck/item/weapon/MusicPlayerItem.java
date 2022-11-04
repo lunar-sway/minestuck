@@ -104,7 +104,7 @@ public class MusicPlayerItem extends WeaponItem
 			else
 			{
 				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
-						new MusicPlayerContainer(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
+						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
 						new TextComponent("Music Player")));
 			}
 		}

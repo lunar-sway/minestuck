@@ -2,18 +2,18 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.inventory.musicplayer.MusicPlayerContainer;
+import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MusicPlayerScreen extends AbstractContainerScreen<MusicPlayerContainer>
+public class MusicPlayerScreen extends AbstractContainerScreen<CassetteContainerMenu>
 {
 	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/music_player.png");
 	
-	public MusicPlayerScreen(MusicPlayerContainer container, Inventory pPlayerInventory, Component pTitle)
+	public MusicPlayerScreen(CassetteContainerMenu container, Inventory pPlayerInventory, Component pTitle)
 	{
 		super(container, pPlayerInventory, pTitle);
 	}
