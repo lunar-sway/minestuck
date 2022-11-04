@@ -104,7 +104,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	
 	private void sylladex()
 	{
-		if( ClientPlayerData.getModus() != null)
+		if( ClientPlayerData.getModus() != null && menu.getCarried().isEmpty())
 		{
 			minecraft.player.connection.send(new ServerboundContainerClosePacket(minecraft.player.containerMenu.containerId));
 			MSScreenFactories.displaySylladexScreen(ClientPlayerData.getModus());
