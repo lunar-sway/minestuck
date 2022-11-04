@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class ItemHandlerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
 	private final LazyOptional<IItemHandler> lazyInitSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
-	private ItemStackHandlerMusicPlayer itemStackHandlerMusicPlayer;
+	private CassetteItemHandler cassetteItemHandler;
 	
 	@NotNull
 	@Override
@@ -25,11 +25,11 @@ public class ItemHandlerCapabilityProvider implements ICapabilityProvider, INBTS
 		return LazyOptional.empty();
 	}
 	
-	private @NotNull ItemStackHandlerMusicPlayer getCachedInventory() {
-		if (itemStackHandlerMusicPlayer == null) {
-			itemStackHandlerMusicPlayer = new ItemStackHandlerMusicPlayer(1);
+	private @NotNull CassetteItemHandler getCachedInventory() {
+		if (cassetteItemHandler == null) {
+			cassetteItemHandler = new CassetteItemHandler(1);
 		}
-		return itemStackHandlerMusicPlayer;
+		return cassetteItemHandler;
 	}
 	
 	@Override

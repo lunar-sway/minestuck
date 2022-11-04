@@ -6,9 +6,9 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 
-public class ItemStackHandlerMusicPlayer extends ItemStackHandler
+public class CassetteItemHandler extends ItemStackHandler
 {
-	public ItemStackHandlerMusicPlayer (int numberOfSlots) {
+	public CassetteItemHandler(int numberOfSlots) {
 		super(numberOfSlots);
 	}
 	

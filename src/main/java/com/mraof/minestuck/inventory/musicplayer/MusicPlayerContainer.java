@@ -1,6 +1,5 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.util.MSTags;
@@ -30,7 +29,7 @@ public class MusicPlayerContainer extends AbstractContainerMenu
 	
 	public MusicPlayerContainer(int windowId, Inventory playerInventory)
 	{
-		this(windowId, playerInventory, new ItemStackHandlerMusicPlayer(1), ItemStack.EMPTY);
+		this(windowId, playerInventory, new CassetteItemHandler(1), ItemStack.EMPTY);
 	}
 	
 	@Override
