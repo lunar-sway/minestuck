@@ -11,7 +11,7 @@ import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemHandlerCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
+public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
 	private final LazyOptional<IItemHandler> lazyInitSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
 	private CassetteItemHandler cassetteItemHandler;
