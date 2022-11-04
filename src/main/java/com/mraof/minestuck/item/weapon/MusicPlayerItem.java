@@ -89,13 +89,11 @@ public class MusicPlayerItem extends WeaponItem
 					if(musicPlayingCap.getCassetteType() == EnumCassetteType.NONE)
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
-						musicPlayingCap.setCassetteType(cassette.cassetteID);
-						musicPlayingCap.setCurrentMusicPlayer(musicPlayer);
+						musicPlayingCap.setMusicPlaying(musicPlayer, cassette.cassetteID);
 					} else
 					{
 						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
-						musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
-						musicPlayingCap.setCurrentMusicPlayer(ItemStack.EMPTY);
+						musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					}
 					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
 				}
@@ -124,8 +122,7 @@ public class MusicPlayerItem extends WeaponItem
 					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
 				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
-				musicPlayingCap.setCassetteType(EnumCassetteType.NONE);
-				musicPlayingCap.setCurrentMusicPlayer(ItemStack.EMPTY);
+				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 				MSPacketHandler.sendToTrackingAndSelf(packet, player);
 			}
 			

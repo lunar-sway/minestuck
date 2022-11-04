@@ -6,9 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 public interface IMusicPlaying
 {
-	void setCassetteType(EnumCassetteType cassetteType);
-	
-	void setCurrentMusicPlayer(ItemStack itemStack);
+	void setMusicPlaying(ItemStack cassettePlayer, EnumCassetteType cassetteType);
 	
 	EnumCassetteType getCassetteType();
 	

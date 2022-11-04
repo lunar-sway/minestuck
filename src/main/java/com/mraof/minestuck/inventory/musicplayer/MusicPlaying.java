@@ -9,15 +9,10 @@ public class MusicPlaying implements IMusicPlaying
 	private ItemStack currentCassettePlayer = ItemStack.EMPTY;
 	
 	@Override
-	public void setCassetteType(EnumCassetteType cassetteType)
+	public void setMusicPlaying(ItemStack cassettePlayer, EnumCassetteType cassetteType)
 	{
+		this.currentCassettePlayer = cassettePlayer;
 		this.cassetteType = cassetteType;
-	}
-	
-	@Override
-	public void setCurrentMusicPlayer(ItemStack itemStack)
-	{
-		this.currentCassettePlayer = itemStack;
 	}
 	
 	@Override
