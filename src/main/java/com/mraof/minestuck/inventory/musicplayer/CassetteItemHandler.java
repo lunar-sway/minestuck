@@ -8,12 +8,14 @@ import javax.annotation.Nonnull;
 
 public class CassetteItemHandler extends ItemStackHandler
 {
-	public CassetteItemHandler(int numberOfSlots) {
+	public CassetteItemHandler(int numberOfSlots)
+	{
 		super(numberOfSlots);
 	}
 	
 	@Override
-	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+	public boolean isItemValid(int slot, @Nonnull ItemStack stack)
+	{
 		return stack.is(MSTags.Items.CASSETTES);
 	}
 }

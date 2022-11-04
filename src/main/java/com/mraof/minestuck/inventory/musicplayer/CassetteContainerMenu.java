@@ -48,7 +48,7 @@ public class CassetteContainerMenu extends AbstractContainerMenu
 		Slot slot = this.slots.get(slotNumber);
 		int allSlots = this.slots.size();
 		
-		if (slot.hasItem())
+		if(slot.hasItem())
 		{
 			ItemStack itemstackOrig = slot.getItem();
 			itemstack = itemstackOrig.copy();

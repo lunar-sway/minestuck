@@ -7,7 +7,9 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 
 public class CapabilityMusicPlaying
 {
-	public static final Capability<IMusicPlaying> MUSIC_PLAYING_CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
+	public static final Capability<IMusicPlaying> MUSIC_PLAYING_CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
+	{
+	});
 	
 	public static void register(RegisterCapabilitiesEvent event)
 	{

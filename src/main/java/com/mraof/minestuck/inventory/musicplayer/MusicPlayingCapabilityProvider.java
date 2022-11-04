@@ -21,8 +21,10 @@ public class MusicPlayingCapabilityProvider implements ICapabilityProvider
 		return LazyOptional.empty();
 	}
 	
-	private @NotNull MusicPlaying getCachedMusicPlaying() {
-		if (musicPlaying == null) {
+	private @NotNull MusicPlaying getCachedMusicPlaying()
+	{
+		if(musicPlaying == null)
+		{
 			musicPlaying = new MusicPlaying();
 		}
 		return musicPlaying;

@@ -4,7 +4,8 @@ import com.mraof.minestuck.block.EnumCassetteType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.ItemStack;
 
-public interface IMusicPlaying {
+public interface IMusicPlaying
+{
 	void setCassetteType(EnumCassetteType cassetteType);
 	
 	void setCurrentMusicPlayer(ItemStack itemStack);

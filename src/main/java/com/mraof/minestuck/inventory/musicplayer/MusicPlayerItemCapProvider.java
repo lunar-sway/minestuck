@@ -25,8 +25,10 @@ public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSeri
 		return LazyOptional.empty();
 	}
 	
-	private @NotNull CassetteItemHandler getCachedInventory() {
-		if (itemHandler == null) {
+	private @NotNull CassetteItemHandler getCachedInventory()
+	{
+		if(itemHandler == null)
+		{
 			itemHandler = new CassetteItemHandler(1);
 		}
 		return itemHandler;
