@@ -53,6 +53,7 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 	@Override
 	public void removed(Player playerIn)
 	{
+		super.removed(playerIn);
 		ItemStack stack = this.inventory.removeItemNoUpdate(0);
 		if(!stack.isEmpty())
 			playerIn.drop(stack, false);
