@@ -101,6 +101,10 @@ public class MusicPlayerItem extends WeaponItem
 			//open the GUI if right-clicked
 			else
 			{
+				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
+				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
+				MSPacketHandler.sendToTrackingAndSelf(packet, playerIn); //This will stop the music before opening the GUI
+				
 				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
 						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
 						new TextComponent("Music Player")));
