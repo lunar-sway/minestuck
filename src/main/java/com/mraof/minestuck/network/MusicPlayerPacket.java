@@ -1,11 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.client.sounds.MusicPlayerOnPlayerSoundInstance;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.sounds.SoundManager;
+import com.mraof.minestuck.client.sounds.PlayerMusicClientHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
 public class MusicPlayerPacket implements PlayToClientPacket
@@ -42,22 +39,6 @@ public class MusicPlayerPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
-		if(entity instanceof Player)
-		{
-			SoundManager soundManager = Minecraft.getInstance().getSoundManager();
-			
-			if(MusicPlayerOnPlayerSoundInstance.getEntitiesMap().containsKey(entityID))
-			{
-				soundManager.stop(MusicPlayerOnPlayerSoundInstance.getEntitiesMap().remove(entityID));
-			}
-			if(cassetteType != EnumCassetteType.NONE)
-			{
-				MusicPlayerOnPlayerSoundInstance soundInstance = new MusicPlayerOnPlayerSoundInstance((Player) entity, cassetteType.getSoundEvent());
-				
-				MusicPlayerOnPlayerSoundInstance.getEntitiesMap().put(entityID, soundInstance);
-				soundManager.play(soundInstance);
-			}
-		}
+		PlayerMusicClientHandler.sendPacket(entityID, cassetteType);
 	}
 }
