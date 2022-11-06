@@ -115,9 +115,12 @@ public class MusicPlayerItem extends WeaponItem
 					player.getItemInHand(InteractionHand.OFF_HAND) == musicPlayingCap.getCurrentMusicPlayer()) ||
 					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
-				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
-				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
-				MSPacketHandler.sendToTrackingAndSelf(packet, player);
+				if(musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
+				{
+					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
+					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
+					MSPacketHandler.sendToTrackingAndSelf(packet, player);
+				}
 			}
 			
 			if(player.level.getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
