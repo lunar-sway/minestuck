@@ -9,11 +9,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MusicPlayerScreen extends AbstractContainerScreen<CassetteContainerMenu>
+public class CassetteContainerScreen extends AbstractContainerScreen<CassetteContainerMenu>
 {
-	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/music_player.png");
+	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cassette_container.png");
 	
-	public MusicPlayerScreen(CassetteContainerMenu container, Inventory pPlayerInventory, Component pTitle)
+	public CassetteContainerScreen(CassetteContainerMenu container, Inventory pPlayerInventory, Component pTitle)
 	{
 		super(container, pPlayerInventory, pTitle);
 	}

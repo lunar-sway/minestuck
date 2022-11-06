@@ -21,7 +21,7 @@ public class CassetteContainerMenu extends AbstractContainerMenu
 	
 	public CassetteContainerMenu(int windowId, Inventory playerInventory, IItemHandler itemStackHandler, ItemStack musicPlayer)
 	{
-		super(MSMenuTypes.MUSIC_PLAYER.get(), windowId);
+		super(MSMenuTypes.CASSETTE_CONTAINER.get(), windowId);
 		this.musicPlayer = musicPlayer;
 		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y));
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
