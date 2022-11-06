@@ -17,6 +17,8 @@ public class PlayerMusicClientHandler
 	
 	public static void sendPacket(int entityID, EnumCassetteType cassetteType)
 	{
+		checkEntitiesInMap();
+		
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
 		if(entity instanceof Player)
 		{
@@ -33,6 +35,15 @@ public class PlayerMusicClientHandler
 				
 				entitiesMap.put(entityID, soundInstance);
 				soundManager.play(soundInstance);
+			}
+		}
+	}
+	
+	private static void checkEntitiesInMap() {
+		for (Integer key : entitiesMap.keySet()) {
+			Entity entity = Minecraft.getInstance().level.getEntity(key);
+			if(entity == null){
+				entitiesMap.remove(key);
 			}
 		}
 	}
