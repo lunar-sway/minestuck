@@ -2,18 +2,19 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.musicplayer.*;
+import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
+import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
+import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayerItemCapProvider;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -22,7 +23,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -46,16 +46,6 @@ public class MusicPlayerItem extends WeaponItem
 	{
 		return entity.getCapability(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
 				new IllegalArgumentException("Expected an music playing for this entity, but " + entity + " does not expose a music playing."));
-	}
-	
-	@SubscribeEvent
-	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> attachCapabilitiesEvent)
-	{
-		if(attachCapabilitiesEvent.getObject() instanceof Player)
-		{
-			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "musicplaying"),
-					new MusicPlayingCapabilityProvider());
-		}
 	}
 	
 	@Nullable
