@@ -67,18 +67,24 @@ public enum EnumCassetteType implements StringRepresentable
 	{
 		return this.soundEvent.get();
 	}
+	
 	@Nonnull
 	public EffectContainer getEffectContainer()
 	{
 		return Objects.requireNonNull(effectContainer);
 	}
+	
 	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit)
 	{
 	}
-	private static EffectContainer userEffect(Supplier<MobEffectInstance> effect){
+	
+	private static EffectContainer userEffect(Supplier<MobEffectInstance> effect)
+	{
 		return new EffectContainer(effect, 1F, false);
 	}
-	private static EffectContainer onHitEffect(Supplier<MobEffectInstance> effect, float chance){
+	
+	private static EffectContainer onHitEffect(Supplier<MobEffectInstance> effect, float chance)
+	{
 		return new EffectContainer(effect, chance, true);
 	}
 }
