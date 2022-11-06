@@ -14,6 +14,7 @@ import java.util.Map;
 public class PlayerMusicClientHandler
 {
 	private static final Map<Integer, EntityBoundSoundInstance> entitiesMap = new HashMap<>();
+	
 	public static void sendPacket(int entityID, EnumCassetteType cassetteType)
 	{
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
@@ -21,23 +22,18 @@ public class PlayerMusicClientHandler
 		{
 			SoundManager soundManager = Minecraft.getInstance().getSoundManager();
 			
-			if(getEntitiesMap().containsKey(entityID))
+			if(entitiesMap.containsKey(entityID))
 			{
-				soundManager.stop(getEntitiesMap().remove(entityID));
+				soundManager.stop(entitiesMap.remove(entityID));
 			}
 			if(cassetteType != EnumCassetteType.NONE)
 			{
 				EntityBoundSoundInstance soundInstance = new EntityBoundSoundInstance(
-						cassetteType.getSoundEvent(), SoundSource.PLAYERS, 10.0F, 1.0F, entity);
+						cassetteType.getSoundEvent(), SoundSource.PLAYERS, 4.0F, 1.0F, entity);
 				
-				getEntitiesMap().put(entityID, soundInstance);
+				entitiesMap.put(entityID, soundInstance);
 				soundManager.play(soundInstance);
 			}
 		}
-	}
-	
-	public static Map<Integer, EntityBoundSoundInstance> getEntitiesMap()
-	{
-		return entitiesMap;
 	}
 }
