@@ -8,7 +8,17 @@ import net.minecraft.world.entity.player.Player;
 public class MusicPlayerPacket implements PlayToClientPacket
 {
 	private final int entityID;
-	private EnumCassetteType cassetteType;
+	private final EnumCassetteType cassetteType;
+	
+	/**
+	 * Create a packet to the client to start a music based on the cassetteType given.
+	 * If the cassetteType NONE is given, the previous music stop if there
+	 * was any, and no music is played.
+	 *
+	 * @param entity     The player starting the music
+	 * @param cassetteType The cassette that is going to be played.
+	 * @see PlayerMusicClientHandler
+	 */
 	
 	public static MusicPlayerPacket createPacket(Player entity, EnumCassetteType cassetteType)
 	{

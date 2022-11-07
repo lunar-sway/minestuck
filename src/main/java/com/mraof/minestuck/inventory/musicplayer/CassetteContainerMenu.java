@@ -19,6 +19,16 @@ public class CassetteContainerMenu extends AbstractContainerMenu
 	private static final int CASSETTE_Y = 36;
 	private final ItemStack musicPlayer;
 	
+	/**
+	 * Create a container menu that can store one cassette item
+	 *
+	 * @param windowId         The id of the container id
+	 * @param playerInventory  The player inventory that will be linked to the GUI
+	 * @param itemStackHandler The itemStackHandler referring to the cassette stored in the item
+	 * @param musicPlayer      The musicPlayerItem that open the GUI
+	 * @see AbstractContainerMenu
+	 */
+	
 	public CassetteContainerMenu(int windowId, Inventory playerInventory, IItemHandler itemStackHandler, ItemStack musicPlayer)
 	{
 		super(MSMenuTypes.CASSETTE_CONTAINER.get(), windowId);
