@@ -74,9 +74,7 @@ public enum EnumCassetteType implements StringRepresentable
 		return Objects.requireNonNull(effectContainer);
 	}
 	
-	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit)
-	{
-	}
+	public record EffectContainer(Supplier<MobEffectInstance> effect, float applyingChance, boolean onHit) {}
 	
 	private static EffectContainer userEffect(Supplier<MobEffectInstance> effect)
 	{

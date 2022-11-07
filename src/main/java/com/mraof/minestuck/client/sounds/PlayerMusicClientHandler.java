@@ -39,10 +39,13 @@ public class PlayerMusicClientHandler
 		}
 	}
 	
-	private static void checkEntitiesInMap() {
-		for (Integer key : entitiesMap.keySet()) {
+	private static void checkEntitiesInMap()
+	{
+		for(Integer key : entitiesMap.keySet())
+		{
 			Entity entity = Minecraft.getInstance().level.getEntity(key);
-			if(entity == null){
+			if(entity == null)
+			{
 				entitiesMap.remove(key);
 			}
 		}
