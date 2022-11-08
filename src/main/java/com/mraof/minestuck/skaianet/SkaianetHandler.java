@@ -4,19 +4,24 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
+import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Stream;
 
 /**
@@ -240,6 +246,31 @@ public final class SkaianetHandler extends SavedData
 		} else
 		{
 			openedServers.put(player, computer);
+		}
+	}
+	
+	public void burnDisk(ComputerBlockEntity computerBlockEntity, Level level, int programId)
+	{
+		BlockPos bePos = computerBlockEntity.getBlockPos();
+		ItemStack diskStack = ProgramData.getItem(programId);
+		if(!diskStack.isEmpty() && computerBlockEntity.blankDisksStored > 0)
+		{
+			Random random = level.getRandom();
+			
+			float rx = random.nextFloat() * 0.8F + 0.1F;
+			float ry = random.nextFloat() * 0.8F + 0.1F;
+			float rz = random.nextFloat() * 0.8F + 0.1F;
+			
+			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
+			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
+			level.addFreshEntity(entityItem);
+			
+			computerBlockEntity.blankDisksStored--;
+			
+			//Imitates the structure block to ensure that changes are sent client-side
+			computerBlockEntity.setChanged();
+			BlockState state = computerBlockEntity.getBlockState();
+			level.sendBlockUpdated(bePos, state, state, 3);
 		}
 	}
 	

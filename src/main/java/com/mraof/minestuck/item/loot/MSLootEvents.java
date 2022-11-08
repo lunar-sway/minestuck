@@ -60,7 +60,6 @@ public class MSLootEvents
 	@SubscribeEvent
 	public static void addCustomVillagerTrade(VillagerTradesEvent event)
 	{
-		//TODO test in server setting for bugs
 		Int2ObjectMap<List<VillagerTrades.ItemListing>> trades = event.getTrades();
 		
 		if(event.getType() == VillagerProfession.CARTOGRAPHER)

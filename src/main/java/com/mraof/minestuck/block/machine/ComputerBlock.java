@@ -118,7 +118,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack stackInHand = player.getItemInHand(handIn);
 		int id = ProgramData.getProgramID(stackInHand);
 		
-		if(stackInHand.is(MSItems.BLANK_DISK.get().asItem()))
+		if(stackInHand.is(MSItems.BLANK_DISK.get()))
 		{
 			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
 			{
@@ -205,9 +205,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ComputerBlockEntity be = new ComputerBlockEntity(pos, state);
-		be.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
-		return state.getValue(STATE) != State.OFF ? be : null;
+		return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
 	}
 	
 	@Override
@@ -239,7 +237,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			ItemStack diskStack = ProgramData.getItem(program);
-			if(diskStack != null && !diskStack.isEmpty())
+			if(!diskStack.isEmpty())
 			{
 				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
 				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
@@ -263,12 +261,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
 			ItemStack diskStack = ProgramData.getItem(-1);
-			if(diskStack != null)
-			{
-				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
-				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-				level.addFreshEntity(entityItem);
-			}
+			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
+			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
+			level.addFreshEntity(entityItem);
 		}
 	}
 	

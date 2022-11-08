@@ -27,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code. Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
+ * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
+ * Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
  */
 public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 {
@@ -74,7 +75,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	{
 		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 		
-		if(MSTags.blockExistsInList(hieroglpyhsList, hieroglyphBlock))
+		if(hieroglpyhsList.contains(hieroglyphBlock))
 		{
 			for(Block block : hieroglpyhsList)
 			{

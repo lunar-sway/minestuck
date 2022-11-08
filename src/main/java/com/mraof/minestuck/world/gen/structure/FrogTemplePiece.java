@@ -34,8 +34,6 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
-	private static final List<WeightedEntry.Wrapper<Block>> weightedBlockList = buildWeightedList();
-	private static final int totalWeight = WeightedRandom.getTotalWeight(weightedBlockList);
 	
 	public FrogTemplePiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int x, int z)
 	{
@@ -278,6 +276,9 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	
 	static class Selector extends StructurePiece.BlockSelector
 	{
+		private final List<WeightedEntry.Wrapper<Block>> weightedBlockList = buildWeightedList();
+		private final int totalWeight = WeightedRandom.getTotalWeight(weightedBlockList);
+		
 		private Selector()
 		{
 		}

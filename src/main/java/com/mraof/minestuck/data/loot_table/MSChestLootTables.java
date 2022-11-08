@@ -69,7 +69,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
-						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(5).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))
+						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(2).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).setWeight(4).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(MSItems.RAW_URANIUM.get()).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(MSItems.BUG_ON_A_STICK.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))

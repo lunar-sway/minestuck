@@ -46,10 +46,8 @@ public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, L
 	
 	private static CompoundTag giveParadoxFragment()
 	{
-		ItemStack stack = new ItemStack(MSItems.SBURB_CODE.get());
-		CompoundTag nbt = stack.getOrCreateTag();
+		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("hasParadoxInfo", true);
-		stack.setTag(nbt);
 		
 		return nbt;
 	}

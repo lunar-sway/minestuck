@@ -9,10 +9,10 @@ import java.util.ArrayList;
 
 public class DiskBurner extends ButtonListProgram
 {
-	public static final String NAME = "minestuck.disk_burner_program";
-	public static final String BURN_SERVER_DISK = "minestuck.burn_server_disk";
-	public static final String BURN_CLIENT_DISK = "minestuck.burn_client_disk";
-	public static final String CHOOSE = "minestuck.choose";
+	public static final String NAME = "minestuck.program.disk_burner.name";
+	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
+	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
+	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)

@@ -36,6 +36,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public ComputerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
+		this.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
 	}
 	
 	/**

@@ -31,48 +31,40 @@ import java.util.stream.Collectors;
  */
 public class ReadableSburbCodeScreen extends Screen
 {
-	public static final ResourceLocation BOOK_TEXTURES_01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
-	public static final ResourceLocation BOOK_TEXTURES_01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
-	public static final ResourceLocation BOOK_TEXTURES_02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
-	public static final ResourceLocation BOOK_TEXTURES_03 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
-	public final int validHieroglyphCount;
-	public boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
-	public List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
+	private static final ResourceLocation BOOK_TEXTURES_01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
+	private static final ResourceLocation BOOK_TEXTURES_01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
+	private static final ResourceLocation BOOK_TEXTURES_02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
+	private static final ResourceLocation BOOK_TEXTURES_03 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_03.png");
+	private final boolean[] hieroglyphValidityArray; //same size as MAX_HIEROGLYPH_COUNT
+	private final List<List<String>> listOfPages = new ArrayList<>(); //each element of the outermost list is a different page, and each page is a collection of lines
 	
 	private PageButton forwardButton;
 	private PageButton backButton;
 	
-	public List<String> textList = null;
-	public int linesPerBlock = 27; //With 298 lines of text the default is 27 per block
-	public int totalPages = 8;
-	public int currentPage = 0;
+	private List<String> textList = null;
+	private int linesPerBlock = 27; //With 298 lines of text the default is 27 per block
+	private int totalPages = 8;
+	private int currentPage = 0;
 	
 	//GUI sizes
-	public static final int GUI_WIDTH = 192;
-	public static final int GUI_HEIGHT = 192;
-	public static final int TEXT_WIDTH = 288; //114
-	public static final int TEXT_OFFSET_X = 36, TEXT_OFFSET_Y = 32;
+	private static final int GUI_WIDTH = 192;
+	private static final int GUI_HEIGHT = 192;
+	private static final int TEXT_WIDTH = 288; //114
+	private static final int TEXT_OFFSET_X = 36, TEXT_OFFSET_Y = 32;
 	
-	public static final int CUSTOM_LINE_HEIGHT = 3;
-	public static final int LINES_PER_PAGE = 40; //how many lines can be fit neatly on a page, at 48 character per line
+	private static final int CUSTOM_LINE_HEIGHT = 3;
+	private static final int LINES_PER_PAGE = 40; //how many lines can be fit neatly on a page, at 48 character per line
 	
-	public static final List<Block> FULL_HIEROGLYPH_LIST = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-	public static final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
+	private static final List<Block> FULL_HIEROGLYPH_LIST = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+	private static final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
 	
-	public final static String EMPTY_SPACE = "                                                "; //48 characters
+	private final static String EMPTY_SPACE = "                                                "; //48 characters
 	
 	public ReadableSburbCodeScreen(List<Block> recordedBlockList, boolean paradoxCode)
 	{
 		super(NarratorChatListener.NO_TITLE);
 		this.hieroglyphValidityArray = checkForValidity(recordedBlockList, paradoxCode);
 		
-		int numberOfValidBits = 0;
-		for(boolean isValidHieroglyph : hieroglyphValidityArray)
-		{
-			if(isValidHieroglyph)
-				numberOfValidBits++;
-		}
-		this.validHieroglyphCount = numberOfValidBits;
 	}
 	
 	@Override

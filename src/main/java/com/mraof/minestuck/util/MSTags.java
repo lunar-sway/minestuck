@@ -167,14 +167,6 @@ public class MSTags
 		}
 	}
 	
-	/**
-	 * Used when getBlocksFromTag has already been called to avoid redundancy
-	 */
-	public static boolean blockExistsInList(List<Block> blockList, Block block)
-	{
-		return blockList.contains(block);
-	}
-	
 	public static List<Block> getBlocksFromTag(TagKey<Block> blockTag)
 	{
 		return ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();

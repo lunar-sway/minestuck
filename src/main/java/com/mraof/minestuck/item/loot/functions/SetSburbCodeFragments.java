@@ -46,7 +46,10 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 			
 			for(int iterate = 0; iterate < numberOfIterations; iterate++) //up to two runs at filling the book with another fragment of code
 			{
-				pickedList.add(completeList.get(random.nextInt(completeList.size()))); //random element from the full list of blocks
+				Block prospectiveBlock = completeList.get(random.nextInt(completeList.size()));
+				if (!pickedList.contains(prospectiveBlock))
+					pickedList.add(prospectiveBlock); //random element from the full list of blocks
+				
 			}
 		}
 		
