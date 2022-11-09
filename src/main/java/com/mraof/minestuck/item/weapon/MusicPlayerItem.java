@@ -116,7 +116,7 @@ public class MusicPlayerItem extends WeaponItem
 					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
 				if(musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
-				{
+				{ //If the Cassette player isn't in hand and is playing a music, stop it
 					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
 					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					MSPacketHandler.sendToTrackingAndSelf(packet, player);
@@ -126,7 +126,7 @@ public class MusicPlayerItem extends WeaponItem
 			if(player.level.getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
 			{
 				EnumCassetteType.EffectContainer effectContainer = musicPlayingCap.getCassetteType().getEffectContainer();
-				if(!effectContainer.onHit())
+				if(!effectContainer.onHit()) //Apply the cassette buff every 50 ticks, if there is any
 					player.addEffect(effectContainer.effect().get());
 			}
 		}
@@ -157,7 +157,7 @@ public class MusicPlayerItem extends WeaponItem
 				targetLuckValue = targetLuck.getValue();
 			else
 				targetLuckValue = 0.0D;
-			
+			//Compare the luck of the target with the user's
 			chanceToHit = chanceToHit + (attackerLuckValue / 10) - (targetLuckValue / 10);
 			
 			if(chanceToHit > r.nextFloat() && effectContainer.onHit())
