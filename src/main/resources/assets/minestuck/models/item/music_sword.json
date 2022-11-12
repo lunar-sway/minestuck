@@ -2,5 +2,13 @@
     "parent": "item/handheld",
     "textures": {
         "layer0": "minestuck:item/music_sword"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:hascassette": 1
+            },
+            "model": "minestuck:item/music_sword_deployed"
+        }
+    ]
 }

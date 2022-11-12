@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -101,6 +102,17 @@ public class MusicPlayerItem extends WeaponItem
 			}
 		}
 		return super.use(level, playerIn, handIn);
+	}
+	
+	@Override
+	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
+	{
+		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
+		if(stack.getItem() instanceof MusicPlayerItem)
+		{
+			ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
+			stack.getTag().putBoolean("HasCassette", itemInMusicPlayer != ItemStack.EMPTY);
+		}
 	}
 	
 	@SubscribeEvent
