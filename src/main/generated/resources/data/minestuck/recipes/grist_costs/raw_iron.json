@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:raw_iron"
+  },
+  "grist_cost": {
+    "minestuck:rust": 9
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:flint_and_steel"
+  },
+  "input2": {
+    "item": "minecraft:birch_wood"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:tuff"
+  }
+}

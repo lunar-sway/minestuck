@@ -50,7 +50,8 @@ public final class RegistryBackedBiomeSet implements LandBiomeAccess
 			return LandBiomeType.ROUGH;
 		else if(biome == OCEAN)
 			return LandBiomeType.OCEAN;
-		else throw new IllegalArgumentException("Got biome \"" + biome + "\" which is not in the biome set.");
+		else
+			return LandBiomeType.NORMAL;
 	}
 	
 }

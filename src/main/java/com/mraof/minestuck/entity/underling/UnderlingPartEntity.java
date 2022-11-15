@@ -23,7 +23,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	
 	public UnderlingPartEntity(IEntityMultiPart entityMultiPart, int id, float width, float height)
 	{
-		super(((Entity) entityMultiPart).getType(), entityMultiPart.getLevel());
+		super(entityMultiPart.asEntity().getType(), entityMultiPart.asEntity().getLevel());
 		size = EntityDimensions.scalable(width, height);
 		this.baseEntity = entityMultiPart;
 		this.id = id;
@@ -50,7 +50,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	@Override
 	public Component getName()
 	{
-		return ((Entity) baseEntity).getName();
+		return baseEntity.asEntity().getName();
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class UnderlingPartEntity extends Entity implements IEntityAdditionalSpaw
 	public void tick()
 	{
 		super.tick();
-		if(this.baseEntity == null || ((Entity) this.baseEntity).isRemoved())
+		if(this.baseEntity == null || this.baseEntity.asEntity().isRemoved())
 		{
 			this.discard();
 		} else

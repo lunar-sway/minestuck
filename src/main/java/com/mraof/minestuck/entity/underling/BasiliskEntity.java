@@ -81,12 +81,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	}
 	
 	@Override
-	public Level getLevel()
-	{
-		return this.level;
-	}
-	
-	@Override
 	public void baseTick()
 	{
 		super.baseTick();
