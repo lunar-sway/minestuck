@@ -6,15 +6,11 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
-import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.IdentifierHandler;
@@ -25,7 +21,6 @@ import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -40,8 +35,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -55,7 +48,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -237,32 +229,6 @@ public class ServerEventHandler
 						}
 					}
 				}
-			}
-		}
-	}
-	
-	@SubscribeEvent(priority=EventPriority.LOW)
-	public static void onBlockBreak(BlockEvent.BreakEvent event)
-	{
-		Player player = event.getPlayer();
-		BlockPos pos = event.getPos();
-		Level level = player.level;
-		ItemStack stack = player.getMainHandItem(); //pickaxes cannot be swung in the offhand
-		BlockState state = event.getState();
-		
-		if(stack.getItem() == MSItems.MINE_AND_GRIST.get() && !level.isClientSide && stack.isCorrectToolForDrops(state)) //will only drop grist instead of an item if it can be mined by the pick
-		{
-			ItemStack droppedStack = state.getCloneItemStack(null, level, pos, player);
-			GristSet gristSet = GristCostRecipe.findCostForItem(droppedStack, null, false, level);
-			if(gristSet != null && !gristSet.isEmpty())
-			{
-				for(GristAmount gristAmount : gristSet.getAmounts())
-				{
-					if(gristAmount.getAmount() > 0)
-						level.addFreshEntity(new GristEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, gristAmount));
-				}
-				
-				level.removeBlock(pos, false);
 			}
 		}
 	}
