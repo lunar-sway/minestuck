@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.AttackByDistanceGoal;
+import com.mraof.minestuck.entity.ai.attack.AttackByDistanceGoal;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

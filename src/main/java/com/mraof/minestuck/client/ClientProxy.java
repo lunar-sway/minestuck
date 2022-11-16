@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.renderer.blockentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.ReturnNodeRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
+import com.mraof.minestuck.client.renderer.tileentity.TotemLatheRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
