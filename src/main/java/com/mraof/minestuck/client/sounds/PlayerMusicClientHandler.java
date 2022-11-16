@@ -15,7 +15,7 @@ public class PlayerMusicClientHandler
 {
 	private static final Map<Integer, EntityBoundSoundInstance> entitiesMap = new HashMap<>();
 	
-	public static void sendPacket(int entityID, EnumCassetteType cassetteType)
+	public static void sendPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch)
 	{
 		checkEntitiesInMap();
 		
@@ -31,7 +31,7 @@ public class PlayerMusicClientHandler
 			if(cassetteType != EnumCassetteType.NONE)
 			{
 				EntityBoundSoundInstance soundInstance = new EntityBoundSoundInstance(
-						cassetteType.getSoundEvent(), SoundSource.PLAYERS, 4.0F, 1.0F, entity);
+						cassetteType.getSoundEvent(), SoundSource.PLAYERS, volume, pitch, entity);
 				
 				entitiesMap.put(entityID, soundInstance);
 				soundManager.play(soundInstance);

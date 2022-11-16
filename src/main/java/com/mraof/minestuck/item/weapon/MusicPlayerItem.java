@@ -37,6 +37,8 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MusicPlayerItem extends WeaponItem
 {
+	private final float volume;
+	private final float pitch;
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
@@ -56,9 +58,19 @@ public class MusicPlayerItem extends WeaponItem
 		return new MusicPlayerItemCapProvider();
 	}
 	
+	public MusicPlayerItem(Builder builder, Properties properties, float volume, float pitch)
+	{
+		super(builder, properties);
+		this.volume = volume;
+		this.pitch = pitch;
+		
+	}
+	
 	public MusicPlayerItem(Builder builder, Properties properties)
 	{
 		super(builder, properties);
+		this.volume = 4.0F;
+		this.pitch = 1.0F;
 	}
 	
 	@Override
@@ -79,11 +91,11 @@ public class MusicPlayerItem extends WeaponItem
 					MusicPlayerPacket packet;
 					if(musicPlayingCap.getCassetteType() == EnumCassetteType.NONE)
 					{
-						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID);
+						packet = MusicPlayerPacket.createPacket(playerIn, cassette.cassetteID, volume, pitch);
 						musicPlayingCap.setMusicPlaying(musicPlayer, cassette.cassetteID);
 					} else
 					{
-						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
+						packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
 						musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					}
 					MSPacketHandler.sendToTrackingAndSelf(packet, playerIn);
@@ -92,7 +104,7 @@ public class MusicPlayerItem extends WeaponItem
 			//open the GUI if right-clicked
 			else
 			{
-				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE);
+				MusicPlayerPacket packet = MusicPlayerPacket.createPacket(playerIn, EnumCassetteType.NONE, 0, 0);
 				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 				MSPacketHandler.sendToTrackingAndSelf(packet, playerIn); //This will stop the music before opening the GUI
 				
@@ -111,7 +123,7 @@ public class MusicPlayerItem extends WeaponItem
 		if(stack.getItem() instanceof MusicPlayerItem)
 		{
 			ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
-			stack.getTag().putBoolean("HasCassette", itemInMusicPlayer != ItemStack.EMPTY);
+			stack.getOrCreateTag().putBoolean("HasCassette", itemInMusicPlayer != ItemStack.EMPTY);
 		}
 	}
 	
@@ -129,7 +141,7 @@ public class MusicPlayerItem extends WeaponItem
 			{
 				if(musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
 				{ //If the Cassette player isn't in hand and is playing a music, stop it
-					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE);
+					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE, 0, 0);
 					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					MSPacketHandler.sendToTrackingAndSelf(packet, player);
 				}
