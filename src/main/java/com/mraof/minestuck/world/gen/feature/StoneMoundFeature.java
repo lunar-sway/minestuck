@@ -1,27 +1,31 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
 import java.util.Random;
 
-public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
+public class StoneMoundFeature extends Feature<BlockStateConfiguration>
 {
 	
-	public StoneMoundFeature(Codec<BlockStateFeatureConfig> codec)
+	public StoneMoundFeature(Codec<BlockStateConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader worldIn, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(FeaturePlaceContext<BlockStateConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		
 		float randFloat = rand.nextFloat();
 		BlockState state;
 		if(randFloat >= .95)
@@ -35,7 +39,7 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 			state = Blocks.DIORITE.defaultBlockState();
 		} else
 		{
-			state = config.state;
+			state = context.config().state;
 		}
 		int height = 2 + rand.nextInt(60);
 		double width = 1 + height / 2;
@@ -43,7 +47,7 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 		double maxJ = width + rand.nextInt(10);
 		double maxK = width + rand.nextInt(10);
 		
-		if(!worldIn.getBlockState(pos.below(15)).getMaterial().isSolid())
+		if(!level.getBlockState(pos.below(15)).getMaterial().isSolid())
 			return false;
 		
 		for(int i = 0; i < height; i++)
@@ -59,8 +63,8 @@ public class StoneMoundFeature extends Feature<BlockStateFeatureConfig>
 					
 					if((doubleX * doubleX) + (doubleZ * doubleZ) <= radius)
 					{
-						setBlock(worldIn, pos.offset(x, i - 10, z), state);
-						setBlock(worldIn, pos.offset(x, -i - 10, z), state);
+						setBlock(level, pos.offset(x, i - 10, z), state);
+						setBlock(level, pos.offset(x, -i - 10, z), state);
 					}
 				}
 			}

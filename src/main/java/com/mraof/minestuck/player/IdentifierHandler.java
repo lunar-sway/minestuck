@@ -1,12 +1,12 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.UsernameCache;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
@@ -28,7 +28,7 @@ public class IdentifierHandler
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
 	
-	public static PlayerIdentifier encode(PlayerEntity player)
+	public static PlayerIdentifier encode(Player player)
 	{
 		if(player instanceof FakePlayer || player.getGameProfile() == null)
 			return null;
@@ -41,13 +41,13 @@ public class IdentifierHandler
 		return identifier;
 	}
 	
-	public static boolean hasIdentifier(CompoundNBT nbt, String key)
+	public static boolean hasIdentifier(CompoundTag nbt, String key)
 	{
-		return nbt.contains(key, Constants.NBT.TAG_STRING) || nbt.contains(key + "Most", Constants.NBT.TAG_LONG) && nbt.contains(key + "Least", Constants.NBT.TAG_LONG);
+		return nbt.contains(key, Tag.TAG_STRING) || nbt.contains(key + "Most", Tag.TAG_LONG) && nbt.contains(key + "Least", Tag.TAG_LONG);
 	}
 	
 	@Nonnull
-	public static PlayerIdentifier load(CompoundNBT nbt, String key)
+	public static PlayerIdentifier load(CompoundTag nbt, String key)
 	{
 		PlayerIdentifier identifier;
 		String type = nbt.getString(key);
@@ -155,7 +155,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public boolean appliesTo(PlayerEntity player)
+		public boolean appliesTo(Player player)
 		{
 			return player.getGameProfile().getId().equals(uuid);
 		}
@@ -167,7 +167,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public ServerPlayerEntity getPlayer(MinecraftServer server)
+		public ServerPlayer getPlayer(MinecraftServer server)
 		{
 			PlayerList list = server == null ? null : server.getPlayerList();
 			if(list == null)
@@ -182,7 +182,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		public CompoundTag saveToNBT(CompoundTag nbt, String key)
 		{
 			nbt.putString(key, "uuid");
 			nbt.putUUID(key + "_uuid", uuid);
@@ -219,7 +219,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public boolean appliesTo(PlayerEntity player)
+		public boolean appliesTo(Player player)
 		{
 			return false;
 		}
@@ -231,7 +231,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public ServerPlayerEntity getPlayer(MinecraftServer server)
+		public ServerPlayer getPlayer(MinecraftServer server)
 		{
 			return null;
 		}
@@ -243,7 +243,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		public CompoundTag saveToNBT(CompoundTag nbt, String key)
 		{
 			nbt.putString(key, "null");
 			return nbt;
@@ -267,7 +267,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public boolean appliesTo(PlayerEntity player)
+		public boolean appliesTo(Player player)
 		{
 			return false;
 		}
@@ -279,7 +279,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public ServerPlayerEntity getPlayer(MinecraftServer server)
+		public ServerPlayer getPlayer(MinecraftServer server)
 		{
 			return null;
 		}
@@ -291,7 +291,7 @@ public class IdentifierHandler
 		}
 		
 		@Override
-		public CompoundNBT saveToNBT(CompoundNBT nbt, String key)
+		public CompoundTag saveToNBT(CompoundTag nbt, String key)
 		{
 			nbt.putString(key, "fake");
 			nbt.putInt(key+"_count", count);

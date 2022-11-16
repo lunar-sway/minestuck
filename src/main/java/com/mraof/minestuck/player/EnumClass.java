@@ -1,7 +1,7 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.stream.Stream;
 
@@ -78,9 +78,9 @@ public enum EnumClass
 	 * Used for messages from the mod that for example will be sent trough chat.
 	 * @return a text component that will translate into the name of the title-class
 	 */
-	public ITextComponent asTextComponent()
+	public Component asTextComponent()
 	{
-		return new TranslationTextComponent(getTranslationKey());
+		return new TranslatableComponent(getTranslationKey());
 	}
 	
 	public String getTranslationKey()

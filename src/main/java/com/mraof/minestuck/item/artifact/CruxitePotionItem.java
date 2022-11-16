@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item.artifact;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 public class CruxitePotionItem extends CruxiteArtifactItem
 {
@@ -23,25 +23,25 @@ public class CruxitePotionItem extends CruxiteArtifactItem
 	}
 	
 	@Override
-	public UseAction getUseAnimation(ItemStack stack)
+	public UseAnim getUseAnimation(ItemStack stack)
 	{
-		return UseAction.DRINK;
+		return UseAnim.DRINK;
 	}
 	
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity entityLiving)
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving)
 	{
 		stack.shrink(1);
-		if(entityLiving instanceof ServerPlayerEntity)
-			onArtifactActivated((ServerPlayerEntity) entityLiving);
+		if(entityLiving instanceof ServerPlayer player)
+			onArtifactActivated(player);
 		
 		return stack;
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		playerIn.startUsingItem(handIn);
-		return ActionResult.success(playerIn.getItemInHand(handIn));
+		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 }

@@ -3,7 +3,8 @@
   "pools": [
     {
       "name": "main",
-      "rolls": 5,
+      "rolls": 5.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -17,10 +18,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 3.0,
-                "max": 10.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 10.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:grasshopper"
@@ -30,10 +32,11 @@
     {
       "name": "special",
       "rolls": {
+        "type": "minecraft:uniform",
         "min": 1.0,
-        "max": 2.0,
-        "type": "minecraft:uniform"
+        "max": 2.0
       },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -47,10 +50,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 2.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:pumpkin_pie"
@@ -65,10 +69,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:candy_corn"
@@ -79,10 +84,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:grist_candy",

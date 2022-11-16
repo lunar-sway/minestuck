@@ -2,7 +2,7 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,7 +13,7 @@ public class MSCommands
 	@SubscribeEvent
 	public static void serverStarting(RegisterCommandsEvent event)
 	{
-		CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
+		CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 		
 		CheckLandCommand.register(dispatcher);
 		GristLayerCommand.register(dispatcher);

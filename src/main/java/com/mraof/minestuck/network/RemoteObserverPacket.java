@@ -1,34 +1,36 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.redstone.RemoteObserverTileEntity;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class RemoteObserverPacket implements PlayToServerPacket
 {
-	private final RemoteObserverTileEntity.ActiveType activeType;
-	private final BlockPos tileBlockPos;
+	private final RemoteObserverBlockEntity.ActiveType activeType;
+	private final BlockPos beBlockPos;
 	private final EntityType<?> entityType;
+	private final int observingRange;
 	
-	public RemoteObserverPacket(RemoteObserverTileEntity.ActiveType activeType, BlockPos tileBlockPos, @Nullable EntityType<?> entityType)
+	public RemoteObserverPacket(RemoteObserverBlockEntity.ActiveType activeType, int observingRange, BlockPos beBlockPos, @Nullable EntityType<?> entityType)
 	{
 		this.activeType = activeType;
-		this.tileBlockPos = tileBlockPos;
+		this.observingRange = observingRange;
+		this.beBlockPos = beBlockPos;
 		this.entityType = entityType;
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeEnum(activeType);
-		buffer.writeBlockPos(tileBlockPos);
+		buffer.writeInt(observingRange);
+		buffer.writeBlockPos(beBlockPos);
 		if(entityType != null)
 		{
 			buffer.writeUtf(EntityType.getKey(entityType).toString());
@@ -37,32 +39,33 @@ public class RemoteObserverPacket implements PlayToServerPacket
 		
 	}
 	
-	public static RemoteObserverPacket decode(PacketBuffer buffer)
+	public static RemoteObserverPacket decode(FriendlyByteBuf buffer)
 	{
-		RemoteObserverTileEntity.ActiveType activeType = buffer.readEnum(RemoteObserverTileEntity.ActiveType.class);
-		BlockPos tileBlockPos = buffer.readBlockPos();
+		RemoteObserverBlockEntity.ActiveType activeType = buffer.readEnum(RemoteObserverBlockEntity.ActiveType.class);
+		int observingRange = buffer.readInt();
+		BlockPos beBlockPos = buffer.readBlockPos();
 		Optional<EntityType<?>> attemptedEntityType = EntityType.byString(buffer.readUtf());
 		
-		return new RemoteObserverPacket(activeType, tileBlockPos, attemptedEntityType.orElse(null));
+		return new RemoteObserverPacket(activeType, observingRange, beBlockPos, attemptedEntityType.orElse(null));
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(tileBlockPos, 0))
+		if(player.level.isAreaLoaded(beBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof RemoteObserverTileEntity)
+			if(player.level.getBlockEntity(beBlockPos) instanceof RemoteObserverBlockEntity observerBE)
 			{
-				if(Math.sqrt(player.distanceToSqr(tileBlockPos.getX() + 0.5, tileBlockPos.getY() + 0.5, tileBlockPos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
-					((RemoteObserverTileEntity) te).setActiveType(activeType);
+					observerBE.setActiveType(activeType);
 					if(entityType != null)
-						((RemoteObserverTileEntity) te).setCurrentEntityType(entityType);
+						observerBE.setCurrentEntityType(entityType);
+					observerBE.setObservingRange(observingRange);
 					//Imitates the structure block to ensure that changes are sent client-side
-					te.setChanged();
-					BlockState state = player.level.getBlockState(tileBlockPos);
-					player.level.sendBlockUpdated(tileBlockPos, state, state, 3);
+					observerBE.setChanged();
+					BlockState state = player.level.getBlockState(beBlockPos);
+					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

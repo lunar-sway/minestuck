@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.entity.item.HangingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
 
 public class HangingItem extends Item
 {
@@ -19,39 +19,39 @@ public class HangingItem extends Item
 	}
 	
 	@Override
-	public ActionResultType useOn(ItemUseContext context)
+	public InteractionResult useOn(UseOnContext context)
 	{
 		ItemStack stack = context.getItemInHand();
 		Direction facing = context.getClickedFace();
-		World worldIn = context.getLevel();
+		Level level = context.getLevel();
 		BlockPos blockPos = context.getClickedPos().relative(facing);
 		
 		if (facing != Direction.DOWN && facing != Direction.UP
 				&& (context.getPlayer() == null || context.getPlayer().mayUseItemAt(blockPos, facing, stack)))
 		{
-			HangingEntity entityhanging = provider.createEntity(worldIn, blockPos, facing, stack);
+			HangingEntity entityhanging = provider.createEntity(level, blockPos, facing, stack);
 			
 			if (entityhanging != null && entityhanging.survives())
 			{
-				if (!worldIn.isClientSide)
+				if (!level.isClientSide)
 				{
 					entityhanging.playPlacementSound();
-					worldIn.addFreshEntity(entityhanging);
+					level.addFreshEntity(entityhanging);
 				}
 				
 				stack.shrink(1);
 			}
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 		else
 		{
-			return ActionResultType.FAIL;
+			return InteractionResult.FAIL;
 		}
 	}
 	
 	public interface EntityProvider
 	{
-		HangingEntity createEntity(World world, BlockPos pos, Direction facing, ItemStack stack);
+		HangingEntity createEntity(Level level, BlockPos pos, Direction facing, ItemStack stack);
 	}
 }

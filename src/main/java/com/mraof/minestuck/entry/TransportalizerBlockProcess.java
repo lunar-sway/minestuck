@@ -1,25 +1,25 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
 public class TransportalizerBlockProcess implements EntryBlockProcessing
 {
 	@Override
-	public void copyOver(ServerWorld oldWorld, BlockPos oldPos, ServerWorld newWorld, BlockPos newPos, BlockState state, @Nullable TileEntity oldTE, @Nullable TileEntity newTE)
+	public void copyOver(ServerLevel oldLevel, BlockPos oldPos, ServerLevel newLevel, BlockPos newPos, BlockState state, @Nullable BlockEntity oldBE, @Nullable BlockEntity newBE)
 	{
-		if(oldTE instanceof TransportalizerTileEntity && newTE instanceof TransportalizerTileEntity)
+		if(oldBE instanceof TransportalizerBlockEntity && newBE instanceof TransportalizerBlockEntity)
 		{
-			TransportalizerSavedData.get(oldWorld).replace(((TransportalizerTileEntity) newTE).getId(), GlobalPos.of(oldWorld.dimension(), oldPos), GlobalPos.of(newWorld.dimension(), newPos));
-			if(((TransportalizerTileEntity) oldTE).isActive())
-				((TransportalizerTileEntity) newTE).tryReactivate();
+			TransportalizerSavedData.get(oldLevel).replace(((TransportalizerBlockEntity) newBE).getId(), GlobalPos.of(oldLevel.dimension(), oldPos), GlobalPos.of(newLevel.dimension(), newPos));
+			if(((TransportalizerBlockEntity) oldBE).isActive())
+				((TransportalizerBlockEntity) newBE).tryReactivate();
 		}
 	}
 }

@@ -1,15 +1,16 @@
 package com.mraof.minestuck.item.foods;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
-public class UnknowableEggItem extends Item {
+public class UnknowableEggItem extends Item
+{
 	
 	public UnknowableEggItem(Properties properties)
 	{
@@ -18,14 +19,14 @@ public class UnknowableEggItem extends Item {
 
 	
 	@Override
-	public ItemStack finishUsingItem(ItemStack stack, World worldIn, LivingEntity player)
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity player)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			player.addEffect(new EffectInstance(Effects.CONFUSION, 160, 2));
-			player.addEffect(new EffectInstance(Effects.POISON, 160, 2));
-			player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE, SoundCategory.AMBIENT, 1.0F, 0.8F);
+			player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 2));
+			player.addEffect(new MobEffectInstance(MobEffects.POISON, 160, 2));
+			player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE.get(), SoundSource.AMBIENT, 1.0F, 0.8F);
 		}
-		return super.finishUsingItem(stack, worldIn, player);
+		return super.finishUsingItem(stack, level, player);
 	}
 }

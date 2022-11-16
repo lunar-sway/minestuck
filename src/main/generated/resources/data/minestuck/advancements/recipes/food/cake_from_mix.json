@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:cake_mix"
+            "items": [
+              "minestuck:cake_mix"
+            ]
           }
         ]
       }

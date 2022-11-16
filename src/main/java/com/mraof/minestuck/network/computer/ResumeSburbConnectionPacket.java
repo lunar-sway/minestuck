@@ -2,10 +2,10 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class ResumeSburbConnectionPacket implements PlayToServerPacket
 {
@@ -18,24 +18,24 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 		this.isClient = isClient;
 	}
 	
-	public static ResumeSburbConnectionPacket asClient(ComputerTileEntity te)
+	public static ResumeSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), true);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), true);
 	}
 	
-	public static ResumeSburbConnectionPacket asServer(ComputerTileEntity te)
+	public static ResumeSburbConnectionPacket asServer(ComputerBlockEntity be)
 	{
-		return new ResumeSburbConnectionPacket(te.getBlockPos(), false);
+		return new ResumeSburbConnectionPacket(be.getBlockPos(), false);
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
 		buffer.writeBoolean(isClient);
 	}
 	
-	public static ResumeSburbConnectionPacket decode(PacketBuffer buffer)
+	public static ResumeSburbConnectionPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos computer = buffer.readBlockPos();
 		boolean isClient = buffer.readBoolean();
@@ -43,9 +43,9 @@ public class ResumeSburbConnectionPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos,
+		ComputerBlockEntity.forNetworkIfPresent(player, pos,
 				computer -> SkaianetHandler.get(player.server).resumeConnection(computer, isClient));
 	}
 }

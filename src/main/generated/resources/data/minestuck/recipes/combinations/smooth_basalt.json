@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:honeycomb"
+  },
+  "input2": {
+    "item": "minecraft:basalt"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:smooth_basalt"
+  }
+}

@@ -1,18 +1,15 @@
 package com.mraof.minestuck.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
+import com.mojang.blaze3d.vertex.*;
+import com.mojang.math.Matrix4f;
+import com.mraof.minestuck.alchemy.GristAmount;
 import mezz.jei.api.ingredients.IIngredientRenderer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.TooltipFlag;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -21,42 +18,33 @@ import java.util.List;
 public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 {
 	@Override
-	public void render(MatrixStack matrixStack, int xPosition, int yPosition, @Nullable GristAmount ingredient)
+	public void render(PoseStack matrixStack, @Nullable GristAmount ingredient)
 	{
 		if(ingredient == null)
 			return;
 		RenderSystem.enableBlend();
-		RenderSystem.enableAlphaTest();
-		RenderSystem.color4f(1, 1, 1, 1);
-
-		ResourceLocation icon = ingredient.getType().getIcon();
-		Minecraft.getInstance().getTextureManager().bind(icon);
-
-		float scale = (float) 1 / 16;
-
-		int iconX = 16;
-		int iconY = 16;
-		int iconU = 0;
-		int iconV = 0;
-
-		BufferBuilder render = Tessellator.getInstance().getBuilder();
-		render.begin(7, DefaultVertexFormats.POSITION_TEX);
-		render.vertex(xPosition, yPosition + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(xPosition + iconX, yPosition + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(xPosition + iconX, yPosition, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(xPosition, yPosition, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tessellator.getInstance().end();
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, ingredient.getType().getIcon());
 		
-		RenderSystem.disableAlphaTest();
+		Matrix4f pose = matrixStack.last().pose();
+		BufferBuilder render = Tesselator.getInstance().getBuilder();
+		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		render.vertex(pose, 0, 16, 0).uv(0, 1).endVertex();
+		render.vertex(pose, 16, 16, 0).uv(1, 1).endVertex();
+		render.vertex(pose, 16, 0, 0).uv(1, 0).endVertex();
+		render.vertex(pose, 0, 0, 0).uv(0, 0).endVertex();
+		Tesselator.getInstance().end();
+		
 		RenderSystem.disableBlend();
 	}
-
+	
 	@Override
-	public List<ITextComponent> getTooltip(GristAmount ingredient, ITooltipFlag tooltipFlag)
+	public List<Component> getTooltip(GristAmount ingredient, TooltipFlag tooltipFlag)
 	{
-		List<ITextComponent> list = new ArrayList<>();
+		List<Component> list = new ArrayList<>();
 		list.add(ingredient.getType().getDisplayName());
-		list.add(new StringTextComponent(String.valueOf(ingredient.getType().getRegistryName())).withStyle(TextFormatting.DARK_GRAY));
+		list.add(new TextComponent(String.valueOf(ingredient.getType().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));
 		return list;
 	}
 }

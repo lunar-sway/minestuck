@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:command_block_minecart",
+    "minecraft:spawner_minecart",
+    "minestuck:player_decoy"
+  ]
+}

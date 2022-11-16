@@ -1,49 +1,46 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class WirelessRedstoneTransmitterPacket implements PlayToServerPacket
 {
 	private final BlockPos destinationBlockPos;
-	private final BlockPos tileBlockPos;
+	private final BlockPos beBlockPos;
 	
-	public WirelessRedstoneTransmitterPacket(BlockPos pos, BlockPos tileBlockPos)
+	public WirelessRedstoneTransmitterPacket(BlockPos pos, BlockPos beBlockPos)
 	{
 		this.destinationBlockPos = pos;
-		this.tileBlockPos = tileBlockPos;
+		this.beBlockPos = beBlockPos;
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(destinationBlockPos);
-		buffer.writeBlockPos(tileBlockPos);
+		buffer.writeBlockPos(beBlockPos);
 	}
 	
-	public static WirelessRedstoneTransmitterPacket decode(PacketBuffer buffer)
+	public static WirelessRedstoneTransmitterPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos destinationBlockPos = buffer.readBlockPos();
-		BlockPos tileBlockPos = buffer.readBlockPos();
+		BlockPos beBlockPos = buffer.readBlockPos();
 		
-		return new WirelessRedstoneTransmitterPacket(destinationBlockPos, tileBlockPos);
+		return new WirelessRedstoneTransmitterPacket(destinationBlockPos, beBlockPos);
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(tileBlockPos, 0))
+		if(player.level.isAreaLoaded(beBlockPos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(tileBlockPos);
-			if(te instanceof WirelessRedstoneTransmitterTileEntity)
+			if(player.level.getBlockEntity(beBlockPos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
 			{
-				BlockPos tePos = te.getBlockPos();
-				if(Math.sqrt(player.distanceToSqr(tePos.getX() + 0.5, tePos.getY() + 0.5, tePos.getZ() + 0.5)) <= 8)
+				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
-					((WirelessRedstoneTransmitterTileEntity) te).setDestinationBlockPos(destinationBlockPos);
+					transmitter.setOffsetFromDestinationBlockPos(destinationBlockPos);
 				}
 			}
 		}

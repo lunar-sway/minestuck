@@ -7,10 +7,10 @@ import com.mraof.minestuck.command.argument.LandTypePairArgument;
 import com.mraof.minestuck.command.argument.ListArgument;
 import com.mraof.minestuck.skaianet.CommandActionHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
@@ -20,17 +20,17 @@ import java.util.List;
 public class DebugLandsCommand
 {
 	public static final String MUST_ENTER = "commands.minestuck.debuglands.must_enter";
-	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent(MUST_ENTER));
+	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(MUST_ENTER));
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("debuglands").then(Commands.argument("lands", ListArgument.list(LandTypePairArgument.nullablePairs()))
 				.executes(context -> createDebugLands(context.getSource(), ListArgument.getListArgument(context, "lands")))));
 	}
 	
-	private static int createDebugLands(CommandSource source, List<LandTypePair> landTypes) throws CommandSyntaxException
+	private static int createDebugLands(CommandSourceStack source, List<LandTypePair> landTypes) throws CommandSyntaxException
 	{
-		ServerPlayerEntity player = source.getPlayerOrException();
+		ServerPlayer player = source.getPlayerOrException();
 		CommandActionHandler.createDebugLandsChain(player, landTypes, source);
 		return 1;
 	}

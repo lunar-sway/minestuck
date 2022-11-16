@@ -1,7 +1,7 @@
 {
     "type": "minestuck:skaia",
     "generator": {
-        "type": "minestuck:skaia",
+        "type": "noise",
         "seed": 0,
         "settings": "minestuck:skaia",
         "biome_source": {

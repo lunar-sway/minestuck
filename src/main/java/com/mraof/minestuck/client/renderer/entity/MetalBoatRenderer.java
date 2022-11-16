@@ -2,19 +2,19 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import net.minecraft.client.renderer.entity.BoatRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.vehicle.Boat;
 
 public class MetalBoatRenderer extends BoatRenderer
 {
-	public MetalBoatRenderer(EntityRendererManager manager)
+	public MetalBoatRenderer(EntityRendererProvider.Context context)
 	{
-		super(manager);
+		super(context);
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(BoatEntity entity)
+	public ResourceLocation getTextureLocation(Boat entity)
 	{
 		MetalBoatEntity boat = (MetalBoatEntity) entity;
 		

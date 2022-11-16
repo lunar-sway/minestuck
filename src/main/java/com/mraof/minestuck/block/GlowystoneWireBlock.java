@@ -4,25 +4,26 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.state.properties.RedstoneSide;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.RedstoneSide;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPES[getAABBIndex(state)];
 	}
@@ -85,36 +86,36 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		IWorld world = context.getLevel();
+		LevelAccessor level = context.getLevel();
 		BlockPos blockpos = context.getClickedPos();
-		return this.defaultBlockState().setValue(WEST, this.getSide(world, blockpos, Direction.WEST)).setValue(EAST, this.getSide(world, blockpos, Direction.EAST)).setValue(NORTH, this.getSide(world, blockpos, Direction.NORTH)).setValue(SOUTH, this.getSide(world, blockpos, Direction.SOUTH));
+		return this.defaultBlockState().setValue(WEST, this.getSide(level, blockpos, Direction.WEST)).setValue(EAST, this.getSide(level, blockpos, Direction.EAST)).setValue(NORTH, this.getSide(level, blockpos, Direction.NORTH)).setValue(SOUTH, this.getSide(level, blockpos, Direction.SOUTH));
 	}
 	
 	
 	@Override
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
 	{
 		if(facing == Direction.DOWN)
 		{
 			return stateIn;
 		} else
 		{
-			return facing == Direction.UP ? stateIn.setValue(WEST, this.getSide(worldIn, currentPos, Direction.WEST)).setValue(EAST, this.getSide(worldIn, currentPos, Direction.EAST)).setValue(NORTH, this.getSide(worldIn, currentPos, Direction.NORTH)).setValue(SOUTH, this.getSide(worldIn, currentPos, Direction.SOUTH)) : stateIn.setValue(FACING_PROPERTY_MAP.get(facing), this.getSide(worldIn, currentPos, facing));
+			return facing == Direction.UP ? stateIn.setValue(WEST, this.getSide(level, currentPos, Direction.WEST)).setValue(EAST, this.getSide(level, currentPos, Direction.EAST)).setValue(NORTH, this.getSide(level, currentPos, Direction.NORTH)).setValue(SOUTH, this.getSide(level, currentPos, Direction.SOUTH)) : stateIn.setValue(FACING_PROPERTY_MAP.get(facing), this.getSide(level, currentPos, facing));
 		}
 	}
 	
-	private RedstoneSide getSide(IWorldReader worldIn, BlockPos pos, Direction face)
+	private RedstoneSide getSide(LevelReader level, BlockPos pos, Direction face)
 	{
 		BlockPos blockpos = pos.relative(face);
-		BlockState blockstate = worldIn.getBlockState(blockpos);
+		BlockState blockstate = level.getBlockState(blockpos);
 		BlockPos blockpos1 = pos.above();
-		BlockState blockstate1 = worldIn.getBlockState(blockpos1);
-		if (!blockstate1.isRedstoneConductor(worldIn, blockpos1)) {
-			boolean flag = Block.canSupportCenter(worldIn, blockpos, Direction.UP);
-			if (flag && canConnectTo(worldIn.getBlockState(blockpos.above()))) {
-				if (isShapeFullBlock(blockstate.getBlockSupportShape(worldIn, blockpos))) {
+		BlockState blockstate1 = level.getBlockState(blockpos1);
+		if (!blockstate1.isRedstoneConductor(level, blockpos1)) {
+			boolean flag = Block.canSupportCenter(level, blockpos, Direction.UP);
+			if (flag && canConnectTo(level.getBlockState(blockpos.above()))) {
+				if (isShapeFullBlock(blockstate.getBlockSupportShape(level, blockpos))) {
 					return RedstoneSide.UP;
 				}
 				
@@ -122,130 +123,130 @@ public class GlowystoneWireBlock extends Block
 			}
 		}
 		
-		return !canConnectTo(worldIn.getBlockState(blockpos)) && (blockstate.isRedstoneConductor(worldIn, blockpos) || !canConnectTo(worldIn.getBlockState(blockpos.below()))) ? RedstoneSide.NONE : RedstoneSide.SIDE;
+		return !canConnectTo(level.getBlockState(blockpos)) && (blockstate.isRedstoneConductor(level, blockpos) || !canConnectTo(level.getBlockState(blockpos.below()))) ? RedstoneSide.NONE : RedstoneSide.SIDE;
 	}
 	
 	@Override
-	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		BlockPos blockpos = pos.below();
-		BlockState blockstate = worldIn.getBlockState(blockpos);
-		return Block.canSupportCenter(worldIn, blockpos, Direction.UP);
+		BlockState blockstate = level.getBlockState(blockpos);
+		return Block.canSupportCenter(level, blockpos, Direction.UP);
 	}
 	
-	private BlockState updateSurroundingGlowystone(World worldIn, BlockPos pos, BlockState state)
+	private BlockState updateSurroundingGlowystone(Level level, BlockPos pos, BlockState state)
 	{
 		List<BlockPos> list = Lists.newArrayList(this.blocksNeedingUpdate);
 		this.blocksNeedingUpdate.clear();
 		
 		for(BlockPos blockpos : list) {
-			worldIn.updateNeighborsAt(blockpos, this);
+			level.updateNeighborsAt(blockpos, this);
 		}
 		
 		return state;
 	}
 	
-	private void notifyWireNeighborsOfStateChange(World worldIn, BlockPos pos)
+	private void notifyWireNeighborsOfStateChange(Level level, BlockPos pos)
 	{
-		if (worldIn.getBlockState(pos).getBlock() == this)
+		if (level.getBlockState(pos).is(this))
 		{
-			worldIn.updateNeighborsAt(pos, this);
+			level.updateNeighborsAt(pos, this);
 
 			for (Direction direction : Direction.values())
 			{
-				worldIn.updateNeighborsAt(pos.relative(direction), this);
+				level.updateNeighborsAt(pos.relative(direction), this);
 			}
 		}
 	}
 	
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if (!worldIn.isClientSide)
+		if (!level.isClientSide)
 		{
-			this.updateSurroundingGlowystone(worldIn, pos, state);
+			this.updateSurroundingGlowystone(level, pos, state);
 
 			for (Direction direction : Direction.Plane.VERTICAL)
 			{
-				worldIn.updateNeighborsAt(pos.relative(direction), this);
+				level.updateNeighborsAt(pos.relative(direction), this);
 			}
 
 			for (Direction direction : Direction.Plane.HORIZONTAL)
 			{
-				this.notifyWireNeighborsOfStateChange(worldIn, pos.relative(direction));
+				this.notifyWireNeighborsOfStateChange(level, pos.relative(direction));
 			}
 
 			for (Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				BlockPos blockpos = pos.relative(direction);
 
-				if (worldIn.getBlockState(blockpos).isRedstoneConductor(worldIn, blockpos))
+				if (level.getBlockState(blockpos).isRedstoneConductor(level, blockpos))
 				{
-					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.above());
+					this.notifyWireNeighborsOfStateChange(level, blockpos.above());
 				}
 				else
 				{
-					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.below());
+					this.notifyWireNeighborsOfStateChange(level, blockpos.below());
 				}
 			}
 		}
 	}
 	
 	@Override
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		super.onRemove(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, level, pos, newState, isMoving);
 
-		if (!worldIn.isClientSide)
+		if (!level.isClientSide)
 		{
 			for (Direction direction : Direction.values())
 			{
-				worldIn.updateNeighborsAt(pos.relative(direction), this);
+				level.updateNeighborsAt(pos.relative(direction), this);
 			}
 
-			this.updateSurroundingGlowystone(worldIn, pos, state);
+			this.updateSurroundingGlowystone(level, pos, state);
 
 			for (Direction direction : Direction.Plane.HORIZONTAL)
 			{
-				this.notifyWireNeighborsOfStateChange(worldIn, pos.relative(direction));
+				this.notifyWireNeighborsOfStateChange(level, pos.relative(direction));
 			}
 
 			for (Direction direction : Direction.Plane.HORIZONTAL)
 			{
 				BlockPos blockpos = pos.relative(direction);
 
-				if (worldIn.getBlockState(blockpos).isRedstoneConductor(worldIn, blockpos))
+				if (level.getBlockState(blockpos).isRedstoneConductor(level, blockpos))
 				{
-					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.above());
+					this.notifyWireNeighborsOfStateChange(level, blockpos.above());
 				}
 				else
 				{
-					this.notifyWireNeighborsOfStateChange(worldIn, blockpos.below());
+					this.notifyWireNeighborsOfStateChange(level, blockpos.below());
 				}
 			}
 		}
 	}
 	
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		if (!worldIn.isClientSide)
+		if (!level.isClientSide)
 		{
-			if (this.canSurvive(state, worldIn, pos))
+			if (this.canSurvive(state, level, pos))
 			{
-				this.updateSurroundingGlowystone(worldIn, pos, state);
+				this.updateSurroundingGlowystone(level, pos, state);
 			}
 			else
 			{
-				dropResources(state, worldIn, pos);
-				worldIn.removeBlock(pos, false);
+				dropResources(state, level, pos);
+				level.removeBlock(pos, false);
 			}
 		}
 	}
 	
-	protected static boolean canConnectTo(BlockState blockState)
+	protected boolean canConnectTo(BlockState blockState)
 	{
-		return blockState.getBlock() == MSBlocks.GLOWYSTONE_DUST;
+		return blockState.is(this);
 	}
 	
 	public static int colorMultiplier()
@@ -256,23 +257,24 @@ public class GlowystoneWireBlock extends Block
 		float f2 = 0.2F;
 		float f3 = 0.0F;
 
-		int i = MathHelper.clamp((int)(f1 * 255.0F), 0, 255);
-		int j = MathHelper.clamp((int)(f2 * 255.0F), 0, 255);
-		int k = MathHelper.clamp((int)(f3 * 255.0F), 0, 255);
+		int i = Mth.clamp((int)(f1 * 255.0F), 0, 255);
+		int j = Mth.clamp((int)(f2 * 255.0F), 0, 255);
+		int k = Mth.clamp((int)(f3 * 255.0F), 0, 255);
 		return -16777216 | i << 16 | j << 8 | k;
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
-		double d0 = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
-		double d1 = (double)((float)pos.getY() + 0.0625F);
-		double d2 = (double)pos.getZ() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
+		double x = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
+		double y = pos.getY() + 0.0625;
+		double z = (double)pos.getZ() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
 		
-		worldIn.addParticle(new RedstoneParticleData(1F, 0.8F, 0F, 1F), d0, d1, d2, 0, 0, 0);
+		level.addParticle(new DustParticleOptions(new Vector3f(1F, 0.8F, 0F), 1F), x, y, z, 0, 0, 0);
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockState rotate(BlockState state, Rotation rot)
 	{
 		switch(rot)
@@ -289,6 +291,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, Mirror mirrorIn)
 	{
 		switch(mirrorIn)
@@ -303,7 +306,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(NORTH, EAST, SOUTH, WEST);
 	}

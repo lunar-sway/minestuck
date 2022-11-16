@@ -2,65 +2,70 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.*;
 
-public class RockSpikeFeature extends Feature<NoFeatureConfig>
+public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 {
 	private final boolean stomps = false;
 	
-	public RockSpikeFeature(Codec<NoFeatureConfig> codec)
+	public RockSpikeFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		
+		Random rand = context.random();
+		
 		int height = rand.nextInt(7) + 10;
 		
-		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(level.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
-		BlockState ground = StructureBlockRegistry.getOrDefault(generator).getBlockState("ground");
+		BlockState ground = StructureBlockRegistry.getOrDefault(context.chunkGenerator()).getBlockState("ground");
 		
-		BlockPos nodePos = generateRock(pos.above(height), height, plateauSize, world, rand, ground);
+		BlockPos nodePos = generateRock(pos.above(height), height, plateauSize, level, rand, ground);
 		
 		float rockRarity = plateauSize + height/15F + rand.nextFloat()*0.5F - 0.5F;
 		
 		if(rockRarity > 1F)
 		{
-			generateSubRock(pos, height, plateauSize, world, rand, ground);
+			generateSubRock(pos, height, plateauSize, level, rand, ground);
 			rockRarity -= 1F;
 		}
 		if(rand.nextFloat() < rockRarity)
-			generateSubRock(pos, height, plateauSize, world, rand, ground);
+			generateSubRock(pos, height, plateauSize, level, rand, ground);
 		
 		//TODO return node
 		
 		return true;
 	}
 	
-	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, IWorld world, Random rand, BlockState ground)
+	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, LevelAccessor level, Random rand, BlockState ground)
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
 		BlockPos newPos = pos.offset(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
 		//newPos = world.getTopSolidOrLiquidBlock(newPos).up(height);
 		float plateauSize = rand.nextFloat()*plateauOld*0.75F;
 		
-		generateRock(newPos, height, plateauSize, world, rand, ground);
+		generateRock(newPos, height, plateauSize, level, rand, ground);
 	}
 	
-	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, IWorld world, Random random, BlockState ground)
+	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, Random random, BlockState ground)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
 		
@@ -146,7 +151,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(ground))
+			if(!level.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(ground))
 				toProcess2.add(entry);
 		}
 		
@@ -160,10 +165,10 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 					stomps=true;
 					break;
 				}*/
-				was.put(pos, world.getBlockState(pos));
-				world.setBlock(pos, ground, Constants.BlockFlags.BLOCK_UPDATE);
+				was.put(pos, level.getBlockState(pos));
+				level.setBlock(pos, ground, Block.UPDATE_CLIENTS);
 				pos = pos.below();
-			} while(!world.getBlockState(pos).equals(ground));
+			} while(!level.getBlockState(pos).equals(ground));
 		}
 		
 		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
@@ -189,7 +194,7 @@ public class RockSpikeFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlock(t, u, Constants.BlockFlags.BLOCK_UPDATE));
+			was.forEach((t, u) -> level.setBlock(t, u, Block.UPDATE_CLIENTS));
 		}
 		
 		return corePosition;

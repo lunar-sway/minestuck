@@ -1,36 +1,39 @@
 package com.mraof.minestuck.block.redstone;
 
+import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
-import com.mraof.minestuck.util.ParticlesAroundSolidBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalBlock;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.particles.RedstoneParticleData;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the tile entity
+ * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the block entity
  * GUI is limited by creative shock
  */
-public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
+public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock implements EntityBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED; //used for texture purposes
@@ -41,87 +44,92 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalBlock
 		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWER, 0).setValue(POWERED, false));
 	}
 	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return true;
+		return new WirelessRedstoneTransmitterBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return new WirelessRedstoneTransmitterTileEntity();
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.WIRELESS_REDSTONE_TRANSMITTER.get(), WirelessRedstoneTransmitterBlockEntity::serverTick) : null;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			TileEntity tileEntity = worldIn.getBlockEntity(pos);
-			if(tileEntity instanceof WirelessRedstoneTransmitterTileEntity)
+			if(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
 			{
-				if(worldIn.isClientSide)
+				if(level.isClientSide)
 				{
-					WirelessRedstoneTransmitterTileEntity te = (WirelessRedstoneTransmitterTileEntity) tileEntity;
-					MSScreenFactories.displayWirelessRedstoneTransmitterScreen(te);
+					MSScreenFactories.displayWirelessRedstoneTransmitterScreen(transmitter);
 				}
 				
-				return ActionResultType.SUCCESS;
+				return InteractionResult.SUCCESS;
 			}
 		}
 		
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 	
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		super.neighborChanged(state, worldIn, pos, blockIn, fromPos, isMoving);
-		updatePower(worldIn, pos);
+		super.neighborChanged(state, level, pos, blockIn, fromPos, isMoving);
+		updatePower(level, pos);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		super.onPlace(state, worldIn, pos, oldState, isMoving);
-		updatePower(worldIn, pos);
+		super.onPlace(state, level, pos, oldState, isMoving);
+		updatePower(level, pos);
 	}
 	
-	public void updatePower(World worldIn, BlockPos pos)
+	public void updatePower(Level level, BlockPos pos)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			BlockState state = worldIn.getBlockState(pos);
-			int powerInt = worldIn.getBestNeighborSignal(pos);
-			worldIn.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			BlockState oldState = level.getBlockState(pos);
+			int newPower = level.getBestNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != powerInt > 0)
-				worldIn.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
-			else worldIn.sendBlockUpdated(pos, state, state, 2);
+			BlockState newState = setPower(oldState, newPower);
+			if(oldState != newState)
+				level.setBlockAndUpdate(pos, newState);
 		}
 	}
 	
+	public static BlockState setPower(BlockState state, int newPower)
+	{
+		return state.setValue(POWER, newPower).setValue(POWERED, newPower > 0);
+	}
+	
 	@Override
-	public void animateTick(BlockState stateIn, World worldIn, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{
-			ParticlesAroundSolidBlock.spawnParticles(worldIn, pos, () -> RedstoneParticleData.REDSTONE);
+			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);
 		}
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);

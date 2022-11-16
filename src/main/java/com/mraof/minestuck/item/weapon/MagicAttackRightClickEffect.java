@@ -5,23 +5,27 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MagicEffectPacket;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.command.arguments.EntityAnchorArgument;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.pathfinding.PathType;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.PathComputationType;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
@@ -30,23 +34,23 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 {
 	private final int distance;
 	private final int damage;
-	private final Supplier<EffectInstance> effect;
+	private final Supplier<MobEffectInstance> effect;
 	private final Supplier<SoundEvent> sound;
 	private final float pitch;
 	@Nullable
 	private final MagicEffect.Type type;
 	
-	private static final EntityPredicate visiblePredicate = (new EntityPredicate());//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
+	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
 	
 	public static final MagicAttackRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.Type.GREEN);
 	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
 	public static final MagicAttackRightClickEffect STANDARD_MAGIC = new MagicAttackRightClickEffect(15, 3, null, null, 1.0F, MagicEffect.Type.ENCHANT);
 	public static final MagicAttackRightClickEffect POOL_CUE_MAGIC = new MagicAttackRightClickEffect(18, 4, null, null, 1.0F, MagicEffect.Type.RED);
-	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new EffectInstance(Effects.WITHER, 100, 0), () -> MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
+	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
 	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
 	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
 	
-	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 	{
 		this.distance = distance;
 		this.damage = damage;
@@ -57,12 +61,12 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
+	public InteractionResultHolder<ItemStack> onRightClick(Level level, Player player, InteractionHand hand)
 	{
 		ItemStack itemStackIn = player.getItemInHand(hand);
 		
-		if(player instanceof ServerPlayerEntity)
-			magicAttack(world, (ServerPlayerEntity) player);
+		if(player instanceof ServerPlayer serverPlayer)
+			magicAttack(level, serverPlayer);
 		
 		if(player.isCreative())
 			player.getCooldowns().addCooldown(itemStackIn.getItem(), 10);
@@ -70,60 +74,60 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			player.getCooldowns().addCooldown(itemStackIn.getItem(), 50);
 		
 		player.swing(hand, true);
-		itemStackIn.hurtAndBreak(6, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+		itemStackIn.hurtAndBreak(6, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		player.awardStat(Stats.ITEM_USED.get(itemStackIn.getItem()));
 		
-		return ActionResult.success(itemStackIn);
+		return InteractionResultHolder.success(itemStackIn);
 	}
 	
-	private void magicAttack(World world, ServerPlayerEntity player)
+	private void magicAttack(Level level, ServerPlayer player)
 	{
 		if(sound != null && player.getRandom().nextFloat() < .1F) //optional sound effect adding
-			world.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundCategory.PLAYERS, 0.7F, pitch);
-		world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.EVOKER_CAST_SPELL, SoundCategory.PLAYERS, 1.0F, 1.6F);
+			level.playSound(null, player.getX(), player.getY(), player.getZ(), sound.get(), SoundSource.PLAYERS, 0.7F, pitch);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
 		targetEffect(player);
 		
-		Vector3d eyePos = player.getEyePosition(1.0F);
-		Vector3d lookVec = player.getLookAngle();
+		Vec3 eyePos = player.getEyePosition(1.0F);
+		Vec3 lookVec = player.getLookAngle();
 		
 		for(int step = 0; step < distance * 2; step++) //uses the float i value to increase the distance away from where the player is looking and creating a sort of raytrace
 		{
-			Vector3d vecPos = eyePos.add(lookVec.scale(step / 2D));
+			Vec3 vecPos = eyePos.add(lookVec.scale(step / 2D));
 			
-			boolean hitObstacle = checkCollisionInPath(world, player, vecPos);
+			boolean hitObstacle = checkCollisionInPath(level, player, vecPos);
 			
 			if(hitObstacle)
 			{
-				sendEffectPacket(world, eyePos, lookVec, step, true);
+				sendEffectPacket(level, eyePos, lookVec, step, true);
 				return;
 			}
 		}
-		sendEffectPacket(world, eyePos, lookVec, distance * 2, false);
+		sendEffectPacket(level, eyePos, lookVec, distance * 2, false);
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(World world, Vector3d pos, Vector3d lookVec, int length, boolean collides)
+	protected void sendEffectPacket(Level level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		if(type != null)
 			MSPacketHandler.sendToNear(new MagicEffectPacket(type, pos, lookVec, length, collides),
-					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, world.dimension()));
+					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()));
 	}
 	
-	protected void targetEffect(ServerPlayerEntity player)
+	protected void targetEffect(ServerPlayer player)
 	{
 	}
 	
-	private boolean checkCollisionInPath(World world, ServerPlayerEntity player, Vector3d vecPos)
+	private boolean checkCollisionInPath(Level level, ServerPlayer player, Vec3 vecPos)
 	{
 		BlockPos blockPos = new BlockPos(vecPos);
 		
-		if(!world.getBlockState(blockPos).isPathfindable(world, blockPos, PathType.LAND))
+		if(!level.getBlockState(blockPos).isPathfindable(level, blockPos, PathComputationType.LAND))
 		{
 			return true;
 		}
 		
-		AxisAlignedBB axisAlignedBB = new AxisAlignedBB(blockPos);
+		AABB axisAlignedBB = new AABB(blockPos);
 		// gets entities in a bounding box around each vector position in the for loop
 		LivingEntity closestTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
 		if(closestTarget != null)
@@ -143,33 +147,33 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	
 	private static class SbahjMagicEffect extends MagicAttackRightClickEffect
 	{
-		SbahjMagicEffect(int distance, int damage, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		SbahjMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 		{
 			super(distance, damage, effect, sound, pitch, type);
 		}
 		
 		@Override
-		protected void targetEffect(ServerPlayerEntity player)
+		protected void targetEffect(ServerPlayer player)
 		{
-			Vector3d randomFacingVecPos = new Vector3d(player.getX() + player.getRandom().nextInt(10) - 5, player.getY() + player.getRandom().nextInt(10) - 5, player.getZ() + player.getRandom().nextInt(10) - 5);
+			Vec3 randomFacingVecPos = new Vec3(player.getX() + player.getRandom().nextInt(10) - 5, player.getY() + player.getRandom().nextInt(10) - 5, player.getZ() + player.getRandom().nextInt(10) - 5);
 			player.lookAt(player.createCommandSourceStack().getAnchor(), randomFacingVecPos);
 		}
 	}
 	
 	private static class AimbotMagicEffect extends MagicAttackRightClickEffect
 	{
-		AimbotMagicEffect(int distance, int damage, Supplier<EffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		AimbotMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 		{
 			super(distance, damage, effect, sound, pitch, type);
 		}
 		
 		@Override
-		protected void targetEffect(ServerPlayerEntity player)
+		protected void targetEffect(ServerPlayer player)
 		{
 			BlockPos playerEyePos = new BlockPos(player.getX(), player.getEyeY(), player.getZ());
-			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AxisAlignedBB(playerEyePos).inflate(11));
+			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AABB(playerEyePos).inflate(11));
 			if(closestVisibleTarget != null)
-				player.lookAt(EntityAnchorArgument.Type.EYES, closestVisibleTarget, EntityAnchorArgument.Type.EYES);
+				player.lookAt(EntityAnchorArgument.Anchor.EYES, closestVisibleTarget, EntityAnchorArgument.Anchor.EYES);
 		}
 	}
 }

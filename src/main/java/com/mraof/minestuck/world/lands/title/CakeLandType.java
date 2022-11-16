@@ -2,17 +2,21 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.ProbabilityConfig;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 public class CakeLandType extends TitleLandType
 {
@@ -33,25 +37,24 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.MAGENTA_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.ORANGE_WOOL);
+		registry.setBlock("carpet", Blocks.MAGENTA_CARPET);
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		if(type != LandBiomeType.OCEAN)
-		{
-			builder.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES, MSFeatures.CAKE_PEDESTAL.configured(IFeatureConfig.NONE).chance(100));
-		}
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.CAKE.configured(new ProbabilityConfig(baseBiome.getBaseTemperature()/2))
-				.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).countRandom(5));
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
+						new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
+						CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
+				LandBiomeType.any());
 	}
 	
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_CAKE;
+		return MSSoundEvents.MUSIC_CAKE.get();
 	}
 }

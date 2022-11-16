@@ -1,24 +1,29 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.ai.attack.CustomMeleeAttackGoal;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.entity.EntityBigPart;
+import com.mraof.minestuck.entity.IBigEntity;
+import com.mraof.minestuck.entity.PartGroup;
+import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
@@ -30,7 +35,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		this.maxUpStep = 2;
 	}
 	
-	public static AttributeModifierMap.MutableAttribute giclopsAttributes()
+	public static AttributeSupplier.Builder giclopsAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.23)
@@ -44,19 +49,22 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 50, 1.1F));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT;
+		return MSSoundEvents.ENTITY_GICLOPS_AMBIENT.get();
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_HURT;
+		return MSSoundEvents.ENTITY_GICLOPS_HURT.get();
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_GICLOPS_DEATH;
+		return MSSoundEvents.ENTITY_GICLOPS_DEATH.get();
 	}
 	
 	@Override
@@ -102,19 +110,19 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	//Only pay attention to the top for water
 	
 	@Override
-	public boolean updateFluidHeightAndDoFluidPushing(ITag<Fluid> fluidTag, double fluidFactor)
+	public boolean updateFluidHeightAndDoFluidPushing(TagKey<Fluid> fluidTag, double fluidFactor)
 	{
-		AxisAlignedBB realBox = this.getBoundingBox();
-		this.setBoundingBox(new AxisAlignedBB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
+		AABB realBox = this.getBoundingBox();
+		this.setBoundingBox(new AABB(realBox.minX, realBox.maxY - 1, realBox.minZ, realBox.maxX, realBox.maxY, realBox.maxZ));
 		boolean result = super.updateFluidHeightAndDoFluidPushing(fluidTag, fluidFactor);
 		this.setBoundingBox(realBox);
 		return result;
 	}
 	
 	@Override
-	public void move(MoverType typeIn, Vector3d pos)
+	public void move(MoverType typeIn, Vec3 pos)    //TODO probably doesn't work as originally intended anymore. What was this meant to do?
 	{
-		AxisAlignedBB realBox = this.getBoundingBox();
+		AABB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
 		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
 		double minY = realBox.minY;
@@ -122,11 +130,10 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
 		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
 		double maxZ = pos.z < 0 ? realBox.minZ - pos.z : realBox.maxZ;
-		this.setBoundingBox(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		this.setBoundingBox(new AABB(minX, minY, minZ, maxX, maxY, maxZ));
 		super.move(typeIn, pos);
-		AxisAlignedBB changedBox = this.getBoundingBox();
-		this.setBoundingBox(realBox.move(changedBox.minX - minX, changedBox.minY - minY, changedBox.minZ - minZ));
-		this.setLocationFromBoundingbox();
+		AABB changedBox = this.getBoundingBox();
+		this.setPos(this.getX() + changedBox.minX - minX, this.getY() + changedBox.minY - minY, this.getZ() + changedBox.minZ - minZ);
 	}
 	
 	@Override

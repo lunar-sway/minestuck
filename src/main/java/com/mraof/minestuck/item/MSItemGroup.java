@@ -1,16 +1,16 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
-public class MSItemGroup extends ItemGroup
+public class MSItemGroup extends CreativeModeTab
 {
-	public static final ItemGroup MAIN = new MSItemGroup("minestuck", () -> new ItemStack(MSItems.CLIENT_DISK));
-	public static final ItemGroup LANDS = new MSItemGroup("minestuck_lands", () -> new ItemStack(MSBlocks.GLOWING_MUSHROOM));
-	public static final ItemGroup WEAPONS = new MSItemGroup("minestuck_weapons", () -> new ItemStack(MSItems.ZILLYHOO_HAMMER));
+	public static final CreativeModeTab MAIN = new MSItemGroup("minestuck", () -> new ItemStack(MSItems.CLIENT_DISK.get()));
+	public static final CreativeModeTab LANDS = new MSItemGroup("minestuck_lands", () -> new ItemStack(MSBlocks.GLOWING_MUSHROOM.get()));
+	public static final CreativeModeTab WEAPONS = new MSItemGroup("minestuck_weapons", () -> new ItemStack(MSItems.ZILLYHOO_HAMMER.get()));
 	
 	private final Supplier<ItemStack> icon;
 	

@@ -1,34 +1,41 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class OceanRundownFeature extends Feature<NoFeatureConfig>
+public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 {
 	
-	public OceanRundownFeature(Codec<NoFeatureConfig> codec)
+	public OceanRundownFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		ChunkGenerator generator = context.chunkGenerator();
+		Random rand = context.random();
+		
 		BlockPos pos2, pos3;
-		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), world.getSeaLevel(), pos.getZ(), 3)
-				.stream().anyMatch(biome -> biome.getBiomeCategory() == Biome.Category.OCEAN))
+		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), level.getSeaLevel(), pos.getZ(), 3, generator.climateSampler())
+				.stream().anyMatch(biome -> Biome.getBiomeCategory(biome) == Biome.BiomeCategory.OCEAN))
 		{
 			return false;
 		}
@@ -38,8 +45,8 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				if(generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2)
-						.getBiomeCategory() == Biome.Category.OCEAN)
+				Holder<Biome> biome = generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2, generator.climateSampler());
+				if(Biome.getBiomeCategory(biome) == Biome.BiomeCategory.OCEAN)
 					oceanPos.add(pos.offset(posX - 8, 0, posZ - 8));
 			}
 		}
@@ -91,9 +98,13 @@ public class OceanRundownFeature extends Feature<NoFeatureConfig>
 			}
 			for(int posZ = z1; posZ <= z2; posZ++)
 			{
-				BlockPos groundPos = world.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
-				if(!world.getBlockState(groundPos).getMaterial().isLiquid())
-					setBlock(world, groundPos.below(), fluid);
+				BlockPos groundPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
+				if(!level.getBlockState(groundPos).getMaterial().isLiquid())
+				{
+					BlockPos fluidPos = groundPos.below();
+					setBlock(level, fluidPos, fluid);
+					level.getChunk(fluidPos).markPosForPostprocessing(fluidPos);
+				}
 			}
 		}
 		

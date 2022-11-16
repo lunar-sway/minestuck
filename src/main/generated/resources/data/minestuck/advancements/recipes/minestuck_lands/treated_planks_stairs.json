@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:treated_planks"
+            "items": [
+              "minestuck:treated_planks"
+            ]
           }
         ]
       }

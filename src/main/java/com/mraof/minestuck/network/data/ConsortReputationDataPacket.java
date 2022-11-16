@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.network.PacketBuffer;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class ConsortReputationDataPacket implements PlayToClientPacket
 {
@@ -19,12 +19,12 @@ public class ConsortReputationDataPacket implements PlayToClientPacket
     }
     
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeInt(count);
     }
     
-    public static ConsortReputationDataPacket decode(PacketBuffer buffer)
+    public static ConsortReputationDataPacket decode(FriendlyByteBuf buffer)
     {
         int count = buffer.readInt();
         return create(count);

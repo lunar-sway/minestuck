@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 /**
  * This packet tells the server to clear the message for the
@@ -26,13 +26,13 @@ public class ClearMessagePacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
 		buffer.writeInt(program);
 	}
 	
-	public static ClearMessagePacket decode(PacketBuffer buffer)
+	public static ClearMessagePacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos computer = buffer.readBlockPos();
 		int program = buffer.readInt();
@@ -41,9 +41,9 @@ public class ClearMessagePacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos, computer -> {
+		ComputerBlockEntity.forNetworkIfPresent(player, pos, computer -> {
 			computer.latestmessage.put(program, "");
 			computer.markBlockForUpdate();
 		});

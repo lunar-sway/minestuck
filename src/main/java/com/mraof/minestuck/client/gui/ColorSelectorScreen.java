@@ -1,17 +1,18 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.Util;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class ColorSelectorScreen extends Screen
 {
@@ -27,7 +28,7 @@ public class ColorSelectorScreen extends Screen
 	
 	public ColorSelectorScreen(boolean firstTime)
 	{
-		super(new TranslationTextComponent(TITLE));
+		super(new TranslatableComponent(TITLE));
 		this.firstTime = firstTime;
 		for(int i = 0; i < ColorHandler.getColorSize(); i++)
 		{
@@ -41,37 +42,38 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addButton(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, new StringTextComponent("Choose"), button -> selectColor()));	//TODO translation key
+		addRenderableWidget(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, new TextComponent("Choose"), button -> selectColor()));	//TODO translation key
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
 		
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
 		
-		this.minecraft.getTextureManager().bind(guiBackground);
-		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, guiBackground);
+		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage = I18n.get(SELECT_COLOR);
-		minecraft.font.draw(matrixStack, cacheMessage, (this.width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		minecraft.font.draw(poseStack, cacheMessage, (this.width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
-		renderColorBoxes(matrixStack);
+		renderColorBoxes(poseStack);
 		
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 		
-		renderSelectionBox(matrixStack);
+		renderSelectionBox(poseStack);
 		
 		int index = getColorIndexAtMouse(mouseX, mouseY);
 		if(index != -1)
-			renderTooltip(matrixStack, ColorHandler.getName(index), mouseX, mouseY);
+			renderTooltip(poseStack, ColorHandler.getName(index), mouseX, mouseY);
 	}
 	
-	private void renderColorBoxes(MatrixStack matrixStack)
+	private void renderColorBoxes(PoseStack poseStack)
 	{
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -81,14 +83,14 @@ public class ColorSelectorScreen extends Screen
 		{
 			int color = ColorHandler.getColor(i) | 0xFF000000;
 			int x = 21 + 34*i;
-			fill(matrixStack, xOffset + x, yOffset + 32, xOffset + x + 32, yOffset + 48, color);
+			fill(poseStack, xOffset + x, yOffset + 32, xOffset + x + 32, yOffset + 48, color);
 		}
 		//Alpha colors
 		for(int i = 0; i < 4; i++)
 		{
 			int color = ColorHandler.getColor(i + 4) | 0xFF000000;
 			int x = 21 + 34*i;
-			fill(matrixStack, xOffset + x, yOffset + 53, xOffset + x + 32, yOffset + 69, color);
+			fill(poseStack, xOffset + x, yOffset + 53, xOffset + x + 32, yOffset + 69, color);
 		}
 		//Troll colors
 		for(int xIndex = 0; xIndex < 4; xIndex++)
@@ -97,11 +99,11 @@ public class ColorSelectorScreen extends Screen
 				int color = ColorHandler.getColor(yIndex*4 + xIndex + 8) | 0xFF000000;
 				int x = 21 + 34*xIndex;
 				int y = 74 + 18*yIndex;
-				fill(matrixStack, xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
+				fill(poseStack, xOffset + x, yOffset + y, xOffset + x + 32, yOffset + y + 16, color);
 			}
 	}
 	
-	private void renderSelectionBox(MatrixStack matrixStack)
+	private void renderSelectionBox(PoseStack poseStack)
 	{
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
@@ -114,9 +116,11 @@ public class ColorSelectorScreen extends Screen
 				y += 3;
 			if(selectedIndex >= 8)
 				y += 3;
-			RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-			this.minecraft.getTextureManager().bind(guiBackground);
-			this.blit(matrixStack, xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
+			
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.setShaderTexture(0, guiBackground);
+			this.blit(poseStack, xOffset + x, yOffset + y, guiWidth, 0, 36, 20);
 		}
 	}
 	
@@ -168,11 +172,11 @@ public class ColorSelectorScreen extends Screen
 	{
 		if(firstTime && minecraft != null && minecraft.player != null)
 		{
-			ITextComponent message;
+			Component message;
 			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
-				message = new TranslationTextComponent(DEFAULT_COLOR_SELECTED);
-			else message = new TranslationTextComponent(COLOR_SELECTED);
-			this.minecraft.player.sendMessage(new StringTextComponent("[Minestuck] ").append(message), Util.NIL_UUID);
+				message = new TranslatableComponent(DEFAULT_COLOR_SELECTED);
+			else message = new TranslatableComponent(COLOR_SELECTED);
+			this.minecraft.player.sendMessage(new TextComponent("[Minestuck] ").append(message), Util.NIL_UUID);
 		}
 	}
 	

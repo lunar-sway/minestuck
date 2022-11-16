@@ -3,8 +3,10 @@
     "item": "minecraft:clock"
   },
   "range": {
-    "min": 150.0,
-    "max": 200.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 150,
+      "max_inclusive": 200
+    }
   }
 }

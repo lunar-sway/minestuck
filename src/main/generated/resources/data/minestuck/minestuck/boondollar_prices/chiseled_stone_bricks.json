@@ -3,8 +3,10 @@
     "item": "minecraft:chiseled_stone_bricks"
   },
   "range": {
-    "min": 10.0,
-    "max": 15.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 10,
+      "max_inclusive": 15
+    }
   }
 }

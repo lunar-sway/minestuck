@@ -3,8 +3,10 @@
     "item": "minecraft:beef"
   },
   "range": {
-    "min": 110.0,
-    "max": 130.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 110,
+      "max_inclusive": 130
+    }
   }
 }

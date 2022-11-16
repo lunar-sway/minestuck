@@ -1,9 +1,9 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class ColorSelectPacket implements PlayToServerPacket
 {
@@ -15,12 +15,12 @@ public class ColorSelectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(colorIndex);
 	}
 	
-	public static ColorSelectPacket decode(PacketBuffer buffer)
+	public static ColorSelectPacket decode(FriendlyByteBuf buffer)
 	{
 		int color = buffer.readInt();
 		
@@ -28,7 +28,7 @@ public class ColorSelectPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		PlayerSavedData.getData(player).trySetColor(ColorHandler.getColor(colorIndex));
 	}

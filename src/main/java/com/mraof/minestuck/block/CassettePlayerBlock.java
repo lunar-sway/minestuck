@@ -1,32 +1,32 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.item.CassetteItem;
-import com.mraof.minestuck.tileentity.CassettePlayerTileEntity;
+import com.mraof.minestuck.blockentity.CassettePlayerBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class CassettePlayerBlock extends CustomShapeBlock
+public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 {
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 	public static final EnumProperty<EnumCassetteType> CASSETTE = MSProperties.CASSETTE;
@@ -39,113 +39,109 @@ public class CassettePlayerBlock extends CustomShapeBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
 		if(player.isShiftKeyDown())
 		{
 			state = state.cycle(OPEN);
-			TileEntity tileentity = worldIn.getBlockEntity(pos);
-			worldIn.setBlock(pos, state, 2);
-			if(tileentity instanceof CassettePlayerTileEntity && !state.getValue(OPEN))
+			level.setBlock(pos, state, 2);
+			if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 			{
-				ItemStack itemStack = ((CassettePlayerTileEntity) tileentity).getCassette();
-				worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, Item.getId(itemStack.getItem()));
-				if(player != null)
+				if(!state.getValue(OPEN))
 				{
+					ItemStack itemStack = cassettePlayer.getCassette();
+					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, Item.getId(itemStack.getItem()));
 					player.awardStat(Stats.PLAY_RECORD);
+				} else if(state.getValue(OPEN))
+				{
+					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, 0);
 				}
-			} else if(tileentity instanceof CassettePlayerTileEntity && state.getValue(OPEN))
-			{
-				worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else if(state.getValue(CASSETTE) != EnumCassetteType.NONE && state.getValue(OPEN))
 		{
-			this.dropCassette(worldIn, pos);
+			this.dropCassette(level, pos);
 			state = state.setValue(CASSETTE, EnumCassetteType.NONE);
-			worldIn.setBlock(pos, state, 2);
-			return ActionResultType.SUCCESS;
+			level.setBlock(pos, state, 2);
+			return InteractionResult.SUCCESS;
 		} else
 		{
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		}
 	}
 	
-	public void insertCassette(IWorld worldIn, BlockPos pos, BlockState state, ItemStack cassetteStack)
+	public void insertCassette(LevelAccessor level, BlockPos pos, BlockState state, ItemStack cassetteStack)
 	{
-		TileEntity tileentity = worldIn.getBlockEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity && state.getValue(OPEN) && state.getValue(CASSETTE) == EnumCassetteType.NONE)
+		if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer
+				&& state.getValue(OPEN) && state.getValue(CASSETTE) == EnumCassetteType.NONE)
 		{
-			((CassettePlayerTileEntity) tileentity).setCassette(cassetteStack.copy());
-			if(cassetteStack.getItem() instanceof CassetteItem)
+			cassettePlayer.setCassette(cassetteStack.copy());
+			if(cassetteStack.getItem() instanceof CassetteItem cassette)
 			{
-				worldIn.setBlock(pos, state.setValue(CASSETTE, ((CassetteItem) cassetteStack.getItem()).cassetteID), 2);
+				level.setBlock(pos, state.setValue(CASSETTE, cassette.cassetteID), 2);
 			}
 		}
 	}
 	
-	private void dropCassette(World worldIn, BlockPos pos)
+	private void dropCassette(Level level, BlockPos pos)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			TileEntity tileentity = worldIn.getBlockEntity(pos);
-			if(tileentity instanceof CassettePlayerTileEntity)
+			if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 			{
-				CassettePlayerTileEntity cassettePlayer = (CassettePlayerTileEntity) tileentity;
 				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
 				{
-					worldIn.levelEvent(Constants.WorldEvents.PLAY_RECORD_SOUND, pos, 0);
+					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, 0);
 					cassettePlayer.clearContent();
 					float f = 0.7F;
-					double xOffset = f * worldIn.random.nextFloat() + 0.15;
-					double yOffset = f * worldIn.random.nextFloat() + 0.66;
-					double zOffset = f * worldIn.random.nextFloat() + 0.15;
+					double xOffset = f * level.random.nextFloat() + 0.15;
+					double yOffset = f * level.random.nextFloat() + 0.66;
+					double zOffset = f * level.random.nextFloat() + 0.15;
 					ItemStack itemstack1 = itemstack.copy();
-					ItemEntity itementity = new ItemEntity(worldIn, (double) pos.getX() + xOffset, (double) pos.getY() + yOffset, (double) pos.getZ() + zOffset, itemstack1);
+					ItemEntity itementity = new ItemEntity(level, (double) pos.getX() + xOffset, (double) pos.getY() + yOffset, (double) pos.getZ() + zOffset, itemstack1);
 					itementity.setDefaultPickUpDelay();
-					worldIn.addFreshEntity(itementity);
+					level.addFreshEntity(itementity);
 				}
 			}
-		}
-	}
-	
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
-	{
-		if(state.getBlock() != newState.getBlock())
-		{
-			this.dropCassette(worldIn, pos);
-			super.onRemove(state, worldIn, pos, newState, isMoving);
 		}
 	}
 	
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		return true;
+		if(state.getBlock() != newState.getBlock())
+		{
+			this.dropCassette(level, pos);
+			super.onRemove(state, level, pos, newState, isMoving);
+		}
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new CassettePlayerTileEntity();
+		return new CassettePlayerBlockEntity(pos, state);
 	}
 	
+	@Override
+	@SuppressWarnings("deprecation")
 	public boolean hasAnalogOutputSignal(BlockState state)
 	{
 		return true;
 	}
 	
-	public int getAnalogOutputSignal(BlockState blockState, World worldIn, BlockPos pos)
+	@Override
+	@SuppressWarnings("deprecation")
+	public int getAnalogOutputSignal(BlockState blockState, Level level, BlockPos pos)
 	{
-		TileEntity tileentity = worldIn.getBlockEntity(pos);
-		if(tileentity instanceof CassettePlayerTileEntity)
+		if(level.getBlockEntity(pos) instanceof CassettePlayerBlockEntity cassettePlayer)
 		{
-			Item item = ((CassettePlayerTileEntity) tileentity).getCassette().getItem();
-			if(item instanceof CassetteItem)
+			Item item = cassettePlayer.getCassette().getItem();
+			if(item instanceof CassetteItem cassette)
 			{
-				return ((CassetteItem) item).getAnalogOutput();
+				return cassette.getAnalogOutput();
 			}
 		}
 		
@@ -153,7 +149,7 @@ public class CassettePlayerBlock extends CustomShapeBlock
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(CASSETTE);

@@ -2,35 +2,38 @@ package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
-import net.minecraft.block.*;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class RainbowSaplingBlock extends BushBlock implements IGrowable
+public class RainbowSaplingBlock extends BushBlock implements BonemealableBlock
 {
 	public static final BooleanProperty RED = MSProperties.RED;
 	public static final BooleanProperty GREEN = MSProperties.GREEN;
 	public static final BooleanProperty BLUE = MSProperties.BLUE;
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final Tree tree = new RainbowTree();
+	private final AbstractTreeGrower tree = new RainbowTree();
 	
 	public RainbowSaplingBlock(Properties properties)
 	{
@@ -40,39 +43,39 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
-		super.tick(state, worldIn, pos, random);
-		if (!worldIn.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
-		if (worldIn.getMaxLocalRawBrightness(pos.above()) >= 9 && random.nextInt(3) == 0)
-			this.performBonemeal(worldIn, random, pos, state);
+		super.tick(state, level, pos, random);
+		if (!level.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
+		if (level.getMaxLocalRawBrightness(pos.above()) >= 9 && random.nextInt(3) == 0)
+			this.performBonemeal(level, random, pos, state);
 	}
 	
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state)
 	{
-		return (double)worldIn.random.nextFloat() < 0.45D;
+		return level.random.nextFloat() < 0.45F;
 	}
 	
 	@Override
-	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state)
 	{
 		if(state.getValue(RED) && state.getValue(GREEN) && state.getValue(BLUE))
 		{
-			generateTree(worldIn, pos, state, rand);
+			generateTree(level, pos, state, rand);
 		} else
 		{
 			float f = rand.nextFloat();
@@ -83,144 +86,144 @@ public class RainbowSaplingBlock extends BushBlock implements IGrowable
 				property = GREEN;
 			else property = BLUE;
 			if(!state.getValue(property))
-				worldIn.setBlock(pos, state.setValue(property, true), Constants.BlockFlags.BLOCK_UPDATE);
+				level.setBlock(pos, state.setValue(property, true), Block.UPDATE_CLIENTS);
 		}
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(RED, GREEN, BLUE);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onPlace(BlockState state, World worldIn, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		BlockState soil = worldIn.getBlockState(pos.below());
-		if(soil.getBlock() == Blocks.GRASS_BLOCK)
+		BlockState soil = level.getBlockState(pos.below());
+		if(soil.is(Blocks.GRASS_BLOCK))
 		{
 			state = state.setValue(GREEN, true);
-		} else if(soil.getBlock() == Blocks.BLUE_WOOL)
+		} else if(soil.is(Blocks.BLUE_WOOL))
 		{
 			state = state.setValue(BLUE, true);
-		} else if(soil.getBlock() == Blocks.CYAN_WOOL)
+		} else if(soil.is(Blocks.CYAN_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 				state = state.setValue(GREEN, true);
 			else state = state.setValue(BLUE, true);
-		} else if(soil.getBlock() == Blocks.GREEN_WOOL)
+		} else if(soil.is(Blocks.GREEN_WOOL))
 		{
 			state = state.setValue(GREEN, true);
-		} else if(soil.getBlock() == Blocks.LIGHT_BLUE_WOOL)
+		} else if(soil.is(Blocks.LIGHT_BLUE_WOOL))
 		{
 			state = state.setValue(BLUE, true);
-		} else if(soil.getBlock() == Blocks.LIME_WOOL)
+		} else if(soil.is(Blocks.LIME_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.25)
+			if(level.random.nextFloat() < 0.25)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
-		} else if(soil.getBlock() == Blocks.MAGENTA_WOOL)
+		} else if(soil.is(Blocks.MAGENTA_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 			state = state.setValue(RED, true);
 		else state = state.setValue(BLUE, true);
-		} else if(soil.getBlock() == Blocks.PURPLE_WOOL)
+		} else if(soil.is(Blocks.PURPLE_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.25)
+			if(level.random.nextFloat() < 0.25)
 				state = state.setValue(RED, true);
 			else state = state.setValue(BLUE, true);
-		} else if(soil.getBlock() == Blocks.ORANGE_WOOL)
+		} else if(soil.is(Blocks.ORANGE_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.75)
+			if(level.random.nextFloat() < 0.75)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
-		} else if(soil.getBlock() == Blocks.PINK_WOOL)
+		} else if(soil.is(Blocks.PINK_WOOL))
 		{
 			state = state.setValue(RED, true);
-		} else if(soil.getBlock() == Blocks.RED_WOOL)
+		} else if(soil.is(Blocks.RED_WOOL))
 		{
 			state = state.setValue(RED, true);
-		} else if(soil.getBlock() == Blocks.YELLOW_WOOL)
+		} else if(soil.is(Blocks.YELLOW_WOOL))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
 		}
-		worldIn.setBlockAndUpdate(pos, state);
+		level.setBlockAndUpdate(pos, state);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
 		ItemStack stack = player.getItemInHand(hand);
-		if(stack.getItem() == Items.LAPIS_LAZULI)
+		if(stack.is(Items.LAPIS_LAZULI))
 		{
 			state = state.setValue(BLUE, true);
-		} else if(stack.getItem() == Items.CYAN_DYE)
+		} else if(stack.is(Items.CYAN_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 				state = state.setValue(GREEN, true);
 			else state = state.setValue(BLUE, true);
-		} else if(stack.getItem() == Items.GREEN_DYE)
+		} else if(stack.is(Items.GREEN_DYE))
 		{
 			state = state.setValue(GREEN, true);
-		} else if(stack.getItem() == Items.LIGHT_BLUE_DYE)
+		} else if(stack.is(Items.LIGHT_BLUE_DYE))
 		{
 			state = state.setValue(BLUE, true);
-		} else if(stack.getItem() == Items.LIME_DYE)
+		} else if(stack.is(Items.LIME_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.25)
+			if(level.random.nextFloat() < 0.25)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
-		} else if(stack.getItem() == Items.MAGENTA_DYE)
+		} else if(stack.is(Items.MAGENTA_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 				state = state.setValue(RED, true);
 			else state = state.setValue(BLUE, true);
-		} else if(stack.getItem() == Items.PURPLE_DYE)
+		} else if(stack.is(Items.PURPLE_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.25)
+			if(level.random.nextFloat() < 0.25)
 				state = state.setValue(RED, true);
 			else state = state.setValue(BLUE, true);
-		} else if(stack.getItem() == Items.ORANGE_DYE)
+		} else if(stack.is(Items.ORANGE_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.75)
+			if(level.random.nextFloat() < 0.75)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
-		} else if(stack.getItem() == Items.PINK_DYE)
+		} else if(stack.is(Items.PINK_DYE))
 		{
 			state = state.setValue(RED, true);
-		} else if(stack.getItem() == Items.RED_DYE)
+		} else if(stack.is(Items.RED_DYE))
 		{
 			state = state.setValue(RED, true);
-		} else if(stack.getItem() == Items.YELLOW_DYE)
+		} else if(stack.is(Items.YELLOW_DYE))
 		{
-			if(worldIn.random.nextFloat() < 0.5)
+			if(level.random.nextFloat() < 0.5)
 				state = state.setValue(RED, true);
 			else state = state.setValue(GREEN, true);
-		} else return ActionResultType.PASS;
+		} else return InteractionResult.PASS;
 		
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			worldIn.setBlockAndUpdate(pos, state);
+			level.setBlockAndUpdate(pos, state);
 			stack.shrink(1);
 		}
 		
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 	
 	@Override
-	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
 	{
-		return BlockTags.WOOL.contains(state.getBlock()) || super.mayPlaceOn(state, worldIn, pos);
+		return state.is(BlockTags.WOOL) || super.mayPlaceOn(state, worldIn, pos);
 	}
 	
-	private void generateTree(ServerWorld worldIn, BlockPos pos, BlockState state, Random rand)
+	private void generateTree(ServerLevel level, BlockPos pos, BlockState state, Random rand)
 	{
-		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
+		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(level, rand, pos))
 			return;
-		tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, state, rand);
+		tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 	}
 }

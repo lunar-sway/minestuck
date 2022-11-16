@@ -7,15 +7,15 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.tuple.Pair;
@@ -66,7 +66,7 @@ public class ColorHandler
 		ItemStack stack = event.getItemResult();
 		if(stack.getItem() instanceof AlchemizedColored)
 		{
-			int color = getColorForPlayer(event.getPlayer(), event.getWorld());
+			int color = getColorForPlayer(event.getPlayer(), event.getLevel());
 			event.setItemResult(((AlchemizedColored) stack.getItem()).setColor(stack, color));
 		}
 	}
@@ -78,11 +78,11 @@ public class ColorHandler
 		return colors.get(index).getLeft();
 	}
 	
-	public static ITextComponent getName(int index)
+	public static Component getName(int index)
 	{
 		if(index < 0 || index >= colors.size())
-			return new StringTextComponent("INVALID");
-		return new TranslationTextComponent("minestuck.color." + colors.get(index).getRight());
+			return new TextComponent("INVALID");
+		return new TranslatableComponent("minestuck.color." + colors.get(index).getRight());
 	}
 	
 	public static int getColorSize()
@@ -103,24 +103,24 @@ public class ColorHandler
 	
 	public static int getColorFromStack(ItemStack stack)
 	{
-		if(stack.hasTag() && stack.getTag().contains("color", Constants.NBT.TAG_ANY_NUMERIC))
+		if(stack.hasTag() && stack.getTag().contains("color", Tag.TAG_ANY_NUMERIC))
 			return stack.getTag().getInt("color");
 		else return DEFAULT_COLOR;
 	}
 	
-	public static int getColorForDimension(ServerWorld world)
+	public static int getColorForDimension(ServerLevel level)
 	{
-		SburbConnection c = SburbHandler.getConnectionForDimension(world);
-		return c == null ? ColorHandler.DEFAULT_COLOR : getColorForPlayer(c.getClientIdentifier(), world);
+		SburbConnection c = SburbHandler.getConnectionForDimension(level);
+		return c == null ? ColorHandler.DEFAULT_COLOR : getColorForPlayer(c.getClientIdentifier(), level);
 	}
 	
-	public static int getColorForPlayer(ServerPlayerEntity player)
+	public static int getColorForPlayer(ServerPlayer player)
 	{
 		return getColorForPlayer(IdentifierHandler.encode(player), player.level);
 	}
 	
-	public static int getColorForPlayer(PlayerIdentifier identifier, World world)
+	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)
 	{
-		return PlayerSavedData.getData(identifier, world).getColor();
+		return PlayerSavedData.getData(identifier, level).getColor();
 	}
 }

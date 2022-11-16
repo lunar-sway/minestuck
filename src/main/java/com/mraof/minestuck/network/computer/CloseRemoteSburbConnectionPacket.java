@@ -2,10 +2,10 @@ package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.network.PlayToServerPacket;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 {
@@ -16,27 +16,27 @@ public class CloseRemoteSburbConnectionPacket implements PlayToServerPacket
 		this.pos = pos;
 	}
 	
-	public static CloseRemoteSburbConnectionPacket asClient(ComputerTileEntity te)
+	public static CloseRemoteSburbConnectionPacket asClient(ComputerBlockEntity be)
 	{
-		return new CloseRemoteSburbConnectionPacket(te.getBlockPos());
+		return new CloseRemoteSburbConnectionPacket(be.getBlockPos());
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
 	}
 	
-	public static CloseRemoteSburbConnectionPacket decode(PacketBuffer buffer)
+	public static CloseRemoteSburbConnectionPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos computer = buffer.readBlockPos();
 		return new CloseRemoteSburbConnectionPacket(computer);
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		ComputerTileEntity.forNetworkIfPresent(player, pos,
+		ComputerBlockEntity.forNetworkIfPresent(player, pos,
 				computer -> SkaianetHandler.get(player.server).closeClientConnectionRemotely(computer.getOwner()));
 	}
 }

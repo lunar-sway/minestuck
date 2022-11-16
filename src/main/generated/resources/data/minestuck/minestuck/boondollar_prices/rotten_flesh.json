@@ -3,8 +3,10 @@
     "item": "minecraft:rotten_flesh"
   },
   "range": {
-    "min": 1.0,
-    "max": 5.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 1,
+      "max_inclusive": 5
+    }
   }
 }

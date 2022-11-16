@@ -1,7 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
@@ -9,18 +9,18 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.GameType;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +34,7 @@ public class EditData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	EditData(DecoyEntity decoy, ServerPlayerEntity player, SburbConnection c)
+	EditData(DecoyEntity decoy, ServerPlayer player, SburbConnection c)
 	{
 		this.decoy = decoy;
 		this.player = player;
@@ -45,7 +45,7 @@ public class EditData
 	
 	final SburbConnection connection;
 	
-	private final ServerPlayerEntity player;
+	private final ServerPlayer player;
 	
 	private boolean isRecovering;
 	
@@ -57,7 +57,7 @@ public class EditData
 	/**
 	 * @return the player that activated and is in editmode (not necessarily the server player of the connection)
 	 */
-	public ServerPlayerEntity getEditor()
+	public ServerPlayer getEditor()
 	{
 		return player;
 	}
@@ -73,7 +73,7 @@ public class EditData
 	public void sendGristCacheToEditor()
 	{
 		GristSet cache = PlayerSavedData.getData(connection.getClientIdentifier(), getEditor().server).getGristCache();
-		ServerPlayerEntity editor = getEditor();
+		ServerPlayer editor = getEditor();
 		GristCachePacket packet = new GristCachePacket(cache, true);
 		MSPacketHandler.sendToPlayer(packet, editor);
 	}
@@ -85,9 +85,9 @@ public class EditData
 		MSPacketHandler.sendToPlayer(packet, getEditor());
 	}
 	
-	public CompoundNBT writeRecoveryData()
+	public CompoundTag writeRecoveryData()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		
 		new PlayerRecovery(decoy).write(nbt);
 		new ConnectionRecovery(this).write(nbt);
@@ -95,12 +95,12 @@ public class EditData
 		return nbt;
 	}
 	
-	public static PlayerRecovery readRecovery(CompoundNBT nbt)
+	public static PlayerRecovery readRecovery(CompoundTag nbt)
 	{
 		return new PlayerRecovery(nbt);
 	}
 	
-	public static ConnectionRecovery readExtraRecovery(CompoundNBT nbt)
+	public static ConnectionRecovery readExtraRecovery(CompoundTag nbt)
 	{
 		if(nbt.contains("edit_inv"))
 			return new ConnectionRecovery(nbt);
@@ -126,14 +126,14 @@ public class EditData
 	
 	public static class PlayerRecovery
 	{
-		private final RegistryKey<World> dimension;
+		private final ResourceKey<Level> dimension;
 		private final double posX, posY, posZ;
 		private final float rotationYaw, rotationPitch;
 		private final GameType gameType;
-		private final CompoundNBT capabilities;
+		private final CompoundTag capabilities;
 		private final float health;
-		private final CompoundNBT foodStats;
-		private final ListNBT inventory;
+		private final CompoundTag foodStats;
+		private final ListTag inventory;
 		
 		private PlayerRecovery(DecoyEntity decoy)
 		{
@@ -141,18 +141,18 @@ public class EditData
 			posX = decoy.getX();
 			posY = decoy.getY();
 			posZ = decoy.getZ();
-			rotationYaw = decoy.yRot;
-			rotationPitch = decoy.xRot;
+			rotationYaw = decoy.getYRot();
+			rotationPitch = decoy.getXRot();
 			gameType = decoy.gameType;
 			capabilities = decoy.capabilities.copy();
 			health = decoy.getHealth();
 			foodStats = decoy.getFoodStatsNBT();
-			inventory = decoy.inventory.save(new ListNBT());
+			inventory = decoy.inventory.save(new ListTag());
 		}
 		
-		private PlayerRecovery(CompoundNBT nbt)
+		private PlayerRecovery(CompoundTag nbt)
 		{
-			dimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
+			dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
 			posX = nbt.getDouble("x");
 			posY = nbt.getDouble("y");
 			posZ = nbt.getDouble("z");
@@ -163,13 +163,13 @@ public class EditData
 			capabilities = nbt.getCompound("capabilities");
 			health = nbt.getFloat("health");
 			foodStats = nbt.getCompound("food");
-			inventory = nbt.getList("inv", Constants.NBT.TAG_COMPOUND);
+			inventory = nbt.getList("inv", Tag.TAG_COMPOUND);
 		}
 		
-		public CompoundNBT write(CompoundNBT nbt)
+		public CompoundTag write(CompoundTag nbt)
 		{
 			if(dimension != null)
-				ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
+				ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, dimension.location()).resultOrPartial(LOGGER::error)
 						.ifPresent(tag -> nbt.put("dim", tag));
 			nbt.putDouble("x", posX);
 			nbt.putDouble("y", posY);
@@ -186,16 +186,16 @@ public class EditData
 			return nbt;
 		}
 		
-		void recover(ServerPlayerEntity player, boolean throwException)
+		void recover(ServerPlayer player, boolean throwException)
 		{
 			player.closeContainer();
-			RegistryKey<World> dim = dimension;
+			ResourceKey<Level> dim = dimension;
 			if(dim == null)
 			{
 				LOGGER.warn("Couldn't load original dimension for player {}. Defaulting to overworld.", player.getGameProfile().getName());
-				dim = World.OVERWORLD;
+				dim = Level.OVERWORLD;
 			}
-			ServerWorld world = player.server.getLevel(dim);
+			ServerLevel world = player.server.getLevel(dim);
 			if(player.level.dimension() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
 			{
 				if(throwException)
@@ -204,34 +204,34 @@ public class EditData
 			}
 			player.connection.teleport(posX, posY, posZ, rotationYaw, rotationPitch);
 			player.setGameMode(gameType);
-			player.abilities.loadSaveData(capabilities);
+			player.getAbilities().loadSaveData(capabilities);
 			player.onUpdateAbilities();
 			player.fallDistance = 0;
 			
 			player.setHealth(health);
 			player.getFoodData().readAdditionalSaveData(foodStats);
-			player.inventory.load(inventory);
+			player.getInventory().load(inventory);
 		}
 	}
 	
 	public static class ConnectionRecovery
 	{
 		private final PlayerIdentifier clientPlayer;
-		private final ListNBT inventory;
+		private final ListTag inventory;
 		
 		private ConnectionRecovery(EditData data)
 		{
 			clientPlayer = data.connection.getClientIdentifier();
-			inventory = data.player.inventory.save(new ListNBT());
+			inventory = data.player.getInventory().save(new ListTag());
 		}
 		
-		private ConnectionRecovery(CompoundNBT nbt)
+		private ConnectionRecovery(CompoundTag nbt)
 		{
 			clientPlayer = IdentifierHandler.load(nbt, "client");
-			inventory = nbt.getList("edit_inv", Constants.NBT.TAG_COMPOUND);
+			inventory = nbt.getList("edit_inv", Tag.TAG_COMPOUND);
 		}
 		
-		private void write(CompoundNBT nbt)
+		private void write(CompoundTag nbt)
 		{
 			clientPlayer.saveToNBT(nbt, "client");
 			nbt.put("edit_inv", inventory);
@@ -247,14 +247,14 @@ public class EditData
 			recover(connection, null);
 		}
 		
-		void recover(SburbConnection connection, ServerPlayerEntity editPlayer)
+		void recover(SburbConnection connection, ServerPlayer editPlayer)
 		{
 			if(connection != null)
 			{
 				connection.putEditmodeInventory(this.inventory);
 				if(editPlayer != null)
 				{
-					ServerEditHandler.lastEditmodePos.put(connection, new Vector3d(editPlayer.getX(), editPlayer.getY(), editPlayer.getZ()));
+					ServerEditHandler.lastEditmodePos.put(connection, new Vec3(editPlayer.getX(), editPlayer.getY(), editPlayer.getZ()));
 				}
 			} else LOGGER.warn("Unable to perform editmode recovery for the connection for client player {}. Got null connection.", clientPlayer.getUsername());
 		}

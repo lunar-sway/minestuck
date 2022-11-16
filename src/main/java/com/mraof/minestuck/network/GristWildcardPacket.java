@@ -1,17 +1,18 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.tileentity.machine.GristWildcardHolder;
-import com.mraof.minestuck.util.Debug;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.blockentity.machine.GristWildcardHolder;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 
 public class GristWildcardPacket implements PlayToServerPacket
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final GristType gristType;
 	private final BlockPos pos;
@@ -23,13 +24,13 @@ public class GristWildcardPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeRegistryId(gristType);
 		buffer.writeBlockPos(pos);
 	}
 	
-	public static GristWildcardPacket decode(PacketBuffer buffer)
+	public static GristWildcardPacket decode(FriendlyByteBuf buffer)
 	{
 		GristType gristType = buffer.readRegistryIdSafe(GristType.class);
 		BlockPos pos = buffer.readBlockPos();
@@ -38,18 +39,14 @@ public class GristWildcardPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player != null && player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			TileEntity te = player.getCommandSenderWorld().getBlockEntity(pos);
-			if(te instanceof GristWildcardHolder)
-			{
-				((GristWildcardHolder) te).setWildcardGrist(gristType);
-			} else
-			{
-				Debug.warnf("No tile entity found at %s for packet sent by player %s!", pos, player.getName());
-			}
+			if(player.getCommandSenderWorld().getBlockEntity(pos) instanceof GristWildcardHolder blockEntity)
+				blockEntity.setWildcardGrist(gristType);
+			else
+				LOGGER.warn("No block entity found at {} for packet sent by player {}!", pos, player.getName());
 		}
 	}
 }

@@ -2,8 +2,8 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +34,7 @@ public final class DefaultSessionHandler extends SessionHandler
 		split(globalSession);
 	}
 	
-	DefaultSessionHandler(SkaianetHandler skaianetHandler, ListNBT list)
+	DefaultSessionHandler(SkaianetHandler skaianetHandler, ListTag list)
 	{
 		super(skaianetHandler);
 		for(int i = 0; i < list.size(); i++)
@@ -42,9 +42,9 @@ public final class DefaultSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	void write(CompoundNBT compound)
+	void write(CompoundTag compound)
 	{
-		ListNBT list = new ListNBT();
+		ListTag list = new ListTag();
 		
 		for(Session s : sessions)
 			list.add(s.write());

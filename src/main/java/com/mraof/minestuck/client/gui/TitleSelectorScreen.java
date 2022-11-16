@@ -1,18 +1,20 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TitleSelectorScreen extends Screen
 {
@@ -34,7 +36,7 @@ public class TitleSelectorScreen extends Screen
 	
 	TitleSelectorScreen(Title title)
 	{
-		super(new TranslationTextComponent(TITLE));
+		super(new TranslatableComponent(TITLE));
 		previous = title;
 	}
 	
@@ -47,9 +49,9 @@ public class TitleSelectorScreen extends Screen
 			int i = EnumClass.getIntFromClass(c);
 			if(i < 12)
 			{
-				ITextComponent className = c.asTextComponent();
+				Component className = c.asTextComponent();
 				Button button = new ExtendedButton(leftX + 4 + (i % 2) * 40, topY + 24 + (i / 2) * 16, 40, 16, className, button1 -> pickClass(c));
-				addButton(button);
+				addRenderableWidget(button);
 				classButtons[i] = button;
 			}
 		}
@@ -58,37 +60,39 @@ public class TitleSelectorScreen extends Screen
 			int i = EnumAspect.getIntFromAspect(a);
 			if(i < 12)
 			{
-				ITextComponent aspectName = a.asTextComponent();
+				Component aspectName = a.asTextComponent();
 				Button button = new ExtendedButton(leftX + 102 + (i % 2) * 40, topY + 24 + (i / 2) * 16, 40, 16, aspectName, button1 -> pickAspect(a));
-				addButton(button);
+				addRenderableWidget(button);
 				aspectButtons[i] = button;
 			}
 		}
 		
-		addButton(selectButton = new ExtendedButton(leftX + 24, topY + 128, 60, 20, new TranslationTextComponent(SELECT), button -> select()));
-		addButton(new ExtendedButton(leftX + 102, topY + 128, 60, 20, new TranslationTextComponent(RANDOMIZE), button -> random()));
+		addRenderableWidget(selectButton = new ExtendedButton(leftX + 24, topY + 128, 60, 20, new TranslatableComponent(SELECT), button -> select()));
+		addRenderableWidget(new ExtendedButton(leftX + 102, topY + 128, 60, 20, new TranslatableComponent(RANDOMIZE), button -> random()));
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		selectButton.active = currentClass != null && currentAspect != null;
 		
 		int xOffset = (width - guiWidth)/2;
 		int yOffset = (height - guiHeight)/2;
 		
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
 		
-		this.minecraft.getTextureManager().bind(guiBackground);
-		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, guiBackground);
+		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String message = previous == null ? I18n.get(SELECT_TITLE) : I18n.get(USED_TITLE, previous.asTextComponent().getString());
-		font.draw(matrixStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 10, 0x404040);
+		font.draw(poseStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 10, 0x404040);
 		
 		message = I18n.get(Title.FORMAT, "", "");
-		font.draw(matrixStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 72 - font.lineHeight/2F, 0x404040);
+		font.draw(poseStack, message, (this.width / 2F) - font.width(message) / 2F, yOffset + 72 - font.lineHeight/2F, 0x404040);
 		
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 		
 	}
 	

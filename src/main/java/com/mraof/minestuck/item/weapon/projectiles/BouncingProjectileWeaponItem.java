@@ -2,11 +2,14 @@ package com.mraof.minestuck.item.weapon.projectiles;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BouncingProjectileEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 {
@@ -16,25 +19,25 @@ public class BouncingProjectileWeaponItem extends ReturningProjectileWeaponItem
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
-		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TRIDENT_THROW, SoundCategory.PLAYERS, 1.0F, 1.2F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			BouncingProjectileEntity projectileEntity = new BouncingProjectileEntity(MSEntityTypes.BOUNCING_PROJECTILE, playerIn, worldIn, maxTick);
+			BouncingProjectileEntity projectileEntity = new BouncingProjectileEntity(MSEntityTypes.BOUNCING_PROJECTILE.get(), playerIn, level, maxTick);
 			projectileEntity.setItem(item);
-			projectileEntity.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, 0.0F, velocity, accuracy);
+			projectileEntity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, velocity, accuracy);
 			projectileEntity.setNoGravity(true);
-			worldIn.addFreshEntity(projectileEntity);
+			level.addFreshEntity(projectileEntity);
 		}
 		
-		item.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+		item.hurtAndBreak(1, playerIn, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		
 		playerIn.getCooldowns().addCooldown(this, maxTick);
 		playerIn.awardStat(Stats.ITEM_USED.get(this));
-		return new ActionResult<>(ActionResultType.SUCCESS, item);
+		return InteractionResultHolder.success(item);
 	}
 }

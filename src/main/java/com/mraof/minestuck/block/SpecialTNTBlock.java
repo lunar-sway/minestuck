@@ -1,24 +1,24 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.TNTBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.TNTEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TntBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class SpecialTNTBlock extends TNTBlock
+public class SpecialTNTBlock extends TntBlock
 {
 	private final boolean primed, unstable, instant;
 	
@@ -32,53 +32,54 @@ public class SpecialTNTBlock extends TNTBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void attack(BlockState state, World worldIn, BlockPos pos, PlayerEntity player)
+	public void attack(BlockState state, Level level, BlockPos pos, Player player)
 	{
 		if(primed)
 		{
-			this.explode(worldIn, pos, player);
-			worldIn.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+			this.explode(level, pos, player);
+			level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
 		}
 	}
 	
 	@Override
-	public void catchFire(BlockState state, World world, BlockPos pos, @Nullable Direction direction, @Nullable LivingEntity igniter)
+	public void onCaughtFire(BlockState state, Level level, BlockPos pos, @Nullable Direction direction, @Nullable LivingEntity igniter)
 	{
-		explode(world, pos, igniter);
+		explode(level, pos, igniter);
 	}
 	
-	private void explode(World worldIn, BlockPos pos, LivingEntity igniter)
+	private void explode(Level level, BlockPos pos, LivingEntity igniter)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			TNTEntity entity = new TNTEntity(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, igniter);
+			PrimedTnt entity = new PrimedTnt(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, igniter);
 			if(instant)
 				entity.setFuse(0);
-			worldIn.addFreshEntity(entity);
-			worldIn.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			level.addFreshEntity(entity);
+			level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 	
 	@Override
-	public void wasExploded(World worldIn, BlockPos pos, Explosion explosionIn)
+	public void wasExploded(Level level, BlockPos pos, Explosion explosionIn)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
-			TNTEntity entity = new TNTEntity(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getSourceMob());
-			entity.setFuse(worldIn.random.nextInt(entity.getLife() / 4) + entity.getLife() / 8);
+			PrimedTnt entity = new PrimedTnt(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getSourceMob());
+			entity.setFuse(level.random.nextInt(entity.getFuse() / 4) + entity.getFuse() / 8);
 			if(instant)
-				entity.setFuse(entity.getLife() / 2);
-			worldIn.addFreshEntity(entity);
+				entity.setFuse(entity.getFuse() / 2);
+			level.addFreshEntity(entity);
 		}
 	}
 	
 	@Override
-	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	@SuppressWarnings("deprecation")
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
 		if(unstable && random.nextDouble() < 0.1)
 		{
-			this.explode(worldIn, pos, null);
-			worldIn.removeBlock(pos, false);
+			this.explode(level, pos, null);
+			level.removeBlock(pos, false);
 		}
 	}
 }

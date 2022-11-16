@@ -4,9 +4,11 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.server.MinecraftServer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -80,14 +82,14 @@ public class Generator
 		return EnumClass.valuesStream().filter(c -> !usedClasses.contains(c)).collect(Collectors.toList());
 	}
 	
-	static TitleLandType generateWeightedTitleLandType(Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
+	static TitleLandType generateWeightedTitleLandType(MinecraftServer server, Session session, EnumAspect aspect, @Nullable TerrainLandType terrainType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
-		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(ignore);
+		List<TitleLandType> usedTypes = session.getUsedTitleLandTypes(server, ignore);
 		
-		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS);
+		boolean hasFrogs = usedTypes.contains(LandTypes.FROGS.get());
 		
 		//if(aspect == EnumAspect.SPACE && !hasFrogs)
 		//Maybe force it if we so want?
@@ -95,12 +97,12 @@ public class Generator
 		return landGen.getTitleAspect(terrainType, aspect, usedTypes);
 	}
 	
-	static TerrainLandType generateWeightedTerrainLandType(Session session, TitleLandType titleType, PlayerIdentifier ignore)
+	static TerrainLandType generateWeightedTerrainLandType(MinecraftServer server, Session session, TitleLandType titleType, PlayerIdentifier ignore)
 	{
 		Random random = new Random();
-		LandTypes landGen = new LandTypes(random.nextLong());	//TODO seed based on player and world in a good way
+		LandTypeGenerator landGen = new LandTypeGenerator(random.nextLong());	//TODO seed based on player and world in a good way
 		
-		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(ignore);
+		List<TerrainLandType> usedTypes = session.getUsedTerrainLandTypes(server, ignore);
 		
 		return landGen.getTerrainAspect(titleType, usedTypes);
 	}

@@ -6,7 +6,9 @@ public class MSCriteriaTriggers
 {
 	public static final EventTrigger SBURB_CONNECTION = new EventTrigger(EventTrigger.SBURB_CONNECTION_ID);
 	public static final EventTrigger CRUXITE_ARTIFACT = new EventTrigger(EventTrigger.CRUXITE_ARTIFACT_ID);
+	public static final EventTrigger RETURN_NODE = new EventTrigger(EventTrigger.RETURN_NODE_ID);
 	public static final EventTrigger MELON_OVERLOAD = new EventTrigger(EventTrigger.MELON_OVERLOAD_ID);
+	
 	public static final PunchDesignixTrigger PUNCH_DESIGNIX = new PunchDesignixTrigger();
 	public static final CaptchalogueTrigger CAPTCHALOGUE = new CaptchalogueTrigger();
 	public static final ChangeModusTrigger CHANGE_MODUS = new ChangeModusTrigger();
@@ -21,7 +23,9 @@ public class MSCriteriaTriggers
 	{
 		CriteriaTriggers.register(SBURB_CONNECTION);
 		CriteriaTriggers.register(CRUXITE_ARTIFACT);
+		CriteriaTriggers.register(RETURN_NODE);
 		CriteriaTriggers.register(MELON_OVERLOAD);
+		
 		CriteriaTriggers.register(PUNCH_DESIGNIX);
 		CriteriaTriggers.register(CAPTCHALOGUE);
 		CriteriaTriggers.register(CHANGE_MODUS);

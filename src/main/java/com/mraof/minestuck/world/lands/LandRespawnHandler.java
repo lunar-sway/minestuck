@@ -5,12 +5,10 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,26 +21,25 @@ public class LandRespawnHandler
 	@SubscribeEvent
 	public static void onRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		if (!event.isEndConquered() && event.getPlayer() instanceof ServerPlayerEntity)
+		if (!event.isEndConquered() && event.getPlayer() instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 			if (player.getRespawnPosition() == null)
 			{
 				Optional<SburbConnection> c = SkaianetHandler.get(player.server).getPrimaryConnection(IdentifierHandler.encode(player), true);
-				if(c.isPresent() && c.get().getLandInfo() != null)
+				if(c.isPresent() && c.get().getClientDimension() != null)
 				{
-					LandInfo info = c.get().getLandInfo();
-					RegistryKey<World> land = info.getDimensionType();
-					ServerWorld destination = player.server.getLevel(land);
-					BlockPos spawn = info.getSpawn();
+					ServerLevel destination = player.server.getLevel(c.get().getClientDimension());
+					
+					if (destination == null)
+						return;
 					
 					int spawnFuzz = 12;	//TODO spawn explicitly within the entry area
 					int spawnFuzzHalf = spawnFuzz / 2;
 					
-					spawn = spawn.offset(player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf,
+					BlockPos spawn = new BlockPos(player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf,
 							0, player.getRandom().nextInt(spawnFuzz) - spawnFuzzHalf);
 					
-					int y = destination.getChunk(spawn).getHeight(Heightmap.Type.MOTION_BLOCKING, spawn.getX() & 15, spawn.getZ() & 15) + 1;
+					int y = destination.getChunk(spawn).getHeight(Heightmap.Types.MOTION_BLOCKING, spawn.getX() & 15, spawn.getZ() & 15) + 1;
 					if(y >= 0)
 					{
 						spawn = new BlockPos(spawn.getX(), y, spawn.getZ());

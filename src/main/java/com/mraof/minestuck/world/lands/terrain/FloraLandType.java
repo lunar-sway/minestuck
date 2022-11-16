@@ -3,24 +3,27 @@ package com.mraof.minestuck.world.lands.terrain;
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.biome.MinestuckBiomeFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.ForestFlowerBlockStateProvider;
-import net.minecraft.world.gen.carver.ConfiguredCarvers;
-import net.minecraft.world.gen.feature.*;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import net.minecraft.data.worldgen.Carvers;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.Random;
 
@@ -30,128 +33,93 @@ public class FloraLandType extends TerrainLandType
 	public static final String FLOWERS = "minestuck.flowers";
 	public static final String THORNS = "minestuck.thorns";
 	
-	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.9D);
-	private static final Vector3d skyColor = new Vector3d(0.6D, 0.8D, 0.6D);
-	
 	public FloraLandType()
 	{
-		super();
+		super(new Builder(MSEntityTypes.IGUANA).names(FLORA, FLOWERS, THORNS)
+				.fogColor(0.5, 0.6, 0.9).skyColor(0.6, 0.8, 0.6)
+				.category(Biome.BiomeCategory.FOREST).music(MSSoundEvents.MUSIC_FLORA));
 	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
-		registry.setBlockState("surface_rough", Blocks.COARSE_DIRT.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("ocean", MSBlocks.BLOOD.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", Blocks.MOSSY_COBBLESTONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
-		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.YELLOW_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
+		registry.setBlock("surface", Blocks.GRASS_BLOCK);
+		registry.setBlock("surface_rough", Blocks.COARSE_DIRT);
+		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("ocean", MSBlocks.BLOOD);
+		registry.setBlock("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
+		registry.setBlock("structure_primary_stairs", Blocks.STONE_BRICK_STAIRS);
+		registry.setBlock("structure_secondary", Blocks.MOSSY_COBBLESTONE);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		registry.setBlock("structure_secondary_stairs", Blocks.DARK_OAK_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("bush", Blocks.FERN);
+		registry.setBlock("structure_wool_1", Blocks.YELLOW_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.CYAN_WOOL);
 	}
 	
 	@Override
-	public String[] getNames()
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		return new String[]{FLORA, FLOWERS, THORNS};
-	}
-	
-	@Override
-	public void setProperties(LandProperties properties)
-	{
-		properties.category = Biome.Category.FOREST;
-	}
-	
-	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
-	{
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_GRASS_FOREST);
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.FLOWER
-					.configured((new BlockClusterFeatureConfig.Builder(ForestFlowerBlockStateProvider.INSTANCE, SimpleBlockPlacer.INSTANCE)).tries(64).build())
-					.decorated(Features.Placements.ADD_32).decorated(Features.Placements.HEIGHTMAP_SQUARE).count(65));
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.DARK_OAK.decorated(Features.Placements.HEIGHTMAP_SQUARE).count(25));
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BROKEN_SWORD.configured(IFeatureConfig.NONE).chance(50));
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.configured(MinestuckBiomeFeatures.STRAWBERRY_CONFIG)
-					.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(60));
-		}
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.FLOWER_FLOWER_FOREST, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.DARK_OAK, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.UNCOMMON_BROKEN_SWORD, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RARE_STRAWBERRY_PATCH, LandBiomeType.NORMAL);
 		
-		if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, Feature.LAKE.configured(new BlockStateFeatureConfig(MSBlocks.BLOOD.defaultBlockState()))
-					.decorated(Features.Placements.HEIGHTMAP_SQUARE).count(25));
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.SURFACE_FOSSIL.configured(IFeatureConfig.NONE).chance(5));
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.BROKEN_SWORD.configured(IFeatureConfig.NONE).chance(10));
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_PATCH.configured(MinestuckBiomeFeatures.STRAWBERRY_CONFIG).decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE));
-		}
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.BLOOD_POOL, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.SURFACE_FOSSIL, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.BROKEN_SWORD, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.STRAWBERRY_PATCH, LandBiomeType.ROUGH);
 		
-		if(type == LandBiomeType.OCEAN)
-		{
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.CLAY.defaultBlockState(), FeatureSpread.of(2, 1), 1, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.defaultBlockState())))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE));
-		}
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
+				new DiskConfiguration(Blocks.CLAY.defaultBlockState(), UniformInt.of(2, 3), 1, Lists.newArrayList(blocks.getBlockState("ocean_surface"), Blocks.CLAY.defaultBlockState())),
+				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()), LandBiomeType.OCEAN);
 		
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33))
-				.range(256).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
-				.range(256).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17))
-				.range(64).squared().count(13));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.EMERALD_ORE.defaultBlockState(), 3))
-				.range(32).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 3))
-				.range(32).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.LAPIS_ORE.defaultBlockState(), 3))
-				.range(32).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.defaultBlockState(), 5))
-				.range(32).squared().count(8));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 33),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17),
+						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.EMERALD_ORE.defaultBlockState(), 3),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 3),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.LAPIS_ORE.defaultBlockState(), 3),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), MSBlocks.STONE_QUARTZ_ORE.get().defaultBlockState(), 5),
+						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		
-		builder.addCarver(GenerationStage.Carving.AIR, ConfiguredCarvers.CAVE);
-	}
-	
-	@Override
-	public Vector3d getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vector3d getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
+		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
+		
 	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FLORA;
+		IguanaVillagePieces.addPieces(register, random);
 	}
 }

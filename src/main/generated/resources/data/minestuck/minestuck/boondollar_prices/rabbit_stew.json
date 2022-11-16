@@ -3,8 +3,10 @@
     "item": "minecraft:rabbit_stew"
   },
   "range": {
-    "min": 130.0,
-    "max": 150.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 130,
+      "max_inclusive": 150
+    }
   }
 }

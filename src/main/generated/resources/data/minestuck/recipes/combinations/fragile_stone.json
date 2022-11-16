@@ -6,7 +6,7 @@
   "input2": {
     "item": "minecraft:gravel"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
     "item": "minestuck:fragile_stone"
   }

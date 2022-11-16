@@ -3,7 +3,8 @@
   "pools": [
     {
       "name": "weapons",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -18,9 +19,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:bow"
@@ -33,9 +36,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:stone_sword"
@@ -48,9 +53,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:iron_sword"
@@ -63,9 +70,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:claw_hammer"
@@ -78,9 +87,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:sickle"
@@ -93,9 +104,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:katana"
@@ -107,9 +120,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:lipstick"
@@ -122,9 +137,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:sledge_hammer"
@@ -137,9 +154,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:wooden_spoon"
@@ -151,9 +170,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:scythe"
@@ -166,9 +187,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:knitting_needle"
@@ -181,9 +204,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:shuriken"
@@ -196,9 +221,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:metal_bat"
@@ -210,9 +237,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:mace"
@@ -225,9 +254,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:jousting_lance"
@@ -240,9 +271,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:fan"
@@ -254,9 +287,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:lucerne_hammer"
@@ -269,9 +304,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:fork"
@@ -280,7 +317,8 @@
     },
     {
       "name": "supplies",
-      "rolls": 3,
+      "rolls": 3.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -294,10 +332,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 16.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 16.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:arrow"
@@ -309,10 +348,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 3.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:bread"
@@ -324,10 +364,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:wheat"
@@ -339,10 +380,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 3.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:apple"
@@ -354,10 +396,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 2.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:experience_bottle"
@@ -375,10 +418,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:rotten_flesh"
@@ -391,10 +435,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 3.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:bone"
@@ -407,10 +452,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 3.0,
-                "max": 7.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 7.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:phlegm_gushers"
@@ -420,10 +466,11 @@
     {
       "name": "misc",
       "rolls": {
+        "type": "minecraft:uniform",
         "min": 2.0,
-        "max": 4.0,
-        "type": "minecraft:uniform"
+        "max": 4.0
       },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minestuck:land_table",
@@ -438,10 +485,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:iron_ingot"
@@ -454,10 +502,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:gold_ingot"
@@ -470,10 +519,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 3.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 3.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:redstone"
@@ -531,10 +581,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 8.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 8.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:barbasol"
@@ -553,10 +604,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:raw_cruxite"
@@ -569,10 +621,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:raw_uranium"
@@ -582,10 +635,11 @@
     {
       "name": "rare",
       "rolls": {
+        "type": "minecraft:uniform",
         "min": 0.0,
-        "max": 1.0,
-        "type": "minecraft:uniform"
+        "max": 1.0
       },
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -595,10 +649,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:iron_ingot"
@@ -611,10 +666,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:gold_ingot"
@@ -627,10 +683,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 2.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 2.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:diamond"
@@ -720,7 +777,8 @@
     },
     {
       "name": "boondollars",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -730,10 +788,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 3.0,
-                "max": 7.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 7.0
+              },
+              "add": false
             }
           ],
           "name": "minestuck:sorrow_gushers"
@@ -746,9 +805,9 @@
             {
               "function": "minestuck:set_boondollar_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 5.0,
-                "max": 50.0,
-                "type": "minecraft:uniform"
+                "max": 50.0
               }
             }
           ],
@@ -761,9 +820,9 @@
             {
               "function": "minestuck:set_boondollar_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 50.0,
-                "max": 250.0,
-                "type": "minecraft:uniform"
+                "max": 250.0
               }
             }
           ],
@@ -776,9 +835,9 @@
             {
               "function": "minestuck:set_boondollar_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 250.0,
-                "max": 1000.0,
-                "type": "minecraft:uniform"
+                "max": 1000.0
               }
             }
           ],

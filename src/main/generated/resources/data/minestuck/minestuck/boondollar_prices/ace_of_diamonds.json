@@ -3,8 +3,10 @@
     "item": "minestuck:ace_of_diamonds"
   },
   "range": {
-    "min": 3000.0,
-    "max": 5000.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 3000,
+      "max_inclusive": 5000
+    }
   }
 }

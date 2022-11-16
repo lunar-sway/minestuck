@@ -2,10 +2,10 @@ package com.mraof.minestuck.util;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.block.Block;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Map;
@@ -78,7 +78,7 @@ public class CustomVoxelShape
 		VoxelShape out = Block.box(0,0,0,0,0,0);
 		
 		for(double[] part : shape.parts)
-			out = VoxelShapes.or(out, Block.box(part[0], part[1], part[2], part[3], part[4], part[5]));
+			out = Shapes.or(out, Block.box(Math.min(part[0], part[3]), Math.min(part[1], part[4]), Math.min(part[2], part[5]), Math.max(part[0], part[3]), Math.max(part[1], part[4]), Math.max(part[2], part[5])));
 		return out;
 	}
 	

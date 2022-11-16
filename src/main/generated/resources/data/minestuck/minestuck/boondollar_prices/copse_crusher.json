@@ -3,8 +3,10 @@
     "item": "minestuck:copse_crusher"
   },
   "range": {
-    "min": 1000.0,
-    "max": 1500.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 1000,
+      "max_inclusive": 1500
+    }
   }
 }

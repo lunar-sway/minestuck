@@ -1,11 +1,10 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import com.mraof.minestuck.entity.SimpleTexturedEntity;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
@@ -18,10 +17,9 @@ public class SimpleTexturedEntityRenderer<T extends MobEntity, M extends EntityM
 		this(manager, model, shadowRadius, textureFromType(entityType));
 	}
 	
-	public SimpleTexturedEntityRenderer(EntityRendererManager manager, M model, float shadowRadius, ResourceLocation textureLocation)
+	public SimpleTexturedEntityRenderer(EntityRendererProvider.Context context, M par1ModelBase, float par2)
 	{
-		super(manager, model, shadowRadius);
-		this.textureLocation = textureLocation;
+		super(context, par1ModelBase, par2);
 	}
 	
 	@Override

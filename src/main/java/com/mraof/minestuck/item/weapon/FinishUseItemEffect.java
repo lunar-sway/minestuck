@@ -1,42 +1,41 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 import java.util.function.Supplier;
 
 public interface FinishUseItemEffect
 {
-	ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityIn);
+	ItemStack onItemUseFinish(ItemStack stack, Level level, LivingEntity entityIn);
 	
 	
 	FinishUseItemEffect SPAWN_BREADCRUMBS = (stack, worldIn, entityIn) -> {
-		if(!entityIn.level.isClientSide && entityIn instanceof PlayerEntity)
+		if(!entityIn.level.isClientSide && entityIn instanceof Player player)
 		{
 			Random rand = new Random();
 			int num = rand.nextInt(10);
-			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS, num);
+			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), num);
 			
-			PlayerEntity player = (PlayerEntity) entityIn;
 			player.addItem(crumbs);
 		}
 		return stack;
 	};
 	
 	FinishUseItemEffect SHARPEN_CANDY_CANE = (stack, worldIn, entityIn) -> {
-		if(entityIn instanceof PlayerEntity && !entityIn.level.isClientSide)
+		if(entityIn instanceof Player player && !entityIn.level.isClientSide)
 		{
-			((PlayerEntity) entityIn).addItem(new ItemStack(MSItems.SHARP_CANDY_CANE, 1));
+			player.addItem(new ItemStack(MSItems.SHARP_CANDY_CANE.get(), 1));
 		}
-		stack.hurtAndBreak(999, entityIn, entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
+		stack.hurtAndBreak(999, entityIn, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		return stack;
 	};
 	
@@ -48,21 +47,20 @@ public interface FinishUseItemEffect
 	static FinishUseItemEffect foodEffect(int healAmount, float saturationModifier, int damageTaken)
 	{
 		return (stack, worldIn, entityIn) -> {
-			stack.hurtAndBreak(damageTaken, entityIn, entity -> entity.broadcastBreakEvent(Hand.MAIN_HAND));
-			if(entityIn instanceof PlayerEntity)
+			stack.hurtAndBreak(damageTaken, entityIn, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			if(entityIn instanceof Player player)
 			{
-				PlayerEntity player = (PlayerEntity) entityIn;
 				player.getFoodData().eat(healAmount, saturationModifier);
-				worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
+				worldIn.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_BURP, SoundSource.PLAYERS, 0.5F, worldIn.random.nextFloat() * 0.1F + 0.9F);
 			}
 			return stack;
 		};
 	}
 	
-	static FinishUseItemEffect potionEffect(Supplier<EffectInstance> effect, float probability)
+	static FinishUseItemEffect potionEffect(Supplier<MobEffectInstance> effect, float probability)
 	{
 		return (stack, worldIn, entityLiving) -> {
-			if (!worldIn.isClientSide && worldIn.random.nextFloat() < probability)
+			if(!worldIn.isClientSide && worldIn.random.nextFloat() < probability)
 				entityLiving.addEffect(effect.get());
 			return stack;
 		};

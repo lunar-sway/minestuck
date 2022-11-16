@@ -3,8 +3,10 @@
     "item": "minestuck:onion"
   },
   "range": {
-    "min": 9.0,
-    "max": 15.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 9,
+      "max_inclusive": 15
+    }
   }
 }

@@ -3,8 +3,10 @@
     "item": "minestuck:mini_typheus_statue"
   },
   "range": {
-    "min": 10000.0,
-    "max": 12000.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 10000,
+      "max_inclusive": 12000
+    }
   }
 }

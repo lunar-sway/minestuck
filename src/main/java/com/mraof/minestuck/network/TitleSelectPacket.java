@@ -3,8 +3,8 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class TitleSelectPacket implements PlayToBothPacket
 {
@@ -21,7 +21,7 @@ public class TitleSelectPacket implements PlayToBothPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		if(title != null)
 		{
@@ -29,7 +29,7 @@ public class TitleSelectPacket implements PlayToBothPacket
 		}
 	}
 	
-	public static TitleSelectPacket decode(PacketBuffer buffer)
+	public static TitleSelectPacket decode(FriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() > 0)
 		{
@@ -45,7 +45,7 @@ public class TitleSelectPacket implements PlayToBothPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		TitleSelectionHook.handleTitleSelection(player, title);
 	}

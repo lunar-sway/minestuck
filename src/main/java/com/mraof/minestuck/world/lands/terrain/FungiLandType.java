@@ -1,24 +1,29 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import com.mraof.minestuck.world.gen.feature.structure.GateMushroomPiece;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.FeatureModifier;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.Random;
 
@@ -31,50 +36,43 @@ public class FungiLandType extends TerrainLandType
 	public static final String MOLD = "minestuck.mold";
 	public static final String MILDEW = "minestuck.mildew";
 	
-	private static final Vector3d fogColor = new Vector3d(0.69D, 0.76D, 0.61D);
-	private static final Vector3d skyColor = new Vector3d(0.69D, 0.76D, 0.61D);
-	
 	public FungiLandType()
 	{
-		super();
+		super(new Builder(MSEntityTypes.SALAMANDER).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
+				.fogColor(0.69, 0.76, 0.61).skyColor(0.69, 0.76, 0.61)
+				.category(Biome.BiomeCategory.MUSHROOM).music(MSSoundEvents.MUSIC_FUNGI));
 	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setGroundState(MSBlocks.MYCELIUM_STONE.defaultBlockState(), MSFillerBlockTypes.MYCELIUM_STONE);
-		registry.setBlockState("surface", Blocks.MYCELIUM.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("ocean", Blocks.WATER.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.MYCELIUM_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.MYCELIUM_COLUMN.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS.defaultBlockState());
-		registry.setBlockState("village_path", Blocks.GRASS_PATH.defaultBlockState());
-		registry.setBlockState("light_block", MSBlocks.GLOWY_GOOP.defaultBlockState());
-		registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
-		registry.setBlockState("mushroom_1", Blocks.RED_MUSHROOM.defaultBlockState());
-		registry.setBlockState("mushroom_2", Blocks.BROWN_MUSHROOM.defaultBlockState());
-		registry.setBlockState("bush", Blocks.BROWN_MUSHROOM.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.LIME_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.GRAY_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM};
+		registry.setBlock("ground", MSBlocks.MYCELIUM_STONE);
+		registry.setBlock("surface", Blocks.MYCELIUM);
+		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("ocean", Blocks.WATER);
+		registry.setBlock("structure_primary", MSBlocks.MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_MYCELIUM_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.MYCELIUM_COLUMN);
+		registry.setBlock("structure_primary_stairs", MSBlocks.MYCELIUM_BRICK_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.POLISHED_MYCELIUM_STONE);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.MYCELIUM_COBBLESTONE);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.MYCELIUM_STAIRS);
+		registry.setBlock("village_path", Blocks.DIRT_PATH);
+		registry.setBlock("light_block", MSBlocks.GLOWY_GOOP);
+		registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
+		registry.setBlock("mushroom_1", Blocks.RED_MUSHROOM);
+		registry.setBlock("mushroom_2", Blocks.BROWN_MUSHROOM);
+		registry.setBlock("bush", Blocks.BROWN_MUSHROOM);
+		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.MUSHROOM;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	
@@ -85,71 +83,40 @@ public class FungiLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_BOOLEAN_SELECTOR
-					.configured(new TwoFeatureChoiceConfig(() -> Features.HUGE_RED_MUSHROOM, () -> Features.HUGE_BROWN_MUSHROOM))
-					.decorated(Features.Placements.HEIGHTMAP_SQUARE));
-			
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(blocks.getBlockState("slime"), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE));
-		} else if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Feature.RANDOM_BOOLEAN_SELECTOR
-					.configured(new TwoFeatureChoiceConfig(() -> Features.HUGE_RED_MUSHROOM, () -> Features.HUGE_BROWN_MUSHROOM))
-					.decorated(Features.Placements.HEIGHTMAP_SQUARE).count(3));
-			
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(blocks.getBlockState("slime"), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(2));
-		}
-		builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_BROWN_MUSHROOM.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(2));
-		builder.addFeature(GenerationStage.Decoration.VEGETAL_DECORATION, Features.PATCH_RED_MUSHROOM.decorated(Features.Placements.HEIGHTMAP_DOUBLE_SQUARE).chance(2));
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.MUSHROOM_ISLAND_VEGETATION, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33))
-				.range(256).squared().count(8));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 9))
-				.range(64).squared().count(24));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 8))
-				.range(32).squared().count(12));
-	}
-	
-	@Override
-	public Vector3d getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vector3d getSkyColor()
-	{
-		return skyColor;
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.SALAMANDER;
+		builder.addModified(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SLIME_DISK, FeatureModifier.withState(blocks.getBlockState("slime")), LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.HUGE_MUSHROOMS, LandBiomeType.ROUGH);
+		
+		builder.addModified(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.EXTRA_SLIME_DISK, FeatureModifier.withState(blocks.getBlockState("slime")), LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.BROWN_MUSHROOM_PATCH, LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.RED_MUSHROOM_PATCH, LandBiomeType.any());
+		
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
+						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.IRON_ORE.defaultBlockState(), 9),
+						CountPlacement.of(48), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.REDSTONE_ORE.defaultBlockState(), 8),
+						CountPlacement.of(36), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
+				LandBiomeType.any());
 	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addSalamanderVillageCenters(register);
+		SalamanderVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addSalamanderVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FUNGI;
+		SalamanderVillagePieces.addPieces(register, random);
 	}
 }

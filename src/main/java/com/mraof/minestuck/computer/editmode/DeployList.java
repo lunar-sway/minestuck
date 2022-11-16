@@ -4,19 +4,19 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.world.World;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
@@ -42,19 +42,17 @@ public final class DeployList
 		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
 		registerItem("artifact_card", new GristSet(), null, 0, HAS_NOT_ENTERED,
-				(connection, world) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(world, connection), true));
+				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true));
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("punch_designix", 0,null, item(MSBlocks.PUNCH_DESIGNIX),
+		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4));
 		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
-				(connection, world) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), world)));
-		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX));
-		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE));
-		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER));
-		/*registerItem("jumper_block_extension", new ItemStack(MinestuckBlocks.jumperBlockExtension[0]), new GristSet(GristType.Build, 1000), 1);
-		registerItem("punch_card_shunt", new ItemStack(MinestuckItems.shunt), new GristSet(GristType.Build, 100), 1);*/
-		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD), new GristSet(GristTypes.BUILD, 4000), 2);
-		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD), true));
+				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)));
+		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()));
+		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()));
+		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()));
+		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new GristSet(GristTypes.BUILD, 4000), 2);
+		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD.get()), true));
 		
 	}
 	
@@ -82,7 +80,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
+	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
 	}
@@ -90,7 +88,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item)
+	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item)
 	{
 		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2);
 	}
@@ -98,7 +96,7 @@ public final class DeployList
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, World, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
+	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
 	{
 		if(containsEntry(name))
 			throw new IllegalStateException("Item stack already added to the deploy list: "+name);
@@ -133,9 +131,9 @@ public final class DeployList
 		return getEntryForName(name) != null;
 	}
 	
-	public static boolean containsItemStack(ItemStack stack, SburbConnection c, World world)
+	public static boolean containsItemStack(ItemStack stack, SburbConnection c, Level level)
 	{
-		return getEntryForItem(stack, c, world) != null;
+		return getEntryForItem(stack, c, level) != null;
 	}
 	
 	public static DeployEntry getEntryForName(String name)
@@ -146,11 +144,11 @@ public final class DeployList
 		return null;
 	}
 	
-	public static DeployEntry getEntryForItem(ItemStack stack, SburbConnection c, World world)
+	public static DeployEntry getEntryForItem(ItemStack stack, SburbConnection c, Level level)
 	{
 		stack = cleanStack(stack);
 		for(DeployEntry entry : list)
-			if(ItemStack.matches(stack, entry.getItemStack(c, world)))
+			if(ItemStack.matches(stack, entry.getItemStack(c, level)))
 				return entry;
 		return null;
 	}
@@ -166,22 +164,22 @@ public final class DeployList
 		return connection -> config.get();
 	}
 	
-	public static BiFunction<SburbConnection, World, ItemStack> item(IItemProvider item)
+	public static BiFunction<SburbConnection, Level, ItemStack> item(ItemLike item)
 	{
 		return (sburbConnection, world) -> new ItemStack(item);
 	}
 	
 	
-	static CompoundNBT getDeployListTag(MinecraftServer server, SburbConnection c)
+	static CompoundTag getDeployListTag(MinecraftServer server, SburbConnection c)
 	{
-		CompoundNBT nbt = new CompoundNBT();
-		ListNBT tagList = new ListNBT();
+		CompoundTag nbt = new CompoundTag();
+		ListTag tagList = new ListTag();
 		nbt.put("l", tagList);
 		int tier = SburbHandler.availableTier(server, c.getClientIdentifier());
 		for(int i = 0; i < list.size(); i++)
 		{
 			DeployEntry entry = list.get(i);
-			entry.tryAddDeployTag(c, server.getLevel(World.OVERWORLD), tier, tagList, i);
+			entry.tryAddDeployTag(c, server.getLevel(Level.OVERWORLD), tier, tagList, i);
 		}
 		return nbt;
 	}

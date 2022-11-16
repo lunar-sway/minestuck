@@ -1,42 +1,69 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.CustomShapeBlock;
-import com.mraof.minestuck.util.CustomVoxelShape;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import com.mraof.minestuck.block.MSBlockShapes;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class SendificatorBlock extends CustomShapeBlock
+import javax.annotation.Nullable;
+import java.util.Map;
+
+public class SendificatorBlock extends MachineProcessBlock implements EntityBlock
 {
-	public static final String ACTIVATION_MESSAGE = "activation_message";
+	private static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.SENDIFICATOR.createRotatedShapes();
 	
-	public SendificatorBlock(Properties properties, CustomVoxelShape shape)
+	public SendificatorBlock(Properties properties)
 	{
-		super(properties, shape);
+		super(properties);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	{
+		return SHAPE.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(!player.isShiftKeyDown() && player.getMainHandItem().isEmpty())
+		if(player instanceof ServerPlayer serverPlayer)
 		{
-			//ItemStack itemStackIn = player.getHeldItem(handIn);
-			//Function will store information about item and pass it along to TileEntity, currently useless
-			if(!worldIn.isClientSide)
+			if(level.getBlockEntity(pos) instanceof SendificatorBlockEntity sendificator)
 			{
-				player.sendMessage(new TranslationTextComponent(getDescriptionId() + "." + ACTIVATION_MESSAGE), Util.NIL_UUID);
+				sendificator.openMenu(serverPlayer);
 			}
-			return ActionResultType.SUCCESS;
-		} else
-		{
-			return super.use(state, worldIn, pos, player, handIn, hit);
 		}
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return new SendificatorBlockEntity(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <E extends BlockEntity> BlockEntityTicker<E> getTicker(Level level, BlockState state, BlockEntityType<E> placedType)
+	{
+		return createMachineTicker(level, placedType, MSBlockEntityTypes.SENDIFICATOR.get());
 	}
 }

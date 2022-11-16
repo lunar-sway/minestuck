@@ -2,30 +2,29 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.machine.TotemLatheDowelTileEntity;
-import com.mraof.minestuck.tileentity.machine.TotemLatheTileEntity;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -44,56 +43,51 @@ public class TotemLatheBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(worldIn.isClientSide)
-			return ActionResultType.SUCCESS;
+		if(level.isClientSide)
+			return InteractionResult.SUCCESS;
 		
 		BlockPos mainPos = getMainPos(state, pos);
-		TileEntity te = worldIn.getBlockEntity(mainPos);
-		if(te instanceof TotemLatheTileEntity)
-			((TotemLatheTileEntity) te).onRightClick(player, state);
-		return ActionResultType.SUCCESS;
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe)
+			totemLathe.onRightClick(player, state);
+		return InteractionResult.SUCCESS;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if(!hasTileEntity(state))
+		BlockPos mainPos = getMainPos(state, pos);
+		BlockState otherState = level.getBlockState(mainPos);
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
-			BlockPos mainPos = getMainPos(state, pos);
-			TileEntity te = worldIn.getBlockEntity(mainPos);
-			BlockState otherState = worldIn.getBlockState(mainPos);
-			if(te instanceof TotemLatheTileEntity && otherState.getValue(FACING) == state.getValue(FACING))
-			{
-				((TotemLatheTileEntity) te).setBroken();
-			}
+			totemLathe.checkStates();
 		}
 		
-		super.onRemove(state, worldIn, pos, newState, isMoving);
+		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void neighborChanged(BlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
+	public void neighborChanged(BlockState state, Level level, BlockPos pos, Block blockIn, BlockPos fromPos, boolean isMoving)
 	{
-		TileEntity te = worldIn.getBlockEntity(pos);
-		if(te instanceof TotemLatheTileEntity)
-			((TotemLatheTileEntity) te).checkStates();
+		if(level.getBlockEntity(pos) instanceof TotemLatheBlockEntity totemLathe)
+			totemLathe.checkStates();
 	}
 	
-	/**
-	 * returns the block position of the "Main" block
-	 * aka the block with the TileEntity for the machine
-	 */
+    /**
+     *returns the block position of the "Main" block
+     *aka the block with the BlockEntity for the machine
+     */
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
 	{
 		Rotation rotation = MSRotationUtil.fromDirection(state.getValue(FACING));
@@ -115,7 +109,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			if(state.getValue(DOWEL).equals(EnumDowelType.CARVED_DOWEL))
 			{
@@ -129,21 +123,15 @@ public class TotemLatheBlock extends MultiMachineBlock
 			}
 		}
 		
-		@Override
-		public boolean hasTileEntity(BlockState state)
-		{
-			return true;
-		}
-		
 		@Nullable
 		@Override
-		public TileEntity createTileEntity(BlockState state, IBlockReader world)
+		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new TotemLatheDowelTileEntity();
+			return new ItemStackBlockEntity(pos, state);
 		}
 		
 		@Override
-		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
@@ -164,7 +152,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 	}
 	
-	public static class Slot extends TotemLatheBlock
+	public static class Slot extends TotemLatheBlock implements EntityBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
@@ -173,21 +161,15 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}
 		
-		@Override
-		public boolean hasTileEntity(BlockState state)
-		{
-			return true;
-		}
-		
 		@Nullable
 		@Override
-		public TileEntity createTileEntity(BlockState state, IBlockReader world)
+		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new TotemLatheTileEntity();
+			return new TotemLatheBlockEntity(pos, state);
 		}
 		
 		@Override
-		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(COUNT);

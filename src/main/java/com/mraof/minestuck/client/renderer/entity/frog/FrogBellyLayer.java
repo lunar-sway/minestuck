@@ -1,29 +1,31 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.model.FrogModel;
+import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.IEntityRenderer;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.resources.ResourceLocation;
 
 import static com.mraof.minestuck.entity.FrogEntity.maxTypes;
 
-public class FrogBellyLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEntity>>
+public class FrogBellyLayer extends RenderLayer<FrogEntity, FrogModel<FrogEntity>>
 {
-	private final FrogModel<FrogEntity> frogModel = new FrogModel<>();
+	private final FrogModel<FrogEntity> frogModel;
 	private float colorMin = 0;
 	private int type = 0;
-	private String name;
 	
-	public FrogBellyLayer(IEntityRenderer<FrogEntity, FrogModel<FrogEntity>> renderIn)
+	public FrogBellyLayer(RenderLayerParent<FrogEntity, FrogModel<FrogEntity>> renderer, EntityModelSet modelSet)
 	{
-		super(renderIn);
+		super(renderer);
+		frogModel = new FrogModel<>(modelSet.bakeLayer(MSModelLayers.FROG));
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
+	public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, FrogEntity frog, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
 	{
 		if (!frog.isInvisible() && (frog.getFrogType() > maxTypes() || frog.getFrogType() < 1))
         {
@@ -44,7 +46,7 @@ public class FrogBellyLayer extends LayerRenderer<FrogEntity, FrogModel<FrogEnti
 			if (g < this.colorMin) g = this.colorMin;
 			if (b < this.colorMin) b = this.colorMin;
 
-			coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), matrixStackIn, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
+			coloredCutoutModelCopyLayerRender(this.getParentModel(), this.frogModel, this.getTextureLocation(frog), poseStack, bufferIn, packedLightIn, frog, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, partialTicks, r, g, b);
 		}
 	}
 

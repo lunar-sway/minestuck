@@ -1,48 +1,45 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.command.impl.TeleportCommand;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.server.TicketType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.ChunkPos;
 
 public class Teleport	//TODO there might still be things that vanilla does that we should do as well. Also, is it feasible to move over to the vanilla teleport method?
 {
 	
-	public static Entity teleportEntity(Entity entity, ServerWorld world)
+	public static Entity teleportEntity(Entity entity, ServerLevel level)
 	{
-		return teleportEntity(entity, world, entity.getX(), entity.getY(), entity.getZ());
+		return teleportEntity(entity, level, entity.getX(), entity.getY(), entity.getZ());
 	}
 	
-	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z)
+	public static Entity teleportEntity(Entity entity, ServerLevel level, double x, double y, double z)
 	{
-		return teleportEntity(entity, world, x, y, z, entity.yRot, entity.xRot);
+		return teleportEntity(entity, level, x, y, z, entity.getYRot(), entity.getXRot());
 	}
 	
 	/**
-	 * Made with the help of a private function in {@link TeleportCommand}.
+	 * Made with the help of a private function in {@link net.minecraft.server.commands.TeleportCommand}.
 	 */
-	public static Entity teleportEntity(Entity entity, ServerWorld world, double x, double y, double z, float yaw, float pitch)
+	public static Entity teleportEntity(Entity entity, ServerLevel level, double x, double y, double z, float yaw, float pitch)
 	{
-		if(entity instanceof ServerPlayerEntity)
+		if(entity instanceof ServerPlayer player)
 		{
-			ServerPlayerEntity player = (ServerPlayerEntity) entity;
-			
 			ChunkPos chunkpos = new ChunkPos(new BlockPos(x, y, z));
-			world.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getId());
+			level.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getId());
 			player.stopRiding();
 			if(player.isSleeping())
 			{
 				player.stopSleeping();
 			}
 			
-			boolean toNewDim = player.level != world;
-			player.teleportTo(world, x, y, z, yaw, pitch);
-			if(toNewDim && player.level != world)	//Was teleporting to a new dimension, but the teleportation did not go through
+			boolean toNewDim = player.level != level;
+			player.teleportTo(level, x, y, z, yaw, pitch);
+			if(toNewDim && player.level != level)	//Was teleporting to a new dimension, but the teleportation did not go through
 				return null;
 			
 			player.isChangingDimension = true;
@@ -53,10 +50,10 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 			
 		} else
 		{
-			yaw = MathHelper.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
-			pitch = MathHelper.wrapDegrees(pitch);
-			pitch = MathHelper.clamp(pitch, -90.0F, 90.0F);
-			if(world == entity.level)
+			yaw = Mth.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
+			pitch = Mth.wrapDegrees(pitch);
+			pitch = Mth.clamp(pitch, -90.0F, 90.0F);
+			if(level == entity.level)
 			{
 				entity.moveTo(x, y, z, yaw, pitch);
 				entity.setYHeadRot(yaw);
@@ -64,19 +61,19 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 			{
 				entity.unRide();
 				Entity oldEntity = entity;
-				entity = entity.getType().create(world);
+				entity = entity.getType().create(level);
 				if (entity == null)
 					return null;
 				
 				entity.restoreFrom(oldEntity);
 				entity.moveTo(x, y, z, yaw, pitch);
 				entity.setYHeadRot(yaw);
-				world.addFromAnotherDimension(entity);
-				oldEntity.remove(false);
+				oldEntity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+				level.addDuringTeleport(entity);
 			}
 		}
 		
-		if(!(entity instanceof LivingEntity) || !((LivingEntity)entity).isFallFlying())
+		if(!(entity instanceof LivingEntity living && living.isFallFlying()))
 		{
 			entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0D, 0.0D, 1.0D));
 			entity.setOnGround(true);

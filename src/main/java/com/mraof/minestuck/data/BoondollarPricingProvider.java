@@ -6,13 +6,14 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.loot.IRandomRange;
-import net.minecraft.loot.RandomValueRange;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.valueproviders.ConstantInt;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,11 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.item.MSItems.*;
-import static net.minecraft.item.Items.*;
+import static net.minecraft.world.item.Items.*;
 
-public class BoondollarPricingProvider implements IDataProvider
+public class BoondollarPricingProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -43,112 +43,112 @@ public class BoondollarPricingProvider implements IDataProvider
 	
 	protected void registerPricings()
 	{
-		add(ONION, 9, 15);
-		add(JAR_OF_BUGS, 12, 18);
-		add(BUG_ON_A_STICK, 4, 6);
-		add(CONE_OF_FLIES, 4, 6);
-		add(GRASSHOPPER, 90, 110);
-		add(SALAD, 10, 14);
-		add(CHOCOLATE_BEETLE, 30, 35);
-		add(DESERT_FRUIT, 2, 6);
-		add(GLOWING_MUSHROOM, 10, 15);
-		add(COLD_CAKE, 400, 400);
-		add(BLUE_CAKE, 400, 400);
-		add(HOT_CAKE, 400, 400);
-		add(RED_CAKE, 400, 400);
-		add(FUCHSIA_CAKE, 1500, 1500);
-		add(ROCK_COOKIE, 15, 20);
-		add(STRAWBERRY_CHUNK, 100, 150);
-		add(TAB, 200, 200);
-		add(ORANGE_FAYGO, 100, 100);
-		add(CANDY_APPLE_FAYGO, 100, 100);
-		add(FAYGO_COLA, 100, 100);
-		add(COTTON_CANDY_FAYGO, 100, 100);
-		add(CREME_SODA_FAYGO, 100, 100);
-		add(GRAPE_FAYGO, 100, 100);
-		add(MOON_MIST_FAYGO, 100, 100);
-		add(PEACH_FAYGO, 100, 100);
-		add(REDPOP_FAYGO, 100, 100);
-		add(GOLD_SEEDS, 300, 400);
-		add(APPLE_CAKE, 100, 140);
-		add(IRRADIATED_STEAK, 70, 80);
-		add(CANDY_CORN, 100, 150);
-		add(BUILD_GUSHERS, 90, 120);
-		add(AMBER_GUMMY_WORM, 125, 150);
-		add(CAULK_PRETZEL, 125, 150);
-		add(CHALK_CANDY_CIGARETTE, 125, 150);
-		add(IODINE_LICORICE, 125, 150);
-		add(SHALE_PEEP, 125, 150);
-		add(TAR_LICORICE, 125, 150);
-		add(COBALT_GUM, 150, 180);
-		add(MARBLE_JAWBREAKER, 150, 180);
-		add(MERCURY_SIXLETS, 150, 180);
-		add(QUARTZ_JELLY_BEAN, 150, 180);
-		add(SULFUR_CANDY_APPLE, 150, 180);
-		add(AMETHYST_HARD_CANDY, 175, 210);
-		add(GARNET_TWIX, 175, 210);
-		add(RUBY_CROAK, 175, 210);
-		add(RUST_GUMMY_EYE, 175, 210);
-		add(DIAMOND_MINT, 200, 240);
-		add(GOLD_CANDY_RIBBON, 200, 240);
-		add(URANIUM_GUMMY_BEAR, 200, 240);
-		add(ARTIFACT_WARHEAD, 225, 270);
-		add(ZILLIUM_SKITTLES, 250, 300);
+		add(ONION.get(), 9, 15);
+		add(JAR_OF_BUGS.get(), 12, 18);
+		add(BUG_ON_A_STICK.get(), 4, 6);
+		add(CONE_OF_FLIES.get(), 4, 6);
+		add(GRASSHOPPER.get(), 90, 110);
+		add(SALAD.get(), 10, 14);
+		add(CHOCOLATE_BEETLE.get(), 30, 35);
+		add(DESERT_FRUIT.get(), 2, 6);
+		add(MSItems.GLOWING_MUSHROOM.get(), 10, 15);
+		add(MSItems.COLD_CAKE.get(), 400);
+		add(MSItems.BLUE_CAKE.get(), 400);
+		add(MSItems.HOT_CAKE.get(), 400);
+		add(MSItems.RED_CAKE.get(), 400);
+		add(MSItems.FUCHSIA_CAKE.get(), 1500);
+		add(ROCK_COOKIE.get(), 15, 20);
+		add(STRAWBERRY_CHUNK.get(), 100, 150);
+		add(TAB.get(), 200);
+		add(ORANGE_FAYGO.get(), 100);
+		add(CANDY_APPLE_FAYGO.get(), 100);
+		add(FAYGO_COLA.get(), 100);
+		add(COTTON_CANDY_FAYGO.get(), 100);
+		add(CREME_SODA_FAYGO.get(), 100);
+		add(GRAPE_FAYGO.get(), 100);
+		add(MOON_MIST_FAYGO.get(), 100);
+		add(PEACH_FAYGO.get(), 100);
+		add(REDPOP_FAYGO.get(), 100);
+		add(MSItems.GOLD_SEEDS.get(), 300, 400);
+		add(MSItems.APPLE_CAKE.get(), 100, 140);
+		add(IRRADIATED_STEAK.get(), 70, 80);
+		add(CANDY_CORN.get(), 100, 150);
+		add(BUILD_GUSHERS.get(), 90, 120);
+		add(AMBER_GUMMY_WORM.get(), 125, 150);
+		add(CAULK_PRETZEL.get(), 125, 150);
+		add(CHALK_CANDY_CIGARETTE.get(), 125, 150);
+		add(IODINE_LICORICE.get(), 125, 150);
+		add(SHALE_PEEP.get(), 125, 150);
+		add(TAR_LICORICE.get(), 125, 150);
+		add(COBALT_GUM.get(), 150, 180);
+		add(MARBLE_JAWBREAKER.get(), 150, 180);
+		add(MERCURY_SIXLETS.get(), 150, 180);
+		add(QUARTZ_JELLY_BEAN.get(), 150, 180);
+		add(SULFUR_CANDY_APPLE.get(), 150, 180);
+		add(AMETHYST_HARD_CANDY.get(), 175, 210);
+		add(GARNET_TWIX.get(), 175, 210);
+		add(RUBY_CROAK.get(), 175, 210);
+		add(RUST_GUMMY_EYE.get(), 175, 210);
+		add(DIAMOND_MINT.get(), 200, 240);
+		add(GOLD_CANDY_RIBBON.get(), 200, 240);
+		add(URANIUM_GUMMY_BEAR.get(), 200, 240);
+		add(ARTIFACT_WARHEAD.get(), 225, 270);
+		add(ZILLIUM_SKITTLES.get(), 250, 300);
 		
-		add(CARVING_TOOL, 60, 90);
-		add(MINI_FROG_STATUE, 200, 250);
-		add(MINI_WIZARD_STATUE, 200, 250);
-		add(MINI_TYPHEUS_STATUE, 10000, 12000);
-		add(MSItems.STONE_SLAB, 20, 30);
-		add(THRESH_DVD, 350, 400);
-		add(CREW_POSTER, 350, 400);
-		add(SBAHJ_POSTER, 350, 400);
-		add(GAMEBRO_MAGAZINE, 450, 600);
-		add(GAMEGRL_MAGAZINE, 450, 600);
-		add(MUSIC_DISC_EMISSARY_OF_DANCE, 1000, 1000);
-		add(MUSIC_DISC_DANCE_STAB_DANCE, 1000, 1000);
-		add(MUSIC_DISC_RETRO_BATTLE, 1000, 1000);
-		add(CRUMPLY_HAT, 80, 100);
-		add(BATTERY, 10, 100);
-		add(GRIMOIRE, 666, 666);
-		add(ACE_OF_SPADES, 3000, 5000);
-		add(ACE_OF_HEARTS, 3000, 5000);
-		add(ACE_OF_DIAMONDS, 3000, 5000);
-		add(ACE_OF_CLUBS, 3000, 5000);
-		add(CLUBS_SUITARANG, 30, 50);
-		add(DIAMONDS_SUITARANG, 30, 50);
-		add(HEARTS_SUITARANG, 30, 50);
-		add(SPADES_SUITARANG, 30, 50);
-		add(POGO_CLUB, 900, 1200);
-		add(METAL_BAT, 400, 500);
-		add(FIRE_POKER, 1500, 2000);
-		add(COPSE_CRUSHER, 1000, 1500);
-		add(KATANA, 400, 500);
-		add(CACTACEAE_CUTLASS, 500, 700);
-		add(STEAK_SWORD, 350, 650);
-		add(BEEF_SWORD, 250, 625);
-		add(GLOWSTONE_DUST, 20, 40);
-		add(IRON_CANE, 300, 400);
-		add(GLOWING_LOG, 20, 32);
-		add(GLOWING_PLANKS, 5, 8);
-		add(COARSE_STONE, 5, 8);
-		add(CHISELED_COARSE_STONE, 8, 15);
-		add(SHADE_BRICKS, 5, 8);
-		add(SMOOTH_SHADE_STONE, 5, 8);
-		add(FROST_BRICKS, 5, 8);
-		add(FROST_TILE, 5, 8);
-		add(CAST_IRON, 5, 8);
-		add(CHISELED_CAST_IRON, 8, 15);
-		add(VINE_LOG, 20, 32);
-		add(FLOWERY_VINE_LOG, 25, 40);
-		add(FROST_LOG, 20, 32);
-		add(WOODEN_CACTUS, 50, 60);
-		add(SUGAR_CUBE, 200, 240);
-		add(FUNGAL_SPORE, 1, 4);
-		add(SPOREO, 15, 25);
-		add(MOREL_MUSHROOM, 40, 80);
-		add(PARADISES_PORTABELLO, 400, 600);
-		add(BUG_NET, 500, 600);
+		add(CARVING_TOOL.get(), 60, 90);
+		add(MSItems.MINI_FROG_STATUE.get(), 200, 250);
+		add(MSItems.MINI_WIZARD_STATUE.get(), 200, 250);
+		add(MSItems.MINI_TYPHEUS_STATUE.get(), 10000, 12000);
+		add(MSItems.STONE_TABLET.get(), 20, 30);
+		add(THRESH_DVD.get(), 350, 400);
+		add(CREW_POSTER.get(), 350, 400);
+		add(SBAHJ_POSTER.get(), 350, 400);
+		add(GAMEBRO_MAGAZINE.get(), 450, 600);
+		add(GAMEGRL_MAGAZINE.get(), 450, 600);
+		add(MUSIC_DISC_EMISSARY_OF_DANCE.get(), 1000);
+		add(MUSIC_DISC_DANCE_STAB_DANCE.get(), 1000);
+		add(MUSIC_DISC_RETRO_BATTLE.get(), 1000);
+		add(CRUMPLY_HAT.get(), 80, 100);
+		add(BATTERY.get(), 10, 100);
+		add(GRIMOIRE.get(), 666);
+		add(ACE_OF_SPADES.get(), 3000, 5000);
+		add(ACE_OF_HEARTS.get(), 3000, 5000);
+		add(ACE_OF_DIAMONDS.get(), 3000, 5000);
+		add(ACE_OF_CLUBS.get(), 3000, 5000);
+		add(CLUBS_SUITARANG.get(), 30, 50);
+		add(DIAMONDS_SUITARANG.get(), 30, 50);
+		add(HEARTS_SUITARANG.get(), 30, 50);
+		add(SPADES_SUITARANG.get(), 30, 50);
+		add(POGO_CLUB.get(), 900, 1200);
+		add(METAL_BAT.get(), 400, 500);
+		add(FIRE_POKER.get(), 1500, 2000);
+		add(COPSE_CRUSHER.get(), 1000, 1500);
+		add(KATANA.get(), 400, 500);
+		add(CACTACEAE_CUTLASS.get(), 500, 700);
+		add(STEAK_SWORD.get(), 350, 650);
+		add(BEEF_SWORD.get(), 250, 625);
+		add(MSItems.GLOWYSTONE_DUST.get(), 20, 40);
+		add(IRON_CANE.get(), 300, 400);
+		add(MSItems.GLOWING_LOG.get(), 20, 32);
+		add(MSItems.GLOWING_PLANKS.get(), 5, 8);
+		add(MSItems.COARSE_STONE.get(), 5, 8);
+		add(MSItems.CHISELED_COARSE_STONE.get(), 8, 15);
+		add(MSItems.SHADE_BRICKS.get(), 5, 8);
+		add(MSItems.SMOOTH_SHADE_STONE.get(), 5, 8);
+		add(MSItems.FROST_BRICKS.get(), 5, 8);
+		add(MSItems.FROST_TILE.get(), 5, 8);
+		add(MSItems.CAST_IRON.get(), 5, 8);
+		add(MSItems.CHISELED_CAST_IRON.get(), 8, 15);
+		add(MSItems.VINE_LOG.get(), 20, 32);
+		add(MSItems.FLOWERY_VINE_LOG.get(), 25, 40);
+		add(MSItems.FROST_LOG.get(), 20, 32);
+		add(MSItems.WOODEN_CACTUS.get(), 50, 60);
+		add(MSItems.SUGAR_CUBE.get(), 200, 240);
+		add(FUNGAL_SPORE.get(), 1, 4);
+		add(SPOREO.get(), 15, 25);
+		add(MOREL_MUSHROOM.get(), 40, 80);
+		add(PARADISES_PORTABELLO.get(), 400, 600);
+		add(BUG_NET.get(), 500, 600);
 		
 		add(LILY_PAD, 24, 31);
 		add(POTATO, 12, 15);
@@ -174,7 +174,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(COD, 90, 100);
 		add(COOKIE, 120, 150);
 		add(PUMPKIN_PIE, 120, 160);
-		add(GOLDEN_APPLE, 2500, 2500);
+		add(GOLDEN_APPLE, 2500);
 		add(LAPIS_LAZULI, 25, 35);
 		add(FEATHER, 25, 35);
 		add(FLINT, 5, 10);
@@ -228,7 +228,7 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(STONE_BRICKS, 5, 10);
 		add(CHISELED_STONE_BRICKS, 10, 15);
 		add(BREAD, 90, 130);
-		add(CHORUS_FRUIT, 420, 420);
+		add(CHORUS_FRUIT, 420);
 		add(DRAGON_BREATH, 50, 100);
 		add(EGG, 50, 100);
 		add(ELYTRA, 500, 1000);
@@ -236,13 +236,19 @@ public class BoondollarPricingProvider implements IDataProvider
 		add(PAPER, 5, 20);
 	}
 	
-	protected void add(IItemProvider item, int min, int max)
+	protected void add(ItemLike item, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), new RandomValueRange(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
 	}
 	
-	protected void add(Ingredient ingredient, IRandomRange range, String name)
+	protected void add(ItemLike item, int min, int max)
+	{
+		//Just set the name manually if this throws an exception
+		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+	}
+	
+	protected void add(Ingredient ingredient, IntProvider range, String name)
 	{
 		add(new BoondollarPricing(ingredient, range), new ResourceLocation(modid, name));
 	}
@@ -253,7 +259,7 @@ public class BoondollarPricingProvider implements IDataProvider
 	}
 	
 	@Override
-	public void run(DirectoryCache cache)
+	public void run(HashCache cache)
 	{
 		registerPricings();
 		
@@ -264,7 +270,7 @@ public class BoondollarPricingProvider implements IDataProvider
 			Path pricingPath = getPath(outputPath, entry.getKey());
 			try
 			{
-				IDataProvider.save(GSON, cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
+				DataProvider.save(GSON, cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
 			} catch(IOException e)
 			{
 				LOGGER.error("Couldn't save boondollar pricing {}", pricingPath, e);

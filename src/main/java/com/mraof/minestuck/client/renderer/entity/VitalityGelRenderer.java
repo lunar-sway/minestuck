@@ -1,40 +1,40 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix3f;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Matrix3f;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
 
 public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 {
 	
-	public VitalityGelRenderer(EntityRendererManager manager)
+	public VitalityGelRenderer(EntityRendererProvider.Context context)
 	{
-		super(manager);
+		super(context);
 		this.shadowRadius = 0.15F;
 		this.shadowStrength = .75F;
 	}
 
 	@Override
-	public void render(VitalityGelEntity gel, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn)
+	public void render(VitalityGelEntity gel, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn)
 	{
-		matrixStackIn.pushPose();
-		matrixStackIn.translate(0.0F, 0.0F + gel.getSizeByValue()/2, 0.0F);
-		matrixStackIn.scale(gel.getSizeByValue(), gel.getSizeByValue(), gel.getSizeByValue());
-		matrixStackIn.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-		MatrixStack.Entry matrixstack = matrixStackIn.last();
+		poseStack.pushPose();
+		poseStack.translate(0.0F, 0.0F + gel.getSizeByValue()/2, 0.0F);
+		poseStack.scale(gel.getSizeByValue(), gel.getSizeByValue(), gel.getSizeByValue());
+		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
+		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		PoseStack.Pose matrixstack = poseStack.last();
 		Matrix4f matrix4f = matrixstack.pose();
 		Matrix3f matrix3f = matrixstack.normal();
-		IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(gel)));
+		VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entityCutoutNoCull(this.getTextureLocation(gel)));
 		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(0, 1)
 				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
 		ivertexbuilder.vertex(matrix4f, 1.0F - 0.5F, 0 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(1, 1)
@@ -43,8 +43,8 @@ public class VitalityGelRenderer extends EntityRenderer<VitalityGelEntity>
 				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
 		ivertexbuilder.vertex(matrix4f, 0.0F - 0.5F, 1 - 0.25F, 0.0F).color(255, 255, 255, 255).uv(0, 0)
 				.overlayCoords(OverlayTexture.NO_OVERLAY).uv2(packedLightIn).normal(matrix3f, 0.0F, 1.0F, 0.0F).endVertex();
-		matrixStackIn.popPose();
-		super.render(gel, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+		poseStack.popPose();
+		super.render(gel, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
 	
 //	@Override

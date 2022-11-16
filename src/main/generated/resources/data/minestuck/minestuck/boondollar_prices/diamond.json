@@ -3,8 +3,10 @@
     "item": "minecraft:diamond"
   },
   "range": {
-    "min": 800.0,
-    "max": 1200.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 800,
+      "max_inclusive": 1200
+    }
   }
 }

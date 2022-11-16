@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:pointed_dripstone"
+  },
+  "grist_cost": {
+    "minestuck:build": 4,
+    "minestuck:amber": 3
+  }
+}

@@ -3,7 +3,8 @@
   "pools": [
     {
       "name": "weapons",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -13,9 +14,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minestuck:cactaceae_cutlass"
@@ -27,9 +30,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_sword"
@@ -41,9 +46,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_axe"
@@ -52,7 +59,8 @@
     },
     {
       "name": "supplies",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -62,10 +70,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:gold_ingot"
@@ -77,9 +86,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_pickaxe"
@@ -91,9 +102,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_shovel"
@@ -106,9 +119,11 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
+                "type": "minecraft:uniform",
                 "min": 0.75,
                 "max": 1.0
-              }
+              },
+              "add": false
             }
           ],
           "name": "minecraft:golden_hoe"
@@ -117,7 +132,8 @@
     },
     {
       "name": "misc",
-      "rolls": 1,
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -127,10 +143,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 2.0,
-                "max": 16.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 16.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:sand"
@@ -143,10 +160,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:red_sand"
@@ -159,10 +177,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 2.0,
-                "max": 12.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 12.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:sandstone"
@@ -175,10 +194,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:smooth_sandstone"
@@ -191,10 +211,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 4.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 4.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:red_sandstone"
@@ -207,10 +228,11 @@
             {
               "function": "minecraft:set_count",
               "count": {
+                "type": "minecraft:uniform",
                 "min": 1.0,
-                "max": 5.0,
-                "type": "minecraft:uniform"
-              }
+                "max": 5.0
+              },
+              "add": false
             }
           ],
           "name": "minecraft:cactus"

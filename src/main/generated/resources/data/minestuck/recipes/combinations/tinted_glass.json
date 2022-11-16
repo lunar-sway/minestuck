@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ink_sac"
+  },
+  "input2": {
+    "item": "minecraft:fermented_spider_eye"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:tinted_glass"
+  }
+}

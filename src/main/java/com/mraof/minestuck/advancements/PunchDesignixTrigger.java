@@ -2,19 +2,14 @@ package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Objects;
 
-public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignixTrigger.Instance>
+public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTrigger.Instance>
 {
 	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "punch_designix");
 	
@@ -25,7 +20,7 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
 		
 		ItemPredicate input = ItemPredicate.fromJson(json.get("input"));
@@ -34,18 +29,18 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 		return new Instance(predicate, input, target, output);
 	}
 	
-	public void trigger(ServerPlayerEntity player, ItemStack input, ItemStack target, ItemStack result)
+	public void trigger(ServerPlayer player, ItemStack input, ItemStack target, ItemStack result)
 	{
 		trigger(player, instance -> instance.test(input, target, result));
 	}
 	
-	public static class Instance extends CriterionInstance
+	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final ItemPredicate input;
 		private final ItemPredicate target;
 		private final ItemPredicate output;
 		
-		public Instance(EntityPredicate.AndPredicate predicate, ItemPredicate input, ItemPredicate target, ItemPredicate output)
+		public Instance(EntityPredicate.Composite predicate, ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
 			super(ID, predicate);
 			this.input = Objects.requireNonNull(input);
@@ -60,7 +55,7 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 		
 		public static Instance create(ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY, input, target, output);
+			return new Instance(EntityPredicate.Composite.ANY, input, target, output);
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
@@ -69,9 +64,9 @@ public class PunchDesignixTrigger extends AbstractCriterionTrigger<PunchDesignix
 		}
 		
 		@Override
-		public JsonObject serializeToJson(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(SerializationContext context)
 		{
-			JsonObject json = super.serializeToJson(conditions);
+			JsonObject json = super.serializeToJson(context);
 			json.add("input", input.serializeToJson());
 			json.add("target", target.serializeToJson());
 			json.add("output", output.serializeToJson());

@@ -3,20 +3,19 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.FeatureModifier;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Features;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.phys.Vec3;
 
 public class LightLandType extends TitleLandType
 {
@@ -37,32 +36,27 @@ public class LightLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.ORANGE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.ORANGE_CARPET.defaultBlockState());
-		registry.setBlockState("torch", Blocks.TORCH.defaultBlockState());
-		registry.setBlockState("slime", MSBlocks.GLOWY_GOOP.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.ORANGE_WOOL);
+		registry.setBlock("carpet", Blocks.ORANGE_CARPET);
+		registry.setBlock("torch", Blocks.TORCH);
+		registry.setBlock("slime", MSBlocks.GLOWY_GOOP);
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
 		properties.skylightBase = 1.0F;
-		properties.mergeFogColor(new Vector3d(1, 1, 0.8), 0.5F);
+		properties.mergeFogColor(new Vec3(1, 1, 0.8), 0.5F);
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		BlockState lightBlock = blocks.getBlockState("light_block");
-		if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.LARGE_PILLAR
-					.configured(new BlockStateFeatureConfig(lightBlock)).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(3));
-		} else
-		{
-			builder.addFeature(GenerationStage.Decoration.LOCAL_MODIFICATIONS, MSFeatures.PILLAR
-					.configured(new BlockStateFeatureConfig(lightBlock)).decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).chance(2));
-		}
+		
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_PILLAR_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
+		
 	}
 	
 	@Override
@@ -76,6 +70,6 @@ public class LightLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_LIGHT;
+		return MSSoundEvents.MUSIC_LIGHT.get();
 	}
 }

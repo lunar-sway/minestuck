@@ -1,13 +1,13 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Supplier;
 
@@ -22,10 +22,10 @@ public class SoundItem extends Item
     }
     
     @Override
-    public ActionResult<ItemStack> use(World worldIn, PlayerEntity player, Hand handIn)
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand handIn)
     {
-        worldIn.playSound(player, player.getX(), player.getY(), player.getZ(), sound.get(), SoundCategory.PLAYERS, 1.0F, 1.0F);
+        level.playSound(player, player.getX(), player.getY(), player.getZ(), sound.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
     
-        return ActionResult.success(player.getItemInHand(handIn));
+        return InteractionResultHolder.success(player.getItemInHand(handIn));
     }
 }

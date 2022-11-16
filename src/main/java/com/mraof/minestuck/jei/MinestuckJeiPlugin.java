@@ -4,22 +4,22 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationMode;
-import com.mraof.minestuck.item.crafting.alchemy.CombinationRecipe;
-import com.mraof.minestuck.item.crafting.alchemy.GristAmount;
-import com.mraof.minestuck.item.crafting.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.CombinationMode;
+import com.mraof.minestuck.alchemy.CombinationRecipe;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * Created by mraof on 2017 January 23 at 2:11 AM.
@@ -27,32 +27,31 @@ import java.util.stream.Collectors;
 @JeiPlugin
 public class MinestuckJeiPlugin implements IModPlugin
 {
-	public static final ResourceLocation PLUGIN_ID = new ResourceLocation(Minestuck.MOD_ID, "minestuck");
-	public static final ResourceLocation GRIST_COST_ID = new ResourceLocation(Minestuck.MOD_ID, "grist_cost");
-	public static final ResourceLocation LATHE_ID = new ResourceLocation(Minestuck.MOD_ID, "totem_lathe");
-	public static final ResourceLocation DESIGNIX_ID = new ResourceLocation(Minestuck.MOD_ID, "punch_designix");
-
+	public static final RecipeType<JeiGristCost> GRIST_COST = RecipeType.create(Minestuck.MOD_ID, "grist_cost", JeiGristCost.class);
+	public static final RecipeType<JeiCombination> LATHE = RecipeType.create(Minestuck.MOD_ID, "totem_lathe", JeiCombination.class);
+	public static final RecipeType<JeiCombination> DESIGNIX = RecipeType.create(Minestuck.MOD_ID, "punch_designix", JeiCombination.class);
+	
 	public static final IIngredientType<GristAmount> GRIST = () -> GristAmount.class;
-
+	
 	@Override
 	public ResourceLocation getPluginUid()
 	{
-		return PLUGIN_ID;
+		return new ResourceLocation(Minestuck.MOD_ID, "minestuck");
 	}
-
+	
 	@Override
 	public void registerItemSubtypes(ISubtypeRegistration subtypeRegistry)
-    {
-        subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD);
-        subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.asItem());
-    }
-
+	{
+		subtypeRegistry.useNbtForSubtypes(MSItems.CAPTCHA_CARD.get());
+		subtypeRegistry.useNbtForSubtypes(MSBlocks.CRUXITE_DOWEL.get().asItem());
+	}
+	
 	@Override
-    public void registerIngredients(IModIngredientRegistration registry)
-    {
-    	registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
-    }
-
+	public void registerIngredients(IModIngredientRegistration registry)
+	{
+		registry.register(GRIST, GristIngredientHelper.createList(), new GristIngredientHelper(), new GristIngredientRenderer());
+	}
+	
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry)
 	{
@@ -63,27 +62,32 @@ public class MinestuckJeiPlugin implements IModPlugin
 		DesignixRecipeCategory designixCategory = new DesignixRecipeCategory(registry.getJeiHelpers().getGuiHelper());
 		registry.addRecipeCategories(designixCategory);
 	}
-
+	
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration)
 	{
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER), GRIST_COST_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER), GRIST_COST_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE), LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE), LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX), DESIGNIX_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL), GRIST_COST_ID, LATHE_ID);
-		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD), LATHE_ID, DESIGNIX_ID);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.ALCHEMITER), GRIST_COST);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_ALCHEMITER.get()), GRIST_COST);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.TOTEM_LATHE), LATHE);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_TOTEM_LATHE.get()), LATHE);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.PUNCH_DESIGNIX), DESIGNIX);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.MINI_PUNCH_DESIGNIX.get()), DESIGNIX);
+		registration.addRecipeCatalyst(new ItemStack(MSBlocks.CRUXITE_DOWEL.get()), GRIST_COST, LATHE);
+		registration.addRecipeCatalyst(new ItemStack(MSItems.CAPTCHA_CARD.get()), LATHE, DESIGNIX);
 	}
-
+	
 	@Override
 	public void registerRecipes(IRecipeRegistration registration)
 	{
-		World world = Minecraft.getInstance().level;
-		Collection<IRecipe<?>> recipes = world.getRecipeManager().getRecipes();
-		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE).flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(world).stream()).collect(Collectors.toList()), GRIST_COST_ID);
-		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.AND).collect(Collectors.toList()), LATHE_ID);
-		registration.addRecipes(recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE).flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream()).filter(combination -> combination.getMode() == CombinationMode.OR).collect(Collectors.toList()), DESIGNIX_ID);
+		Level level = Minecraft.getInstance().level;
+		Collection<Recipe<?>> recipes = level.getRecipeManager().getRecipes();
+		registration.addRecipes(GRIST_COST, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.GRIST_COST_TYPE.get())
+				.flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(level).stream()).toList());
+		registration.addRecipes(LATHE, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
+				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
+				.filter(combination -> combination.getMode() == CombinationMode.AND).toList());
+		registration.addRecipes(DESIGNIX, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
+				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
+				.filter(combination -> combination.getMode() == CombinationMode.OR).toList());
 	}
 }

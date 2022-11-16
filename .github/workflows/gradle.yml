@@ -3,11 +3,11 @@ name: Build
 on:
   push:
     branches: 
-      - '1.16'
+      - '1.18'
       - 'upcoming-content'
   pull_request:
     branches: 
-      - '1.16'
+      - '1.18'
       - 'upcoming-content'
 
 permissions:
@@ -23,12 +23,25 @@ jobs:
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
 
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1
     - name: Gradle Build
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+    - name: Data Generation
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: :runData
+    - name: Detect Changes
+      id: changes
+      uses: ch4rl3x/has-changes-action@3058353091eb04bf2c56876af42fd5a286b41faa
+    - name: Did runData create changes?
+      if: steps.changes.outputs.changed == 1
+      run: |
+        echo "Files were changed after running runData. Make sure to run runData and commit changes!"
+        git status --porcelain
+        exit 1

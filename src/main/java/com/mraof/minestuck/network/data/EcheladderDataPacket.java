@@ -3,11 +3,11 @@ package com.mraof.minestuck.network.data;
 import com.mraof.minestuck.client.gui.playerStats.EcheladderScreen;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class EcheladderDataPacket implements PlayToClientPacket
 {
@@ -33,14 +33,14 @@ public class EcheladderDataPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(rung);
 		buffer.writeFloat(progress);
 		buffer.writeBoolean(sendMessage);
 	}
 	
-	public static EcheladderDataPacket decode(PacketBuffer buffer)
+	public static EcheladderDataPacket decode(FriendlyByteBuf buffer)
 	{
 		int rung = buffer.readInt();
 		float progress = buffer.readFloat();
@@ -57,8 +57,8 @@ public class EcheladderDataPacket implements PlayToClientPacket
 		if(sendMessage)
 			for(prev++; prev <= rung; prev++)
 			{
-				TranslationTextComponent rung = new TranslationTextComponent(Echeladder.translationKey(prev));
-				Minecraft.getInstance().player.sendMessage(new TranslationTextComponent(Echeladder.NEW_RUNG, rung), Util.NIL_UUID);
+				TranslatableComponent rung = new TranslatableComponent(Echeladder.translationKey(prev));
+				Minecraft.getInstance().player.sendMessage(new TranslatableComponent(Echeladder.NEW_RUNG, rung), Util.NIL_UUID);
 			}
 		else EcheladderScreen.animatedRung = EcheladderScreen.lastRung = rung;
 	}

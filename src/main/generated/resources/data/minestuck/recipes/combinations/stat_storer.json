@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:comparator"
+    "item": "minestuck:computer_parts"
   },
   "input2": {
     "item": "minestuck:remote_observer"

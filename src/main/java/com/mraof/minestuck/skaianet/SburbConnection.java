@@ -6,24 +6,19 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandInfo;
-import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.StringNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.nbt.*;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -33,6 +28,8 @@ import java.util.Set;
 
 public final class SburbConnection
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	final SkaianetHandler skaianet;
 	
 	@Nonnull
@@ -47,14 +44,14 @@ public final class SburbConnection
 	private boolean isMain;
 	boolean lockedToSession;
 	private boolean hasEntered = false;	//If the player has entered. Is set to true after entry has finished
-	private LandInfo clientLandInfo;	//The land info for this client player. This is initialized in preparation for entry
+	private ResourceKey<Level> clientLandKey;	//The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
 	private GristType baseGrist;
 	
 	private final Set<String> givenItemList = new HashSet<>();
 	
 	//Only used by the edit handler
-	private ListNBT inventory;
+	private ListTag inventory;
 	
 	SburbConnection(PlayerIdentifier client, SkaianetHandler skaianet)
 	{
@@ -69,19 +66,19 @@ public final class SburbConnection
 		this.lockedToSession = false;
 	}
 	
-	SburbConnection(CompoundNBT nbt, SkaianetHandler skaianet)
+	SburbConnection(CompoundTag nbt, SkaianetHandler skaianet)
 	{
 		this.skaianet = skaianet;
 		isMain = nbt.getBoolean("IsMain");
 		boolean active = true;
-		if(nbt.contains("Inventory", Constants.NBT.TAG_LIST))
-			inventory = nbt.getList("Inventory", Constants.NBT.TAG_COMPOUND);
+		if(nbt.contains("Inventory", Tag.TAG_LIST))
+			inventory = nbt.getList("Inventory", Tag.TAG_COMPOUND);
 		if(isMain)
 		{
 			active = nbt.getBoolean("IsActive");
 			
 			lockedToSession = nbt.getBoolean("locked");
-			ListNBT list = nbt.getList("GivenItems", Constants.NBT.TAG_STRING);
+			ListTag list = nbt.getList("GivenItems", Tag.TAG_STRING);
 			for(int i = 0; i < list.size(); i++)
 			{
 				givenItemList.add(list.getString(i));
@@ -98,22 +95,21 @@ public final class SburbConnection
 				isActive = true;
 			} catch(Exception e)
 			{
-				Debug.logger.error("Unable to read computer position for sburb connection between "+ clientIdentifier.getUsername()+" and "+serverIdentifier.getUsername()+", setting connection to be inactive. Cause: ", e);
+				LOGGER.error("Unable to read computer position for sburb connection between {} and {}, setting connection to be inactive. Cause: ", clientIdentifier.getUsername(), serverIdentifier.getUsername(), e);
 			}
 		}
-		if(nbt.contains("ClientLand", Constants.NBT.TAG_COMPOUND))
+		if(nbt.contains("ClientLand"))
 		{
-			clientLandInfo = LandInfo.read(nbt.getCompound("ClientLand"), skaianet, getClientIdentifier());
-			MSDimensions.updateLandMaps(this, false);
+			clientLandKey = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("ClientLand")).resultOrPartial(LOGGER::error).orElse(null);
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
 		baseGrist = GristType.read(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
-	CompoundNBT write()
+	CompoundTag write()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		nbt.putBoolean("IsMain", isMain);
 		if(inventory != null)
 			nbt.put("Inventory", inventory);
@@ -121,14 +117,15 @@ public final class SburbConnection
 		{
 			nbt.putBoolean("IsActive", isActive);
 			nbt.putBoolean("locked", lockedToSession);
-			ListNBT list = new ListNBT();
+			ListTag list = new ListTag();
 			for(String name : givenItemList)
-				list.add(StringNBT.valueOf(name));
+				list.add(StringTag.valueOf(name));
 			
 			nbt.put("GivenItems", list);
-			if(clientLandInfo != null)
+			if(clientLandKey != null)
 			{
-				nbt.put("ClientLand", clientLandInfo.write(new CompoundNBT()));
+				Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, clientLandKey).resultOrPartial(LOGGER::error)
+						.ifPresent(tag -> nbt.put("ClientLand", tag));
 				nbt.putBoolean("has_entered", hasEntered);
 			}
 		}
@@ -138,8 +135,8 @@ public final class SburbConnection
 		
 		if(isActive)
 		{
-			nbt.put("client_computer", clientComputer.write(new CompoundNBT()));
-			nbt.put("server_computer", serverComputer.write(new CompoundNBT()));
+			nbt.put("client_computer", clientComputer.write(new CompoundTag()));
+			nbt.put("server_computer", serverComputer.write(new CompoundTag()));
 		}
 		
 		nbt.putInt("artifact", artifactType);
@@ -286,7 +283,7 @@ public final class SburbConnection
 		{
 			Title title = PlayerSavedData.getData(getClientIdentifier(), skaianet.mcServer).getTitle();
 			if(title == null)
-				Debug.warnf("Found player %s that has entered, but did not have a title!", getClientIdentifier().getUsername());
+				LOGGER.warn("Found player {} that has entered, but did not have a title!", getClientIdentifier().getUsername());
 			return title;
 		}
 		return null;
@@ -294,27 +291,22 @@ public final class SburbConnection
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */
-	public RegistryKey<World> getClientDimension()
+	public ResourceKey<Level> getClientDimension()
 	{
-		return getLandInfo() == null ? null : getLandInfo().getDimensionType();
+		return this.clientLandKey;
 	}
-	public LandInfo getLandInfo()
+	void setLand(ResourceKey<Level> dimension)
 	{
-		return clientLandInfo;
-	}
-	void setLand(LandTypePair landTypes, RegistryKey<World> dimension)
-	{
-		if(clientLandInfo != null)
+		if(clientLandKey != null)
 			throw new IllegalStateException("Can't set land twice");
 		else
 		{
-			clientLandInfo = new LandInfo(clientIdentifier, landTypes, dimension, new Random());	//TODO handle random better
-			MSDimensions.updateLandMaps(this, true);
+			clientLandKey = dimension;
 		}
 	}
 	void setHasEntered()
 	{
-		if(clientLandInfo == null)
+		if(clientLandKey == null)
 			throw new IllegalStateException("Land has not been initiated, can't have entered now!");
 		if(hasEntered)
 			throw new IllegalStateException("Can't have entered twice");
@@ -342,12 +334,12 @@ public final class SburbConnection
 		}
 	}
 	
-	public ListNBT getEditmodeInventory()
+	public ListTag getEditmodeInventory()
 	{
 		return inventory == null ? null : inventory.copy();
 	}
 	
-	public void putEditmodeInventory(ListNBT nbt)
+	public void putEditmodeInventory(ListTag nbt)
 	{
 		inventory = nbt;
 	}
@@ -367,7 +359,7 @@ public final class SburbConnection
 	void copyFrom(SburbConnection other)
 	{
 		lockedToSession = other.lockedToSession;
-		clientLandInfo = other.clientLandInfo;
+		clientLandKey = other.clientLandKey;
 		hasEntered = other.hasEntered;
 		artifactType = other.artifactType;
 		baseGrist = other.baseGrist;
@@ -377,7 +369,7 @@ public final class SburbConnection
 	/**
 	 * Writes the connection info needed client-side to a network buffer. Must match with {@link ReducedConnection#read}.
 	 */
-	public void toBuffer(PacketBuffer buffer)
+	public void toBuffer(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(isMain);
 		if(isMain){

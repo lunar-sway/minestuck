@@ -2,15 +2,15 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.item.BarbasolBombEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class BarbasolBombItem extends Item
 {
@@ -20,7 +20,7 @@ public class BarbasolBombItem extends Item
 	}
 	
 	@Override
-	public ActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn)
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
 		
@@ -29,18 +29,18 @@ public class BarbasolBombItem extends Item
 			item.shrink(1);
 		}
 		
-		worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TNT_PRIMED, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.TNT_PRIMED, SoundSource.NEUTRAL, 1.0F, 1.0F);
 		
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
 			
-			BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB, playerIn, worldIn, playerIn.abilities.mayBuild);
+			BarbasolBombEntity bomb = new BarbasolBombEntity(MSEntityTypes.BARBASOL_BOMB.get(), playerIn, level, playerIn.getAbilities().mayBuild);
 			bomb.setItem(item);
-			bomb.shootFromRotation(playerIn, playerIn.xRot, playerIn.yRot, -20.0F, 0.7F, 1.0F);
-			worldIn.addFreshEntity(bomb);
+			bomb.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), -20.0F, 0.7F, 1.0F);
+			level.addFreshEntity(bomb);
 		}
 		
 		playerIn.awardStat(Stats.ITEM_USED.get(this));
-		return ActionResult.success(item);
+		return InteractionResultHolder.success(item);
 	}
 }

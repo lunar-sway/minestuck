@@ -3,8 +3,10 @@
     "item": "minestuck:battery"
   },
   "range": {
-    "min": 10.0,
-    "max": 100.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 10,
+      "max_inclusive": 100
+    }
   }
 }

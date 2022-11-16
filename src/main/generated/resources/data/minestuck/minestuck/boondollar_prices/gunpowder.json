@@ -3,8 +3,10 @@
     "item": "minecraft:gunpowder"
   },
   "range": {
-    "min": 50.0,
-    "max": 65.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 50,
+      "max_inclusive": 65
+    }
   }
 }

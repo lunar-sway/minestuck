@@ -1,23 +1,22 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.client.gui.screen.ConfirmScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
-import org.lwjgl.opengl.GL13;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.ConfirmScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 
@@ -56,27 +55,27 @@ public abstract class SylladexScreen extends Screen
 	
 	public SylladexScreen()
 	{
-		super(new TranslationTextComponent(TITLE));
+		super(new TranslatableComponent(TITLE));
 	}
 	
 	@Override
 	public void init()
 	{
-		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, new TranslationTextComponent(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
-		addButton(emptySylladex);
+		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, new TranslatableComponent(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
+		addRenderableWidget(emptySylladex);
 		updateContent();
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int xcor, int ycor, float f)
+	public void render(PoseStack poseStack, int xcor, int ycor, float f)
 	{
-		this.renderBackground(matrixStack);
-		
-		emptySylladex.x = (width - GUI_WIDTH)/2 + 140;
-		emptySylladex.y = (height - GUI_HEIGHT)/2 + 175;
+		this.renderBackground(poseStack);
 		
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
+		
+		emptySylladex.x = xOffset + 140;
+		emptySylladex.y = yOffset + 175;
 		
 		if(mousePressed)
 		{
@@ -98,11 +97,13 @@ public abstract class SylladexScreen extends Screen
 			mousePosY = -1;
 		}
 		
-		prepareMap(xOffset + X_OFFSET, yOffset + Y_OFFSET);
+		PoseStack modelPoseStack = RenderSystem.getModelViewStack();
+		modelPoseStack.pushPose();
+		modelPoseStack.translate(xOffset + X_OFFSET, yOffset + Y_OFFSET, 0);
+		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
+		RenderSystem.applyModelViewMatrix();
 		
-		drawGuiMap(matrixStack, xcor, ycor);
-		
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
+		drawGuiMap(poseStack, xcor, ycor);
 		
 		ArrayList<GuiCard> visibleCards = new ArrayList<>();
 		for(GuiCard card : cards)
@@ -111,28 +112,26 @@ public abstract class SylladexScreen extends Screen
 				visibleCards.add(card);
 		
 		for(GuiCard card : visibleCards)
-			card.drawItemBackground(matrixStack);
+			card.drawItemBackground(poseStack);
 
-		RenderHelper.turnBackOn();
-		RenderSystem.enableRescaleNormal();
-		RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE2, 240F, 240F);
 		for(GuiCard card : visibleCards)
-			card.drawItem(matrixStack);
+			card.drawItem(poseStack);
+		
+		modelPoseStack.popPose();
+		RenderSystem.applyModelViewMatrix();
 		RenderSystem.disableDepthTest();
-		RenderHelper.turnOff();
-		RenderSystem.color4f(1F, 1F, 1F, 1F);
 		
-		finishMap();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, sylladexFrame);
+		blit(poseStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		minecraft.getTextureManager().bind(sylladexFrame);
-		blit(matrixStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		
-		font.draw(matrixStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
+		font.draw(poseStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
 		
 		String str = ClientPlayerData.getModus().getName().getString();
-		font.draw(matrixStack, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040);
+		font.draw(poseStack, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040);
 		
-		super.render(matrixStack, xcor, ycor, f);
+		super.render(poseStack, xcor, ycor, f);
 		
 		if(isMouseInContainer(xcor, ycor))
 		{
@@ -142,7 +141,7 @@ public abstract class SylladexScreen extends Screen
 				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
 						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
-					card.drawTooltip(matrixStack, xcor, ycor);
+					card.drawTooltip(poseStack, xcor, ycor);
 					break;
 				}
 		}
@@ -157,7 +156,7 @@ public abstract class SylladexScreen extends Screen
 			this.scroll += 0.25F;
 		else if (scroll > 0)
 			this.scroll -= 0.25F;
-		this.scroll = MathHelper.clamp(this.scroll, 1.0F, 2.0F);
+		this.scroll = Mth.clamp(this.scroll, 1.0F, 2.0F);
 		
 		if(prevScroll != this.scroll)
 		{
@@ -210,14 +209,14 @@ public abstract class SylladexScreen extends Screen
 	
 	private void emptySylladex()
 	{
-		minecraft.screen = new ConfirmScreen(this::onEmptyConfirm, new TranslationTextComponent(EMPTY_SYLLADEX_1), new TranslationTextComponent(EMPTY_SYLLADEX_2));
+		minecraft.screen = new ConfirmScreen(this::onEmptyConfirm, new TranslatableComponent(EMPTY_SYLLADEX_1), new TranslatableComponent(EMPTY_SYLLADEX_2));
 		minecraft.screen.init(minecraft, width, height);
 	}
 	
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputMappings.getKey(keyCode, scanCode)))
+		if(MSKeyHandler.sylladexKey.isActiveAndMatches(InputConstants.getKey(keyCode, scanCode)))
 		{
 			minecraft.setScreen(null);
 			return true;
@@ -266,21 +265,9 @@ public abstract class SylladexScreen extends Screen
 		return false;
 	}
 	
-	public void drawGuiMap(MatrixStack matrixStack, int mouseX, int mouseY)
+	public void drawGuiMap(PoseStack poseStack, int mouseX, int mouseY)
 	{
-		fill(matrixStack, 0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
-	}
-	
-	private void prepareMap(int xOffset, int yOffset)
-	{
-		RenderSystem.pushMatrix();
-		RenderSystem.translatef((float)xOffset, (float)yOffset, 0F);
-		RenderSystem.scalef(1.0F / this.scroll, 1.0F / this.scroll, 1.0F);
-	}
-	
-	private void finishMap()
-	{
-		RenderSystem.popMatrix();
+		fill(poseStack, 0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
 	}
 	
 	private boolean isMouseInContainer(double xcor, double ycor)
@@ -354,9 +341,11 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 
-		protected void drawItemBackground(MatrixStack matrixStack)
+		protected void drawItemBackground(PoseStack poseStack)
 		{
-			gui.minecraft.getTextureManager().bind(gui.getCardTexture(this));
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.setShaderTexture(0, gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -366,14 +355,14 @@ public abstract class SylladexScreen extends Screen
 				minY += gui.mapY - (this.yPos + minY);
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
-			gui.blit(matrixStack, this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
+			gui.blit(poseStack, this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
 					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
 		}
 		
-		protected void drawItem(MatrixStack matrixStack)
+		protected void drawItem(PoseStack poseStack)
 		{
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(!this.item.isEmpty())
 			{
 				int x = this.xPos +2 - gui.mapX;
@@ -385,10 +374,10 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 		
-		protected void drawTooltip(MatrixStack matrixStack, int mouseX, int mouseY)
+		protected void drawTooltip(PoseStack poseStack, int mouseX, int mouseY)
 		{
 			if(!item.isEmpty())
-				gui.renderTooltip(matrixStack, item, mouseX, mouseY);
+				gui.renderTooltip(poseStack, item, mouseX, mouseY);
 		}
 		
 	}
@@ -407,12 +396,12 @@ public abstract class SylladexScreen extends Screen
 		}
 		
 		@Override
-		protected void drawTooltip(MatrixStack matrixStack, int mouseX, int mouseY) {}
+		protected void drawTooltip(PoseStack poseStack, int mouseX, int mouseY) {}
 		
 		@Override
-		protected void drawItem(MatrixStack matrixStack)
+		protected void drawItem(PoseStack poseStack)
 		{
-			RenderSystem.color4f(1F, 1F, 1F, 1F);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(size > 1)
 			{
 				String stackSize = String.valueOf(size);
@@ -420,11 +409,9 @@ public abstract class SylladexScreen extends Screen
 				int y = this.yPos - gui.mapY + 15;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + gui.font.width(stackSize) < 0 || y + gui.font.lineHeight < 0)
 					return;
-				RenderSystem.disableLighting();
 				RenderSystem.disableDepthTest();
 				RenderSystem.disableBlend();
-				gui.font.drawShadow(matrixStack, stackSize, x, y, 0xC6C6C6);
-				RenderSystem.enableLighting();
+				gui.font.drawShadow(poseStack, stackSize, x, y, 0xC6C6C6);
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();
 			}

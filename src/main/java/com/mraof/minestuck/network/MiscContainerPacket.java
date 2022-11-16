@@ -2,10 +2,13 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.EditmodeContainer;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import com.mraof.minestuck.inventory.EditmodeMenu;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,13 +26,13 @@ public class MiscContainerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(index);
 		buffer.writeBoolean(editmode);
 	}
 	
-	public static MiscContainerPacket decode(PacketBuffer buffer)
+	public static MiscContainerPacket decode(FriendlyByteBuf buffer)
 	{
 		int index = buffer.readInt();
 		boolean editmode = buffer.readBoolean();
@@ -38,7 +41,7 @@ public class MiscContainerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		boolean isInEditmode = ServerEditHandler.getData(player) != null;
 		
@@ -51,15 +54,16 @@ public class MiscContainerPacket implements PlayToServerPacket
 			ServerEditHandler.resendEditmodeStatus(player);
 		} else
 		{
+			int id = PlayerStatsScreen.WINDOW_ID_START + index;
+			AbstractContainerMenu menu;
 			if(!isInEditmode)
-			{
-				player.containerMenu = new CaptchaDeckContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);//ContainerHandler.windowIdStart + i;
-			} else
-			{
-				player.containerMenu = new EditmodeContainer(PlayerStatsScreen.WINDOW_ID_START + index, player.inventory);
-			}
+				menu = new CaptchaDeckMenu(id, player.getInventory());
+			else
+				menu = new EditmodeMenu(id, player.getInventory());
 			
-			player.initMenu();
+			player.containerMenu = menu;
+			player.initMenu(menu);
+			MinecraftForge.EVENT_BUS.post(new PlayerContainerEvent.Open(player, menu));
 		}
 	}
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:golden_carrot"
+  },
+  "input2": {
+    "item": "minecraft:item_frame"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:glow_item_frame"
+  }
+}

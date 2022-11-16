@@ -21,7 +21,9 @@
       "conditions": {
         "items": [
           {
-            "item": "minestuck:sburb_code"
+            "items": [
+              "minestuck:sburb_code"
+            ]
           }
         ]
       }

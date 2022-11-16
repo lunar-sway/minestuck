@@ -1,25 +1,28 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.village.IguanaVillagePieces;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.EntityType;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.*;
+import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
+import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
 import java.util.Random;
 
@@ -29,139 +32,91 @@ public class FrostLandType extends TerrainLandType
 	public static final String ICE = "minestuck.ice";
 	public static final String SNOW = "minestuck.snow";
 	
-	private static final Vector3d fogColor = new Vector3d(0.5D, 0.6D, 0.98D);
-	
 	public FrostLandType()
 	{
-		super();
+		super(new Builder(MSEntityTypes.IGUANA).names(FROST, ICE, SNOW)
+				.skylight(7/8F).fogColor(0.5, 0.6, 0.98).skyColor(0.6, 0.7, 0.9)
+				.biomeSet(MSBiomes.SNOW_LAND).category(Biome.BiomeCategory.ICY).music(MSSoundEvents.MUSIC_FROST));
 	}
 	
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
-		registry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		registry.setBlockState("structure_primary", MSBlocks.FROST_TILE.defaultBlockState());
-		registry.setBlockState("structure_primary_decorative", MSBlocks.CHISELED_FROST_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_cracked", MSBlocks.CRACKED_FROST_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_primary_column", MSBlocks.FROST_COLUMN.defaultBlockState());
-		registry.setBlockState("structure_primary_stairs", MSBlocks.FROST_TILE_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary", MSBlocks.FROST_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS.defaultBlockState());
-		registry.setBlockState("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS.defaultBlockState());
-		registry.setBlockState("structure_planks", Blocks.SPRUCE_PLANKS.defaultBlockState());
-		registry.setBlockState("structure_planks_slab", Blocks.SPRUCE_SLAB.defaultBlockState());
-		registry.setBlockState("river", Blocks.ICE.defaultBlockState());
-		registry.setBlockState("light_block", Blocks.SEA_LANTERN.defaultBlockState());
-		registry.setBlockState("bucket_1", Blocks.SNOW_BLOCK.defaultBlockState());
-		registry.setBlockState("bush", Blocks.FERN.defaultBlockState());
-		registry.setBlockState("structure_wool_1", Blocks.WHITE_WOOL.defaultBlockState());
-		registry.setBlockState("structure_wool_3", Blocks.CYAN_WOOL.defaultBlockState());
-	}
-	
-	@Override
-	public String[] getNames() {
-		return new String[] {FROST, ICE, SNOW};
-	}
-	
-	@Override
-	public LandBiomeSet getBiomeSet()
-	{
-		return MSBiomes.SNOW_LAND;
+		registry.setBlock("surface", Blocks.GRASS_BLOCK);
+		registry.setBlock("upper", Blocks.DIRT);
+		registry.setBlock("structure_primary", MSBlocks.FROST_TILE);
+		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_FROST_BRICKS);
+		registry.setBlock("structure_primary_cracked", MSBlocks.CRACKED_FROST_BRICKS);
+		registry.setBlock("structure_primary_column", MSBlocks.FROST_COLUMN);
+		registry.setBlock("structure_primary_stairs", MSBlocks.FROST_TILE_STAIRS);
+		registry.setBlock("structure_secondary", MSBlocks.FROST_BRICKS);
+		registry.setBlock("structure_secondary_stairs", MSBlocks.FROST_BRICK_STAIRS);
+		registry.setBlock("structure_secondary_decorative", MSBlocks.CHISELED_FROST_BRICKS);
+		registry.setBlock("structure_planks", Blocks.SPRUCE_PLANKS);
+		registry.setBlock("structure_planks_slab", Blocks.SPRUCE_SLAB);
+		registry.setBlock("river", Blocks.ICE);
+		registry.setBlock("light_block", Blocks.SEA_LANTERN);
+		registry.setBlock("bucket_1", Blocks.SNOW_BLOCK);
+		registry.setBlock("bush", Blocks.FERN);
+		registry.setBlock("structure_wool_1", Blocks.WHITE_WOOL);
+		registry.setBlock("structure_wool_3", Blocks.CYAN_WOOL);
 	}
 	
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		properties.category = Biome.Category.ICY;
 		properties.forceRain = LandProperties.ForceType.ON;
 	}
 	
 	@Override
 	public void setGenSettings(LandGenSettings settings)
 	{
-		settings.oceanChance = 1/4F;
+		settings.oceanThreshold = -0.3F;
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		//TODO
-		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumNormal));
-		//list.add(new SpruceTreeDecorator(MinestuckBlocks.log.getDefaultState().withProperty(BlockMinestuckLog1.VARIANT, BlockMinestuckLog1.BlockType.FROST), MinestuckBlocks.leaves1.getDefaultState().withProperty(BlockMinestuckLeaves1.VARIANT, BlockMinestuckLeaves1.BlockType.FROST).withProperty(BlockMinestuckLeaves1.CHECK_DECAY, Boolean.valueOf(false)), BiomeMinestuck.mediumRough));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COARSE_DIRT_DISK, LandBiomeType.anyExcept(LandBiomeType.NORMAL));
 		
-		if(type != LandBiomeType.NORMAL)
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.COARSE_DIRT.defaultBlockState(), FeatureSpread.of(2, 4), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(10));
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SNOW_BLOCK_DISK, LandBiomeType.NORMAL);
 		
-		if(type == LandBiomeType.NORMAL)
-		{
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.SNOW_BLOCK.defaultBlockState(), FeatureSpread.of(2, 2), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(15));
-		} else if(type == LandBiomeType.ROUGH)
-		{
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.SNOW_BLOCK.defaultBlockState(), FeatureSpread.of(2, 1), 2, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(8));
-			builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.DISK
-					.configured(new SphereReplaceConfig(Blocks.ICE.defaultBlockState(), FeatureSpread.of(2, 1), 1, Lists.newArrayList(blocks.getBlockState("surface"), blocks.getBlockState("upper"))))
-					.decorated(Features.Placements.TOP_SOLID_HEIGHTMAP_SQUARE).count(8));
-		}
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.PACKED_ICE.defaultBlockState(), 8))
-				.range(64).squared().count(2));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.SNOW_BLOCK.defaultBlockState(), 16))
-				.range(64).squared().count(3));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 28))
-				.range(64).squared().count(3));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17))
-				.range(64).squared().count(13));
-		builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, Feature.ORE.configured(new OreFeatureConfig(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 6))
-				.range(24).squared().count(3));
-
-		DefaultBiomeFeatures.addSurfaceFreezing(builder);
-	}
-	
-	@Override
-	public float getSkylightBase()
-	{
-		return 7/8F;
-	}
-	
-	@Override
-	public Vector3d getFogColor()
-	{
-		return fogColor;
-	}
-	
-	@Override
-	public Vector3d getSkyColor()
-	{
-		return new Vector3d(0.6D, 0.7D, 0.9D);
-	}
-	
-	@Override
-	public EntityType<? extends ConsortEntity> getConsortType()
-	{
-		return MSEntityTypes.IGUANA;
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.SMALL_SNOW_BLOCK_DISK, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.ICE_DISK, LandBiomeType.ROUGH);
+		
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.PACKED_ICE.defaultBlockState(), 8),
+						CountPlacement.of(4), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.SNOW_BLOCK.defaultBlockState(), 16),
+						CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.DIRT.defaultBlockState(), 28),
+						CountPlacement.of(6), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.COAL_ORE.defaultBlockState(), 17),
+						CountPlacement.of(26), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), Blocks.DIAMOND_ORE.defaultBlockState(), 6),
+						CountPlacement.of(11), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(24)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		
+		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MiscOverworldPlacements.FREEZE_TOP_LAYER, LandBiomeType.any());
 	}
 	
 	@Override
 	public void addVillageCenters(CenterRegister register)
 	{
-		addIguanaVillageCenters(register);
+		IguanaVillagePieces.addCenters(register);
 	}
 	
 	@Override
 	public void addVillagePieces(PieceRegister register, Random random)
 	{
-		addIguanaVillagePieces(register, random);
-	}
-	
-	@Override
-	public SoundEvent getBackgroundMusic()
-	{
-		return MSSoundEvents.MUSIC_FROST;
+		IguanaVillagePieces.addPieces(register, random);
 	}
 }

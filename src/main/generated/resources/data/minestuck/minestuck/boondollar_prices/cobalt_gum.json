@@ -3,8 +3,10 @@
     "item": "minestuck:cobalt_gum"
   },
   "range": {
-    "min": 150.0,
-    "max": 180.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 150,
+      "max_inclusive": 180
+    }
   }
 }

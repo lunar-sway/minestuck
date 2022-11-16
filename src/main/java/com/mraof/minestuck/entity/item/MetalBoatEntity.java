@@ -2,22 +2,22 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.item.BoatEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.IEntityAdditionalSpawnData;
+import net.minecraftforge.network.NetworkHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,24 +27,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpawnData
+public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	@Nonnull
 	private Type type = Type.IRON;
 	
-	public MetalBoatEntity(EntityType<? extends MetalBoatEntity> type, World world)
+	public MetalBoatEntity(EntityType<? extends MetalBoatEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 	}
 	
-	public MetalBoatEntity(World world, double x, double y, double z, @Nonnull Type type)
+	public MetalBoatEntity(Level level, double x, double y, double z, @Nonnull Type type)
 	{
-		super(MSEntityTypes.METAL_BOAT, world);
+		super(MSEntityTypes.METAL_BOAT.get(), level);
 		this.blocksBuilding = false;
 		this.setPos(x, y, z);
-		this.setDeltaMovement(Vector3d.ZERO);
+		this.setDeltaMovement(Vec3.ZERO);
 		this.xo = x;
 		this.yo = y;
 		this.zo = z;
@@ -59,7 +59,7 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	@Override
 	public boolean hurt(DamageSource source, float amount)
 	{
-		return super.hurt(source, amount*type.damageModifier);
+		return super.hurt(source, amount * type.damageModifier);
 	}
 	
 	@Override
@@ -74,9 +74,9 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public void setDeltaMovement(Vector3d motionIn)
+	public void setDeltaMovement(Vec3 motionIn)
 	{
-		super.setDeltaMovement(new Vector3d(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
+		super.setDeltaMovement(new Vec3(motionIn.x, -Math.abs(motionIn.y), motionIn.z));
 	}
 	
 	private final List<ItemEntity> captureDropsCache = new ArrayList<>(5);
@@ -109,45 +109,45 @@ public class MetalBoatEntity extends BoatEntity implements IEntityAdditionalSpaw
 	}
 	
 	@Override
-	public void setType(BoatEntity.Type boatType)
+	public void setType(Boat.Type pBoatType)
 	{
 		throw new UnsupportedOperationException();
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
 		compound.putString("Type", type.asString());
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 		this.type = Type.fromString(compound.getString("Type"));
 	}
 	
 	@Override
-	public void writeSpawnData(PacketBuffer buffer)
+	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeUtf(type.asString());
 	}
 	
 	@Override
-	public void readSpawnData(PacketBuffer additionalData)
+	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
 		this.type = Type.fromString(additionalData.readUtf(16));
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
 	
 	public enum Type
 	{
-		IRON(1/1.5F, () -> Items.IRON_INGOT, () -> MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
-		GOLD(1.0F, () -> Items.GOLD_INGOT, () -> MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
+		IRON(1 / 1.5F, () -> Items.IRON_INGOT, MSItems.IRON_BOAT, new ResourceLocation("minestuck", "textures/entity/iron_boat.png")),
+		GOLD(1.0F, () -> Items.GOLD_INGOT, MSItems.GOLD_BOAT, new ResourceLocation("minestuck", "textures/entity/gold_boat.png"));
 		
 		private final float damageModifier;
 		private final Supplier<Item> droppedItem, boatItem;

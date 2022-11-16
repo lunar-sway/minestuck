@@ -3,8 +3,10 @@
     "item": "minecraft:elytra"
   },
   "range": {
-    "min": 500.0,
-    "max": 1000.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 500,
+      "max_inclusive": 1000
+    }
   }
 }

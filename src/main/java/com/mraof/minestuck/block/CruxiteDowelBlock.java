@@ -1,33 +1,34 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext;
-import net.minecraft.loot.LootParameters;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class CruxiteDowelBlock extends Block
+public class CruxiteDowelBlock extends Block implements EntityBlock
 {
 	public static final VoxelShape CRUXTRUDER_SHAPE = Block.box(5, 0, 5, 11, 5, 11);
 	public static final VoxelShape DOWEL_SHAPE = Block.box(5, 0, 5, 11, 8, 11);
@@ -42,35 +43,27 @@ public class CruxiteDowelBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return state.getValue(DOWEL_TYPE) == Type.CRUXTRUDER ? CRUXTRUDER_SHAPE : DOWEL_SHAPE;
 	}
 	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return true;
-	}
-	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		ItemStackTileEntity te = new ItemStackTileEntity();
-		te.setStack(new ItemStack(this));
-		return te;
+		ItemStackBlockEntity be = new ItemStackBlockEntity(pos, state);
+		be.setStack(new ItemStack(this));
+		return be;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		TileEntity te = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
-		if (te instanceof ItemStackTileEntity)
+		if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
 		{
-			ItemStackTileEntity itemTE = (ItemStackTileEntity)te;
-			builder = builder.withDynamicDrop(ItemStackTileEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemTE.getStack()));
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(stackEntity.getStack()));
 		}
 		
 		return super.getDrops(state, builder);
@@ -78,46 +71,44 @@ public class CruxiteDowelBlock extends Block
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
 	{
-		if(!worldIn.isClientSide)
-			dropDowel(worldIn, pos);
-		return  ActionResultType.SUCCESS;
+		if(!level.isClientSide)
+			dropDowel(level, pos);
+		return  InteractionResult.SUCCESS;
 	}
 	
 	@Nullable
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return context.getClickedFace() == Direction.UP ? defaultBlockState() : null;
 	}
 	
 	@Override
-	public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
-		TileEntity te = world.getBlockEntity(pos);
-		if(te instanceof ItemStackTileEntity)
+		if (level.getBlockEntity(pos) instanceof ItemStackBlockEntity stackEntity)
 		{
-			ItemStack dowel = ((ItemStackTileEntity) te).getStack();
+			ItemStack dowel = stackEntity.getStack();
 			if(!dowel.isEmpty())
 				return dowel.copy();
 		}
-		return super.getPickBlock(state, target, world, pos, player);
+		return super.getCloneItemStack(state, target, level, pos, player);
 	}
 	
-	public static void dropDowel(World world, BlockPos pos)
+	public static void dropDowel(Level level, BlockPos pos)
 	{
-		TileEntity te = world.getBlockEntity(pos);
-		if(te instanceof ItemStackTileEntity)
+		if (level.getBlockEntity(pos) instanceof ItemStackBlockEntity stackEntity)
 		{
-			ItemStack stack = ((ItemStackTileEntity) te).getStack();
-			popResource(world, pos, stack);
+			ItemStack stack = stackEntity.getStack();
+			popResource(level, pos, stack);
 		}
-		world.removeBlock(pos, false);
+		level.removeBlock(pos, false);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(DOWEL_TYPE);
 	}
@@ -129,7 +120,7 @@ public class CruxiteDowelBlock extends Block
 		return PushReaction.DESTROY;
 	}
 	
-	public enum Type implements IStringSerializable
+	public enum Type implements StringRepresentable
 	{
 		CRUXTRUDER,
 		DOWEL,
