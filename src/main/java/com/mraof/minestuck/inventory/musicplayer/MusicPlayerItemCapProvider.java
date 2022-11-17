@@ -8,13 +8,14 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
 {
 	private final LazyOptional<IItemHandler> lazyInitSupplierItemHandler = LazyOptional.of(this::getCachedInventory);
-	private CassetteItemHandler itemHandler;
+	private ItemStackHandler itemHandler;
 	
 	@NotNull
 	@Override
@@ -25,11 +26,11 @@ public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSeri
 		return LazyOptional.empty();
 	}
 	
-	private @NotNull CassetteItemHandler getCachedInventory()
+	private @NotNull ItemStackHandler getCachedInventory()
 	{
 		if(itemHandler == null)
 		{
-			itemHandler = new CassetteItemHandler(1);
+			itemHandler = new ItemStackHandler(1);
 		}
 		return itemHandler;
 	}

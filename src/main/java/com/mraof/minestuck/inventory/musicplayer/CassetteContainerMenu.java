@@ -9,7 +9,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -33,13 +35,20 @@ public class CassetteContainerMenu extends AbstractContainerMenu
 	{
 		super(MSMenuTypes.CASSETTE_CONTAINER.get(), windowId);
 		this.musicPlayer = musicPlayer;
-		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y));
+		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y){
+			@Override
+			public boolean mayPlace(@NotNull ItemStack stack)
+			{
+				return stack.is(MSTags.Items.CASSETTES);
+			}
+		});
+		
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
 	public CassetteContainerMenu(int windowId, Inventory playerInventory)
 	{
-		this(windowId, playerInventory, new CassetteItemHandler(1), ItemStack.EMPTY);
+		this(windowId, playerInventory, new ItemStackHandler(1), ItemStack.EMPTY);
 	}
 	
 	@Override
