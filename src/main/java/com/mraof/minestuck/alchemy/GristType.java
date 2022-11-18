@@ -248,6 +248,12 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 			candyItem = Objects.requireNonNull(stack);
 			return this;
 		}
+		
+		public Properties color(int color)
+		{
+			this.color = color;
+			return this;
+		}
 	}
 	
 	public enum SpawnCategory    //Which categories can a certain grist type appear under (for spawning underlings)

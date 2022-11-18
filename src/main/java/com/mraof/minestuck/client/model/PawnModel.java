@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class PawnModel extends AnimatedModel<PawnEntity>
 {

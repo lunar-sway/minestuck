@@ -4,18 +4,16 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.model.*;
+import com.mraof.minestuck.client.model.BishopModel;
+import com.mraof.minestuck.client.model.MSModelLayers;
+import com.mraof.minestuck.client.model.RookModel;
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
+import com.mraof.minestuck.client.renderer.blockentity.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.PawnRenderer;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.GateRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.HolopadRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.ReturnNodeRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
-import com.mraof.minestuck.client.renderer.tileentity.TotemLatheRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.SburbClient;
@@ -48,6 +46,7 @@ public class ClientProxy
 		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -69,10 +68,10 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.BASILISK.get(), UnderlingRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LICH.get(), UnderlingRenderer::new);
 		EntityRenderers.register(MSEntityTypes.GICLOPS.get(), UnderlingRenderer::new);
-		EntityRenderers.register(MSEntityTypes.PROSPITIAN_BISHOP.get(), UnderlingRenderer::new);
-		EntityRenderers.register(MSEntityTypes.DERSITE_BISHOP.get(), UnderlingRenderer::new);
-		EntityRenderers.register(MSEntityTypes.PROSPITIAN_ROOK.get(), UnderlingRenderer::new);
-		EntityRenderers.register(MSEntityTypes.DERSITE_ROOK.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.PROSPITIAN_BISHOP.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(manager.bakeLayer(MSModelLayers.BISHOP)), 1.8F, MSEntityTypes.PROSPITIAN_BISHOP.get()));
+		EntityRenderers.register(MSEntityTypes.DERSITE_BISHOP.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(manager.bakeLayer(MSModelLayers.BISHOP)), 1.8F, MSEntityTypes.DERSITE_BISHOP.get()));
+		EntityRenderers.register(MSEntityTypes.PROSPITIAN_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.PROSPITIAN_ROOK.get()));
+		EntityRenderers.register(MSEntityTypes.DERSITE_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.DERSITE_ROOK.get()));
 		EntityRenderers.register(MSEntityTypes.PROSPITIAN_PAWN.get(), PawnRenderer::new);
 		EntityRenderers.register(MSEntityTypes.DERSITE_PAWN.get(), PawnRenderer::new);
 		EntityRenderers.register(MSEntityTypes.GRIST.get(), GristRenderer::new);

@@ -1,10 +1,12 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.entity.IEntityMultiPart;
-import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
+import com.mojang.math.Vector3d;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -21,6 +23,7 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
@@ -98,54 +101,10 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public void baseTick()
-	{
-		super.baseTick();
-		this.updatePartPositions();
-	}
-	
-	@Override
-	public boolean attackEntityFromPart(Entity entityPart, DamageSource source, float damage)
-	{
-		return this.hurt(source, damage);
-	}
-	
-	@Override
 	protected void doPush(Entity par1Entity)
 	{
 		if(par1Entity != this.tail)
 			super.doPush(par1Entity);
-	}
-	
-	@Override
-	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
-	{
-		super.absMoveTo(par1, par3, par5, par7, par8);
-		this.updatePartPositions();
-	}
-	
-	@Override
-	public void updatePartPositions()
-	{
-		if(tail == null)
-			return;
-		float f1 = this.yRotO + (this.getYRot() - this.yRotO);
-		double tailPosX = (this.getX() + Math.sin(f1 / 180.0 * Math.PI) * tail.getBbWidth());
-		double tailPosZ = (this.getZ() + -Math.cos(f1 / 180.0 * Math.PI) * tail.getBbWidth());
-		
-		tail.absMoveTo(tailPosX, this.getY(), tailPosZ, this.getYRot(), this.getXRot());
-	}
-	
-	@Override
-	public void addPart(Entity entityPart, int id)
-	{
-		this.tail = (UnderlingPartEntity) entityPart;
-	}
-	
-	@Override
-	public void onPartDeath(Entity entityPart, int id)
-	{
-	
 	}
 	
 	@Override
@@ -188,8 +147,8 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		}
 		
 		float bodyAngle = this.yBodyRot * ((float) Math.PI / 180F);
-		float xOffset = MathHelper.sin(bodyAngle);
-		float zOffset = -MathHelper.cos(bodyAngle);
+		double xOffset = Math.sin(bodyAngle);
+		double zOffset = -Math.cos(bodyAngle);
 		
 		// update the body parts based on the body rotation + apply natural offsets
 		this.updatePart(this.body, 0, 0, 0);

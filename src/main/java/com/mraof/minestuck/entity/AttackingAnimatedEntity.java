@@ -1,23 +1,23 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.ai.attack.AttackState;
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.level.Level;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
  */
-public abstract class AttackingAnimatedEntity extends CreatureEntity implements AttackState.Holder
+public abstract class AttackingAnimatedEntity extends PathfinderMob implements AttackState.Holder
 {
-	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AttackingAnimatedEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
-	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, World world)
+	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 	}
 	
 	@Override

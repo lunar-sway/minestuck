@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.model;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 

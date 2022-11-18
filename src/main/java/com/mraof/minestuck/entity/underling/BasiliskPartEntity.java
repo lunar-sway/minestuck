@@ -1,23 +1,23 @@
 package com.mraof.minestuck.entity.underling;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.Pose;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 import net.minecraftforge.entity.PartEntity;
 
 public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 {
 	public final BasiliskEntity parentMob;
 	public final String name;
-	private final EntitySize size;
+	private final EntityDimensions size;
 	
 	public BasiliskPartEntity(BasiliskEntity parent, String name, float width, float height)
 	{
 		super(parent);
-		this.size = EntitySize.scalable(width, height);
+		this.size = EntityDimensions.scalable(width, height);
 		this.refreshDimensions();
 		this.parentMob = parent;
 		this.name = name;
@@ -29,12 +29,12 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT pCompound)
+	protected void readAdditionalSaveData(CompoundTag pCompound)
 	{
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT pCompound)
+	protected void addAdditionalSaveData(CompoundTag pCompound)
 	{
 	}
 	
@@ -54,12 +54,12 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 		return this == pEntity || this.parentMob == pEntity;
 	}
 	
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		throw new UnsupportedOperationException();
 	}
 	
-	public EntitySize getDimensions(Pose pPose)
+	public EntityDimensions getDimensions(Pose pPose)
 	{
 		return this.size;
 	}

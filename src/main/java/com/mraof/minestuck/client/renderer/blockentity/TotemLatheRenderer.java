@@ -1,60 +1,57 @@
-package com.mraof.minestuck.client.renderer.tileentity;
+package com.mraof.minestuck.client.renderer.blockentity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
+import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.client.model.TotemLatheModel;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.tileentity.machine.TotemLatheDowelTileEntity;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelDataMap;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
-import javax.annotation.Nullable;
-
-public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEntity>
+public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEntity>
 {
-	private TotemLatheDowelTileEntity lathe;
-	private IRenderTypeBuffer renderTypeBuffer;
+	private TotemLatheDowelBlockEntity lathe;
+	private MultiBufferSource renderTypeBuffer;
 	
-	public TotemLatheRenderer(TileEntityRendererDispatcher rendererDispatcherIn)
+	public TotemLatheRenderer(BlockEntityRendererProvider.Context context)
 	{
-		super(rendererDispatcherIn, new TotemLatheModel());
+		super(context, new TotemLatheModel());
 	}
 	
 	@Override
-	public RenderType getRenderType(TotemLatheDowelTileEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
+	public RenderType getRenderType(TotemLatheDowelBlockEntity animatable, float partialTicks, PoseStack stack, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
 	{
 		return RenderType.entityCutoutNoCull(textureLocation);
 	}
 	
 	@Override
-	public void renderEarly(TotemLatheDowelTileEntity animatable, MatrixStack stackIn, float ticks, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks)
+	public void renderEarly(TotemLatheDowelBlockEntity animatable, PoseStack stackIn, float partialTicks, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
 	{
-		super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);
+		super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		this.lathe = animatable;
 		this.renderTypeBuffer = renderTypeBuffer;
 	}
 	
 	@Override
-	public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	public void renderRecursively(GeoBone bone, PoseStack stack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
 	{
 		if(bone.getName().equals("totem"))
 		{
@@ -64,7 +61,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEnti
 				return; // render nothing
 			}
 			
-			BlockState cruxiteDowel = MSBlocks.CRUXITE_DOWEL.defaultBlockState();
+			BlockState cruxiteDowel = MSBlocks.CRUXITE_DOWEL.get().defaultBlockState();
 			if(AlchemyHelper.hasDecodedItem(dowel))
 			{
 				cruxiteDowel = cruxiteDowel.setValue(MSProperties.DOWEL_BLOCK, CruxiteDowelBlock.Type.TOTEM);
@@ -78,11 +75,11 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelTileEnti
 			stack.mulPose(Vector3f.ZP.rotationDegrees(90));
 			
 			// render the dowel with the blockRenderer
-			ClientWorld level = Minecraft.getInstance().level;
-			BlockRendererDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
+			ClientLevel level = Minecraft.getInstance().level;
+			BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 			BlockPos pos = lathe.getBlockPos();
 			IModelData modelData = EmptyModelData.INSTANCE;
-			blockRenderer.renderModel(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
+			blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			
 			stack.popPose();
 			

@@ -1,13 +1,9 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.EntityBigPart;
-import com.mraof.minestuck.entity.IBigEntity;
-import com.mraof.minestuck.entity.PartGroup;
-import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.CustomMeleeAttackGoal;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -27,11 +23,12 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+//TODO check back and make sure removal of disableGiclops config was intentional
 public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 {
-	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, World world)
+	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
-		super(type, world, 7);
+		super(type, level, 7);
 		this.maxUpStep = 2;
 	}
 	

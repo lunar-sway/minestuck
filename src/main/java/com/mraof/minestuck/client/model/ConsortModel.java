@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.model;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ConsortModel<T extends ConsortEntity> extends AnimatedModel<T>
 {

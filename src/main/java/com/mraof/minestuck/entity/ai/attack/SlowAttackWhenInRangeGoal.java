@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.ai.attack;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import javax.annotation.Nonnull;
 
@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
  * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
  * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
  */
-public class SlowAttackWhenInRangeGoal<T extends CreatureEntity & AttackState.Holder> extends Goal
+public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Holder> extends Goal
 {
 	protected final T entity;
 	/**
@@ -36,7 +36,7 @@ public class SlowAttackWhenInRangeGoal<T extends CreatureEntity & AttackState.Ho
 	public boolean canUse()
 	{
 		LivingEntity target = this.entity.getTarget();
-		return target != null && this.isValidTarget(target) && this.entity.getSensing().canSee(target);
+		return target != null && this.isValidTarget(target) && this.entity.getSensing().hasLineOfSight(target);
 	}
 	
 	@Override

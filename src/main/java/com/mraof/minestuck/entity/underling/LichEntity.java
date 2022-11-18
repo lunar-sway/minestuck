@@ -3,6 +3,8 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
+import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -10,10 +12,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 
 import software.bernie.geckolib3.core.IAnimatable;
@@ -21,6 +24,8 @@ import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
+
+import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
@@ -150,7 +155,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public void start()
 		{
-			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
 				instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}
@@ -158,7 +163,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public void stop()
 		{
-			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null)
 				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}

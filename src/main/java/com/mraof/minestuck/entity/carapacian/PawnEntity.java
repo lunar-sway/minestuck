@@ -7,13 +7,10 @@ import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationUtil;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
@@ -44,7 +41,7 @@ import javax.annotation.Nullable;
 
 public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, AttackState.Holder
 {
-	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(PawnEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);

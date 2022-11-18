@@ -1,13 +1,17 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
+import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,9 +21,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,7 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class TotemLatheBlock extends MultiMachineBlock
+public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
@@ -95,6 +100,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 		return pos.offset(mainPos.rotate(rotation));
 	}
 	
+	@org.jetbrains.annotations.Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
+	{
+		return null;
+	}
+	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.AREA_EFFECT.get(), AreaEffectBlockEntity::serverTick) : null;
+	}
+	
 	public static class DowelRod extends TotemLatheBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
@@ -138,14 +157,14 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 		{
 			if(state.getBlock() != newState.getBlock())
 			{
-				TileEntity totemLathe = worldIn.getBlockEntity(pos);
-				if(totemLathe instanceof ItemStackTileEntity)
+				BlockEntity totemLathe = worldIn.getBlockEntity(pos);
+				if(totemLathe instanceof ItemStackBlockEntity)
 				{
-					InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackTileEntity) totemLathe).getStack());
+					Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackBlockEntity) totemLathe).getStack());
 				}
 			}
 			super.onRemove(state, worldIn, pos, newState, isMoving);
@@ -168,6 +187,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 			return new TotemLatheBlockEntity(pos, state);
 		}
 		
+		@Nullable
+		@Override
+		public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+		{
+			return BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.TOTEM_LATHE.get(), TotemLatheBlockEntity::tick);
+		}
+		
 		@Override
 		protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 		{
@@ -176,21 +202,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 		{
 			if(state.getBlock() != newState.getBlock())
 			{
-				TileEntity te = worldIn.getBlockEntity(pos);
-				if(te instanceof TotemLatheTileEntity)
+				BlockEntity be = worldIn.getBlockEntity(pos);
+				if(be instanceof TotemLatheBlockEntity totemLathe)
 				{
-					TotemLatheTileEntity totemLathe = (TotemLatheTileEntity) te;
 					if(!totemLathe.getCard1().isEmpty())
 					{
-						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
+						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
 					}
 					if(!totemLathe.getCard2().isEmpty())
 					{
-						InventoryHelper.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
+						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
 					}
 				}
 			}

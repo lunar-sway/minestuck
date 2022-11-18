@@ -1,25 +1,25 @@
 package com.mraof.minestuck.entity;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.level.Level;
 
 /**
  * Abstract class that provide a way to track an action with optional durations for animated entities.
  */
-public abstract class AnimatedCreatureEntity extends CreatureEntity
+public abstract class AnimatedCreatureEntity extends PathfinderMob
 {
-	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(AnimatedCreatureEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedCreatureEntity.class, EntityDataSerializers.INT);
 	
 	private int animationTicks = 0;
 	
 	
-	protected AnimatedCreatureEntity(EntityType<? extends AnimatedCreatureEntity> type, World world)
+	protected AnimatedCreatureEntity(EntityType<? extends AnimatedCreatureEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 	}
 	
 	@Override
