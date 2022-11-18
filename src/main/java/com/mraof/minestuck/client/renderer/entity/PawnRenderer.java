@@ -44,7 +44,7 @@ public class PawnRenderer extends GeoEntityRenderer<PawnEntity>
 			stack.pushPose();
 			stack.translate(0.36D, 0.58, -0.22D);
 			stack.mulPose(Vector3f.XP.rotationDegrees(-80));
-			Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItemBySlot(EquipmentSlot.MAINHAND), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, renderTypeBuffer, rtb);
+			Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItemBySlot(EquipmentSlot.MAINHAND), ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, rtb, entity.getId());
 			stack.popPose();
 			bufferIn = rtb.getBuffer(RenderType.entitySolid(whTexture));
 		}
