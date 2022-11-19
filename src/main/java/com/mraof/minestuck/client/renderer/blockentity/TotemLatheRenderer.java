@@ -12,6 +12,7 @@ import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.client.model.TotemLatheModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -81,7 +82,8 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 			BlockPos pos = lathe.getBlockPos();
 			IModelData modelData = EmptyModelData.INSTANCE;
-			//blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
+			//appears darker than intended, may be lighting issues
+			blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(ItemBlockRenderTypes.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			
 			stack.popPose();
 			
