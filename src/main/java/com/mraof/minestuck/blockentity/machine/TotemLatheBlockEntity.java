@@ -143,34 +143,42 @@ public class TotemLatheBlockEntity extends BlockEntity
 			return false;
 		
 		Direction facing = getFacing();
-		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
-		BlockState oldState = level.getBlockState(pos);
+		BlockPos dowelPos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
+		BlockState oldState = level.getBlockState(dowelPos);
 		
-		if(!oldState.isAir())
-			return false;	// Something is in the way that we shouldn't replace
+		//this check doesnt work with the geckolib changes, since the dowel block is that old state
+		//if(!oldState.isAir())
+		//	return false;	// Something is in the way that we shouldn't replace
 		
 		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
 				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
 		
-		level.setBlockAndUpdate(pos, newState);
+		//level.setBlockAndUpdate(dowelPos, newState);
 		//setActiveRod(true);
 		
-		BlockEntity be = level.getBlockEntity(pos);
-		if(be instanceof TotemLatheDowelBlockEntity beItem)
+		if(isValidDowelRod(oldState, facing))
 		{
-			beItem.setStack(dowelStack);
-			//updating the dowel tile entity
-			if(!oldState.equals(newState))
-				level.setBlockAndUpdate(pos, newState);
-			else level.sendBlockUpdated(pos, oldState, oldState, Block.UPDATE_ALL);
+			BlockEntity be = level.getBlockEntity(dowelPos);
+			if(!(be instanceof TotemLatheDowelBlockEntity))
+			{
+				be = new TotemLatheDowelBlockEntity(dowelPos, newState);
+				level.setBlockEntity(be);
+			}
 			
-			//updating the machine's tile entity
+			TotemLatheDowelBlockEntity beItem = (TotemLatheDowelBlockEntity) be;
+			beItem.setStack(dowelStack);
+			//updating the dowel block entity
+			if(!oldState.equals(newState))
+				level.setBlockAndUpdate(dowelPos, newState);
+			else level.sendBlockUpdated(dowelPos, oldState, oldState, Block.UPDATE_ALL);
+			
+			//updating the machine's block entity
 			isProcessing = false;
 			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
 			return true;
-		} else
-			return false;
+		}
+		return false;
 	}
 	
 	private boolean setCarvedItem(ItemStack output)
@@ -312,7 +320,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			else if(!player.getInventory().add(dowel))
 				dropItem(true, getBlockPos().above().relative(getFacing().getCounterClockWise(), 2), dowel);
 			else player.inventoryMenu.broadcastChanges();
-			removeDowel();
+			setDowel(ItemStack.EMPTY);
 		}
 	}
 	
@@ -378,30 +386,30 @@ public class TotemLatheBlockEntity extends BlockEntity
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
-	public void processContents()
+	public static void processContents(TotemLatheBlockEntity blockEntity, Level level)
 	{
-		ItemStack dowel = getDowel();
+		ItemStack dowel = blockEntity.getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!blockEntity.card1.isEmpty() || !blockEntity.card2.isEmpty()))
 		{
-			if(!card1.isEmpty() && !card2.isEmpty())
-				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
+			if(!blockEntity.card1.isEmpty() && !blockEntity.card2.isEmpty())
+				if(!AlchemyHelper.isPunchedCard(blockEntity.card1) || !AlchemyHelper.isPunchedCard(blockEntity.card2))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
+				else output = CombinationRecipe.findResult(new CombinerWrapper(blockEntity.card1, blockEntity.card2, CombinationMode.AND), level);
 			else
 			{
-				ItemStack input = card1.isEmpty() ? card2 : card1;
+				ItemStack input = blockEntity.card1.isEmpty() ? blockEntity.card2 : blockEntity.card1;
 				if(!AlchemyHelper.isPunchedCard(input))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
-				success = setCarvedItem(output);
+				success = blockEntity.setCarvedItem(output);
 		}
 		
-		effects(success);
+		//blockEntity.effects(success);
 	}
 	
 	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)
@@ -411,7 +419,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			blockEntity.animationticks--;
 			if(blockEntity.animationticks <= 0)
 			{
-				processContents(); //TODO in 1.16 there was the ITickableTileEntity, which had a nonstatic function. Now we use a static function and cannot handle processContents the same
+				processContents(blockEntity, level); //TODO in 1.16 there was the ITickableTileEntity, which had a nonstatic function. Now we use a static function and cannot handle processContents the same
 			}
 		}
 	}

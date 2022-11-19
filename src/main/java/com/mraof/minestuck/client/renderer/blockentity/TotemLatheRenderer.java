@@ -26,6 +26,8 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
+import javax.annotation.Nullable;
+
 public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEntity>
 {
 	private TotemLatheDowelBlockEntity lathe;
@@ -37,13 +39,13 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 	}
 	
 	@Override
-	public RenderType getRenderType(TotemLatheDowelBlockEntity animatable, float partialTicks, PoseStack stack, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
+	public RenderType getRenderType(TotemLatheDowelBlockEntity animatable, float partialTicks, PoseStack stack, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, ResourceLocation textureLocation)
 	{
 		return RenderType.entityCutoutNoCull(textureLocation);
 	}
 	
 	@Override
-	public void renderEarly(TotemLatheDowelBlockEntity animatable, PoseStack stackIn, float partialTicks, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
+	public void renderEarly(TotemLatheDowelBlockEntity animatable, PoseStack stackIn, float partialTicks, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
 	{
 		super.renderEarly(animatable, stackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 		this.lathe = animatable;
@@ -79,7 +81,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 			BlockPos pos = lathe.getBlockPos();
 			IModelData modelData = EmptyModelData.INSTANCE;
-			blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
+			//blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(RenderTypeLookup.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			
 			stack.popPose();
 			

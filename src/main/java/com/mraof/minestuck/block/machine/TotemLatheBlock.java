@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
-import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
+import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.core.BlockPos;
@@ -34,7 +34,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
+/**
+ * Carves a cruxite dowel into a totem based on the card(s) put into the machines card slots. It has two block entities. One for the slot and one for dowel area which is rendered in a distinct way
+ */
+public class TotemLatheBlock extends MultiMachineBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
@@ -100,21 +103,10 @@ public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
 		return pos.offset(mainPos.rotate(rotation));
 	}
 	
-	@org.jetbrains.annotations.Nullable
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState)
-	{
-		return null;
-	}
-	
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
-	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.AREA_EFFECT.get(), AreaEffectBlockEntity::serverTick) : null;
-	}
-	
-	public static class DowelRod extends TotemLatheBlock
+	/**
+	 * Holds the dowel and in the renderer is made to spin around when carving
+	 */
+	public static class DowelRod extends TotemLatheBlock implements EntityBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		protected final Map<Direction, VoxelShape> carvedShape;
@@ -146,7 +138,7 @@ public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
 		@Override
 		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new ItemStackBlockEntity(pos, state);
+			return new TotemLatheDowelBlockEntity(pos, state);
 		}
 		
 		@Override
@@ -171,6 +163,9 @@ public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
 		}
 	}
 	
+	/**
+	 * Holds the cards and keeps track of which stage the animations are at
+	 */
 	public static class Slot extends TotemLatheBlock implements EntityBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
@@ -201,6 +196,7 @@ public class TotemLatheBlock extends MultiMachineBlock implements EntityBlock
 			builder.add(COUNT);
 		}
 		
+		//TODO blockentity is not deleted on destruction of slot component, even if every block in the machine is destroyed
 		@Override
 		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 		{
