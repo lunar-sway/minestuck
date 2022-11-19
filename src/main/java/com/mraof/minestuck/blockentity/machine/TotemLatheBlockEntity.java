@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -121,25 +122,10 @@ public class TotemLatheBlockEntity extends BlockEntity
 		broken = true;
 	}
 	
-	public void removeDowel()
-	{
-		Objects.requireNonNull(this.level);
-		
-		Direction facing = getFacing();
-		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
-		BlockState state = level.getBlockState(pos);
-		
-		if(isValidDowelRod(state, facing))
-		{
-			level.removeBlock(pos, false);
-			//setActiveRod(false);
-		}
-	}
-	
 	public boolean setDowel(ItemStack dowelStack)
 	{
 		Objects.requireNonNull(this.level);
-		if(!dowelStack.is(MSItems.CRUXITE_DOWEL.get()))
+		if(!(dowelStack.is(MSItems.CRUXITE_DOWEL.get()) || dowelStack.isEmpty()))
 			return false;
 		
 		Direction facing = getFacing();
@@ -265,15 +251,20 @@ public class TotemLatheBlockEntity extends BlockEntity
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.is(MSBlocks.TOTEM_LATHE.TOP.get()))
+		if(clickedState.is(MSBlocks.TOTEM_LATHE.TOP.get()) && level != null)
 		{
+			boolean startingCarving = false;
+			
 			//carve the dowel.
-			if(!getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()) && level != null)
+			if(working && !getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()))
 			{
+				startingCarving = true;
 				isProcessing = true;
 				animationticks = 25;
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
 			}
+			
+			level.levelEvent(startingCarving ? LevelEvent.SOUND_DISPENSER_DISPENSE : LevelEvent.SOUND_DISPENSER_FAIL, getBlockPos(), 0);
 		}
 	}
 	

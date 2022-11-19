@@ -196,7 +196,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			builder.add(COUNT);
 		}
 		
-		//TODO blockentity is not deleted on destruction of slot component, even if every block in the machine is destroyed
+		//TODO blockentity is not deleted on destruction of slot component, even if every block in the machine is destroyed. Once the world is quit and reloaded, it is fixed
 		@Override
 		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
 		{
