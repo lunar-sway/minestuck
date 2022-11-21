@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.renderer.entity;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -14,7 +15,9 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
+import org.slf4j.Logger;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -28,6 +31,8 @@ import java.io.IOException;
  */
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T>
 {
+	private static final Logger LOGGER = LogUtils.getLogger();
+	
 	public UnderlingRenderer(EntityRendererProvider.Context context)
 	{
 		// this renderer does two simple things :
@@ -58,42 +63,51 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		String textureName = entity.getGristType().getRegistryName().getPath();
 		ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
 		
-		/*
 		// the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
-		if(Minecraft.getInstance().textureManager.getTexture(resource) == null)
+		SimpleTexture nullTexture = new SimpleTexture(resource);
+		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
 		{
-			try
+			DynamicTexture texture = createLayeredTexture(entity);
+			
+			// save the computed texture to the texture manager's cache
+			Minecraft.getInstance().textureManager.register(resource, texture);
+		}
+		
+		return resource;
+	}
+	
+	private DynamicTexture createLayeredTexture(T entity) {
+		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+		NativeImage base = loadImage(resourceManager, super.getTextureLocation(entity));
+		NativeImage texture = loadImage(resourceManager, getGristTexture(entity));
+		NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
+		
+		// loop through pixels on the base, apply textures & keep transparency
+		// TODO possibility to bake the details layer directly in the texture when/if the renderer stops coloring the vertex
+		for(int i = 0; i < base.getWidth(); i++)
+		{
+			for(int j = 0; j < base.getHeight(); j++)
 			{
-				ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-				NativeImage base = SimpleTexture.TextureData.load(resourceManager, super.getTextureLocation(entity)).getImage();
-				NativeImage texture = SimpleTexture.TextureData.load(resourceManager, getGristTexture(entity)).getImage();
-				NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
-				
-				// loop through pixels on the base, apply textures & keep transparency
-				// TODO possibility to bake the details layer directly in the texture when/if the renderer stops coloring the vertex
-				for(int i = 0; i < base.getWidth(); i++)
+				if(NativeImage.getA(base.getPixelRGBA(i, j)) == 0)
 				{
-					for(int j = 0; j < base.getHeight(); j++)
-					{
-						if(NativeImage.getA(base.getPixelRGBA(i, j)) == 0)
-						{
-							computed.setPixelRGBA(i, j, 0);
-						} else
-						{
-							computed.setPixelRGBA(i, j, texture.getPixelRGBA(i % texture.getWidth(), j % texture.getHeight()));
-						}
-					}
+					computed.setPixelRGBA(i, j, 0);
+				} else
+				{
+					computed.setPixelRGBA(i, j, texture.getPixelRGBA(i % texture.getWidth(), j % texture.getHeight()));
 				}
-				
-				// save the computed texture to the texture manager's cache
-				Minecraft.getInstance().textureManager.register(resource, new DynamicTexture(computed));
-			} catch(IOException e)
-			{
-				throw new RuntimeException(e);
 			}
 		}
-		*/
-		return resource;
+		
+		return new DynamicTexture(computed);
+	}
+	
+	private NativeImage loadImage(ResourceManager resourceManager, ResourceLocation location) {
+		try {
+			Resource resource = resourceManager.getResource(location);
+			return NativeImage.read(resource.getInputStream());
+		} catch (IOException e) {
+			return null;
+		}
 	}
 	
 	private ResourceLocation getGristTexture(T entity)
