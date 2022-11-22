@@ -18,12 +18,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.shadowed.eliotlash.mclib.utils.MathHelper;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
@@ -37,10 +37,10 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	{
 		super(type, level, 5);
 		
-		this.head = new BasiliskPartEntity(this, "head", 2.3F, 2.3F);
-		this.body = new BasiliskPartEntity(this, "body", 2.8F, 2.2F);
-		this.tail = new BasiliskPartEntity(this, "tail", 2.0F, 2.0F);
-		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.7F, 1.7F);
+		this.head = new BasiliskPartEntity(this, "head", 2.1F, 2.1F);
+		this.body = new BasiliskPartEntity(this, "body", 2.5F, 1.9F);
+		this.tail = new BasiliskPartEntity(this, "tail", 1.8F, 1.8F);
+		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.4F, 1.3F);
 		parts = new BasiliskPartEntity[]{this.head, this.body, this.tail, this.tailEnd};
 		this.noCulling = true;
 	}
@@ -101,13 +101,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	protected void doPush(Entity par1Entity)
-	{
-		if(par1Entity != this.tail)
-			super.doPush(par1Entity);
-	}
-	
-	@Override
 	public void die(DamageSource cause)
 	{
 		super.die(cause);
@@ -122,7 +115,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public boolean canBeCollidedWith()
 	{
-		return false;
+		return true;
 	}
 	
 	public void checkDespawn()
@@ -132,7 +125,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public boolean isPickable()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -180,7 +173,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public net.minecraftforge.entity.PartEntity<?>[] getParts()
+	public PartEntity<?>[] getParts()
 	{
 		return this.parts;
 	}
