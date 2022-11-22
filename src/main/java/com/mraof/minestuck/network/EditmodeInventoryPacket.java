@@ -1,11 +1,11 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
-import com.mraof.minestuck.inventory.EditmodeContainer;
+import com.mraof.minestuck.inventory.EditmodeMenu;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(b1);
 		if(inventory != null)
@@ -45,7 +45,7 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 		}
 	}
 	
-	public static EditmodeInventoryPacket decode(PacketBuffer buffer)
+	public static EditmodeInventoryPacket decode(FriendlyByteBuf buffer)
 	{
 		boolean b1 = buffer.readBoolean();
 		if(buffer.readableBytes() > 0)
@@ -75,10 +75,10 @@ public class EditmodeInventoryPacket implements PlayToBothPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof EditmodeContainer)
-			((EditmodeContainer)player.containerMenu).updateScroll(b1);
+		if(player.containerMenu instanceof EditmodeMenu)
+			((EditmodeMenu)player.containerMenu).updateScroll(b1);
 	}
 	
 	public List<ItemStack> getInventory()

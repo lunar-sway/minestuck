@@ -1,34 +1,39 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.HolopadTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import com.mraof.minestuck.blockentity.HolopadBlockEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 
-public class HolopadBlock extends MachineBlock
+public class HolopadBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 1, 14, 6, 13);
 	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
-	protected static final AxisAlignedBB HOLOPAD_TOP_AABB = new AxisAlignedBB(3/16F, 6/16F, 2.6/16F, 13/16F, 7/16F, 12.6/16F);
-	protected static final AxisAlignedBB HOLOPAD_CARDSLOT_AABB = new AxisAlignedBB(4/16F, 0F, 13.8/16F, 12/16F, 10.1/16F, 15.94/16F);
+	protected static final AABB HOLOPAD_TOP_AABB = new AABB(3/16F, 6/16F, 2.6/16F, 13/16F, 7/16F, 12.6/16F);
+	protected static final AABB HOLOPAD_CARDSLOT_AABB = new AABB(4/16F, 0F, 13.8/16F, 12/16F, 10.1/16F, 15.94/16F);
 	
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
@@ -36,7 +41,7 @@ public class HolopadBlock extends MachineBlock
 	{
 		VoxelShape topShape = Block.box(3, 6, 3, 13, 7, 13);
 		COLLISION_SHAPE = createRotatedShapes(4, 0, 14, 12, 10, 16);
-		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> VoxelShapes.or(shape, topShape));
+		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> Shapes.or(shape, topShape));
 	}
 	
 	public HolopadBlock(Properties builder)
@@ -45,60 +50,63 @@ public class HolopadBlock extends MachineBlock
 		registerDefaultState(defaultBlockState().setValue(HAS_CARD, false));
 	}
 	
+	@Nullable
 	@Override
-	public boolean hasTileEntity(BlockState state)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return true;
+		return new HolopadBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return new HolopadTileEntity();
+		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HOLOPAD.get(), HolopadBlockEntity::clientTick) : null;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
+	{
+		if(player.isShiftKeyDown()) return InteractionResult.PASS;
+		if(level.isClientSide)
+			return InteractionResult.SUCCESS;
+		
+		if(level.getBlockEntity(pos) instanceof HolopadBlockEntity holopad)
+			holopad.onRightClick(player);
+		return InteractionResult.SUCCESS;
 	}
 	
 	@Override
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		if(player.isShiftKeyDown()) return ActionResultType.PASS;
-		if(worldIn.isClientSide)
-			return ActionResultType.SUCCESS;
-		TileEntity te = worldIn.getBlockEntity(pos);
+		HolopadBlockEntity be = (HolopadBlockEntity) level.getBlockEntity(pos);
 		
-		if(te instanceof HolopadTileEntity)
-			((HolopadTileEntity) te).onRightClick(player);
-		return ActionResultType.SUCCESS;
-	}
-	
-	@Override
-	public void playerWillDestroy(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
-	{
-		HolopadTileEntity te = (HolopadTileEntity) worldIn.getBlockEntity(pos);
-		
-		if(te != null && !worldIn.isClientSide)
+		if(be != null && !level.isClientSide)
 		{
-			te.dropItem(true, worldIn, pos, te.getCard());
+			be.dropItem(true, level, pos, be.getCard());
 		}
 		
-		super.playerWillDestroy(worldIn, pos, state, player);
+		super.playerWillDestroy(level, pos, state, player);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(HAS_CARD);
 	}
 	
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	@SuppressWarnings("deprecation")
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE.get(state.getValue(FACING));
 	}
 	
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	@SuppressWarnings("deprecation")
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return COLLISION_SHAPE.get(state.getValue(FACING));
 	}

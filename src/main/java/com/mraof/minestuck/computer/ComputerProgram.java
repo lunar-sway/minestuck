@@ -1,8 +1,8 @@
 package com.mraof.minestuck.computer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -55,11 +55,8 @@ public abstract class ComputerProgram
 	/**
 	 * Called when the gui is created or if the player pressed the switch
 	 * program button.
-	 *
-	 * @param prevProgram
-	 *            The previous program, or null if the gui was just created.
 	 */
-	public void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
+	public void onInitGui(ComputerScreen gui)
 	{
 	}
 	
@@ -74,7 +71,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(MatrixStack matrixStack, ComputerScreen gui, ComputerTileEntity te);
+	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be);
 	
 	/**
 	 * Returns an unlocalized string of the name of the program. Used for the

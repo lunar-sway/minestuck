@@ -1,12 +1,8 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-
-import java.util.function.Supplier;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.network.FriendlyByteBuf;
 
 public class DataCheckerPermissionPacket implements PlayToClientPacket
 {
@@ -21,24 +17,16 @@ public class DataCheckerPermissionPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(available);
 	}
 	
-	public static DataCheckerPermissionPacket decode(PacketBuffer buffer)
+	public static DataCheckerPermissionPacket decode(FriendlyByteBuf buffer)
 	{
 		boolean dataChecker = buffer.readBoolean();
 		
 		return new DataCheckerPermissionPacket(dataChecker);
-	}
-	
-	public void consume(Supplier<NetworkEvent.Context> ctx)
-	{
-		if(ctx.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT)
-			ctx.get().enqueueWork(this::execute);
-		
-		ctx.get().setPacketHandled(true);
 	}
 	
 	@Override

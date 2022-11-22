@@ -3,8 +3,10 @@
     "item": "minestuck:fungal_spore"
   },
   "range": {
-    "min": 1.0,
-    "max": 4.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 1,
+      "max_inclusive": 4
+    }
   }
 }

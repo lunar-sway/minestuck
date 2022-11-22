@@ -2,13 +2,13 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 
 import java.util.Objects;
@@ -31,13 +31,13 @@ public abstract class Modus
 	 * This is called when the modus is created without calling readFromNBT(nbt).
 	 * Note that this method is used to clear the inventory/size after dropping stuff on death without creating a new instance.
 	 */
-	public abstract void initModus(ItemStack modusItem, ServerPlayerEntity player, NonNullList<ItemStack> prev, int size);
+	public abstract void initModus(ItemStack modusItem, ServerPlayer player, NonNullList<ItemStack> prev, int size);
 	
-	public abstract void readFromNBT(CompoundNBT nbt);
+	public abstract void readFromNBT(CompoundTag nbt);
 	
-	public abstract CompoundNBT writeToNBT(CompoundNBT nbt);
+	public abstract CompoundTag writeToNBT(CompoundTag nbt);
 	
-	public abstract boolean putItemStack(ServerPlayerEntity player, ItemStack item);
+	public abstract boolean putItemStack(ServerPlayer player, ItemStack item);
 	
 	public abstract NonNullList<ItemStack> getItems();
 	
@@ -50,15 +50,15 @@ public abstract class Modus
 		return count;
 	}
 	
-	public abstract boolean increaseSize(ServerPlayerEntity player);
+	public abstract boolean increaseSize(ServerPlayer player);
 	
-	public abstract ItemStack getItem(ServerPlayerEntity player, int id, boolean asCard);
+	public abstract ItemStack getItem(ServerPlayer player, int id, boolean asCard);
 	
 	public abstract boolean canSwitchFrom(Modus modus);
 	
 	public abstract int getSize();
 	
-	public void setValue(ServerPlayerEntity player, byte type, int value) {}
+	public void setValue(ServerPlayer player, byte type, int value) {}
 	
 	public ModusType<?> getType()
 	{
@@ -70,7 +70,7 @@ public abstract class Modus
 		return new ItemStack(getType().getItem());
 	}
 	
-	public ITextComponent getName()
+	public Component getName()
 	{
 		return new ItemStack(type.getItem()).getHoverName();
 	}
@@ -86,7 +86,7 @@ public abstract class Modus
 		needResend = true;
 	}
 	
-	public final void checkAndResend(ServerPlayerEntity player)
+	public final void checkAndResend(ServerPlayer player)
 	{
 		if(needResend)
 		{

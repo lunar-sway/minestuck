@@ -1,14 +1,13 @@
 package com.mraof.minestuck.block.plant;
 
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
@@ -28,36 +27,36 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	}
 	
 	@Override
-	public void randomTick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
 		if(!state.getValue(PERSISTENT) && state.getValue(DISTANCE) > LEAF_SUSTAIN_DISTANCE)
 		{
-			dropResources(state, worldIn, pos);
-			worldIn.removeBlock(pos, false);
+			dropResources(state, level, pos);
+			level.removeBlock(pos, false);
 		}
 	}
 	
 	@Override
-	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos)
+	public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
 	{
 		int i = getDistance(facingState) + 1;
 		if(i != 1 || stateIn.getValue(DISTANCE) != i)
-			worldIn.getBlockTicks().scheduleTick(currentPos, this, 1);
+			level.scheduleTick(currentPos, this, 1);
 		
 		return stateIn;
 	}
 	
-	protected BlockState updateDistance(BlockState state, IWorld world, BlockPos pos)
+	protected BlockState updateDistance(BlockState state, LevelAccessor level, BlockPos pos)
 	{
 		int i = 7;
 		
-		BlockPos.Mutable mutablePos = new BlockPos.Mutable();
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		
 		for(Direction facing : Direction.values())
 		{
 			mutablePos.set(pos).move(facing);
 			int axisDecrease = facing.getAxis() == Direction.Axis.X ? 2 : 1;
-			i = Math.min(i, getDistance(world.getBlockState(mutablePos)) + axisDecrease);
+			i = Math.min(i, getDistance(level.getBlockState(mutablePos)) + axisDecrease);
 			if(i == 1)
 				break;
 		}
@@ -68,35 +67,29 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	
 	protected int getDistance(BlockState neighbor)
 	{
-		if(neighbor.getBlock() == MSBlocks.END_LOG)
+		if(neighbor.is(MSBlocks.END_LOG.get()))
 		{
 			return 0;
 		} else
 		{
-			return neighbor.getBlock() == this ? neighbor.getValue(DISTANCE) : 7;
+			return neighbor.is(this) ? neighbor.getValue(DISTANCE) : 7;
 		}
 	}
 	
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context)
+	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return updateDistance(this.defaultBlockState().setValue(PERSISTENT, true), context.getLevel(), context.getClickedPos());
 	}
 	
 	@Override
-	public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos)
-	{
-		return false;
-	}
-	
-	@Override
-	public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+	public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
 	{
 		return 1;
 	}
 	
 	@Override
-	public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction face)
+	public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
 	{
 		return 250;
 	}

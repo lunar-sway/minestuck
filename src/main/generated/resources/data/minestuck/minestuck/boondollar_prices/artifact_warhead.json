@@ -3,8 +3,10 @@
     "item": "minestuck:artifact_warhead"
   },
   "range": {
-    "min": 225.0,
-    "max": 270.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 225,
+      "max_inclusive": 270
+    }
   }
 }

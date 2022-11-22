@@ -7,17 +7,18 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +26,14 @@ import java.util.Optional;
 public final class CommandActionHandler
 {
 	
-	public static int connectByCommand(CommandSource source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
+	public static int connectByCommand(CommandSourceStack source, PlayerIdentifier client, PlayerIdentifier server) throws CommandSyntaxException
 	{
 		SkaianetHandler skaianet = SkaianetHandler.get(source.getServer());
 		try
 		{
 			if(forceConnection(skaianet, client, server))
 			{
-				source.sendSuccess(new TranslationTextComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+				source.sendSuccess(new TranslatableComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
 				return 1;
 			} else
 			{
@@ -104,9 +105,8 @@ public final class CommandActionHandler
 		return true;
 	}
 	
-	public static void createDebugLandsChain(ServerPlayerEntity player, List<LandTypePair> landTypes, CommandSource source) throws CommandSyntaxException
+	public static void createDebugLandsChain(ServerPlayer player, List<LandTypePair> landTypes, CommandSourceStack source) throws CommandSyntaxException
 	{
-		SessionHandler sessions = SessionHandler.get(player.server);
 		SkaianetHandler skaianet = SkaianetHandler.get(player.server);
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
@@ -128,7 +128,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
-			source.sendSuccess(new StringTextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(TextFormatting.YELLOW), true);
+			source.sendSuccess(new TextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}
 		
 		try
@@ -144,7 +144,7 @@ public final class CommandActionHandler
 				PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 				c.setNewServerPlayer(fakePlayer);
 				
-				c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
+				c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, IdentifierHandler.NULL_IDENTIFIER);
 			}
 			
 			if(i == landTypes.size())
@@ -159,7 +159,7 @@ public final class CommandActionHandler
 						break;
 					PlayerIdentifier fakePlayer = IdentifierHandler.createNewFakeIdentifier();
 					
-					c = makeConnectionWithLand(skaianet, land, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
+					c = makeConnectionWithLand(skaianet, createDebugLand(player.server, land), fakePlayer, lastIdentifier);
 					
 					lastIdentifier = fakePlayer;
 				}
@@ -169,14 +169,16 @@ public final class CommandActionHandler
 			//TODO give proper feedback to user. The operation will most likely have partially executed
 		}
 		
+		// Several new lands may have been created through calls to createDebugLand(). Send potentially new land types to players
+		MSDimensions.sendLandTypesToAll(source.getServer());
 		skaianet.infoTracker.reloadLandChains();
 	}
 	
-	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, LandTypePair landTypes, RegistryKey<World> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
+	private static SburbConnection makeConnectionWithLand(SkaianetHandler skaianet, ResourceKey<Level> dimensionName, PlayerIdentifier client, PlayerIdentifier server) throws MergeResult.SessionMergeException
 	{
 		SburbConnection c = new SburbConnection(client, server, skaianet);
 		c.setIsMain();
-		c.setLand(landTypes, dimensionName);
+		c.setLand(dimensionName);
 		c.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
@@ -184,14 +186,14 @@ public final class CommandActionHandler
 		SburbHandler.onConnectionCreated(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
-		ServerWorld world = skaianet.mcServer.getLevel(dimensionName);
-		EntryProcess.placeGates(world);
+		ServerLevel level = skaianet.mcServer.getLevel(dimensionName);
+		EntryProcess.placeGates(level);
 		
 		return c;
 	}
 	
 	
-	private static RegistryKey<World> createDebugLand(MinecraftServer server, LandTypePair landTypes)
+	private static ResourceKey<Level> createDebugLand(MinecraftServer server, LandTypePair landTypes)
 	{
 		return DynamicDimensions.createLand(server, new ResourceLocation("minestuck:debug_land"), landTypes);
 	}

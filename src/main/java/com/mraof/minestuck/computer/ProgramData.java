@@ -1,9 +1,9 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  */
 public class ProgramData
 {
-	private static final HashMap<Integer, Consumer<ComputerTileEntity>> closeFunctions = new HashMap<>();
+	private static final HashMap<Integer, Consumer<ComputerBlockEntity>> closeFunctions = new HashMap<>();
 	
 	private static final HashMap<Integer, ItemStack> disks = new HashMap<>();
 	
@@ -31,7 +31,7 @@ public class ProgramData
 	 *            The item that will serve as the disk that installs the
 	 *            program.
 	 */
-	public static void registerProgram(int id, ItemStack disk, Consumer<ComputerTileEntity> closeFunction)
+	public static void registerProgram(int id, ItemStack disk, Consumer<ComputerBlockEntity> closeFunction)
 	{
 		if(disks.containsKey(id) || id == -1 || id == -2)
 			throw new IllegalArgumentException("Program id " + id + " is already used!");
@@ -39,9 +39,9 @@ public class ProgramData
 		disks.put(id, disk);
 	}
 	
-	public static void closeProgram(int id, ComputerTileEntity computer)
+	public static void closeProgram(int id, ComputerBlockEntity computer)
 	{
-		Consumer<ComputerTileEntity> closeFunction = closeFunctions.get(id);
+		Consumer<ComputerBlockEntity> closeFunction = closeFunctions.get(id);
 		if(closeFunction != null)
 			closeFunction.accept(computer);
 	}
@@ -72,15 +72,15 @@ public class ProgramData
 		return disks.get(id).copy();
 	}
 	
-	public static void onClientClosed(ComputerTileEntity te)
+	public static void onClientClosed(ComputerBlockEntity be)
 	{
-		Objects.requireNonNull(te.getLevel());
-		SkaianetHandler.get(te.getLevel()).closeClientConnection(te);	//Can safely be done even if this computer isn't in a connection
+		Objects.requireNonNull(be.getLevel());
+		SkaianetHandler.get(be.getLevel()).closeClientConnection(be);	//Can safely be done even if this computer isn't in a connection
 	}
 	
-	public static void onServerClosed(ComputerTileEntity te)
+	public static void onServerClosed(ComputerBlockEntity be)
 	{
-		Objects.requireNonNull(te.getLevel());
-		SkaianetHandler.get(te.getLevel()).closeServerConnection(te);
+		Objects.requireNonNull(be.getLevel());
+		SkaianetHandler.get(be.getLevel()).closeServerConnection(be);
 	}
 }

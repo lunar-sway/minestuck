@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.ai;
 
 import com.mraof.minestuck.entity.AnimatedCreatureEntity;
-import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 
 public class AnimatedPanicGoal extends PanicGoal
 {

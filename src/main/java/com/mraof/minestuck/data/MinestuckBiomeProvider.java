@@ -7,12 +7,13 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import com.mraof.minestuck.world.biome.SkaiaBiome;
+import net.minecraft.core.Holder;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DirectoryCache;
-import net.minecraft.data.IDataProvider;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.HashCache;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +23,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-public class MinestuckBiomeProvider implements IDataProvider
+public class MinestuckBiomeProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -33,7 +34,7 @@ public class MinestuckBiomeProvider implements IDataProvider
 		this.generator = generator;
 	}
 	
-	protected void generateBiomes(BiConsumer<RegistryKey<Biome>, Biome> consumer)
+	protected void generateBiomes(BiConsumer<ResourceKey<Biome>, Biome> consumer)
 	{
 		consumer.accept(MSBiomes.SKAIA, SkaiaBiome.makeBiome());
 		
@@ -44,7 +45,7 @@ public class MinestuckBiomeProvider implements IDataProvider
 	}
 	
 	@Override
-	public void run(DirectoryCache cache) throws IOException
+	public void run(HashCache cache) throws IOException
 	{
 		Path path = this.generator.getOutputFolder();
 		Set<ResourceLocation> writtenBiomes = Sets.newHashSet();
@@ -57,11 +58,11 @@ public class MinestuckBiomeProvider implements IDataProvider
 			{
 				try
 				{
-					Optional<JsonElement> result = Biome.CODEC.encodeStart(JsonOps.INSTANCE, () -> biome).result();
+					Optional<JsonElement> result = Biome.CODEC.encodeStart(JsonOps.INSTANCE, Holder.direct(biome)).result();
 					if(result.isPresent())
 					{
 						Path biomePath = path.resolve("data/" + location.getNamespace() + "/worldgen/biome/" + location.getPath() + ".json");
-						IDataProvider.save(GSON, cache, result.get(), biomePath);
+						DataProvider.save(GSON, cache, result.get(), biomePath);
 					} else LOGGER.error("Couldn't serialize biome {}", location);
 				} catch(IOException e)
 				{

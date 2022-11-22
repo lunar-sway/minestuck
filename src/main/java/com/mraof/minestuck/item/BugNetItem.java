@@ -1,15 +1,15 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Random;
 
@@ -21,31 +21,31 @@ public class BugNetItem extends Item
 	}
 	
 	@Override
-	public boolean mineBlock(ItemStack stack, World worldIn, BlockState state, BlockPos pos,
-			LivingEntity entityLiving) {
+	public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos,
+							 LivingEntity entityLiving) {
 		
-		if(entityLiving instanceof PlayerEntity)
+		if(entityLiving instanceof Player)
 		{
-			PlayerEntity playerIn = (PlayerEntity) entityLiving;
-			if(!playerIn.isCreative() && worldIn.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
+			Player playerIn = (Player) entityLiving;
+			if(!playerIn.isCreative() && level.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
 			{
 				Random rand = playerIn.getRandom();
 				
-				if(!worldIn.isClientSide)
+				if(!level.isClientSide)
 				{
 					if(rand.nextInt(555) == 0)
 					{
-						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER, 1));
-						worldIn.addFreshEntity(item);
-						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(Hand.MAIN_HAND));
+						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GOLDEN_GRASSHOPPER.get(), 1));
+						level.addFreshEntity(item);
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 						
 						return true;
 					}
 					else if(rand.nextInt(5) == 0)
 					{
-						ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER, 1));
-						worldIn.addFreshEntity(item);
-						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(Hand.MAIN_HAND));
+						ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY() + 0.5, pos.getZ(), new ItemStack(MSItems.GRASSHOPPER.get(), 1));
+						level.addFreshEntity(item);
+						playerIn.getMainHandItem().hurtAndBreak(1, playerIn, PlayerIn -> playerIn.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 						
 						return true;
 					}

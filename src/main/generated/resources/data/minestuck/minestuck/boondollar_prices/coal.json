@@ -3,8 +3,10 @@
     "item": "minecraft:coal"
   },
   "range": {
-    "min": 70.0,
-    "max": 90.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 70,
+      "max_inclusive": 90
+    }
   }
 }

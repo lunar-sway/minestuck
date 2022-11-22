@@ -3,8 +3,10 @@
     "item": "minestuck:chiseled_cast_iron"
   },
   "range": {
-    "min": 8.0,
-    "max": 15.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 8,
+      "max_inclusive": 15
+    }
   }
 }

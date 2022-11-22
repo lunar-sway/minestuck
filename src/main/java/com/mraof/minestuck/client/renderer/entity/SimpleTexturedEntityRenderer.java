@@ -1,26 +1,26 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 
 import java.util.Objects;
 
-public class SimpleTexturedEntityRenderer<T extends MobEntity, M extends EntityModel<T>> extends MobRenderer<T, M>
+public class SimpleTexturedEntityRenderer<T extends Mob, M extends EntityModel<T>> extends MobRenderer<T, M>
 {
 	private final ResourceLocation textureLocation;
 	
-	public SimpleTexturedEntityRenderer(EntityRendererManager manager, M model, float shadowRadius, EntityType<T> entityType)
+	public SimpleTexturedEntityRenderer(EntityRendererProvider.Context context, M model, float shadowRadius, EntityType<T> entityType)
 	{
-		this(manager, model, shadowRadius, textureFromType(entityType));
+		this(context, model, shadowRadius, textureFromType(entityType));
 	}
 	
-	public SimpleTexturedEntityRenderer(EntityRendererManager manager, M model, float shadowRadius, ResourceLocation textureLocation)
+	public SimpleTexturedEntityRenderer(EntityRendererProvider.Context context, M model, float shadowRadius, ResourceLocation textureLocation)
 	{
-		super(manager, model, shadowRadius);
+		super(context, model, shadowRadius);
 		this.textureLocation = textureLocation;
 	}
 	

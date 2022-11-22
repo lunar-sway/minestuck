@@ -1,13 +1,13 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.ComputerBlock;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 
 /**
- * Minestuck version of {@link net.minecraft.state.properties.BlockStateProperties}
+ * Minestuck version of {@link net.minecraft.world.level.block.state.properties.BlockStateProperties}
  */
 public class MSProperties
 {
@@ -21,9 +21,13 @@ public class MSProperties
 	public static final BooleanProperty GREEN = BooleanProperty.create("green");
 	public static final BooleanProperty BLUE = BooleanProperty.create("blue");
 	public static final BooleanProperty CARVED = BooleanProperty.create("carved");
-	public static final BooleanProperty AUTO_RESET = BooleanProperty.create("auto_reset");
+	public static final BooleanProperty MACHINE_TOGGLE = BooleanProperty.create("machine_toggle"); //for use in TogglerBlock, as a way to change redstone/puzzle block functionality through another block
+	public static final BooleanProperty SHUT_DOWN = BooleanProperty.create("shut_down");
+	public static final BooleanProperty INVISIBLE = BooleanProperty.create("invisible");
+	public static final BooleanProperty UNTRIGGERABLE = BooleanProperty.create("untriggerable"); //for use in SummonerBlock, if used in other blocks with correlating properties then add those cases to StuctureCoreTileEntity
 	
 	public static final IntegerProperty COUNT_0_2 = IntegerProperty.create("count", 0, 2);
+	public static final IntegerProperty DISTANCE_1_16 = IntegerProperty.create("distance", 1, 16);
 	
 	public static final EnumProperty<EnumCassetteType> CASSETTE = EnumProperty.create("cassette", EnumCassetteType.class);
 	public static final EnumProperty<EnumDowelType> DOWEL_OR_NONE = EnumProperty.create("dowel", EnumDowelType.class);

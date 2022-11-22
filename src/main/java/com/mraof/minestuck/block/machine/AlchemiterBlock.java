@@ -2,24 +2,25 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -41,56 +42,53 @@ public class AlchemiterBlock extends MultiMachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		BlockPos mainPos = getMainPos(state, pos, worldIn);
-		TileEntity te = worldIn.getBlockEntity(mainPos);
+		BlockPos mainPos = getMainPos(state, pos, level);
 		
-		if(te instanceof AlchemiterTileEntity)
+		if (level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
 		{
-			((AlchemiterTileEntity) te).onRightClick(worldIn, player, state, hit.getDirection());
+			alchemiter.onRightClick(level, player, state, hit.getDirection());
 		}
 		
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
-			BlockPos mainPos = getMainPos(state, pos, worldIn);
-			TileEntity te = worldIn.getBlockEntity(mainPos);
-			if(te instanceof AlchemiterTileEntity)
+			BlockPos mainPos = getMainPos(state, pos, level);
+			if(level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
 			{
-				AlchemiterTileEntity alchemiter = (AlchemiterTileEntity) te;
 				alchemiter.breakMachine();
 				if(mainPos.equals(pos))
 					alchemiter.dropItem(null);
 			}
 			
-			super.onRemove(state, worldIn, pos, newState, isMoving);
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 	
-	/**
-	 * returns the block position of the "Main" block
-	 * aka the block with the TileEntity for the machine
-	 */
-	public BlockPos getMainPos(BlockState state, BlockPos pos, IBlockReader world)
+    /**
+     * returns the block position of the "Main" block
+     * aka the block with the BlockEntity for the machine
+     */
+	public BlockPos getMainPos(BlockState state, BlockPos pos, BlockGetter level)
 	{
-		return getMainPos(state, pos, world, 4);
+		return getMainPos(state, pos, level, 4);
 	}
 	
-	protected BlockPos getMainPos(BlockState state, BlockPos pos, IBlockReader world, int count)
+	protected BlockPos getMainPos(BlockState state, BlockPos pos, BlockGetter level, int count)
 	{
 		Direction direction = state.getValue(FACING);
 		
@@ -100,16 +98,16 @@ public class AlchemiterBlock extends MultiMachineBlock
 			return newPos;
 		else
 		{
-			BlockState newState = world.getBlockState(newPos);
+			BlockState newState = level.getBlockState(newPos);
 			if(count > 0 && newState.getBlock() instanceof AlchemiterBlock && ((AlchemiterBlock) newState.getBlock()).corner
 					&& newState.getValue(FACING).equals(this.corner ? state.getValue(FACING).getClockWise() : state.getValue(FACING)))
 			{
-				return ((AlchemiterBlock) newState.getBlock()).getMainPos(newState, newPos, world, count - 1);
-			} else return new BlockPos(0, -1, 0);
+				return ((AlchemiterBlock) newState.getBlock()).getMainPos(newState, newPos, level, count - 1);
+			} else return new BlockPos(0, -1 , 0);
 		}
 	}
-	
-	public static class Pad extends AlchemiterBlock
+
+	public static class Pad extends AlchemiterBlock implements EntityBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		
@@ -118,21 +116,15 @@ public class AlchemiterBlock extends MultiMachineBlock
 			super(machine, shape, false, false, new BlockPos(0, 0, 0), properties);
 		}
 		
-		@Override
-		public boolean hasTileEntity(BlockState state)
-		{
-			return true;
-		}
-		
 		@Nullable
 		@Override
-		public TileEntity createTileEntity(BlockState state, IBlockReader world)
+		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 		{
-			return new AlchemiterTileEntity();
+			return new AlchemiterBlockEntity(pos, state);
 		}
 		
 		@Override
-		protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+		protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);

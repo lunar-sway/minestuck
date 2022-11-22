@@ -1,6 +1,6 @@
 package com.mraof.minestuck.item.weapon.projectiles;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public interface ProjectileDamaging
 {

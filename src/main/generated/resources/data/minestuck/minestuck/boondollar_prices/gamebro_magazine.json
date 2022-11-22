@@ -3,8 +3,10 @@
     "item": "minestuck:gamebro_magazine"
   },
   "range": {
-    "min": 450.0,
-    "max": 600.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 450,
+      "max_inclusive": 600
+    }
   }
 }

@@ -6,21 +6,20 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +27,7 @@ import java.util.UUID;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Echeladder
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String NEW_RUNG = "echeladder.new_rung";
 	
@@ -42,12 +42,12 @@ public class Echeladder
 													// 0				4						9							14							  19								24									29										34
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
-	public static void increaseProgress(PlayerIdentifier player, World world, int progress)
+	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
 	{
-		PlayerSavedData.getData(player, world).getEcheladder().increaseProgress(progress);
+		PlayerSavedData.getData(player, level).getEcheladder().increaseProgress(progress);
 	}
 	
-	public static void increaseProgress(ServerPlayerEntity player, int progress)
+	public static void increaseProgress(ServerPlayer player, int progress)
 	{
 		PlayerSavedData.getData(player).getEcheladder().increaseProgress(progress);
 	}
@@ -55,8 +55,8 @@ public class Echeladder
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		Echeladder echeladder = PlayerSavedData.getData((ServerPlayerEntity) event.getPlayer()).getEcheladder();
-		echeladder.updateEcheladderBonuses((ServerPlayerEntity) event.getPlayer());
+		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getPlayer()).getEcheladder();
+		echeladder.updateEcheladderBonuses((ServerPlayer) event.getPlayer());
 		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
 			event.getPlayer().heal(event.getPlayer().getMaxHealth());
 	}
@@ -93,7 +93,7 @@ public class Echeladder
 		
 		int prevRung = rung;
 		int prevExp = exp;
-		Debug.debugf("Adding %s exp(modified) to player %s's echeladder (previously at rung %s progress %s/%s)", exp, identifier.getUsername(), rung, progress, expReq);
+		LOGGER.debug("Adding {} exp(modified) to player {}'s echeladder (previously at rung {} progress {}/{})", exp, identifier.getUsername(), rung, progress, expReq);
 		long boondollarsGained = 0;
 		
 		increment:
@@ -110,28 +110,28 @@ public class Echeladder
 					break increment;
 				if(rung > prevRung + 1)
 					exp = (int) (exp / 1.5);
-				Debug.debugf("Increased rung to %s, remaining exp is %s", rung, exp);
+				LOGGER.debug("Increased rung to {}, remaining exp is {}", rung, exp);
 			}
 			if(exp >= 1)
 			{
 				progress += exp;
 				savedData.setDirty();
-				Debug.debugf("Added remainder exp to progress, which is now at %s", progress);
+				LOGGER.debug("Added remainder exp to progress, which is now at {}", progress);
 			} else
-				Debug.debugf("Remaining exp %s is below 1, and will therefore be ignored", exp);
+				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
 		savedData.getData(identifier).addBoondollars(boondollarsGained);
 		
-		Debug.debugf("Finished echeladder climbing for %s at %s with progress %s", identifier.getUsername(), rung, progress);
-		ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
+		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
+		ServerPlayer player = identifier.getPlayer(savedData.mcServer);
 		if(player != null)
 		{
 			sendDataPacket(player, true);
 			if(rung != prevRung)
 			{
 				updateEcheladderBonuses(player);
-				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE, SoundCategory.AMBIENT, 1F, 1F);
+				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
 			}
 		}
 	}
@@ -171,7 +171,7 @@ public class Echeladder
 		return getUnderlingProtectionModifier(rung);
 	}
 	
-	public void updateEcheladderBonuses(ServerPlayerEntity player)
+	public void updateEcheladderBonuses(ServerPlayer player)
 	{
 		int healthBonus = healthBoost(rung);
 		double damageBonus = attackBonus(rung);
@@ -180,14 +180,14 @@ public class Echeladder
 		updateAttribute(player.getAttribute(Attributes.ATTACK_DAMAGE), new AttributeModifier(echeladderDamageBoostModifierUUID, "Echeladder Damage Boost", damageBonus, AttributeModifier.Operation.MULTIPLY_BASE));
 	}
 	
-	public void updateAttribute(ModifiableAttributeInstance attribute, AttributeModifier modifier)
+	public void updateAttribute(AttributeInstance attribute, AttributeModifier modifier)
 	{
 		if(attribute.hasModifier(modifier))
 			attribute.removeModifier(attribute.getModifier(modifier.getId()));
 		attribute.addPermanentModifier(modifier);
 	}
 	
-	public void saveEcheladder(CompoundNBT nbt)
+	public void saveEcheladder(CompoundTag nbt)
 	{
 		nbt.putInt("rung", rung);
 		nbt.putInt("rungProgress", progress);
@@ -200,7 +200,7 @@ public class Echeladder
 		nbt.putByteArray("rungBonuses", bonuses);
 	}
 	
-	public void loadEcheladder(CompoundNBT nbt)
+	public void loadEcheladder(CompoundTag nbt)
 	{
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");
@@ -237,7 +237,7 @@ public class Echeladder
 		int prevRung = this.rung;
 		int prevProgress = this.progress;
 		
-		this.rung = MathHelper.clamp(rung, 0, RUNG_COUNT - 1);
+		this.rung = Mth.clamp(rung, 0, RUNG_COUNT - 1);
 		
 		if(rung != RUNG_COUNT - 1)
 		{
@@ -249,7 +249,7 @@ public class Echeladder
 		if(prevProgress != this.progress || prevRung != this.rung)
 		{
 			savedData.setDirty();
-			ServerPlayerEntity player = identifier.getPlayer(savedData.mcServer);
+			ServerPlayer player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{
 				sendDataPacket(player, false);
@@ -259,13 +259,13 @@ public class Echeladder
 		}
 	}
 	
-	public void sendInitialPacket(ServerPlayerEntity player)
+	public void sendInitialPacket(ServerPlayer player)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.init(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F);
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	public void sendDataPacket(ServerPlayerEntity player, boolean sendMessage)
+	public void sendDataPacket(ServerPlayer player, boolean sendMessage)
 	{
 		EcheladderDataPacket packet = EcheladderDataPacket.create(getRung(), MinestuckConfig.SERVER.echeladderProgress.get() ? getProgress() : 0F, sendMessage);
 		MSPacketHandler.sendToPlayer(packet, player);

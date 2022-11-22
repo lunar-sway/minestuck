@@ -1,5 +1,6 @@
 package com.mraof.minestuck.client.util;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
@@ -7,19 +8,18 @@ import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.inventory.ContainerScreen;
-import net.minecraft.client.gui.screen.inventory.CreativeScreen;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.client.util.InputMappings;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
@@ -33,37 +33,37 @@ public class MSKeyHandler
 	public static final String ASPECT_EFFECT_TOGGLE = "key.minestuck.aspext_effect_toggle";
 	public static final String SYLLADEX = "key.minestuck.sylladex";
 	
-	public static KeyBinding statKey;
-	public static KeyBinding editKey;
-	public static KeyBinding captchaKey;
-	public static KeyBinding effectToggleKey;
-	public static KeyBinding sylladexKey;
+	public static KeyMapping statKey;
+	public static KeyMapping editKey;
+	public static KeyMapping captchaKey;
+	public static KeyMapping effectToggleKey;
+	public static KeyMapping sylladexKey;
 	
 	public static void registerKeys()
 	{
 		if(statKey != null)
 			throw new IllegalStateException("Minestuck keys have already been registered!");
 		
-		statKey = new KeyBinding(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
+		statKey = new KeyMapping(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
 		ClientRegistry.registerKeyBinding(statKey);
-		editKey = new KeyBinding(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
+		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
 		ClientRegistry.registerKeyBinding(editKey);
-		captchaKey = new KeyBinding(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
+		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
 		ClientRegistry.registerKeyBinding(captchaKey);
-		effectToggleKey = new KeyBinding(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
+		effectToggleKey = new KeyMapping(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
 		ClientRegistry.registerKeyBinding(effectToggleKey);
-		sylladexKey = new KeyBinding(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
+		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
 		ClientRegistry.registerKeyBinding(sylladexKey);
 	}
 	
 	@SubscribeEvent
-	public static void guiKeyInput(GuiScreenEvent.KeyboardKeyPressedEvent.Post event)
+	public static void guiKeyInput(ScreenEvent.KeyboardKeyPressedEvent.Post event)
 	{
-		InputMappings.Input input = InputMappings.getKey(event.getKeyCode(), event.getScanCode());
+		InputConstants.Key input = InputConstants.getKey(event.getKeyCode(), event.getScanCode());
 		
-		if(captchaKey.isActiveAndMatches(input) && Minecraft.getInstance().screen instanceof ContainerScreen<?>)
+		if(captchaKey.isActiveAndMatches(input) && Minecraft.getInstance().screen instanceof AbstractContainerScreen<?>)
 		{
-			captchalogueInGui((ContainerScreen<?>) Minecraft.getInstance().screen);
+			captchalogueInGui((AbstractContainerScreen<?>) Minecraft.getInstance().screen);
 			event.setCanceled(true);
 		}
 	}
@@ -78,7 +78,7 @@ public class MSKeyHandler
 	{
 		if(isNotRelease(event) && Minecraft.getInstance().screen == null)
 		{
-			InputMappings.Input input = InputMappings.getKey(event.getKey(), event.getScanCode());
+			InputConstants.Key input = InputConstants.getKey(event.getKey(), event.getScanCode());
 			
 			if(statKey.isActiveAndMatches(input))
 				PlayerStatsScreen.openGui(false);
@@ -104,9 +104,9 @@ public class MSKeyHandler
 			MSPacketHandler.sendToServer(CaptchaDeckPacket.captchalogue());
 	}
 	
-	private static void captchalogueInGui(ContainerScreen<?> screen)
+	private static void captchalogueInGui(AbstractContainerScreen<?> screen)
 	{
-		if(!(screen instanceof CreativeScreen))
+		if(!(screen instanceof CreativeModeInventoryScreen))
 		{
 			Slot slot = screen.getSlotUnderMouse();
 			if(slot != null && slot.hasItem())

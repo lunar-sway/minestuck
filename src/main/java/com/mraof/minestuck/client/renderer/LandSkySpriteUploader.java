@@ -5,11 +5,11 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.SpriteUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.TextureAtlasHolder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class LandSkySpriteUploader extends SpriteUploader
+public class LandSkySpriteUploader extends TextureAtlasHolder
 {
 	public static final int VARIANT_COUNT = 3;
 	
@@ -37,7 +37,7 @@ public class LandSkySpriteUploader extends SpriteUploader
 	{
 		System.out.println("Creating land planet resource");
 		Minecraft mc = Minecraft.getInstance();
-		((IReloadableResourceManager) mc.getResourceManager()).registerReloadListener(INSTANCE = new LandSkySpriteUploader(mc.getTextureManager()));
+		((ReloadableResourceManager) mc.getResourceManager()).registerReloadListener(INSTANCE = new LandSkySpriteUploader(mc.getTextureManager()));
 	}
 	
 	public LandSkySpriteUploader(TextureManager textureManagerIn)
@@ -53,12 +53,12 @@ public class LandSkySpriteUploader extends SpriteUploader
 	
 	private Stream<ResourceLocation> planetLocations()
 	{
-		return LandTypes.TERRAIN_REGISTRY.getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "planets/planet_"+name.getPath()));
+		return LandTypes.TERRAIN_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "planets/planet_"+name.getPath()));
 	}
 	
 	private Stream<ResourceLocation> overlayLocations()
 	{
-		return LandTypes.TITLE_REGISTRY.getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "overlays/overlay_"+name.getPath()));
+		return LandTypes.TITLE_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "overlays/overlay_"+name.getPath()));
 	}
 	
 	private Stream<ResourceLocation> extras()

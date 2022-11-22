@@ -1,23 +1,23 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.machine.AlchemiterTileEntity;
-import com.mraof.minestuck.tileentity.machine.MiniAlchemiterTileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.eventbus.api.Event;
 
 public class AlchemyEvent extends Event
 {
 	private final PlayerIdentifier player;
-	private final TileEntity alchemiter;
+	private final BlockEntity alchemiter;
 	private final ItemStack dowel;
 	private ItemStack result;
 	private final GristSet cost;
 	
-	public AlchemyEvent(PlayerIdentifier player, TileEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
+	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
 	{
 		this.player = player;
 		this.alchemiter = alchemiter;
@@ -32,14 +32,14 @@ public class AlchemyEvent extends Event
 	}
 	
 	/**
-	 * Returns the alchemiter tile entity that this is happening on. Either an instance of {@link AlchemiterTileEntity} or {@link MiniAlchemiterTileEntity}.
+	 * Returns the alchemiter tile entity that this is happening on. Either an instance of {@link AlchemiterBlockEntity} or {@link MiniAlchemiterBlockEntity}.
 	 */
-	public TileEntity getAlchemiter()
+	public BlockEntity getAlchemiter()
 	{
 		return alchemiter;
 	}
 	
-	public World getWorld()
+	public Level getLevel()
 	{
 		return alchemiter.getLevel();
 	}

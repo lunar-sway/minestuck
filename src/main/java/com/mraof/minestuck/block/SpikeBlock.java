@@ -2,16 +2,16 @@ package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSDamageSources;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -26,25 +26,26 @@ public class SpikeBlock extends CustomShapeBlock
 	}
 	
 	@Override
-	public void fallOn(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		entityIn.causeFallDamage(fallDistance, 3);
+		entityIn.causeFallDamage(fallDistance, 3, DamageSource.FALL);
 	}
 	
 	/**
 	 * Damages relevant entities as they move through the block
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
-	public void entityInside(BlockState state, World worldIn, BlockPos pos, Entity entityIn)
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entityIn)
 	{
 		if(entityIn instanceof LivingEntity && entityIn.fallDistance < 1)
 		{
-			if(!worldIn.isClientSide && (entityIn.xOld != entityIn.getX() || entityIn.zOld != entityIn.getZ()))
+			if(!level.isClientSide && (entityIn.xOld != entityIn.getX() || entityIn.zOld != entityIn.getZ()))
 			{
 				double distanceX = Math.abs(entityIn.getX() - entityIn.xOld);
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				
-				entityIn.makeStuckInBlock(state, new Vector3d(0.3F, 0.9, 0.3F));
+				entityIn.makeStuckInBlock(state, new Vec3(0.3F, 0.9, 0.3F));
 				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
 					entityIn.hurt(MSDamageSources.SPIKE, 1.0F);
@@ -58,8 +59,8 @@ public class SpikeBlock extends CustomShapeBlock
 	 */
 	@Nullable
 	@Override
-	public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
+	public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
 	{
-		return PathNodeType.DAMAGE_OTHER;
+		return BlockPathTypes.DAMAGE_OTHER;
 	}
 }

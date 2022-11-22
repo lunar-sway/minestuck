@@ -1,8 +1,8 @@
 package com.mraof.minestuck.item.enums;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum EnumShopPoster implements IStringSerializable
+public enum EnumShopPoster implements StringRepresentable
 {
 	FRAYMOTIFS(0,0,"fraymotifs","fraymotifs"),
 	FOOD(1,1,"food","food"),

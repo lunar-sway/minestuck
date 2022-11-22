@@ -6,8 +6,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -62,6 +62,7 @@ public class MinestuckConfig
 		public final ConfigValue<List<String>> forbiddenDimensionTypesTpz;
 		public final BooleanValue disableGristWidget;
 		public final IntValue alchemiterMaxStacks;
+		public final IntValue puzzleBlockTickRate;
 		
 		//Medium
 		public final BooleanValue canBreakGates;
@@ -79,7 +80,6 @@ public class MinestuckConfig
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
-		public final ConfigValue<List<String>> startingModusTypes;
 		public final IntValue modusMaxSize;
 		public final EnumValue<DropMode> sylladexDropMode;
 		public final EnumValue<AvailableOptions> treeModusSetting;
@@ -152,8 +152,6 @@ public class MinestuckConfig
 					.define("dropItemsInCards", true);
 			initialModusSize = builder.comment("The initial amount of captchalogue cards in your sylladex.")
 					.defineInRange("initialModusSize", 5, 0, Integer.MAX_VALUE);
-			startingModusTypes = builder.comment("An array with the possible modus types to be assigned. Written with mod-id and modus name, for example \"minestuck:queue_stack\" or \"minestuck:hash_map\"")
-					.define("startingModusTypes", new ArrayList<>(Arrays.asList("minestuck:stack","minestuck:queue")));
 			modusMaxSize = builder.comment("The max size on a modus. Ignored if the value is 0.")
 					.defineInRange("modusMaxSize", 0, 0, Integer.MAX_VALUE);
 			sylladexDropMode = builder.comment("Determines which items from the modus that are dropped on death. \"items\": Only the items are dropped. \"cards_and_items\": Both items and cards are dropped. (So that you have at most initial_modus_size amount of cards) \"all\": Everything is dropped, even the modus.")
@@ -197,6 +195,8 @@ public class MinestuckConfig
 					.define("disableGristWidget",false);
 			alchemiterMaxStacks = builder.comment("The number of stacks that can be alchemized at the same time with the alchemiter.")
 					.defineInRange("alchemiterMaxStacks",16,0,999);
+			puzzleBlockTickRate = builder.comment("How often puzzle/redstone related blocks such as the remote observer tick.")
+					.defineInRange("puzzleBlockTickRate",6,2,10);
 			cruxtruderIntake = builder.comment("If enabled, the regular cruxtruder will require raw cruxite to function, which is inserted through the pipe.")
 					.define("cruxtruderIntake",true);
 			forbiddenWorldsTpz = builder.comment("A list of worlds that you cannot travel to or from using transportalizers.")
@@ -208,7 +208,7 @@ public class MinestuckConfig
 			builder.push("entry");
 			entryCrater = builder.comment("Disable this to prevent craters from people entering the medium.")
 					.define("entryCrater",true);
-			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:128. Makes entry take slightly longer.")
+			adaptEntryBlockHeight = builder.comment("Adapt the transferred height to make the top non-air block to be placed at y:120. Makes entry take slightly longer.")
 					.define("adaptEntryBlockHeight",true);
 			stopSecondEntry = builder.comment("If this is true, players may only use an artifact once, even if they end up in the overworld again.")
 					.define("stopSecondEntry",false);
@@ -266,7 +266,7 @@ public class MinestuckConfig
 	}
 	
 	@SubscribeEvent
-	public static void onReload(final ModConfig.Reloading event)
+	public static void onReload(final ModConfigEvent.Reloading event)
 	{
 		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 		if(server != null && server.isSameThread())	//TODO Check if this will be true after server start. If not, use a static boolean together with a tick event instead

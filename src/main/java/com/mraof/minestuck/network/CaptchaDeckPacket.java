@@ -1,12 +1,11 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckContainer;
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 
 public class CaptchaDeckPacket implements PlayToServerPacket
 {
@@ -18,8 +17,6 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 	private static final byte CAPTCHALOGUE_INV = 4;
 	
 	private byte type;
-	
-	private CompoundNBT nbt;
 	
 	private int itemIndex;
 	private boolean asCard;
@@ -77,7 +74,7 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeByte(type);	//Packet type
 		if(type == GET)	//Take item from modus
@@ -95,7 +92,7 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 		}
 	}
 	
-	public static CaptchaDeckPacket decode(PacketBuffer buffer)
+	public static CaptchaDeckPacket decode(FriendlyByteBuf buffer)
 	{
 		CaptchaDeckPacket packet = new CaptchaDeckPacket();
 		packet.type = buffer.readByte();
@@ -123,14 +120,14 @@ public class CaptchaDeckPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(ServerEditHandler.getData(player) != null)
 			return;
 		
-		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckContainer)
+		if(this.type == MODUS && player.containerMenu instanceof CaptchaDeckMenu)
 			CaptchaDeckHandler.useItem(player);
-		else if(this.type == CAPTCHALOGUE && !player.getItemBySlot(EquipmentSlotType.MAINHAND).isEmpty())
+		else if(this.type == CAPTCHALOGUE && !player.getItemBySlot(EquipmentSlot.MAINHAND).isEmpty())
 			CaptchaDeckHandler.captchalogueItem(player);
 		else if(this.type == CAPTCHALOGUE_INV)
 		{

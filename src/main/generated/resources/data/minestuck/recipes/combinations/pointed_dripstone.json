@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:dripstone_block"
+  },
+  "input2": {
+    "item": "minecraft:arrow"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:pointed_dripstone"
+  }
+}

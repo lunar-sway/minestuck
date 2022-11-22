@@ -1,10 +1,9 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class TransportalizerPacket implements PlayToServerPacket
 {
@@ -18,13 +17,13 @@ public class TransportalizerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBlockPos(pos);
 		buffer.writeUtf(destId, 4);
 	}
 	
-	public static TransportalizerPacket decode(PacketBuffer buffer)
+	public static TransportalizerPacket decode(FriendlyByteBuf buffer)
 	{
 		BlockPos pos = buffer.readBlockPos();
 		String destId = buffer.readUtf(4);
@@ -33,14 +32,13 @@ public class TransportalizerPacket implements PlayToServerPacket
 	}
 	
 	@Override
-	public void execute(ServerPlayerEntity player)
+	public void execute(ServerPlayer player)
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			TileEntity te = player.level.getBlockEntity(pos);
-			if(te instanceof TransportalizerTileEntity)
+			if(player.level.getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
 			{
-				((TransportalizerTileEntity) te).setDestId(destId);
+				transportalizer.setDestId(destId);
 			}
 		}
 	}

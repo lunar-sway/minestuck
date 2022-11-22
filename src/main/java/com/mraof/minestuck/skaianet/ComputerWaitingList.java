@@ -4,8 +4,8 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,11 +32,11 @@ public class ComputerWaitingList
 		this.name = name;
 	}
 	
-	void read(ListNBT list)
+	void read(ListTag list)
 	{
 		for(int i = 0; i < list.size(); i++)
 		{
-			CompoundNBT cmp = list.getCompound(i);
+			CompoundTag cmp = list.getCompound(i);
 			try
 			{
 				map.put(IdentifierHandler.load(cmp, "player"), ComputerReference.read(cmp.getCompound("computer")));
@@ -47,13 +47,13 @@ public class ComputerWaitingList
 		}
 	}
 	
-	ListNBT write()
+	ListTag write()
 	{
-		ListNBT list = new ListNBT();
+		ListTag list = new ListTag();
 		for(Map.Entry<PlayerIdentifier, ComputerReference> entry : map.entrySet())
 		{
-			CompoundNBT nbt = new CompoundNBT();
-			nbt.put("computer", entry.getValue().write(new CompoundNBT()));
+			CompoundTag nbt = new CompoundTag();
+			nbt.put("computer", entry.getValue().write(new CompoundTag()));
 			entry.getKey().saveToNBT(nbt, "player");
 			list.add(nbt);
 		}

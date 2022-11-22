@@ -4,7 +4,7 @@
     "item": "minecraft:stone"
   },
   "input2": {
-    "item": "minecraft:gravel"
+    "item": "minecraft:basalt"
   },
   "mode": "and",
   "output": {

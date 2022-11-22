@@ -1,19 +1,19 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +35,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 
 	public GristSelectorScreen(T screen)
 	{
-		super(new TranslationTextComponent(TITLE));
+		super(new TranslatableComponent(TITLE));
 		this.otherScreen = screen;
 	}
 
@@ -49,38 +49,34 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.init();
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
-		this.previousButton = new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, new StringTextComponent("<"), button -> prevPage());
-		this.nextButton = new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, new StringTextComponent(">"), button -> nextPage());
-		if(GristTypes.getRegistry().getValues().size() > rows * columns)
-		{
-			this.addButton(this.nextButton);
-		}
+		this.previousButton = addRenderableWidget(new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, new TextComponent("<"), button -> prevPage()));
+		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, new TextComponent(">"), button -> nextPage()));
+		
+		previousButton.visible = false;
+		nextButton.visible = GristTypes.getRegistry().getValues().size() > rows * columns;
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
 		
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		this.minecraft.getTextureManager().bind(guiGristcache);
-		this.blit(matrixStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, guiGristcache);
+		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage = I18n.get(SELECT_GRIST);
-		minecraft.font.draw(matrixStack, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
-
-		RenderSystem.color3f(1.0F, 1.0F, 1.0F);
-		RenderSystem.disableRescaleNormal();
-		RenderHelper.turnOff();
-		RenderSystem.disableLighting();
+		minecraft.font.draw(poseStack, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
+		
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableDepthTest();
 
-		this.drawGrist(matrixStack, xOffset, yOffset, mouseX, mouseY, page);
+		this.drawGrist(poseStack, xOffset, yOffset, mouseX, mouseY, page);
 		
 /*		if (tooltip != -1)
 			if(tooltip % 2 == 0)
@@ -144,12 +140,9 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		{
 			page--;
 			if(page == 0) {
-				this.buttons.remove(previousButton);
-				this.children.remove(previousButton);
+				previousButton.visible = false;
 			}
-			if(!this.buttons.contains(nextButton)) {
-				this.addButton(nextButton);
-			}
+			nextButton.visible = true;
 		}
 	}
 	
@@ -160,12 +153,9 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		{
 			page++;
 			if(page == maxPage) {
-				this.buttons.remove(nextButton);
-				this.children.remove(nextButton);
+				nextButton.visible = false;
 			}
-			if(!this.buttons.contains(previousButton)) {
-				this.addButton(previousButton);
-			}
+			previousButton.visible = true;
 		}
 	}
 }

@@ -1,19 +1,19 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 
 public class KindAbstratusType
 {
 	
-	private String unlocalizedName;
+	private final String unlocalizedName;
 	
-	private ArrayList<ItemType> items = new ArrayList<ItemType>();
+	private final ArrayList<ItemType> items = new ArrayList<ItemType>();
 	
 	public KindAbstratusType(String unlocName) {
 		this.unlocalizedName = unlocName;
@@ -29,8 +29,8 @@ public class KindAbstratusType
 		return this;
 	}
 	
-	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("strife."+unlocalizedName);
+	public Component getDisplayName() {
+		return new TranslatableComponent("strife."+unlocalizedName);
 	}
 	
 	public String getUnlocalizedName() {

@@ -1,17 +1,20 @@
 package com.mraof.minestuck.computer;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraftforge.fml.client.gui.widget.ExtendedButton;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -21,7 +24,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 {
 	public static final String CLEAR_BUTTON = "minestuck.clear_button";
 	
-	private LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
+	private final LinkedHashMap<Button, UnlocalizedString> buttonMap = new LinkedHashMap<>();
 	private Button upButton, downButton;
 	private String message;
 	
@@ -31,17 +34,17 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Creates an ArrayList of UnlocalizedString and returns it.
 	 * The first item in the list must be the message above the buttons, and then it continues with the topmost
 	 * button and down.
-	 * @param te The TileEntityComputer this program is associated with, for access to related data.
+	 * @param be The {@link ComputerBlockEntity} this program is associated with, for access to related data.
 	 */
-	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerTileEntity te);
+	protected abstract ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be);
 	
 	/**
 	 * Performs the action caused by pressing a button.
-	 * @param te The computer, if needed.
+	 * @param be The computer, if needed.
 	 * @param buttonName The unlocalized string from getStringList() associated with the pressed button.
 	 * @param data Format data provided by getStringList().
 	 */
-	protected abstract void onButtonPressed(ComputerTileEntity te, String buttonName, Object[] data);
+	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
 	
 	public final void onButtonPressed(ComputerScreen screen, Button button) {
 		UnlocalizedString data = buttonMap.get(button);
@@ -50,33 +53,28 @@ public abstract class ButtonListProgram extends ComputerProgram
 		else if (button == downButton)
 			index++;
 		else if(data != null) {
-			if(!screen.te.latestmessage.get(this.getId()).isEmpty())
-				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.te.getBlockPos(), this.getId()));
-			onButtonPressed(screen.te, data.string, data.formatData);
+			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
+				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
+			onButtonPressed(screen.be, data.string, data.formatData);
 		}
 		screen.updateGui();
 	}
 	
 	@Override
-	public final void onInitGui(ComputerScreen gui, ComputerProgram prevProgram)
+	public final void onInitGui(ComputerScreen gui)
 	{
-		if(prevProgram != null)
-		{
-			gui.clearButtons();
-			gui.addButton(gui.programButton);
-		}
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, StringTextComponent.EMPTY, button1 -> onButtonPressed(gui, button1));
+			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, TextComponent.EMPTY, button1 -> onButtonPressed(gui, button1));
 			buttonMap.put(button, new UnlocalizedString(""));
-			gui.addButton(button);
+			gui.addRenderableWidget(button);
 		}
 		
-		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, new StringTextComponent("^"), button1 -> onButtonPressed(gui, button1));
-		gui.addButton(upButton);
-		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, new StringTextComponent("v"), button1 -> onButtonPressed(gui, button1));
-		gui.addButton(downButton);
+		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, new TextComponent("^"), button1 -> onButtonPressed(gui, button1));
+		gui.addRenderableWidget(upButton);
+		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, new TextComponent("v"), button1 -> onButtonPressed(gui, button1));
+		gui.addRenderableWidget(downButton);
 	}
 	
 	@Override
@@ -84,8 +82,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		downButton.active = false;
 		upButton.active = index > 0;
-		ArrayList<UnlocalizedString> list = getStringList(gui.te);
-		if(!gui.te.latestmessage.get(this.getId()).isEmpty())
+		ArrayList<UnlocalizedString> list = getStringList(gui.be);
+		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		int pos = -1;
 		for(UnlocalizedString s : list) 
@@ -122,15 +120,21 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(MatrixStack matrixStack, ComputerScreen gui, ComputerTileEntity te) {
-		Minecraft mc = Minecraft.getInstance();
-		mc.getTextureManager().bind(ComputerScreen.guiBackground);
+	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be)
+	{
+		
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
-		gui.blit(matrixStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
-		if(te.latestmessage.get(te.programSelected) == null || te.latestmessage.get(te.programSelected).isEmpty())
-			mc.font.draw(matrixStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, ComputerScreen.guiBackground);
+		gui.blit(poseStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
+		
+		Font font = Minecraft.getInstance().font;
+		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
+			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 		else 
-			mc.font.draw(matrixStack, I18n.get(te.latestmessage.get(te.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
 	/**
@@ -150,9 +154,9 @@ public abstract class ButtonListProgram extends ComputerProgram
 			return I18n.get(string, formatData);
 		}
 		
-		public ITextComponent asTextComponent()
+		public Component asTextComponent()
 		{
-			return new TranslationTextComponent(string, formatData);
+			return new TranslatableComponent(string, formatData);
 		}
 	}
 	

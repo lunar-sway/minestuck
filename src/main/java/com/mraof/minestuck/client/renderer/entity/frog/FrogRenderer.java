@@ -1,29 +1,30 @@
 package com.mraof.minestuck.client.renderer.entity.frog;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.FrogModel;
+import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class FrogRenderer extends MobRenderer<FrogEntity, FrogModel<FrogEntity>>
 {
 
-	public FrogRenderer(EntityRendererManager manager)
+	public FrogRenderer(EntityRendererProvider.Context context)
 	{
-		super(manager, new FrogModel<>(), 0.5f);
-		this.addLayer(new FrogSkinLayer(this));
-		this.addLayer(new FrogEyesLayer(this));
-		this.addLayer(new FrogBellyLayer(this));
+		super(context, new FrogModel<>(context.bakeLayer(MSModelLayers.FROG)), 0.5f);
+		this.addLayer(new FrogSkinLayer(this, context.getModelSet()));
+		this.addLayer(new FrogEyesLayer(this, context.getModelSet()));
+		this.addLayer(new FrogBellyLayer(this, context.getModelSet()));
 	}
 
 	@Override
-	public void render(FrogEntity frog, float entityYaw, float partialTicks, MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn) {
-		matrixStackIn.scale(frog.getFrogSize(), frog.getFrogSize(), frog.getFrogSize());
-		super.render(frog, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);
+	public void render(FrogEntity frog, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
+		poseStack.scale(frog.getFrogSize(), frog.getFrogSize(), frog.getFrogSize());
+		super.render(frog, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);
 	}
 
 	@Override

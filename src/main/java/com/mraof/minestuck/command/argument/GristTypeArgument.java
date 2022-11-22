@@ -7,14 +7,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.command.arguments.IArgumentSerializer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,12 +23,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class GristTypeArgument implements ArgumentType<GristType>
 {
-	public static final IArgumentSerializer<GristTypeArgument> SERIALIZER = new ArgumentSerializer<>(GristTypeArgument::gristType);
+	public static final ArgumentSerializer<GristTypeArgument> SERIALIZER = new EmptyArgumentSerializer<>(GristTypeArgument::gristType);
 	
 	private static final List<String> EXAMPLES = Arrays.asList("minestuck:build", "minestuck:marble", "minestuckarsenal:iron");
 	
 	public static final String INVALID = "argument.grist_type.invalid";
-	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID, o));
+	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID, o));
 	
 	public static GristTypeArgument gristType()
 	{
@@ -51,7 +51,7 @@ public class GristTypeArgument implements ArgumentType<GristType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return ISuggestionProvider.suggestResource(GristTypes.values().stream().map(GristType::getRegistryName), builder);
+		return SharedSuggestionProvider.suggestResource(GristTypes.values().stream().map(GristType::getRegistryName), builder);
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class GristTypeArgument implements ArgumentType<GristType>
 	}
 	
 	@SuppressWarnings("unused")
-	public static GristType getGristArgument(CommandContext<CommandSource> context, String id)
+	public static GristType getGristArgument(CommandContext<CommandSourceStack> context, String id)
 	{
 		return context.getArgument(id, GristType.class);
 	}

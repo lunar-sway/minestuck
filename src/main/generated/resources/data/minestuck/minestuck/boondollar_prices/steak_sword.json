@@ -3,8 +3,10 @@
     "item": "minestuck:steak_sword"
   },
   "range": {
-    "min": 350.0,
-    "max": 650.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 350,
+      "max_inclusive": 650
+    }
   }
 }

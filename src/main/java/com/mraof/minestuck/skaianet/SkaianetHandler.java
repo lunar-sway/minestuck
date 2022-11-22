@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
@@ -8,15 +9,17 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +33,7 @@ import java.util.stream.Stream;
  * This class also handles the main saving and loading.
  * @author kirderf1
  */
-public final class SkaianetHandler
+public final class SkaianetHandler extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -39,33 +42,35 @@ public final class SkaianetHandler
 	public static final String STOP_RESUME = "minestuck.stop_resume_message";
 	public static final String CLOSED = "minestuck.closed_message";
 	
-	private static SkaianetHandler INSTANCE;
-	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	final SessionHandler sessionHandler;
 	
-	MinecraftServer mcServer;
+	final MinecraftServer mcServer;
 	
-	private SkaianetHandler()
+	private SkaianetHandler(MinecraftServer mcServer)
 	{
+		this.mcServer = mcServer;
+		
 		sessionHandler = new DefaultSessionHandler(this);
 	}
 	
-	private SkaianetHandler(CompoundNBT nbt)
+	private SkaianetHandler(MinecraftServer mcServer, CompoundTag nbt)
 	{
+		this.mcServer = mcServer;
+		
 		SessionHandler sessions;
-		if(nbt.contains("session", Constants.NBT.TAG_COMPOUND))
+		if(nbt.contains("session", Tag.TAG_COMPOUND))
 			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
-		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Constants.NBT.TAG_COMPOUND));
+		else sessions = new DefaultSessionHandler(this, nbt.getList("sessions", Tag.TAG_COMPOUND));
 		
 		sessionHandler = sessions.getActual();
 		
-		openedServers.read(nbt.getList("serversOpen", Constants.NBT.TAG_COMPOUND));
-		resumingClients.read(nbt.getList("resumingClients", Constants.NBT.TAG_COMPOUND));
-		resumingServers.read(nbt.getList("resumingServers", Constants.NBT.TAG_COMPOUND));
+		openedServers.read(nbt.getList("serversOpen", Tag.TAG_COMPOUND));
+		resumingClients.read(nbt.getList("resumingClients", Tag.TAG_COMPOUND));
+		resumingServers.read(nbt.getList("resumingServers", Tag.TAG_COMPOUND));
 		
 		//fix data in secondary connections that isn't being saved by finding them and copying data from the primary counterpart
 		// TODO this is a simple solution, but a more elegant solution would be to achieve this during reading from nbt
@@ -342,13 +347,14 @@ public final class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new ConnectionClosedEvent(mcServer, connection, sessionHandler.getPlayerSession(connection.getClientIdentifier()), type));
 	}
 	
-	public void requestInfo(ServerPlayerEntity player, PlayerIdentifier p1)
+	public void requestInfo(ServerPlayer player, PlayerIdentifier p1)
 	{
 		checkData();
 		infoTracker.requestInfo(player, p1);
 	}
 	
-	private CompoundNBT write(CompoundNBT compound)
+	@Override
+	public CompoundTag save(CompoundTag compound)
 	{
 		//checkData();
 		
@@ -416,7 +422,7 @@ public final class SkaianetHandler
 	 * @param target the identifier of the player that is entering
 	 * @return The dimension type of the new land created, or null if the player can't enter at this time.
 	 */
-	public RegistryKey<World> prepareEntry(PlayerIdentifier target)
+	public ResourceKey<Level> prepareEntry(PlayerIdentifier target)
 	{
 		SburbConnection c = getPrimaryConnection(target, true).orElse(null);
 		if(c == null)
@@ -460,59 +466,45 @@ public final class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
 	}
 	
-	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
+	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
 	{
-		ComputerReference oldRef = ComputerReference.of(oldTE), newRef = ComputerReference.of(newTE);
-		if(!oldTE.owner.equals(newTE.owner))
-			throw new IllegalStateException("Moving computers with different owners! ("+oldTE.owner+" and "+newTE.owner+")");
+		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
+		if(!oldBE.owner.equals(newBE.owner))
+			throw new IllegalStateException("Moving computers with different owners! ("+oldBE.owner+" and "+newBE.owner+")");
 		
-		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldTE, newRef));
+		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		resumingClients.replace(oldTE.owner, oldRef, newRef);
-		resumingServers.replace(oldTE.owner, oldRef, newRef);
-		openedServers.replace(oldTE.owner, oldRef, newRef);
+		resumingClients.replace(oldBE.owner, oldRef, newRef);
+		resumingServers.replace(oldBE.owner, oldRef, newRef);
+		openedServers.replace(oldBE.owner, oldRef, newRef);
 	}
 	
-	public static SkaianetHandler get(World world)
+	public static SkaianetHandler get(Level level)
 	{
-		MinecraftServer server = world.getServer();
+		MinecraftServer server = level.getServer();
 		if(server == null)
-			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from world)");
+			throw new IllegalArgumentException("Can't get skaianet instance on client side! (Got null server from level)");
 		return get(server);
 	}
+	
+	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
 	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
 		Objects.requireNonNull(server);
-		if(INSTANCE == null)
-			INSTANCE = new SkaianetHandler();
-		INSTANCE.mcServer = server;
-		return INSTANCE;
+		
+		ServerLevel level = server.overworld();
+		
+		DimensionDataStorage storage = level.getDataStorage();
+		
+		return storage.computeIfAbsent(nbt -> new SkaianetHandler(server, nbt), () -> new SkaianetHandler(server), DATA_NAME);
 	}
 	
-	/**
-	 * Called when reading skaianet persistence data.
-	 * Should only be called by minestuck itself (specifically {@link com.mraof.minestuck.MSWorldPersistenceHook}).
-	 */
-	public static void init(CompoundNBT nbt)
+	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.
+	@Override
+	public boolean isDirty()
 	{
-		if(nbt != null)
-		{
-			try
-			{
-				INSTANCE = new SkaianetHandler(nbt);
-			} catch(Exception e)
-			{
-				LOGGER.error("Caught unhandled exception while loading Skaianet:", e);
-			}
-		}
-	}
-	
-	public static CompoundNBT write()
-	{
-		if(INSTANCE == null)
-			return null;
-		else return INSTANCE.write(new CompoundNBT());
+		return true;
 	}
 	
 	/**
@@ -520,7 +512,6 @@ public final class SkaianetHandler
 	 */
 	public static void clear()
 	{
-		INSTANCE = null;
 		TitleSelectionHook.playersInTitleSelection.clear();
 	}
 }

@@ -2,21 +2,21 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.*;
 
-public class MesaFeature extends Feature<NoFeatureConfig>
+public class MesaFeature extends Feature<NoneFeatureConfiguration>
 {
 	private final BlockState[] baseBlock = {Blocks.RED_TERRACOTTA.defaultBlockState(),
 			Blocks.ORANGE_TERRACOTTA.defaultBlockState(),
@@ -39,43 +39,47 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 	
 	private final boolean stomps = false;
 	
-	public MesaFeature(Codec<NoFeatureConfig> codec)
+	public MesaFeature(Codec<NoneFeatureConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config)
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
 		
-		if(world.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(level.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		
 		float plateauSize = 0.6F + rand.nextFloat()*(height/10F);
 		float altFrequency = 0.01F;
 		boolean isAlt = rand.nextFloat() < altFrequency;
 		
-		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(generator);
+		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(context.chunkGenerator());
 		
-		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, world, rand, isAlt, blocks.getBlockState("ground"));
+		BlockPos nodePos = generateMesa(pos.above(height), height, plateauSize, level, rand, isAlt, blocks.getBlockState("ground"));
 		
 		if(!stomps)
 		{
-				world.setBlock(nodePos, isAlt?altCore:baseCore, Constants.BlockFlags.BLOCK_UPDATE);
+				level.setBlock(nodePos, isAlt?altCore:baseCore, Block.UPDATE_CLIENTS);
 		} else
 		{
-			world.setBlock(nodePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+			level.setBlock(nodePos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
 		}
 		
 		return true;
 	}
 	
 	//TODO: Figure out how this code even works, make it more readable (and possibly more efficient), and make the same changes to RockDecorator.generateRock()
-	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, IWorld world, Random random, boolean isAlt, BlockState groundBlock)
+	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, Random random, boolean isAlt, BlockState groundBlock)
 	{
-		MutableBoundingBox boundingBox = new MutableBoundingBox(rockPos.getX() - 8, rockPos.getZ() - 8, rockPos.getX() + 7, rockPos.getZ() + 7);	//Extra solution to prevent the code to run indefinitely
+		BoundingBox boundingBox = new BoundingBox(rockPos.getX() - 8, level.getMinBuildHeight(), rockPos.getZ() - 8, rockPos.getX() + 7, level.getMaxBuildHeight(), rockPos.getZ() + 7);	//Extra solution to prevent the code to run indefinitely
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
 		
 		Map<CoordPair, Integer> heightMap = new HashMap<>();
@@ -162,7 +166,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 				}
 			} else entry.spreadChance += 0.5F;
 			
-			if(!world.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(groundBlock))
+			if(!level.getBlockState(new BlockPos(entry.pos.x, rockPos.getY() - h - 1, entry.pos.z)).equals(groundBlock))
 				toProcess2.add(entry);
 		}
 		
@@ -171,10 +175,10 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 			BlockPos pos = new BlockPos(entry.getKey().x, entry.getValue(), entry.getKey().z);
 			do
 			{
-				was.put(pos, world.getBlockState(pos));
-				world.setBlock(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], Constants.BlockFlags.BLOCK_UPDATE);
+				was.put(pos, level.getBlockState(pos));
+				level.setBlock(pos, isAlt?altBlock[pos.getY() % altBlock.length]:baseBlock[pos.getY() % baseBlock.length], Block.UPDATE_CLIENTS);
 				pos = pos.below();
-			} while(!world.getBlockState(pos).equals(groundBlock));
+			} while(!level.getBlockState(pos).equals(groundBlock));
 		}
 		
 		CoordPair nodePos = new CoordPair(rockPos.getX(), rockPos.getZ());
@@ -200,7 +204,7 @@ public class MesaFeature extends Feature<NoFeatureConfig>
 		
 		if(stomps)
 		{
-			was.forEach((t, u) -> world.setBlock(t, u, Constants.BlockFlags.BLOCK_UPDATE));
+			was.forEach((t, u) -> level.setBlock(t, u, Block.UPDATE_CLIENTS));
 		}
 		
 		return corePosition;

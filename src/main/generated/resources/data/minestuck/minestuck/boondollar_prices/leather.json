@@ -3,8 +3,10 @@
     "item": "minecraft:leather"
   },
   "range": {
-    "min": 65.0,
-    "max": 80.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 65,
+      "max_inclusive": 80
+    }
   }
 }

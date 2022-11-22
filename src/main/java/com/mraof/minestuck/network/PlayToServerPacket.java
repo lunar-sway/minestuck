@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -17,5 +17,5 @@ public interface PlayToServerPacket extends StandardPacket
 		ctx.get().setPacketHandled(true);
 	}
 	
-	void execute(ServerPlayerEntity player);
+	void execute(ServerPlayer player);
 }

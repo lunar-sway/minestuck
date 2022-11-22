@@ -2,17 +2,17 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.util.MagicEffect;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.phys.Vec3;
 
 public class MagicEffectPacket implements PlayToClientPacket
 {
 	private final MagicEffect.Type type;
-	private final Vector3d pos, lookVec;
+	private final Vec3 pos, lookVec;
 	private final int length;
 	private final boolean collides;
 	
-	public MagicEffectPacket(MagicEffect.Type type, Vector3d pos, Vector3d lookVec, int length, boolean collides)
+	public MagicEffectPacket(MagicEffect.Type type, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		this.type = type;
 		this.pos = pos;
@@ -22,7 +22,7 @@ public class MagicEffectPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(type.toInt());
 		buffer.writeDouble(pos.x);
@@ -35,11 +35,11 @@ public class MagicEffectPacket implements PlayToClientPacket
 		buffer.writeBoolean(collides);
 	}
 	
-	public static MagicEffectPacket decode(PacketBuffer buffer)
+	public static MagicEffectPacket decode(FriendlyByteBuf buffer)
 	{
 		MagicEffect.Type type = MagicEffect.Type.fromInt(buffer.readInt());
-		Vector3d pos = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-		Vector3d lookVec = new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+		Vec3 pos = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+		Vec3 lookVec = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		int length = buffer.readInt();
 		boolean collided = buffer.readBoolean();
 		return new MagicEffectPacket(type, pos, lookVec, length, collided);

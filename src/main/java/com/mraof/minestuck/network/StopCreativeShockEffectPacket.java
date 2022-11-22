@@ -1,8 +1,8 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.ClientProxy;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 
 public class StopCreativeShockEffectPacket implements PlayToClientPacket
 {
@@ -14,12 +14,12 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(mayBuild);
 	}
 	
-	public static StopCreativeShockEffectPacket decode(PacketBuffer buffer)
+	public static StopCreativeShockEffectPacket decode(FriendlyByteBuf buffer)
 	{
 		boolean mayBuild = buffer.readBoolean();
 		
@@ -29,10 +29,10 @@ public class StopCreativeShockEffectPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		PlayerEntity playerEntity = ClientProxy.getClientPlayer();
+		Player playerEntity = ClientProxy.getClientPlayer();
 		if(playerEntity != null)
 		{
-			playerEntity.abilities.mayBuild = !mayBuild;
+			playerEntity.getAbilities().mayBuild = !mayBuild;
 		}
 	}
 }

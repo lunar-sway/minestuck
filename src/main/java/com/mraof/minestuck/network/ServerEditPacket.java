@@ -1,9 +1,9 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,21 +14,21 @@ public class ServerEditPacket implements PlayToClientPacket
 	
 	String target;
 	int centerX, centerZ;
-	CompoundNBT deployTags;
+	CompoundTag deployTags;
 	
 	public static ServerEditPacket exit()
 	{
 		return new ServerEditPacket();
 	}
 	
-	public static ServerEditPacket givenItems(CompoundNBT deployTags)
+	public static ServerEditPacket givenItems(CompoundTag deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.deployTags = deployTags;
 		return packet;
 	}
 	
-	public static ServerEditPacket activate(String target, int centerX, int centerZ, CompoundNBT deployTags)
+	public static ServerEditPacket activate(String target, int centerX, int centerZ, CompoundTag deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;
@@ -39,7 +39,7 @@ public class ServerEditPacket implements PlayToClientPacket
 	}
 	
 	@Override
-	public void encode(PacketBuffer buffer)
+	public void encode(FriendlyByteBuf buffer)
 	{
 		if(target != null)
 		{
@@ -56,7 +56,7 @@ public class ServerEditPacket implements PlayToClientPacket
 			try
 			{
 				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				CompressedStreamTools.writeCompressed(deployTags, bytes);
+				NbtIo.writeCompressed(deployTags, bytes);
 				buffer.writeBytes(bytes.toByteArray());
 			} catch(IOException e)
 			{
@@ -65,7 +65,7 @@ public class ServerEditPacket implements PlayToClientPacket
 		}
 	}
 	
-	public static ServerEditPacket decode(PacketBuffer buffer)
+	public static ServerEditPacket decode(FriendlyByteBuf buffer)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		if(buffer.readableBytes() > 0)
@@ -83,7 +83,7 @@ public class ServerEditPacket implements PlayToClientPacket
 				buffer.readBytes(bytes);
 				try
 				{
-					packet.deployTags = CompressedStreamTools.readCompressed(new ByteArrayInputStream(bytes));
+					packet.deployTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
 				} catch(IOException e)
 				{
 					e.printStackTrace();

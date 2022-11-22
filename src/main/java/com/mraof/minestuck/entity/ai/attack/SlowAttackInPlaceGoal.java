@@ -1,8 +1,8 @@
 package com.mraof.minestuck.entity.ai.attack;
 
-import net.minecraft.entity.CreatureEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
  */
-public class SlowAttackInPlaceGoal<T extends CreatureEntity & AttackState.Holder> extends SlowAttackWhenInRangeGoal<T>
+public class SlowAttackInPlaceGoal<T extends PathfinderMob & AttackState.Holder> extends SlowAttackWhenInRangeGoal<T>
 {
 	private Vector3d lookTarget;
 	

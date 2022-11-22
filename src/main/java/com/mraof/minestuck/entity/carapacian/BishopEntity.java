@@ -1,43 +1,47 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.attack.AttackByDistanceGoal;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.projectile.FireballEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.LargeFireball;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
-public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, IMob
+public class BishopEntity extends CarapacianEntity implements RangedAttackMob, Enemy
 {
 	int burnTime;
 	
-	protected BishopEntity(EntityType<? extends BishopEntity> type, EnumEntityKingdom kingdom, World world)
+	protected BishopEntity(EntityType<? extends BishopEntity> type, EnumEntityKingdom kingdom, Level level)
 	{
-		super(type, kingdom, world);
+		super(type, kingdom, level);
 		this.xpReward = 3;
 	}
 	
-	public static BishopEntity createProspitian(EntityType<? extends BishopEntity> type, World world)
+	public static BishopEntity createProspitian(EntityType<? extends BishopEntity> type, Level level)
 	{
-		return new BishopEntity(type, EnumEntityKingdom.PROSPITIAN, world);
+		return new BishopEntity(type, EnumEntityKingdom.PROSPITIAN, level);
 	}
 	
-	public static BishopEntity createDersite(EntityType<? extends BishopEntity> type, World world)
+	public static BishopEntity createDersite(EntityType<? extends BishopEntity> type, Level level)
 	{
-		return new BishopEntity(type, EnumEntityKingdom.DERSITE, world);
+		return new BishopEntity(type, EnumEntityKingdom.DERSITE, level);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute bishopAttributes()
+	public static AttributeSupplier.Builder bishopAttributes()
 	{
 		return CarapacianEntity.carapacianAttributes().add(Attributes.MAX_HEALTH, 40)
 				.add(Attributes.MOVEMENT_SPEED, 0.2);
@@ -59,10 +63,9 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 		double distanceY = target.getBoundingBox().minY + (double) (target.getBbHeight() / 2.0F) - (this.getY() + (double) (this.getBbHeight() / 2.0F));
 		double distanceZ = target.getZ() - this.getZ();
 		
-		FireballEntity fireball = new FireballEntity(this.level, this, distanceX, distanceY, distanceZ);
-		fireball.explosionPower = 1;
+		LargeFireball fireball = new LargeFireball(this.level, this, distanceX, distanceY, distanceZ, 1);
 		double d8 = this.getBbHeight();
-		Vector3d vec3 = this.getViewVector(1.0F);
+		Vec3 vec3 = this.getViewVector(1.0F);
 		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F + vec3.x * d8;
 		double y = this.getY() + (double) (this.getBbHeight() / 2.0F);
 		double z = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
@@ -99,7 +102,7 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 	{
 		int damage = this.getAttackStrength(par1Entity);
 		int knockback = 6;
-		par1Entity.push(-MathHelper.sin(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (MathHelper.cos(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
+		par1Entity.push(-Mth.sin(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (Mth.cos(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
 		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
 	
@@ -117,13 +120,13 @@ public class BishopEntity extends CarapacianEntity implements IRangedAttackMob, 
 	
 	private static class NearestAttackableExtendedGoal extends NearestAttackableTargetGoal<LivingEntity>
 	{
-		NearestAttackableExtendedGoal(MobEntity goalOwnerIn, Class<LivingEntity> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate)
+		NearestAttackableExtendedGoal(Mob goalOwnerIn, Class<LivingEntity> targetClassIn, int targetChanceIn, boolean checkSight, boolean nearbyOnlyIn, @Nullable Predicate<LivingEntity> targetPredicate)
 		{
 			super(goalOwnerIn, targetClassIn, targetChanceIn, checkSight, nearbyOnlyIn, targetPredicate);
 		}
 		
 		@Override
-		protected AxisAlignedBB getTargetSearchArea(double targetDistance)
+		protected AABB getTargetSearchArea(double targetDistance)
 		{
 			//Bishops use a much higher bounding box for some reason. Probably for their fire ball targeting
 			return this.mob.getBoundingBox().inflate(targetDistance, 64.0D, targetDistance);

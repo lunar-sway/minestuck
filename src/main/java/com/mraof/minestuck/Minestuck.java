@@ -1,6 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ProgramData;
@@ -13,22 +14,30 @@ import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.entry.RSEntryBlockProcess;
 import com.mraof.minestuck.entry.TransportalizerBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
+import com.mraof.minestuck.inventory.MSMenuTypes;
+import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.generator.recipe.InterpreterSerializers;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.world.gen.MSSurfaceBuilders;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.gen.MSDensityFunctions;
+import com.mraof.minestuck.world.gen.MSNoiseParameters;
+import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
-import com.mraof.minestuck.world.gen.feature.MSCFeatures;
-import com.mraof.minestuck.world.gen.feature.MSFillerBlockTypes;
-import net.minecraft.command.arguments.ArgumentTypes;
-import net.minecraft.command.arguments.IArgumentSerializer;
-import net.minecraft.item.ItemStack;
+import com.mraof.minestuck.world.gen.feature.*;
+import com.mraof.minestuck.world.gen.structure.*;
+import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.WorldPersistenceHooks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -54,16 +63,43 @@ public class Minestuck
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, MinestuckConfig.clientSpec);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, MinestuckConfig.serverSpec);
 		
-		WorldPersistenceHooks.addHook(new MSWorldPersistenceHook());
-
 		GeckoLib.initialize();
 		
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		MSFluids.FLUIDS.register(eventBus);
-		MSSurfaceBuilders.REGISTER.register(eventBus);
-		MSTileEntityTypes.REGISTER.register(eventBus);
+		MSBlocks.REGISTER.register(eventBus);
+		MSItems.REGISTER.register(eventBus);
+		MSFluids.REGISTER.register(eventBus);
+		MSBlockEntityTypes.REGISTER.register(eventBus);
+		MSEntityTypes.REGISTER.register(eventBus);
+		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
+		MSSoundEvents.REGISTER.register(eventBus);
+		LandTypes.TERRAIN_REGISTER.register(eventBus);
+		LandTypes.TITLE_REGISTER.register(eventBus);
+		InterpreterSerializers.REGISTER.register(eventBus);
+		MSRecipeTypes.RECIPE_TYPE_REGISTER.register(eventBus);
+		MSRecipeTypes.SERIALIZER_REGISTER.register(eventBus);
+		MSLootTables.CONDITION_REGISTER.register(eventBus);
+		MSLootTables.FUNCTION_REGISTER.register(eventBus);
+		MSLootTables.ENTRY_REGISTER.register(eventBus);
+		ModusTypes.REGISTER.register(eventBus);
+		
+		MSNoiseParameters.REGISTER.register(eventBus);
+		MSDensityFunctions.REGISTER.register(eventBus);
+		MSFeatures.REGISTER.register(eventBus);
+		MSCFeatures.REGISTER.register(eventBus);
+		MSPlacedFeatures.REGISTER.register(eventBus);
+		
+		MSStructurePieces.REGISTER.register(eventBus);
+		MSStructures.REGISTER.register(eventBus);
+		MSConfiguredStructures.REGISTER.register(eventBus);
+		MSStructurePlacements.REGISTER.register(eventBus);
+		MSStructureSets.REGISTER.register(eventBus);
+		
+		MSStructureProcessorTypes.REGISTER.register(eventBus);
+		MSSurfaceRules.REGISTER.register(eventBus);
+		MSWorldGenTypes.REGISTER.register(eventBus);
 	}
 	
 	/**
@@ -86,17 +122,14 @@ public class Minestuck
 	{
 		MSCriteriaTriggers.register();
 		MSEntityTypes.registerPlacements();
-		MSFillerBlockTypes.init();	//Not sure if this is thread safe, but better safe than sorry
-		MSCFeatures.init();
-		MSWorldGenTypes.register();
 		
 		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK), ProgramData::onServerClosed);
+		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
+		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
 		
 		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
 		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());
@@ -110,7 +143,7 @@ public class Minestuck
 		ArgumentTypes.register("minestuck:land_type_pair", LandTypePairArgument.class, LandTypePairArgument.SERIALIZER);
 		ArgumentTypes.register("minestuck:title", TitleArgument.class, TitleArgument.SERIALIZER);
 		//noinspection unchecked,rawtypes
-		ArgumentTypes.register("minestuck:list", ListArgument.class, (IArgumentSerializer) ListArgument.SERIALIZER);
+		ArgumentTypes.register("minestuck:list", ListArgument.class, (ArgumentSerializer) ListArgument.SERIALIZER);
 		
 	}
 	

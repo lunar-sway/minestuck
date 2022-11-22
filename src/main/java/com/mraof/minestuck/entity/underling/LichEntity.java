@@ -1,23 +1,24 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -28,12 +29,13 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	public LichEntity(EntityType<? extends LichEntity> type, World world)
+	
+	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{
-		super(type, world, 7);
+		super(type, level, 7);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute lichAttributes()
+	public static AttributeSupplier.Builder lichAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 175)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.3).add(Attributes.MOVEMENT_SPEED, 0.25)
@@ -49,19 +51,22 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_AMBIENT;
+		return MSSoundEvents.ENTITY_LICH_AMBIENT.get();
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_LICH_HURT;
+		return MSSoundEvents.ENTITY_LICH_HURT.get();
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_LICH_DEATH;
+		return MSSoundEvents.ENTITY_LICH_DEATH.get();
 	}
 	
 	@Override
@@ -150,7 +155,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public void start()
 		{
-			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null && !instance.hasModifier(RESISTANCE_MODIFIER_ATTACKING))
 				instance.addTransientModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}
@@ -158,7 +163,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public void stop()
 		{
-			ModifiableAttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
+			AttributeInstance instance = getAttributes().getInstance(Attributes.KNOCKBACK_RESISTANCE);
 			if(instance != null)
 				instance.removeModifier(RESISTANCE_MODIFIER_ATTACKING);
 		}

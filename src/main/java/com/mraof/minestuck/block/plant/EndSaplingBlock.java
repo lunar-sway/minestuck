@@ -3,30 +3,30 @@ package com.mraof.minestuck.block.plant;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.feature.tree.EndTree;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BushBlock;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class EndSaplingBlock extends BushBlock implements IGrowable
+public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 {
 	public static final BooleanProperty ALPHA = MSProperties.ALPHA;
 	public static final BooleanProperty OMEGA = MSProperties.OMEGA;
 	protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 12.0D, 14.0D);
 	
-	private final Tree tree = new EndTree();
+	private final AbstractTreeGrower tree = new EndTree();
 	
 	public EndSaplingBlock(Properties properties)
 	{
@@ -36,19 +36,19 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext contezt)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPE;
 	}
 	
 	@Override
-	public boolean isValidBonemealTarget(IBlockReader worldIn, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean isBonemealSuccess(World worldIn, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -58,9 +58,9 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 	 * If Alpha is true and omega is false, then the tree will generate.
 	 */
 	@Override
-	public void performBonemeal(ServerWorld worldIn, Random rand, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state)
 	{
-		if(worldIn.isClientSide || worldIn.dimensionType().moonPhase(worldIn.getDayTime()) == 4)
+		if(level.isClientSide || level.dimensionType().moonPhase(level.getDayTime()) == 4)
 		{
 			return;
 		}
@@ -74,50 +74,50 @@ public class EndSaplingBlock extends BushBlock implements IGrowable
 		
 		if(state.getValue(ALPHA) && !state.getValue(OMEGA))
 		{
-			generateTree(worldIn, pos, state, rand);
+			generateTree(level, pos, state, rand);
 		} else
 		{
-			worldIn.setBlockAndUpdate(pos, state);
+			level.setBlockAndUpdate(pos, state);
 		}
 	}
 	
-	private void generateTree(ServerWorld worldIn, BlockPos pos, BlockState state, Random rand)
+	private void generateTree(ServerLevel level, BlockPos pos, BlockState state, Random rand)
 	{
-		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(worldIn, rand, pos))
+		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(level, rand, pos))
 			return;
-		tree.growTree(worldIn, worldIn.getChunkSource().getGenerator(), pos, state, rand);
+		tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(ALPHA, OMEGA);
 	}
 	
 	@Override
-	public boolean canSurvive(BlockState state, IWorldReader worldIn, BlockPos pos)
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		BlockPos groundPos = pos.below();
-		return mayPlaceOn(worldIn.getBlockState(groundPos), worldIn, groundPos);
+		return mayPlaceOn(level.getBlockState(groundPos), level, groundPos);
 	}
 	
 	@Override
-	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
-		return MSTags.Blocks.END_SAPLING_DIRT.contains(state.getBlock());
+		return state.is(MSTags.Blocks.END_SAPLING_DIRT);
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerWorld worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
 	{
-		if (!worldIn.isClientSide)
+		if (!level.isClientSide)
 		{
-			super.tick(state, worldIn, pos, random);
+			super.tick(state, level, pos, random);
 			
-			if (isValidBonemealTarget(worldIn, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
+			if (isValidBonemealTarget(level, pos, state, false) && random.nextInt(7) == 0)	//The world is not remote, therefore the side is not client.
 			{
-				this.performBonemeal(worldIn, random, pos, state);
+				this.performBonemeal(level, random, pos, state);
 			}
 		}
 	}

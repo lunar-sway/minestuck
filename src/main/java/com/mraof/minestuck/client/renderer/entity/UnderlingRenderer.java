@@ -1,27 +1,29 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import org.slf4j.Logger;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 
 /**
@@ -29,10 +31,12 @@ import java.io.IOException;
  */
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T>
 {
-	public UnderlingRenderer(EntityRendererManager renderManager)
+	private static final Logger LOGGER = LogUtils.getLogger();
+	
+	public UnderlingRenderer(EntityRendererProvider.Context context)
 	{
 		// this renderer does two simple things :
-		super(renderManager, new UnderlingModel<>()); // render the entity with the base layer merged with a grist texture
+		super(context, new UnderlingModel<>()); // render the entity with the base layer merged with a grist texture
 		this.addLayer(new UnderlingDetailsLayer(this)); // render a second layer with details (eyes, mouth, etc)
 	}
 	
@@ -43,7 +47,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	}
 	
 	@Override
-	public Color getRenderColor(T animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn)
+	public Color getRenderColor(T animatable, float partialTicks, PoseStack stack, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn)
 	{
 		return Color.ofOpaque(animatable.getGristType().getColor());
 	}
@@ -60,39 +64,50 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
 		
 		// the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
-		if(Minecraft.getInstance().textureManager.getTexture(resource) == null)
+		SimpleTexture nullTexture = new SimpleTexture(resource);
+		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
 		{
-			try
+			DynamicTexture texture = createLayeredTexture(entity);
+			
+			// save the computed texture to the texture manager's cache
+			Minecraft.getInstance().textureManager.register(resource, texture);
+		}
+		
+		return resource;
+	}
+	
+	private DynamicTexture createLayeredTexture(T entity) {
+		ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+		NativeImage base = loadImage(resourceManager, super.getTextureLocation(entity));
+		NativeImage texture = loadImage(resourceManager, getGristTexture(entity));
+		NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
+		
+		// loop through pixels on the base, apply textures & keep transparency
+		// TODO possibility to bake the details layer directly in the texture when/if the renderer stops coloring the vertex
+		for(int i = 0; i < base.getWidth(); i++)
+		{
+			for(int j = 0; j < base.getHeight(); j++)
 			{
-				IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
-				NativeImage base = SimpleTexture.TextureData.load(resourceManager, super.getTextureLocation(entity)).getImage();
-				NativeImage texture = SimpleTexture.TextureData.load(resourceManager, getGristTexture(entity)).getImage();
-				NativeImage computed = new NativeImage(base.getWidth(), base.getHeight(), false);
-				
-				// loop through pixels on the base, apply textures & keep transparency
-				// TODO possibility to bake the details layer directly in the texture when/if the renderer stops coloring the vertex
-				for(int i = 0; i < base.getWidth(); i++)
+				if(NativeImage.getA(base.getPixelRGBA(i, j)) == 0)
 				{
-					for(int j = 0; j < base.getHeight(); j++)
-					{
-						if(NativeImage.getA(base.getPixelRGBA(i, j)) == 0)
-						{
-							computed.setPixelRGBA(i, j, 0);
-						} else
-						{
-							computed.setPixelRGBA(i, j, texture.getPixelRGBA(i % texture.getWidth(), j % texture.getHeight()));
-						}
-					}
+					computed.setPixelRGBA(i, j, 0);
+				} else
+				{
+					computed.setPixelRGBA(i, j, texture.getPixelRGBA(i % texture.getWidth(), j % texture.getHeight()));
 				}
-				
-				// save the computed texture to the texture manager's cache
-				Minecraft.getInstance().textureManager.register(resource, new DynamicTexture(computed));
-			} catch(IOException e)
-			{
-				throw new RuntimeException(e);
 			}
 		}
-		return resource;
+		
+		return new DynamicTexture(computed);
+	}
+	
+	private NativeImage loadImage(ResourceManager resourceManager, ResourceLocation location) {
+		try {
+			Resource resource = resourceManager.getResource(location);
+			return NativeImage.read(resource.getInputStream());
+		} catch (IOException e) {
+			return null;
+		}
 	}
 	
 	private ResourceLocation getGristTexture(T entity)
@@ -116,7 +131,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		}
 		
 		@Override
-		public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
+		public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
 		{
 			RenderType renderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entityLivingBaseIn) + "_details.png"));
 			float color = getContrastModifier(entityLivingBaseIn);

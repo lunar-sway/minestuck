@@ -3,17 +3,17 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class PropelEffect implements ItemRightClickEffect
 {
@@ -29,12 +29,12 @@ public class PropelEffect implements ItemRightClickEffect
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onRightClick(World world, PlayerEntity player, Hand hand)
+	public InteractionResultHolder<ItemStack> onRightClick(Level level, Player player, InteractionHand hand)
 	{
 		ItemStack itemStack = player.getItemInHand(hand);
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MOBILITY_ITEMS))
 			propelAction(player, itemStack, getVelocityMod(), hand);
-		return ActionResult.pass(itemStack);
+		return InteractionResultHolder.pass(itemStack);
 	}
 	
 	private double getVelocityMod()
@@ -42,22 +42,22 @@ public class PropelEffect implements ItemRightClickEffect
 		return velocity;
 	}
 	
-	void propelAction(PlayerEntity player, ItemStack stack, double velocity, Hand hand)
+	void propelAction(Player player, ItemStack stack, double velocity, InteractionHand hand)
 	{
 		Title title = null;
 		if(player.level.isClientSide)
 		{
 			title = ClientPlayerData.getTitle();
-		} else if(player instanceof ServerPlayerEntity)
+		} else if(player instanceof ServerPlayer)
 		{
-			title = PlayerSavedData.getData((ServerPlayerEntity) player).getTitle();
+			title = PlayerSavedData.getData((ServerPlayer) player).getTitle();
 			if(player.getCooldowns().getCooldownPercent(stack.getItem(), 1F) <= 0 && ((title != null && title.getHeroAspect() == aspect) || player.isCreative()))
 				propelActionSound(player.level, player);
 		}
 		
 		if((title != null && title.getHeroAspect() == aspect) || player.isCreative())
 		{
-			Vector3d lookVec = player.getLookAngle().scale(velocity);
+			Vec3 lookVec = player.getLookAngle().scale(velocity);
 			if(player.isFallFlying())
 			{
 				lookVec = lookVec.scale(velocity / 12D);
@@ -66,12 +66,12 @@ public class PropelEffect implements ItemRightClickEffect
 			
 			player.swing(hand, true);
 			player.getCooldowns().addCooldown(stack.getItem(), 100);
-			stack.hurtAndBreak(4, player, playerEntity -> playerEntity.broadcastBreakEvent(Hand.MAIN_HAND));
+			stack.hurtAndBreak(4, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 		}
 	}
 	
-	void propelActionSound(World world, PlayerEntity player)
+	void propelActionSound(Level level, Player player)
 	{
-		world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, 1.75F, 1.6F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_RIPTIDE_2, SoundSource.PLAYERS, 1.75F, 1.6F);
 	}
 }

@@ -3,15 +3,15 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.FrogEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.Set;
@@ -19,16 +19,16 @@ import java.util.Set;
 public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 {
 	protected int dmg = 0;
-	private static final DataParameter<Integer> TYPE = EntityDataManager.defineId(FrogEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(FrogEntity.class, EntityDataSerializers.INT);
 	
-	public ShopPosterEntity(EntityType<? extends ShopPosterEntity> type, World worldIn)
+	public ShopPosterEntity(EntityType<? extends ShopPosterEntity> type, Level level)
 	{
-		super(type, worldIn);
+		super(type, level);
 	}
 	
-	public ShopPosterEntity(World worldIn, BlockPos pos, Direction direction, ItemStack stack)
+	public ShopPosterEntity(Level level, BlockPos pos, Direction direction, ItemStack stack)
 	{
-		super(MSEntityTypes.SHOP_POSTER, worldIn, pos, direction);
+		super(MSEntityTypes.SHOP_POSTER.get(), level, pos, direction);
 		//setPosterType(meta);
 	}
 	
@@ -55,14 +55,14 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	@Override
 	public ItemStack getStackDropped()
 	{
-		return new ItemStack(MSItems.SHOP_POSTER);//, 1, getPosterType()); TODO poster subtypes
+		return new ItemStack(MSItems.SHOP_POSTER.get());//, 1, getPosterType()); TODO poster subtypes
 	}
 	
 	private void setPosterType(int i)
-    {
-    	this.entityData.set(TYPE, i);
+	{
+		this.entityData.set(TYPE, i);
 	}
-
+	
 	public int getPosterType()
 	{
 		return this.entityData.get(TYPE);
@@ -71,14 +71,14 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 	//NBT
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("Type", this.getPosterType());
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		if(compound.contains("Type")) setPosterType(compound.getInt("Type"));
@@ -107,21 +107,34 @@ public class ShopPosterEntity extends HangingArtEntity<ShopPosterEntity.ShopArt>
 		}
 		
 		
-		
 		@Override
 		public String getTitle()
-		{return title;}
+		{
+			return title;
+		}
+		
 		@Override
 		public int getSizeX()
-		{return sizeX;}
+		{
+			return sizeX;
+		}
+		
 		@Override
 		public int getSizeY()
-		{return sizeY;}
+		{
+			return sizeY;
+		}
+		
 		@Override
 		public int getOffsetX()
-		{return offsetX;}
+		{
+			return offsetX;
+		}
+		
 		@Override
 		public int getOffsetY()
-		{return offsetY;}
+		{
+			return offsetY;
+		}
 	}
 }

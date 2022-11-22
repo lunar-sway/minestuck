@@ -3,8 +3,10 @@
     "item": "minestuck:smooth_shade_stone"
   },
   "range": {
-    "min": 5.0,
-    "max": 8.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 5,
+      "max_inclusive": 8
+    }
   }
 }

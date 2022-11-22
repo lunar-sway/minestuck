@@ -5,12 +5,11 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.SkaianetInfoPacket;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,8 +32,8 @@ public class SkaiaClient
 	/**
 	 * A map used to track chains of lands, to be used by the skybox render
 	 */
-	private static final Map<RegistryKey<World>, List<RegistryKey<World>>> landChainMap = new HashMap<>();
-	private static ComputerTileEntity te = null;
+	private static final Map<ResourceKey<Level>, List<ResourceKey<Level>>> landChainMap = new HashMap<>();
+	private static ComputerBlockEntity be = null;
 	public static int playerId;	//The id that this player is expected to have.
 	
 	@SubscribeEvent
@@ -54,14 +53,14 @@ public class SkaiaClient
 	 * @param computer The computer. Will save this variable for later if it sends a request.
 	 * @return If it currently has the necessary information.
 	 */
-	public static boolean requestData(ComputerTileEntity computer)
+	public static boolean requestData(ComputerBlockEntity computer)
 	{
 		boolean b = openServers.get(computer.ownerId) != null;
 		if(!b)
 		{
 			SkaianetInfoPacket packet = SkaianetInfoPacket.request(computer.ownerId);
 			MSPacketHandler.sendToServer(packet);
-			te = computer;
+			be = computer;
 		}
 		return b;
 	}
@@ -91,7 +90,7 @@ public class SkaiaClient
 		return false;
 	}
 	
-	public static List<RegistryKey<World>> getLandChain(RegistryKey<World> id)
+	public static List<ResourceKey<Level>> getLandChain(ResourceKey<Level> id)
 	{
 		return landChainMap.get(id);
 	}
@@ -131,9 +130,9 @@ public class SkaiaClient
 		if(data.landChains != null)
 		{
 			landChainMap.clear();
-			for(List<RegistryKey<World>> list : data.landChains)
+			for(List<ResourceKey<Level>> list : data.landChains)
 			{
-				for(RegistryKey<World> land : list)
+				for(ResourceKey<Level> land : list)
 				{
 					landChainMap.put(land, list);
 				}
@@ -152,13 +151,13 @@ public class SkaiaClient
 		connections.addAll(data.connectionsTo);
 		
 		Screen gui = Minecraft.getInstance().screen;
-		if(gui instanceof ComputerScreen)
-			((ComputerScreen)gui).updateGui();
-		else if(te != null && te.ownerId == data.playerId)
+		if(gui instanceof ComputerScreen computerScreen)
+			computerScreen.updateGui();
+		else if(be != null && be.ownerId == data.playerId)
 		{
 			if(!Minecraft.getInstance().player.isShiftKeyDown())
-				MSScreenFactories.displayComputerScreen(te);
-			te = null;
+				MSScreenFactories.displayComputerScreen(be);
+			be = null;
 		}
 	}
 }

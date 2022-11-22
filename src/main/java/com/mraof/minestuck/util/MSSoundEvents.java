@@ -1,145 +1,103 @@
 package com.mraof.minestuck.util;
 
-import com.google.common.collect.Lists;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
-import javax.annotation.Nonnull;
-import java.util.List;
-
-@ObjectHolder(Minestuck.MOD_ID)
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.MOD)
 public class MSSoundEvents
 {
-	public static final SoundEvent MUSIC_DISC_EMISSARY_OF_DANCE = getNull();
-	public static final SoundEvent MUSIC_DISC_DANCE_STAB_DANCE = getNull();
-	public static final SoundEvent MUSIC_DISC_RETRO_BATTLE_THEME = getNull();
+	public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Minestuck.MOD_ID);
 	
-	public static final SoundEvent MUSIC_DEFAULT = getNull();
-	public static final SoundEvent MUSIC_FOREST = getNull();
-	public static final SoundEvent MUSIC_TAIGA = getNull();
-	public static final SoundEvent MUSIC_FROST = getNull();
-	public static final SoundEvent MUSIC_FUNGI = getNull();
-	public static final SoundEvent MUSIC_HEAT = getNull();
-	public static final SoundEvent MUSIC_ROCK = getNull();
-	public static final SoundEvent MUSIC_PETRIFICATION = getNull();
-	public static final SoundEvent MUSIC_SAND = getNull();
-	public static final SoundEvent MUSIC_LUSH_DESERTS = getNull();
-	public static final SoundEvent MUSIC_SANDSTONE = getNull();
-	public static final SoundEvent MUSIC_SHADE = getNull();
-	public static final SoundEvent MUSIC_WOOD = getNull();
-	public static final SoundEvent MUSIC_RAINBOW = getNull();
-	public static final SoundEvent MUSIC_FLORA = getNull();
-	public static final SoundEvent MUSIC_END = getNull();
-	public static final SoundEvent MUSIC_RAIN = getNull();
+	public static final RegistryObject<SoundEvent> MUSIC_DISC_EMISSARY_OF_DANCE = register("music_disc.emissary_of_dance");
+	public static final RegistryObject<SoundEvent> MUSIC_DISC_DANCE_STAB_DANCE = register("music_disc.dance_stab_dance");
+	public static final RegistryObject<SoundEvent> MUSIC_DISC_RETRO_BATTLE_THEME = register("music_disc.retro_battle_theme");
 	
-	public static final SoundEvent MUSIC_FROGS = getNull();
-	public static final SoundEvent MUSIC_WIND = getNull();
-	public static final SoundEvent MUSIC_LIGHT = getNull();
-	public static final SoundEvent MUSIC_CLOCKWORK = getNull();
-	public static final SoundEvent MUSIC_SILENCE = getNull();
-	public static final SoundEvent MUSIC_THUNDER = getNull();
-	public static final SoundEvent MUSIC_PULSE = getNull();
-	public static final SoundEvent MUSIC_THOUGHT = getNull();
-	public static final SoundEvent MUSIC_BUCKETS = getNull();
-	public static final SoundEvent MUSIC_CAKE = getNull();
-	public static final SoundEvent MUSIC_RABBITS = getNull();
-	public static final SoundEvent MUSIC_MONSTERS = getNull();
-	public static final SoundEvent MUSIC_UNDEAD = getNull();
-	public static final SoundEvent MUSIC_TOWERS = getNull();
+	public static final RegistryObject<SoundEvent> MUSIC_DEFAULT = register("music.default");
+	public static final RegistryObject<SoundEvent> MUSIC_FOREST = register("music.forest");
+	public static final RegistryObject<SoundEvent> MUSIC_TAIGA = register("music.taiga");
+	public static final RegistryObject<SoundEvent> MUSIC_FROST = register("music.frost");
+	public static final RegistryObject<SoundEvent> MUSIC_FUNGI = register("music.fungi");
+	public static final RegistryObject<SoundEvent> MUSIC_HEAT = register("music.heat");
+	public static final RegistryObject<SoundEvent> MUSIC_ROCK = register("music.rock");
+	public static final RegistryObject<SoundEvent> MUSIC_PETRIFICATION = register("music.petrification");
+	public static final RegistryObject<SoundEvent> MUSIC_SAND = register("music.sand");
+	public static final RegistryObject<SoundEvent> MUSIC_LUSH_DESERTS = register("music.lush_deserts");
+	public static final RegistryObject<SoundEvent> MUSIC_SANDSTONE = register("music.sandstone");
+	public static final RegistryObject<SoundEvent> MUSIC_SHADE = register("music.shade");
+	public static final RegistryObject<SoundEvent> MUSIC_WOOD = register("music.wood");
+	public static final RegistryObject<SoundEvent> MUSIC_RAINBOW = register("music.rainbow");
+	public static final RegistryObject<SoundEvent> MUSIC_FLORA = register("music.flora");
+	public static final RegistryObject<SoundEvent> MUSIC_END = register("music.end");
+	public static final RegistryObject<SoundEvent> MUSIC_RAIN = register("music.rain");
 	
-	public static final SoundEvent ENTITY_NAKAGATOR_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_NAKAGATOR_HURT = getNull();
-	public static final SoundEvent ENTITY_NAKAGATOR_DEATH = getNull();
-	public static final SoundEvent ENTITY_SALAMANDER_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_SALAMANDER_HURT = getNull();
-	public static final SoundEvent ENTITY_SALAMANDER_DEATH = getNull();
-	public static final SoundEvent ENTITY_IGUANA_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_IGUANA_HURT = getNull();
-	public static final SoundEvent ENTITY_IGUANA_DEATH = getNull();
-	public static final SoundEvent ENTITY_TURTLE_HURT = getNull();
-	public static final SoundEvent ENTITY_TURTLE_DEATH = getNull();
-	public static final SoundEvent ENTITY_FROG_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_FROG_HURT = getNull();
-	public static final SoundEvent ENTITY_FROG_DEATH = getNull();
-	public static final SoundEvent ENTITY_IMP_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_IMP_HURT = getNull();
-	public static final SoundEvent ENTITY_IMP_DEATH = getNull();
-	public static final SoundEvent ENTITY_OGRE_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_OGRE_HURT = getNull();
-	public static final SoundEvent ENTITY_OGRE_DEATH = getNull();
-	public static final SoundEvent ENTITY_BASILISK_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_BASILISK_HURT = getNull();
-	public static final SoundEvent ENTITY_BASILISK_DEATH = getNull();
-	public static final SoundEvent ENTITY_LICH_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_LICH_HURT = getNull();
-	public static final SoundEvent ENTITY_LICH_DEATH = getNull();
-	public static final SoundEvent ENTITY_GICLOPS_AMBIENT = getNull();
-	public static final SoundEvent ENTITY_GICLOPS_HURT = getNull();
-	public static final SoundEvent ENTITY_GICLOPS_DEATH = getNull();
-	public static final SoundEvent ITEM_LONG_FORGOTTEN_WARHORN_USE = getNull();
-	public static final SoundEvent ITEM_GRIMOIRE_USE = getNull();
-	public static final SoundEvent ITEM_HORN_USE = getNull();
-	public static final SoundEvent ITEM_EEEEEEEEEEEE_HIT = getNull();
-	public static final SoundEvent EVENT_ECHELADDER_INCREASE = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_SHOCK = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_AMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_BBMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_CMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_DMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EBMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_EMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_FMAJOR = getNull();
-	public static final SoundEvent EVENT_ELECTRIC_AUTOHARP_STROKE_GMAJOR = getNull();
-    
-    @Nonnull
-	@SuppressWarnings("ConstantConditions")
-	private static <T> T getNull()
+	public static final RegistryObject<SoundEvent> MUSIC_FROGS = register("music.frogs");
+	public static final RegistryObject<SoundEvent> MUSIC_WIND = register("music.wind");
+	public static final RegistryObject<SoundEvent> MUSIC_LIGHT = register("music.light");
+	public static final RegistryObject<SoundEvent> MUSIC_CLOCKWORK = register("music.clockwork");
+	public static final RegistryObject<SoundEvent> MUSIC_SILENCE = register("music.silence");
+	public static final RegistryObject<SoundEvent> MUSIC_THUNDER = register("music.thunder");
+	public static final RegistryObject<SoundEvent> MUSIC_PULSE = register("music.pulse");
+	public static final RegistryObject<SoundEvent> MUSIC_THOUGHT = register("music.thought");
+	public static final RegistryObject<SoundEvent> MUSIC_BUCKETS = register("music.buckets");
+	public static final RegistryObject<SoundEvent> MUSIC_CAKE = register("music.cake");
+	public static final RegistryObject<SoundEvent> MUSIC_RABBITS = register("music.rabbits");
+	public static final RegistryObject<SoundEvent> MUSIC_MONSTERS = register("music.monsters");
+	public static final RegistryObject<SoundEvent> MUSIC_UNDEAD = register("music.undead");
+	public static final RegistryObject<SoundEvent> MUSIC_TOWERS = register("music.towers");
+	
+	public static final RegistryObject<SoundEvent> MUSIC_UNIVERSAL = register("music.universal"); //play in all lands
+	public static final RegistryObject<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
+	
+	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_AMBIENT = register("entity.nakagator.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_HURT = register("entity.nakagator.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_DEATH = register("entity.nakagator.death");
+	public static final RegistryObject<SoundEvent> ENTITY_SALAMANDER_AMBIENT = register("entity.salamander.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_SALAMANDER_HURT = register("entity.salamander.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_SALAMANDER_DEATH = register("entity.salamander.death");
+	public static final RegistryObject<SoundEvent> ENTITY_IGUANA_AMBIENT = register("entity.iguana.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_IGUANA_HURT = register("entity.iguana.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_IGUANA_DEATH = register("entity.iguana.death");
+	public static final RegistryObject<SoundEvent> ENTITY_TURTLE_HURT = register("entity.turtle.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_TURTLE_DEATH = register("entity.turtle.death");
+	public static final RegistryObject<SoundEvent> ENTITY_FROG_AMBIENT = register("entity.frog.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_FROG_HURT = register("entity.frog.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_FROG_DEATH = register("entity.frog.death");
+	public static final RegistryObject<SoundEvent> ENTITY_IMP_AMBIENT = register("entity.imp.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_IMP_HURT = register("entity.imp.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_IMP_DEATH = register("entity.imp.death");
+	public static final RegistryObject<SoundEvent> ENTITY_OGRE_AMBIENT = register("entity.ogre.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_OGRE_HURT = register("entity.ogre.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_OGRE_DEATH = register("entity.ogre.death");
+	public static final RegistryObject<SoundEvent> ENTITY_BASILISK_AMBIENT = register("entity.basilisk.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_BASILISK_HURT = register("entity.basilisk.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_BASILISK_DEATH = register("entity.basilisk.death");
+	public static final RegistryObject<SoundEvent> ENTITY_LICH_AMBIENT = register("entity.lich.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_LICH_HURT = register("entity.lich.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_LICH_DEATH = register("entity.lich.death");
+	public static final RegistryObject<SoundEvent> ENTITY_GICLOPS_AMBIENT = register("entity.giclops.ambient");
+	public static final RegistryObject<SoundEvent> ENTITY_GICLOPS_HURT = register("entity.giclops.hurt");
+	public static final RegistryObject<SoundEvent> ENTITY_GICLOPS_DEATH = register("entity.giclops.death");
+	public static final RegistryObject<SoundEvent> ITEM_LONG_FORGOTTEN_WARHORN_USE = register("item.long_forgotten_warhorn.use");
+	public static final RegistryObject<SoundEvent> ITEM_GRIMOIRE_USE = register("item.grimoire.use");
+	public static final RegistryObject<SoundEvent> ITEM_HORN_USE = register("item.horn.use");
+	public static final RegistryObject<SoundEvent> ITEM_EEEEEEEEEEEE_HIT = register("item.eeeeeeeeeeee.hit");
+	public static final RegistryObject<SoundEvent> ITEM_ELECTRIC_AUTOHARP_STROKE = register("item.electric_autoharp.stroke");
+	public static final RegistryObject<SoundEvent> ITEM_MAGIC_CAST = register("item.magic.cast"); //based on evoker cast
+	public static final RegistryObject<SoundEvent> ITEM_MAGIC_HIT = register("item.magic.hit"); //identical to shulker bullet hit
+	public static final RegistryObject<SoundEvent> ITEM_PROJECTILE_THROW = register("item.projectile.throw"); //identical to trident throw
+	public static final RegistryObject<SoundEvent> ITEM_PROJECTILE_BOUNCE = register("item.projectile.bounce"); //identical to shield block
+	public static final RegistryObject<SoundEvent> EVENT_ECHELADDER_INCREASE = register("event.echeladder.increase");
+	public static final RegistryObject<SoundEvent> EVENT_ELECTRIC_SHOCK = register("event.electric_shock");
+	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_LOOT_SPAWN = register("event.lotus_flower.loot_spawn"); //based on boat paddle land and item pop
+	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_OPEN = register("event.lotus_flower.open"); //identical to composter ready
+	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
+	
+	
+	private static RegistryObject<SoundEvent> register(String name)
 	{
-		return null;
-	}
-	
-	@SubscribeEvent
-	public static void registerSound(final RegistryEvent.Register<SoundEvent> event)
-	{
-		List<String> paths = Lists.newArrayList(
-				"music_disc.emissary_of_dance", "music_disc.dance_stab_dance", "music_disc.retro_battle_theme",
-				"music.default",
-				"music.forest", "music.taiga", "music.frost", "music.fungi",
-				"music.heat", "music.rock", "music.petrification", "music.sand",
-				"music.lush_deserts", "music.sandstone", "music.shade", "music.wood",
-				"music.rainbow", "music.flora", "music.end", "music.rain",
-				"music.frogs", "music.wind", "music.light", "music.clockwork", "music.silence", "music.thunder", "music.pulse",
-				"music.thought", "music.buckets", "music.cake", "music.rabbits", "music.monsters", "music.undead", "music.towers",
-				"entity.nakagator.ambient", "entity.nakagator.hurt", "entity.nakagator.death",
-				"entity.iguana.ambient", "entity.iguana.hurt", "entity.iguana.death",
-				"entity.salamander.ambient", "entity.salamander.hurt", "entity.salamander.death",
-				"entity.turtle.hurt", "entity.turtle.death",
-				"entity.frog.ambient", "entity.frog.hurt", "entity.frog.death",
-				"entity.imp.ambient", "entity.imp.hurt", "entity.imp.death",
-				"entity.ogre.ambient", "entity.ogre.hurt", "entity.ogre.death",
-				"entity.basilisk.ambient", "entity.basilisk.hurt", "entity.basilisk.death",
-				"entity.lich.ambient", "entity.lich.hurt", "entity.lich.death",
-				"entity.giclops.ambient", "entity.giclops.hurt", "entity.giclops.death",
-				"item.long_forgotten_warhorn.use", "item.grimoire.use",  "item.horn.use",
-				"item.eeeeeeeeeeee.hit", "event.echeladder.increase", "event.electric_shock",
-				"event.electric_autoharp.stroke.amajor","event.electric_autoharp.stroke.bmajor",
-				"event.electric_autoharp.stroke.bbmajor", "event.electric_autoharp.stroke.cmajor",
-				"event.electric_autoharp.stroke.dmajor", "event.electric_autoharp.stroke.ebmajor",
-				"event.electric_autoharp.stroke.emajor","event.electric_autoharp.stroke.fmajor",
-				"event.electric_autoharp.stroke.gmajor");
-		
-		for(String path : paths)
-		{
-			ResourceLocation location = new ResourceLocation(Minestuck.MOD_ID, path);
-			ResourceLocation name = new ResourceLocation(location.toString().replace('.', '_'));
-			event.getRegistry().register(new SoundEvent(location).setRegistryName(name));
-		}
+		return REGISTER.register(name.replace(".","_"), () -> new SoundEvent(new ResourceLocation(Minestuck.MOD_ID, name)));
 	}
 }

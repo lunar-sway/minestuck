@@ -1,40 +1,43 @@
 package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.util.Debug;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.IIntArray;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.TranslationTextComponent;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.Util;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsortMerchantInventory implements IInventory
+public class ConsortMerchantInventory implements Container
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final String CANT_AFFORD = "consort.cant_afford";
 	
 	private final NonNullList<ItemStack> inv = NonNullList.withSize(9, ItemStack.EMPTY);
 	private final int[] prices = new int[9];
 	private final ConsortEntity consort;
 	
-	public ConsortMerchantInventory(ConsortEntity consort, ListNBT list)
+	public ConsortMerchantInventory(ConsortEntity consort, ListTag list)
 	{
 		this.consort = consort;
 		
 		for(int i = 0; i < list.size() && i < 9; i++)
 		{
-			CompoundNBT nbt = list.getCompound(i);
+			CompoundTag nbt = list.getCompound(i);
 			ItemStack stack = ItemStack.of(nbt);
 			inv.set(i, stack);
 			if(!stack.isEmpty())
@@ -54,7 +57,7 @@ public class ConsortMerchantInventory implements IInventory
 		}
 	}
 	
-	public void handlePurchase(ServerPlayerEntity player, boolean all, int index)
+	public void handlePurchase(ServerPlayer player, boolean all, int index)
 	{
 		if (!player.level.isClientSide && index >= 0 && index < inv.size())
 		{
@@ -65,7 +68,7 @@ public class ConsortMerchantInventory implements IInventory
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
-				player.sendMessage(new TranslationTextComponent(CANT_AFFORD), Util.NIL_UUID);
+				player.sendMessage(new TranslatableComponent(CANT_AFFORD), Util.NIL_UUID);
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);
@@ -74,25 +77,25 @@ public class ConsortMerchantInventory implements IInventory
 				if(stack.isEmpty())
 					prices[index] = 0;
 				
-				if (!player.addItem(items))
+				if (player.addItem(items))
+					player.inventoryMenu.broadcastChanges();
+				else
 				{
 					ItemEntity entity = player.drop(items, false);
 					if (entity != null)
 						entity.setNoPickUpDelay();
-					else Debug.warn("Couldn't spawn in an item purchased from a consort! "+items);
-				} else player.inventoryMenu.broadcastChanges();
-				
-				player.containerMenu.broadcastChanges();
+					else LOGGER.warn("Couldn't spawn in an item purchased from a consort: {}", items);
+				}
 			}
 		}
 	}
 	
-	public ListNBT writeToNBT()
+	public ListTag writeToNBT()
 	{
-		ListNBT list = new ListNBT();
+		ListTag list = new ListTag();
 		for (int i = 0; i < 9; i++)
 		{
-			CompoundNBT nbt = inv.get(i).save(new CompoundNBT());
+			CompoundTag nbt = inv.get(i).save(new CompoundTag());
 			nbt.putInt("price", prices[i]);
 			list.add(nbt);
 		}
@@ -150,19 +153,19 @@ public class ConsortMerchantInventory implements IInventory
 	}
 	
 	@Override
-	public boolean stillValid(PlayerEntity player)
+	public boolean stillValid(Player player)
 	{
 		return true;
 	}
 	
 	@Override
-	public void startOpen(PlayerEntity player)
+	public void startOpen(Player player)
 	{
 	
 	}
 	
 	@Override
-	public void stopOpen(PlayerEntity player)
+	public void stopOpen(Player player)
 	{
 	
 	}
@@ -203,10 +206,10 @@ public class ConsortMerchantInventory implements IInventory
 		else return (int) Math.floor(0.6*price);
 	}
 	
-	public IIntArray createPricesFor(ServerPlayerEntity player)
+	public ContainerData createPricesFor(ServerPlayer player)
 	{
 		PlayerData data = PlayerSavedData.getData(player);
-		return new IIntArray()
+		return new ContainerData()
 		{
 			@Override
 			public int get(int index)

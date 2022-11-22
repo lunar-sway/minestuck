@@ -1,28 +1,33 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
 import java.util.Iterator;
 import java.util.Random;
 
 /**
- * A version of the {@link net.minecraft.world.gen.feature.BlockBlobFeature}, but without the need to be placed on dirt or stone.
+ * A version of the {@link net.minecraft.world.level.levelgen.feature.BlockBlobFeature}, but without the need to be placed on dirt or stone.
  */
-public class ConditionFreeBlobFeature extends Feature<BlockStateFeatureConfig>
+public class ConditionFreeBlobFeature extends Feature<BlockStateConfiguration>
 {
-	public ConditionFreeBlobFeature(Codec<BlockStateFeatureConfig> codec)
+	public ConditionFreeBlobFeature(Codec<BlockStateConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(FeaturePlaceContext<BlockStateConfiguration> context)
 	{
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		BlockStateConfiguration config = context.config();
+		
 		final int startRadius = 0;
 		for (int i1 = 0; i1 < 3; i1++)
 		{
@@ -37,7 +42,7 @@ public class ConditionFreeBlobFeature extends Feature<BlockStateFeatureConfig>
 				BlockPos blockpos1 = iterator.next();
 				
 				if (blockpos1.distSqr(pos) <= (double)(f * f))
-					setBlock(world, blockpos1, config.state);
+					setBlock(level, blockpos1, config.state);
 			}
 			
 			pos = pos.offset(-(startRadius + 1) + rand.nextInt(2 + startRadius * 2), 0 - rand.nextInt(2), -(startRadius + 1) + rand.nextInt(2 + startRadius * 2));

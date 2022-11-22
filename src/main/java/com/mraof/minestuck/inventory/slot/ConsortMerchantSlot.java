@@ -1,18 +1,18 @@
 package com.mraof.minestuck.inventory.slot;
 
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class ConsortMerchantSlot extends Slot
 {
-	private PlayerEntity player;
+	private Player player;
 	private ConsortMerchantInventory merchant;
 	
-	public ConsortMerchantSlot(PlayerEntity player, IInventory inventoryIn, int index, int xPosition, int yPosition)
+	public ConsortMerchantSlot(Player player, Container inventoryIn, int index, int xPosition, int yPosition)
 	{
 		super(inventoryIn, index, xPosition, yPosition);
 		this.player = player;
@@ -29,8 +29,8 @@ public class ConsortMerchantSlot extends Slot
 	@Override
 	public ItemStack remove(int amount)
 	{
-		if(merchant != null && player instanceof ServerPlayerEntity)
-			merchant.handlePurchase((ServerPlayerEntity) player, false, this.index);
+		if(merchant != null && player instanceof ServerPlayer serverPlayer)
+			merchant.handlePurchase(serverPlayer, false, this.index);
 		return ItemStack.EMPTY;
 	}
 }

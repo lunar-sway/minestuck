@@ -3,8 +3,10 @@
     "item": "minecraft:egg"
   },
   "range": {
-    "min": 50.0,
-    "max": 100.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 50,
+      "max_inclusive": 100
+    }
   }
 }

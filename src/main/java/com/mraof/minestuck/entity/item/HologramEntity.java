@@ -2,80 +2,80 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.network.NetworkHooks;
 
 public class HologramEntity extends Entity
 {
-
-	private static final DataParameter<ItemStack> ITEM = EntityDataManager.defineId(HologramEntity.class, DataSerializers.ITEM_STACK);
+	
+	private static final EntityDataAccessor<ItemStack> ITEM = SynchedEntityData.defineId(HologramEntity.class, EntityDataSerializers.ITEM_STACK);
 	public int innerRotation;
 	
-	public HologramEntity(World worldIn, ItemStack item)
+	public HologramEntity(Level level, ItemStack item)
 	{
-		this(MSEntityTypes.HOLOGRAM, worldIn, item);
+		this(MSEntityTypes.HOLOGRAM.get(), level, item);
 	}
 	
-	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn, ItemStack item)
+	public HologramEntity(EntityType<? extends HologramEntity> type, Level level, ItemStack item)
 	{
-		super(type, worldIn);
+		super(type, level);
 		this.innerRotation = this.random.nextInt(100000);
 		entityData.set(ITEM, item);
 	}
-
-	public HologramEntity(EntityType<? extends HologramEntity> type, World worldIn)
+	
+	public HologramEntity(EntityType<? extends HologramEntity> type, Level level)
 	{
-		this(type, worldIn, new ItemStack(MSBlocks.GENERIC_OBJECT));
+		this(type, level, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
 	}
 	
 	public void onUpdate()
-    {
-        this.xo = this.getX();
-        this.yo = this.getY();
-        this.zo = this.getZ();
-        ++this.innerRotation;
-
-        if (!this.level.isClientSide)
-        {
-            BlockPos blockpos = blockPosition();
-
-            if (this.level.dimension() == World.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
-            {
-                this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
-            }
-        }
-    }
+	{
+		this.xo = this.getX();
+		this.yo = this.getY();
+		this.zo = this.getZ();
+		++this.innerRotation;
+		
+		if(!this.level.isClientSide)
+		{
+			BlockPos blockpos = blockPosition();
+			
+			if(this.level.dimension() == Level.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
+			{
+				this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
+			}
+		}
+	}
 	
 	@Override
 	protected void defineSynchedData()
 	{
-		this.entityData.define(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT));
+		this.entityData.define(ITEM, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundNBT compound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 		if(compound.contains("Item"))
 			setItem(ItemStack.of(compound.getCompound("Item")));
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundNBT compound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
-		compound.put("Item", this.getItem().save(new CompoundNBT()));
+		compound.put("Item", this.getItem().save(new CompoundTag()));
 	}
-
+	
 	public ItemStack getItem()
 	{
 		return entityData.get(ITEM);
@@ -88,7 +88,7 @@ public class HologramEntity extends Entity
 	
 	public void setItem(ItemStack item)
 	{
-		entityData.set(ITEM,item);
+		entityData.set(ITEM, item);
 	}
 	
 	public void setItem(int id)
@@ -96,7 +96,7 @@ public class HologramEntity extends Entity
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

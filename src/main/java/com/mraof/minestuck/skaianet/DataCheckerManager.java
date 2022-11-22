@@ -5,49 +5,59 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.DataCheckerPermission;
+import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class DataCheckerManager
 {
-	public static void onDataRequest(ServerPlayerEntity player, int index)
+	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static void onDataRequest(ServerPlayer player, int index)
 	{
 		if(DataCheckerPermission.hasPermission(player))
 		{
-			CompoundNBT data = createDataTag(SessionHandler.get(player.level));
+			CompoundTag data = createDataTag(player.server, SessionHandler.get(player.level));
 			MSPacketHandler.sendToPlayer(DataCheckerPacket.data(index, data), player);
 		}
 	}
 	/**
 	 * Creates data to be used for the data checker
 	 */
-	private static CompoundNBT createDataTag(SessionHandler handler)
+	private static CompoundTag createDataTag(MinecraftServer server, SessionHandler handler)
 	{
-		CompoundNBT nbt = new CompoundNBT();
-		ListNBT sessionList = new ListNBT();
+		CompoundTag nbt = new CompoundTag();
+		ListTag sessionList = new ListTag();
 		nbt.put("sessions", sessionList);
 		for(Session session : handler.getSessions())
 		{
-			sessionList.add(createSessionDataTag(session));
+			sessionList.add(createSessionDataTag(server, session));
 		}
 		return nbt;
 	}
 	
-	private static CompoundNBT createSessionDataTag(Session session)
+	private static CompoundTag createSessionDataTag(MinecraftServer server, Session session)
 	{
-		ListNBT connectionList = new ListNBT();
+		ListTag connectionList = new ListTag();
 		Set<PlayerIdentifier> playerSet = new HashSet<>();
 		for(SburbConnection c : session.connections)
 		{
-			connectionList.add(createConnectionDataTag(c, playerSet, session.predefinedPlayers));
+			connectionList.add(createConnectionDataTag(server, c, playerSet, session.predefinedPlayers));
 		}
 		
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : session.predefinedPlayers.entrySet())
@@ -58,7 +68,7 @@ public class DataCheckerManager
 			connectionList.add(createPredefineDataTag(entry.getKey(), entry.getValue()));
 		}
 		
-		CompoundNBT sessionTag = new CompoundNBT();
+		CompoundTag sessionTag = new CompoundTag();
 		if(session.name != null)
 			sessionTag.putString("name", session.name);
 		sessionTag.put("connections", connectionList);
@@ -68,11 +78,11 @@ public class DataCheckerManager
 	/**
 	 * Creates data for this connection to be sent to the data checker screen
 	 */
-	private static CompoundNBT createConnectionDataTag(SburbConnection connection, Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
+	private static CompoundTag createConnectionDataTag(MinecraftServer server, SburbConnection connection, Set<PlayerIdentifier> playerSet, Map<PlayerIdentifier, PredefineData> predefinedPlayers)
 	{
 		if(connection.isMain())
 			playerSet.add(connection.getClientIdentifier());
-		CompoundNBT connectionTag = new CompoundNBT();
+		CompoundTag connectionTag = new CompoundTag();
 		connectionTag.putString("client", connection.getClientIdentifier().getUsername());
 		connectionTag.putString("clientId", connection.getClientIdentifier().getCommandString());
 		if(connection.hasServerPlayer())
@@ -81,11 +91,15 @@ public class DataCheckerManager
 		connectionTag.putBoolean("isActive", connection.isActive());
 		if(connection.isMain())
 		{
-			if(connection.getLandInfo() != null)
+			ResourceKey<Level> landDimensionKey = connection.getClientDimension();
+			if(landDimensionKey != null)
 			{
-				connectionTag.putString("clientDim", connection.getClientDimension().getRegistryName().toString());
-				connectionTag.putString("landType1", connection.getLandInfo().landName1());
-				connectionTag.putString("landType2", connection.getLandInfo().landName2());
+				connectionTag.putString("clientDim", connection.getClientDimension().location().toString());
+				
+				Optional<LandTypePair.Named> landTypes = LandTypePair.getNamed(server, landDimensionKey);
+				landTypes.flatMap(named -> LandTypePair.Named.CODEC.encodeStart(NbtOps.INSTANCE, named).resultOrPartial(LOGGER::error))
+						.ifPresent(tag -> connectionTag.put("landTypes", tag));
+				
 				Title title = PlayerSavedData.getData(connection.getClientIdentifier(), connection.skaianet.mcServer).getTitle();
 				if(title != null)
 				{
@@ -104,9 +118,9 @@ public class DataCheckerManager
 	/**
 	 * Creates data to be sent to the data checker screen for players with predefined data but without a connection
 	 */
-	private static CompoundNBT createPredefineDataTag(PlayerIdentifier identifier, PredefineData data)
+	private static CompoundTag createPredefineDataTag(PlayerIdentifier identifier, PredefineData data)
 	{
-		CompoundNBT connectionTag = new CompoundNBT();
+		CompoundTag connectionTag = new CompoundTag();
 		
 		connectionTag.putString("client", identifier.getUsername());
 		connectionTag.putString("clientId", identifier.getCommandString());
@@ -119,7 +133,7 @@ public class DataCheckerManager
 		return connectionTag;
 	}
 	
-	private static void putPredefinedDataToTag(CompoundNBT nbt, PredefineData data)
+	private static void putPredefinedDataToTag(CompoundTag nbt, PredefineData data)
 	{
 		Title title = data.getTitle();
 		if(title != null)

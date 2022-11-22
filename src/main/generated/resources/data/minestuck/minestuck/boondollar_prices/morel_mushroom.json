@@ -3,8 +3,10 @@
     "item": "minestuck:morel_mushroom"
   },
   "range": {
-    "min": 40.0,
-    "max": 80.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 40,
+      "max_inclusive": 80
+    }
   }
 }

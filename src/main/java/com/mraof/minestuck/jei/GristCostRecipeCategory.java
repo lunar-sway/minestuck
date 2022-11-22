@@ -1,61 +1,70 @@
 package com.mraof.minestuck.jei;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
 import mezz.jei.api.constants.VanillaTypes;
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
  */
 public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 {
-	private IDrawable background, icon;
+	private final IDrawable background, icon;
 
 	GristCostRecipeCategory(IGuiHelper guiHelper)
 	{
 		ResourceLocation alchemiterBackground = new ResourceLocation("minestuck:textures/gui/alchemiter.png");
 		background = guiHelper.createDrawable(alchemiterBackground, 8, 15, 160, 56);
-		icon = guiHelper.createDrawableIngredient(new ItemStack(MSBlocks.ALCHEMITER));
+		icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MSBlocks.ALCHEMITER));
 	}
-
+	
+	@Override
+	public RecipeType<JeiGristCost> getRecipeType()
+	{
+		return MinestuckJeiPlugin.GRIST_COST;
+	}
+	
+	@SuppressWarnings("removal")
 	@Override
 	public Class<? extends JeiGristCost> getRecipeClass()
 	{
-		return JeiGristCost.class;
+		return getRecipeType().getRecipeClass();
 	}
-
+	
+	@SuppressWarnings("removal")
 	@Override
 	public ResourceLocation getUid()
 	{
-		return MinestuckJeiPlugin.GRIST_COST_ID;
+		return getRecipeType().getUid();
 	}
 
 	@Override
-	public String getTitle()
+	public Component getTitle()
 	{
-		return I18n.get(JeiGristCost.GRIST_COSTS);
+		return new TranslatableComponent(JeiGristCost.GRIST_COSTS);
 	}
 
 	@Override
@@ -69,42 +78,36 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	{
 		return icon;
 	}
-
+	
 	@Override
-	public void setIngredients(JeiGristCost recipe, IIngredients ingredients)
+	public void setRecipe(IRecipeLayoutBuilder builder, JeiGristCost recipe, IFocusGroup focuses)
 	{
-		ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(Arrays.asList(recipe.getIngredient().getItems())));
+		builder.addSlot(RecipeIngredientRole.CATALYST, 19, 5)
+				.addItemStacks(Arrays.stream(recipe.getIngredient().getItems())
+						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
+						.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor())).toList());
+		builder.addSlot(RecipeIngredientRole.OUTPUT, 127, 5)
+				.addIngredients(recipe.getIngredient());
+		
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			ingredients.setInputs(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
+			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
 		//TODO Wildcard grist cost
 	}
-
-	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, JeiGristCost recipe, IIngredients ingredients)
-	{
-		recipeLayout.getItemStacks().init(0, true, 18, 4);
-		recipeLayout.getItemStacks().init(1, false, 126, 4);
-		Stream<ItemStack> inputDowels = ingredients.getOutputs(VanillaTypes.ITEM).get(0).stream();
-		inputDowels = inputDowels.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL)));
-		inputDowels = inputDowels.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor()));
-		recipeLayout.getItemStacks().set(0, inputDowels.collect(Collectors.toList()));
-		recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-	}
 	
 	@Override
-	public void draw(JeiGristCost recipe, MatrixStack matrixStack, double mouseX, double mouseY)
+	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY)
 	{
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			GuiUtil.drawGristBoard(matrixStack, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(poseStack, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			GuiUtil.drawGristBoard(matrixStack, new GristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(poseStack, new GristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
 	}
 	
 	
 	@Override
-	public List<ITextComponent> getTooltipStrings(JeiGristCost recipe, double mouseX, double mouseY)
+	public List<Component> getTooltipStrings(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY)
 	{
-		ITextComponent text = null;
+		Component text = null;
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
 			text = GuiUtil.getGristboardTooltip(recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
@@ -112,6 +115,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		
 		if(text != null)
 			return Collections.singletonList(text);
-		else return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+		else
+			return Collections.emptyList();
 	}
 }

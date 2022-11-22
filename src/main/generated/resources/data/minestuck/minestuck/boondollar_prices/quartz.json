@@ -3,8 +3,10 @@
     "item": "minecraft:quartz"
   },
   "range": {
-    "min": 60.0,
-    "max": 80.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 60,
+      "max_inclusive": 80
+    }
   }
 }

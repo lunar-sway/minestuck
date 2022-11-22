@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minestuck:black_chess_dirt",
+    "minestuck:white_chess_dirt",
+    "minestuck:dark_gray_chess_dirt",
+    "minestuck:light_gray_chess_dirt",
+    "minestuck:black_sand",
+    "minestuck:wood_shavings",
+    "minestuck:glowy_goop",
+    "minestuck:coagulated_blood"
+  ]
+}

@@ -3,8 +3,10 @@
     "item": "minecraft:lily_pad"
   },
   "range": {
-    "min": 24.0,
-    "max": 31.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 24,
+      "max_inclusive": 31
+    }
   }
 }

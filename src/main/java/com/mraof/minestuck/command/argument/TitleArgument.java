@@ -11,11 +11,11 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.arguments.ArgumentSerializer;
-import net.minecraft.command.arguments.IArgumentSerializer;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,15 +26,15 @@ import java.util.stream.Stream;
 
 public class TitleArgument implements ArgumentType<Title>
 {
-	public static final IArgumentSerializer<TitleArgument> SERIALIZER = new ArgumentSerializer<>(TitleArgument::title);
+	public static final ArgumentSerializer<TitleArgument> SERIALIZER = new EmptyArgumentSerializer<>(TitleArgument::title);
 	
 	private static final List<String> EXAMPLES = Arrays.asList("heir light", "bard void", "lord doom");
 	public static final String INCOMPLETE = "argument.title.incomplete";
 	public static final String INVALID_CLASS = "argument.title.invalid_class";
 	public static final String INVALID_ASPECT = "argument.title.invalid_aspect";
-	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslationTextComponent(INCOMPLETE));
-	private static final DynamicCommandExceptionType INVALID_CLASS_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID_CLASS, o));
-	private static final DynamicCommandExceptionType INVALID_ASPECT_TYPE = new DynamicCommandExceptionType(o -> new TranslationTextComponent(INVALID_ASPECT, o));
+	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslatableComponent(INCOMPLETE));
+	private static final DynamicCommandExceptionType INVALID_CLASS_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID_CLASS, o));
+	private static final DynamicCommandExceptionType INVALID_ASPECT_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID_ASPECT, o));
 	
 	public static TitleArgument title()
 	{
@@ -69,14 +69,14 @@ public class TitleArgument implements ArgumentType<Title>
 		
 		if(!remaining.contains(" "))	//Suggest for the class
 		{
-			return ISuggestionProvider.suggest(Stream.of(EnumClass.values()).map(EnumClass::toString), builder);
+			return SharedSuggestionProvider.suggest(Stream.of(EnumClass.values()).map(EnumClass::toString), builder);
 		} else	//Suggest for the aspect
 		{
 			String[] parts = remaining.split(" ");
 			EnumClass c = EnumClass.fromString(parts[0]);
 			if(c == null)	//Do no suggestions if the class is invalid
 				return Suggestions.empty();
-			else return ISuggestionProvider.suggest(Stream.of(EnumAspect.values()).map(a -> parts[0] + " " + a), builder);
+			else return SharedSuggestionProvider.suggest(Stream.of(EnumAspect.values()).map(a -> parts[0] + " " + a), builder);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class TitleArgument implements ArgumentType<Title>
 		return EXAMPLES;
 	}
 	
-	public static Title get(CommandContext<CommandSource> context, String id)
+	public static Title get(CommandContext<CommandSourceStack> context, String id)
 	{
 		return context.getArgument(id, Title.class);
 	}

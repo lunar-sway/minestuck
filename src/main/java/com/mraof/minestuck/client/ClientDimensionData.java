@@ -4,10 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.data.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.world.World;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,32 +14,31 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientDimensionData
 {
-	private static final Map<RegistryKey<World>, LandTypePair> landTypes = new HashMap<>();
+	private static final Map<ResourceKey<Level>, LandTypePair> landTypes = new HashMap<>();
 	
 	private static LandProperties properties;
-	private static RegistryKey<World> currentWorld;
+	private static ResourceKey<Level> currentWorld;
 	
-	public static LandTypePair getLandTypes(RegistryKey<World> world)
+	public static LandTypePair getLandTypes(ResourceKey<Level> level)
 	{
-		return landTypes.get(world);
+		return landTypes.get(level);
 	}
 	
-	public static boolean isLand(RegistryKey<World> world)
+	public static boolean isLand(ResourceKey<Level> level)
 	{
-		return landTypes.containsKey(world);
+		return landTypes.containsKey(level);
 	}
 	
-	public static LandProperties getProperties(ClientWorld level)
+	public static LandProperties getProperties(ClientLevel level)
 	{
 		if (level == null)
 			return null;
 		
-		RegistryKey<World> key = level.dimension();
+		ResourceKey<Level> key = level.dimension();
 		if (currentWorld != key)
 		{
 			currentWorld = key;

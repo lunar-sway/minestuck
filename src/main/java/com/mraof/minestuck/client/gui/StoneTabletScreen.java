@@ -1,31 +1,32 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.StoneTabletPacket;
-import com.mraof.minestuck.util.StoneTabletUtils;
-import com.mraof.minestuck.util.StoneTabletUtils.Point;
-import net.minecraft.client.gui.AbstractGui;
+import com.mraof.minestuck.client.gui.StoneTabletUtils.Point;
+import net.minecraft.ChatFormatting;
+import net.minecraft.SharedConstants;
+import net.minecraft.Util;
+import net.minecraft.client.StringSplitter;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.chat.NarratorChatListener;
-import net.minecraft.client.gui.fonts.TextInputUtil;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SharedConstants;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.*;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.font.TextFieldHelper;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.glfw.GLFW;
-
 
 public class StoneTabletScreen extends Screen
 {
@@ -44,17 +45,17 @@ public class StoneTabletScreen extends Screen
 	/** In milliseconds */
 	private long lastClickTime;
 	//Player
-	private final PlayerEntity editingPlayer;
-	private final Hand hand;
+	private final Player editingPlayer;
+	private final InteractionHand hand;
 	private final ItemStack tablet;
 	//GUI buttons
 	private Button buttonDone;
 	private Button buttonCancel;
 	
-	private final TextInputUtil pageEditor = new TextInputUtil(() -> text, this::setText, this::getClipboard, this::setClipboard,
+	private final TextFieldHelper pageEditor = new TextFieldHelper(() -> text, this::setText, this::getClipboard, this::setClipboard,
 			text -> text.length() < 1024 && this.font.wordWrapHeight(text, TEXT_WIDTH) <= 128);
 	
-	public StoneTabletScreen(PlayerEntity player, Hand hand, String text, boolean canEdit)
+	public StoneTabletScreen(Player player, InteractionHand hand, String text, boolean canEdit)
 	{
 		super(NarratorChatListener.NO_TITLE);
 		
@@ -82,40 +83,42 @@ public class StoneTabletScreen extends Screen
 		
 		if(canEdit)
 		{
-			this.buttonDone = this.addButton(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 98, 20, new TranslationTextComponent("gui.done"), (button) ->
+			this.buttonDone = this.addRenderableWidget(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 98, 20, new TranslatableComponent("gui.done"), (button) ->
 			{
 				this.minecraft.setScreen(null);
 				this.sendTabletToServer();
 			}));
-			this.buttonCancel = this.addButton(new Button(this.width / 2 + 2, GUI_HEIGHT + 4, 98, 20, new TranslationTextComponent("gui.cancel"), (button) ->
+			this.buttonCancel = this.addRenderableWidget(new Button(this.width / 2 + 2, GUI_HEIGHT + 4, 98, 20, new TranslatableComponent("gui.cancel"), (button) ->
 			{
 				minecraft.setScreen(null);
 			}));
 		}
 		else
 		{
-			this.addButton(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 200, 20, new TranslationTextComponent("gui.done"), (p_214161_1_) -> {
+			this.addRenderableWidget(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 200, 20, new TranslatableComponent("gui.done"), (p_214161_1_) -> {
 				this.minecraft.setScreen(null);
 			}));
 		}
 	}
 	
 	@Override
-	public void render(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
+	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(matrixStack);
+		this.renderBackground(poseStack);
 		this.setFocused(null);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.minecraft.getTextureManager().bind(TABLET_TEXTURES);
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
-		this.blit(matrixStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, TABLET_TEXTURES);
+		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		{
 			
 			MutableInt lineY = new MutableInt();
-			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-				ITextComponent line = new StringTextComponent(text.substring(start, end)).setStyle(style);
-				font.draw(matrixStack, line, (this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF);
+			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, false, (style, start, end) -> {
+				Component line = new TextComponent(text.substring(start, end)).setStyle(style);
+				font.draw(poseStack, line, (this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF);
 				lineY.add(font.lineHeight);
 			});
 			
@@ -131,13 +134,13 @@ public class StoneTabletScreen extends Screen
 				
 				StoneTabletUtils.pointerToPrecise(point, width);
 				if(pageEditor.getCursorPos() < text.length())
-					AbstractGui.fill(matrixStack, point.x, point.y - 1, point.x + 1, point.y + font.lineHeight, 0xFFFFFF);
+					GuiComponent.fill(poseStack, point.x, point.y - 1, point.x + 1, point.y + font.lineHeight, 0xFFFFFF);
 				else
-					this.font.draw(matrixStack, "_", (float) point.x, (float) point.y, 0);
+					this.font.draw(poseStack, "_", (float) point.x, (float) point.y, 0);
 			}
 		}
 		
-		super.render(matrixStack, mouseX, mouseY, partialTicks);
+		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
@@ -184,18 +187,22 @@ public class StoneTabletScreen extends Screen
 		
 		StoneTabletUtils.pointerToPrecise(point, width);
 		StoneTabletUtils.pointerToPrecise(point1, width);
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
-		RenderSystem.color4f(0.0F, 0.0F, 1.0F, 1.0F);
 		RenderSystem.disableTexture();
 		RenderSystem.enableColorLogicOp();
 		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+		
+		RenderSystem.setShaderColor(0, 0, 1, 1);
+		RenderSystem.setShader(GameRenderer::getPositionShader);
+		
+		Tesselator tesselator = Tesselator.getInstance();
+		BufferBuilder bufferbuilder = tesselator.getBuilder();
+		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
 		bufferbuilder.vertex(point.x, point1.y, 0.0D).endVertex();
 		bufferbuilder.vertex(point1.x, point1.y, 0.0D).endVertex();
 		bufferbuilder.vertex(point1.x, point.y, 0.0D).endVertex();
 		bufferbuilder.vertex(point.x, point.y, 0.0D).endVertex();
-		tessellator.end();
+		tesselator.end();
+		
 		RenderSystem.disableColorLogicOp();
 		RenderSystem.enableTexture();
 	}
@@ -237,12 +244,12 @@ public class StoneTabletScreen extends Screen
 	private void setClipboard(String str)
 	{
 		if(minecraft != null)
-			TextInputUtil.setClipboardContents(minecraft, str);
+			TextFieldHelper.setClipboardContents(minecraft, str);
 	}
 	
 	private String getClipboard()
 	{
-		return minecraft != null ? TextInputUtil.getClipboardContents(this.minecraft) : "";
+		return minecraft != null ? TextFieldHelper.getClipboardContents(this.minecraft) : "";
 	}
 	
 	
@@ -272,8 +279,8 @@ public class StoneTabletScreen extends Screen
 					{
 						if(!pageEditor.isSelecting())
 						{
-							int start = CharacterManager.getWordPosition(s, -1, clickedIndex, false);
-							int end = CharacterManager.getWordPosition(s, 1, clickedIndex, false);
+							int start = StringSplitter.getWordPosition(s, -1, clickedIndex, false);
+							int end = StringSplitter.getWordPosition(s, 1, clickedIndex, false);
 							pageEditor.setSelectionRange(start, end);
 						} else
 							pageEditor.selectAll();
@@ -391,7 +398,7 @@ public class StoneTabletScreen extends Screen
 		if(!text.isEmpty())
 		{
 			Point point = StoneTabletUtils.createPointer(font, text, pageEditor.getCursorPos());
-			int textHeight = this.font.wordWrapHeight(text + "" + TextFormatting.BLACK + "_", TEXT_WIDTH);
+			int textHeight = this.font.wordWrapHeight(text + "" + ChatFormatting.BLACK + "_", TEXT_WIDTH);
 			if(point.y + font.lineHeight == textHeight)
 				pageEditor.setCursorPos(text.length(), Screen.hasShiftDown());
 			else

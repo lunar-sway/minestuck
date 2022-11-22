@@ -22,7 +22,7 @@ public class CoordPair
 	@Override
 	public int hashCode()
 	{
-		return (new Integer(x).hashCode() << 16) | (new Integer(z).hashCode() >> 16);
+		return (Integer.hashCode(x) << 16) | (Integer.hashCode(z) >> 16);
 	}
 	
 	public CoordPair north()

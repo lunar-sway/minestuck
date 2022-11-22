@@ -1,36 +1,48 @@
 package com.mraof.minestuck.entity.consort;
 
+import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedCreatureEntity;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
-import com.mraof.minestuck.inventory.ConsortMerchantContainer;
+import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.IContainerProvider;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.*;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
+import org.slf4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -43,44 +55,46 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends AnimatedCreatureEntity implements IContainerProvider, IAnimatable
+public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvider, IAnimatable
 {
+	private static final Logger LOGGER = LogUtils.getLogger();
+	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
-	private CompoundNBT messageData;
+	private CompoundTag messageData;
 	private final Set<PlayerIdentifier> talkRepPlayerList = new HashSet<>();
 	public EnumConsort.MerchantType merchantType = EnumConsort.MerchantType.NONE;
-	RegistryKey<World> homeDimension;
+	ResourceKey<Level> homeDimension;
 	boolean visitedSkaia;
 	MessageType.DelayMessage updatingMessage; //TODO Change to an interface/array if more message components need tick updates
 	public ConsortMerchantInventory stocks;
 	private int eventTimer = -1;    //TODO use the interface mentioned in the todo above to implement consort explosion instead
 	
-	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, World world)
+	public ConsortEntity(EnumConsort consortType, EntityType<? extends ConsortEntity> type, Level level)
 	{
-		super(type, world);
+		super(type, level);
 		this.consortType = consortType;
 		this.xpReward = 1;
 	}
 	
 	
-	public static AttributeModifierMap.MutableAttribute consortAttributes()
+	public static AttributeSupplier.Builder consortAttributes()
 	{
-		return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.35);
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.35);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
-		goalSelector.addGoal(0, new SwimGoal(this));
+		goalSelector.addGoal(0, new FloatGoal(this));
 		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
-		goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-		goalSelector.addGoal(7, new LookRandomlyGoal(this));
-		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, PlayerEntity.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
 	}
 	
 	@Override
@@ -91,13 +105,13 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
 	{
-		return entity instanceof ServerPlayerEntity && EntityPredicates.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayerEntity) entity).getConsortReputation(homeDimension) <= -1000;
+		return entity instanceof ServerPlayer && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(entity) && PlayerSavedData.getData((ServerPlayer) entity).getConsortReputation(homeDimension) <= -1000;
 	}
 	
 	protected void applyAdditionalAITasks()
 	{
 		if(!this.hasRestriction() || getRestrictRadius() > 1)
-			goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 0.5F));
+			goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.5F));
 	}
 	
 	@Override
@@ -107,13 +121,12 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	}
 	
 	@Override
-	protected ActionResultType mobInteract(PlayerEntity player, Hand hand)
+	protected InteractionResult mobInteract(Player player, InteractionHand hand)
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			if(!level.isClientSide && player instanceof ServerPlayerEntity && PlayerSavedData.getData((ServerPlayerEntity) player).getConsortReputation(homeDimension) > -1000)
+			if(!level.isClientSide && player instanceof ServerPlayer serverPlayer && PlayerSavedData.getData(serverPlayer).getConsortReputation(homeDimension) > -1000)
 			{
-				ServerPlayerEntity serverPlayer = (ServerPlayerEntity) player;
 				if(message == null)
 				{
 					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
@@ -124,7 +137,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 				
 				try
 				{
-					ITextComponent text = message.getMessage(this, serverPlayer);
+					Component text = message.getMessage(this, serverPlayer);
 					if(text != null)
 						player.sendMessage(text, Util.NIL_UUID);
 					handleConsortRepFromTalking(serverPlayer);
@@ -137,7 +150,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 				}
 			}
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else
 			return super.mobInteract(player, hand);
 	}
@@ -146,7 +159,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	{
 		if(messageData == null)
 		{
-			messageData = new CompoundNBT();
+			messageData = new CompoundTag();
 			messageTicksLeft = 24000 + level.random.nextInt(24000);
 		}
 	}
@@ -159,7 +172,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		talkRepPlayerList.clear();
 	}
 	
-	private void handleConsortRepFromTalking(ServerPlayerEntity player)
+	private void handleConsortRepFromTalking(ServerPlayer player)
 	{
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		if(!talkRepPlayerList.contains(identifier))
@@ -212,13 +225,13 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
 			float explosionRadius = 2.0f;
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), explosionRadius, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
-			this.remove();
+			this.level.explode(this, this.getX(), this.getY(), this.getZ(), explosionRadius, flag ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
+			this.discard();
 		}
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		
@@ -229,16 +242,16 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 			{
 				compound.putInt("MessageTicks", messageTicksLeft);
 				compound.put("MessageData", messageData);
-				ListNBT list = new ListNBT();
+				ListTag list = new ListTag();
 				for(PlayerIdentifier id : talkRepPlayerList)
-					list.add(id.saveToNBT(new CompoundNBT(), "id"));
+					list.add(id.saveToNBT(new CompoundTag(), "id"));
 				compound.put("talkRepList", list);
 			}
 		}
 		compound.putBoolean("HasHadMessage", hasHadMessage);
 		
 		compound.putInt("Type", merchantType.ordinal());
-		ResourceLocation.CODEC.encodeStart(NBTDynamicOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
+		ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, homeDimension.location()).resultOrPartial(LOGGER::error)
 				.ifPresent(tag -> compound.put("HomeDim", tag));
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && stocks != null)
@@ -246,7 +259,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		
 		if(hasRestriction())
 		{
-			CompoundNBT nbt = new CompoundNBT();
+			CompoundTag nbt = new CompoundTag();
 			BlockPos home = getRestrictCenter();
 			nbt.putInt("HomeX", home.getX());
 			nbt.putInt("HomeY", home.getY());
@@ -259,20 +272,20 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		
-		if(compound.contains("Dialogue", Constants.NBT.TAG_STRING))
+		if(compound.contains("Dialogue", Tag.TAG_STRING))
 		{
 			message = ConsortDialogue.getMessageFromString(compound.getString("Dialogue"));
-			if(compound.contains("MessageData", Constants.NBT.TAG_COMPOUND))
+			if(compound.contains("MessageData", Tag.TAG_COMPOUND))
 			{
 				messageData = compound.getCompound("MessageData");
 				messageTicksLeft = compound.getInt("MessageTicks");
 				
 				talkRepPlayerList.clear();
-				ListNBT list = compound.getList("talkRepList", Constants.NBT.TAG_COMPOUND);
+				ListTag list = compound.getList("talkRepList", Tag.TAG_COMPOUND);
 				for(int i = 0; i < list.size(); i++)
 					talkRepPlayerList.add(IdentifierHandler.load(list.getCompound(i), "id"));
 			}
@@ -280,21 +293,21 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 			hasHadMessage = true;
 		} else hasHadMessage = compound.getBoolean("HasHadMessage");
 		
-		merchantType = EnumConsort.MerchantType.values()[MathHelper.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
+		merchantType = EnumConsort.MerchantType.values()[Mth.clamp(compound.getInt("Type"), 0, EnumConsort.MerchantType.values().length - 1)];
 		
-		if(compound.contains("HomeDim", Constants.NBT.TAG_STRING))
-			homeDimension = World.RESOURCE_KEY_CODEC.parse(NBTDynamicOps.INSTANCE, compound.get("HomeDim")).resultOrPartial(LOGGER::error).orElse(null);
+		if(compound.contains("HomeDim", Tag.TAG_STRING))
+			homeDimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, compound.get("HomeDim")).resultOrPartial(LOGGER::error).orElse(null);
 		if(homeDimension == null)
 			homeDimension = this.level.dimension();
 		
-		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Constants.NBT.TAG_LIST))
+		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Tag.TAG_LIST))
 		{
-			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", Constants.NBT.TAG_COMPOUND));
+			stocks = new ConsortMerchantInventory(this, compound.getList("Stock", Tag.TAG_COMPOUND));
 		}
 		
-		if(compound.contains("HomePos", Constants.NBT.TAG_COMPOUND))
+		if(compound.contains("HomePos", Tag.TAG_COMPOUND))
 		{
-			CompoundNBT nbt = compound.getCompound("HomePos");
+			CompoundTag nbt = compound.getCompound("HomePos");
 			BlockPos pos = new BlockPos(nbt.getInt("HomeX"), nbt.getInt("HomeY"), nbt.getInt("HomeZ"));
 			restrictTo(pos, nbt.getInt("MaxHomeDistance"));
 		}
@@ -306,7 +319,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	
 	@Nullable
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
 	{
 		if(merchantType == EnumConsort.MerchantType.NONE && this.random.nextInt(30) == 0)
 		{
@@ -326,8 +339,8 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	@Override
 	public boolean skipAttackInteraction(Entity entityIn)
 	{
-		if(entityIn instanceof ServerPlayerEntity)
-			PlayerSavedData.getData((ServerPlayerEntity) entityIn).addConsortReputation(-5, homeDimension);
+		if(entityIn instanceof ServerPlayer player)
+			PlayerSavedData.getData(player).addConsortReputation(-5, homeDimension);
 		return super.skipAttackInteraction(entityIn);
 	}
 	
@@ -335,8 +348,8 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 	public void die(DamageSource cause)
 	{
 		LivingEntity livingEntity = this.getKillCredit();
-		if(livingEntity instanceof ServerPlayerEntity && (!(livingEntity instanceof FakePlayer)))
-			PlayerSavedData.getData((ServerPlayerEntity) livingEntity).addConsortReputation(-100, homeDimension);
+		if(livingEntity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
+			PlayerSavedData.getData(player).addConsortReputation(-100, homeDimension);
 		super.die(cause);
 	}
 	
@@ -351,40 +364,40 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return consortType;
 	}
 	
-	public void commandReply(ServerPlayerEntity player, String chain)
+	public void commandReply(ServerPlayer player, String chain)
 	{
 		if(this.isAlive() && !level.isClientSide && message != null)
 		{
-			ITextComponent text = message.getFromChain(this, player, chain);
+			Component text = message.getFromChain(this, player, chain);
 			if(text != null)
 				player.sendMessage(text, Util.NIL_UUID);
 		}
 	}
 	
-	public CompoundNBT getMessageTag()
+	public CompoundTag getMessageTag()
 	{
 		return messageData;
 	}
 	
-	public CompoundNBT getMessageTagForPlayer(PlayerEntity player)
+	public CompoundTag getMessageTagForPlayer(Player player)
 	{
-		if(!messageData.contains(player.getStringUUID(), Constants.NBT.TAG_COMPOUND))
-			messageData.put(player.getStringUUID(), new CompoundNBT());
+		if(!messageData.contains(player.getStringUUID(), Tag.TAG_COMPOUND))
+			messageData.put(player.getStringUUID(), new CompoundTag());
 		return messageData.getCompound(player.getStringUUID());
 	}
 	
 	@Nullable
 	@Override
-	public Container createMenu(int windowId, PlayerInventory playerInventory, PlayerEntity player)
+	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		if(this.stocks != null)
-			return new ConsortMerchantContainer(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayerEntity) player));
+			return new ConsortMerchantMenu(windowId, playerInventory, stocks, getConsortType(), merchantType, stocks.createPricesFor((ServerPlayer) player));
 		else return null;
 	}
 	
-	protected void writeShopContainerBuffer(PacketBuffer buffer)
+	protected void writeShopMenuBuffer(FriendlyByteBuf buffer)
 	{
-		ConsortMerchantContainer.write(buffer, this);
+		ConsortMerchantMenu.write(buffer, this);
 	}
 	
 	@Nullable
@@ -408,12 +421,12 @@ public class ConsortEntity extends AnimatedCreatureEntity implements IContainerP
 		return consortType.getDeathSound();
 	}
 	
-	public RegistryKey<World> getHomeDimension()
+	public ResourceKey<Level> getHomeDimension()
 	{
 		return homeDimension;
 	}
 	
-	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, IWorld world, SpawnReason reason, BlockPos pos, Random random)
+	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
 	{
 		return true;
 	}

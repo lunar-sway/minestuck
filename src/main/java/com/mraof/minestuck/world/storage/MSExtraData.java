@@ -3,14 +3,14 @@ package com.mraof.minestuck.world.storage;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * Stores any extra data that's not worth putting in their own data file. (Such as editmode recovery data and post entry tasks, which most of the time will be empty)
  * @author kirderf1
  */
-public class MSExtraData extends WorldSavedData
+public class MSExtraData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -39,47 +39,49 @@ public class MSExtraData extends WorldSavedData
 	
 	private MSExtraData()
 	{
-		super(DATA_NAME);
 	}
 	
-	@Override
-	public void load(CompoundNBT nbt)
+	public static MSExtraData load(CompoundTag nbt)
 	{
-		activeEditData.clear();
-		editPlayerRecovery.clear();
-		editConnectionRecovery.clear();
+		MSExtraData data = new MSExtraData();
 		
-		postEntryTasks.clear();
+		data.activeEditData.clear();
+		data.editPlayerRecovery.clear();
+		data.editConnectionRecovery.clear();
 		
-		ListNBT editRecoveryList = nbt.getList("editmode_recovery", Constants.NBT.TAG_COMPOUND);
+		data.postEntryTasks.clear();
+		
+		ListTag editRecoveryList = nbt.getList("editmode_recovery", Tag.TAG_COMPOUND);
 		for(int i = 0; i < editRecoveryList.size(); i++)
 		{
-			CompoundNBT dataTag = editRecoveryList.getCompound(i);
+			CompoundTag dataTag = editRecoveryList.getCompound(i);
 			UUID playerID = dataTag.getUUID("player");
-			editPlayerRecovery.put(playerID, EditData.readRecovery(dataTag));
+			data.editPlayerRecovery.put(playerID, EditData.readRecovery(dataTag));
 			EditData.ConnectionRecovery recovery = EditData.readExtraRecovery(dataTag);
 			if(recovery != null)
-				editConnectionRecovery.add(recovery);
+				data.editConnectionRecovery.add(recovery);
 		}
 		
-		ListNBT entryTaskList = nbt.getList("entry_tasks", Constants.NBT.TAG_COMPOUND);
+		ListTag entryTaskList = nbt.getList("entry_tasks", Tag.TAG_COMPOUND);
 		for(int i = 0; i < entryTaskList.size(); i++)
 		{
-			CompoundNBT tag = entryTaskList.getCompound(i);
-			postEntryTasks.add(new PostEntryTask(tag));
+			CompoundTag tag = entryTaskList.getCompound(i);
+			data.postEntryTasks.add(new PostEntryTask(tag));
 		}
+		
+		return data;
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public CompoundTag save(CompoundTag compound)
 	{
-		ListNBT editRecoveryList = new ListNBT();
+		ListTag editRecoveryList = new ListTag();
 		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
 		editRecoveryList.addAll(activeEditData.stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
 		
 		compound.put("editmode_recovery", editRecoveryList);
 		
-		ListNBT entryTaskList = new ListNBT();
+		ListTag entryTaskList = new ListTag();
 		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).collect(Collectors.toList()));
 		
 		compound.put("entry_tasks", entryTaskList);
@@ -87,42 +89,35 @@ public class MSExtraData extends WorldSavedData
 		return compound;
 	}
 	
-	private static CompoundNBT writeRecovery(EditData data)
+	private static CompoundTag writeRecovery(EditData data)
 	{
-		CompoundNBT nbt = data.writeRecoveryData();
+		CompoundTag nbt = data.writeRecoveryData();
 		nbt.putUUID("player", data.getEditor().getGameProfile().getId());
 		return nbt;
 	}
 	
-	private static CompoundNBT writeRecovery(Map.Entry<UUID, EditData.PlayerRecovery> data)
+	private static CompoundTag writeRecovery(Map.Entry<UUID, EditData.PlayerRecovery> data)
 	{
-		CompoundNBT nbt = data.getValue().write(new CompoundNBT());
+		CompoundTag nbt = data.getValue().write(new CompoundTag());
 		nbt.putUUID("player", data.getKey());
 		return nbt;
 	}
 	
-	public static MSExtraData get(World world)
+	public static MSExtraData get(Level level)
 	{
-		MinecraftServer server = world.getServer();
+		MinecraftServer server = level.getServer();
 		if(server == null)
-			throw new IllegalArgumentException("Can't get extra data instance on client side! (Got null server from world)");
+			throw new IllegalArgumentException("Can't get extra data instance on client side! (Got null server from level)");
 		return get(server);
 	}
 	
 	public static MSExtraData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getLevel(World.OVERWORLD);
+		ServerLevel level = mcServer.getLevel(Level.OVERWORLD);
 		
-		DimensionSavedDataManager storage = world.getDataStorage();
-		MSExtraData instance = storage.get(MSExtraData::new, DATA_NAME);
+		DimensionDataStorage storage = level.getDataStorage();
 		
-		if(instance == null)	//There is no save data, so insert a new instance
-		{
-			instance = new MSExtraData();
-			storage.set(instance);
-		}
-		
-		return instance;
+		return storage.computeIfAbsent(MSExtraData::load, MSExtraData::new, DATA_NAME);
 	}
 	
 	public EditData findEditData(Predicate<EditData> condition)

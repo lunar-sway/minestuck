@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 public interface Positioned
 {

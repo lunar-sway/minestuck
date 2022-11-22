@@ -1,53 +1,66 @@
 package com.mraof.minestuck.world.gen.feature.tree;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.TreeFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
 import java.util.Random;
 
-public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
+/**
+ * A feature which places a set of branches in a similar manner to fancy oak trees,
+ * but without any leaves.
+ */
+public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 {
-	public LeaflessTreeFeature(Codec<BlockStateFeatureConfig> codec)
+	public LeaflessTreeFeature(Codec<BlockStateConfiguration> codec)
 	{
 		super(codec);
 	}
 	
 	@Override
-	public boolean place(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateFeatureConfig config)
+	public boolean place(FeaturePlaceContext<BlockStateConfiguration> context)
 	{
-		//TODO Define which blocks that it is allowed to place on
+		WorldGenLevel level = context.level();
+		BlockPos pos = context.origin();
+		Random rand = context.random();
+		BlockState state = context.config().state;
+		
 		int size = rand.nextInt(3);
 		int height = 4 + size;
 		
-		int min = size < 2 ? 1 : 2;
+		int branchMinHeight = size < 2 ? 1 : 2;
 		
-		int count = size + (rand.nextBoolean() ? 2 : 3);
+		int branchCount = size + (rand.nextBoolean() ? 2 : 3);
 		
-		for(int i = 0; i < count; i++)
+		for(int i = 0; i < branchCount; i++)
 		{
-			int h = min + rand.nextInt(height - min);
-			float modifier = (h+3)*0.2F;
+			int branchHeightStart = branchMinHeight + rand.nextInt(height - branchMinHeight);
+			float modifier = (branchHeightStart+3)*0.2F;
 			int xOffset = Math.round((rand.nextFloat() - rand.nextFloat())*4*modifier);
-			int yOffset = h + Math.round(rand.nextFloat()*2*modifier);
+			int yOffset = branchHeightStart + Math.round(rand.nextFloat()*2*modifier);
 			int zOffset = Math.round((rand.nextFloat() - rand.nextFloat())*4*modifier);
 			
-			genBranch(pos.above(h), pos.offset(xOffset, yOffset, zOffset), world, config.state);
+			genBranch(pos.above(branchHeightStart), pos.offset(xOffset, yOffset, zOffset), level, state);
 		}
 		
-		genBranch(pos, pos.above(height), world, config.state);
+		genBranch(pos, pos.above(height), level, state);
 		
 		return true;
 	}
 	
-	protected void genBranch(BlockPos pos0, BlockPos pos1, IWorld world, BlockState logState)
+	/**
+	 * Generates blocks in a straight line from pos0 to pos1,
+	 * and sets the blockstate axis to the axis that the line travels the furthest along.
+	 */
+	protected void genBranch(BlockPos pos0, BlockPos pos1, LevelAccessor level, BlockState logState)
 	{
 		final int xDiff = pos1.getX() - pos0.getX();
 		final int yDiff = pos1.getY() - pos0.getY();
@@ -78,8 +91,8 @@ public class LeaflessTreeFeature extends Feature<BlockStateFeatureConfig>
 		{
 			float f = i/(float) (length);
 			BlockPos pos = pos0.offset(xDiff*f, yDiff*f, zDiff*f);
-			if(world.isStateAtPosition(pos, (blockState) -> blockState.canBeReplacedByLogs(world, pos)))
-				setBlock(world, pos, state);
+			if(TreeFeature.isFree(level, pos))
+				setBlock(level, pos, state);
 			else return;
 		}
 	}

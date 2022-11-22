@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class SimpleCakeBlock extends CustomCakeBlock
 {
@@ -20,7 +20,7 @@ public class SimpleCakeBlock extends CustomCakeBlock
 	}
 	
 	@Override
-	protected void applyEffects(World worldIn, BlockPos pos, BlockState state, PlayerEntity player)
+	protected void applyEffects(Level level, BlockPos pos, BlockState state, Player player)
 	{
 		player.getFoodData().eat(foodLevel, saturation);
 		if(effect != null)
@@ -29,6 +29,6 @@ public class SimpleCakeBlock extends CustomCakeBlock
 	
 	public interface Effect
 	{
-		void applyEffects(PlayerEntity player);
+		void applyEffects(Player player);
 	}
 }

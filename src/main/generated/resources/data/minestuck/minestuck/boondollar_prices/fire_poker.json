@@ -3,8 +3,10 @@
     "item": "minestuck:fire_poker"
   },
   "range": {
-    "min": 1500.0,
-    "max": 2000.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 1500,
+      "max_inclusive": 2000
+    }
   }
 }

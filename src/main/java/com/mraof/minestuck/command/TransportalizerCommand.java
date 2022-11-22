@@ -6,16 +6,16 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.Commands;
-import net.minecraft.command.arguments.EntityArgument;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,45 +26,45 @@ public class TransportalizerCommand
 	public static final String FAILURE = "commands.minestuck.tpz.failure";
 	public static final String RESULT = "commands.minestuck.tpz.result";
 	public static final String FAILURE_RESULT = "commands.minestuck.tpz.failure_result";
-	private static final DynamicCommandExceptionType NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(o -> new TranslationTextComponent(NOT_FOUND, o));
-	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent(TransportalizerTileEntity.BLOCKED_DESTINATION));
-	private static final SimpleCommandExceptionType RESULT_EXCEPTION = new SimpleCommandExceptionType(new TranslationTextComponent(FAILURE_RESULT));
+	private static final DynamicCommandExceptionType NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(o -> new TranslatableComponent(NOT_FOUND, o));
+	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(TransportalizerBlockEntity.BLOCKED_DESTINATION));
+	private static final SimpleCommandExceptionType RESULT_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(FAILURE_RESULT));
 	
-	public static void register(CommandDispatcher<CommandSource> dispatcher)
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("tpz").requires(commandSource -> commandSource.hasPermission(2))
 				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code")))
 				.then(Commands.argument("targets", EntityArgument.entities()).executes(context -> teleport(context.getSource(), EntityArgument.getEntities(context, "targets"), StringArgumentType.getString(context, "code"))))));
 	}
 	
-	private static int teleport(CommandSource source, Collection<? extends Entity> entities, String code) throws CommandSyntaxException
+	private static int teleport(CommandSourceStack source, Collection<? extends Entity> entities, String code) throws CommandSyntaxException
 	{
 		GlobalPos destination = TransportalizerSavedData.get(source.getServer()).get(code);
 		if(destination == null)
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		ServerWorld world = source.getServer().getLevel(destination.dimension());
+		ServerLevel level = source.getServer().getLevel(destination.dimension());
 		
-		if(world == null || world.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER)
+		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER.get())
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
-		if(TransportalizerTileEntity.isBlocked(world, destination.pos()))
+		if(TransportalizerBlockEntity.isBlocked(level, destination.pos()))
 			throw BLOCKED_EXCEPTION.create();
 		
 		int count = 0;
 		for(Entity entity : entities)
 		{
-			Entity newEntity = Teleport.teleportEntity(entity, world, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.yRot, entity.xRot);
+			Entity newEntity = Teleport.teleportEntity(entity, level, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(newEntity != null)
 			{
 				newEntity.setPortalCooldown();
 				count++;
-			} else source.sendFailure(new TranslationTextComponent(FAILURE, entity.getDisplayName()));
+			} else source.sendFailure(new TranslatableComponent(FAILURE, entity.getDisplayName()));
 		}
 		
 		if(count == 0)
 			throw RESULT_EXCEPTION.create();
-		else source.sendSuccess(new TranslationTextComponent(RESULT, count), true);
+		else source.sendSuccess(new TranslatableComponent(RESULT, count), true);
 		
 		return count;
 	}

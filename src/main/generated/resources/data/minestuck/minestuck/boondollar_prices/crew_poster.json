@@ -3,8 +3,10 @@
     "item": "minestuck:crew_poster"
   },
   "range": {
-    "min": 350.0,
-    "max": 400.0,
-    "type": "minecraft:uniform"
+    "type": "minecraft:uniform",
+    "value": {
+      "min_inclusive": 350,
+      "max_inclusive": 400
+    }
   }
 }

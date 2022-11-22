@@ -6,32 +6,32 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Random;
 
-public class ComputerBlock extends MachineBlock
+public class ComputerBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = MSBlockShapes.COMPUTER.createRotatedShapes();
 	public static final Map<Direction, VoxelShape> LAPTOP_CLOSED_SHAPE = MSBlockShapes.LAPTOP_CLOSED.createRotatedShapes();
@@ -53,7 +53,7 @@ public class ComputerBlock extends MachineBlock
 	}
 	
 	@Override
-	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(STATE);
@@ -61,106 +61,98 @@ public class ComputerBlock extends MachineBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public ActionResultType use(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
 		if(player.isShiftKeyDown())
-			return ActionResultType.PASS;
+			return InteractionResult.PASS;
 		
 		ItemStack heldItem = player.getItemInHand(handIn);
 		if(state.getValue(STATE) == State.OFF)
 		{
 			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
-				return ActionResultType.PASS;
+				return InteractionResult.PASS;
 			
-			turnOn(state, worldIn, pos, player, handIn, hit);
+			turnOn(state, level, pos, player, handIn, hit);
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		} else
 		{
-			ComputerTileEntity tileEntity = (ComputerTileEntity) worldIn.getBlockEntity(pos);
+			ComputerBlockEntity blockEntity = (ComputerBlockEntity) level.getBlockEntity(pos);
 			
 			
-			if(tileEntity == null)
-				return ActionResultType.FAIL;
+			if(blockEntity == null)
+				return InteractionResult.FAIL;
 			
-			if(insertDisk(tileEntity, state, worldIn, pos, player, handIn))
-				return ActionResultType.SUCCESS;
+			if(insertDisk(blockEntity, state, level, pos, player, handIn))
+				return InteractionResult.SUCCESS;
 			
-			if(worldIn.isClientSide && SkaiaClient.requestData(tileEntity))
-				MSScreenFactories.displayComputerScreen(tileEntity);
+			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
+				MSScreenFactories.displayComputerScreen(blockEntity);
 			
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 	}
 	
-	private void turnOn(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit)
+	private void turnOn(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(!worldIn.isClientSide)
+		if(!level.isClientSide)
 		{
 			BlockState newState = state.setValue(STATE, State.ON);
-			worldIn.setBlock(pos, newState, Constants.BlockFlags.BLOCK_UPDATE);
+			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 			
-			TileEntity te = worldIn.getBlockEntity(pos);
-			if(te instanceof ComputerTileEntity)
-				((ComputerTileEntity) te).owner = IdentifierHandler.encode(player);
-			newState.use(worldIn, player, handIn, hit);
+			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
+				computer.owner = IdentifierHandler.encode(player);
+			newState.use(level, player, handIn, hit);
 		}
 	}
 	
-	private boolean insertDisk(ComputerTileEntity tileEntity, BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn)
+	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
 	{
 		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
-		if(id != -2 && !tileEntity.hasProgram(id) && tileEntity.installedPrograms.size() < 2 && !tileEntity.hasProgram(-1))
+		if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 2 && !blockEntity.hasProgram(-1))
 		{
-			if(worldIn.isClientSide)
+			if(level.isClientSide)
 				return true;
 			player.setItemInHand(handIn, ItemStack.EMPTY);
 			if(id == -1)
 			{
-				tileEntity.closeAll();
-				worldIn.setBlock(pos, state.setValue(STATE, State.BROKEN), Constants.BlockFlags.BLOCK_UPDATE);
+				blockEntity.closeAll();
+				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
 			}
-			else tileEntity.installedPrograms.put(id, true);
-			tileEntity.setChanged();
-			worldIn.sendBlockUpdated(pos, state, state, 3);
+			else blockEntity.installedPrograms.put(id, true);
+			blockEntity.setChanged();
+			level.sendBlockUpdated(pos, state, state, 3);
 			return true;
 		} else return false;
 	}
 	
-	@Override
-	public boolean hasTileEntity(BlockState state)
-	{
-		return state.getValue(STATE) != State.OFF;
-	}
-	
 	@Nullable
 	@Override
-	public TileEntity createTileEntity(BlockState state, IBlockReader world)
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new ComputerTileEntity();
+		return state.getValue(STATE) != State.OFF ? new ComputerBlockEntity(pos, state) : null;
 	}
-	
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void onRemove(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		dropItems(worldIn, pos.getX(), pos.getY(), pos.getZ(), state);
-		super.onRemove(state, worldIn, pos, newState, isMoving);
+		dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
+		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	private void dropItems(World world, int x, int y, int z, BlockState state)
+	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
 		Random rand = new Random();
-		ComputerTileEntity te = (ComputerTileEntity) world.getBlockEntity(new BlockPos(x, y, z));
-		if (te == null)
+		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
+		if (be == null)
 		{
 			return;
 		}
-		te.closeAll();
+		be.closeAll();
 		float factor = 0.05F;
 		
-		for(Map.Entry<Integer, Boolean> pairs : te.installedPrograms.entrySet())
+		for(Map.Entry<Integer, Boolean> pairs : be.installedPrograms.entrySet())
 		{
 			if(!pairs.getValue())
 				continue;
@@ -169,24 +161,24 @@ public class ComputerBlock extends MachineBlock
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(program));
+			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, ProgramData.getItem(program));
 			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addFreshEntity(entityItem);
+			level.addFreshEntity(entityItem);
 		}
 		if(state.getValue(STATE) == State.BROKEN)
 		{
 			float rx = rand.nextFloat() * 0.8F + 0.1F;
 			float ry = rand.nextFloat() * 0.8F + 0.1F;
 			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(world, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
+			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
 			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			world.addFreshEntity(entityItem);
+			level.addFreshEntity(entityItem);
 		}
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context)
+	public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 	{
 		if(state.getValue(STATE) == State.OFF)
 			return shapeOff.get(state.getValue(FACING));
@@ -194,7 +186,7 @@ public class ComputerBlock extends MachineBlock
 	}
 	
 	
-	public enum State implements IStringSerializable
+	public enum State implements StringRepresentable
 	{
 		OFF,
 		ON,

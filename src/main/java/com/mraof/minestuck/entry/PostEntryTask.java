@@ -1,17 +1,18 @@
 package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.util.Debug;
 import com.mraof.minestuck.util.MSNBTUtil;
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.Heightmap;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Represents a task for updating blocks copied over into the entry.
@@ -20,19 +21,20 @@ import net.minecraft.world.server.ServerWorld;
  */
 public class PostEntryTask
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	/**
 	 * The maximum amount of time (in milliseconds) to spend updating blocks,
 	 * before leaving the rest for the next game tick.
 	 */
 	private static final long MIN_TIME = 20;
 	
-	private final RegistryKey<World> dimension;
+	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
 	private final int entrySize;
 	private final byte entryType;	//Used if we add more ways for entry to happen
 	private int index;
 	
-	public PostEntryTask(RegistryKey<World> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
+	public PostEntryTask(ResourceKey<Level> dimension, int xCoord, int yCoord, int zCoord, int entrySize, byte entryType)
 	{
 		this.dimension = dimension;
 		this.x = xCoord;
@@ -43,17 +45,17 @@ public class PostEntryTask
 		this.index = 0;
 	}
 	
-	public PostEntryTask(CompoundNBT nbt)
+	public PostEntryTask(CompoundTag nbt)
 	{
 		this(MSNBTUtil.tryReadDimensionType(nbt, "dimension"), nbt.getInt("x"), nbt.getInt("y"), nbt.getInt("z"), nbt.getInt("entrySize"), nbt.getByte("entryType"));
 		this.index = nbt.getInt("index");
 		if(dimension == null)
-			Debug.warnf("Unable to load dimension type by name %s!", nbt.getString("dimension"));
+			LOGGER.warn("Unable to load dimension type by name {}!", nbt.getString("dimension"));
 	}
 	
-	public CompoundNBT write()
+	public CompoundTag write()
 	{
-		CompoundNBT nbt = new CompoundNBT();
+		CompoundTag nbt = new CompoundTag();
 		MSNBTUtil.tryWriteDimensionType(nbt, "dimension", dimension);
 		nbt.putInt("x", x);
 		nbt.putInt("y", y);
@@ -70,11 +72,11 @@ public class PostEntryTask
 		if(isDone())
 			return false;
 		
-		ServerWorld world = dimension != null ? server.getLevel(dimension) : null;
+		ServerLevel world = dimension != null ? server.getLevel(dimension) : null;
 		
 		if(world == null)
 		{
-			Debug.errorf("Couldn't find world for dimension %d when performing post entry preparations! Cancelling task.", dimension);
+			LOGGER.error("Couldn't find world for dimension {} when performing post entry preparations! Cancelling task.", dimension);
 			setDone();
 			return true;
 		}
@@ -108,12 +110,12 @@ public class PostEntryTask
 				}
 			}
 			
-			Debug.infof("Completed entry block updates for dimension %s.", dimension.location());
+			LOGGER.info("Completed entry block updates for dimension {}.", dimension.location());
 			setDone();
 			return true;
 		}
 		
-		Debug.debugf("Updated %d blocks this tick.", index - preIndex);
+		LOGGER.debug("Updated {} blocks this tick.", index - preIndex);
 		return index != preIndex;
 	}
 	
@@ -127,20 +129,20 @@ public class PostEntryTask
 		index = -1;
 	}
 	
-	private int updateBlock(BlockPos pos, ServerWorld world, int i, boolean blockUpdate)
+	private int updateBlock(BlockPos pos, ServerLevel world, int i, boolean blockUpdate)
 	{
 		if(i >= index)
 		{
 			if(blockUpdate)
 				world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
 			world.getChunkSource().getLightEngine().checkBlock(pos);
-			IChunk chunk = world.getChunk(pos);
+			ChunkAccess chunk = world.getChunk(pos);
 			BlockState state = chunk.getBlockState(pos);
 			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.OCEAN_FLOOR).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Type.WORLD_SURFACE).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR).update(x, y, z, state);
+			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE).update(x, y, z, state);
 			index++;
 		}
 		return i + 1;

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum EnumCassetteType implements IStringSerializable
+public enum EnumCassetteType implements StringRepresentable
 {
 	NONE,
 	THIRTEEN,

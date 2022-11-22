@@ -1,24 +1,24 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mojang.math.Vector3d;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -33,19 +33,19 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	private final BasiliskPartEntity tail;
 	private final BasiliskPartEntity tailEnd;
 	
-	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, World world)
+	public BasiliskEntity(EntityType<? extends BasiliskEntity> type, Level level)
 	{
-		super(type, world, 5);
+		super(type, level, 5);
 		
-		this.head = new BasiliskPartEntity(this, "head", 2.3F, 2.3F);
-		this.body = new BasiliskPartEntity(this, "body", 2.8F, 2.2F);
-		this.tail = new BasiliskPartEntity(this, "tail", 2.0F, 2.0F);
-		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.7F, 1.7F);
+		this.head = new BasiliskPartEntity(this, "head", 2.1F, 2.1F);
+		this.body = new BasiliskPartEntity(this, "body", 2.5F, 1.9F);
+		this.tail = new BasiliskPartEntity(this, "tail", 1.8F, 1.8F);
+		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.4F, 1.3F);
 		parts = new BasiliskPartEntity[]{this.head, this.body, this.tail, this.tailEnd};
 		this.noCulling = true;
 	}
 	
-	public static AttributeModifierMap.MutableAttribute basiliskAttributes()
+	public static AttributeSupplier.Builder basiliskAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 85)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.6).add(Attributes.MOVEMENT_SPEED, 0.25)
@@ -61,19 +61,22 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_BASILISK_AMBIENT;
+		return MSSoundEvents.ENTITY_BASILISK_AMBIENT.get();
 	}
 	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_BASILISK_HURT;
+		return MSSoundEvents.ENTITY_BASILISK_HURT.get();
 	}
 	
+	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_BASILISK_DEATH;
+		return MSSoundEvents.ENTITY_BASILISK_DEATH.get();
 	}
 	
 	@Override
@@ -112,7 +115,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public boolean canBeCollidedWith()
 	{
-		return false;
+		return true;
 	}
 	
 	public void checkDespawn()
@@ -122,7 +125,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public boolean isPickable()
 	{
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -137,8 +140,8 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		}
 		
 		float bodyAngle = this.yBodyRot * ((float) Math.PI / 180F);
-		float xOffset = MathHelper.sin(bodyAngle);
-		float zOffset = -MathHelper.cos(bodyAngle);
+		double xOffset = Math.sin(bodyAngle);
+		double zOffset = -Math.cos(bodyAngle);
 		
 		// update the body parts based on the body rotation + apply natural offsets
 		this.updatePart(this.body, 0, 0, 0);
@@ -170,7 +173,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public net.minecraftforge.entity.PartEntity<?>[] getParts()
+	public PartEntity<?>[] getParts()
 	{
 		return this.parts;
 	}

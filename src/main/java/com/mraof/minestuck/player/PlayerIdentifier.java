@@ -1,9 +1,9 @@
 package com.mraof.minestuck.player;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 public abstract class PlayerIdentifier
 {
@@ -22,13 +22,13 @@ public abstract class PlayerIdentifier
 		return id;
 	}
 	
-	public abstract boolean appliesTo(PlayerEntity player);
+	public abstract boolean appliesTo(Player player);
 	
 	public abstract String getUsername();
 	
 	public abstract String getCommandString();
 	
-	public abstract ServerPlayerEntity getPlayer(MinecraftServer server);
+	public abstract ServerPlayer getPlayer(MinecraftServer server);
 	
-	public abstract CompoundNBT saveToNBT(CompoundNBT nbt, String key);
+	public abstract CompoundTag saveToNBT(CompoundTag nbt, String key);
 }

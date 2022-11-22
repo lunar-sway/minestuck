@@ -8,5 +8,6 @@
   },
   "sources": [
     "minecraft:diamond"
-  ]
+  ],
+  "multiplier": 3.0
 }

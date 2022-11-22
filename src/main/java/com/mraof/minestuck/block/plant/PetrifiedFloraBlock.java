@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.plant;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BushBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class PetrifiedFloraBlock extends BushBlock
 {
@@ -14,8 +14,8 @@ public class PetrifiedFloraBlock extends BushBlock
 	}
 	
 	@Override
-	protected boolean mayPlaceOn(BlockState state, IBlockReader worldIn, BlockPos pos)
+	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
 	{
-        return state.getBlock() == Blocks.STONE || state.getBlock() == Blocks.GRAVEL || state.getBlock() == Blocks.COBBLESTONE;
-    }
+		return state.is(MSTags.Blocks.PETRIFIED_FLORA_PLACEABLE);
+	}
 }

@@ -2,18 +2,16 @@ package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.Features;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.material.Material;
 
 public class RabbitsLandType extends TitleLandType
 {
@@ -34,19 +32,15 @@ public class RabbitsLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.PINK_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.LIGHT_GRAY_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.PINK_WOOL);
+		registry.setBlock("carpet", Blocks.LIGHT_GRAY_CARPET);
 	}
 	
 	@Override
-	public void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		if(type == LandBiomeType.NORMAL)
-			builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.RABBIT_PLACEMENT.configured(IFeatureConfig.NONE)
-					.decorated(Features.Placements.HEIGHTMAP_SQUARE).count(6).chance(5));
-		if(type == LandBiomeType.ROUGH)
-			builder.addFeature(GenerationStage.Decoration.TOP_LAYER_MODIFICATION, MSFeatures.RABBIT_PLACEMENT.configured(IFeatureConfig.NONE)
-					.decorated(Features.Placements.HEIGHTMAP_SQUARE).count(3).chance(5));
+		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.RABBIT_PLACEMENT, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, MSPlacedFeatures.SMALL_RABBIT_PLACEMENT, LandBiomeType.ROUGH);
 	}
 	
 	@Override
@@ -60,6 +54,6 @@ public class RabbitsLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_RABBITS;
+		return MSSoundEvents.MUSIC_RABBITS.get();
 	}
 }

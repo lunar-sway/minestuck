@@ -5,11 +5,12 @@ import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
-import net.minecraft.data.BlockTagsProvider;
+import com.mraof.minestuck.data.tag.*;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MinestuckData
@@ -26,6 +27,9 @@ public class MinestuckData
 			gen.addProvider(new MinestuckItemTagsProvider(gen, blockTags, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckFluidTagsProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckEntityTypeTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MinestuckBiomeTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MSStructureTagsProvider(gen, event.getExistingFileHelper()));
+			gen.addProvider(new MSGristTypeTagsProvider(gen, event.getExistingFileHelper()));
 			
 			gen.addProvider(new MinestuckRecipeProvider(gen));
 			gen.addProvider(new MinestuckGristCostsProvider(gen));
@@ -34,10 +38,12 @@ public class MinestuckData
 			
 			gen.addProvider(new BoondollarPricingProvider(gen, Minestuck.MOD_ID));
 			gen.addProvider(new MinestuckLootTableProvider(gen));
-			gen.addProvider(new MSAdvancementProvider(gen));
+			gen.addProvider(new MSAdvancementProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
 			
 			gen.addProvider(new MinestuckBiomeProvider(gen));
+			
+			gen.addProvider(new StartingModusProvider(gen, Minestuck.MOD_ID));
 		}
 	}
 }

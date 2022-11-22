@@ -7,29 +7,29 @@ import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationUtil;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RangedAttackGoal;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -39,32 +39,32 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IMob, IAnimatable, AttackState.Holder
+public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, AttackState.Holder
 {
-	private static final DataParameter<Integer> CURRENT_ACTION = EntityDataManager.defineId(PawnEntity.class, DataSerializers.INT);
+	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
-	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, World world)
+	protected PawnEntity(EntityType<? extends PawnEntity> type, EnumEntityKingdom kingdom, Level level)
 	{
-		super(type, kingdom, world);
+		super(type, kingdom, level);
 		this.xpReward = 1;
 		setCombatTask();
 	}
 	
-	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, World world)
+	public static PawnEntity createProspitian(EntityType<? extends PawnEntity> type, Level level)
 	{
-		return new PawnEntity(type, EnumEntityKingdom.PROSPITIAN, world);
+		return new PawnEntity(type, EnumEntityKingdom.PROSPITIAN, level);
 	}
 	
-	public static PawnEntity createDersite(EntityType<? extends PawnEntity> type, World world)
+	public static PawnEntity createDersite(EntityType<? extends PawnEntity> type, Level level)
 	{
-		return new PawnEntity(type, EnumEntityKingdom.DERSITE, world);
+		return new PawnEntity(type, EnumEntityKingdom.DERSITE, level);
 	}
 	
-	public static AttributeModifierMap.MutableAttribute pawnAttributes()
+	public static AttributeSupplier.Builder pawnAttributes()
 	{
 		return CarapacianEntity.carapacianAttributes().add(Attributes.ATTACK_DAMAGE)
 				.add(Attributes.MOVEMENT_SPEED, 0.2);
@@ -109,17 +109,17 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty)
 	{
 		super.populateDefaultEquipmentSlots(difficulty);
-		this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD : random.nextDouble() < .02 ? MSItems.SORD : Items.STONE_SWORD));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD.get() : random.nextDouble() < .02 ? MSItems.SORD.get() : Items.STONE_SWORD));
 	}
 	
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
-		ArrowEntity arrow = new ArrowEntity(this.level, this);
+		Arrow arrow = new Arrow(this.level, this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getBoundingBox().minY + (double) (target.getBbHeight() / 3.0F) - arrow.getY();
 		double d2 = target.getZ() - this.getZ();
-		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+		double d3 = Math.sqrt(d0 * d0 + d2 * d2);
 		arrow.shoot(d0, d1 + d3 * 0.2D, d2, 1.6F, 12.0F);
 		int power = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER_ARROWS, this);
 		int punch = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH_ARROWS, this);
@@ -175,7 +175,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 			par1Entity.setSecondsOnFire(1);
 		
 		if(knockback > 0)
-			par1Entity.push(-MathHelper.sin(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (MathHelper.cos(this.yRot * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
+			par1Entity.push(-Mth.sin(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (Mth.cos(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
 		
 		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
@@ -210,14 +210,14 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		setCombatTask();
 	}
 	
 	@Override
-	public void setItemSlot(EquipmentSlotType slotIn, ItemStack stack)
+	public void setItemSlot(EquipmentSlot slotIn, ItemStack stack)
 	{
 		super.setItemSlot(slotIn, stack);
 		
@@ -229,7 +229,7 @@ public class PawnEntity extends CarapacianEntity implements IRangedAttackMob, IM
 	
 	@Nullable
 	@Override
-	public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
 	{
 		spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
 		

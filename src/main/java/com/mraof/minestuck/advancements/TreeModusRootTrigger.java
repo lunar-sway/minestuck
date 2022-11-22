@@ -2,18 +2,13 @@ package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.criterion.AbstractCriterionTrigger;
-import net.minecraft.advancements.criterion.CriterionInstance;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.loot.ConditionArrayParser;
-import net.minecraft.loot.ConditionArraySerializer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Objects;
 
-public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRootTrigger.Instance>
+public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTrigger.Instance>
 {
 	private static final ResourceLocation ID = new ResourceLocation(Minestuck.MOD_ID, "tree_modus_root");
 	
@@ -24,29 +19,29 @@ public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRoot
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.AndPredicate predicate, ConditionArrayParser conditionsParser)
+	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		MinMaxBounds.IntBound count = MinMaxBounds.IntBound.fromJson(json.get("count"));
+		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
 		return new Instance(predicate, count);
 	}
 	
-	public void trigger(ServerPlayerEntity player, int count)
+	public void trigger(ServerPlayer player, int count)
 	{
 		trigger(player, instance -> instance.test(count));
 	}
 	
-	public static class Instance extends CriterionInstance
+	public static class Instance extends AbstractCriterionTriggerInstance
 	{
-		private final MinMaxBounds.IntBound count;
-		public Instance(EntityPredicate.AndPredicate predicate, MinMaxBounds.IntBound count)
+		private final MinMaxBounds.Ints count;
+		public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints count)
 		{
 			super(ID, predicate);
 			this.count = Objects.requireNonNull(count);
 		}
 		
-		public static Instance count(MinMaxBounds.IntBound count)
+		public static Instance count(MinMaxBounds.Ints count)
 		{
-			return new Instance(EntityPredicate.AndPredicate.ANY, count);
+			return new Instance(EntityPredicate.Composite.ANY, count);
 		}
 		
 		public boolean test(int count)
@@ -55,9 +50,9 @@ public class TreeModusRootTrigger extends AbstractCriterionTrigger<TreeModusRoot
 		}
 		
 		@Override
-		public JsonObject serializeToJson(ConditionArraySerializer conditions)
+		public JsonObject serializeToJson(SerializationContext context)
 		{
-			JsonObject json = super.serializeToJson(conditions);
+			JsonObject json = super.serializeToJson(context);
 			json.add("count", count.serializeToJson());
 			
 			return json;

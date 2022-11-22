@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:glow_berries"
+  },
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:sulfur": 2
+  }
+}

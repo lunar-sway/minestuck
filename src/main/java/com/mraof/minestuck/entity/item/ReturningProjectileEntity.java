@@ -3,64 +3,64 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
-public class ReturningProjectileEntity extends ProjectileItemEntity
+public class ReturningProjectileEntity extends ThrowableItemProjectile
 {
 	private int bounce;
 	public int maxTick = 0;
 	private int inBlockTicks = 0;
 	private boolean noBlockCollision;
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, World worldIn)
+	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, Level level)
 	{
-		super(type, worldIn);
+		super(type, level);
 	}
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, double x, double y, double z, World worldIn)
+	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, double x, double y, double z, Level level)
 	{
-		super(type, x, y, z, worldIn);
+		super(type, x, y, z, level);
 	}
 	
-	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, LivingEntity livingEntityIn, World worldIn, int maxTick, boolean noBlockCollision)
+	public ReturningProjectileEntity(EntityType<? extends ReturningProjectileEntity> type, LivingEntity livingEntityIn, Level level, int maxTick, boolean noBlockCollision)
 	{
-		super(type, livingEntityIn, worldIn);
+		super(type, livingEntityIn, level);
 		this.maxTick = maxTick;
 		this.noBlockCollision = noBlockCollision;
 	}
 	
 	@Override
-	protected void onHit(RayTraceResult result) //TODO onImpact does not trigger if already used within a couple ticks, allowing it to pass through blocks or entities
+	protected void onHit(HitResult result) //TODO onImpact does not trigger if already used within a couple ticks, allowing it to pass through blocks or entities
 	{
 		int damage = ProjectileDamaging.getDamageFromItem(getItemFromItemStack().getItem());
 		
-		if(result.getType() == RayTraceResult.Type.ENTITY)
+		if(result.getType() == HitResult.Type.ENTITY)
 		{
 			this.setDeltaMovement(getDeltaMovement().scale(-1.05));
 			if(!level.isClientSide)
 			{
 				++bounce;
-				Entity entity = ((EntityRayTraceResult) result).getEntity();
+				Entity entity = ((EntityHitResult) result).getEntity();
 				
 				if(entity instanceof UnderlingEntity)
 					entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
@@ -71,9 +71,9 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 					resetThrower();
 				}
 			}
-		} else if(result.getType() == RayTraceResult.Type.BLOCK && !noBlockCollision)
+		} else if(result.getType() == HitResult.Type.BLOCK && !noBlockCollision)
 		{
-			BlockRayTraceResult blockResult = (BlockRayTraceResult) result;
+			BlockHitResult blockResult = (BlockHitResult) result;
 			Direction blockFace = blockResult.getDirection();
 			BlockPos blockPos = blockResult.getBlockPos();
 			if(Block.canSupportCenter(level, blockPos, blockFace))
@@ -82,7 +82,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 				if(!level.isClientSide)
 				{
 					++bounce;
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.6F, 4.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
 				}
 			}
 			
@@ -100,16 +100,16 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	
 	public void resetThrower()
 	{
-		if(getOwner() instanceof PlayerEntity)
+		if(getOwner() instanceof Player player)
 		{
-			((PlayerEntity)getOwner()).getCooldowns().addCooldown(getItemRaw().getItem(), 5);
-			this.remove(); //TODO find a better set of conditions to remove entity(ticksExisted?)
+			player.getCooldowns().addCooldown(getItemRaw().getItem(), 5);
+			this.discard(); //TODO find a better set of conditions to remove entity(ticksExisted?)
 		}
 	}
 	
 	public void tick()
 	{
-		Vector3d pos = position();
+		Vec3 pos = position();
 		this.xOld = pos.x;
 		this.yOld = pos.y;
 		this.zOld = pos.z;
@@ -128,17 +128,18 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public void readAdditionalSaveData(CompoundNBT compound)
+	public void readAdditionalSaveData(CompoundTag compound)
 	{
 		super.readAdditionalSaveData(compound);
 		bounce = compound.getInt("bounce");
 		maxTick = compound.getInt("maxTick");
-		inBlockTicks = compound.getInt("inBlockTicks");;
+		inBlockTicks = compound.getInt("inBlockTicks");
+		;
 		noBlockCollision = compound.getBoolean("noBlockCollision");
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundNBT compound)
+	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putInt("bounce", bounce);
@@ -148,7 +149,7 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	}
 	
 	@Override
-	public IPacket<?> getAddEntityPacket()
+	public Packet<?> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -156,10 +157,11 @@ public class ReturningProjectileEntity extends ProjectileItemEntity
 	@Override
 	protected Item getDefaultItem()
 	{
-		return MSItems.CHAKRAM;
+		return MSItems.CHAKRAM.get();
 	}
 	
-	public ItemStack getItemFromItemStack() {
+	public ItemStack getItemFromItemStack()
+	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}

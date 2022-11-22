@@ -7,10 +7,10 @@ import com.mraof.minestuck.network.TitleSelectPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,13 +25,13 @@ public class TitleSelectionHook
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	static Map<PlayerEntity, Vector3d> playersInTitleSelection = new HashMap<>();
+	static Map<Player, Vec3> playersInTitleSelection = new HashMap<>();
 	
 	/**
 	 * Checks if the player has the go-ahead to enter.
 	 * If the player should get the title selection screen, this will send that packet to the player and then return false.
 	 */
-	public static boolean performEntryCheck(ServerPlayerEntity player)
+	public static boolean performEntryCheck(ServerPlayer player)
 	{
 		if(!MinestuckConfig.SERVER.playerSelectedTitle.get())
 			return true;
@@ -43,18 +43,18 @@ public class TitleSelectionHook
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
 			return true;
 		
-		playersInTitleSelection.put(player, new Vector3d(player.getX(), player.getY(), player.getZ()));
+		playersInTitleSelection.put(player, new Vec3(player.getX(), player.getY(), player.getZ()));
 		TitleSelectPacket packet = new TitleSelectPacket();
 		MSPacketHandler.sendToPlayer(packet, player);
 		return false;
 	}
 	
-	public static void cancelSelection(ServerPlayerEntity player)
+	public static void cancelSelection(ServerPlayer player)
 	{
 		playersInTitleSelection.remove(player);
 	}
 	
-	public static void handleTitleSelection(ServerPlayerEntity player, Title title)
+	public static void handleTitleSelection(ServerPlayer player, Title title)
 	{
 		if(MinestuckConfig.SERVER.playerSelectedTitle.get() && playersInTitleSelection.containsKey(player))
 		{
@@ -76,7 +76,7 @@ public class TitleSelectionHook
 			}
 			
 			//Once the title selection has finished successfully, restore player position and trigger entry
-			Vector3d pos = playersInTitleSelection.remove(player);
+			Vec3 pos = playersInTitleSelection.remove(player);
 			
 			player.setPos(pos.x, pos.y, pos.z);
 			

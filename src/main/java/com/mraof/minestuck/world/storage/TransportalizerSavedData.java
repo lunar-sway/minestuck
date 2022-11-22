@@ -1,15 +1,15 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.DimensionSavedDataManager;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ import java.util.Random;
 /**
  * Keeps track of all transportalizer codes and the locations that they are linked to.
  */
-public class TransportalizerSavedData extends WorldSavedData
+public class TransportalizerSavedData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final String DATA_NAME = Minestuck.MOD_ID+"_transportalizers";
@@ -29,29 +29,29 @@ public class TransportalizerSavedData extends WorldSavedData
 	
 	private TransportalizerSavedData()
 	{
-		super(DATA_NAME);
 		locations = new HashMap<>();
 	}
 	
-	@Override
-	public void load(CompoundNBT nbt)
+	public static TransportalizerSavedData load(CompoundTag nbt)
 	{
-		locations.clear();
+		TransportalizerSavedData data = new TransportalizerSavedData();
+		data.locations.clear();
 		for(String id : nbt.getAllKeys())
 		{
-			INBT locationTag = nbt.get(id);
-			GlobalPos.CODEC.parse(NBTDynamicOps.INSTANCE, locationTag).resultOrPartial(LOGGER::error).ifPresent(location -> locations.put(id, location));
+			Tag locationTag = nbt.get(id);
+			GlobalPos.CODEC.parse(NbtOps.INSTANCE, locationTag).resultOrPartial(LOGGER::error).ifPresent(location -> data.locations.put(id, location));
 		}
+		return data;
 	}
 	
 	@Override
-	public CompoundNBT save(CompoundNBT compound)
+	public CompoundTag save(CompoundTag compound)
 	{
 		for(Map.Entry<String, GlobalPos> entry : locations.entrySet())
 		{
 			GlobalPos location = entry.getValue();
 			
-			GlobalPos.CODEC.encodeStart(NBTDynamicOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(locationTag -> compound.put(entry.getKey(), locationTag));
+			GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, location).resultOrPartial(LOGGER::error).ifPresent(locationTag -> compound.put(entry.getKey(), locationTag));
 		}
 		
 		return compound;
@@ -104,27 +104,20 @@ public class TransportalizerSavedData extends WorldSavedData
 			setDirty();
 	}
 	
-	public static TransportalizerSavedData get(World world)
+	public static TransportalizerSavedData get(Level level)
 	{
-		MinecraftServer server = world.getServer();
+		MinecraftServer server = level.getServer();
 		if(server == null)
-			throw new IllegalArgumentException("Can't get transportalizer data instance on client side! (Got null server from world)");
+			throw new IllegalArgumentException("Can't get transportalizer data instance on client side! (Got null server from level)");
 		return get(server);
 	}
 	
 	public static TransportalizerSavedData get(MinecraftServer mcServer)
 	{
-		ServerWorld world = mcServer.getLevel(World.OVERWORLD);
+		ServerLevel level = mcServer.getLevel(Level.OVERWORLD);
 		
-		DimensionSavedDataManager storage = world.getDataStorage();
-		TransportalizerSavedData instance = storage.get(TransportalizerSavedData::new, DATA_NAME);
+		DimensionDataStorage storage = level.getDataStorage();
 		
-		if(instance == null)	//There is no save data
-		{
-			instance = new TransportalizerSavedData();
-			storage.set(instance);
-		}
-		
-		return instance;
+		return storage.computeIfAbsent(TransportalizerSavedData::load, TransportalizerSavedData::new, DATA_NAME);
 	}
 }

@@ -2,31 +2,36 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
-import net.minecraft.client.gui.DisplayEffectsScreen;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Util;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.TrapDoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -65,10 +70,10 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, CompoundNBT deployList)
+	public static void onClientPackage(String target, int posX, int posZ, CompoundTag deployList)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		ClientPlayerEntity player = mc.player;
+		LocalPlayer player = mc.player;
 		if(target != null) {	//Enable edit mode
 			activated = true;
 			centerX = posX;
@@ -98,17 +103,17 @@ public final class ClientEditHandler
 		
 	}
 	
-	private static GristSet itemCost(ItemStack stack, World world)
+	private static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
 			return deployEntry.getCost();
-		else return GristCostRecipe.findCostForItem(stack, null, false, world);
+		else return GristCostRecipe.findCostForItem(stack, null, false, level);
 	}
 	
-	private static void addToolTip(ItemStack stack, List<ITextComponent> toolTip, GristSet have)
+	private static void addToolTip(ItemStack stack, List<Component> toolTip, GristSet have)
 	{
-		World level = Objects.requireNonNull(Minecraft.getInstance().level);
+		Level level = Objects.requireNonNull(Minecraft.getInstance().level);
 		GristSet cost = itemCost(stack, level);
 		
 		if(cost == null)
@@ -119,11 +124,11 @@ public final class ClientEditHandler
 		for(GristAmount amount : cost.getAmounts())
 		{
 			GristType grist = amount.getType();
-			TextFormatting color = amount.getAmount() <= have.getGrist(grist) ? TextFormatting.GREEN : TextFormatting.RED;
-			toolTip.add(new StringTextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			ChatFormatting color = amount.getAmount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
+			toolTip.add(new TextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslationTextComponent(GuiUtil.FREE).withStyle(TextFormatting.GREEN));
+			toolTip.add(new TranslatableComponent(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
 	}
 	
 	@SubscribeEvent
@@ -131,7 +136,7 @@ public final class ClientEditHandler
 	{
 		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
 		{
-			PlayerEntity player = event.player;
+			Player player = event.player;
 			
 			double range = ClientDimensionData.isLand(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
@@ -144,7 +149,7 @@ public final class ClientEditHandler
 	{
 		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
-			PlayerInventory inventory = event.getPlayer().inventory;
+			Inventory inventory = event.getPlayer().getInventory();
 			ItemStack stack = event.getEntityItem().getItem();
 			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
@@ -154,10 +159,11 @@ public final class ClientEditHandler
 			}
 			if(event.isCanceled())
 			{
-				if(!inventory.getCarried().isEmpty())
-					inventory.setCarried(ItemStack.EMPTY);
+				AbstractContainerMenu menu = event.getPlayer().containerMenu;
+				if(!menu.getCarried().isEmpty())
+					menu.setCarried(ItemStack.EMPTY);
 				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
-				event.getEntityItem().remove();
+				event.getEntityItem().discard();
 			}
 		}
 	}
@@ -178,7 +184,7 @@ public final class ClientEditHandler
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
-			if(event.getHand().equals(Hand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
+			if(event.getHand().equals(InteractionHand.OFF_HAND) || !ServerEditHandler.isBlockItem(stack.getItem()))
 			{
 				event.setCanceled(true);
 				return;
@@ -248,9 +254,9 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public static void onGuiOpened(GuiOpenEvent event)
+	public static void onScreenOpened(ScreenOpenEvent event)
 	{
-		if(isActive() && event.getGui() instanceof DisplayEffectsScreen<?>)
+		if(isActive() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
 		{
 				event.setCanceled(true);
 				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
