@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,7 +58,7 @@ public enum EnumCassetteType implements StringRepresentable
 	}
 	
 	@Override
-	public @NotNull String getSerializedName()
+	public @NonNull String getSerializedName()
 	{
 		return name().toLowerCase();
 	}
