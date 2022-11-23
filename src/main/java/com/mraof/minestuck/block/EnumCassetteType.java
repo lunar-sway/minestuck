@@ -21,7 +21,7 @@ public enum EnumCassetteType implements StringRepresentable
 	THIRTEEN(() -> SoundEvents.MUSIC_DISC_13, onHitEffect(() -> new MobEffectInstance(MobEffects.HUNGER, 100, 0), 0.30F)),
 	BLOCKS(() -> SoundEvents.MUSIC_DISC_BLOCKS, onHitEffect(() -> new MobEffectInstance(MobEffects.CONFUSION, 100, 0),
 			0.15F)),
-	CAT(() -> SoundEvents.MUSIC_DISC_CAT, userEffect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0,
+	CAT(() -> SoundEvents.MUSIC_DISC_CAT, userEffect(() -> new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0,
 			false, false, false))),
 	CHIRP(() -> SoundEvents.MUSIC_DISC_CHIRP, userEffect(() -> new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
 			false, false, false))),

@@ -11,6 +11,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -37,6 +38,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MusicPlayerItem extends WeaponItem
 {
+	public static final String TITLE = "minestuck.music_player";
 	private final float volume;
 	private final float pitch;
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
@@ -110,7 +112,7 @@ public class MusicPlayerItem extends WeaponItem
 				
 				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
 						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
-						new TextComponent("Music Player")));
+						new TranslatableComponent(TITLE)));
 			}
 		}
 		return super.use(level, playerIn, handIn);

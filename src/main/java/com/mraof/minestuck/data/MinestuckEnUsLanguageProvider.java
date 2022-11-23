@@ -29,6 +29,7 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.item.weapon.MusicPlayerItem;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
@@ -1498,6 +1499,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");
 		addStrife(KindAbstratusList.SPORK, "Sporkkind");
 		
+		add(MusicPlayerItem.TITLE, "Music Player");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
