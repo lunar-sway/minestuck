@@ -25,7 +25,7 @@ public enum EnumCassetteType implements StringRepresentable
 			false, false, false))),
 	CHIRP(() -> SoundEvents.MUSIC_DISC_CHIRP, userEffect(() -> new MobEffectInstance(MobEffects.SLOW_FALLING, 100, 0,
 			false, false, false))),
-	MUSIC_DISC_DANCE_STAB_DANCE(MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 500, 3),
+	DANCE_STAB_DANCE(MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 500, 3),
 			0.3F)),
 	EMISSARY_OF_DANCE(MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, onHitEffect(() -> new MobEffectInstance(MobEffects.POISON, 200, 0),
 			0.1F)),
