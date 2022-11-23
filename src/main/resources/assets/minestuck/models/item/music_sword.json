@@ -6,7 +6,7 @@
     "overrides": [
         {
             "predicate": {
-                "minestuck:hascassette": 1
+                "minestuck:has_cassette": 1
             },
             "model": "minestuck:item/music_sword_deployed"
         }
