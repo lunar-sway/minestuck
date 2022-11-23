@@ -2,13 +2,13 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerItemCapProvider;
 import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
@@ -52,6 +52,8 @@ import java.util.Random;
  * 	The tag used to do so is HasCassette.
  * </p>
  * {@link #inventoryTick(ItemStack, Level, Entity, int, boolean)}
+ * {@link #setHasCassette(ItemStack, boolean)}
+ * {@link #hasCassette(ItemStack)}
  */
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
@@ -144,7 +146,7 @@ public class MusicPlayerItem extends WeaponItem
 		if(stack.getItem() instanceof MusicPlayerItem)
 		{
 			ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
-			stack.getOrCreateTag().putBoolean("HasCassette", itemInMusicPlayer != ItemStack.EMPTY);
+			setHasCassette(stack, itemInMusicPlayer != ItemStack.EMPTY);
 		}
 	}
 	
@@ -211,5 +213,23 @@ public class MusicPlayerItem extends WeaponItem
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
+	}
+	
+	public static boolean hasCassette(ItemStack stack)
+	{
+		if(!stack.hasTag() || !stack.getTag().contains("HasCasette"))
+			return false;
+		else return stack.getTag().getBoolean("HasCassette");
+	}
+	
+	public static void setHasCassette(ItemStack stack, boolean value)
+	{
+		CompoundTag nbt = stack.getTag();
+		if(nbt == null)
+		{
+			nbt = new CompoundTag();
+			stack.setTag(nbt);
+		}
+		nbt.putBoolean("HasCassette", value);
 	}
 }
