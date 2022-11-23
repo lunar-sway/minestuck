@@ -15,7 +15,7 @@ public class PlayerMusicClientHandler
 {
 	private static final Map<Integer, EntityBoundSoundInstance> entitiesMap = new HashMap<>();
 	
-	public static void sendPacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch)
+	public static void handlePacket(int entityID, EnumCassetteType cassetteType, float volume, float pitch)
 	{
 		checkEntitiesInMap();
 		

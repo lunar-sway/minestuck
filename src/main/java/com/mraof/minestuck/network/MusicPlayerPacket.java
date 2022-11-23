@@ -57,6 +57,6 @@ public class MusicPlayerPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		PlayerMusicClientHandler.sendPacket(entityID, cassetteType, volume, pitch);
+		PlayerMusicClientHandler.handlePacket(entityID, cassetteType, volume, pitch);
 	}
 }
