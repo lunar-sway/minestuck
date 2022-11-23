@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
-import com.mraof.minestuck.inventory.MSCapabilities;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;

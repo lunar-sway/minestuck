@@ -1,4 +1,4 @@
-package com.mraof.minestuck.inventory;
+package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;

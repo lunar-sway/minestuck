@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.MSCapabilities;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerItemCapProvider;
@@ -10,7 +10,6 @@ import com.mraof.minestuck.item.CassetteItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -34,6 +33,26 @@ import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+
+/**
+ * <p>
+ * 	This Weapon allow the user to open a GUI that can contain one cassette with right-click, and can play the
+ * 	music associated to it with shift right-click. Doing it again while a music is playing will
+ * 	stop the music.
+ * </p>
+ * {@link #use(Level, Player, InteractionHand)}
+ * <p>
+ * 	Depending on the music that is currently playing, the player will receive positive effect,
+ * 	or will apply negative effect on hit.
+ * </p>
+ * 	{@link #playerTick(TickEvent.PlayerTickEvent)}
+ * 	{@link #hurtEnemy(ItemStack, LivingEntity, LivingEntity)}
+ * <p>
+ * 	The sprite of the item can change depending of if a cassette is currently inside or not.
+ * 	The tag used to do so is HasCassette.
+ * </p>
+ * {@link #inventoryTick(ItemStack, Level, Entity, int, boolean)}
+ */
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class MusicPlayerItem extends WeaponItem
