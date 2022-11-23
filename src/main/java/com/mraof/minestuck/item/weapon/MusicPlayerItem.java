@@ -136,6 +136,7 @@ public class MusicPlayerItem extends WeaponItem
 						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
 						new TranslatableComponent(TITLE)));
 			}
+			return InteractionResultHolder.success(musicPlayer);
 		}
 		return super.use(level, playerIn, handIn);
 	}
