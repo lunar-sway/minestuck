@@ -11,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.NotNull;
-
 import javax.annotation.Nonnull;
 
 public class CassetteContainerMenu extends AbstractContainerMenu
@@ -37,7 +35,7 @@ public class CassetteContainerMenu extends AbstractContainerMenu
 		this.musicPlayer = musicPlayer;
 		addSlot(new SlotItemHandler(itemStackHandler, 0, CASSETTE_X, CASSETTE_Y){
 			@Override
-			public boolean mayPlace(@NotNull ItemStack stack)
+			public boolean mayPlace(@Nonnull ItemStack stack)
 			{
 				return stack.is(MSTags.Items.CASSETTES);
 			}

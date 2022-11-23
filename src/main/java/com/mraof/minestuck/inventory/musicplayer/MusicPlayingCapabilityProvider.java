@@ -5,24 +5,25 @@ import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MusicPlayingCapabilityProvider implements ICapabilityProvider
 {
 	private final LazyOptional<IMusicPlaying> lazyInitSupplierMusicPlaying = LazyOptional.of(this::getCachedMusicPlaying);
 	private MusicPlaying musicPlaying;
 	
-	@NotNull
+	@Nonnull
 	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
 		if(MSCapabilities.MUSIC_PLAYING_CAPABILITY == cap)
 			return (lazyInitSupplierMusicPlaying).cast();
 		return LazyOptional.empty();
 	}
 	
-	private @NotNull MusicPlaying getCachedMusicPlaying()
+	private @Nonnull MusicPlaying getCachedMusicPlaying()
 	{
 		if(musicPlaying == null)
 		{
