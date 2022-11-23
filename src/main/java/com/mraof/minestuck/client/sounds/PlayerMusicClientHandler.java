@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.sounds;
 
 import com.mraof.minestuck.block.EnumCassetteType;
+import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.EntityBoundSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
@@ -10,6 +11,13 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Keep track of every player entities listening to the music.
+ * Create a sound instance on every client matching the music currently playing.
+ *
+ * @see MusicPlayerPacket
+ */
 
 public class PlayerMusicClientHandler
 {

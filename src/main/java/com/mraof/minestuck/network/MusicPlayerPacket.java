@@ -17,8 +17,10 @@ public class MusicPlayerPacket implements PlayToClientPacket
 	 * If the cassetteType NONE is given, the previous music stop if there
 	 * was any, and no music is played.
 	 *
-	 * @param entity     The player starting the music
+	 * @param entity     The player starting the music.
 	 * @param cassetteType The cassette that is going to be played.
+	 * @param volume The volume of the music. Default is 4.0F.
+	 * @param pitch The pitch of the music, how fast should it be. Default is 1.0F.
 	 * @see PlayerMusicClientHandler
 	 */
 	
