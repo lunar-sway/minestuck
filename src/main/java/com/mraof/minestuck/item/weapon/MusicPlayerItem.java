@@ -36,20 +36,20 @@ import java.util.Random;
 
 /**
  * <p>
- * 	This Weapon allow the user to open a GUI that can contain one cassette with right-click, and can play the
- * 	music associated to it with shift right-click. Doing it again while a music is playing will
- * 	stop the music.
+ * This Weapon allow the user to open a GUI that can contain one cassette with right-click, and can play the
+ * music associated to it with shift right-click. Doing it again while a music is playing will
+ * stop the music.
  * </p>
  * {@link #use(Level, Player, InteractionHand)}
  * <p>
- * 	Depending on the music that is currently playing, the player will receive positive effect,
- * 	or will apply negative effect on hit.
+ * Depending on the music that is currently playing, the player will receive positive effect,
+ * or will apply negative effect on hit.
  * </p>
- * 	{@link #playerTick(TickEvent.PlayerTickEvent)}
- * 	{@link #hurtEnemy(ItemStack, LivingEntity, LivingEntity)}
+ * {@link #playerTick(TickEvent.PlayerTickEvent)}
+ * {@link #hurtEnemy(ItemStack, LivingEntity, LivingEntity)}
  * <p>
- * 	The sprite of the item can change depending of if a cassette is currently inside or not.
- * 	The tag used to do so is HasCassette.
+ * The sprite of the item can change depending of if a cassette is currently inside or not.
+ * The tag used to do so is HasCassette.
  * </p>
  * {@link #inventoryTick(ItemStack, Level, Entity, int, boolean)}
  * {@link #setHasCassette(ItemStack, boolean)}
@@ -62,6 +62,7 @@ public class MusicPlayerItem extends WeaponItem
 	public static final String TITLE = "minestuck.music_player";
 	private final float volume;
 	private final float pitch;
+	
 	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
@@ -143,11 +144,8 @@ public class MusicPlayerItem extends WeaponItem
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
 	{
 		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
-		if(stack.getItem() instanceof MusicPlayerItem)
-		{
-			ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
-			setHasCassette(stack, itemInMusicPlayer != ItemStack.EMPTY);
-		}
+		ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
+		setHasCassette(stack, !itemInMusicPlayer.isEmpty());
 	}
 	
 	@SubscribeEvent
