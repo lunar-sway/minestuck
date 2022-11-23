@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.inventory.musicplayer.CapabilityMusicPlaying;
+import com.mraof.minestuck.inventory.MSCapabilities;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayerItemCapProvider;
@@ -47,7 +47,7 @@ public class MusicPlayerItem extends WeaponItem
 	
 	private static IMusicPlaying getMusicPlaying(LivingEntity entity)
 	{
-		return entity.getCapability(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
+		return entity.getCapability(MSCapabilities.MUSIC_PLAYING_CAPABILITY).orElseThrow(() ->
 				new IllegalArgumentException("Expected an music playing for this entity, but " + entity + " does not expose a music playing."));
 	}
 	

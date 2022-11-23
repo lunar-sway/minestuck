@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
+import com.mraof.minestuck.inventory.MSCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -16,7 +17,7 @@ public class MusicPlayingCapabilityProvider implements ICapabilityProvider
 	@Override
 	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
 	{
-		if(CapabilityMusicPlaying.MUSIC_PLAYING_CAPABILITY == cap)
+		if(MSCapabilities.MUSIC_PLAYING_CAPABILITY == cap)
 			return (lazyInitSupplierMusicPlaying).cast();
 		return LazyOptional.empty();
 	}

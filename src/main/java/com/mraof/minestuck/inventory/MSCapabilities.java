@@ -1,6 +1,9 @@
-package com.mraof.minestuck.inventory.musicplayer;
+package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
+import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
+import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -13,7 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
-public class CapabilityMusicPlaying
+public class MSCapabilities
 {
 	public static final Capability<IMusicPlaying> MUSIC_PLAYING_CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
 	{
@@ -24,6 +27,11 @@ public class CapabilityMusicPlaying
 		event.register(IMusicPlaying.class);
 	}
 	
+	/**
+	 * Attach the MusicPlayingCapability to the player
+	 *
+	 * @see MusicPlayingCapabilityProvider
+	 */
 	@SubscribeEvent
 	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> attachCapabilitiesEvent)
 	{
