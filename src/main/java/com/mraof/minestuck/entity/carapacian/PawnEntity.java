@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.entity.AnimatedCreatureEntity;
 import com.mraof.minestuck.entity.ai.attack.AttackState;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.animation.MSMobAnimations;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -90,7 +90,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, AnimatedCreatureEntity.Actions.NONE.ordinal());
+		entityData.define(CURRENT_ACTION, MSMobAnimations.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
@@ -243,10 +243,10 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<PawnEntity> event)

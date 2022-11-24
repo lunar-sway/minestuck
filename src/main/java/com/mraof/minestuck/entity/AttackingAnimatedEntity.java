@@ -1,17 +1,17 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.ai.attack.AttackState;
+import com.mraof.minestuck.entity.animation.MSMobAnimations;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
  */
-public abstract class AttackingAnimatedEntity extends PathfinderMob implements AttackState.Holder
+public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements AttackState.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
@@ -24,7 +24,7 @@ public abstract class AttackingAnimatedEntity extends PathfinderMob implements A
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, AnimatedCreatureEntity.Actions.NONE.ordinal());
+		entityData.define(CURRENT_ACTION, MSMobAnimations.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
