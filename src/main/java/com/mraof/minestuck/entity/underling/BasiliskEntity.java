@@ -6,7 +6,8 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -27,9 +28,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final MSMobAnimation BITE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.BITE, 14, true,false);
-	public static final int BITE_DELAY = 4;
-	public static final int BITE_RECOVERY = BITE_ANIMATION.getAnimationLength() - BITE_DELAY; //10
+	public static final MobAnimationPhases BITE_PHASES = new MobAnimationPhases(2, 4, 5, 14);
+	public static final MobAnimation BITE_ANIMATION = new MobAnimation(MobAnimation.Actions.BITE, BITE_PHASES.getTotalAnimationLength(), true,false);
+	//public static final int BITE_DELAY = 4;
+	//public static final int BITE_RECOVERY = BITE_ANIMATION.getAnimationLength() - BITE_DELAY; //10
 	
 	private final BasiliskPartEntity[] parts;
 	private final BasiliskPartEntity head;
@@ -60,7 +62,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, BITE_DELAY, BITE_RECOVERY, BITE_ANIMATION));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, BITE_ANIMATION, BITE_PHASES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

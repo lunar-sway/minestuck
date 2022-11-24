@@ -5,18 +5,18 @@ import net.minecraft.nbt.CompoundTag;
 /**
  * Keeps track of a given animation. Can store stages of the animation in which to perform additional actions/events
  */
-public class MSMobAnimation
+public class MobAnimation
 {
 	public static final int LOOPING_ANIMATION = -1; //when set to -1, it will continue looping until another animation overrides it
-	public static final MSMobAnimation.Actions IDLE_ACTION = Actions.IDLE;
-	public static final MSMobAnimation DEFAULT_IDLE_ANIMATION = new MSMobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false, false);
+	public static final MobAnimation.Actions IDLE_ACTION = Actions.IDLE;
+	public static final MobAnimation DEFAULT_IDLE_ANIMATION = new MobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false, false);
 	
 	private final Actions actions;
 	private final int animationLength;
 	private final boolean freezeMovement;
 	private final boolean freezeSight;
 	
-	public MSMobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
+	public MobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
 	{
 		this.actions = actions;
 		this.animationLength = animationLength;
@@ -59,13 +59,13 @@ public class MSMobAnimation
 		return nbt;
 	}
 	
-	public static MSMobAnimation createTrackerFromCompoundTag(CompoundTag nbtIn)
+	public static MobAnimation createTrackerFromCompoundTag(CompoundTag nbtIn)
 	{
 		Actions actions = Actions.fromInt(nbtIn.getInt("actions"));
 		int animationLength = nbtIn.getInt("animationLength");
 		boolean freezeMovement = nbtIn.getBoolean("freezeMovement");
 		boolean freezeSight = nbtIn.getBoolean("freezeSight");
-		return new MSMobAnimation(actions, animationLength, freezeMovement, freezeSight);
+		return new MobAnimation(actions, animationLength, freezeMovement, freezeSight);
 	}
 	
 	/**

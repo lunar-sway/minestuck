@@ -5,12 +5,12 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,9 +29,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final MSMobAnimation PUNCH_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PUNCH, 38, true,true);
-	public static final int PUNCH_DELAY = 18;
-	public static final int PUNCH_RECOVERY = PUNCH_ANIMATION.getAnimationLength() - PUNCH_DELAY; //20
+	public static final MobAnimationPhases PUNCH_PHASES = new MobAnimationPhases(6, 11, 13, 18);
+	public static final MobAnimation PUNCH_ANIMATION = new MobAnimation(MobAnimation.Actions.PUNCH, PUNCH_PHASES.getTotalAnimationLength(), true,true);
+	//public static final int PUNCH_DELAY = 18;
+	//public static final int PUNCH_RECOVERY = PUNCH_ANIMATION.getAnimationLength() - PUNCH_DELAY; //20
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
@@ -50,7 +51,8 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_DELAY, PUNCH_RECOVERY, PUNCH_ANIMATION));
+		//this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_DELAY, PUNCH_RECOVERY, PUNCH_ANIMATION));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, PUNCH_PHASES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -106,24 +108,35 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	public void initiationPhaseStart(MSMobAnimation.Actions animation)
+	public void initiationPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation == MSMobAnimation.Actions.PUNCH)
+		if(animation == MobAnimation.Actions.PUNCH)
 		{
 			Level level = this.level;
 			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.RAVAGER_AMBIENT, SoundSource.HOSTILE, 1.0F, 1.0F);
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
 		}
 	}
 	
 	@Override
-	public void contactPhaseStart(MSMobAnimation.Actions animation)
+	public void contactPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation == MSMobAnimation.Actions.PUNCH)
+		if(animation == MobAnimation.Actions.PUNCH)
 		{
 			Level level = this.level;
 			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.RAVAGER_ATTACK, SoundSource.HOSTILE, 1.0F, 1.0F);
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
+		}
+	}
+	
+	@Override
+	public void recoveryPhaseStart(MobAnimation.Actions animation)
+	{
+		if(animation == MobAnimation.Actions.PUNCH)
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
 		}
 	}
 	

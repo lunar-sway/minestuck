@@ -5,7 +5,8 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -28,9 +29,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final MSMobAnimation CLAW_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.CLAW, 14, true,false);
-	public static final int CLAW_DELAY = 4;
-	public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //10
+	public static final MobAnimationPhases CLAW_PHASES = new MobAnimationPhases(2, 4, 5, 14);
+	public static final MobAnimation CLAW_ANIMATION = new MobAnimation(MobAnimation.Actions.CLAW, CLAW_PHASES.getTotalAnimationLength(), true,false);
+	//public static final int CLAW_DELAY = 4;
+	//public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //10
 	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
@@ -48,7 +50,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, CLAW_DELAY, CLAW_RECOVERY, CLAW_ANIMATION));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, CLAW_ANIMATION, CLAW_PHASES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

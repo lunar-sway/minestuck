@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -11,11 +11,11 @@ import net.minecraft.world.level.Level;
 /**
  * A base class for animated entities with a potentially delayed attack.
  */
-public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements MobAnimationPhases.Holder
+public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements MobAnimationPhases.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
-	public static final MSMobAnimation MELEE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.MELEE, 20, true, false);
+	public static final MobAnimation MELEE_ANIMATION = new MobAnimation(MobAnimation.Actions.MELEE, 20, true, false);
 	
 	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, Level level)
 	{
@@ -26,55 +26,55 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, MSMobAnimation.IDLE_ACTION.ordinal());
+		entityData.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
-	public MSMobAnimation getDefaultAttackAnimation()
+	public MobAnimation getDefaultAttackAnimation()
 	{
 		return MELEE_ANIMATION;
 	}
 	
 	@Override
-	public MobAnimationPhases getPhase()
+	public MobAnimationPhases.Phases getPhase()
 	{
-		return MobAnimationPhases.values()[this.entityData.get(CURRENT_ACTION)];
+		return MobAnimationPhases.Phases.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	@Override
-	public void setAnimationPhase(MobAnimationPhases phase, MSMobAnimation.Actions animation)
+	public void setAnimationPhase(MobAnimationPhases.Phases phase, MobAnimation.Actions animation)
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 		
-		if(phase == MobAnimationPhases.ANTICIPATION)
+		if(phase == MobAnimationPhases.Phases.ANTICIPATION)
 			anticipationPhaseStart(animation);
-		else if(phase == MobAnimationPhases.INITIATION)
+		else if(phase == MobAnimationPhases.Phases.INITIATION)
 			initiationPhaseStart(animation);
-		else if(phase == MobAnimationPhases.CONTACT)
+		else if(phase == MobAnimationPhases.Phases.CONTACT)
 			contactPhaseStart(animation);
-		else if(phase == MobAnimationPhases.RECOVERY)
+		else if(phase == MobAnimationPhases.Phases.RECOVERY)
 			recoveryPhaseStart(animation);
-		else if(phase == MobAnimationPhases.NEUTRAL)
+		else if(phase == MobAnimationPhases.Phases.NEUTRAL)
 			neutralPhaseStart(animation);
 	}
 	
-	public void anticipationPhaseStart(MSMobAnimation.Actions animation)
+	public void anticipationPhaseStart(MobAnimation.Actions animation)
 	{
 	}
 	
-	public void initiationPhaseStart(MSMobAnimation.Actions animation)
+	public void initiationPhaseStart(MobAnimation.Actions animation)
 	{
 	}
 	
-	public void contactPhaseStart(MSMobAnimation.Actions animation)
+	public void contactPhaseStart(MobAnimation.Actions animation)
 	{
 	}
 	
-	public void recoveryPhaseStart(MSMobAnimation.Actions animation)
+	public void recoveryPhaseStart(MobAnimation.Actions animation)
 	{
 	}
 	
-	public void neutralPhaseStart(MSMobAnimation.Actions animation)
+	public void neutralPhaseStart(MobAnimation.Actions animation)
 	{
 	}
 }
