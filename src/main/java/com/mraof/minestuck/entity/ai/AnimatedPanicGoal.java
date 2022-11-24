@@ -26,7 +26,7 @@ public class AnimatedPanicGoal extends PanicGoal
 	@Override
 	public void stop()
 	{
-		this.entity.setCurrentAnimation(MSMobAnimation.DEFAULT_IDLE_ANIMATION);
+		this.entity.endCurrentAction();
 		super.stop();
 	}
 }

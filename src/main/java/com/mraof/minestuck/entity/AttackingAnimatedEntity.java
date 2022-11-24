@@ -15,6 +15,8 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
+	public static final MSMobAnimation MELEE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.MELEE, 20, true, false);
+	
 	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, Level level)
 	{
 		super(type, level);
@@ -25,6 +27,12 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	{
 		super.defineSynchedData();
 		entityData.define(CURRENT_ACTION, MSMobAnimation.IDLE_ACTION.ordinal());
+	}
+	
+	@Override
+	public MSMobAnimation getDefaultAttackAnimation()
+	{
+		return MELEE_ANIMATION;
 	}
 	
 	@Override

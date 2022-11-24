@@ -1,7 +1,5 @@
 package com.mraof.minestuck.entity.animation;
 
-import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
-
 /**
  * Subdivision of animations from MSMobAnimation that is split into stages where additional functionality can be implemented, such as particles or sound effects.
  * Primarily used for combat animations.
@@ -15,20 +13,19 @@ public enum MobAnimationPhases
 	RECOVERY;
 	
 	/**
-	 * An interface for an entity which may hold an attack state.
+	 * An interface for an entity which may hold an animation phase.
 	 */
 	public interface Holder
 	{
 		/**
-		 * @return the current state of the entity's melee attack
+		 * @return the current phase of the entity's animation
 		 */
 		MobAnimationPhases getPhase();
 		
 		/**
 		 * Used to set the entity's animation phase.
-		 * The attack phase is meant to be set exclusively by {@link MoveToTargetGoal}.
 		 *
-		 * @param phase The new phase of the entity's melee attack
+		 * @param phase The new phase of the entity's animation
 		 */
 		void setAnimationPhase(MobAnimationPhases phase, MSMobAnimation.Actions animation);
 		

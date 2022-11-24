@@ -10,7 +10,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 /**
- * Abstract class that provide a way to track an action with optional durations for animated entities.
+ * Abstract class that utilizes helpful functions for utilizing and storing a MSMobAnimation
  */
 public abstract class AnimatedPathfinderMob extends PathfinderMob
 {
@@ -55,7 +55,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 * Gets called when the duration of time associated with an action has run out.
 	 * Default behavior is to set the action to IDLE, but this function can be overridden to add behavior for specific actions.
 	 **/
-	protected void endCurrentAction()
+	public void endCurrentAction()
 	{
 		this.setCurrentAnimation(MSMobAnimation.DEFAULT_IDLE_ANIMATION);
 	}
