@@ -42,7 +42,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
-	public static final MSMobAnimation MELEE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.MELEE, 18, true);
+	public static final MSMobAnimation MELEE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.MELEE, 18, true,false);
 	public static final int MELEE_DELAY = 6;
 	public static final int MELEE_RECOVERY = MELEE_ANIMATION.getAnimationLength() - MELEE_DELAY; //12
 	
@@ -84,7 +84,6 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, MELEE_DELAY, MELEE_RECOVERY, MELEE_ANIMATION));
-		//this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}

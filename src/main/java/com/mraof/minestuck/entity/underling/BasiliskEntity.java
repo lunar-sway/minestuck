@@ -6,7 +6,6 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
@@ -28,7 +27,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final MSMobAnimation BITE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.BITE, 14, true);
+	public static final MSMobAnimation BITE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.BITE, 14, true,false);
 	public static final int BITE_DELAY = 4;
 	public static final int BITE_RECOVERY = BITE_ANIMATION.getAnimationLength() - BITE_DELAY; //10
 	
@@ -62,7 +61,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, BITE_DELAY, BITE_RECOVERY, BITE_ANIMATION));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

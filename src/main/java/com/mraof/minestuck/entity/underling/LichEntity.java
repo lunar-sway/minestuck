@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final MSMobAnimation CLAW_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.CLAW, 30, true);
+	public static final MSMobAnimation CLAW_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.CLAW, 30, false,false);
 	public static final int CLAW_DELAY = 14;
 	public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //16
 	

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.ai.attack;
 
+import com.mojang.math.Vector3d;
 import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.world.entity.LivingEntity;
@@ -7,6 +8,8 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 import javax.annotation.Nonnull;
+import java.util.EnumSet;
+import java.util.Objects;
 
 /**
  * A goal for performing a slow melee attack when within hitting range.
@@ -29,12 +32,22 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	
 	private int attackDuration = -1, recoverDuration = -1;
 	
+	private Vector3d lookTarget;
+	
 	public SlowAttackWhenInRangeGoal(T entity, int attackDelay, int attackRecovery, MSMobAnimation animation)
 	{
 		this.entity = entity;
 		this.attackDelay = attackDelay;
 		this.attackRecovery = attackRecovery;
 		this.animation = animation;
+		
+		//code block has some redundancy with the tick function in AnimatedPathfinderMob, however entities who are not members of that class are expected to be able to use this goal
+		if(animation.freezesMovement() && !animation.freezesSight())
+			this.setFlags(EnumSet.of(Flag.MOVE));
+		else if(!animation.freezesMovement() && animation.freezesSight())
+			this.setFlags(EnumSet.of(Flag.LOOK));
+		else if(animation.freezesMovement() && animation.freezesSight())
+			this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}
 	
 	@Override
@@ -53,6 +66,13 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	@Override
 	public void start()
 	{
+		if(animation.freezesSight())
+		{
+			//the target should be guaranteed to be non-null because canUse() requires it to be non-null.
+			LivingEntity target = Objects.requireNonNull(this.entity.getTarget());
+			this.lookTarget = new Vector3d(target.getX(), target.getEyeY(), target.getZ());
+		}
+		
 		this.attackDuration = this.attackDelay;
 		this.entity.setAnimationPhase(MobAnimationPhases.ANTICIPATION, animation.getAction());
 	}
@@ -68,6 +88,9 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	@Override
 	public void tick()
 	{
+		if(animation.freezesSight())
+			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z, 30.0F, 30.0F);
+		
 		this.attackDuration = Math.max(this.attackDuration - 1, -1);
 		this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
 		

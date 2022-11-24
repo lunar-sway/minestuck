@@ -5,7 +5,6 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
 import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
@@ -30,7 +29,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final MSMobAnimation PUNCH_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PUNCH, 38, true);
+	public static final MSMobAnimation PUNCH_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PUNCH, 38, true,true);
 	public static final int PUNCH_DELAY = 18;
 	public static final int PUNCH_RECOVERY = PUNCH_ANIMATION.getAnimationLength() - PUNCH_DELAY; //20
 	
@@ -52,7 +51,6 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_DELAY, PUNCH_RECOVERY, PUNCH_ANIMATION));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

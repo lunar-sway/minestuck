@@ -40,7 +40,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	{
 		super.tick();
 		
-		if(mobAnimation != null && mobAnimation.stopsMovement())
+		if(mobAnimation != null && mobAnimation.freezesMovement())
 			this.getNavigation().stop();
 		
 		if(remainingAnimationTicks > 0)

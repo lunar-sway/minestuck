@@ -9,17 +9,19 @@ public class MSMobAnimation
 {
 	public static final int LOOPING_ANIMATION = -1; //when set to -1, it will continue looping until another animation overrides it
 	public static final MSMobAnimation.Actions IDLE_ACTION = Actions.IDLE;
-	public static final MSMobAnimation DEFAULT_IDLE_ANIMATION = new MSMobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false);
+	public static final MSMobAnimation DEFAULT_IDLE_ANIMATION = new MSMobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false, false);
 	
 	private final Actions actions;
 	private final int animationLength;
-	private final boolean stopsMovement;
+	private final boolean freezeMovement;
+	private final boolean freezeSight;
 	
-	public MSMobAnimation(Actions actions, int animationLength, boolean stopsMovement)
+	public MSMobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
 	{
 		this.actions = actions;
 		this.animationLength = animationLength;
-		this.stopsMovement = stopsMovement;
+		this.freezeMovement = freezeMovement;
+		this.freezeSight = freezeSight;
 	}
 	
 	public Actions getAction()
@@ -37,9 +39,14 @@ public class MSMobAnimation
 		return animationLength == LOOPING_ANIMATION;
 	}
 	
-	public boolean stopsMovement()
+	public boolean freezesMovement()
 	{
-		return stopsMovement;
+		return freezeMovement;
+	}
+	
+	public boolean freezesSight()
+	{
+		return freezeSight;
 	}
 	
 	public CompoundTag getCompoundTag()
@@ -47,7 +54,8 @@ public class MSMobAnimation
 		CompoundTag nbt = new CompoundTag();
 		nbt.putInt("actions", actions.ordinal());
 		nbt.putInt("animationLength", animationLength);
-		nbt.putBoolean("stopsMovement", stopsMovement);
+		nbt.putBoolean("freezeMovement", freezeMovement);
+		nbt.putBoolean("freezeSight", freezeSight);
 		return nbt;
 	}
 	
@@ -55,8 +63,9 @@ public class MSMobAnimation
 	{
 		Actions actions = Actions.fromInt(nbtIn.getInt("actions"));
 		int animationLength = nbtIn.getInt("animationLength");
-		boolean stopsMovement = nbtIn.getBoolean("stopsMovement");
-		return new MSMobAnimation(actions, animationLength, stopsMovement);
+		boolean freezeMovement = nbtIn.getBoolean("freezeMovement");
+		boolean freezeSight = nbtIn.getBoolean("freezeSight");
+		return new MSMobAnimation(actions, animationLength, freezeMovement, freezeSight);
 	}
 	
 	/**

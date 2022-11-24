@@ -60,8 +60,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final MSMobAnimation TALK_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.TALK, 80, true); //TODO adjust as needed - 4 secs for now
-	public static final MSMobAnimation PANIC_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PANIC, MSMobAnimation.LOOPING_ANIMATION, false);
+	public static final MSMobAnimation TALK_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.TALK, 80, true,false); //TODO adjust as needed - 4 secs for now
+	public static final MSMobAnimation PANIC_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PANIC, MSMobAnimation.LOOPING_ANIMATION, false,false);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
