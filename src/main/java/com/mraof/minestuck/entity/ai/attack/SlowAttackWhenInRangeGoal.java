@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.ai.attack;
 
 import com.mojang.math.Vector3d;
+import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,6 +67,9 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	@Override
 	public void start()
 	{
+		if(entity instanceof AnimatedPathfinderMob animatedMob)
+			animatedMob.setCurrentAnimation(animation);
+		
 		if(animation.freezesSight())
 		{
 			//the target should be guaranteed to be non-null because canUse() requires it to be non-null.
@@ -74,7 +78,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 		}
 		
 		this.attackDuration = this.attackDelay;
-		this.entity.setAnimationPhase(MobAnimationPhases.ANTICIPATION, animation.getAction());
+		this.entity.setAnimationPhase(MobAnimationPhases.ANTICIPATION, animation.getAction()); //TODO add initiation phase
 	}
 	
 	@Override
@@ -103,7 +107,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 				// TODO: AOE bounding box collision checks + aoe flag
 			}
 			this.recoverDuration = this.attackRecovery;
-			this.entity.setAnimationPhase(MobAnimationPhases.RECOVERY, animation.getAction());
+			this.entity.setAnimationPhase(MobAnimationPhases.RECOVERY, animation.getAction()); //TODO add contact phase
 		}
 		
 		if(this.recoverDuration == 0)

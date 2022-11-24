@@ -106,14 +106,24 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	public void anticipationPhaseStart(MSMobAnimation.Actions animation)
+	public void initiationPhaseStart(MSMobAnimation.Actions animation)
 	{
 		if(animation == MSMobAnimation.Actions.PUNCH)
 		{
 			Level level = this.level;
 			BlockPos entityPos = this.blockPosition();
-			level.addParticle(ParticleTypes.FLASH, true, entityPos.getX(), entityPos.getY() + 5, entityPos.getZ(), 0.0D, 0.0D, 0.0D);
-			level.playSound(null, entityPos, SoundEvents.BLAZE_DEATH, SoundSource.HOSTILE, 1.0F, 1.0F);
+			level.playSound(null, entityPos, SoundEvents.RAVAGER_AMBIENT, SoundSource.HOSTILE, 1.0F, 1.0F);
+		}
+	}
+	
+	@Override
+	public void contactPhaseStart(MSMobAnimation.Actions animation)
+	{
+		if(animation == MSMobAnimation.Actions.PUNCH)
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.RAVAGER_ATTACK, SoundSource.HOSTILE, 1.0F, 1.0F);
 		}
 	}
 	
