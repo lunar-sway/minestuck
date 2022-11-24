@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.entity.animation.MSMobAnimations;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,11 +15,11 @@ import net.minecraft.world.level.Level;
 public abstract class AnimatedPathfinderMob extends PathfinderMob
 {
 	/**
-	 * Retains the action from MSMobAnimations
+	 * Retains the action from MSMobAnimation
 	 */
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedPathfinderMob.class, EntityDataSerializers.INT);
 	
-	private MSMobAnimations mobAnimations = MSMobAnimations.DEFAULT_IDLE_ANIMATION;
+	private MSMobAnimation mobAnimation = MSMobAnimation.DEFAULT_IDLE_ANIMATION;
 	private int remainingAnimationTicks;
 	
 	
@@ -32,7 +32,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, MSMobAnimations.IDLE_ACTION.ordinal());
+		entityData.define(CURRENT_ACTION, MSMobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	{
 		super.tick();
 		
-		if(mobAnimations != null && mobAnimations.stopsMovement())
+		if(mobAnimation != null && mobAnimation.stopsMovement())
 			this.getNavigation().stop();
 		
 		if(remainingAnimationTicks > 0)
@@ -57,7 +57,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 **/
 	protected void endCurrentAction()
 	{
-		this.setCurrentAnimation(MSMobAnimations.DEFAULT_IDLE_ANIMATION);
+		this.setCurrentAnimation(MSMobAnimation.DEFAULT_IDLE_ANIMATION);
 	}
 	
 	/**
@@ -65,9 +65,9 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 *
 	 * @return The action this entity is currently executing
 	 */
-	protected MSMobAnimations getCurrentAnimation()
+	protected MSMobAnimation getCurrentAnimation()
 	{
-		return mobAnimations;
+		return mobAnimation;
 	}
 	
 	/**
@@ -75,32 +75,32 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 *
 	 * @return The action this entity is currently executing
 	 */
-	protected MSMobAnimations.Actions getCurrentAction()
+	protected MSMobAnimation.Actions getCurrentAction()
 	{
-		return MSMobAnimations.Actions.values()[this.entityData.get(CURRENT_ACTION)];
+		return MSMobAnimation.Actions.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	/**
 	 * Used to set the entity's action
 	 *
-	 * @param MSMobAnimations The animation that contains the action
+	 * @param MSMobAnimation The animation that contains the action
 	 */
-	public void setCurrentAnimation(MSMobAnimations MSMobAnimations)
+	public void setCurrentAnimation(MSMobAnimation MSMobAnimation)
 	{
-		this.entityData.set(CURRENT_ACTION, MSMobAnimations.getAction().ordinal());
-		this.mobAnimations = MSMobAnimations;
-		this.remainingAnimationTicks = MSMobAnimations.getAnimationLength();
+		this.entityData.set(CURRENT_ACTION, MSMobAnimation.getAction().ordinal());
+		this.mobAnimation = MSMobAnimation;
+		this.remainingAnimationTicks = MSMobAnimation.getAnimationLength();
 	}
 	
 	/**
 	 * Typically used by passive mobs
 	 */
-	public MSMobAnimations getPanicAnimation()
+	public MSMobAnimation getPanicAnimation()
 	{
 		return null;
 	}
 	
-	public MSMobAnimations getDefaultAttackAnimation()
+	public MSMobAnimation getDefaultAttackAnimation()
 	{
 		return null;
 	}
@@ -109,15 +109,15 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		compound.put("mobAnimations", mobAnimations.getCompoundTag());
+		compound.put("mobAnimation", mobAnimation.getCompoundTag());
 	}
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
-		if(compound.contains("mobAnimations"))
-			mobAnimations = MSMobAnimations.createTrackerFromCompoundTag(compound.getCompound("mobAnimations"));
+		if(compound.contains("mobAnimation"))
+			mobAnimation = MSMobAnimation.createTrackerFromCompoundTag(compound.getCompound("mobAnimation"));
 		else
-			mobAnimations = MSMobAnimations.DEFAULT_IDLE_ANIMATION;
+			mobAnimation = MSMobAnimation.DEFAULT_IDLE_ANIMATION;
 	}
 }

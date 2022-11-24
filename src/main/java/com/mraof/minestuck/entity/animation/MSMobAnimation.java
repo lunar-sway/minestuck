@@ -5,17 +5,17 @@ import net.minecraft.nbt.CompoundTag;
 /**
  * Keeps track of a given animation. Can store stages of the animation in which to perform additional actions/events
  */
-public class MSMobAnimations
+public class MSMobAnimation
 {
 	public static final int LOOPING_ANIMATION = -1; //when set to -1, it will continue looping until another animation overrides it
-	public static final MSMobAnimations.Actions IDLE_ACTION = Actions.IDLE;
-	public static final MSMobAnimations DEFAULT_IDLE_ANIMATION = new MSMobAnimations(IDLE_ACTION, LOOPING_ANIMATION, false);
+	public static final MSMobAnimation.Actions IDLE_ACTION = Actions.IDLE;
+	public static final MSMobAnimation DEFAULT_IDLE_ANIMATION = new MSMobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false);
 	
 	private final Actions actions;
 	private final int animationLength;
 	private final boolean stopsMovement;
 	
-	public MSMobAnimations(Actions actions, int animationLength, boolean stopsMovement)
+	public MSMobAnimation(Actions actions, int animationLength, boolean stopsMovement)
 	{
 		this.actions = actions;
 		this.animationLength = animationLength;
@@ -51,12 +51,12 @@ public class MSMobAnimations
 		return nbt;
 	}
 	
-	public static MSMobAnimations createTrackerFromCompoundTag(CompoundTag nbtIn)
+	public static MSMobAnimation createTrackerFromCompoundTag(CompoundTag nbtIn)
 	{
 		Actions actions = Actions.fromInt(nbtIn.getInt("actions"));
 		int animationLength = nbtIn.getInt("animationLength");
 		boolean stopsMovement = nbtIn.getBoolean("stopsMovement");
-		return new MSMobAnimations(actions, animationLength, stopsMovement);
+		return new MSMobAnimation(actions, animationLength, stopsMovement);
 	}
 	
 	/**
@@ -73,10 +73,10 @@ public class MSMobAnimations
 		PUNCH(true),
 		CLAW(true),
 		BITE(true),
+		MELEE(true), //weapon
 		SLAM(true),
 		SHOOT(true), //projectile
-		SHOVE(true),
-		;
+		SHOVE(true);
 		
 		private final boolean isAttack; //whether this action represents an attack
 		

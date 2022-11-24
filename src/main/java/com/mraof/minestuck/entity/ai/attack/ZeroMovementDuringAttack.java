@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.ai.attack;
 
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,7 +16,7 @@ import java.util.UUID;
  * Also, while {@link SlowAttackInPlaceGoal} is used instead of {@link SlowAttackWhenInRangeGoal},
  * this goal is used on top of {@link SlowAttackWhenInRangeGoal}.
  */
-public class ZeroMovementDuringAttack<T extends PathfinderMob & AttackState.Holder> extends Goal
+public class ZeroMovementDuringAttack<T extends PathfinderMob & MobAnimationPhases.Holder> extends Goal
 {
 	private static final UUID MOVEMENT_MODIFIER_ATTACKING_UUID = UUID.fromString("a2793876-ee17-11ec-8ea0-0242ac120002");
 	private static final AttributeModifier MOVEMENT_MODIFIER_ATTACKING = new AttributeModifier(MOVEMENT_MODIFIER_ATTACKING_UUID, "Attacking movement reduction", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
@@ -30,7 +31,7 @@ public class ZeroMovementDuringAttack<T extends PathfinderMob & AttackState.Hold
 	@Override
 	public boolean canUse()
 	{
-		return this.entity.isAttacking();
+		return this.entity.isActive();
 	}
 	
 	@Override

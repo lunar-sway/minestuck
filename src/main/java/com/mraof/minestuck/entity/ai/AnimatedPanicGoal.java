@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.ai;
 
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
-import com.mraof.minestuck.entity.animation.MSMobAnimations;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 
 public class AnimatedPanicGoal extends PanicGoal
@@ -17,7 +17,7 @@ public class AnimatedPanicGoal extends PanicGoal
 	@Override
 	public void start()
 	{
-		MSMobAnimations animation = this.entity.getPanicAnimation();
+		MSMobAnimation animation = this.entity.getPanicAnimation();
 		if(animation != null)
 			this.entity.setCurrentAnimation(animation);
 		super.start();
@@ -26,7 +26,7 @@ public class AnimatedPanicGoal extends PanicGoal
 	@Override
 	public void stop()
 	{
-		this.entity.setCurrentAnimation(MSMobAnimations.DEFAULT_IDLE_ANIMATION);
+		this.entity.setCurrentAnimation(MSMobAnimation.DEFAULT_IDLE_ANIMATION);
 		super.stop();
 	}
 }

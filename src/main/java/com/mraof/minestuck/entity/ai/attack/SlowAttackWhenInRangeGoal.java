@@ -1,5 +1,7 @@
 package com.mraof.minestuck.entity.ai.attack;
 
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -11,7 +13,7 @@ import javax.annotation.Nonnull;
  * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
  * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
  */
-public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Holder> extends Goal
+public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPhases.Holder> extends Goal
 {
 	protected final T entity;
 	/**
@@ -23,13 +25,16 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Hol
 	 */
 	private final int attackRecovery;
 	
+	private final MSMobAnimation animation;
+	
 	private int attackDuration = -1, recoverDuration = -1;
 	
-	public SlowAttackWhenInRangeGoal(T entity, int attackDelay, int attackRecovery)
+	public SlowAttackWhenInRangeGoal(T entity, int attackDelay, int attackRecovery, MSMobAnimation animation)
 	{
 		this.entity = entity;
 		this.attackDelay = attackDelay;
 		this.attackRecovery = attackRecovery;
+		this.animation = animation;
 	}
 	
 	@Override
@@ -49,7 +54,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Hol
 	public void start()
 	{
 		this.attackDuration = this.attackDelay;
-		this.entity.setAttackState(AttackState.PREPARATION);
+		this.entity.setAnimationPhase(MobAnimationPhases.ANTICIPATION, animation.getAction());
 	}
 	
 	@Override
@@ -57,7 +62,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Hol
 	{
 		this.attackDuration = -1;
 		this.recoverDuration = -1;
-		this.entity.setAttackState(AttackState.NONE);
+		this.entity.setAnimationPhase(MobAnimationPhases.NEUTRAL, MSMobAnimation.Actions.IDLE);
 	}
 	
 	@Override
@@ -75,12 +80,12 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & AttackState.Hol
 				// TODO: AOE bounding box collision checks + aoe flag
 			}
 			this.recoverDuration = this.attackRecovery;
-			this.entity.setAttackState(AttackState.RECOVERY);
+			this.entity.setAnimationPhase(MobAnimationPhases.RECOVERY, animation.getAction());
 		}
 		
 		if(this.recoverDuration == 0)
 		{
-			this.entity.setAttackState(AttackState.NONE);
+			this.entity.setAnimationPhase(MobAnimationPhases.NEUTRAL, animation.getAction());
 		}
 	}
 	

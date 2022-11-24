@@ -1,10 +1,9 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import com.mraof.minestuck.entity.ai.attack.AttackState;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
-import com.mraof.minestuck.entity.animation.MSMobAnimations;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -39,9 +38,13 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, AttackState.Holder
+public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, MobAnimationPhases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
+	
+	public static final MSMobAnimation MELEE_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.MELEE, 18, true);
+	public static final int MELEE_DELAY = 6;
+	public static final int MELEE_RECOVERY = MELEE_ANIMATION.getAnimationLength() - MELEE_DELAY; //12
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
@@ -80,8 +83,8 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 6, 12));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, MELEE_DELAY, MELEE_RECOVERY, MELEE_ANIMATION));
+		//this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
@@ -90,19 +93,19 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, MSMobAnimations.IDLE_ACTION.ordinal());
+		entityData.define(CURRENT_ACTION, MSMobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
-	public AttackState getAttackState()
+	public MobAnimationPhases getPhase()
 	{
-		return AttackState.values()[this.entityData.get(CURRENT_ACTION)];
+		return MobAnimationPhases.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	@Override
-	public void setAttackState(AttackState state)
+	public void setAnimationPhase(MobAnimationPhases phase, MSMobAnimation.Actions actions)
 	{
-		this.entityData.set(CURRENT_ACTION, state.ordinal());
+		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 	}
 	
 	@Override
@@ -261,7 +264,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static PlayState walkArmsAnimation(AnimationEvent<PawnEntity> event)
 	{
-		if(event.isMoving() && !event.getAnimatable().isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 			return PlayState.CONTINUE;
@@ -281,7 +284,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	private static PlayState swingAnimation(AnimationEvent<PawnEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
 			return PlayState.CONTINUE;

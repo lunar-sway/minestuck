@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -28,6 +29,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
+	public static final MSMobAnimation CLAW_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.CLAW, 14, true);
+	public static final int CLAW_DELAY = 4;
+	public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //10
+	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
 		super(type, level, 1);
@@ -44,7 +49,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 4, 10));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, CLAW_DELAY, CLAW_RECOVERY, CLAW_ANIMATION));
 		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
@@ -148,7 +153,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState walkArmsAnimation(AnimationEvent<ImpEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().isAttacking())
+		if(!event.isMoving() || event.getAnimatable().isActive())
 		{
 			return PlayState.STOP;
 		}
@@ -176,7 +181,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState swingAnimation(AnimationEvent<ImpEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", false));
 			return PlayState.CONTINUE;

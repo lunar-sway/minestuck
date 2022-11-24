@@ -6,10 +6,15 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,6 +30,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
+	public static final MSMobAnimation PUNCH_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.PUNCH, 38, true);
+	public static final int PUNCH_DELAY = 18;
+	public static final int PUNCH_RECOVERY = PUNCH_ANIMATION.getAnimationLength() - PUNCH_DELAY; //20
+	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
 		super(type, level, 3);
@@ -42,7 +51,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 18, 20));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_DELAY, PUNCH_RECOVERY, PUNCH_ANIMATION));
 		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
@@ -99,6 +108,18 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
+	public void anticipationPhaseStart(MSMobAnimation.Actions animation)
+	{
+		if(animation == MSMobAnimation.Actions.PUNCH)
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.addParticle(ParticleTypes.FLASH, true, entityPos.getX(), entityPos.getY() + 5, entityPos.getZ(), 0.0D, 0.0D, 0.0D);
+			level.playSound(null, entityPos, SoundEvents.BLAZE_DEATH, SoundSource.HOSTILE, 1.0F, 1.0F);
+		}
+	}
+	
+	@Override
 	public void registerControllers(AnimationData data)
 	{
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
@@ -119,7 +140,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkArmsAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.isMoving() && !event.getAnimatable().isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
@@ -129,7 +150,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;

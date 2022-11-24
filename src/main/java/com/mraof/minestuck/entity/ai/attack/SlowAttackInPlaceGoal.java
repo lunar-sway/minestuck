@@ -1,6 +1,8 @@
 package com.mraof.minestuck.entity.ai.attack;
 
 import com.mojang.math.Vector3d;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
+import com.mraof.minestuck.entity.animation.MobAnimationPhases;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 
@@ -10,13 +12,13 @@ import java.util.Objects;
 /**
  * Like {@link SlowAttackWhenInRangeGoal}, but interrupts any movement and look goals to stand still and look at the target.
  */
-public class SlowAttackInPlaceGoal<T extends PathfinderMob & AttackState.Holder> extends SlowAttackWhenInRangeGoal<T>
+public class SlowAttackInPlaceGoal<T extends PathfinderMob & MobAnimationPhases.Holder> extends SlowAttackWhenInRangeGoal<T>
 {
 	private Vector3d lookTarget;
 	
-	public SlowAttackInPlaceGoal(T entity, int attackDelay, int attackRecovery)
+	public SlowAttackInPlaceGoal(T entity, int attackDelay, int attackRecovery, MSMobAnimation animation)
 	{
-		super(entity, attackDelay, attackRecovery);
+		super(entity, attackDelay, attackRecovery, animation);
 		// Will stop any other goal with movement or looking if this goal activates
 		this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 	}

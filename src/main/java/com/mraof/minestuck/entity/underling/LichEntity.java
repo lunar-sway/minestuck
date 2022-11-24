@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.animation.MSMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -29,6 +30,9 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
+	public static final MSMobAnimation CLAW_ANIMATION = new MSMobAnimation(MSMobAnimation.Actions.CLAW, 30, true);
+	public static final int CLAW_DELAY = 14;
+	public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //16
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{
@@ -47,7 +51,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 14, 16));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, CLAW_DELAY, CLAW_RECOVERY, CLAW_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -132,7 +136,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState swingAnimation(AnimationEvent<LichEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
 			return PlayState.CONTINUE;
@@ -149,7 +153,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public boolean canUse()
 		{
-			return LichEntity.this.isPreparingToAttack();
+			return LichEntity.this.isBeforeContact();
 		}
 		
 		@Override
