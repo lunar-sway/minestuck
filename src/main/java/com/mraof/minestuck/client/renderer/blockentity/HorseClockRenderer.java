@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.blockentity;
 
-import com.mraof.minestuck.blockentity.machine.HorseClockBlockEntity;
+import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import com.mraof.minestuck.client.model.blockentity.HorseClockModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;

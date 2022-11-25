@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.model.blockentity;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.blockentity.machine.HorseClockBlockEntity;
+import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

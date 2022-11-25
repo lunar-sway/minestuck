@@ -1,9 +1,9 @@
-package com.mraof.minestuck.blockentity.machine;
+package com.mraof.minestuck.blockentity;
 
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -19,6 +19,12 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 	public HorseClockBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.HORSE_CLOCK.get(), pos, state);
+	}
+	
+	@Override
+	public AABB getRenderBoundingBox()
+	{
+		return INFINITE_EXTENT_AABB; //keeps the model rendered even when the blockpos is no longer viewed by the camera
 	}
 	
 	@Override
