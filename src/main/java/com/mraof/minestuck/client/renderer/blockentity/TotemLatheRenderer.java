@@ -8,7 +8,7 @@ import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
-import com.mraof.minestuck.client.model.block.TotemLatheModel;
+import com.mraof.minestuck.client.model.blockentity.TotemLatheModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;

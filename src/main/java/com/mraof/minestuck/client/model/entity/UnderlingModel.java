@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.model;
+package com.mraof.minestuck.client.model.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;

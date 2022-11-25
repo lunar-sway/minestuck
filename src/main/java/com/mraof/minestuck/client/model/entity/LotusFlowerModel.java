@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.model; // Made with Blockbench 3.8.4 by Riotmode
+package com.mraof.minestuck.client.model.entity; // Made with Blockbench 3.8.4 by Riotmode
 
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.resources.ResourceLocation;

@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.renderer.entity.frog;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.model.FrogModel;
+import com.mraof.minestuck.client.model.entity.FrogModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.entity.FrogEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
