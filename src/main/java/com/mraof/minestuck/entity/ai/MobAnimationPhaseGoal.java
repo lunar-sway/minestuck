@@ -12,18 +12,17 @@ import java.util.EnumSet;
 import java.util.Objects;
 
 /**
- * A goal for performing a slow melee attack when within hitting range.
- * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
- * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
+ * An abstract goal for handling MobAnimationPhases compliant animated actions
  */
 public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimationPhases.Phases.Holder> extends Goal
 {
 	protected final T entity;
-	
 	protected final MobAnimation animation;
-	
 	protected final MobAnimationPhases phases;
 	
+	/**
+	 * Starts at 0 and counts up, when this int matches any of the ints in phases, it transitions to the start of that given phase
+	 */
 	protected int time = 0;
 	
 	protected Vector3d lookTarget;
@@ -82,10 +81,10 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimati
 	@Override
 	public void tick()
 	{
-		super.tick(); //make sure the super function is ran
+		//make sure the super function is ran in goals that extend this
 		
 		if(animation.freezesSight())
-			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z, 30.0F, 30.0F);
+			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z);
 		
 		this.time++;
 		phases.attemptPhaseChange(time, entity, animation);

@@ -10,7 +10,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 /**
- * Abstract class that utilizes helpful functions for utilizing and storing a MobAnimation
+ * Abstract class for handling the actions of Geckolib animated mobs. It keeps track of which animation is in use via a MobAnimation and EntityDataAccessor
  */
 public abstract class AnimatedPathfinderMob extends PathfinderMob
 {
@@ -20,7 +20,8 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedPathfinderMob.class, EntityDataSerializers.INT);
 	
 	private MobAnimation mobAnimation = MobAnimation.DEFAULT_IDLE_ANIMATION;
-	private int remainingAnimationTicks;
+	
+	private int remainingAnimationTicks; //starts off as the time value stored in mobAnimation when set. Will be set to -1 for looping animations
 	
 	
 	protected AnimatedPathfinderMob(EntityType<? extends AnimatedPathfinderMob> type, Level level)
@@ -81,15 +82,15 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	}
 	
 	/**
-	 * Used to set the entity's action
+	 * Used to set the entity's animation and action
 	 *
-	 * @param MobAnimation The animation that contains the action
+	 * @param animation The animation to set, also contains the action to set entityData from
 	 */
-	public void setCurrentAnimation(MobAnimation MobAnimation)
+	public void setCurrentAnimation(MobAnimation animation)
 	{
-		this.entityData.set(CURRENT_ACTION, MobAnimation.getAction().ordinal());
-		this.mobAnimation = MobAnimation;
-		this.remainingAnimationTicks = MobAnimation.getAnimationLength();
+		this.entityData.set(CURRENT_ACTION, animation.getAction().ordinal());
+		this.mobAnimation = animation;
+		this.remainingAnimationTicks = animation.getAnimationLength();
 	}
 	
 	/**

@@ -13,12 +13,14 @@ import net.minecraft.world.level.Level;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
+ * Through the use of MobAnimationPhases, additional code can be deployed at the changing point of each animation phase of specific animations.
  */
 public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements MobAnimationPhases.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
-	public static final MobAnimation MELEE_ANIMATION = new MobAnimation(MobAnimation.Actions.MELEE, 20, true, false);
+	public static final MobAnimationPhases MELEE_PHASES = new MobAnimationPhases(2, 4, 5, 10);
+	public static final MobAnimation MELEE_ANIMATION = new MobAnimation(MobAnimation.Actions.MELEE, MELEE_PHASES.getTotalAnimationLength(), true, false);
 	
 	protected AttackingAnimatedEntity(EntityType<? extends AttackingAnimatedEntity> type, Level level)
 	{
@@ -49,7 +51,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 		
-		if(phase == MobAnimationPhases.Phases.ANTICIPATION)
+		if(phase == MobAnimationPhases.Phases.ANTICIPATION) //first tick of animation
 			anticipationPhaseStart(animation);
 		else if(phase == MobAnimationPhases.Phases.INITIATION)
 			initiationPhaseStart(animation);
@@ -57,48 +59,24 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 			contactPhaseStart(animation);
 		else if(phase == MobAnimationPhases.Phases.RECOVERY)
 			recoveryPhaseStart(animation);
-		else if(phase == MobAnimationPhases.Phases.NEUTRAL)
+		else if(phase == MobAnimationPhases.Phases.NEUTRAL) //last tick of animation
 			neutralPhaseStart(animation);
 	}
 	
 	public void anticipationPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation == MobAnimation.Actions.PUNCH)
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
 	}
 	
 	public void initiationPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation.isAttack())
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
 	}
 	
 	public void contactPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation.isAttack())
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
 	}
 	
 	public void recoveryPhaseStart(MobAnimation.Actions animation)
 	{
-		if(animation.isAttack())
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
 	}
 	
 	public void neutralPhaseStart(MobAnimation.Actions animation)

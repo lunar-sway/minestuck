@@ -30,8 +30,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
 	public static final MobAnimationPhases BITE_PHASES = new MobAnimationPhases(2, 4, 5, 14);
 	public static final MobAnimation BITE_ANIMATION = new MobAnimation(MobAnimation.Actions.BITE, BITE_PHASES.getTotalAnimationLength(), true,false);
-	//public static final int BITE_DELAY = 4;
-	//public static final int BITE_RECOVERY = BITE_ANIMATION.getAnimationLength() - BITE_DELAY; //10
 	
 	private final BasiliskPartEntity[] parts;
 	private final BasiliskPartEntity head;

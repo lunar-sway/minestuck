@@ -3,8 +3,8 @@ package com.mraof.minestuck.entity.animation;
 import net.minecraft.world.entity.PathfinderMob;
 
 /**
- * Subdivision of animations from MobAnimation that is split into stages where additional functionality can be implemented, such as particles or sound effects.
- * Primarily used for combat animations.
+ * A supplement to MobAnimation that allows for certain code to be performed at the point where one phase of an animation ends and the other begins.
+ * Primarily intended for use with {@link com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal}
  */
 public class MobAnimationPhases
 {
@@ -58,6 +58,9 @@ public class MobAnimationPhases
 		return recoveryEnd;
 	}
 	
+	/**
+	 * Is called every tick to check whether its time to transition to a new phase
+	 */
 	public <T extends PathfinderMob & MobAnimationPhases.Phases.Holder> void attemptPhaseChange(int time, T entity, MobAnimation animation)
 	{
 		if(time == getInitiationStartTime())
@@ -70,6 +73,10 @@ public class MobAnimationPhases
 			entity.setAnimationPhase(Phases.NEUTRAL, animation.getAction());
 	}
 	
+	/**
+	 * A list of all the phases, the transition to ANTICIPATION is not included in a MobAnimationPhases object because the transition time is equivalent to the start of when its called.
+	 * Contains the Holder interface
+	 */
 	public enum Phases
 	{
 		NEUTRAL,

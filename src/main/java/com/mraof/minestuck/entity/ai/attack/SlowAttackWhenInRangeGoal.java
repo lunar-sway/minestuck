@@ -10,8 +10,7 @@ import javax.annotation.Nonnull;
 
 /**
  * A goal for performing a slow melee attack when within hitting range.
- * The attack has a preparation phase that delays the actual attack from the moment when the target is first in range.
- * The goal updates the attack state of the attacker accordingly, so that the state can be used for animations and other things.
+ * The attack will occur at the start of the Contact MobAnimationPhases.Phases
  */
 public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPhases.Phases.Holder> extends MobAnimationPhaseGoal<T>
 {
