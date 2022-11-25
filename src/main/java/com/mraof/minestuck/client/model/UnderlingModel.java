@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-public class UnderlingModel<T extends UnderlingEntity> extends AnimatedModel<T>
+public class UnderlingModel<T extends UnderlingEntity> extends RotatingHeadAnimatedModel<T>
 {
 	@Override
 	public ResourceLocation getModelLocation(T entity)

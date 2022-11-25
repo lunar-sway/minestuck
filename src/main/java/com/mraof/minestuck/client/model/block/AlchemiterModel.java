@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.model.machine;
+package com.mraof.minestuck.client.model.block;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
@@ -10,7 +10,7 @@ public class AlchemiterModel extends AnimatedGeoModel<AlchemiterBlockEntity>
 	@Override
 	public ResourceLocation getModelLocation(AlchemiterBlockEntity object)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "geo/alchemiter.geo.json");
+		return new ResourceLocation(Minestuck.MOD_ID, "geo/block/alchemiter.geo.json");
 	}
 	
 	@Override
@@ -22,6 +22,6 @@ public class AlchemiterModel extends AnimatedGeoModel<AlchemiterBlockEntity>
 	@Override
 	public ResourceLocation getAnimationFileLocation(AlchemiterBlockEntity animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "animations/alchemiter.animation.json");
+		return new ResourceLocation(Minestuck.MOD_ID, "animations/block/alchemiter.animation.json");
 	}
 }
