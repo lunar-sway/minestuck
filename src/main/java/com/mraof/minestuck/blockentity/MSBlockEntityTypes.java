@@ -35,6 +35,8 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE_MAIN.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<CassettePlayerBlockEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> BlockEntityType.Builder.of(CassettePlayerBlockEntity::new, MSBlocks.CASSETTE_PLAYER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<HorseClockBlockEntity>> HORSE_CLOCK = REGISTER.register("horse_clock", () -> BlockEntityType.Builder.of(HorseClockBlockEntity::new, MSBlocks.HORSE_CLOCK.BOTTOM.get()).build(null));
+	
 	public static final RegistryObject<BlockEntityType<StatStorerBlockEntity>> STAT_STORER = REGISTER.register("stat_storer", () -> BlockEntityType.Builder.of(StatStorerBlockEntity::new, MSBlocks.STAT_STORER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<RemoteObserverBlockEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> BlockEntityType.Builder.of(RemoteObserverBlockEntity::new, MSBlocks.REMOTE_OBSERVER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<WirelessRedstoneTransmitterBlockEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_transmitter", () -> BlockEntityType.Builder.of(WirelessRedstoneTransmitterBlockEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get()).build(null));

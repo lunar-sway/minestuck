@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/horse_clock_center" },
+        "facing=east":  { "model": "minestuck:block/horse_clock_center", "y": 90 },
+        "facing=south": { "model": "minestuck:block/horse_clock_center", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/horse_clock_center", "y": 270 }
+    }
+}

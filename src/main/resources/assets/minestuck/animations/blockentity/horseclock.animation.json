@@ -1,0 +1,42 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"ticktockontheclock": {
+			"loop": true,
+			"animation_length": 2,
+			"bones": {
+				"TailA": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 12.5],
+							"easing": "easeInOutQuint"
+						},
+						"1.04": {
+							"vector": [0, 0, -12.5],
+							"easing": "easeInOutCubic"
+						},
+						"2.0": {
+							"vector": [0, 0, 12.5],
+							"easing": "easeInOutCubic"
+						}
+					}
+				},
+				"horseclock": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 12.5]
+						},
+						"1.04": {
+							"vector": [0, 0, -12.5],
+							"easing": "easeInOutCubic"
+						},
+						"2.0": {
+							"vector": [0, 0, 12.5],
+							"easing": "easeInOutCubic"
+						}
+					}
+				}
+			}
+		}
+	}
+}

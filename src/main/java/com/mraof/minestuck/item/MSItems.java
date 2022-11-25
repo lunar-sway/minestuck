@@ -984,6 +984,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> MINI_WIZARD_STATUE = registerBlockItem(MSBlocks.MINI_WIZARD_STATUE, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> MINI_TYPHEUS_STATUE = registerBlockItem(MSBlocks.MINI_TYPHEUS_STATUE, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> CASSETTE_PLAYER = registerBlockItem(MSBlocks.CASSETTE_PLAYER, new Item.Properties().tab(MSItemGroup.MAIN));
+	public static final RegistryObject<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<BlockItem> GLOWYSTONE_DUST = registerBlockItem(MSBlocks.GLOWYSTONE_DUST, MSItemGroup.MAIN);
 	
 	/**
