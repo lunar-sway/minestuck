@@ -37,7 +37,7 @@ public enum EnumCassetteType implements StringRepresentable
 			0.20F)),
 	PIGSTEP(() -> SoundEvents.MUSIC_DISC_PIGSTEP, userEffect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0,
 			false, false, false))),
-	RETRO_BATTLE_THEME(MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, userEffect(() -> new MobEffectInstance(MobEffects.HEALTH_BOOST, 100, 2,
+	RETRO_BATTLE_THEME(MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, userEffect(() -> new MobEffectInstance(MobEffects.DIG_SPEED, 100, 2,
 			false, false, false))),
 	STAL(() -> SoundEvents.MUSIC_DISC_STAL, userEffect(() -> new MobEffectInstance(MobEffects.JUMP, 100, 1,
 			false, false, false))),
