@@ -2,9 +2,12 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.MobAnimationPhases;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
@@ -60,18 +63,42 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	
 	public void anticipationPhaseStart(MobAnimation.Actions animation)
 	{
+		if(animation == MobAnimation.Actions.PUNCH)
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
+		}
 	}
 	
 	public void initiationPhaseStart(MobAnimation.Actions animation)
 	{
+		if(animation.isAttack())
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
+		}
 	}
 	
 	public void contactPhaseStart(MobAnimation.Actions animation)
 	{
+		if(animation.isAttack())
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
+		}
 	}
 	
 	public void recoveryPhaseStart(MobAnimation.Actions animation)
 	{
+		if(animation.isAttack())
+		{
+			Level level = this.level;
+			BlockPos entityPos = this.blockPosition();
+			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
+		}
 	}
 	
 	public void neutralPhaseStart(MobAnimation.Actions animation)

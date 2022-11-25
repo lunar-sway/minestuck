@@ -29,10 +29,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final MobAnimationPhases PUNCH_PHASES = new MobAnimationPhases(6, 11, 13, 18);
+	public static final MobAnimationPhases PUNCH_PHASES = new MobAnimationPhases(8, 10, 13, 18);
 	public static final MobAnimation PUNCH_ANIMATION = new MobAnimation(MobAnimation.Actions.PUNCH, PUNCH_PHASES.getTotalAnimationLength(), true,true);
-	//public static final int PUNCH_DELAY = 18;
-	//public static final int PUNCH_RECOVERY = PUNCH_ANIMATION.getAnimationLength() - PUNCH_DELAY; //20
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
@@ -51,7 +49,6 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		//this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_DELAY, PUNCH_RECOVERY, PUNCH_ANIMATION));
 		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, PUNCH_PHASES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
@@ -104,39 +101,6 @@ public class OgreEntity extends UnderlingEntity
 		{
 			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
-		}
-	}
-	
-	@Override
-	public void initiationPhaseStart(MobAnimation.Actions animation)
-	{
-		if(animation == MobAnimation.Actions.PUNCH)
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
-	}
-	
-	@Override
-	public void contactPhaseStart(MobAnimation.Actions animation)
-	{
-		if(animation == MobAnimation.Actions.PUNCH)
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
-		}
-	}
-	
-	@Override
-	public void recoveryPhaseStart(MobAnimation.Actions animation)
-	{
-		if(animation == MobAnimation.Actions.PUNCH)
-		{
-			Level level = this.level;
-			BlockPos entityPos = this.blockPosition();
-			level.playSound(null, entityPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.HOSTILE, 1.0F, 2.0F);
 		}
 	}
 	

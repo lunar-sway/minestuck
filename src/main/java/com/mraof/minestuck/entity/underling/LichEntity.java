@@ -31,10 +31,8 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final MobAnimationPhases CLAW_PHASES = new MobAnimationPhases(7, 14, 15, 30);
+	public static final MobAnimationPhases CLAW_PHASES = new MobAnimationPhases(4, 8, 10, 12);
 	public static final MobAnimation CLAW_ANIMATION = new MobAnimation(MobAnimation.Actions.CLAW, CLAW_PHASES.getTotalAnimationLength(), false,false);
-	//public static final int CLAW_DELAY = 14;
-	//public static final int CLAW_RECOVERY = CLAW_ANIMATION.getAnimationLength() - CLAW_DELAY; //16
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{

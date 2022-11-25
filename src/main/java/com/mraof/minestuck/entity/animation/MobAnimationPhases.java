@@ -8,17 +8,13 @@ import net.minecraft.world.entity.PathfinderMob;
  */
 public class MobAnimationPhases
 {
-	//private final MobAnimation animation;
-	//private final int anticipationStart;
 	private final int initiationStart;
 	private final int contactStart;
 	private final int recoveryStart;
 	private final int recoveryEnd;
 	
-	public MobAnimationPhases(/*MobAnimation animation, int anticipationStart, */int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
+	public MobAnimationPhases(int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
 	{
-		//this.animation = animation;
-		//this.anticipationStart = anticipationStart;
 		this.initiationStart = initiationStart;
 		this.contactStart = contactStart;
 		this.recoveryStart = recoveryStart;

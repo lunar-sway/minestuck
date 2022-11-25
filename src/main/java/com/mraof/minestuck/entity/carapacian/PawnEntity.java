@@ -44,8 +44,6 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	public static final MobAnimationPhases MELEE_PHASES = new MobAnimationPhases(3, 6, 7, 18);
 	public static final MobAnimation MELEE_ANIMATION = new MobAnimation(MobAnimation.Actions.MELEE, MELEE_PHASES.getTotalAnimationLength(), true, false);
-	//public static final int MELEE_DELAY = 6;
-	//public static final int MELEE_RECOVERY = MELEE_ANIMATION.getAnimationLength() - MELEE_DELAY; //12
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);

@@ -31,11 +31,6 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	public void tick()
 	{
 		super.tick();
-		//if(animation.freezesSight())
-		//	this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z, 30.0F, 30.0F);
-		
-		//this.attackDuration = Math.max(this.attackDuration - 1, -1);
-		//this.recoverDuration = Math.max(this.recoverDuration - 1, -1);
 		
 		if(time == phases.getContactStartTime())
 		{
@@ -45,14 +40,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 				this.entity.doHurtTarget(target);
 				// TODO: AOE bounding box collision checks + aoe flag
 			}
-			//this.recoverDuration = this.attackRecovery;
-			//this.entity.setAnimationPhase(MobAnimationPhases.Phases.RECOVERY, animation.getAction()); //TODO add contact phase
 		}
-		
-		/*if(this.recoverDuration == 0)
-		{
-			this.entity.setAnimationPhase(MobAnimationPhases.Phases.NEUTRAL, animation.getAction());
-		}*/
 	}
 	
 	protected boolean isValidTarget(@Nonnull LivingEntity target)
