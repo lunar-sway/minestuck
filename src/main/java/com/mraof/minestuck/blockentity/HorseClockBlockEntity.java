@@ -31,42 +31,47 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 	
 	public static void serverTick(Level level, BlockPos pos, BlockState state, HorseClockBlockEntity blockEntity)
 	{
-		//once per second
-		if(level.getGameTime() % 40 == 0)
-			blockEntity.sendUpdate(true);
-		if(level.getGameTime() % 40 == 20)
-			blockEntity.sendUpdate(false);
-		
-		if((level.getDayTime() >= 0 && level.getDayTime() <= 40) && isNotMuffled(blockEntity) && !blockEntity.hasChimed) //chimes at the beginning of day
+		if(level != null && level.isAreaLoaded(pos, 1))
 		{
-			level.playSound(null, blockEntity.getBlockPos(), MSSoundEvents.BLOCK_HORSE_CLOCK_CHIME.get(), SoundSource.BLOCKS, 2F, 1F);
-			blockEntity.hasChimed = true;
+			//once per second
+			if(level.getGameTime() % 40 == 0)
+				blockEntity.sendUpdate(true);
+			if(level.getGameTime() % 40 == 20)
+				blockEntity.sendUpdate(false);
 			
-			if(level.isAreaLoaded(blockEntity.getBlockPos(), 1))
+			if(level.getDayTime() % 24000 == 0 && isNotMuffled(blockEntity) && !blockEntity.hasChimed) //chimes at the beginning of day
 			{
-				powerBlocks(blockEntity, 15);
+				fullPower(level, blockEntity);
 			}
+		}
+	}
+	
+	public static void fullPower(Level level, HorseClockBlockEntity blockEntity)
+	{
+		level.playSound(null, blockEntity.getBlockPos(), MSSoundEvents.BLOCK_HORSE_CLOCK_CHIME.get(), SoundSource.BLOCKS, 2F, 1F);
+		blockEntity.hasChimed = true;
+		
+		if(level.isAreaLoaded(blockEntity.getBlockPos(), 1))
+		{
+			powerBlocks(blockEntity, 15);
 		}
 	}
 	
 	private void sendUpdate(boolean isTick) //versus tock
 	{
-		if(level != null && level.isAreaLoaded(getBlockPos(), 1))
+		if(!hasChimed) //the chime gives off a strong signal that should not be overridden
+			powerBlocks(this, isTick ? 4 : 2);
+		
+		if(isNotMuffled(this))
 		{
-			if(!hasChimed) //the chime gives off a strong signal that should not be overridden
-				powerBlocks(this, isTick ? 4 : 2);
-			
-			if(isNotMuffled(this))
-			{
-				if(isTick)
-					level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TICK.get(), SoundSource.BLOCKS, 0.5F, 1F);
-				else
-					level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TOCK.get(), SoundSource.BLOCKS, 0.5F, 1F);
-			}
-			
-			if(!(level.getDayTime() >= 0 && level.getDayTime() <= 40))
-				hasChimed = false; //TODO fix trigger for hasChimed
+			if(isTick)
+				level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TICK.get(), SoundSource.BLOCKS, 0.5F, 1F);
+			else
+				level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TOCK.get(), SoundSource.BLOCKS, 0.5F, 1F);
 		}
+		
+		if(level.getDayTime() % 24000 != 0)
+			hasChimed = false;
 	}
 	
 	private static void powerBlocks(HorseClockBlockEntity blockEntity, int power)
@@ -88,6 +93,8 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 			level.setBlock(topPos, topState.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
 		
 		level.scheduleTick(new BlockPos(pos), level.getBlockState(pos).getBlock(), 10); //set to half a second
+		level.scheduleTick(new BlockPos(centerPos), level.getBlockState(centerPos).getBlock(), 10);
+		level.scheduleTick(new BlockPos(topPos), level.getBlockState(topPos).getBlock(), 10);
 	}
 	
 	/**

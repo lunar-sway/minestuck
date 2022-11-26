@@ -482,6 +482,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHESSBOARD, "Chessboard");
 		addBlock(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
 		MSBlocks.HORSE_CLOCK.forEachBlock(block -> add(block, "Horse Clock"));
+		addTooltip(MSBlocks.HORSE_CLOCK, "It is so majestic you want to weep");
 		addBlock(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addBlockStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		addBlock(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
@@ -2059,6 +2060,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");
 		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("horse_clock_chime", "Clock chimes... and whinnies");
 		addSubtitles("projectile_throw", "Projectile is thrown");
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		

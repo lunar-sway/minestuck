@@ -769,6 +769,7 @@
   },
   "block.horse_clock.chime": {
     "category": "block",
+    "subtitle": "subtitles.minestuck.horse_clock_chime",
     "sounds": [
       "minestuck:random/horse_clock_chime"
     ]
