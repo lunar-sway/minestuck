@@ -1,6 +1,13 @@
 package com.mraof.minestuck.blockentity;
 
+import com.mraof.minestuck.block.HorseClockBlock;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -15,10 +22,80 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 {
 	private final AnimationFactory factory = new AnimationFactory(this);
+	private boolean hasChimed = false; //prevents the sound from getting stacked if the day time is frozen
 	
 	public HorseClockBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.HORSE_CLOCK.get(), pos, state);
+	}
+	
+	public static void serverTick(Level level, BlockPos pos, BlockState state, HorseClockBlockEntity blockEntity)
+	{
+		//once per second
+		if(level.getGameTime() % 40 == 0)
+			blockEntity.sendUpdate(true);
+		if(level.getGameTime() % 40 == 20)
+			blockEntity.sendUpdate(false);
+		
+		if((level.getDayTime() >= 0 && level.getDayTime() <= 40) && isNotMuffled(blockEntity) && !blockEntity.hasChimed) //chimes at the beginning of day
+		{
+			level.playSound(null, blockEntity.getBlockPos(), MSSoundEvents.BLOCK_HORSE_CLOCK_CHIME.get(), SoundSource.BLOCKS, 2F, 1F);
+			blockEntity.hasChimed = true;
+			
+			if(level.isAreaLoaded(blockEntity.getBlockPos(), 1))
+			{
+				powerBlocks(blockEntity, 15);
+			}
+		}
+	}
+	
+	private void sendUpdate(boolean isTick) //versus tock
+	{
+		if(level != null && level.isAreaLoaded(getBlockPos(), 1))
+		{
+			if(!hasChimed) //the chime gives off a strong signal that should not be overridden
+				powerBlocks(this, isTick ? 4 : 2);
+			
+			if(isNotMuffled(this))
+			{
+				if(isTick)
+					level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TICK.get(), SoundSource.BLOCKS, 0.5F, 1F);
+				else
+					level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TOCK.get(), SoundSource.BLOCKS, 0.5F, 1F);
+			}
+			
+			if(!(level.getDayTime() >= 0 && level.getDayTime() <= 40))
+				hasChimed = false; //TODO fix trigger for hasChimed
+		}
+	}
+	
+	private static void powerBlocks(HorseClockBlockEntity blockEntity, int power)
+	{
+		Level level = blockEntity.level;
+		BlockPos pos = blockEntity.getBlockPos();
+		BlockState state = blockEntity.getBlockState();
+		
+		level.setBlock(pos, state.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
+		
+		BlockPos centerPos = pos.above();
+		BlockState centerState = level.getBlockState(centerPos);
+		if(centerState.is(MSBlocks.HORSE_CLOCK.CENTER.get()))
+			level.setBlock(centerPos, centerState.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
+		
+		BlockPos topPos = pos.above(2);
+		BlockState topState = level.getBlockState(topPos);
+		if(topState.is(MSBlocks.HORSE_CLOCK.TOP.get()))
+			level.setBlock(topPos, topState.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
+		
+		level.scheduleTick(new BlockPos(pos), level.getBlockState(pos).getBlock(), 10); //set to half a second
+	}
+	
+	/**
+	 * Will not make a sound if a sound dampening block is below it
+	 */
+	private static boolean isNotMuffled(HorseClockBlockEntity blockEntity)
+	{
+		return !blockEntity.level.getBlockState(blockEntity.getBlockPos().below()).is(BlockTags.OCCLUDES_VIBRATION_SIGNALS);
 	}
 	
 	@Override

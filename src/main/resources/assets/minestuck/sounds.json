@@ -766,5 +766,23 @@
     "sounds": [
       "minecraft:block/beehive/exit"
     ]
+  },
+  "block.horse_clock.chime": {
+    "category": "block",
+    "sounds": [
+      "minestuck:random/horse_clock_chime"
+    ]
+  },
+  "block.clock.tick": {
+    "category": "block",
+    "sounds": [
+      "minestuck:random/clock_tick"
+    ]
+  },
+  "block.clock.tock": {
+    "category": "block",
+    "sounds": [
+      "minestuck:random/clock_tock"
+    ]
   }
 }
