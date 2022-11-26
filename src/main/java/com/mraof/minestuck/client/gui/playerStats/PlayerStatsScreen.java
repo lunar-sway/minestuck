@@ -39,6 +39,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public static final int WINDOW_ID_START = 105;	//Note that window ids used MUST be a byte. (that's how the window id is serialized in minecraft's packets)
 	
 	public static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
+	public static final ResourceLocation caeger = new ResourceLocation("minestuck", "textures/gui/caeger.png");
 	
 	public enum NormalGuiType
 	{

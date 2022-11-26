@@ -6,9 +6,8 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.particle.MSParticles;
+import com.mraof.minestuck.player.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -46,6 +45,9 @@ import static com.mraof.minestuck.player.EnumAspect.*;
 
 public interface OnHitEffect
 {
+	
+	int CRIT_BET_CAEGER_COST = 62;
+	
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
 	OnHitEffect RAGE_STRENGTH = requireAspect(RAGE, chanceWithCritMod(
@@ -156,6 +158,117 @@ public interface OnHitEffect
 		
 		float rng = (float) (attacker.getRandom().nextInt(7) + 1) * (attacker.getRandom().nextInt(7) + 1);
 		target.hurt(source, rng);
+	};
+	
+	OnHitEffect CAEGER_SWIPE = (stack, target, attacker) -> {
+		DamageSource source;
+		if(attacker instanceof Player player)
+			source = DamageSource.playerAttack(player);
+		else source = DamageSource.mobAttack(attacker);
+		if(stack.getItem() instanceof ICaegerMaker caegerMaker)
+		{
+			if(attacker instanceof Player player)
+			{
+				int coinAmount = caegerMaker.makeCaeger//this creates a certain amount of caegers for the player
+						(PlayerSavedData.getData(IdentifierHandler.encode(player), player.getLevel()));
+				for(int i=0; i<coinAmount; i++)
+				{
+					target.getLevel().addParticle(MSParticles.CaegerParticle.get()//spawns the particle
+							, target.getX(), target.getY(), target.getZ(),//gets the target location
+							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
+					
+				}
+			}
+		}
+	};
+	
+	OnHitEffect CAEGER_SWIPE_SCRATCH = (stack, target, attacker) -> {
+		DamageSource source;
+		if(attacker instanceof Player player)
+			source = DamageSource.playerAttack(player);
+		else source = DamageSource.mobAttack(attacker);
+		if(stack.getItem() instanceof ICaegerMaker caegerMaker)
+		{
+			if(attacker instanceof Player player)
+			{
+				int coinAmount = caegerMaker.makeCaeger//this creates a certain amount of caegers for the player
+						(PlayerSavedData.getData(IdentifierHandler.encode(player), player.getLevel()));
+				
+				for(int i=0; i<coinAmount; i++)
+				{
+					target.getLevel().addParticle(MSParticles.CaegerScratchParticle.get()//spawns the particle
+							, target.getX(), target.getY(), target.getZ(),//gets the target location
+							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
+				}
+			}
+		}
+	};
+	OnHitEffect CRIT_BET = (stack, target, attacker) -> {
+		DamageSource source;
+		if(attacker instanceof Player player)
+		{
+			source = DamageSource.playerAttack(player);
+		} else
+		{
+			source = DamageSource.mobAttack(attacker);
+		}
+		
+		if(stack.getItem() instanceof ICaegerUser caegerUser)
+		{
+			if(attacker instanceof Player player)
+			{
+				PlayerData playerData = PlayerSavedData.getData(IdentifierHandler.encode(player), player.getLevel());
+				
+				if(playerData.getCaegers() == 0)
+				{
+					int roll = attacker.getRandom().nextInt(13);
+					int multiplier = roll / 2 + 1;
+					roll = roll + 1;
+					target.hurt(source, (float) (roll * multiplier));//this does a damage roll with no caeger modifier
+				}
+				else if(playerData.getCaegers() >= 0)
+				{
+					int reduct = caegerUser.reductCaeger(playerData, CRIT_BET_CAEGER_COST);
+					int store = reduct / (CRIT_BET_CAEGER_COST / 8);
+					int outcome = attacker.getRandom().nextInt(13) + store;
+					
+					// Cap this at 12 because the outcome number is currently zero-based.
+					if(outcome > 12)
+					{
+						outcome = 12;
+					}
+					// Set a damage multiplier based on the outcome of the roll:
+					//  If the roll is 1, 2, 3, or 4, the multiplier is 1. (1, 2, 3, or 4 damage)
+					//  If the roll is 5, 6, 7, or 8, the multiplier is 2. (10, 12, 14, or 16 damage)
+					//  If the roll is 9, 10, 11, or 12, the multiplier is 3. (27, 30, 33, or 36 damage)
+					//  If the roll is 13, the multiplier is 4. (52 total damage)
+					int multiplier = outcome / 4 + 1;
+					switch(multiplier)
+					{//this is a switch statement to spawn a particle dependent on the size of the roll
+						case 1:
+							target.getLevel().addParticle(MSParticles.LowRollParticle.get(),
+									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
+							break;
+						case 2:
+							target.getLevel().addParticle(MSParticles.MidRollParticle.get(),
+									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
+						case 3:
+							target.getLevel().addParticle(MSParticles.HighRollParticle.get(),
+									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
+							break;
+						case 4:
+							target.getLevel().addParticle(MSParticles.Crit13Particle.get(),
+									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
+							break;
+					}
+					// Convert outcome from zero-based to one-based, then multiply that by the multiplier to determine damage.
+					outcome = outcome + 1;
+					int damage = outcome * multiplier;
+					
+					target.hurt(source, (float) (damage));
+				}
+			}
+		}
 	};
 	
 	OnHitEffect SWEEP = (stack, target, attacker) -> {
