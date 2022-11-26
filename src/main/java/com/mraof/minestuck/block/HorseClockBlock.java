@@ -44,29 +44,13 @@ public class HorseClockBlock extends MultiMachineBlock implements EntityBlock
 		{
 			if(state.is(MSBlocks.HORSE_CLOCK.BOTTOM.get()) &&
 					!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
-			{
-				breakIfPresent(level, pos, MSBlocks.HORSE_CLOCK.BOTTOM.get());
-				breakIfPresent(level, pos.above(2), MSBlocks.HORSE_CLOCK.TOP.get());
-			} else if(state.is(MSBlocks.HORSE_CLOCK.CENTER.get()) &&
+				level.destroyBlock(pos, true);
+			else if(state.is(MSBlocks.HORSE_CLOCK.CENTER.get()) &&
 					(!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.TOP.get()) || !level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.BOTTOM.get())))
-			{
-				breakIfPresent(level, pos.above(), MSBlocks.HORSE_CLOCK.TOP.get());
-				breakIfPresent(level, pos, MSBlocks.HORSE_CLOCK.CENTER.get());
-				breakIfPresent(level, pos.below(), MSBlocks.HORSE_CLOCK.BOTTOM.get());
-			} else if(state.is(MSBlocks.HORSE_CLOCK.TOP.get()) &&
+				level.destroyBlock(pos, true);
+			else if(state.is(MSBlocks.HORSE_CLOCK.TOP.get()) &&
 					!level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
-			{
-				breakIfPresent(level, pos, MSBlocks.HORSE_CLOCK.TOP.get());
-				breakIfPresent(level, pos.below(2), MSBlocks.HORSE_CLOCK.BOTTOM.get());
-			}
-		}
-	}
-	
-	private static void breakIfPresent(Level level, BlockPos pos, Block clockBlock)
-	{
-		if(level.getBlockState(pos).is(clockBlock))
-		{
-			level.destroyBlock(pos, true);
+				level.destroyBlock(pos, true);
 		}
 	}
 	
