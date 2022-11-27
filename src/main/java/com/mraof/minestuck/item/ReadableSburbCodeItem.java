@@ -38,19 +38,14 @@ public class ReadableSburbCodeItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn)
 	{
-		if(playerIn.isShiftKeyDown() || !BlockHitResultUtil.collidedBlockState(levelIn, playerIn).is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+		ItemStack itemStackIn = playerIn.getItemInHand(handIn);
+		
+		if(levelIn.isClientSide())
 		{
-			ItemStack itemStackIn = playerIn.getItemInHand(handIn);
-			
-			if(levelIn.isClientSide)
-			{
-				MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn), getParadoxInfo(itemStackIn));
-			}
-			
-			return InteractionResultHolder.success(itemStackIn);
+			MSScreenFactories.displayReadableSburbCodeScreen(getRecordedBlocks(itemStackIn), getParadoxInfo(itemStackIn));
 		}
 		
-		return super.use(levelIn, playerIn, handIn);
+		return InteractionResultHolder.sidedSuccess(itemStackIn, levelIn.isClientSide());
 	}
 	
 	/**
