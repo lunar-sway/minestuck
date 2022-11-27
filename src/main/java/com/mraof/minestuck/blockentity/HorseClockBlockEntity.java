@@ -19,6 +19,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+/**
+ * Block entity present in the bottom of the horse block multiblock. Keeps track of the time and lets off a tick sound each second, which makes the blocks give off a redstone signal.
+ * Chimes at the beginning of the day. It will not give off a redstone If daytime does not advance, it will not give off redstone signals after the chime
+ */
 public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 {
 	private final AnimationFactory factory = new AnimationFactory(this);
@@ -70,7 +74,7 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 				level.playSound(null, getBlockPos(), MSSoundEvents.BLOCK_CLOCK_TOCK.get(), SoundSource.BLOCKS, 0.5F, 1F);
 		}
 		
-		if(level.getDayTime() % 24000 != 0)
+		if(level.getDayTime() % 24000 != 0) //resets if any time of day except the beginning
 			hasChimed = false;
 	}
 	
@@ -80,13 +84,16 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 		BlockPos pos = blockEntity.getBlockPos();
 		BlockState state = blockEntity.getBlockState();
 		
+		//powers the Bottom block
 		level.setBlock(pos, state.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
 		
+		//powers the Center block if present
 		BlockPos centerPos = pos.above();
 		BlockState centerState = level.getBlockState(centerPos);
 		if(centerState.is(MSBlocks.HORSE_CLOCK.CENTER.get()))
 			level.setBlock(centerPos, centerState.setValue(HorseClockBlock.POWER, power), Block.UPDATE_ALL);
 		
+		//powers the Top block if present
 		BlockPos topPos = pos.above(2);
 		BlockState topState = level.getBlockState(topPos);
 		if(topState.is(MSBlocks.HORSE_CLOCK.TOP.get()))
