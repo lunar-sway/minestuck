@@ -1,6 +1,5 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.util.BlockHitResultUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -20,8 +19,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,31 +38,31 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	public InteractionResult useOn(UseOnContext context)
 	{
 		ItemStack stackInUse = context.getItemInHand();
-		Level worldIn = context.getLevel();
+		Level level = context.getLevel();
 		Player player = context.getPlayer();
 		InteractionHand handIn = context.getHand();
 		
-		if(!worldIn.isClientSide && player != null)
+		if(player != null)
 		{
-			BlockHitResult blockRayTraceResult = BlockHitResultUtil.getPlayerPOVHitResult(worldIn, player);
+			boolean didWrite = false;
+			BlockState state = level.getBlockState(context.getClickedPos());
 			
-			if(blockRayTraceResult.getType() == HitResult.Type.BLOCK)
+			List<Block> preProcessBlockList = getRecordedBlocks(stackInUse); //used to differentiate from after processing
+			ItemStack processedStack = addCarvingsToCode(state.getBlock(), stackInUse); //the call to addCarvingsToCode is what processes the stack
+			List<Block> postProcessBlockList = getRecordedBlocks(processedStack);
+			if(!preProcessBlockList.containsAll(postProcessBlockList))
 			{
-				BlockState raytraceState = BlockHitResultUtil.collidedBlockState(player, blockRayTraceResult);
-				
-				List<Block> preProcessBlockList = getRecordedBlocks(stackInUse); //used to differentiate from after processing
-				ItemStack processedStack = addCarvingsToCode(raytraceState.getBlock(), stackInUse); //the call to addCarvingsToCode is what processes the stack
-				List<Block> postProcessBlockList = getRecordedBlocks(processedStack);
-				if(!preProcessBlockList.containsAll(postProcessBlockList))
-				{
-					worldIn.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
-				}
+				level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
+				didWrite = true;
 			}
 			
 			attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
+			
+			if(didWrite)
+				return InteractionResult.sidedSuccess(level.isClientSide);
 		}
 		
-		return InteractionResult.PASS;
+		return InteractionResult.FAIL;
 	}
 	
 	/**
@@ -75,15 +72,12 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	{
 		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 		
-		if(hieroglpyhsList.contains(hieroglyphBlock))
+		for(Block block : hieroglpyhsList)
 		{
-			for(Block block : hieroglpyhsList)
+			if(block == hieroglyphBlock)
 			{
-				if(block == hieroglyphBlock)
-				{
-					addRecordedInfo(stackInUse, hieroglyphBlock);
-					break;
-				}
+				addRecordedInfo(stackInUse, hieroglyphBlock);
+				break;
 			}
 		}
 		

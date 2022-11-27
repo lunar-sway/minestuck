@@ -4,19 +4,16 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.ReadableSburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -90,8 +87,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
-			else if(inputCode(blockEntity, state, level, pos, player, handIn))
-				return InteractionResult.SUCCESS;
+			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
 				MSScreenFactories.displayComputerScreen(blockEntity);
@@ -147,60 +143,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		return false;
 	}
 	
-	private boolean inputCode(ComputerBlockEntity blockEntity, BlockState state, Level levelIn, BlockPos pos, Player player, InteractionHand handIn)
-	{
-		ItemStack heldStack = player.getItemInHand(handIn);
-		if(heldStack.getItem() instanceof ReadableSburbCodeItem)
-		{
-			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
-			boolean newInfo = false;
-			
-			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (IncompleteSburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
-			{
-				newInfo = true;
-				blockEntity.hasParadoxInfoStored = true;
-			}
-			
-			if(!hieroglyphList.isEmpty())
-			{
-				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the block entities block should it not exist yet
-				{
-					if(blockEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
-					{
-						blockEntity.hieroglyphsStored.add(iterateBlock);
-						newInfo = true;
-					}
-				}
-				
-				//checks additionally if the item is also a IncompleteSburbCodeItem, and does the reverse process of adding any new blocks from the block entities list to the item's
-				if(heldStack.getItem() instanceof IncompleteSburbCodeItem)
-				{
-					if(blockEntity.hasParadoxInfoStored)
-						IncompleteSburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
-					
-					if(blockEntity.hieroglyphsStored != null)
-					{
-						for(Block iterateBlock : blockEntity.hieroglyphsStored)
-						{
-							IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
-							IncompleteSburbCodeItem.attemptConversionToCompleted(player, handIn);
-						}
-					}
-				}
-			}
-			
-			if(newInfo)
-			{
-				blockEntity.setChanged();
-				levelIn.sendBlockUpdated(pos, state, state, 3);
-				
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
@@ -218,52 +160,30 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
-		Random rand = new Random();
 		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
 		if(be == null)
 		{
 			return;
 		}
 		be.closeAll();
-		float factor = 0.05F;
 		
+		//program disks
 		for(Map.Entry<Integer, Boolean> pairs : be.installedPrograms.entrySet())
 		{
 			if(!pairs.getValue())
 				continue;
 			int program = pairs.getKey();
 			
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemStack diskStack = ProgramData.getItem(program);
-			if(!diskStack.isEmpty())
-			{
-				ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
-				entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-				level.addFreshEntity(entityItem);
-			}
+			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(program));
 		}
 		
-		for(int iterate = 0; iterate < be.blankDisksStored; iterate++)
-		{
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, MSItems.BLANK_DISK.get().getDefaultInstance());
-			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			level.addFreshEntity(entityItem);
-		}
+		//blank disks
+		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));
 		
+		//music disc
 		if(state.getValue(STATE) == State.BROKEN)
 		{
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemStack diskStack = ProgramData.getItem(-1);
-			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, diskStack);
-			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			level.addFreshEntity(entityItem);
+			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(-1));
 		}
 	}
 	

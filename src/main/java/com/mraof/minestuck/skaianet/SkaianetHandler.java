@@ -249,31 +249,6 @@ public final class SkaianetHandler extends SavedData
 		}
 	}
 	
-	public void burnDisk(ComputerBlockEntity computerBlockEntity, Level level, int programId)
-	{
-		BlockPos bePos = computerBlockEntity.getBlockPos();
-		ItemStack diskStack = ProgramData.getItem(programId);
-		if(!diskStack.isEmpty() && computerBlockEntity.blankDisksStored > 0)
-		{
-			Random random = level.getRandom();
-			
-			float rx = random.nextFloat() * 0.8F + 0.1F;
-			float ry = random.nextFloat() * 0.8F + 0.1F;
-			float rz = random.nextFloat() * 0.8F + 0.1F;
-			
-			ItemEntity entityItem = new ItemEntity(level, bePos.getX() + rx, bePos.getY() + ry, bePos.getZ() + rz, diskStack);
-			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
-			level.addFreshEntity(entityItem);
-			
-			computerBlockEntity.blankDisksStored--;
-			
-			//Imitates the structure block to ensure that changes are sent client-side
-			computerBlockEntity.setChanged();
-			BlockState state = computerBlockEntity.getBlockState();
-			level.sendBlockUpdated(bePos, state, state, 3);
-		}
-	}
-	
 	private boolean isConnectingBlocked(PlayerIdentifier player, boolean isClient)
 	{
 		if(isClient)

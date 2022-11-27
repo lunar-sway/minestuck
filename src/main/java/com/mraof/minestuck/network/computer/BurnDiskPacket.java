@@ -43,6 +43,6 @@ public class BurnDiskPacket implements PlayToServerPacket
 	{
 		Level level = player.level;
 		ComputerBlockEntity.forNetworkIfPresent(player, bePos,
-				computer -> SkaianetHandler.get(player.server).burnDisk(computer, level, programId));
+				computer -> computer.burnDisk(computer, level, programId));
 	}
 }

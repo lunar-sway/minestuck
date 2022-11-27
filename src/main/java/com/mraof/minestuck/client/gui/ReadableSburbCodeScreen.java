@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.chat.NarratorChatListener;
@@ -15,7 +16,10 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Block;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.lwjgl.glfw.GLFW;
+import org.slf4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -31,6 +35,8 @@ import java.util.stream.Collectors;
  */
 public class ReadableSburbCodeScreen extends Screen
 {
+	private static final Logger LOGGER = LogUtils.getLogger();
+	
 	private static final ResourceLocation BOOK_TEXTURES_01A = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01a.png");
 	private static final ResourceLocation BOOK_TEXTURES_01B = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_01b.png");
 	private static final ResourceLocation BOOK_TEXTURES_02 = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb_book_02.png");
@@ -74,9 +80,11 @@ public class ReadableSburbCodeScreen extends Screen
 		this.createMenuControls();
 		this.createPageControlButtons();
 		
+		Resource resource = null;
+		
 		try
 		{
-			Resource resource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
+			resource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
 			InputStream inputStream = resource.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 			textList = bufferedReader.lines().collect(Collectors.toList());
@@ -85,7 +93,12 @@ public class ReadableSburbCodeScreen extends Screen
 			totalPages = Math.round((float) (textList.size() + 1) / (float) LINES_PER_PAGE);
 		} catch(Exception ignored)
 		{
+			LOGGER.error("Couldn't load book nucleotides", ignored);
+		} finally
+		{
+			IOUtils.closeQuietly(resource);
 		}
+		
 		
 		if(textList != null)
 		{
@@ -221,12 +234,8 @@ public class ReadableSburbCodeScreen extends Screen
 	protected void createPageControlButtons()
 	{
 		int i = (this.width - 192) / 2;
-		this.forwardButton = this.addRenderableWidget(new PageButton(i + 116, 159, true, (p_214159_1_) -> {
-			this.pageForward();
-		}, true));
-		this.backButton = this.addRenderableWidget(new PageButton(i + 43, 159, false, (p_214158_1_) -> {
-			this.pageBack();
-		}, true));
+		this.forwardButton = this.addRenderableWidget(new PageButton(i + 116, 159, true, button -> this.pageForward(), true));
+		this.backButton = this.addRenderableWidget(new PageButton(i + 43, 159, false, button -> this.pageBack(), true));
 		this.updateButtonVisibility();
 	}
 	
@@ -271,10 +280,10 @@ public class ReadableSburbCodeScreen extends Screen
 		{
 			switch(pKeyCode)
 			{
-				case 266:
+				case GLFW.GLFW_KEY_PAGE_UP:
 					this.backButton.onPress();
 					return true;
-				case 267:
+				case GLFW.GLFW_KEY_PAGE_DOWN:
 					this.forwardButton.onPress();
 					return true;
 				default:
