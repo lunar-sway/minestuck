@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Adds random filled in code segments(blocks from the hieroglyphs block tag) to a sburb code item that is being created in the world.
+ */
 public class SetSburbCodeFragments extends LootItemConditionalFunction
 {
 	public SetSburbCodeFragments(LootItemCondition[] conditionsIn)
