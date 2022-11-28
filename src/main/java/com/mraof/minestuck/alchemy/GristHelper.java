@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -11,6 +12,8 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
@@ -142,9 +145,11 @@ public class GristHelper
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
-				Component type = pairs.getKey().getDisplayName();
-				long difference = pairs.getValue();
-				sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
+				
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs);
+				//Component type = pairs.getKey().getDisplayName();
+				//long difference = pairs.getValue();
+				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 			}
 		}
 	}
