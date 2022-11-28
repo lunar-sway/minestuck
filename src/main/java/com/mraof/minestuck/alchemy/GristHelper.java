@@ -146,7 +146,7 @@ public class GristHelper
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
 				
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs);
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Client");
 				//Component type = pairs.getKey().getDisplayName();
 				//long difference = pairs.getValue();
 				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
@@ -173,10 +173,10 @@ public class GristHelper
 				long difference = pairs.getValue();
 				if(increase)
 				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
+					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Recycle");
 				} else
 				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have spent %s of %s's %s grist.", difference, player.getUsername(), type));
+					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Server");
 				}
 			}
 		}
