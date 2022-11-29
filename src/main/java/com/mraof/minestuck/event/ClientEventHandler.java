@@ -1,32 +1,23 @@
 package com.mraof.minestuck.event;
 
 import com.mojang.blaze3d.shaders.FogShape;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
-import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
-import com.mraof.minestuck.particle.MSParticles;
+import com.mraof.minestuck.particle.MSParticleTypes;
 import com.mraof.minestuck.particle.custom.CaegerParticle;
 import com.mraof.minestuck.particle.custom.HighRollParticle;
 import com.mraof.minestuck.particle.custom.LowRollParticle;
 import com.mraof.minestuck.particle.custom.MidRollParticle;
-import com.mraof.minestuck.player.Caegar;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
@@ -35,7 +26,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -152,16 +142,16 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void registerParticleFactories(final ParticleFactoryRegisterEvent event)
 	{
-		Minecraft.getInstance().particleEngine.register(MSParticles.LowRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.LowRollParticle.get(),
 				LowRollParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticles.CaegerParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CaegerParticle.get(),
 				CaegerParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticles.MidRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.MidRollParticle.get(),
 				MidRollParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticles.HighRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.HighRollParticle.get(),
 				HighRollParticle.Provider::new);
 	}
 }

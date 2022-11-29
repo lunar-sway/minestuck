@@ -765,8 +765,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.DRAGON_CANE, "The most Powerful and awe inspiring of canes!");
 		addItem(MSItems.DRAGON_CANE_UNSHEATHED, "Dragon Cane");
 		addItemTooltip(MSItems.DRAGON_CANE_UNSHEATHED, "The most Powerful and awe inspiring of canes!");
-		addItem(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT, "Chancewyrm's Extra Fortunate Stabbing Implement");
-		addItem(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED, "Chancewyrm's Extra Fortunate Stabbing Implement");
+		addItem(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT, "ChancewyrmItem's Extra Fortunate Stabbing Implement");
+		addItem(MSItems.CHANCEWYRMS_EXTRA_FORTUNATE_STABBING_IMPLEMENT_UNSHEATHED, "ChancewyrmItem's Extra Fortunate Stabbing Implement");
 		addItem(MSItems.POGO_CANE, "Pogo Cane");
 		addItemTooltip(MSItems.POGO_CANE, "Now without leg or hand holds for even more danger!");
 		addItem(MSItems.CANDY_CANE, "Candy Cane");

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.particle.MSParticles;
+import com.mraof.minestuck.particle.MSParticleTypes;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -16,7 +16,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
@@ -82,7 +81,7 @@ public interface ItemRightClickEffect
 				{
 					target.hurt(DamageSource.sting(player), Damage);//deals damage to the target
 					player.swing(hand);//swings the player's hand
-					player.getLevel().addParticle(MSParticles.SlashParticle.get(),//spawns the slash particle
+					player.getLevel().addParticle(MSParticleTypes.SlashParticle.get(),//spawns the slash particle
 							player.getX(), player.getY(), player.getZ(), 0d, 0d, 0d);
 				}
 			}
@@ -105,7 +104,6 @@ public interface ItemRightClickEffect
 			return InteractionResultHolder.success(newItem);
 		};
 	}
-	
 	
 	static ItemRightClickEffect summonFireball()
 	{
@@ -231,7 +229,6 @@ public interface ItemRightClickEffect
 			return InteractionResultHolder.pass(itemStackIn);
 		};
 	}
-	
 	
 	InteractionResultHolder<ItemStack> onRightClick(Level level, Player player, InteractionHand hand);
 }

@@ -6,7 +6,7 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.particle.MSParticles;
+import com.mraof.minestuck.particle.MSParticleTypes;
 import com.mraof.minestuck.player.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
@@ -46,7 +46,7 @@ import static com.mraof.minestuck.player.EnumAspect.*;
 public interface OnHitEffect
 {
 	
-	int CRIT_BET_CAEGER_COST = 62;
+	public static int CRIT_BET_CAEGER_COST = 62;
 	
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
 	
@@ -173,7 +173,7 @@ public interface OnHitEffect
 						(PlayerSavedData.getData(IdentifierHandler.encode(player), player.getLevel()));
 				for(int i=0; i<coinAmount; i++)
 				{
-					target.getLevel().addParticle(MSParticles.CaegerParticle.get()//spawns the particle
+					target.getLevel().addParticle(MSParticleTypes.CaegerParticle.get()//spawns the particle
 							, target.getX(), target.getY(), target.getZ(),//gets the target location
 							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
 					
@@ -196,13 +196,14 @@ public interface OnHitEffect
 				
 				for(int i=0; i<coinAmount; i++)
 				{
-					target.getLevel().addParticle(MSParticles.CaegerScratchParticle.get()//spawns the particle
+					target.getLevel().addParticle(MSParticleTypes.CaegerScratchParticle.get()//spawns the particle
 							, target.getX(), target.getY(), target.getZ(),//gets the target location
 							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
 				}
 			}
 		}
 	};
+	
 	OnHitEffect CRIT_BET = (stack, target, attacker) -> {
 		DamageSource source;
 		if(attacker instanceof Player player)
@@ -246,18 +247,18 @@ public interface OnHitEffect
 					switch(multiplier)
 					{//this is a switch statement to spawn a particle dependent on the size of the roll
 						case 1:
-							target.getLevel().addParticle(MSParticles.LowRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.LowRollParticle.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 						case 2:
-							target.getLevel().addParticle(MSParticles.MidRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.MidRollParticle.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 						case 3:
-							target.getLevel().addParticle(MSParticles.HighRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.HighRollParticle.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 						case 4:
-							target.getLevel().addParticle(MSParticles.Crit13Particle.get(),
+							target.getLevel().addParticle(MSParticleTypes.Crit13Particle.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 					}
