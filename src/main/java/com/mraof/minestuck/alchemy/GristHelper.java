@@ -142,6 +142,8 @@ public class GristHelper
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
+			
+			//don't know why this is here, it was copied over from when i merged notifyEditMode() and notify(), but im not sure what it does/did. Seems to be a sanity check.
 			SburbConnection sc;
 			EditData ed;
 			
@@ -159,16 +161,20 @@ public class GristHelper
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
+				//the pair has to be split into two new variables because Map.Entry is immutable.
 				GristType type = pairs.getKey();
 				long difference = pairs.getValue();
 				
+				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 				GristToast.addOrUpdate(player.getPlayer(server), Minecraft.getInstance().getToasts(), type, difference, source, increase);
 				
+				//This used to be how grist notifs were handled. It's left here for legacy reasons.
 				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 			}
 		}
 	}
 	
+	@Deprecated
 	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, Component message)
 	{
 		if(player != null)
