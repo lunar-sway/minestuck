@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:ink_sac"
+  },
+  "input2": {
+    "item": "minecraft:cobblestone_stairs"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:cobbled_deepslate_stairs"
+  }
+}

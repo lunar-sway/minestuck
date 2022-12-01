@@ -3,10 +3,10 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -173,15 +173,18 @@ public class CaptchaDeckHandler
 		{
 			Slot slot = slotIndex >= 0 && slotIndex < player.containerMenu.slots.size() ? player.containerMenu.getSlot(slotIndex) : null;
 			
-			if(slot != null && !slot.getItem().isEmpty() && slot.mayPickup(player))
+			if(slot != null)
 			{
-				ItemStack stack = slot.remove(slot.getItem().getMaxStackSize());
-				captchalogueItem(player, stack);
-				//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+				ItemStack stack = slot.safeTake(slot.getItem().getCount(), Integer.MAX_VALUE, player);
 				if(!stack.isEmpty())
-					launchItem(player, stack);
-				
-				player.containerMenu.broadcastChanges();
+				{
+					captchalogueItem(player, stack);
+					//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+					if(!stack.isEmpty())
+						launchItem(player, stack);
+					
+					player.containerMenu.broadcastChanges();
+				}
 			}
 		}
 	}

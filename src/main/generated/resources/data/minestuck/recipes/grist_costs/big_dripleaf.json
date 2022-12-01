@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:big_dripleaf"
+  },
+  "grist_cost": {
+    "minestuck:build": 2,
+    "minestuck:shale": 2,
+    "minestuck:mercury": 2
+  }
+}

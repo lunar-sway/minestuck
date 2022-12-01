@@ -38,9 +38,9 @@ public class TransportalizerScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, new TextComponent("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextField.setCanLoseFocus(false);
 		this.destinationTextField.setMaxLength(4);
 		this.destinationTextField.setValue(be.getDestId());
-		this.destinationTextField.setFocus(true);
 		destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addRenderableWidget(destinationTextField);
 		setInitialFocus(destinationTextField);

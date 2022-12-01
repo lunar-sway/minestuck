@@ -66,12 +66,12 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 			door2 = new BoundingBox(z2, 0, minX, z2, 0, maxX);
 		}
 		
-		int y1 = 0;
+		int y1 = level.getMinBuildHeight();
 		for(BlockPos doorPos : BlockPos.betweenClosed(door1.minX(), 0, door1.minZ(), door1.maxX(), 0, door1.maxZ()))
 		{
 			y1 = Math.max(y1, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX(), pos.getZ() + doorPos.getZ()));
 		}
-		int y2 = 0;
+		int y2 = level.getMinBuildHeight();
 		for(BlockPos doorPos : BlockPos.betweenClosed(door2.minX(), 0, door2.minZ(), door2.maxX(), 0, door2.maxZ()))
 		{
 			y2 = Math.max(y2, level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + doorPos.getX(), pos.getZ() + doorPos.getZ()));
