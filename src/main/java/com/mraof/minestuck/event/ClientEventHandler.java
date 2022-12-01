@@ -142,16 +142,26 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void registerParticleFactories(final ParticleFactoryRegisterEvent event)
 	{
-		Minecraft.getInstance().particleEngine.register(MSParticleTypes.LowRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.LOW_ROLL.get(),
 				LowRollParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CaegerParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CAEGER.get(),
 				CaegerParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticleTypes.MidRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.MID_ROLL.get(),
 				MidRollParticle.Provider::new);
 		
-		Minecraft.getInstance().particleEngine.register(MSParticleTypes.HighRollParticle.get(),
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.HIGH_ROLL.get(),
 				HighRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CAEGER_SCRATCH.get(),
+				HighRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CRIT_13.get(),
+				HighRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.SLASH.get(),
+				HighRollParticle.Provider::new);
+		
 	}
 }

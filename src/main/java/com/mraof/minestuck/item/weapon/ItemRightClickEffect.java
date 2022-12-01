@@ -81,7 +81,7 @@ public interface ItemRightClickEffect
 				{
 					target.hurt(DamageSource.sting(player), Damage);//deals damage to the target
 					player.swing(hand);//swings the player's hand
-					player.getLevel().addParticle(MSParticleTypes.SlashParticle.get(),//spawns the slash particle
+					player.getLevel().addParticle(MSParticleTypes.SLASH.get(),//spawns the slash particle
 							player.getX(), player.getY(), player.getZ(), 0d, 0d, 0d);
 				}
 			}

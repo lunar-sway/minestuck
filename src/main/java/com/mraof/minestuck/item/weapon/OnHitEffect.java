@@ -173,7 +173,7 @@ public interface OnHitEffect
 						(PlayerSavedData.getData(IdentifierHandler.encode(player), player.getLevel()));
 				for(int i=0; i<coinAmount; i++)
 				{
-					target.getLevel().addParticle(MSParticleTypes.CaegerParticle.get()//spawns the particle
+					target.getLevel().addParticle(MSParticleTypes.CAEGER.get()//spawns the particle
 							, target.getX(), target.getY(), target.getZ(),//gets the target location
 							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
 					
@@ -196,7 +196,7 @@ public interface OnHitEffect
 				
 				for(int i=0; i<coinAmount; i++)
 				{
-					target.getLevel().addParticle(MSParticleTypes.CaegerScratchParticle.get()//spawns the particle
+					target.getLevel().addParticle(MSParticleTypes.CAEGER_SCRATCH.get()//spawns the particle
 							, target.getX(), target.getY(), target.getZ(),//gets the target location
 							(Math.random() - 0.5d) * 0.15d, 0.15d, (Math.random() - 0.5d) * 0.15d);//applies speed to particle in any given direction
 				}
@@ -247,18 +247,18 @@ public interface OnHitEffect
 					switch(multiplier)
 					{//this is a switch statement to spawn a particle dependent on the size of the roll
 						case 1:
-							target.getLevel().addParticle(MSParticleTypes.LowRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.LOW_ROLL.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 						case 2:
-							target.getLevel().addParticle(MSParticleTypes.MidRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.MID_ROLL.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 						case 3:
-							target.getLevel().addParticle(MSParticleTypes.HighRollParticle.get(),
+							target.getLevel().addParticle(MSParticleTypes.HIGH_ROLL.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 						case 4:
-							target.getLevel().addParticle(MSParticleTypes.Crit13Particle.get(),
+							target.getLevel().addParticle(MSParticleTypes.CRIT_13.get(),
 									target.getX(), target.getY(), target.getZ(), 0d, 0d, 0.5d);
 							break;
 					}

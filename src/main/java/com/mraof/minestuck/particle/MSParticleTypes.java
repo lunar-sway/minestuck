@@ -13,26 +13,26 @@ public class MSParticleTypes
 	public static final DeferredRegister<ParticleType<?>> REGISTER =
 		DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<SimpleParticleType> LowRollParticle =
-			REGISTER.register("LOW_ROLL", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> LOW_ROLL =
+			REGISTER.register("low_roll", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> CaegerParticle =
-			REGISTER.register("CAEGER", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> CAEGER =
+			REGISTER.register("caeger", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> MidRollParticle =
-			REGISTER.register("MID_ROLL", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> MID_ROLL =
+			REGISTER.register("mid_roll", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> HighRollParticle =
-			REGISTER.register("HIGH_ROLL", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> HIGH_ROLL =
+			REGISTER.register("high_roll", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> Crit13Particle =
-			REGISTER.register("CRIT_13", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> CRIT_13 =
+			REGISTER.register("crit_13", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> SlashParticle =
-			REGISTER.register("SLASH", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> SLASH =
+			REGISTER.register("slash", () -> new SimpleParticleType(true));
 	
-	public static final RegistryObject<SimpleParticleType> CaegerScratchParticle =
-			REGISTER.register("CAEGER_SCRATCH", () -> new SimpleParticleType(true));
+	public static final RegistryObject<SimpleParticleType> CAEGER_SCRATCH =
+			REGISTER.register("caeger_scratch", () -> new SimpleParticleType(true));
 
 	public static void register(IEventBus eventBus)
 	{
