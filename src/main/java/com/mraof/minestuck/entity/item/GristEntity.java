@@ -222,7 +222,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		GristHelper.increase(level, identifier, new GristSet(gristType, gristValue));
-		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue));
+		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue), "Client", true);
 		this.discard();
 	}
 	

@@ -328,7 +328,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
 				{
 					GristHelper.decrease(event.getPlayer().level, data.connection.getClientIdentifier(), cost);
-					GristHelper.notifyEditPlayer(event.getPlayer().level.getServer(), data.connection.getClientIdentifier(), cost, false);
+					GristHelper.notify(event.getPlayer().level.getServer(), data.connection.getClientIdentifier(), cost, "Server", false);
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
@@ -428,7 +428,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				GristHelper.decrease(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1));
-				GristHelper.notifyEditPlayer(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), false);
+				GristHelper.notify(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), "Server", false);
 			}
 			else
 			{
@@ -438,7 +438,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(set != null && !set.isEmpty())
 				{
 					GristHelper.increase(event.getWorld(), data.connection.getClientIdentifier(), set);
-					GristHelper.notifyEditPlayer(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), true);
+					GristHelper.notify(event.getWorld().getServer(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD, 1), "Server", true);
 				}
 			}
 		}
@@ -470,13 +470,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					if(!cost.isEmpty())
 					{
 						GristHelper.decrease(player.level, c.getClientIdentifier(), cost);
-						GristHelper.notifyEditPlayer(player.level.getServer(), c.getClientIdentifier(), cost, false);
+						GristHelper.notify(player.level.getServer(), c.getClientIdentifier(), cost, "Server", false);
 					}
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decrease(player.level, data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()));
-					GristHelper.notifyEditPlayer(player.level.getServer(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), false);
+					GristHelper.notify(player.level.getServer(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), "Server", false);
 				}
 			}
 		}

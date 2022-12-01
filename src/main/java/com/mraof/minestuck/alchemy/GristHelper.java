@@ -138,46 +138,33 @@ public class GristHelper
 		data.setGristCache(newCache);
 	}
 	
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, String source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			Map<GristType, Long> reqs = set.getMap();
-			for(Entry<GristType, Long> pairs : reqs.entrySet())
-			{
+			SburbConnection sc;
+			EditData ed;
+			
+			if(source.equals("Server")) {
+				sc = SkaianetHandler.get(server).getActiveConnection(player);
+				if(sc == null)
+					return;
 				
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Client");
-				//Component type = pairs.getKey().getDisplayName();
-				//long difference = pairs.getValue();
-				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
+				ed = ServerEditHandler.getData(server, sc);
+				if(ed == null)
+					return;
 			}
-		}
-	}
-	
-	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
-	{
-		if(MinestuckConfig.SERVER.showGristChanges.get())
-		{
-			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-			if(sc == null)
-				return;
 			
-			EditData ed = ServerEditHandler.getData(server, sc);
-			if(ed == null)
-				return;
 			
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
-				Component type = pairs.getKey().getDisplayName();
+				GristType type = pairs.getKey();
 				long difference = pairs.getValue();
-				if(increase)
-				{
-					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Recycle");
-				} else
-				{
-					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), pairs, "Server");
-				}
+				
+				GristToast.addOrUpdate(player.getPlayer(server), Minecraft.getInstance().getToasts(), type, difference, source, increase);
+				
+				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 			}
 		}
 	}
