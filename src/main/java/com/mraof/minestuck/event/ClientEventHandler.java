@@ -8,10 +8,7 @@ import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.particle.MSParticleTypes;
-import com.mraof.minestuck.particle.custom.CaegerParticle;
-import com.mraof.minestuck.particle.custom.HighRollParticle;
-import com.mraof.minestuck.particle.custom.LowRollParticle;
-import com.mraof.minestuck.particle.custom.MidRollParticle;
+import com.mraof.minestuck.particle.custom.*;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -155,13 +152,13 @@ public class ClientEventHandler
 				HighRollParticle.Provider::new);
 		
 		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CAEGER_SCRATCH.get(),
-				HighRollParticle.Provider::new);
+				CaegerScratchParticle.Provider::new);
 		
 		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CRIT_13.get(),
-				HighRollParticle.Provider::new);
+				Crit13Particle.Provider::new);
 		
 		Minecraft.getInstance().particleEngine.register(MSParticleTypes.SLASH.get(),
-				HighRollParticle.Provider::new);
+				SlashParticle.Provider::new);
 		
 	}
 }

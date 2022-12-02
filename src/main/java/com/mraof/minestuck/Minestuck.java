@@ -70,7 +70,7 @@ public class Minestuck
 		MSBlocks.REGISTER.register(eventBus);
 		MSItems.REGISTER.register(eventBus);
 		MSFluids.REGISTER.register(eventBus);
-		MSParticleTypes.register(eventBus);
+		MSParticleTypes.REGISTER.register(eventBus);
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
