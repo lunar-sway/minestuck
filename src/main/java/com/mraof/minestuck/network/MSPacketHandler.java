@@ -67,6 +67,7 @@ public class MSPacketHandler
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
+		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 	}
 	
 	private static int nextIndex;

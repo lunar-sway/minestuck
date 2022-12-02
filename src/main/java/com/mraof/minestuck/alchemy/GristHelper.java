@@ -6,21 +6,22 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.toasts.RecipeToast;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
@@ -157,7 +158,25 @@ public class GristHelper
 					return;
 			}
 			
+			if(player.getPlayer(server).isLocalPlayer() == true)
+			{
+				sendGristMessage(player.getPlayer(server), set, source, increase);
+			}
+			else
+			{
+				GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
+				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+			}
 			
+			//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
+		}
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	public static void sendGristMessage(Player player, GristSet set, String source, boolean increase)
+	{
+		if(player.isLocalPlayer() == true)
+		{
 			Map<GristType, Long> reqs = set.getMap();
 			for(Entry<GristType, Long> pairs : reqs.entrySet())
 			{
@@ -166,25 +185,15 @@ public class GristHelper
 				long difference = pairs.getValue();
 				
 				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
-				GristToast.addOrUpdate(player.getPlayer(server), Minecraft.getInstance().getToasts(), type, difference, source, increase);
-				
-				//This used to be how grist notifs were handled. It's left here for legacy reasons.
-				//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
 			}
+			
+			//This used to be how grist notifs were handled. It's left here for legacy reasons.
+			//client.displayClientMessage(message, true);
+			
+		} else {
+			new Error("ServerPlayer player in addGristToast isn't client-side.");
+			//return;
 		}
 	}
-	
-	@Deprecated
-	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, Component message)
-	{
-		if(player != null)
-		{
-			ServerPlayer client = player.getPlayer(server);
-			if(client != null)
-			{
-				client.displayClientMessage(message, true);
-			}
-		}
-	}
-	
 }

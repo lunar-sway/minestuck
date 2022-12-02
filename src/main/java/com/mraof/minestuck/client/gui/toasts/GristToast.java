@@ -138,7 +138,7 @@ public class GristToast implements Toast
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ServerPlayer player, ToastComponent pToastGui, GristType pType, long pDifference, String pSource, boolean pIncrease) {
+	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, String pSource, boolean pIncrease) {
 		
 		//try to find an existing toast with the same properties as the one being added.
 		GristToast gristToast = pToastGui.getToast(GristToast.class, pType.getTranslationKey() + pSource + String.valueOf(pIncrease));
