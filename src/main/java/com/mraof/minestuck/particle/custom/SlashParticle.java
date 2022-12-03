@@ -61,10 +61,13 @@ public class SlashParticle extends TextureSheetParticle
 			this.sprites = spriteSet;
 		}
 		
+		@Override
 		public Particle createParticle(SimpleParticleType particleType, ClientLevel level, double x, double y, double z,
 									   double dx, double dy, double dz)
 		{
-			return new SlashParticle(level, x, y, z, this.sprites, dx, dy, dz);
+			SlashParticle particle = new SlashParticle(level, x, y, z, this.sprites, dx, dy, dz);
+			particle.pickSprite(this.sprites);
+			return particle;
 		}
 	}
 }
