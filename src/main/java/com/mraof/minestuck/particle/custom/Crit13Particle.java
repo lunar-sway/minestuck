@@ -61,10 +61,13 @@ public class Crit13Particle extends TextureSheetParticle
 			this.sprites = spriteSet;
 		}
 		
+		@Override
 		public Particle createParticle(SimpleParticleType particleType, ClientLevel level, double x, double y, double z,
 									   double dx, double dy, double dz)
 		{
-			return new Crit13Particle(level, x, y, z, this.sprites, dx, dy, dz);
+			Crit13Particle particle = new Crit13Particle(level, x, y, z, this.sprites, dx, dy, dz);
+			particle.pickSprite(this.sprites);
+			return particle;
 		}
 	}
 }
