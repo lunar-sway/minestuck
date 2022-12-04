@@ -28,7 +28,7 @@ public class MSCapabilities
 	}
 	
 	/**
-	 * Attach the MusicPlayingCapability to the player
+	 * Attaches a provider of the music playing capability to any player
 	 *
 	 * @see MusicPlayingCapabilityProvider
 	 */
