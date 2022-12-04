@@ -34,6 +34,7 @@ public class PlayerMusicClientHandler
 			
 			if(entitiesMap.containsKey(entityID))
 			{
+				//TODO: if the sound instance was started the same tick, it fails to stop properly
 				soundManager.stop(entitiesMap.remove(entityID));
 			}
 			if(cassetteType != EnumCassetteType.NONE)
