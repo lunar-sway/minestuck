@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Keep track of every player entities listening to the music.
- * Create a sound instance on every client matching the music currently playing.
+ * Keeps track of sound instances for music being played by nearby players.
+ * These sound instances are created client-side upon receiving a MusicPlayerPacket.
  *
  * @see MusicPlayerPacket
  */
@@ -34,6 +34,7 @@ public class PlayerMusicClientHandler
 			
 			if(entitiesMap.containsKey(entityID))
 			{
+				//TODO: if the sound instance was started the same tick, it fails to stop properly
 				soundManager.stop(entitiesMap.remove(entityID));
 			}
 			if(cassetteType != EnumCassetteType.NONE)
