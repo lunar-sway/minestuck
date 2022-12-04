@@ -50,7 +50,7 @@ public enum EnumCassetteType implements StringRepresentable
 	@Nullable
 	private final EffectContainer effectContainer;
 	
-	EnumCassetteType(Supplier<SoundEvent> soundEvent, EffectContainer effectContainer)
+	EnumCassetteType(Supplier<SoundEvent> soundEvent, @Nullable EffectContainer effectContainer)
 	{
 		this.soundEvent = soundEvent;
 		this.effectContainer = effectContainer;
