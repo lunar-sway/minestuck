@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Keep track of every player entities listening to the music.
- * Create a sound instance on every client matching the music currently playing.
+ * Keeps track of sound instances for music being played by nearby players.
+ * These sound instances are created client-side upon receiving a MusicPlayerPacket.
  *
  * @see MusicPlayerPacket
  */
