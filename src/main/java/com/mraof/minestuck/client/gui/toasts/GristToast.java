@@ -24,13 +24,19 @@ public class GristToast implements Toast
 	private static final float SCALE_Y = 0.6F;
 	private GristType type;
 	private long difference;
-	private String source;
+	private EnumSource source;
 	private boolean increase;
 	private long lastChanged;
 	private boolean changed;
 	
+	public enum EnumSource {
+		CLIENT,
+		SERVER,
+		SENDGRIST
+	}
 	
-	public GristToast (GristType pType, long pDifference, String pSource, boolean pIncrease) {
+	
+	public GristToast (GristType pType, long pDifference, EnumSource pSource, boolean pIncrease) {
 		this.type = pType;
 		this.difference = pDifference;
 		this.source = pSource;
@@ -66,11 +72,11 @@ public class GristToast implements Toast
 		pToastComponent.blit(pPoseStack, 0, 0, 0, 0, 160, 32);
 		
 		//Draws the icon indication the grist toast's "source".
-		if (this.source.equals("Client"))
+		if (this.source == EnumSource.CLIENT)
 			pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
-		if (this.source.equals("Server"))
+		if (this.source == EnumSource.SERVER)
 			pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
-		if (this.source.equals("SendGrist"))
+		if (this.source == EnumSource.SENDGRIST)
 			pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
@@ -138,7 +144,7 @@ public class GristToast implements Toast
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, String pSource, boolean pIncrease) {
+	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, EnumSource pSource, boolean pIncrease) {
 		
 		//try to find an existing toast with the same properties as the one being added.
 		GristToast gristToast = pToastGui.getToast(GristToast.class, pType.getTranslationKey() + pSource + String.valueOf(pIncrease));

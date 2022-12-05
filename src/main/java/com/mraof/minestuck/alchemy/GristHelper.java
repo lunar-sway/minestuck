@@ -13,7 +13,9 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.random.WeightedEntry;
@@ -139,7 +141,7 @@ public class GristHelper
 		data.setGristCache(newCache);
 	}
 	
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, String source, boolean increase)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristToast.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
@@ -148,7 +150,7 @@ public class GristHelper
 			SburbConnection sc;
 			EditData ed;
 			
-			if(source.equals("Server")) {
+			if(source == GristToast.EnumSource.SERVER) {
 				sc = SkaianetHandler.get(server).getActiveConnection(player);
 				if(sc == null)
 					return;
@@ -173,7 +175,7 @@ public class GristHelper
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public static void sendGristMessage(Player player, GristSet set, String source, boolean increase)
+	public static void sendGristMessage(Player player, GristSet set, GristToast.EnumSource source, boolean increase)
 	{
 		if(player.isLocalPlayer() == true)
 		{
