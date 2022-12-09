@@ -32,6 +32,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -52,7 +53,6 @@ import java.util.Random;
  * The tag used to do so is HasCassette.
  * </p>
  * {@link #inventoryTick(ItemStack, Level, Entity, int, boolean)}
- * {@link #setHasCassette(ItemStack, boolean)}
  * {@link #hasCassette(ItemStack)}
  */
 
@@ -140,12 +140,14 @@ public class MusicPlayerItem extends WeaponItem
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
 	}
 	
+	@Nullable
 	@Override
-	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
+	public CompoundTag getShareTag(ItemStack stack)
 	{
-		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);
-		ItemStack itemInMusicPlayer = getItemStackHandlerMusicPlayer(stack).getStackInSlot(0);
-		setHasCassette(stack, !itemInMusicPlayer.isEmpty());
+		CompoundTag tag = stack.getTag() != null ? stack.getTag().copy() : new CompoundTag();
+		tag.putBoolean("HasCassette",
+				!getItemStackHandlerMusicPlayer(stack).getStackInSlot(0).isEmpty());
+		return tag;
 	}
 	
 	@SubscribeEvent
@@ -216,18 +218,7 @@ public class MusicPlayerItem extends WeaponItem
 	public static boolean hasCassette(ItemStack stack)
 	{
 		if(!stack.hasTag() || !stack.getTag().contains("HasCasette"))
-			return false;
+			return !getItemStackHandlerMusicPlayer(stack).getStackInSlot(0).isEmpty();
 		else return stack.getTag().getBoolean("HasCassette");
-	}
-	
-	public static void setHasCassette(ItemStack stack, boolean value)
-	{
-		CompoundTag nbt = stack.getTag();
-		if(nbt == null)
-		{
-			nbt = new CompoundTag();
-			stack.setTag(nbt);
-		}
-		nbt.putBoolean("HasCassette", value);
 	}
 }
