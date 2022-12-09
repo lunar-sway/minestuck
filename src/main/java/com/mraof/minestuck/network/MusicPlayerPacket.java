@@ -13,9 +13,8 @@ public class MusicPlayerPacket implements PlayToClientPacket
 	private final float pitch;
 	
 	/**
-	 * Create a packet to the client to start a music based on the cassetteType given.
-	 * If the cassetteType NONE is given, the previous music stop if there
-	 * was any, and no music is played.
+	 * Creates a packet to the client for starting a cassette music track played by a specified player, and stopping the previous music track played by that player if there was any.
+	 * If the cassetteType NONE is given, no new track is played.
 	 *
 	 * @param entity     The player starting the music.
 	 * @param cassetteType The cassette that is going to be played.
