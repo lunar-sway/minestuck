@@ -5,6 +5,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
+import javax.annotation.Nullable;
+
 public abstract class PlayerIdentifier
 {
 	private final int id;
@@ -28,6 +30,7 @@ public abstract class PlayerIdentifier
 	
 	public abstract String getCommandString();
 	
+	@Nullable
 	public abstract ServerPlayer getPlayer(MinecraftServer server);
 	
 	public abstract CompoundTag saveToNBT(CompoundTag nbt, String key);
