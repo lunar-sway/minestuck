@@ -15,7 +15,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -51,7 +50,7 @@ import java.util.Random;
  * The sprite of the item can change depending of if a cassette is currently inside or not.
  * The tag used to do so is HasCassette.
  * </p>
- * {@link #inventoryTick(ItemStack, Level, Entity, int, boolean)}
+ * {@link #getShareTag(ItemStack)}
  * {@link #hasCassette(ItemStack)}
  */
 
@@ -62,7 +61,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	private final float volume;
 	private final float pitch;
 	
-	private static IItemHandler getItemStackHandlerMusicPlayer(ItemStack itemStack)
+	private static IItemHandler getItemHandler(ItemStack itemStack)
 	{
 		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
 				new IllegalArgumentException("Expected an item handler for the music player item, but " + itemStack + " does not expose an item handler."));
@@ -101,7 +100,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	{
 		ItemStack musicPlayer = playerIn.getItemInHand(handIn);
 		
-		IItemHandler itemStackHandlerMusicPlayer = getItemStackHandlerMusicPlayer(musicPlayer);
+		IItemHandler itemStackHandlerMusicPlayer = getItemHandler(musicPlayer);
 		IMusicPlaying musicPlayingCap = getMusicPlaying(playerIn);
 		
 		if(!level.isClientSide)
@@ -145,7 +144,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	{
 		CompoundTag tag = stack.getTag() != null ? stack.getTag().copy() : new CompoundTag();
 		tag.putBoolean("HasCassette",
-				!getItemStackHandlerMusicPlayer(stack).getStackInSlot(0).isEmpty());
+				!getItemHandler(stack).getStackInSlot(0).isEmpty());
 		return tag;
 	}
 	
@@ -162,7 +161,7 @@ public class MusicPlayerWeapon extends WeaponItem
 					musicPlayingCap.getCurrentMusicPlayer().isEmpty())
 			{
 				if(musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
-				{ //If the Cassette player isn't in hand and is playing a music, stop it
+				{ //If the Cassette player isn't in hand and is playing music, stop it
 					MusicPlayerPacket packet = MusicPlayerPacket.createPacket(player, EnumCassetteType.NONE, 0, 0);
 					musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 					MSPacketHandler.sendToTrackingAndSelf(packet, player);
@@ -217,7 +216,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	public static boolean hasCassette(ItemStack stack)
 	{
 		if(!stack.hasTag() || !stack.getTag().contains("HasCasette"))
-			return !getItemStackHandlerMusicPlayer(stack).getStackInSlot(0).isEmpty();
+			return !getItemHandler(stack).getStackInSlot(0).isEmpty();
 		else return stack.getTag().getBoolean("HasCassette");
 	}
 }
