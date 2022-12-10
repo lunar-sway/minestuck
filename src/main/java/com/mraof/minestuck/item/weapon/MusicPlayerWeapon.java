@@ -32,7 +32,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -57,7 +56,7 @@ import java.util.Random;
  */
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
-public class MusicPlayerItem extends WeaponItem
+public class MusicPlayerWeapon extends WeaponItem
 {
 	public static final String TITLE = "minestuck.music_player";
 	private final float volume;
@@ -82,7 +81,7 @@ public class MusicPlayerItem extends WeaponItem
 		return new MusicPlayerItemCapProvider();
 	}
 	
-	public MusicPlayerItem(Builder builder, Properties properties, float volume, float pitch)
+	public MusicPlayerWeapon(Builder builder, Properties properties, float volume, float pitch)
 	{
 		super(builder, properties);
 		this.volume = volume;
@@ -90,7 +89,7 @@ public class MusicPlayerItem extends WeaponItem
 		
 	}
 	
-	public MusicPlayerItem(Builder builder, Properties properties)
+	public MusicPlayerWeapon(Builder builder, Properties properties)
 	{
 		super(builder, properties);
 		this.volume = 4.0F;

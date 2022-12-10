@@ -1,7 +1,7 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
 import com.mraof.minestuck.block.EnumCassetteType;
-import com.mraof.minestuck.item.weapon.MusicPlayerItem;
+import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -10,7 +10,7 @@ import net.minecraft.world.item.ItemStack;
  * as well as which music player item stack that is being used to play it.
  * This interface defines how to interact with this capability.
  *
- * @see MusicPlayerItem
+ * @see MusicPlayerWeapon
  */
 
 public interface IMusicPlaying

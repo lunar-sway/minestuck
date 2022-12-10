@@ -1,6 +1,6 @@
 package com.mraof.minestuck.inventory.musicplayer;
 
-import com.mraof.minestuck.item.weapon.MusicPlayerItem;
+import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 /**
  * A capability provider that exposes an item handler capability with one item slot.
  *
- * @see MusicPlayerItem
+ * @see MusicPlayerWeapon
  */
 
 public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>
