@@ -6,15 +6,13 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.item.ReadableSburbCodeItem;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -55,7 +53,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public CompoundTag programData = new CompoundTag();
 	public int programSelected = -1;
 	@Nonnull
-	public List<Block> hieroglyphsStored = new ArrayList<>();
+	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
 	
@@ -79,9 +77,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		programData = nbt.getCompound("programData");
 		
-		//keep this above the updateGui() call
-		if(nbt.contains("hieroglyphsStored"))
-			hieroglyphsStored = ReadableSburbCodeItem.getRecordedBlocks(nbt.getList("hieroglyphsStored", Tag.TAG_STRING));
+		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
 			hasParadoxInfoStored = nbt.getBoolean("hasParadoxInfoStored");
 		if(nbt.contains("blankDisksStored"))
@@ -90,6 +86,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(nbt.contains("ownerId"))
 			ownerId = nbt.getInt("ownerId");
 		else this.owner = IdentifierHandler.load(nbt, "owner");
+		
+		//keep this after everything else has been loaded
 		if(gui != null)
 			gui.updateGui();
 	}
@@ -115,11 +113,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
-		ListTag hieroglyphListTag = ReadableSburbCodeItem.getListTagFromBlockList(hieroglyphsStored);
-		if(!hieroglyphListTag.isEmpty())
-		{
-			compound.put("hieroglyphsStored", hieroglyphListTag);
-		}
+		MSNBTUtil.writeBlockSet(compound, "hieroglyphsStored", hieroglyphsStored);
 		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compound.putInt("blankDisksStored", blankDisksStored);

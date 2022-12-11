@@ -1,11 +1,10 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -82,31 +81,12 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	 */
 	public static boolean addRecordedInfo(ItemStack stack, Block block)
 	{
-		StringTag blockIdTag = StringTag.valueOf(String.valueOf(block.getRegistryName()));
-		
-		CompoundTag nbt = stack.getOrCreateTag();
-		
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		if(!hieroglyphList.contains(blockIdTag))
-		{
-			hieroglyphList.add(blockIdTag);
-			nbt.put("recordedHieroglyphs", hieroglyphList);
-			return true;
-		} else
-			return false;
+		return MSNBTUtil.tryAddBlockToSet(stack.getOrCreateTag(), "recordedHieroglyphs", block);
 	}
 	
 	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
 	{
-		CompoundTag nbt = stack.getOrCreateTag();
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		hieroglyphList.clear();
-		nbt.put("recordedHieroglyphs", hieroglyphList);
-		
-		for(Block iterateBlock : blockList)
-		{
-			addRecordedInfo(stack, iterateBlock);
-		}
+		MSNBTUtil.writeBlockSet(stack.getOrCreateTag(), "recordedHieroglyphs", blockList);
 		
 		return stack;
 	}
@@ -126,7 +106,10 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		}
 		
 		for(Block iterateBlock : blockEntity.hieroglyphsStored)
-			changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+		{
+			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+				changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+		}
 		
 		if(changedItem)
 			attemptConversionToCompleted(player, hand);

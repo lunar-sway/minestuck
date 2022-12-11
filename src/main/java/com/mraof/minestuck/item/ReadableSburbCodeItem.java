@@ -5,11 +5,8 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -20,10 +17,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -90,11 +85,8 @@ public abstract class ReadableSburbCodeItem extends Item
 		//for each block in the item's list, adds it to the block entity should it not exist there yet
 		for(Block iterateBlock : getRecordedBlocks(heldStack))
 		{
-			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
-			{
-				blockEntity.hieroglyphsStored.add(iterateBlock);
-				newInfo = true;
-			}
+			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+				newInfo |= blockEntity.hieroglyphsStored.add(iterateBlock);
 		}
 		
 		if(newInfo)
@@ -108,48 +100,6 @@ public abstract class ReadableSburbCodeItem extends Item
 		return false;
 	}
 	
-	/**
-	 * Uses the nbt of a tile entity and attempts to return a list of blocks based on the string of their registry name, used by ComputerTileEntity
-	 */
-	public static List<Block> getRecordedBlocks(ListTag hieroglyphList)
-	{
-		List<ResourceLocation> blockStringList = new ArrayList<>();
-		
-		for(int iterate = 0; iterate < hieroglyphList.size(); iterate++)
-		{
-			ResourceLocation iterateResourceLocation = ResourceLocation.tryParse(hieroglyphList.getString(iterate));
-			if(iterateResourceLocation != null)
-				blockStringList.add(iterateResourceLocation);
-		}
-		
-		List<Block> blockList = new ArrayList<>();
-		
-		for(ResourceLocation iterateList : blockStringList)
-		{
-			Block iterateBlock = ForgeRegistries.BLOCKS.getValue(iterateList);
-			
-			if(iterateBlock != null)
-				blockList.add(iterateBlock);
-		}
-		
-		return blockList;
-	}
-	
-	public static ListTag getListTagFromBlockList(List<Block> blockList)
-	{
-		ListTag hieroglyphList = new ListTag();
-		if(blockList != null && !blockList.isEmpty())
-		{
-			for(Block blockIterate : blockList)
-			{
-				String blockRegistryString = String.valueOf(blockIterate.getRegistryName());
-				
-				hieroglyphList.add(StringTag.valueOf(blockRegistryString));
-			}
-		}
-		
-		return hieroglyphList;
-	}
 	public static class Completed extends ReadableSburbCodeItem
 	{
 		public Completed(Properties properties)
