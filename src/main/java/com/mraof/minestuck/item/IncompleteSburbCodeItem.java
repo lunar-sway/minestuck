@@ -131,7 +131,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		BlockState state = level.getBlockState(context.getClickedPos());
 		
 		if(!state.is(MSTags.Blocks.GREEN_HIEROGLYPHS))
-			return InteractionResult.PASS;
+			return InteractionResult.FAIL;
 		
 		if(!addRecordedInfo(stackInUse, state.getBlock()))
 			return InteractionResult.FAIL;
