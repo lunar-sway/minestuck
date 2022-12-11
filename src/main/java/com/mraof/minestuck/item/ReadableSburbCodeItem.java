@@ -5,8 +5,10 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -20,11 +22,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -59,57 +63,47 @@ public class ReadableSburbCodeItem extends Item
 		Player player = context.getPlayer();
 		InteractionHand hand = context.getHand();
 		BlockPos pos = context.getClickedPos();
-		BlockState state = level.getBlockState(pos);
 		
 		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity)
 		{
-			Set<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
-			boolean newInfo = false;
-			
-			if(heldStack.is(MSItems.COMPLETED_SBURB_CODE.get()) || (IncompleteSburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
-			{
-				newInfo = true;
-				blockEntity.hasParadoxInfoStored = true;
-			}
-			
-			if(!hieroglyphList.isEmpty())
-			{
-				for(Block iterateBlock : hieroglyphList) //for each block in the item's list, adds it to the block entities block should it not exist yet
-				{
-					if(blockEntity.hieroglyphsStored != null && iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
-					{
-						blockEntity.hieroglyphsStored.add(iterateBlock);
-						newInfo = true;
-					}
-				}
-				
-				//checks additionally if the item is also a IncompleteSburbCodeItem, and does the reverse process of adding any new blocks from the block entities list to the item's
-				if(heldStack.getItem() instanceof IncompleteSburbCodeItem)
-				{
-					if(blockEntity.hasParadoxInfoStored)
-						IncompleteSburbCodeItem.setParadoxInfo(heldStack, true); //put before attemptConversionToCompleted in case it just received the paradox info
-					
-					if(blockEntity.hieroglyphsStored != null)
-					{
-						for(Block iterateBlock : blockEntity.hieroglyphsStored)
-						{
-							IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
-							IncompleteSburbCodeItem.attemptConversionToCompleted(player, hand);
-						}
-					}
-				}
-			}
-			
-			if(newInfo)
-			{
-				blockEntity.setChanged();
-				level.sendBlockUpdated(pos, state, state, 3);
-				
-				return InteractionResult.SUCCESS;
-			}
+			if(useOnComputer(heldStack, player, hand, blockEntity))
+				return InteractionResult.sidedSuccess(level.isClientSide);
+			else
+				return InteractionResult.FAIL;
 		}
 		
 		return InteractionResult.PASS;
+	}
+	
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	{
+		boolean newInfo = false;
+		
+		if(getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored)
+		{
+			blockEntity.hasParadoxInfoStored = true;
+			newInfo = true;
+		}
+		
+		//for each block in the item's list, adds it to the block entity should it not exist there yet
+		for(Block iterateBlock : ReadableSburbCodeItem.getRecordedBlocks(heldStack))
+		{
+			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
+			{
+				blockEntity.hieroglyphsStored.add(iterateBlock);
+				newInfo = true;
+			}
+		}
+		
+		if(newInfo)
+		{
+			blockEntity.setChanged();
+			blockEntity.markBlockForUpdate();
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**

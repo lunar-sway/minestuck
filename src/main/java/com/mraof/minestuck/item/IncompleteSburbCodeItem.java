@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
@@ -33,6 +34,29 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	public IncompleteSburbCodeItem(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	{
+		boolean success = super.useOnComputer(heldStack, player, hand, blockEntity);
+		boolean changedItem = false;
+		
+		// adds any new hieroglyph and paradox info from the computer to the item
+		
+		if(blockEntity.hasParadoxInfoStored && !getParadoxInfo(heldStack))
+		{
+			IncompleteSburbCodeItem.setParadoxInfo(heldStack, true);
+			changedItem = true;
+		}
+		
+		for(Block iterateBlock : blockEntity.hieroglyphsStored)
+			changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+		
+		if(changedItem)
+			attemptConversionToCompleted(player, hand);
+		
+		return success || changedItem;
 	}
 	
 	@Override

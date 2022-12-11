@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
@@ -53,6 +54,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
 	public CompoundTag programData = new CompoundTag();
 	public int programSelected = -1;
+	@Nonnull
 	public List<Block> hieroglyphsStored = new ArrayList<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
