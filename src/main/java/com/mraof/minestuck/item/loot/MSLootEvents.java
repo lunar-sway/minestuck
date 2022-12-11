@@ -132,7 +132,7 @@ public class MSLootEvents
 	{
 		List<VillagerTrades.ItemListing> trades = event.getGenericTrades();
 		//between the two new trades, there is an approximately 25% chance for a blank disk to appear in a wandering trader slot(as of 1.18 with no further modifications to the trades)
-		trades.add(1, (villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(MSItems.BLANK_DISK.get()), 3, 12, 0.05F));
-		trades.add(1, (villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(MSItems.BLANK_DISK.get()), 3, 12, 0.05F));
+		trades.add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(MSItems.BLANK_DISK.get()), 3, 12, 0.05F));
+		trades.add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(MSItems.BLANK_DISK.get()), 3, 12, 0.05F));
 	}
 }
