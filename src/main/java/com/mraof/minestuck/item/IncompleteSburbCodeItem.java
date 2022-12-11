@@ -52,7 +52,6 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	{
 		CompoundTag nbt = stack.getOrCreateTag();
 		nbt.putBoolean("hasParadoxInfo", hasInfo);
-		stack.setTag(nbt);
 	}
 	
 	/**

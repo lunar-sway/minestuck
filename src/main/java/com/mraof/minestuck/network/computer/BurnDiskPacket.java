@@ -41,8 +41,7 @@ public class BurnDiskPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		Level level = player.level;
 		ComputerBlockEntity.forNetworkIfPresent(player, bePos,
-				computer -> computer.burnDisk(computer, level, programId));
+				computer -> computer.burnDisk(programId));
 	}
 }

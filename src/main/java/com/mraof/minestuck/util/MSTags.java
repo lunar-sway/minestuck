@@ -25,7 +25,8 @@ public class MSTags
 {
 	public static class Blocks
 	{
-		//if other colored hieroglyph sets are added, switch to creating a tag for each analogous block instead of the whole set(i.e. a tag for lotus)
+		// If other colored hieroglyph sets are added, switch to creating a tag for each analogous block instead of the whole set
+		// I.e. a tag for lotus, a tag for frogs, a tag for skaia etc. instead of a tag for all hieroglyphs
 		public static final TagKey<Block> GREEN_HIEROGLYPHS = tag("green_hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");

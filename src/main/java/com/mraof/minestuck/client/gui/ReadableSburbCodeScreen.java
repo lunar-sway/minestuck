@@ -68,7 +68,7 @@ public class ReadableSburbCodeScreen extends Screen
 	private final List<Block> FULL_HIEROGLYPH_LIST = Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(MSTags.Blocks.GREEN_HIEROGLYPHS).stream().toList();
 	private final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
 	
-	private final static String EMPTY_SPACE = "                                                "; //48 characters
+	private final static String EMPTY_SPACE = " ".repeat(48);
 	
 	public ReadableSburbCodeScreen(Set<Block> recordedBlockList, boolean paradoxCode)
 	{

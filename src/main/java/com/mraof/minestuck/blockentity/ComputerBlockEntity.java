@@ -242,11 +242,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		markBlockForUpdate();
 	}
 	
-	public void burnDisk(ComputerBlockEntity computerBlockEntity, Level level, int programId)
+	public void burnDisk(int programId)
 	{
-		BlockPos bePos = computerBlockEntity.getBlockPos();
+		if(level == null)
+			return;
+		
+		BlockPos bePos = getBlockPos();
 		ItemStack diskStack = ProgramData.getItem(programId);
-		if(!diskStack.isEmpty() && computerBlockEntity.blankDisksStored > 0)
+		if(!diskStack.isEmpty() && blankDisksStored > 0)
 		{
 			Random random = level.getRandom();
 			
@@ -258,11 +261,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			entityItem.setDeltaMovement(random.nextGaussian() * 0.05F, random.nextGaussian() * 0.05F + 0.2F, random.nextGaussian() * 0.05F);
 			level.addFreshEntity(entityItem);
 			
-			computerBlockEntity.blankDisksStored--;
+			blankDisksStored--;
 			
 			//Imitates the structure block to ensure that changes are sent client-side
-			computerBlockEntity.setChanged();
-			BlockState state = computerBlockEntity.getBlockState();
+			setChanged();
+			BlockState state = getBlockState();
 			level.sendBlockUpdated(bePos, state, state, 3);
 		}
 	}
