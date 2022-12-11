@@ -5,10 +5,8 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -26,22 +24,26 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The class for the items Sburb Code and Completed Sburb Code which primarily allows them to be read, with Sburb Code extending its usage.
  * Some checks for the use of sburb code exists in ComputerBlock, and functions from here are used in both ComputerBlock and ComputerTileEntity
  */
-public class ReadableSburbCodeItem extends Item
+public abstract class ReadableSburbCodeItem extends Item
 {
 	public ReadableSburbCodeItem(Item.Properties properties)
 	{
 		super(properties);
 	}
+	
+	public abstract boolean getParadoxInfo(ItemStack stack);
+	
+	/**
+	 * Loads the set of hieroglyph blocks that have been recorded into this item.
+	 */
+	public abstract Set<Block> getRecordedBlocks(ItemStack stack);
 	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn)
@@ -86,7 +88,7 @@ public class ReadableSburbCodeItem extends Item
 		}
 		
 		//for each block in the item's list, adds it to the block entity should it not exist there yet
-		for(Block iterateBlock : ReadableSburbCodeItem.getRecordedBlocks(heldStack))
+		for(Block iterateBlock : getRecordedBlocks(heldStack))
 		{
 			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS) && !blockEntity.hieroglyphsStored.contains(iterateBlock))
 			{
@@ -104,28 +106,6 @@ public class ReadableSburbCodeItem extends Item
 		}
 		
 		return false;
-	}
-	
-	/**
-	 * Loads the set of hieroglyph blocks that have been recorded into this item.
-	 * This set is stored in the item as an nbt tag list under the name "recordedHieroglyphs".
-	 */
-	public static Set<Block> getRecordedBlocks(ItemStack stack)
-	{
-		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
-			return MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		
-		CompoundTag tag = stack.getTag();
-		if(tag == null || !tag.contains("recordedHieroglyphs"))
-			return Collections.emptySet();
-		
-		return stack.getTag().getList("recordedHieroglyphs", Tag.TAG_STRING).stream().map(Tag::getAsString)
-				//Turn the Strings into ResourceLocations
-				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
-				//Turn the ResourceLocations into Blocks
-				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
-				//Gather the blocks into a set
-				.collect(Collectors.toSet());
 	}
 	
 	/**
@@ -170,29 +150,33 @@ public class ReadableSburbCodeItem extends Item
 		
 		return hieroglyphList;
 	}
-	
-	public static boolean getParadoxInfo(ItemStack stack)
+	public static class Completed extends ReadableSburbCodeItem
 	{
-		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
-			return true;
-		else
+		public Completed(Properties properties)
 		{
-			CompoundTag nbt = stack.getTag();
-			
-			return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
+			super(properties);
 		}
-	}
-	
-	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
-	{
-		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
+		
+		@Override
+		public boolean getParadoxInfo(ItemStack stack)
+		{
+			return true;
+		}
+		
+		@Override
+		public Set<Block> getRecordedBlocks(ItemStack stack)
+		{
+			return MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+		}
+		
+		@Override
+		public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
 		{
 			if(Screen.hasShiftDown())
-			{
 				tooltip.add(new TranslatableComponent("item.minestuck.completed_sburb_code.additional_info"));
-			} else
+			else
 				tooltip.add(new TranslatableComponent("item.minestuck.completed_sburb_code.shift_for_more_info"));
 		}
+		
 	}
 }

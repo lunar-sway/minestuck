@@ -8,9 +8,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -20,10 +21,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
@@ -34,6 +39,76 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	public IncompleteSburbCodeItem(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	public boolean getParadoxInfo(ItemStack stack)
+	{
+		CompoundTag nbt = stack.getTag();
+		
+		return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
+	}
+	
+	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
+	{
+		CompoundTag nbt = stack.getOrCreateTag();
+		nbt.putBoolean("hasParadoxInfo", hasInfo);
+		stack.setTag(nbt);
+	}
+	
+	/**
+	 * Loads the set of hieroglyph blocks that have been recorded into this item.
+	 * This set is stored in the item as an nbt tag list under the name "recordedHieroglyphs".
+	 */
+	@Override
+	public Set<Block> getRecordedBlocks(ItemStack stack)
+	{
+		CompoundTag tag = stack.getTag();
+		if(tag == null || !tag.contains("recordedHieroglyphs"))
+			return Collections.emptySet();
+		
+		return stack.getTag().getList("recordedHieroglyphs", Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
+	 * @return true if the item stack was changed.
+	 */
+	public static boolean addRecordedInfo(ItemStack stack, Block block)
+	{
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(block.getRegistryName()));
+		
+		CompoundTag nbt = stack.getOrCreateTag();
+		
+		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
+		if(!hieroglyphList.contains(blockIdTag))
+		{
+			hieroglyphList.add(blockIdTag);
+			nbt.put("recordedHieroglyphs", hieroglyphList);
+			return true;
+		} else
+			return false;
+	}
+	
+	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
+	{
+		CompoundTag nbt = stack.getOrCreateTag();
+		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
+		hieroglyphList.clear();
+		nbt.put("recordedHieroglyphs", hieroglyphList);
+		
+		for(Block iterateBlock : blockList)
+		{
+			addRecordedInfo(stack, iterateBlock);
+		}
+		
+		return stack;
 	}
 	
 	@Override
@@ -86,35 +161,13 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
-	/**
-	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
-	 * @return true if the item stack was changed.
-	 */
-	public static boolean addRecordedInfo(ItemStack stack, Block block)
-	{
-		StringTag blockIdTag = StringTag.valueOf(String.valueOf(block.getRegistryName()));
-		
-		CompoundTag nbt = stack.getOrCreateTag();
-		
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		if(!hieroglyphList.contains(blockIdTag))
-		{
-			hieroglyphList.add(blockIdTag);
-			nbt.put("recordedHieroglyphs", hieroglyphList);
-			return true;
-		} else
-			return false;
-	}
-	
-	public static void attemptConversionToCompleted(Player player, InteractionHand hand)
+	private void attemptConversionToCompleted(Player player, InteractionHand hand)
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
 		Set<Block> recordedSet = getRecordedBlocks(stackInHand);
 		
 		if(hasAllBlocks(recordedSet) && getParadoxInfo(stackInHand))
-		{
 			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.get().getDefaultInstance());
-		}
 	}
 	
 	public static boolean hasAllBlocks(Set<Block> hieroglyphs)
@@ -122,29 +175,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		return hieroglyphs.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
-	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
-	{
-		CompoundTag nbt = stack.getOrCreateTag();
-		nbt.putBoolean("hasParadoxInfo", hasInfo);
-		stack.setTag(nbt);
-	}
-	
-	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
-	{
-		CompoundTag nbt = stack.getOrCreateTag();
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		hieroglyphList.clear();
-		nbt.put("recordedHieroglyphs", hieroglyphList);
-		
-		for(Block iterateBlock : blockList)
-		{
-			addRecordedInfo(stack, iterateBlock);
-		}
-		
-		return stack;
-	}
-	
-	public static float percentCompletion(ItemStack stack)
+	private float percentCompletion(ItemStack stack)
 	{
 		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of 1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
 		float sizeOfList = getRecordedBlocks(stack).size();
