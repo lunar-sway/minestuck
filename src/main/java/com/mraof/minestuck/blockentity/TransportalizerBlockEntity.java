@@ -62,11 +62,20 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		}
 	}
 	
+	private boolean unloaded = false;
+	
+	@Override
+	public void onChunkUnloaded()
+	{
+		super.onChunkUnloaded();
+		this.unloaded = true;
+	}
+	
 	@Override
 	public void setRemoved()
 	{
 		super.setRemoved();
-		if(!level.isClientSide && active)
+		if(!level.isClientSide && active && !unloaded)
 		{
 			TransportalizerSavedData.get(level).remove(id, GlobalPos.of(level.dimension(), worldPosition));
 		}
