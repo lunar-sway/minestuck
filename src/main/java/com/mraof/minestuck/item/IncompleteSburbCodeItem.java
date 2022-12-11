@@ -22,10 +22,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
- * Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
+ * Allows players to store a list of blocks from the GREEN_HIEROGLYPH block tag that in game reflects the collection of genetic code for the creation of sburb
  */
 public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 {
@@ -84,19 +85,17 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	public static void attemptConversionToCompleted(Player player, InteractionHand hand)
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
-		List<Block> recordedList = getRecordedBlocks(stackInHand);
+		Set<Block> recordedSet = getRecordedBlocks(stackInHand);
 		
-		if(hasAllBlocks(recordedList) && getParadoxInfo(stackInHand))
+		if(hasAllBlocks(recordedSet) && getParadoxInfo(stackInHand))
 		{
 			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.get().getDefaultInstance());
 		}
 	}
 	
-	public static boolean hasAllBlocks(List<Block> blockList)
+	public static boolean hasAllBlocks(Set<Block> hieroglyphs)
 	{
-		List<Block> completeList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		
-		return blockList.containsAll(completeList);
+		return hieroglyphs.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
 	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
@@ -106,7 +105,7 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		stack.setTag(nbt);
 	}
 	
-	public static ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
+	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
 	{
 		CompoundTag nbt = stack.getOrCreateTag();
 		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);

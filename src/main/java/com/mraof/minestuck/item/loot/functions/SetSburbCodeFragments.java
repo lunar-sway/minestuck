@@ -12,10 +12,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Adds random filled in code segments(blocks from the hieroglyphs block tag) to a sburb code item that is being created in the world.
@@ -36,27 +36,26 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 	@Override
 	protected ItemStack run(ItemStack stack, LootContext context)
 	{
-		return IncompleteSburbCodeItem.setRecordedInfo(stack, getRandomList(context.getRandom()));
+		return IncompleteSburbCodeItem.setRecordedInfo(stack, pickRandomHieroglyphs(context.getRandom()));
 	}
 	
-	private List<Block> getRandomList(Random random)
+	private Set<Block> pickRandomHieroglyphs(Random random)
 	{
-		List<Block> completeList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		List<Block> pickedList = new ArrayList<>();
-		if(!completeList.isEmpty())
+		ITag<Block> hieroglyphs = Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
+		
+		if(hieroglyphs.isEmpty())
+			return Collections.emptySet();
+		
+		Set<Block> pickedBlocks = new HashSet<>();
+		int numberOfIterations = Math.max(1, random.nextInt(Math.min(3, hieroglyphs.size())));
+		
+		for(int iterate = 0; iterate < numberOfIterations; iterate++) //up to two runs at filling the book with another fragment of code
 		{
-			int numberOfIterations = Math.max(1, random.nextInt(Math.min(3, completeList.size())));
-			
-			for(int iterate = 0; iterate < numberOfIterations; iterate++) //up to two runs at filling the book with another fragment of code
-			{
-				Block prospectiveBlock = completeList.get(random.nextInt(completeList.size()));
-				if (!pickedList.contains(prospectiveBlock))
-					pickedList.add(prospectiveBlock); //random element from the full list of blocks
-				
-			}
+			hieroglyphs.getRandomElement(random)
+					.ifPresent(pickedBlocks::add);
 		}
 		
-		return pickedList;
+		return pickedBlocks;
 	}
 	
 	public static Builder<?> builder()

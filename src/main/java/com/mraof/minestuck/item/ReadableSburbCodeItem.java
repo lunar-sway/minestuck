@@ -24,8 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The class for the items Sburb Code and Completed Sburb Code which primarily allows them to be read, with Sburb Code extending its usage.
@@ -62,10 +63,10 @@ public class ReadableSburbCodeItem extends Item
 		
 		if(player != null && level.getBlockEntity(pos) instanceof ComputerBlockEntity blockEntity)
 		{
-			List<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
+			Set<Block> hieroglyphList = ReadableSburbCodeItem.getRecordedBlocks(heldStack);
 			boolean newInfo = false;
 			
-			if(heldStack.getItem() == MSItems.COMPLETED_SBURB_CODE.get() || (IncompleteSburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
+			if(heldStack.is(MSItems.COMPLETED_SBURB_CODE.get()) || (IncompleteSburbCodeItem.getParadoxInfo(heldStack) && !blockEntity.hasParadoxInfoStored))
 			{
 				newInfo = true;
 				blockEntity.hasParadoxInfoStored = true;
@@ -112,41 +113,25 @@ public class ReadableSburbCodeItem extends Item
 	}
 	
 	/**
-	 * Uses the nbt of the itemstack and attempts to return a list of blocks based on the string of their registry name
+	 * Loads the set of hieroglyph blocks that have been recorded into this item.
+	 * This set is stored in the item as an nbt tag list under the name "recordedHieroglyphs".
 	 */
-	public static List<Block> getRecordedBlocks(ItemStack stack)
+	public static Set<Block> getRecordedBlocks(ItemStack stack)
 	{
 		if(stack.is(MSItems.COMPLETED_SBURB_CODE.get()))
-		{
 			return MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		}
 		
+		CompoundTag tag = stack.getTag();
+		if(tag == null || !tag.contains("recordedHieroglyphs"))
+			return Collections.emptySet();
 		
-		List<ResourceLocation> blockStringList = new ArrayList<>();
-		
-		if(stack.getTag() != null && stack.getTag().contains("recordedHieroglyphs"))
-		{
-			ListTag hieroglyphList = stack.getTag().getList("recordedHieroglyphs", Tag.TAG_STRING);
-			
-			for(int iterate = 0; iterate < hieroglyphList.size(); iterate++)
-			{
-				ResourceLocation iterateResourceLocation = ResourceLocation.tryParse(hieroglyphList.getString(iterate));
-				if(iterateResourceLocation != null)
-					blockStringList.add(iterateResourceLocation);
-			}
-		}
-		
-		List<Block> blockList = new ArrayList<>();
-		
-		for(ResourceLocation iterateList : blockStringList)
-		{
-			Block iterateBlock = ForgeRegistries.BLOCKS.getValue(iterateList);
-			
-			if(iterateBlock != null)
-				blockList.add(iterateBlock);
-		}
-		
-		return blockList;
+		return stack.getTag().getList("recordedHieroglyphs", Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
 	}
 	
 	/**
