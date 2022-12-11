@@ -1,7 +1,6 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -17,8 +16,10 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MSTags
 {
@@ -167,9 +168,9 @@ public class MSTags
 		}
 	}
 	
-	public static List<Block> getBlocksFromTag(TagKey<Block> blockTag)
+	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
 	{
-		return ForgeRegistries.BLOCKS.tags().getTag(blockTag).stream().toList();
+		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
 	}
 	
 	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)

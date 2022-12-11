@@ -1,15 +1,16 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,19 +20,101 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Used for the Sburb Code item, extends ReadableSburbCodeItem which is used by Completed Sburb Code.
- * Allows players to store a list of blocks from the GREEN_HIEROGLPYH block tag that in game reflects the collection of genetic code for the creation of sburb
+ * Allows players to store a list of blocks from the GREEN_HIEROGLYPH block tag that in game reflects the collection of genetic code for the creation of sburb
  */
 public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 {
 	public IncompleteSburbCodeItem(Properties properties)
 	{
 		super(properties);
+	}
+	
+	@Override
+	public boolean getParadoxInfo(ItemStack stack)
+	{
+		CompoundTag nbt = stack.getTag();
+		
+		return nbt != null && nbt.contains("hasParadoxInfo") && nbt.getBoolean("hasParadoxInfo");
+	}
+	
+	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
+	{
+		CompoundTag nbt = stack.getOrCreateTag();
+		nbt.putBoolean("hasParadoxInfo", hasInfo);
+		stack.setTag(nbt);
+	}
+	
+	/**
+	 * Loads the set of hieroglyph blocks that have been recorded into this item.
+	 * This set is stored in the item as an nbt tag list under the name "recordedHieroglyphs".
+	 */
+	@Override
+	public Set<Block> getRecordedBlocks(ItemStack stack)
+	{
+		CompoundTag tag = stack.getTag();
+		if(tag == null || !tag.contains("recordedHieroglyphs"))
+			return Collections.emptySet();
+		
+		return stack.getTag().getList("recordedHieroglyphs", Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
+	 * @return true if the item stack was changed.
+	 */
+	public static boolean addRecordedInfo(ItemStack stack, Block block)
+	{
+		return MSNBTUtil.tryAddBlockToSet(stack.getOrCreateTag(), "recordedHieroglyphs", block);
+	}
+	
+	public static ItemStack setRecordedInfo(ItemStack stack, Set<Block> blockList)
+	{
+		MSNBTUtil.writeBlockSet(stack.getOrCreateTag(), "recordedHieroglyphs", blockList);
+		
+		return stack;
+	}
+	
+	@Override
+	protected boolean useOnComputer(ItemStack heldStack, Player player, InteractionHand hand, ComputerBlockEntity blockEntity)
+	{
+		boolean success = super.useOnComputer(heldStack, player, hand, blockEntity);
+		boolean changedItem = false;
+		
+		// adds any new hieroglyph and paradox info from the computer to the item
+		
+		if(blockEntity.hasParadoxInfoStored && !getParadoxInfo(heldStack))
+		{
+			IncompleteSburbCodeItem.setParadoxInfo(heldStack, true);
+			changedItem = true;
+		}
+		
+		for(Block iterateBlock : blockEntity.hieroglyphsStored)
+		{
+			if(iterateBlock.defaultBlockState().is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+				changedItem |= IncompleteSburbCodeItem.addRecordedInfo(heldStack, iterateBlock);
+		}
+		
+		if(changedItem)
+			attemptConversionToCompleted(player, hand);
+		
+		return success || changedItem;
 	}
 	
 	@Override
@@ -42,109 +125,40 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		Player player = context.getPlayer();
 		InteractionHand handIn = context.getHand();
 		
-		if(player != null)
-		{
-			boolean didWrite = false;
-			BlockState state = level.getBlockState(context.getClickedPos());
-			
-			List<Block> preProcessBlockList = getRecordedBlocks(stackInUse); //used to differentiate from after processing
-			ItemStack processedStack = addCarvingsToCode(state.getBlock(), stackInUse); //the call to addCarvingsToCode is what processes the stack
-			List<Block> postProcessBlockList = getRecordedBlocks(processedStack);
-			if(!preProcessBlockList.containsAll(postProcessBlockList))
-			{
-				level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
-				didWrite = true;
-			}
-			
-			attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
-			
-			if(didWrite)
-				return InteractionResult.sidedSuccess(level.isClientSide);
-		}
+		if(player == null)
+			return InteractionResult.PASS;
 		
-		return InteractionResult.FAIL;
+		BlockState state = level.getBlockState(context.getClickedPos());
+		
+		if(!state.is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+			return InteractionResult.FAIL;
+		
+		if(!addRecordedInfo(stackInUse, state.getBlock()))
+			return InteractionResult.FAIL;
+		
+		level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
+		
+		//if after addRecordedInfo the item now possesses all hieroglyphs, convert it to a completed sburb code item
+		attemptConversionToCompleted(player, handIn);
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
-	/**
-	 * Checks if the block being investigated is in the GREEN_HIEROGLYPHS block tag, if true then it passes to addRecordedInfo()
-	 */
-	public ItemStack addCarvingsToCode(Block hieroglyphBlock, ItemStack stackInUse)
-	{
-		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		
-		for(Block block : hieroglpyhsList)
-		{
-			if(block == hieroglyphBlock)
-			{
-				addRecordedInfo(stackInUse, hieroglyphBlock);
-				break;
-			}
-		}
-		
-		return stackInUse;
-	}
-	
-	/**
-	 * Takes a block thats in the HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored
-	 */
-	public static ItemStack addRecordedInfo(ItemStack stack, Block block)
-	{
-		String blockRegistryString = String.valueOf(block.getRegistryName());
-		
-		CompoundTag nbt = stack.getOrCreateTag();
-		
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		if(!getRecordedBlocks(stack).contains(block))
-		{
-			hieroglyphList.add(StringTag.valueOf(blockRegistryString));
-			nbt.put("recordedHieroglyphs", hieroglyphList);
-		}
-		
-		stack.setTag(nbt);
-		return stack;
-	}
-	
-	public static void attemptConversionToCompleted(Player player, InteractionHand hand)
+	private void attemptConversionToCompleted(Player player, InteractionHand hand)
 	{
 		ItemStack stackInHand = player.getItemInHand(hand);
-		List<Block> recordedList = getRecordedBlocks(stackInHand);
+		Set<Block> recordedSet = getRecordedBlocks(stackInHand);
 		
-		if(hasAllBlocks(recordedList) && getParadoxInfo(stackInHand))
-		{
+		if(hasAllBlocks(recordedSet) && getParadoxInfo(stackInHand))
 			player.setItemInHand(hand, MSItems.COMPLETED_SBURB_CODE.get().getDefaultInstance());
-		}
 	}
 	
-	public static boolean hasAllBlocks(List<Block> blockList)
+	public static boolean hasAllBlocks(Set<Block> hieroglyphs)
 	{
-		List<Block> completeList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		
-		return blockList.containsAll(completeList);
+		return hieroglyphs.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
-	public static void setParadoxInfo(ItemStack stack, boolean hasInfo)
-	{
-		CompoundTag nbt = stack.getOrCreateTag();
-		nbt.putBoolean("hasParadoxInfo", hasInfo);
-		stack.setTag(nbt);
-	}
-	
-	public static ItemStack setRecordedInfo(ItemStack stack, List<Block> blockList)
-	{
-		CompoundTag nbt = stack.getOrCreateTag();
-		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		hieroglyphList.clear();
-		nbt.put("recordedHieroglyphs", hieroglyphList);
-		
-		for(Block iterateBlock : blockList)
-		{
-			addRecordedInfo(stack, iterateBlock);
-		}
-		
-		return stack;
-	}
-	
-	public static float percentCompletion(ItemStack stack)
+	private float percentCompletion(ItemStack stack)
 	{
 		int mod = getParadoxInfo(stack) ? 1 : 0; //the mod of 1 is to give the illusion that part of it has already been filled in before it was sent through the lotus flower, if it has the paradox code
 		float sizeOfList = getRecordedBlocks(stack).size();

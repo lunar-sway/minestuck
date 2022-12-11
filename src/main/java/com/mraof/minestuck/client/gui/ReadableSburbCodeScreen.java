@@ -16,6 +16,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.lwjgl.glfw.GLFW;
@@ -27,6 +28,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -61,12 +64,13 @@ public class ReadableSburbCodeScreen extends Screen
 	private static final int CUSTOM_LINE_HEIGHT = 3;
 	private static final int LINES_PER_PAGE = 40; //how many lines can be fit neatly on a page, at 48 character per line
 	
-	private static final List<Block> FULL_HIEROGLYPH_LIST = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-	private static final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
+	// Use a list instead of a set because we need the hieroglyphs to be ordered when building up filled pages
+	private final List<Block> FULL_HIEROGLYPH_LIST = Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(MSTags.Blocks.GREEN_HIEROGLYPHS).stream().toList();
+	private final int MAX_HIEROGLYPH_COUNT = FULL_HIEROGLYPH_LIST.size() + 1;
 	
 	private final static String EMPTY_SPACE = "                                                "; //48 characters
 	
-	public ReadableSburbCodeScreen(List<Block> recordedBlockList, boolean paradoxCode)
+	public ReadableSburbCodeScreen(Set<Block> recordedBlockList, boolean paradoxCode)
 	{
 		super(NarratorChatListener.NO_TITLE);
 		this.hieroglyphValidityArray = checkForValidity(recordedBlockList, paradoxCode);
@@ -199,7 +203,7 @@ public class ReadableSburbCodeScreen extends Screen
 	/**
 	 * Creates an array of booleans with each element representing a hieroglyph, elements are assigned true if the paradox code(first element) is present or a valid block contained in FULL_HIEROGLYPH_LIST is present
 	 */
-	private boolean[] checkForValidity(List<Block> recordedBlockList, boolean paradoxCode)
+	private boolean[] checkForValidity(Set<Block> recordedBlockList, boolean paradoxCode)
 	{
 		boolean[] booleans = new boolean[MAX_HIEROGLYPH_COUNT];
 		
