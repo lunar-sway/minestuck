@@ -42,66 +42,43 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		Player player = context.getPlayer();
 		InteractionHand handIn = context.getHand();
 		
-		if(player != null)
-		{
-			boolean didWrite = false;
-			BlockState state = level.getBlockState(context.getClickedPos());
-			
-			List<Block> preProcessBlockList = getRecordedBlocks(stackInUse); //used to differentiate from after processing
-			ItemStack processedStack = addCarvingsToCode(state.getBlock(), stackInUse); //the call to addCarvingsToCode is what processes the stack
-			List<Block> postProcessBlockList = getRecordedBlocks(processedStack);
-			if(!preProcessBlockList.containsAll(postProcessBlockList))
-			{
-				level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
-				didWrite = true;
-			}
-			
-			attemptConversionToCompleted(player, handIn); //if after addCarvingsToCode the item now possesses all hieroglyphs, convert it to a completed sburb code item
-			
-			if(didWrite)
-				return InteractionResult.sidedSuccess(level.isClientSide);
-		}
+		if(player == null)
+			return InteractionResult.PASS;
 		
-		return InteractionResult.FAIL;
+		BlockState state = level.getBlockState(context.getClickedPos());
+		
+		if(!state.is(MSTags.Blocks.GREEN_HIEROGLYPHS))
+			return InteractionResult.PASS;
+		
+		if(!addRecordedInfo(stackInUse, state.getBlock()))
+			return InteractionResult.FAIL;
+		
+		level.playSound(null, player.blockPosition(), SoundEvents.VILLAGER_WORK_CARTOGRAPHER, SoundSource.BLOCKS, 1.0F, 1.0F);
+		
+		//if after addRecordedInfo the item now possesses all hieroglyphs, convert it to a completed sburb code item
+		attemptConversionToCompleted(player, handIn);
+		
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 	
 	/**
-	 * Checks if the block being investigated is in the GREEN_HIEROGLYPHS block tag, if true then it passes to addRecordedInfo()
+	 * Takes a block that is in the GREEN_HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored.
+	 * @return true if the item stack was changed.
 	 */
-	public ItemStack addCarvingsToCode(Block hieroglyphBlock, ItemStack stackInUse)
+	public static boolean addRecordedInfo(ItemStack stack, Block block)
 	{
-		List<Block> hieroglpyhsList = MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
-		
-		for(Block block : hieroglpyhsList)
-		{
-			if(block == hieroglyphBlock)
-			{
-				addRecordedInfo(stackInUse, hieroglyphBlock);
-				break;
-			}
-		}
-		
-		return stackInUse;
-	}
-	
-	/**
-	 * Takes a block thats in the HIEROGLYPHS block tag and adds its registry name(as a string) to the item's nbt if it did not already have it stored
-	 */
-	public static ItemStack addRecordedInfo(ItemStack stack, Block block)
-	{
-		String blockRegistryString = String.valueOf(block.getRegistryName());
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(block.getRegistryName()));
 		
 		CompoundTag nbt = stack.getOrCreateTag();
 		
 		ListTag hieroglyphList = nbt.getList("recordedHieroglyphs", Tag.TAG_STRING);
-		if(!getRecordedBlocks(stack).contains(block))
+		if(!hieroglyphList.contains(blockIdTag))
 		{
-			hieroglyphList.add(StringTag.valueOf(blockRegistryString));
+			hieroglyphList.add(blockIdTag);
 			nbt.put("recordedHieroglyphs", hieroglyphList);
-		}
-		
-		stack.setTag(nbt);
-		return stack;
+			return true;
+		} else
+			return false;
 	}
 	
 	public static void attemptConversionToCompleted(Player player, InteractionHand hand)
