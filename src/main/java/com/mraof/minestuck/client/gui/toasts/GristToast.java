@@ -80,7 +80,7 @@ public class GristToast implements Toast
 			pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
-		if(this.increase == true)
+		if(this.increase)
 		{
 			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
