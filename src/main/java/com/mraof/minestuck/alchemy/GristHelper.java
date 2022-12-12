@@ -167,7 +167,12 @@ public class GristHelper
 			else
 			{
 				GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
-				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+				
+				if(player.getPlayer(server) != null)
+					MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+				else
+					return;
+				
 			}
 			
 			//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
