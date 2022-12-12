@@ -145,20 +145,12 @@ public class GristHelper
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			
-			if(player.getPlayer(server).isLocalPlayer() == true)
-			{
-				sendGristMessage(player.getPlayer(server), set, source, increase);
-			}
-			else
-			{
-				GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
+			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
 				
-				if(player.getPlayer(server) != null)
-					MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
-				else
-					return;
-			}
+			if(player.getPlayer(server) != null)
+				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+			else
+				return;
 			
 			//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 		}
