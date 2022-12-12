@@ -146,20 +146,6 @@ public class GristHelper
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			
-			//don't know why this is here, it was copied over from when i merged notifyEditMode() and notify(), but im not sure what it does/did. Seems to be a sanity check.
-			SburbConnection sc;
-			EditData ed;
-			
-			if(source == GristToast.EnumSource.SERVER) {
-				sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				ed = ServerEditHandler.getData(server, sc);
-				if(ed == null)
-					return;
-			}
-			
 			if(player.getPlayer(server).isLocalPlayer() == true)
 			{
 				sendGristMessage(player.getPlayer(server), set, source, increase);
@@ -172,7 +158,6 @@ public class GristHelper
 					MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
 				else
 					return;
-				
 			}
 			
 			//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
