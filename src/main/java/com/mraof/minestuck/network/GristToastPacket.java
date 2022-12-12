@@ -10,9 +10,9 @@ import net.minecraft.world.entity.player.Player;
 
 public class GristToastPacket implements PlayToClientPacket
 {
-	public final GristSet gristValue;
-	public final GristToast.EnumSource source;
-	public final boolean increase;
+	private final GristSet gristValue;
+	private final GristToast.EnumSource source;
+	private final boolean increase;
 	
 	public GristToastPacket(GristSet gristValue, GristToast.EnumSource source, boolean increase)
 	{
