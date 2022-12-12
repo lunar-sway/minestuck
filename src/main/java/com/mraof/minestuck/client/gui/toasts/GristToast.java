@@ -14,6 +14,11 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+/**
+ * A class that handles Grist Notification popups whenever you gain or lose grist.
+ * Utilizes vanilla Minecraft's Toasts system, which is what the advancement and recipe popups use.
+ * @author Caldw3ll
+ */
 @OnlyIn(Dist.CLIENT)
 public class GristToast implements Toast
 {
@@ -29,10 +34,13 @@ public class GristToast implements Toast
 	private long lastChanged;
 	private boolean changed;
 	
+	/**
+	 * An enum for indicating where the grist notification comes from.
+	 */
 	public enum EnumSource {
-		CLIENT,
-		SERVER,
-		SENDGRIST
+		CLIENT, //The SBURB client.
+		SERVER, //The SBURB server.
+		SENDGRIST //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
 	}
 	
 	
