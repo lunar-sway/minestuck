@@ -151,8 +151,6 @@ public class GristHelper
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
 			else
 				return;
-			
-			//sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
 		}
 	}
 	
@@ -172,12 +170,8 @@ public class GristHelper
 				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
 			}
 			
-			//This used to be how grist notifs were handled. It's left here for legacy reasons.
-			//client.displayClientMessage(message, true);
-			
 		} else {
 			new Error("ServerPlayer player in addGristToast isn't client-side.");
-			//return;
 		}
 	}
 }
