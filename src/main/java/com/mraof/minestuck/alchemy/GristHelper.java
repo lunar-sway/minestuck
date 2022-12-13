@@ -153,6 +153,14 @@ public class GristHelper
 		notify(level.getServer(), player, set, source, true);
 	}
 	
+	/**
+	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
+	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
+	 * @param player The Player that the notification should appear for.
+	 * @param set The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
+	 * @param source Indicates where the notification is coming from. See EnumSource.
+	 * @param increase Indicates whether the grist is gained or lost.
+	 */
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
