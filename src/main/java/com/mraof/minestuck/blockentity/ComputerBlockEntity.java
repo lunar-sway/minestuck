@@ -265,8 +265,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			
 			//Imitates the structure block to ensure that changes are sent client-side
 			setChanged();
-			BlockState state = getBlockState();
-			level.sendBlockUpdated(bePos, state, state, 3);
+			markBlockForUpdate();
 		}
 	}
 	
