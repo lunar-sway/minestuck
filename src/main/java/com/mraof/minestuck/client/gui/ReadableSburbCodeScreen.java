@@ -168,34 +168,33 @@ public class ReadableSburbCodeScreen extends Screen
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
 		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		{
-			if(textList != null)
-			{
-				//pushPose function, followed by the scale function and ending with the popPose function, allow the scale changes to only be applied to the text
-				poseStack.pushPose();
-				float subtractScale = 0.4F;
-				float scale = (1 / subtractScale);
-				poseStack.scale(subtractScale, subtractScale, subtractScale);
-				
-				MutableInt lineY = new MutableInt();
-				
-				//takes the necessary page from the group of pages and then reads out each of the 40 lines stored for that page
-				for(String text : listOfPages.get(currentPage))
-				{
-					font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
-						//limiting the length of the page via this if statement
-						if(stillValidLine(lineY.intValue()))
-						{
-							Component line = new TextComponent(text.substring(start, end)).setStyle(style);
-							font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300); //hex is green
-							lineY.add(CUSTOM_LINE_HEIGHT);
-						}
-					});
-				}
-			}
-		}
 		
-		poseStack.popPose();
+		if(textList != null)
+		{
+			//pushPose function, followed by the scale function and ending with the popPose function, allow the scale changes to only be applied to the text
+			poseStack.pushPose();
+			float subtractScale = 0.4F;
+			float scale = (1 / subtractScale);
+			poseStack.scale(subtractScale, subtractScale, subtractScale);
+			
+			MutableInt lineY = new MutableInt();
+			
+			//takes the necessary page from the group of pages and then reads out each of the 40 lines stored for that page
+			for(String text : listOfPages.get(currentPage))
+			{
+				font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, true, (style, start, end) -> {
+					//limiting the length of the page via this if statement
+					if(stillValidLine(lineY.intValue()))
+					{
+						Component line = new TextComponent(text.substring(start, end)).setStyle(style);
+						font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300); //hex is green
+						lineY.add(CUSTOM_LINE_HEIGHT);
+					}
+				});
+			}
+			
+			poseStack.popPose();
+		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
