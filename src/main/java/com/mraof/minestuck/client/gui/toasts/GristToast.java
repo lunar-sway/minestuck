@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui.toasts;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.client.Minecraft;
@@ -12,9 +13,6 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
@@ -23,7 +21,6 @@ import java.util.List;
  * Utilizes vanilla Minecraft's Toasts system, which is what the advancement and recipe popups use.
  * @author Caldw3ll
  */
-@OnlyIn(Dist.CLIENT)
 public class GristToast implements Toast
 {
 	ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
@@ -33,23 +30,13 @@ public class GristToast implements Toast
 	private static final float SCALE_Y = 0.6F;
 	private GristType type;
 	private long difference;
-	private EnumSource source;
+	private GristHelper.EnumSource source;
 	private boolean increase;
 	private long lastChanged;
 	private boolean changed;
 	
-	/**
-	 * An enum for indicating where the grist notification comes from.
-	 */
-	public enum EnumSource {
-		CLIENT, //The SBURB client.
-		SERVER, //The SBURB server.
-		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
-		CONSOLE //For things like the /grist command.
-	}
-	
-	
-	public GristToast (GristType pType, long pDifference, EnumSource pSource, boolean pIncrease) {
+	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	{
 		this.type = pType;
 		this.difference = pDifference;
 		this.source = pSource;
@@ -64,8 +51,10 @@ public class GristToast implements Toast
 	 *
 	 * @param pTimeSinceLastVisible time in milliseconds
 	 */
-	public Toast.Visibility render(PoseStack pPoseStack, ToastComponent pToastComponent, long pTimeSinceLastVisible) {
-		if (this.changed) {
+	public Toast.Visibility render(PoseStack pPoseStack, ToastComponent pToastComponent, long pTimeSinceLastVisible)
+	{
+		if (this.changed)
+		{
 			this.lastChanged = pTimeSinceLastVisible;
 			this.changed = false;
 		}
@@ -85,14 +74,21 @@ public class GristToast implements Toast
 		pToastComponent.blit(pPoseStack, 0, 0, 0, 0, 160, 32);
 		
 		//Draws the icon indication the grist toast's "source".
-		if (this.source == EnumSource.CLIENT)
-			pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
-		if (this.source == EnumSource.SERVER)
-			pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
-		if (this.source == EnumSource.SENDGRIST)
-			pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
-		if (this.source == EnumSource.CONSOLE)
-			pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
+		switch (this.source)
+		{
+			case CLIENT:
+				pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
+				break;
+			case SERVER:
+				pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
+				break;
+			case SENDGRIST:
+				pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
+				break;
+			case CONSOLE:
+				pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
+				break;
+		}
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
 		if(this.increase)
@@ -151,7 +147,8 @@ public class GristToast implements Toast
 	}
 	
 	//adds pDifference to the toast's current grist value.
-	private void addGrist(long pDifference) {
+	private void addGrist(long pDifference)
+	{
 		
 		this.difference += pDifference;
 		this.changed = true;
@@ -159,40 +156,34 @@ public class GristToast implements Toast
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, EnumSource pSource, boolean pIncrease) {
+	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	{
 		
 		//try to find an existing toast with the same properties as the one being added.
 		GristToast gristToast = pToastGui.getToast(GristToast.class, pType.getTranslationKey() + pSource + String.valueOf(pIncrease));
 		
 		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using pDifference.
-		if (gristToast == null) {
+		if (gristToast == null)
 			pToastGui.addToast(new GristToast(pType, pDifference, pSource, pIncrease));
-		} else {
+		else
 			gristToast.addGrist(pDifference);
-		}
-		
 	}
 	
-	public static void sendGristMessage(Player player, GristSet set, GristToast.EnumSource source, boolean increase)
+	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
-		if(player.isLocalPlayer() == true)
+		
+		List<GristAmount> reqs = set.getAmounts();
+		for(GristAmount pairs : reqs)
 		{
-			List<GristAmount> reqs = set.getAmounts();
-			for(GristAmount pairs : reqs)
-			{
-				//the pair has to be split into two new variables because Map.Entry is immutable.
-				GristType type = pairs.getType();
-				long difference = pairs.getAmount();
-				
-				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
-				if (difference >= 0l)
-					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
-				else
-					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase));
-			}
+			//the pair has to be split into two new variables because Map.Entry is immutable.
+			GristType type = pairs.getType();
+			long difference = pairs.getAmount();
 			
-		} else {
-			new Error("ServerPlayer player in addGristToast isn't client-side.");
+			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
+			if (difference >= 0)
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+			else
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase));
 		}
 	}
 	

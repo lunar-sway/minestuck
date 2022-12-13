@@ -1,7 +1,6 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -22,6 +21,17 @@ import java.util.function.Supplier;
 
 public class GristHelper
 {
+	
+	/**
+	 * An enum for indicating where the grist notifications comes from.
+	 */
+	public enum EnumSource {
+		CLIENT, //The SBURB client.
+		SERVER, //The SBURB server.
+		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		CONSOLE //For things like the /grist command.
+	}
+	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
@@ -120,7 +130,7 @@ public class GristHelper
 		increase(level, player, set.copy().scale(-1));
 	}
 	
-	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristToast.EnumSource source)
+	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
 		notify(level.getServer(), player, set, source, false);
@@ -137,13 +147,13 @@ public class GristHelper
 		data.setGristCache(newCache);
 	}
 	
-	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristToast.EnumSource source)
+	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
 		notify(level.getServer(), player, set, source, true);
 	}
 	
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristToast.EnumSource source, boolean increase)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{

@@ -11,10 +11,10 @@ import net.minecraft.world.entity.player.Player;
 public class GristToastPacket implements PlayToClientPacket
 {
 	private final GristSet gristValue;
-	private final GristToast.EnumSource source;
+	private final GristHelper.EnumSource source;
 	private final boolean increase;
 	
-	public GristToastPacket(GristSet gristValue, GristToast.EnumSource source, boolean increase)
+	public GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, boolean increase)
 	{
 		this.gristValue = gristValue;
 		this.source = source;
@@ -32,7 +32,7 @@ public class GristToastPacket implements PlayToClientPacket
 	public static GristToastPacket decode(FriendlyByteBuf buffer)
 	{
 		GristSet gristValue = GristSet.read(buffer);
-		GristToast.EnumSource source = buffer.readEnum(GristToast.EnumSource.class);
+		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
 		boolean increase = buffer.readBoolean();
 		return new GristToastPacket(gristValue, source, increase);
 	}
@@ -45,9 +45,9 @@ public class GristToastPacket implements PlayToClientPacket
 		if(playerEntity != null)
 		{
 			GristSet gristValue = this.gristValue;
-			GristToast.EnumSource source = this.source;
+			GristHelper.EnumSource source = this.source;
 			boolean increase = this.increase;
-			GristToast.sendGristMessage(playerEntity, gristValue, source, increase);
+			GristToast.sendGristMessage(gristValue, source, increase);
 		}
 	}
 }

@@ -60,7 +60,7 @@ public class GristCommand
 		{
 			try
 			{
-				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristToast.EnumSource.CONSOLE);
+				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.CONSOLE);
 				i++;
 				source.sendSuccess(new TranslatableComponent(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
