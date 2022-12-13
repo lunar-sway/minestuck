@@ -2,6 +2,8 @@ package com.mraof.minestuck.client.gui.toasts;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.Toast;
@@ -11,8 +13,11 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import java.util.List;
 
 /**
  * A class that handles Grist Notification popups whenever you gain or lose grist.
@@ -164,6 +169,26 @@ public class GristToast implements Toast
 			gristToast.addGrist(pDifference);
 		}
 		
+	}
+	
+	public static void sendGristMessage(Player player, GristSet set, GristToast.EnumSource source, boolean increase)
+	{
+		if(player.isLocalPlayer() == true)
+		{
+			List<GristAmount> reqs = set.getAmounts();
+			for(GristAmount pairs : reqs)
+			{
+				//the pair has to be split into two new variables because Map.Entry is immutable.
+				GristType type = pairs.getType();
+				long difference = pairs.getAmount();
+				
+				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+			}
+			
+		} else {
+			new Error("ServerPlayer player in addGristToast isn't client-side.");
+		}
 	}
 	
 	//returns a single token that contains the grist type, the source, and whether its positive or negative. Used with getToast() to retrieve toasts that can be merged.

@@ -130,6 +130,12 @@ public class GristHelper
 		increase(level, player, set.copy().scale(-1));
 	}
 	
+	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristToast.EnumSource source)
+	{
+		decrease(level, player, set);
+		notify(level.getServer(), player, set, source, false);
+	}
+	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(level);
@@ -139,6 +145,12 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		newCache.addGrist(set);
 		data.setGristCache(newCache);
+	}
+	
+	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristToast.EnumSource source)
+	{
+		increase(level, player, set);
+		notify(level.getServer(), player, set, source, true);
 	}
 	
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristToast.EnumSource source, boolean increase)
@@ -151,27 +163,6 @@ public class GristHelper
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
 			else
 				return;
-		}
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public static void sendGristMessage(Player player, GristSet set, GristToast.EnumSource source, boolean increase)
-	{
-		if(player.isLocalPlayer() == true)
-		{
-			Map<GristType, Long> reqs = set.getMap();
-			for(Entry<GristType, Long> pairs : reqs.entrySet())
-			{
-				//the pair has to be split into two new variables because Map.Entry is immutable.
-				GristType type = pairs.getKey();
-				long difference = pairs.getValue();
-				
-				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
-			}
-			
-		} else {
-			new Error("ServerPlayer player in addGristToast isn't client-side.");
 		}
 	}
 }

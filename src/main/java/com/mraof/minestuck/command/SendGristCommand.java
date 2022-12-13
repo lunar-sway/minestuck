@@ -43,10 +43,8 @@ public class SendGristCommand
 		{
 			if(GristHelper.canAfford(player, grist))
 			{
-				GristHelper.decrease(player.level, IdentifierHandler.encode(player), grist);
-				GristHelper.notify(player.getServer(), IdentifierHandler.encode(player), grist, GristToast.EnumSource.SENDGRIST, false);
-				GristHelper.increase(player.level, IdentifierHandler.encode(target), grist);
-				GristHelper.notify(player.getServer(), IdentifierHandler.encode(target), grist, GristToast.EnumSource.SENDGRIST, true);
+				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristToast.EnumSource.SENDGRIST);
+				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(target), grist, GristToast.EnumSource.SENDGRIST);
 				source.sendSuccess(new TranslatableComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendMessage(new TranslatableComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.NIL_UUID);
 				return 1;

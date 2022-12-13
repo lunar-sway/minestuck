@@ -274,8 +274,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(level, pid, cost);
-			GristHelper.notify(level.getServer(), pid, cost, GristToast.EnumSource.CLIENT, false);
+			GristHelper.decreaseAndNotify(level, pid, cost, GristToast.EnumSource.CLIENT);
 			
 			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);

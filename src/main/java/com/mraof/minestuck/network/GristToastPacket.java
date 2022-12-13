@@ -47,7 +47,7 @@ public class GristToastPacket implements PlayToClientPacket
 			GristSet gristValue = this.gristValue;
 			GristToast.EnumSource source = this.source;
 			boolean increase = this.increase;
-			GristHelper.sendGristMessage(playerEntity, gristValue, source, increase);
+			GristToast.sendGristMessage(playerEntity, gristValue, source, increase);
 		}
 	}
 }
