@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -45,7 +44,8 @@ public class GristToast implements Toast
 	public enum EnumSource {
 		CLIENT, //The SBURB client.
 		SERVER, //The SBURB server.
-		SENDGRIST //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		CONSOLE //For things like the /grist command.
 	}
 	
 	
@@ -91,6 +91,8 @@ public class GristToast implements Toast
 			pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
 		if (this.source == EnumSource.SENDGRIST)
 			pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
+		if (this.source == EnumSource.CONSOLE)
+			pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
 		if(this.increase)
@@ -183,7 +185,10 @@ public class GristToast implements Toast
 				long difference = pairs.getAmount();
 				
 				//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+				if (difference >= 0l)
+					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+				else
+					GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase));
 			}
 			
 		} else {
