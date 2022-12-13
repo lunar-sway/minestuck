@@ -207,14 +207,11 @@ public class ReadableSburbCodeScreen extends Screen
 	{
 		boolean[] booleans = new boolean[MAX_HIEROGLYPH_COUNT];
 		
-		for(int iterate = 0; iterate < MAX_HIEROGLYPH_COUNT; iterate++)
+		booleans[0] = paradoxCode;
+		if(!recordedBlockList.isEmpty())
 		{
-			if(iterate == 0) //first iteration, checks for paradox code
-				booleans[iterate] = paradoxCode;
-			else if(!recordedBlockList.isEmpty() && iterate < FULL_HIEROGLYPH_LIST.size() + 1) //all but first iteration, checks for blocks in FULL_HIEROGLYPH_LIST, +1 to offset paradox code
-				booleans[iterate] = recordedBlockList.contains(FULL_HIEROGLYPH_LIST.get(iterate - 1));
-			else //unrecorded blocks
-				booleans[iterate] = false;
+			for(int blockIndex = 0; blockIndex < FULL_HIEROGLYPH_LIST.size(); blockIndex++)
+				booleans[blockIndex + 1] = recordedBlockList.contains(FULL_HIEROGLYPH_LIST.get(blockIndex));
 		}
 		
 		return booleans;
