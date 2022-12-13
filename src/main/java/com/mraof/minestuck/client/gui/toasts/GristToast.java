@@ -96,7 +96,8 @@ public class GristToast implements Toast
 			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
-		} else {
+		} else
+		{
 			pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("-" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
@@ -188,7 +189,8 @@ public class GristToast implements Toast
 	}
 	
 	//returns a single token that contains the grist type, the source, and whether its positive or negative. Used with getToast() to retrieve toasts that can be merged.
-	public String getToken() {
+	public String getToken()
+	{
 		return this.type.getTranslationKey() + this.source + String.valueOf(this.increase);
 	}
 }
