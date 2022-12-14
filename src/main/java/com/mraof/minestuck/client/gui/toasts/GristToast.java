@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class GristToast implements Toast
 {
-	ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
 	
 	private static final long DISPLAY_TIME = 5000L;
 	private static final float SCALE_X = 0.6F;
