@@ -74,20 +74,12 @@ public class GristToast implements Toast
 		pToastComponent.blit(pPoseStack, 0, 0, 0, 0, 160, 32);
 		
 		//Draws the icon indication the grist toast's "source".
-		switch (this.source)
+		switch(this.source)
 		{
-			case CLIENT:
-				pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
-				break;
-			case SERVER:
-				pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
-				break;
-			case SENDGRIST:
-				pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
-				break;
-			case CONSOLE:
-				pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
-				break;
+			case CLIENT -> pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
+			case SERVER -> pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
+			case SENDGRIST -> pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
+			case CONSOLE -> pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
 		}
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
