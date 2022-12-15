@@ -40,14 +40,9 @@ public class GristToastPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Player playerEntity = ClientProxy.getClientPlayer();
-		
-		if(playerEntity != null)
-		{
-			GristSet gristValue = this.gristValue;
-			GristHelper.EnumSource source = this.source;
-			boolean increase = this.increase;
-			GristToast.sendGristMessage(gristValue, source, increase);
-		}
+		GristSet gristValue = this.gristValue;
+		GristHelper.EnumSource source = this.source;
+		boolean increase = this.increase;
+		GristToast.sendGristMessage(gristValue, source, increase);
 	}
 }
