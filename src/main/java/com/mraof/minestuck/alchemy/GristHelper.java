@@ -1,13 +1,18 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.GristToastPacket;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.random.WeightedEntry;
@@ -166,11 +171,26 @@ public class GristHelper
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
-				
+			
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
 			else
 				return;
+			
+			if (source == EnumSource.SERVER)
+			{
+				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
+				if(sc == null)
+					return;
+				
+				EditData ed = ServerEditHandler.getData(server, sc);
+				if(ed == null)
+					return;
+				
+				if(IdentifierHandler.encode(ed.getEditor()) != player)
+					MSPacketHandler.sendToPlayer(gristToastPacket, IdentifierHandler.encode(ed.getEditor()).getPlayer(server));
+
+			}
 		}
 	}
 }

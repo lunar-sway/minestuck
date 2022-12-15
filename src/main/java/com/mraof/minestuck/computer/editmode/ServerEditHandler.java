@@ -329,8 +329,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
 				{
 					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-					if (!data.connection.getClientIdentifier().getUsername().equals(data.connection.getServerIdentifier().getUsername()))
-						GristHelper.notify(event.getPlayer().getServer(), data.connection.getServerIdentifier(), cost, GristHelper.EnumSource.SERVER, false);
 					
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
@@ -431,8 +429,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				GristHelper.decreaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
-				if (!data.connection.getClientIdentifier().getUsername().equals(data.connection.getServerIdentifier().getUsername()))
-					GristHelper.notify(event.getPlayer().getServer(), data.connection.getServerIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER, false);
 			}
 			else
 			{
@@ -442,8 +438,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(set != null && !set.isEmpty())
 				{
 					GristHelper.increaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
-					if (!data.connection.getClientIdentifier().getUsername().equals(data.connection.getServerIdentifier().getUsername()))
-						GristHelper.notify(event.getPlayer().getServer(), data.connection.getServerIdentifier(), set, GristHelper.EnumSource.SERVER, true);
 				}
 			}
 		}
@@ -475,15 +469,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					if(!cost.isEmpty())
 					{
 						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-						if (!c.getClientIdentifier().getUsername().equals(c.getServerIdentifier().getUsername()))
-							GristHelper.notify(player.getServer(), c.getServerIdentifier(), cost, GristHelper.EnumSource.SERVER, false);
 					}
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
 					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
-					if (!c.getClientIdentifier().getUsername().equals(c.getServerIdentifier().getUsername()))
-						GristHelper.notify(player.getServer(), c.getServerIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER, false);
 				}
 			}
 		}
