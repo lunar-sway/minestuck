@@ -174,8 +174,6 @@ public class GristHelper
 			
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
-			else
-				return;
 			
 			if (source == EnumSource.SERVER)
 			{
