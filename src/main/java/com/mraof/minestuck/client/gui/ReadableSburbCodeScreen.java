@@ -225,9 +225,7 @@ public class ReadableSburbCodeScreen extends Screen
 	{
 		if(this.minecraft != null)
 		{
-			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, new TranslatableComponent("gui.done"), (p_214161_1_) -> {
-				this.minecraft.setScreen(null);
-			}));
+			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, new TranslatableComponent("gui.done"), button -> this.minecraft.setScreen(null)));
 		}
 	}
 	
