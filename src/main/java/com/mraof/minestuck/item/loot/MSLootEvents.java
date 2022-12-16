@@ -64,7 +64,7 @@ public class MSLootEvents
 		
 		if(event.getType() == VillagerProfession.CARTOGRAPHER)
 		{
-			trades.get(1).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), createFrogTempleMap(villager), 12, 7, 0.2F));
+			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), createFrogTempleMap(villager), 12, 7, 0.2F));
 		}
 		
 		if(event.getType() == VillagerProfession.LEATHERWORKER)
@@ -76,11 +76,18 @@ public class MSLootEvents
 		{
 			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 3), new ItemStack(MSItems.CARVING_TOOL.get()), 4, 2, 0.05F));
 			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 2), new ItemStack(MSItems.STONE_TABLET.get()), 6, 2, 0.05F));
+			trades.get(3).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 5), new ItemStack(MSItems.GREEN_STONE_BRICK_FROG.get()), new ItemStack(MSItems.GREEN_STONE_BRICK_FROG.get(), 2), 12, 7, 0.2F));
 		}
 		
 		if(event.getType() == VillagerProfession.WEAPONSMITH)
 		{
 			trades.get(2).add((villager, random) -> createEnchantedItemOffer(random, new ItemStack(MSItems.LUCERNE_HAMMER.get()), 4, 3, 1, 0.05F));
+		}
+		
+		if(event.getType() == VillagerProfession.FISHERMAN)
+		{
+			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(MSItems.CICADA.get(), 7), new ItemStack(Items.EMERALD, 1), 9, 2, 0.05F));
+			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(MSItems.GRASSHOPPER.get(), 9), new ItemStack(Items.EMERALD, 1), 9, 2, 0.05F));
 		}
 		
 		if(event.getType() == VillagerProfession.LIBRARIAN)

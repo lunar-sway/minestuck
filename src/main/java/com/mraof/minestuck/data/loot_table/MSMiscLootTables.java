@@ -1,10 +1,9 @@
 package com.mraof.minestuck.data.loot_table;
 
+import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -40,15 +39,7 @@ public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, L
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.COMPUTER_PARTS.get()).setWeight(10).setQuality(3)))
 				.withPool(LootPool.lootPool().name("code").setRolls(ConstantValue.exactly(1))
-						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)).apply(SetNbtFunction.setTag(giveParadoxFragment())))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(10).setQuality(3)).apply(SetNbtFunction.setTag(IncompleteSburbCodeItem.giveParadoxInfo())))
 		);
-	}
-	
-	private static CompoundTag giveParadoxFragment()
-	{
-		CompoundTag nbt = new CompoundTag();
-		nbt.putBoolean("hasParadoxInfo", true);
-		
-		return nbt;
 	}
 }

@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -249,7 +250,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		BlockPos bePos = getBlockPos();
 		ItemStack diskStack = ProgramData.getItem(programId);
-		if(!diskStack.isEmpty() && blankDisksStored > 0)
+		if(!diskStack.isEmpty() && blankDisksStored > 0 && hasAllCode())
 		{
 			Random random = level.getRandom();
 			
@@ -267,6 +268,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 			setChanged();
 			markBlockForUpdate();
 		}
+	}
+	
+	/**
+	 * Returns true if the block entity has the paradox info and all the hieroglyphs
+	 */
+	public boolean hasAllCode()
+	{
+		return hasParadoxInfoStored && hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS));
 	}
 	
 	public void markBlockForUpdate()

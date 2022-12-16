@@ -54,6 +54,14 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		nbt.putBoolean("hasParadoxInfo", hasInfo);
 	}
 	
+	public static CompoundTag giveParadoxInfo()
+	{
+		CompoundTag nbt = new CompoundTag();
+		nbt.putBoolean("hasParadoxInfo", true);
+		
+		return nbt;
+	}
+	
 	/**
 	 * Loads the set of hieroglyph blocks that have been recorded into this item.
 	 * This set is stored in the item as an nbt tag list under the name "recordedHieroglyphs".

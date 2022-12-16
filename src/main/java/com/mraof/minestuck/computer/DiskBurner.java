@@ -20,7 +20,7 @@ public class DiskBurner extends ButtonListProgram
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		list.add(new UnlocalizedString(CHOOSE));
 		
-		if(be != null && be.hieroglyphsStored.containsAll(MSTags.getBlocksFromTag(MSTags.Blocks.GREEN_HIEROGLYPHS)) && be.blankDisksStored > 0 && be.hasParadoxInfoStored)
+		if(be != null && be.hasAllCode() && be.blankDisksStored > 0)
 		{
 			list.add(new UnlocalizedString(BURN_SERVER_DISK));
 			list.add(new UnlocalizedString(BURN_CLIENT_DISK));
