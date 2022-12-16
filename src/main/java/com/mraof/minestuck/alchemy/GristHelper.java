@@ -185,8 +185,8 @@ public class GristHelper
 				if(ed == null)
 					return;
 				
-				if(IdentifierHandler.encode(ed.getEditor()) != player)
-					MSPacketHandler.sendToPlayer(gristToastPacket, IdentifierHandler.encode(ed.getEditor()).getPlayer(server));
+				if(!player.appliesTo(ed.getEditor()))
+					MSPacketHandler.sendToPlayer(gristToastPacket, ed.getEditor());
 
 			}
 		}
