@@ -5,14 +5,14 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.random.WeightedEntry;
@@ -26,6 +26,17 @@ import java.util.function.Supplier;
 
 public class GristHelper
 {
+	
+	/**
+	 * An enum for indicating where the grist notifications comes from.
+	 */
+	public enum EnumSource {
+		CLIENT, //The SBURB client.
+		SERVER, //The SBURB server.
+		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		CONSOLE //For things like the /grist command.
+	}
+	
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
@@ -124,6 +135,12 @@ public class GristHelper
 		increase(level, player, set.copy().scale(-1));
 	}
 	
+	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
+	{
+		decrease(level, player, set);
+		notify(level.getServer(), player, set, source, false);
+	}
+	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(level);
@@ -135,58 +152,43 @@ public class GristHelper
 		data.setGristCache(newCache);
 	}
 	
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
+	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
+	{
+		increase(level, player, set);
+		notify(level.getServer(), player, set, source, true);
+	}
+	
+	/**
+	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
+	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
+	 * @param player The Player that the notification should appear for.
+	 * @param set The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
+	 * @param source Indicates where the notification is coming from. See EnumSource.
+	 * @param increase Indicates whether the grist is gained or lost.
+	 */
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			Map<GristType, Long> reqs = set.getMap();
-			for(Entry<GristType, Long> pairs : reqs.entrySet())
-			{
-				Component type = pairs.getKey().getDisplayName();
-				long difference = pairs.getValue();
-				sendGristMessage(server, player, new TranslatableComponent("You gained %s %s grist.", difference, type));
-			}
-		}
-	}
-	
-	public static void notifyEditPlayer(MinecraftServer server, PlayerIdentifier player, GristSet set, boolean increase)
-	{
-		if(MinestuckConfig.SERVER.showGristChanges.get())
-		{
-			SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-			if(sc == null)
-				return;
+			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
 			
-			EditData ed = ServerEditHandler.getData(server, sc);
-			if(ed == null)
-				return;
+			if(player.getPlayer(server) != null)
+				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
 			
-			Map<GristType, Long> reqs = set.getMap();
-			for(Entry<GristType, Long> pairs : reqs.entrySet())
+			if (source == EnumSource.SERVER)
 			{
-				Component type = pairs.getKey().getDisplayName();
-				long difference = pairs.getValue();
-				if(increase)
-				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have refunded %s of %s's %s grist.", difference, player.getUsername(), type));
-				} else
-				{
-					sendGristMessage(server, IdentifierHandler.encode(ed.getEditor()), new TranslatableComponent("You have spent %s of %s's %s grist.", difference, player.getUsername(), type));
-				}
+				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
+				if(sc == null)
+					return;
+				
+				EditData ed = ServerEditHandler.getData(server, sc);
+				if(ed == null)
+					return;
+				
+				if(!player.appliesTo(ed.getEditor()))
+					MSPacketHandler.sendToPlayer(gristToastPacket, ed.getEditor());
+
 			}
 		}
 	}
-	
-	private static void sendGristMessage(MinecraftServer server, PlayerIdentifier player, Component message)
-	{
-		if(player != null)
-		{
-			ServerPlayer client = player.getPlayer(server);
-			if(client != null)
-			{
-				client.displayClientMessage(message, true);
-			}
-		}
-	}
-	
 }

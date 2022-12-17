@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -221,8 +222,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
-		GristHelper.increase(level, identifier, new GristSet(gristType, gristValue));
-		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue));
+		GristHelper.increaseAndNotify(level, identifier, new GristSet(gristType, gristValue), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
