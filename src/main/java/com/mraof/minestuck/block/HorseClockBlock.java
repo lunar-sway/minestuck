@@ -97,6 +97,13 @@ public class HorseClockBlock extends MultiMachineBlock
 		return true;
 	}
 	
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		builder.add(POWER);
+	}
+	
 	public static class Bottom extends HorseClockBlock implements EntityBlock
 	{
 		public Bottom(MachineMultiblock machine, Properties properties)
@@ -130,12 +137,5 @@ public class HorseClockBlock extends MultiMachineBlock
 		{
 			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockBlockEntity::serverTick) : null;
 		}
-	}
-	
-	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-	{
-		super.createBlockStateDefinition(builder);
-		builder.add(POWER);
 	}
 }
