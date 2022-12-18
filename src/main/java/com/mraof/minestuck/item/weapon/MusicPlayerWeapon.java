@@ -1,5 +1,7 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.EnumCassetteType;
 import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
@@ -15,8 +17,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -136,6 +141,15 @@ public class MusicPlayerWeapon extends WeaponItem
 			}
 		}
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
+	}
+	
+	@Override
+	public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack)
+	{
+		if(hasCassette(stack))
+			return super.getAttributeModifiers(slot, stack);
+		else
+			return ImmutableMultimap.of();
 	}
 	
 	@Nullable
