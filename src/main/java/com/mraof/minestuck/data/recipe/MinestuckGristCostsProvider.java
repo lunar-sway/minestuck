@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 import static com.mraof.minestuck.alchemy.GristTypes.*;
 
-public class MinestuckGristCostsProvider extends RecipeProvider
+public class 	MinestuckGristCostsProvider extends RecipeProvider
 {
 	public MinestuckGristCostsProvider(DataGenerator generator)
 	{
@@ -528,6 +528,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CHAKRAM.get()).grist(BUILD, 200).grist(RUBY, 10).grist(RUST, 20).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.UMBRAL_INFILTRATOR.get()).grist(BUILD, 600).grist(TAR, 450).grist(DIAMOND, 55).grist(MERCURY, 55).grist(QUARTZ, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SORCERERS_PINBALL.get()).grist(BUILD, 200).grist(MERCURY, 30).grist(IODINE, 5).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).grist(BUILD, 18760).grist(MARBLE, 1876 ).grist(RUST, 1407).grist(AMBER, 2345 ).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).grist(BUILD, 5000).grist(CAULK, 500).grist(GOLD, 500).grist(MARBLE, 500).grist(MERCURY, 500).grist(SHALE, 500).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.TRANSPORTALIZER.get()).grist(BUILD, 350).grist(AMETHYST, 27).grist(RUST, 36).grist(URANIUM, 18).build(recipeSaver);

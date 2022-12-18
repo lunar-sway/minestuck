@@ -152,16 +152,6 @@ public class MusicPlayerWeapon extends WeaponItem
 			return ImmutableMultimap.of();
 	}
 	
-	@Nullable
-	@Override
-	public CompoundTag getShareTag(ItemStack stack)
-	{
-		CompoundTag tag = stack.getTag() != null ? stack.getTag().copy() : new CompoundTag();
-		tag.putBoolean("HasCassette",
-				!getItemHandler(stack).getStackInSlot(0).isEmpty());
-		return tag;
-	}
-	
 	@SubscribeEvent
 	public static void playerTick(TickEvent.PlayerTickEvent tickEvent)
 	{
@@ -225,6 +215,16 @@ public class MusicPlayerWeapon extends WeaponItem
 			}
 		}
 		return super.hurtEnemy(stack, target, attacker);
+	}
+	
+	@Nullable
+	@Override
+	public CompoundTag getShareTag(ItemStack stack)
+	{
+		CompoundTag tag = stack.getTag() != null ? stack.getTag().copy() : new CompoundTag();
+		tag.putBoolean("HasCassette",
+				!getItemHandler(stack).getStackInSlot(0).isEmpty());
+		return tag;
 	}
 	
 	public static boolean hasCassette(ItemStack stack)
