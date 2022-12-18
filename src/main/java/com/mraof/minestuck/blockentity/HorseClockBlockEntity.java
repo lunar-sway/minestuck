@@ -21,7 +21,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 /**
  * Block entity present in the bottom of the horse block multiblock. Keeps track of the time and lets off a tick sound each second, which makes the blocks give off a redstone signal.
- * Chimes at the beginning of the day. It will not give off a redstone If daytime does not advance, it will not give off redstone signals after the chime
+ * Chimes at the beginning of the day. It will not give off a redstone If daytime does not advance, it will not give off redstone signals after the chime. It is Geckolib animated.
  */
 public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 {

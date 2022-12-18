@@ -27,7 +27,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class HorseClockBlock extends MultiMachineBlock implements EntityBlock
+/**
+ * The horse clock is a multiblock clock that also gives off(all components) redstone power with a strength dependent on the clock sound it is making.
+ * The bottom block has a block entity
+ */
+public class HorseClockBlock extends MultiMachineBlock
 {
 	public static final IntegerProperty POWER = BlockStateProperties.POWER;
 	
@@ -37,34 +41,9 @@ public class HorseClockBlock extends MultiMachineBlock implements EntityBlock
 		registerDefaultState(stateDefinition.any().setValue(POWER, 0));
 	}
 	
-	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
-	{
-		//will only work on the bottom block
-		if(level.getBlockEntity(pos) instanceof HorseClockBlockEntity be)
-		{
-			HorseClockBlockEntity.fullPower(level, be);
-			
-			return InteractionResult.SUCCESS;
-		}
-		
-		return InteractionResult.PASS;
-	}
-	
-	@Nullable
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-	{
-		if(state.is(MSBlocks.HORSE_CLOCK.BOTTOM.get())) //prevents non block entity blocks from trying to tick
-		{
-			return new HorseClockBlockEntity(pos, state);
-		} else
-			return null;
-	}
-	
 	public RenderShape getRenderShape(BlockState state)
 	{
-		return RenderShape.INVISIBLE;
+		return RenderShape.INVISIBLE; //The block itself does not have a texture but is dependent on the modeled block entity
 	}
 	
 	@Override
@@ -75,18 +54,15 @@ public class HorseClockBlock extends MultiMachineBlock implements EntityBlock
 	
 	public static void updateSurvival(BlockState state, Level level, BlockPos pos)
 	{
-		if(!level.isClientSide() && state.getBlock() instanceof HorseClockBlock)
-		{
-			if(state.is(MSBlocks.HORSE_CLOCK.BOTTOM.get()) &&
-					!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
-				level.destroyBlock(pos, true);
-			else if(state.is(MSBlocks.HORSE_CLOCK.CENTER.get()) &&
-					(!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.TOP.get()) || !level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.BOTTOM.get())))
-				level.destroyBlock(pos, true);
-			else if(state.is(MSBlocks.HORSE_CLOCK.TOP.get()) &&
-					!level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
-				level.destroyBlock(pos, true);
-		}
+		if(state.is(MSBlocks.HORSE_CLOCK.BOTTOM.get()) &&
+				!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
+			level.destroyBlock(pos, true);
+		else if(state.is(MSBlocks.HORSE_CLOCK.CENTER.get()) &&
+				(!level.getBlockState(pos.above()).is(MSBlocks.HORSE_CLOCK.TOP.get()) || !level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.BOTTOM.get())))
+			level.destroyBlock(pos, true);
+		else if(state.is(MSBlocks.HORSE_CLOCK.TOP.get()) &&
+				!level.getBlockState(pos.below()).is(MSBlocks.HORSE_CLOCK.CENTER.get()))
+			level.destroyBlock(pos, true);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -121,15 +97,39 @@ public class HorseClockBlock extends MultiMachineBlock implements EntityBlock
 		return true;
 	}
 	
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	public static class Bottom extends HorseClockBlock implements EntityBlock
 	{
-		if(state.is(MSBlocks.HORSE_CLOCK.BOTTOM.get())) //prevents non block entity blocks from trying to tick
+		public Bottom(MachineMultiblock machine, Properties properties)
+		{
+			super(machine, properties);
+		}
+		
+		@Override
+		public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+		{
+			if(level.getBlockEntity(pos) instanceof HorseClockBlockEntity be)
+			{
+				HorseClockBlockEntity.fullPower(level, be);
+				
+				return InteractionResult.SUCCESS;
+			}
+			
+			return InteractionResult.PASS;
+		}
+		
+		@Nullable
+		@Override
+		public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+		{
+			return new HorseClockBlockEntity(pos, state);
+		}
+		
+		@Nullable
+		@Override
+		public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 		{
 			return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockBlockEntity::serverTick) : null;
-		} else
-			return null;
+		}
 	}
 	
 	@Override

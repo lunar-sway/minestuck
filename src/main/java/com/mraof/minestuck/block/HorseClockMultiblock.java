@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class HorseClockMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> BOTTOM = register("horse_clock_bottom", () -> new HorseClockBlock(this, Block.Properties.of(Material.WOOD).strength(0.5F).sound(SoundType.WOOD).noOcclusion())); //has drops
+	public final RegistryObject<Block> BOTTOM = register("horse_clock_bottom", () -> new HorseClockBlock.Bottom(this, Block.Properties.of(Material.WOOD).strength(0.5F).sound(SoundType.WOOD).noOcclusion())); //has drops
 	public final RegistryObject<Block> CENTER = register("horse_clock_center", () -> new HorseClockBlock(this, Block.Properties.of(Material.WOOD).strength(0.5F).sound(SoundType.WOOD).noDrops().noOcclusion()));
 	public final RegistryObject<Block> TOP = register("horse_clock_top", () -> new HorseClockBlock(this, Block.Properties.of(Material.WOOD).strength(0.5F).sound(SoundType.WOOD).noDrops().noOcclusion()));
 	
