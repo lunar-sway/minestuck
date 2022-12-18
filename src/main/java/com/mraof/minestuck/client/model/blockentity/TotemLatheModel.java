@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.model;
+package com.mraof.minestuck.client.model.blockentity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
@@ -8,7 +8,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class TotemLatheModel extends AnimatedGeoModel<TotemLatheDowelBlockEntity> {
     @Override
     public ResourceLocation getModelLocation(TotemLatheDowelBlockEntity object) {
-        return new ResourceLocation(Minestuck.MOD_ID, "geo/totemlathe.geo.json");
+        return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/totemlathe.geo.json");
     }
 
     @Override
@@ -18,6 +18,6 @@ public class TotemLatheModel extends AnimatedGeoModel<TotemLatheDowelBlockEntity
 
     @Override
     public ResourceLocation getAnimationFileLocation(TotemLatheDowelBlockEntity animatable) {
-        return new ResourceLocation(Minestuck.MOD_ID, "animations/totemlathe.animation.json");
+        return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/totemlathe.animation.json");
     }
 }

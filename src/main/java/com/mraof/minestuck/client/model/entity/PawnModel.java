@@ -1,11 +1,11 @@
-package com.mraof.minestuck.client.model;
+package com.mraof.minestuck.client.model.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.carapacian.EnumEntityKingdom;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import net.minecraft.resources.ResourceLocation;
 
-public class PawnModel extends AnimatedModel<PawnEntity>
+public class PawnModel extends RotatingHeadAnimatedModel<PawnEntity>
 {
 	@Override
 	public ResourceLocation getModelLocation(PawnEntity object)

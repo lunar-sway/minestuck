@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:horse_clock"
+  },
+  "grist_cost": {
+    "minestuck:build": 500,
+    "minestuck:gold": 50
+  }
+}

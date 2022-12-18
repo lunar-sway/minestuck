@@ -1,4 +1,4 @@
-package com.mraof.minestuck.client.model;
+package com.mraof.minestuck.client.model.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Objects;
 
-public class UnderlingModel<T extends UnderlingEntity> extends AnimatedModel<T>
+public class UnderlingModel<T extends UnderlingEntity> extends RotatingHeadAnimatedModel<T>
 {
 	@Override
 	public ResourceLocation getModelLocation(T entity)

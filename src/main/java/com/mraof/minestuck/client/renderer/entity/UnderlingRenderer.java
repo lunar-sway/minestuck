@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.model.UnderlingModel;
+import com.mraof.minestuck.client.model.entity.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

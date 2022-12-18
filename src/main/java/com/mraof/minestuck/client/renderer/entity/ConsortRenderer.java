@@ -1,6 +1,6 @@
 package com.mraof.minestuck.client.renderer.entity;
 
-import com.mraof.minestuck.client.model.ConsortModel;
+import com.mraof.minestuck.client.model.entity.ConsortModel;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;

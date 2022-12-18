@@ -1,10 +1,10 @@
-package com.mraof.minestuck.client.model;
+package com.mraof.minestuck.client.model.entity;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import net.minecraft.resources.ResourceLocation;
 
-public class ConsortModel<T extends ConsortEntity> extends AnimatedModel<T>
+public class ConsortModel<T extends ConsortEntity> extends RotatingHeadAnimatedModel<T>
 {
 	@Override
 	public ResourceLocation getModelLocation(T entity)
