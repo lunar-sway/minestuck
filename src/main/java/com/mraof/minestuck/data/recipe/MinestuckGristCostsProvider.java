@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 import static com.mraof.minestuck.alchemy.GristTypes.*;
 
-public class 	MinestuckGristCostsProvider extends RecipeProvider
+public class MinestuckGristCostsProvider extends RecipeProvider
 {
 	public MinestuckGristCostsProvider(DataGenerator generator)
 	{
