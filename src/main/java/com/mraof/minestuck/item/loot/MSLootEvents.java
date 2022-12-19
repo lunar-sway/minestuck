@@ -31,7 +31,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -40,6 +39,8 @@ public class MSLootEvents
 {
 	private static final Set<ResourceLocation> BLANK_DISK_DUNGEON_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.SIMPLE_DUNGEON, BuiltInLootTables.ABANDONED_MINESHAFT, BuiltInLootTables.DESERT_PYRAMID, BuiltInLootTables.JUNGLE_TEMPLE, BuiltInLootTables.WOODLAND_MANSION, BuiltInLootTables.UNDERWATER_RUIN_BIG, BuiltInLootTables.SPAWN_BONUS_CHEST);
 	private static final Set<ResourceLocation> SBURB_CODE_LIBRARY_LOOT_INJECT = Sets.newHashSet(BuiltInLootTables.STRONGHOLD_LIBRARY, BuiltInLootTables.LIBRARIAN_GIFT, BuiltInLootTables.STRONGHOLD_CORRIDOR);
+	
+	public static final String FROG_TEMPLE_MAP = "filled_map.frog_temple";
 	
 	@SubscribeEvent
 	public static void onLootLoad(LootTableLoadEvent event) //created using Upgrade Aquatic "LootEvents" and Mystical World "LootHandler" for reference
@@ -113,13 +114,13 @@ public class MSLootEvents
 				ItemStack itemstack = MapItem.create(serverLevel, templePos.getX(), templePos.getZ(), (byte) 2, true, true);
 				MapItem.renderBiomePreviewMap(serverLevel, itemstack);
 				MapItemSavedData.addTargetDecoration(itemstack, templePos, "+", MapDecoration.Type.RED_X);
-				itemstack.setHoverName(new TranslatableComponent("filled_map." + MSTags.Structures.SCANNER_LOCATED.toString().toLowerCase(Locale.ROOT)));
+				itemstack.setHoverName(new TranslatableComponent(FROG_TEMPLE_MAP));
 				
 				return itemstack;
 			}
 		}
 		
-		return new ItemStack(MSItems.DICE.get());
+		return null;
 	}
 	
 	/**

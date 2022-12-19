@@ -992,7 +992,7 @@
   "entity.minestuck.turtle.sound": "...",
   "entity.minestuck.turtle.sound.2": "..!",
   "entity.minestuck.vitality_gel": "Vitality Gel",
-  "filled_map.tagkey[minecraft:worldgen/configured_structure_feature / minestuck:scanner_located]": "Frog Temple",
+  "filled_map.frog_temple": "Frog Temple",
   "grist.comma": "%s, %s",
   "grist.format": "%s Grist",
   "grist.minestuck.amber": "Amber",
