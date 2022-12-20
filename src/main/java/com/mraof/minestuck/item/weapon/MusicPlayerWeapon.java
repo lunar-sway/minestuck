@@ -221,16 +221,29 @@ public class MusicPlayerWeapon extends WeaponItem
 	@Override
 	public CompoundTag getShareTag(ItemStack stack)
 	{
-		CompoundTag tag = stack.getTag() != null ? stack.getTag().copy() : new CompoundTag();
-		tag.putBoolean("HasCassette",
-				!getItemHandler(stack).getStackInSlot(0).isEmpty());
-		return tag;
+		IItemHandler iitemHandler = getItemHandler(stack);
+		CompoundTag nbt = stack.getTag() != null ? stack.getTag() : new CompoundTag();
+		if(iitemHandler instanceof ItemStackHandler itemHandler)
+			nbt.put("cassette", itemHandler.serializeNBT());
+		return nbt;
+	}
+	
+	@Override
+	public void readShareTag(ItemStack stack, @Nullable CompoundTag nbt)
+	{
+		if(nbt == null)
+			stack.setTag(null);
+		else
+		{
+			IItemHandler iitemHandler = getItemHandler(stack);
+			if(iitemHandler instanceof ItemStackHandler itemHandler)
+				itemHandler.deserializeNBT(nbt.getCompound("cassette"));
+			stack.setTag(nbt);
+		}
 	}
 	
 	public static boolean hasCassette(ItemStack stack)
 	{
-		if(!stack.hasTag() || !stack.getTag().contains("HasCasette"))
-			return !getItemHandler(stack).getStackInSlot(0).isEmpty();
-		else return stack.getTag().getBoolean("HasCassette");
+		return !getItemHandler(stack).getStackInSlot(0).isEmpty();
 	}
 }
