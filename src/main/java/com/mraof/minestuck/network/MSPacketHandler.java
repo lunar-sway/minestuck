@@ -66,6 +66,7 @@ public class MSPacketHandler
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 	}
@@ -104,5 +105,10 @@ public class MSPacketHandler
 	public static <MSG> void sendToTracking(MSG message, Entity entity)
 	{
 		INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
+	}
+	
+	public static <MSG> void sendToTrackingAndSelf(MSG message, Entity entity)
+	{
+		INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 	}
 }

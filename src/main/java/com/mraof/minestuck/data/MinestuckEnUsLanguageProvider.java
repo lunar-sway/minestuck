@@ -29,6 +29,7 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
@@ -580,6 +581,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SHATTER_BACON, "ShatterBacon");
 		addItemTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addItemExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		addItem(MSItems.MUSIC_SWORD, "Music Sword");
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.NIFE, "nife.");
@@ -1131,12 +1133,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CASSETTE_FAR, "desc", "C418 - far");
 		addItem(MSItems.CASSETTE_MALL, "Cassette");
 		addItemExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
+		addItem(MSItems.CASSETTE_11, "Cassette");
+		addItemExtra(MSItems.CASSETTE_11, "desc", "C418 - 11");
+		addItem(MSItems.CASSETTE_STAL, "Cassette");
+		addItemExtra(MSItems.CASSETTE_STAL, "desc", "C418 - Stal");
+		addItem(MSItems.CASSETTE_STRAD, "Cassette");
+		addItemExtra(MSItems.CASSETTE_STRAD, "desc", "C418 - Strad");
+		addItem(MSItems.CASSETTE_WAIT, "Cassette");
+		addItemExtra(MSItems.CASSETTE_WAIT, "desc", "C418 - Wait");
+		addItem(MSItems.CASSETTE_WARD, "Cassette");
+		addItemExtra(MSItems.CASSETTE_WARD, "desc", "C418 - Ward");
 		addItem(MSItems.CASSETTE_EMISSARY, "Cassette");
 		addItemExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
 		addItem(MSItems.CASSETTE_DANCE_STAB, "Cassette");
 		addItemExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
 		addItem(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
 		addItemExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
+		addItem(MSItems.CASSETTE_PIGSTEP, "Cassette");
+		addItemExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Lena Raine - Pigstep");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");
@@ -1485,6 +1499,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");
 		addStrife(KindAbstratusList.SPORK, "Sporkkind");
 		
+		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");

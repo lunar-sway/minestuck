@@ -66,7 +66,6 @@ public class MSItems
 	public static final RegistryObject<Item> MWRTHWL = REGISTER.register("mwrthwl", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 8, -3.2F).efficiency(4.0F).set(MSItemTypes.HAMMER_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	
 	
-	
 	//Blades
 	public static final RegistryObject<Item> SORD = REGISTER.register("sord", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.0F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> PAPER_SWORD = REGISTER.register("paper_sword", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -2.4F).efficiency(3.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS)));
@@ -99,6 +98,7 @@ public class MSItems
 	public static final RegistryObject<Item> SHATTER_BEACON = REGISTER.register("shatter_beacon", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 7, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SHATTER_BACON = REGISTER.register("shatter_bacon", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.MEAT_TIER, 7, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE = REGISTER.register("subtractshumidire_zomorrodnegative", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 6, -2.6F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(30)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> MUSIC_SWORD = REGISTER.register("music_sword", () -> new MusicPlayerWeapon(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> NIFE = REGISTER.register("nife", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 1, -2.0F).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS)));
@@ -523,17 +523,22 @@ public class MSItems
 	public static final RegistryObject<Item> MUSIC_DISC_DANCE_STAB_DANCE = REGISTER.register("music_disc_dance_stab_dance", () -> new RecordItem(2, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> MUSIC_DISC_RETRO_BATTLE = REGISTER.register("music_disc_retro_battle", () -> new RecordItem(3, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
 	
-	public static final RegistryObject<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new CassetteItem(1, () -> SoundEvents.MUSIC_DISC_13, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new CassetteItem(2, () -> SoundEvents.MUSIC_DISC_CAT, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_BLOCKS = REGISTER.register("cassette_blocks", () -> new CassetteItem(3, () -> SoundEvents.MUSIC_DISC_BLOCKS, EnumCassetteType.BLOCKS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_CHIRP = REGISTER.register("cassette_chirp", () -> new CassetteItem(4, () -> SoundEvents.MUSIC_DISC_CHIRP, EnumCassetteType.CHIRP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_FAR = REGISTER.register("cassette_far", () -> new CassetteItem(5, () -> SoundEvents.MUSIC_DISC_FAR, EnumCassetteType.FAR, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_MALL = REGISTER.register("cassette_mall", () -> new CassetteItem(6, () -> SoundEvents.MUSIC_DISC_MALL, EnumCassetteType.MALL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_MELLOHI = REGISTER.register("cassette_mellohi", () -> new CassetteItem(7, () -> SoundEvents.MUSIC_DISC_MELLOHI, EnumCassetteType.MELLOHI, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_DANCE_STAB = REGISTER.register("cassette_dance_stab", () -> new CassetteItem(2, MSSoundEvents.MUSIC_DISC_DANCE_STAB_DANCE, EnumCassetteType.DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_RETRO_BATTLE = REGISTER.register("cassette_retro_battle", () -> new CassetteItem(3, MSSoundEvents.MUSIC_DISC_RETRO_BATTLE_THEME, EnumCassetteType.RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> CASSETTE_EMISSARY = REGISTER.register("cassette_emissary", () -> new CassetteItem(1, MSSoundEvents.MUSIC_DISC_EMISSARY_OF_DANCE, EnumCassetteType.EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
-	
+	public static final RegistryObject<Item> CASSETTE_13 = REGISTER.register("cassette_13", () -> new CassetteItem(1, EnumCassetteType.THIRTEEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_CAT = REGISTER.register("cassette_cat", () -> new CassetteItem(2, EnumCassetteType.CAT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_BLOCKS = REGISTER.register("cassette_blocks", () -> new CassetteItem(3, EnumCassetteType.BLOCKS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_CHIRP = REGISTER.register("cassette_chirp", () -> new CassetteItem(4, EnumCassetteType.CHIRP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_FAR = REGISTER.register("cassette_far", () -> new CassetteItem(5, EnumCassetteType.FAR, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_MALL = REGISTER.register("cassette_mall", () -> new CassetteItem(6, EnumCassetteType.MALL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_MELLOHI = REGISTER.register("cassette_mellohi", () -> new CassetteItem(7, EnumCassetteType.MELLOHI, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_DANCE_STAB = REGISTER.register("cassette_dance_stab", () -> new CassetteItem(2, EnumCassetteType.DANCE_STAB_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_RETRO_BATTLE = REGISTER.register("cassette_retro_battle", () -> new CassetteItem(3, EnumCassetteType.RETRO_BATTLE_THEME, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_EMISSARY = REGISTER.register("cassette_emissary", () -> new CassetteItem(1, EnumCassetteType.EMISSARY_OF_DANCE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_11 = REGISTER.register("cassette_11", () -> new CassetteItem(11, EnumCassetteType.ELEVEN, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_PIGSTEP = REGISTER.register("cassette_pigstep", () -> new CassetteItem(13, EnumCassetteType.PIGSTEP, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_STAL = REGISTER.register("cassette_stal", () -> new CassetteItem(8, EnumCassetteType.STAL, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_STRAD = REGISTER.register("cassette_strad", () -> new CassetteItem(9, EnumCassetteType.STRAD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_WAIT = REGISTER.register("cassette_wait", () -> new CassetteItem(12, EnumCassetteType.WAIT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new CassetteItem(10, EnumCassetteType.WARD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN)));
 	
 	
 	/** Start of block items **/

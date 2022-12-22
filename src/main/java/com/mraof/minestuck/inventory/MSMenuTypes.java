@@ -2,6 +2,7 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
@@ -20,4 +21,5 @@ public class MSMenuTypes
 	public static final RegistryObject<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck", () -> new MenuType<>(CaptchaDeckMenu::new));
 	public static final RegistryObject<MenuType<EditmodeMenu>> EDIT_MODE = REGISTER.register("edit_mode", () -> new MenuType<>(EditmodeMenu::new));
 	public static final RegistryObject<MenuType<ConsortMerchantMenu>> CONSORT_MERCHANT = REGISTER.register("consort_merchant", () -> new MenuType<>((IContainerFactory<ConsortMerchantMenu>) ConsortMerchantMenu::load));
+	public static final RegistryObject<MenuType<CassetteContainerMenu>> CASSETTE_CONTAINER = REGISTER.register("cassette_container", () ->new MenuType<>(CassetteContainerMenu::new));
 }
