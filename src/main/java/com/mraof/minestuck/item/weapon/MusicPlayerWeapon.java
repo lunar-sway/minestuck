@@ -186,7 +186,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker)
 	{
 		IMusicPlaying musicPlaying = getMusicPlaying(attacker);
-		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE)
+		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
 			Random r = attacker.level.getRandom();
 			
