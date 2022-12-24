@@ -5,10 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
-import com.mraof.minestuck.client.model.armor.AmphibeanieModel;
-import com.mraof.minestuck.client.model.armor.ArmorModels;
-import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
-import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
+import com.mraof.minestuck.client.model.armor.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.GateRenderer;
@@ -158,6 +155,8 @@ public class ClientProxy
 	{
 		ArmorModels.register(MSItems.CRUMPLY_HAT.get(), new HumanoidModel<>(CrumplyHatModel.createBodyLayer().bakeRoot()));
 		ArmorModels.register(MSItems.AMPHIBEANIE.get(), new HumanoidModel<>(AmphibeanieModel.createBodyLayer().bakeRoot()));
+		ArmorModels.register(MSItems.NOSTRILDAMUS.get(), new HumanoidModel<>(NostrildamusModel.createBodyLayer().bakeRoot()));
+		ArmorModels.register(MSItems.PONYTAIL.get(), new HumanoidModel<>(PonytailModel.createBodyLayer().bakeRoot()));
 		
 		HumanoidModel<?> pajamasModel = new HumanoidModel<>(DreamerPajamasModel.createBodyLayer().bakeRoot());
 		ArmorModels.register(MSItems.PROSPIT_CIRCLET.get(), pajamasModel);
