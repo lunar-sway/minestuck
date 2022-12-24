@@ -43,6 +43,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
 			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
 			{
+				//TODO optimize how the minimum block height is found, causes lag during map creation
 				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level); //posHeight picks the first solid block, ignoring water
 				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
 			}
