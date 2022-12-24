@@ -65,7 +65,7 @@ public class MSLootEvents
 		
 		if(event.getType() == VillagerProfession.CARTOGRAPHER)
 		{
-			trades.get(2).add((villager, random) -> new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), createFrogTempleMap(villager), 12, 7, 0.2F));
+			trades.get(2).add((villager, random) -> createFrogTempleMapTrade(villager));
 		}
 		
 		if(event.getType() == VillagerProfession.LEATHERWORKER)
@@ -103,7 +103,7 @@ public class MSLootEvents
 	 * Checks for nearby frog temples and creates a map based on an un-generated one if it can be found, seems to cause momentary lag because of this stage at which the map's data is being collected,
 	 * uses TreasureMapForEmeralds in {@link VillagerTrades} as a base
 	 */
-	public static ItemStack createFrogTempleMap(Entity villagerEntity)
+	public static MerchantOffer createFrogTempleMapTrade(Entity villagerEntity)
 	{
 		Level level = villagerEntity.level;
 		if(level instanceof ServerLevel serverLevel)
@@ -116,7 +116,7 @@ public class MSLootEvents
 				MapItemSavedData.addTargetDecoration(itemstack, templePos, "+", MapDecoration.Type.RED_X);
 				itemstack.setHoverName(new TranslatableComponent(FROG_TEMPLE_MAP));
 				
-				return itemstack;
+				return new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), itemstack, 12, 7, 0.2F);
 			}
 		}
 		

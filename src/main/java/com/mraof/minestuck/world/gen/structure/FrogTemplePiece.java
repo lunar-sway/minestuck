@@ -261,15 +261,15 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		List<WeightedEntry.Wrapper<Block>> weightedBlockList = Lists.newArrayList();
 		
 		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_FROG.get(), 1)); //only one frog hieroglyph in order to have a component more difficult to find
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 36));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 36));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 36));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 16));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 16));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 16));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 16));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 16));
-		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 16));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 10));
 		
 		return weightedBlockList;
 	}
