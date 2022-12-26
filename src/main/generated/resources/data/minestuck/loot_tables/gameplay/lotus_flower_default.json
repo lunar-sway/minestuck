@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "name": "computer",
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": 3,
+          "name": "minestuck:computer_parts"
+        }
+      ]
+    },
+    {
+      "name": "code",
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "quality": 3,
+          "name": "minestuck:sburb_code"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:set_nbt",
+          "tag": "{hasParadoxInfo:1b}"
+        }
+      ]
+    }
+  ]
+}

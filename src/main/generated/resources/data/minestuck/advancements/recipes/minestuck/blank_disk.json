@@ -2,17 +2,17 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minestuck:client_disk"
+      "minestuck:blank_disk"
     ]
   },
   "criteria": {
-    "has_sburb_code": {
+    "has_raw_cruxite": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "minestuck:sburb_code"
+              "minestuck:raw_cruxite"
             ]
           }
         ]
@@ -21,13 +21,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minestuck:client_disk"
+        "recipe": "minestuck:blank_disk"
       }
     }
   },
   "requirements": [
     [
-      "has_sburb_code",
+      "has_raw_cruxite",
       "has_the_recipe"
     ]
   ]

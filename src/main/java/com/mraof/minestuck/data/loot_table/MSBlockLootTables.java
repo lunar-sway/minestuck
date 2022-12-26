@@ -180,6 +180,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(CHISELED_GREEN_STONE_BRICKS.get());
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICKS.get());
 		dropSelf(VERTICAL_GREEN_STONE_BRICKS.get());
+		dropSelf(GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
 		dropSelf(GREEN_STONE_BRICK_TRIM.get());
 		dropSelf(GREEN_STONE_BRICK_FROG.get());
 		dropSelf(GREEN_STONE_BRICK_IGUANA_LEFT.get());

@@ -4,15 +4,16 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -28,6 +29,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -85,6 +87,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			
 			if(insertDisk(blockEntity, state, level, pos, player, handIn))
 				return InteractionResult.SUCCESS;
+			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
 				MSScreenFactories.displayComputerScreen(blockEntity);
@@ -108,8 +111,20 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	private boolean insertDisk(ComputerBlockEntity blockEntity, BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn)
 	{
-		int id = ProgramData.getProgramID(player.getItemInHand(handIn));
-		if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 2 && !blockEntity.hasProgram(-1))
+		ItemStack stackInHand = player.getItemInHand(handIn);
+		int id = ProgramData.getProgramID(stackInHand);
+		
+		if(stackInHand.is(MSItems.BLANK_DISK.get()))
+		{
+			if(blockEntity.blankDisksStored < 2) //only allow two blank disks to be burned at a time
+			{
+				stackInHand.shrink(1);
+				blockEntity.blankDisksStored++;
+				blockEntity.setChanged();
+				level.sendBlockUpdated(pos, state, state, 3);
+				return true;
+			}
+		} else if(id != -2 && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 3 && !blockEntity.hasProgram(-1))
 		{
 			if(level.isClientSide)
 				return true;
@@ -123,7 +138,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			blockEntity.setChanged();
 			level.sendBlockUpdated(pos, state, state, 3);
 			return true;
-		} else return false;
+		}
+		
+		return false;
 	}
 	
 	@Nullable
@@ -143,36 +160,30 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	private void dropItems(Level level, int x, int y, int z, BlockState state)
 	{
-		Random rand = new Random();
 		ComputerBlockEntity be = (ComputerBlockEntity) level.getBlockEntity(new BlockPos(x, y, z));
-		if (be == null)
+		if(be == null)
 		{
 			return;
 		}
 		be.closeAll();
-		float factor = 0.05F;
 		
+		//program disks
 		for(Map.Entry<Integer, Boolean> pairs : be.installedPrograms.entrySet())
 		{
 			if(!pairs.getValue())
 				continue;
 			int program = pairs.getKey();
 			
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, ProgramData.getItem(program));
-			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			level.addFreshEntity(entityItem);
+			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(program));
 		}
+		
+		//blank disks
+		Containers.dropItemStack(level, x, y, z, new ItemStack(MSItems.BLANK_DISK.get(), be.blankDisksStored));
+		
+		//music disc
 		if(state.getValue(STATE) == State.BROKEN)
 		{
-			float rx = rand.nextFloat() * 0.8F + 0.1F;
-			float ry = rand.nextFloat() * 0.8F + 0.1F;
-			float rz = rand.nextFloat() * 0.8F + 0.1F;
-			ItemEntity entityItem = new ItemEntity(level, x + rx, y + ry, z + rz, ProgramData.getItem(-1));
-			entityItem.setDeltaMovement(rand.nextGaussian() * factor, rand.nextGaussian() * factor + 0.2F, rand.nextGaussian() * factor);
-			level.addFreshEntity(entityItem);
+			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(-1));
 		}
 	}
 	

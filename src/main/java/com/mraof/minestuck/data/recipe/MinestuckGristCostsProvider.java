@@ -352,8 +352,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.LONG_FORGOTTEN_WARHORN.get()).grist(BUILD, 550).grist(AMETHYST, 120).grist(TAR, 50).grist(GARNET, 80).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
+		GristCostRecipeBuilder.of(MSItems.COMPLETED_SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(MSItems.COMPUTER_PARTS.get()).grist(BUILD, 20).grist(RUST, 5).grist(GOLD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.BLANK_DISK.get()).grist(BUILD, 5).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_APPLE.get()).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_POTION.get()).build(recipeSaver);

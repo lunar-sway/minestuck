@@ -69,6 +69,8 @@ public class ProgramData
 	{
 		if(id == -1)
 			return new ItemStack(Items.MUSIC_DISC_11);
+		if(id == 2)
+			return ItemStack.EMPTY;
 		return disks.get(id).copy();
 	}
 	

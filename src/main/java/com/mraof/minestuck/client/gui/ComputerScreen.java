@@ -16,13 +16,13 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class ComputerScreen extends Screen
 {
-
+	
 	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/bsod_message.png");
 	
@@ -59,8 +59,9 @@ public class ComputerScreen extends Screen
 		
 		if(!bsod && program != null)
 			program.paintGui(poseStack, this, be);
-		else {
-			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+		else
+		{
+			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F + 15, (height - ySize) / 2F + 45, 4210752);
 		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
@@ -73,18 +74,19 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public void init() {
+	public void init()
+	{
 		super.init();
 		
 		if(be.programSelected == -1 && !be.hasProgram(-1))
 			for(Entry<Integer, Boolean> entry : be.installedPrograms.entrySet())
 				if(entry.getValue() && (be.programSelected == -1 || be.programSelected > entry.getKey()))
-						be.programSelected = entry.getKey();
+					be.programSelected = entry.getKey();
 		
 		if(be.programSelected != -1 && (program == null || program.getId() != be.programSelected))
 			program = ComputerProgram.getProgram(be.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, TextComponent.EMPTY, button -> changeProgram());
+		programButton = new ExtendedButton((width - xSize) / 2 + 95, (height - ySize) / 2 + 10, 70, 20, TextComponent.EMPTY, button -> changeProgram());
 		addRenderableWidget(programButton);
 		if(be.programSelected != -1)
 			program.onInitGui(this);
@@ -97,12 +99,14 @@ public class ComputerScreen extends Screen
 		
 		programButton.active = be.installedPrograms.size() > 1;
 		
-		if(be.hasProgram(-1)) {
+		if(be.hasProgram(-1))
+		{
 			clearWidgets();
 			return;
 		}
 		
-		if(program != null) {
+		if(program != null)
+		{
 			program.onUpdateGui(this);
 			programButton.setMessage(new TranslatableComponent(program.getName()));
 		}
@@ -126,27 +130,13 @@ public class ComputerScreen extends Screen
 		updateGui();
 	}
 	
-	private int getNextProgram() {
-	   	if (be.installedPrograms.size() == 1) {
-	   		return be.programSelected;
-	   	}
-		Iterator<Entry<Integer, Boolean>> it = be.installedPrograms.entrySet().iterator();
-		//int place = 0;
-	   	boolean found = false;
-	   	int lastProgram = be.programSelected;
-        while (it.hasNext()) {
-			Map.Entry<Integer, Boolean> pairs = it.next();
-            int program = pairs.getKey();
-            if (found) {
-            	return program;
-            } else if (program== be.programSelected) {
-            	found = true;
-            } else {
-            	lastProgram = program;
-            }
-            //place++;
-        }
-		return lastProgram;
+	private int getNextProgram()
+	{
+		List<Integer> installedProgramIdList = new ArrayList<>(be.installedPrograms.keySet()).stream().sorted().collect(Collectors.toList()); //turned into a list for ease of manipulation and getting information from, immediately sorted so that the keys are in order
+		
+		int selectedProgramIndex = installedProgramIdList.indexOf(be.programSelected);
+		
+		return selectedProgramIndex < installedProgramIdList.size() - 1 ? installedProgramIdList.get(selectedProgramIndex + 1) : installedProgramIdList.get(0);
 	}
 	
 	@Override

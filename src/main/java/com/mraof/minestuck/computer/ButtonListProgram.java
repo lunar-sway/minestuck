@@ -46,13 +46,15 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 */
 	protected abstract void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data);
 	
-	public final void onButtonPressed(ComputerScreen screen, Button button) {
+	public final void onButtonPressed(ComputerScreen screen, Button button)
+	{
 		UnlocalizedString data = buttonMap.get(button);
-		if (button == upButton)
+		if(button == upButton)
 			index--;
-		else if (button == downButton)
+		else if(button == downButton)
 			index++;
-		else if(data != null) {
+		else if(data != null)
+		{
 			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
 				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
@@ -86,33 +88,36 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		int pos = -1;
-		for(UnlocalizedString s : list) 
+		for(UnlocalizedString s : list)
 		{
-			if(pos == -1) 
+			if(pos == -1)
 			{
 				message = s.translate();
-			}
-		       	else
+			} else
 			{
-				if(index > pos) 
+				if(index > pos)
 				{
 					pos++;
 					continue;
 				}
-				if(pos == index + 4) 
+				if(pos == index + 4)
 				{
 					downButton.active = true;
 					break;
 				}
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], s);
+				buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], s);
 			}
 			pos++;
 		}
 		if(index == 0 && pos != 4)
 			for(; pos < 4; pos++)
-				buttonMap.put((Button) buttonMap.keySet().toArray()[pos-index], new UnlocalizedString(""));
+			{
+				if(pos >= 0) //can still be -1 in some instances, causing a crash
+					buttonMap.put((Button) buttonMap.keySet().toArray()[pos - index], new UnlocalizedString(""));
+			}
 		
-		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet()) {
+		for(Entry<Button, UnlocalizedString> entry : buttonMap.entrySet())
+		{
 			UnlocalizedString data = entry.getValue();
 			entry.getKey().active = !data.string.isEmpty();
 			entry.getKey().setMessage(data.asTextComponent());
@@ -122,7 +127,6 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be)
 	{
-		
 		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -133,7 +137,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
 			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
-		else 
+		else
 			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
 	}
 	
@@ -142,15 +146,19 @@ public abstract class ButtonListProgram extends ComputerProgram
 	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
 	 * See getStringList().
 	 */
-	protected static class UnlocalizedString {
+	protected static class UnlocalizedString
+	{
 		String string;
 		Object[] formatData;
-		public UnlocalizedString(String str, Object... obj) {
+		
+		public UnlocalizedString(String str, Object... obj)
+		{
 			string = str;
 			formatData = obj;
 		}
 		
-		public String translate() {
+		public String translate()
+		{
 			return I18n.get(string, formatData);
 		}
 		

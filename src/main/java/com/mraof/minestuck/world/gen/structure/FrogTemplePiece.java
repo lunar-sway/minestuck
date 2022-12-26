@@ -1,9 +1,7 @@
 package com.mraof.minestuck.world.gen.structure;
 
-import com.mraof.minestuck.block.CustomShapeBlock;
-import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.block.MSDirectionalBlock;
+import com.google.common.collect.Lists;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
@@ -12,9 +10,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.random.WeightedEntry;
+import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -27,6 +26,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.Fluids;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
@@ -42,6 +43,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
 			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
 			{
+				//TODO optimize how the minimum block height is found, causes lag during map creation
 				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level); //posHeight picks the first solid block, ignoring water
 				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
 			}
@@ -184,7 +186,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		generateBox(level, boundingBox, 14, 16, 24, 14, 16, 25, MSBlocks.CHISELED_GREEN_STONE_BRICKS.get().defaultBlockState(), MSBlocks.CHISELED_GREEN_STONE_BRICKS.get().defaultBlockState(), false); //sixth step
 		
 		//lower room ladder
-		generateBox(level, boundingBox, 20, 5, 48, 21, 16, 48, Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, Direction.SOUTH), Blocks.LADDER.defaultBlockState(), false);
+		generateBox(level, boundingBox, 20, 5, 49, 21, 16, 49, MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get().defaultBlockState().setValue(CustomShapeBlock.FACING, Direction.SOUTH), MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get().defaultBlockState(), false);
 	}
 	
 	private void carveRooms(WorldGenLevel level, BoundingBox boundingBox)
@@ -255,8 +257,29 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 	}
 	
+	private static List<WeightedEntry.Wrapper<Block>> buildWeightedList()
+	{
+		List<WeightedEntry.Wrapper<Block>> weightedBlockList = Lists.newArrayList();
+		
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_FROG.get(), 1)); //only one frog hieroglyph in order to have a component more difficult to find
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_TURTLE.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SKAIA.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_LOTUS.get(), 23));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get(), 10));
+		weightedBlockList.add(WeightedEntry.wrap(MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get(), 10));
+		
+		return weightedBlockList;
+	}
+	
 	static class Selector extends StructurePiece.BlockSelector
 	{
+		private final List<WeightedEntry.Wrapper<Block>> weightedBlockList = buildWeightedList();
+		private final int totalWeight = WeightedRandom.getTotalWeight(weightedBlockList);
+		
 		private Selector()
 		{
 		}
@@ -264,38 +287,8 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		@Override
 		public void next(Random rand, int x, int y, int z, boolean wall)
 		{
-			int randomBlock = rand.nextInt(14);
-			if(randomBlock == 12 || randomBlock == 13)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_FROG.get().defaultBlockState();
-			} else if(randomBlock == 10 || randomBlock == 11)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_TURTLE.get().defaultBlockState();
-			} else if(randomBlock == 8 || randomBlock == 9)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SKAIA.get().defaultBlockState();
-			} else if(randomBlock == 6 || randomBlock == 7)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_LOTUS.get().defaultBlockState();
-			} else if(randomBlock == 5)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT.get().defaultBlockState();
-			} else if(randomBlock == 4)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_IGUANA_RIGHT.get().defaultBlockState();
-			} else if(randomBlock == 3)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_NAK_LEFT.get().defaultBlockState();
-			} else if(randomBlock == 2)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_NAK_RIGHT.get().defaultBlockState();
-			} else if(randomBlock == 1)
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SALAMANDER_LEFT.get().defaultBlockState();
-			} else
-			{
-				this.next = MSBlocks.GREEN_STONE_BRICK_SALAMANDER_RIGHT.get().defaultBlockState();
-			}
+			WeightedEntry.Wrapper<Block> wrappedBlock = WeightedRandom.getRandomItem(rand, weightedBlockList, totalWeight).orElseThrow();
+			this.next = wrappedBlock.getData().defaultBlockState(); //sets the next blockstate to an element of the weighted list as long as the optional is present
 		}
 	}
 }

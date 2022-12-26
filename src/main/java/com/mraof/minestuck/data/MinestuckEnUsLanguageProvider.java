@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
+import com.mraof.minestuck.computer.DiskBurner;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.effects.MSEffects;
@@ -29,6 +30,7 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -194,6 +196,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
 		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
 		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		addBlock(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, "Green Stone Brick Embedded Ladder");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, "Green Stone Brick Iguana Left Hieroglyph");
@@ -879,11 +882,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		addItem(MSItems.CRUXITE_POTION, "Cruxite Artifact");
 		addItem(MSItems.SBURB_CODE, "SBURB Code");
-		addItemTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into computer game code using a Book and Quill.");
+		addItemTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
+		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
+		addItemExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
+		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");
+		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
+		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
+		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");
-		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
+		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1404,7 +1415,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addAdvancement(MSAdvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
 		addAdvancement(MSAdvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
-		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
+		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
@@ -1598,9 +1609,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
 		add(SburbClient.RESUME_CLIENT, "Waiting for server...");
 		add(SburbServer.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
+		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
+		add(DiskBurner.CHOOSE, "Choose disk type to write");
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
+		add(DiskBurner.NAME, "Disk Burner");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");
 		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
@@ -1667,6 +1682,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
+		
+		add(MSLootEvents.FROG_TEMPLE_MAP, "Frog Temple");
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");

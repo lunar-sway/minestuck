@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 /**
  * The static interface will probably later be merged with DeployList,
  * GristStorage and other similar classes that store static data.
- * 
+ *
  * @author Kirderf1
  */
 public abstract class ComputerProgram
@@ -37,7 +37,7 @@ public abstract class ComputerProgram
 		try
 		{
 			return programs.get(id).newInstance();
-		} catch (Exception e)
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}

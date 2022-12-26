@@ -14,8 +14,8 @@ import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
 import com.mraof.minestuck.item.foods.DrinkableItem;
 import com.mraof.minestuck.item.foods.HealingFoodItem;
-import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.foods.UnknowableEggItem;
+import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
@@ -349,7 +349,8 @@ public class MSItems
 	public static final RegistryObject<Item> CRUXITE_APPLE = REGISTER.register("cruxite_apple", () -> new CruxiteAppleItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON))); //TODO have to fix Cruxite artifact classes
 	public static final RegistryObject<Item> CRUXITE_POTION = REGISTER.register("cruxite_potion", () -> new CruxitePotionItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	
-	public static final RegistryObject<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> SBURB_CODE = REGISTER.register("sburb_code", () -> new IncompleteSburbCodeItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> COMPLETED_SBURB_CODE = REGISTER.register("completed_sburb_code", () -> new ReadableSburbCodeItem.Completed(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> COMPUTER_PARTS = REGISTER.register("computer_parts", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> BLANK_DISK = REGISTER.register("blank_disk", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> CLIENT_DISK = REGISTER.register("client_disk", () -> new Item(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)));
@@ -711,6 +712,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHISELED_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.CHISELED_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> HORIZONTAL_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> VERTICAL_GREEN_STONE_BRICKS = registerBlockItem(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_EMBEDDED_LADDER = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_TRIM = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_TRIM, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_FROG = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_FROG, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GREEN_STONE_BRICK_IGUANA_LEFT = registerBlockItem(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, MSItemGroup.MAIN);

@@ -16,6 +16,7 @@ import com.mraof.minestuck.client.renderer.blockentity.ReturnNodeRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.computer.DiskBurner;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -90,6 +91,7 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.HOLOPAD.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CRUXITE_DOWEL.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLENDER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CHESSBOARD.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.MINI_FROG_STATUE.get(), RenderType.cutout());
@@ -135,6 +137,7 @@ public class ClientProxy
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
+		ComputerProgram.registerProgramClass(2, DiskBurner.class);
 		
 		registerArmorModels();
 

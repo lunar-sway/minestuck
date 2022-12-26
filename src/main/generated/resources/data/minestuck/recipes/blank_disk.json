@@ -2,18 +2,18 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " c ",
-    "cdc",
+    "cnc",
     " c "
   ],
   "key": {
-    "d": {
-      "item": "minestuck:blank_disk"
+    "n": {
+      "item": "minecraft:gold_nugget"
     },
     "c": {
-      "item": "minestuck:sburb_code"
+      "item": "minestuck:raw_cruxite"
     }
   },
   "result": {
-    "item": "minestuck:server_disk"
+    "item": "minestuck:blank_disk"
   }
 }
