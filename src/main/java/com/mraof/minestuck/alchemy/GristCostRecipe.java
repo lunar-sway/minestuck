@@ -27,10 +27,10 @@ import java.util.function.BiConsumer;
 
 public abstract class GristCostRecipe implements Recipe<Container>
 {
-	
-	public static GristSet findCostForItem(ItemStack input, GristType type, boolean shouldRoundDown, Level level)
+	@Nullable
+	public static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
-		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown, level)).orElse(null);
+		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
 	}
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level)
