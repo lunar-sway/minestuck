@@ -17,6 +17,13 @@ import org.apache.commons.compress.utils.Lists;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * A global loot modifier that when applied to loot,
+ * will turn any items with a grist cost into grist entities,
+ * which will be spawned at the loot location.
+ * It is also possible set a multiplier for the grist cost produced,
+ * which could be used to for example lower grist gains.
+ */
 public class GristLootModifier extends LootModifier
 {
 	private final float multiplier;
