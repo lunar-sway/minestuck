@@ -291,7 +291,7 @@ public class GristSet
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) (level.random.nextDouble()*countLeft) + 1);
+				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) (rand.nextDouble()*countLeft) + 1);
 				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
 				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount);
 				postProcessor.accept(entity);

@@ -10,7 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class MSLootTables
@@ -35,4 +37,7 @@ public class MSLootTables
 	
 	public static final DeferredRegister<LootPoolEntryType> ENTRY_REGISTER = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, Minestuck.MOD_ID);
 	public static final RegistryObject<LootPoolEntryType> LAND_TABLE_ENTRY = ENTRY_REGISTER.register("land_table", () -> new LootPoolEntryType(new LandTableLootEntry.SerializerImpl()));
+	
+	public static final DeferredRegister<GlobalLootModifierSerializer<?>> MODIFIER_REGISTER = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Minestuck.MOD_ID);
+	public static final RegistryObject<GristLootModifier.Serializer> GRIST_MODIFIER = MODIFIER_REGISTER.register("grist", GristLootModifier.Serializer::new);
 }
