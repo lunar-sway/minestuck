@@ -883,7 +883,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
 		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
 		addItemExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
-		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
+		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");
+		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
 		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
