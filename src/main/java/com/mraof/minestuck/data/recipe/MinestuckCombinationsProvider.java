@@ -400,6 +400,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BEACON.get()).input(Items.BEACON).and().input(Items.DIAMOND_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHATTER_BACON.get()).input(Items.PORKCHOP).and().input(MSItems.SHATTER_BEACON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CALEDFWLCH.get()).input(MSItems.ROYAL_DERINGER.get()).or().input(MSItems.CUEBALL.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MUSIC_SWORD.get()).input(MSBlocks.CASSETTE_PLAYER.get()).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.NIFE.get()).input(MSItems.DAGGER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_OF_MY_KNIFE.get()).input(MSItems.DAGGER.get()).and().input(Items.LANTERN).build(consumer);
@@ -633,6 +634,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_EMISSARY.get()).input(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE.get()).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_DANCE_STAB.get()).input(MSItems.MUSIC_DISC_DANCE_STAB_DANCE.get()).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_RETRO_BATTLE.get()).input(MSItems.MUSIC_DISC_RETRO_BATTLE.get()).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_11.get()).input(Items.MUSIC_DISC_11).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_PIGSTEP.get()).input(Items.MUSIC_DISC_PIGSTEP).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_STAL.get()).input(Items.MUSIC_DISC_STAL).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_STRAD.get()).input(Items.MUSIC_DISC_STRAD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_WAIT.get()).input(Items.MUSIC_DISC_WAIT).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_WARD.get()).input(Items.MUSIC_DISC_WARD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.GRAY_DYE).build(consumer);

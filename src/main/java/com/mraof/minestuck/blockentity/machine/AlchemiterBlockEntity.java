@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -273,7 +274,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			
 			
 			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(level, pid, cost);
+			GristHelper.decreaseAndNotify(level, pid, cost, GristHelper.EnumSource.CLIENT);
 			
 			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
