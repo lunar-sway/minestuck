@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.data.loot_table.MSLootModifiers;
 import com.mraof.minestuck.data.loot_table.MinestuckLootTableProvider;
 import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
@@ -38,6 +39,7 @@ public class MinestuckData
 			
 			gen.addProvider(new BoondollarPricingProvider(gen, Minestuck.MOD_ID));
 			gen.addProvider(new MinestuckLootTableProvider(gen));
+			gen.addProvider(new MSLootModifiers(gen));
 			gen.addProvider(new MSAdvancementProvider(gen, event.getExistingFileHelper()));
 			gen.addProvider(new MinestuckEnUsLanguageProvider(gen));
 			

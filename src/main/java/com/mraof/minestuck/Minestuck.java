@@ -83,6 +83,7 @@ public class Minestuck
 		MSLootTables.CONDITION_REGISTER.register(eventBus);
 		MSLootTables.FUNCTION_REGISTER.register(eventBus);
 		MSLootTables.ENTRY_REGISTER.register(eventBus);
+		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		ModusTypes.REGISTER.register(eventBus);
 		
 		MSNoiseParameters.REGISTER.register(eventBus);
