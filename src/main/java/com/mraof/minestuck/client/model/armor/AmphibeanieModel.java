@@ -20,7 +20,7 @@ public class AmphibeanieModel
 				.texOffs(0, 0).addBox(-4.5F, -3.25F, -4.5F, 9.0F, 4.0F, 9.0F)
 				.texOffs(0, 13).addBox(-5.5F, -6.25F, -1.0F, 4.0F, 3.0F, 2.0F)
 				.texOffs(0, 13).addBox(1.5F, -6.25F, -1.0F, 4.0F, 3.0F, 2.0F),
-				PartPose.offsetAndRotation(0.0F, -5.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+				PartPose.offsetAndRotation(0.0F, -5.25F, 0.0F, -0.0873F, 0.0F, 0.0F));
 		
 		PartDefinition leftpigtail = beanie.addOrReplaceChild("leftpigtail", CubeListBuilder.create()
 				.texOffs(9, 17).addBox(-1.3867F, -2.1354F, 1.0285F, 3.0F, 3.0F, 4.0F)
