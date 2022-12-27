@@ -678,6 +678,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SICKLE, "Sickle");
 		addItem(MSItems.BISICKLE, "Bisickle");
 		addItem(MSItems.OW_THE_EDGE, "oW THE EDGE");
+		addItemExtra(MSItems.OW_THE_EDGE, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of oW THE EDGE made it phase through your hand");
 		addItem(MSItems.THORNY_SUBJECT, "A Thorny Subject");
 		addItem(MSItems.HEMEOREAPER, "Hemeoreaper");
 		addItemTooltip(MSItems.HEMEOREAPER, "You get the feeling you should hide this away, or maybe paint it a nice gray.");
