@@ -1,11 +1,14 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.google.common.collect.Lists;
-import com.mraof.minestuck.block.*;
+import com.mraof.minestuck.block.CustomShapeBlock;
+import com.mraof.minestuck.block.LotusTimeCapsuleBlock;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -27,7 +30,6 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
@@ -39,14 +41,9 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	{
 		super(MSStructurePieces.FROG_TEMPLE.get(), x - 21, 64, z - 35, 42, 100, 70, getRandomHorizontalDirection(random));
 		
-		int posHeightPicked = Integer.MAX_VALUE;
-		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
-			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
-			{
-				//TODO optimize how the minimum block height is found, causes lag during map creation
-				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level); //posHeight picks the first solid block, ignoring water
-				posHeightPicked = Math.min(posHeightPicked, posHeight); //with each new x/z coord it checks whether or not it is lower than the previous
-			}
+		int posHeightPicked = generator.getBaseHeight((boundingBox.minX() + boundingBox.maxX())/2,
+				(boundingBox.minZ() + boundingBox.maxZ())/2, Heightmap.Types.OCEAN_FLOOR_WG, level);
+		
 		
 		boundingBox = boundingBox.moved(0, posHeightPicked - boundingBox.minY(), 0); //takes the lowest Ocean Floor gen viable height
 	}
