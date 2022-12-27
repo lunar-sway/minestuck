@@ -606,13 +606,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	
 	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/terrain/" + landName.toString().replace(':', '/'));
 	}
 	
 	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
 	}
 }

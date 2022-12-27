@@ -8,7 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -45,7 +44,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(new TranslatableComponent(mode && !menu.overrideStop() ? STOP : GO));
+			goButton.setMessage(Component.translatable(mode && !menu.overrideStop() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -98,7 +97,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 					GoButtonPacket packet = new GoButtonPacket(true, false);
 					MSPacketHandler.sendToServer(packet);
 					
-					setMessage(new TranslatableComponent(GO));
+					setMessage(Component.translatable(GO));
 				}
 			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessBlockEntity.RunType.BUTTON_OVERRIDE)
 			{
@@ -106,7 +105,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());
 				MSPacketHandler.sendToServer(packet);
 				
-				setMessage(new TranslatableComponent(menu.overrideStop() ? STOP : GO));
+				setMessage(Component.translatable(menu.overrideStop() ? STOP : GO));
 			}
 		}
 	}

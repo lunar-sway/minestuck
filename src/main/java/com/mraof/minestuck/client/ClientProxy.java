@@ -1,17 +1,18 @@
 package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.*;
-import com.mraof.minestuck.client.renderer.entity.*;
-import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.GateRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.HolopadRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.ReturnNodeRenderer;
 import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
+import com.mraof.minestuck.client.renderer.entity.*;
+import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.ComputerProgram;
 import com.mraof.minestuck.computer.DiskBurner;
@@ -21,7 +22,6 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
@@ -36,7 +36,13 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD, modid = Minestuck.MOD_ID)
 public class ClientProxy
 {
 	private static void registerRenderers()
@@ -48,7 +54,14 @@ public class ClientProxy
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
-	public static void init()
+	@SubscribeEvent
+	public static void registerKeyMappings(RegisterKeyMappingsEvent event)
+	{
+		MSKeyHandler.registerKeys(event);
+	}
+	
+	@SubscribeEvent
+	public static void init(final FMLClientSetupEvent event)
 	{
 		registerRenderers();
 		
@@ -75,7 +88,7 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.GRIST.get(), GristRenderer::new);
 		EntityRenderers.register(MSEntityTypes.VITALITY_GEL.get(), VitalityGelRenderer::new);
 		EntityRenderers.register(MSEntityTypes.PLAYER_DECOY.get(), DecoyRenderer::new);
-		EntityRenderers.register(MSEntityTypes.METAL_BOAT.get(), MetalBoatRenderer::new);
+		EntityRenderers.register(MSEntityTypes.METAL_BOAT.get(), context -> new MetalBoatRenderer(context, false));
 		EntityRenderers.register(MSEntityTypes.BARBASOL_BOMB.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.CONSUMABLE_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.RETURNING_PROJECTILE.get(), ThrownItemRenderer::new);
@@ -130,8 +143,6 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.LUNCHTOP.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.PLATFORM_BLOCK.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.ITEM_MAGNET.get(), RenderType.translucent());
-		
-		MSKeyHandler.registerKeys();
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);

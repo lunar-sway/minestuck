@@ -5,16 +5,13 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.client.gui.chat.NarratorChatListener;
+import net.minecraft.client.GameNarrator;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -23,9 +20,7 @@ import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -72,7 +67,7 @@ public class ReadableSburbCodeScreen extends Screen
 	
 	public ReadableSburbCodeScreen(Set<Block> recordedBlockList, boolean paradoxCode)
 	{
-		super(NarratorChatListener.NO_TITLE);
+		super(GameNarrator.NO_TITLE);
 		this.hieroglyphValidityArray = checkForValidity(recordedBlockList, paradoxCode);
 		
 	}
@@ -84,23 +79,22 @@ public class ReadableSburbCodeScreen extends Screen
 		this.createMenuControls();
 		this.createPageControlButtons();
 		
-		Resource resource = null;
+		Reader reader = null;
 		
 		try
 		{
-			resource = this.minecraft.getResourceManager().getResource(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
-			InputStream inputStream = resource.getInputStream();
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+			reader = this.minecraft.getResourceManager().openAsReader(new ResourceLocation(Minestuck.MOD_ID, "texts/rana_temporaria_sec22b.txt")); //The text is broken into lines 48 characters long to neatly fit within a block of text that avoids empty spaces
+			BufferedReader bufferedReader = new BufferedReader(reader);
 			textList = bufferedReader.lines().collect(Collectors.toList());
 			
 			linesPerBlock = textList.size() / MAX_HIEROGLYPH_COUNT;
 			totalPages = Math.round((float) (textList.size() + 1) / (float) LINES_PER_PAGE);
-		} catch(Exception ignored)
+		} catch(Exception e)
 		{
-			LOGGER.error("Couldn't load book nucleotides", ignored);
+			LOGGER.error("Couldn't load book nucleotides", e);
 		} finally
 		{
-			IOUtils.closeQuietly(resource);
+			IOUtils.closeQuietly(reader);
 		}
 		
 		
@@ -186,7 +180,7 @@ public class ReadableSburbCodeScreen extends Screen
 					//limiting the length of the page via this if statement
 					if(stillValidLine(lineY.intValue()))
 					{
-						Component line = new TextComponent(text.substring(start, end)).setStyle(style);
+						Component line = Component.literal(text.substring(start, end)).setStyle(style);
 						font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300); //hex is green
 						lineY.add(CUSTOM_LINE_HEIGHT);
 					}
@@ -225,7 +219,7 @@ public class ReadableSburbCodeScreen extends Screen
 	{
 		if(this.minecraft != null)
 		{
-			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, new TranslatableComponent("gui.done"), button -> this.minecraft.setScreen(null)));
+			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, Component.translatable("gui.done"), button -> this.minecraft.setScreen(null)));
 		}
 	}
 	

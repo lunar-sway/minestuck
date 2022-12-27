@@ -333,7 +333,7 @@ public class CaptchaDeckHandler
 		if(modus == null)
 			return null;
 		
-		ResourceLocation name = modus.getType().getRegistryName();
+		ResourceLocation name = ModusTypes.REGISTRY.get().getKey(modus.getType());
 		if(name != null)
 		{
 			CompoundTag nbt = modus.writeToNBT(new CompoundTag());
@@ -350,7 +350,7 @@ public class CaptchaDeckHandler
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && ClientPlayerData.getModus() != null && name.equals(ClientPlayerData.getModus().getType().getRegistryName()))
+		if(clientSide && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
 		else
 		{

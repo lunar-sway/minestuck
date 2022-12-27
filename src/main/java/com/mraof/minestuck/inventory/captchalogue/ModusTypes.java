@@ -16,8 +16,7 @@ public final class ModusTypes
 {
 	public static final DeferredRegister<ModusType<?>> REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "modus_type"), Minestuck.MOD_ID);
 	
-	@SuppressWarnings("unchecked")
-	public static final Supplier<IForgeRegistry<ModusType<?>>> REGISTRY = REGISTER.makeRegistry((Class<ModusType<?>>) (Object) ModusType.class, RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<ModusType<?>>> REGISTRY = REGISTER.makeRegistry(RegistryBuilder::new);
 	
 	public static final RegistryObject<ModusType<StackModus>> STACK = REGISTER.register("stack", () -> new ModusType<>(StackModus::new, MSItems.STACK_MODUS_CARD));
 	public static final RegistryObject<ModusType<QueueModus>> QUEUE = REGISTER.register("queue", () -> new ModusType<>(QueueModus::new, MSItems.QUEUE_MODUS_CARD));

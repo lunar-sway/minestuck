@@ -9,8 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -28,7 +27,7 @@ public class TransportalizerScreen extends Screen
 	
 	TransportalizerScreen(TransportalizerBlockEntity be)
 	{
-		super(new TextComponent("Transportalizer"));
+		super(Component.literal("Transportalizer"));
 
 		this.be = be;
 	}
@@ -37,7 +36,7 @@ public class TransportalizerScreen extends Screen
 	public void init()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, new TextComponent("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, Component.literal("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.destinationTextField.setCanLoseFocus(false);
 		this.destinationTextField.setMaxLength(4);
 		this.destinationTextField.setValue(be.getDestId());
@@ -45,7 +44,7 @@ public class TransportalizerScreen extends Screen
 		addRenderableWidget(destinationTextField);
 		setInitialFocus(destinationTextField);
 		
-		addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, new TranslatableComponent("gui.done"), button -> finish()));
+		addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable("gui.done"), button -> finish()));
 		doneButton.active = destinationTextField.getValue().length() == 4;
 	}
 	

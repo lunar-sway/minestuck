@@ -1,19 +1,18 @@
 package com.mraof.minestuck.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +28,6 @@ import static net.minecraft.world.item.Items.*;
 public class BoondollarPricingProvider implements DataProvider
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	
 	private final Map<ResourceLocation, BoondollarPricing> pricings = new HashMap<>();
 	private final DataGenerator dataGenerator;
@@ -239,13 +237,13 @@ public class BoondollarPricingProvider implements DataProvider
 	protected void add(ItemLike item, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), ConstantInt.of(value), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
 	}
 	
 	protected void add(ItemLike item, int min, int max)
 	{
 		//Just set the name manually if this throws an exception
-		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		add(Ingredient.of(item), UniformInt.of(min, max), Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
 	}
 	
 	protected void add(Ingredient ingredient, IntProvider range, String name)
@@ -259,7 +257,7 @@ public class BoondollarPricingProvider implements DataProvider
 	}
 	
 	@Override
-	public void run(HashCache cache)
+	public void run(CachedOutput cache)
 	{
 		registerPricings();
 		
@@ -270,7 +268,7 @@ public class BoondollarPricingProvider implements DataProvider
 			Path pricingPath = getPath(outputPath, entry.getKey());
 			try
 			{
-				DataProvider.save(GSON, cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
+				DataProvider.saveStable(cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
 			} catch(IOException e)
 			{
 				LOGGER.error("Couldn't save boondollar pricing {}", pricingPath, e);

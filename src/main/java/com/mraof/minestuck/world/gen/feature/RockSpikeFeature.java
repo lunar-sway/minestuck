@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +30,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
 		
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		
 		int height = rand.nextInt(7) + 10;
 		
@@ -55,7 +56,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 		return true;
 	}
 	
-	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, LevelAccessor level, Random rand, BlockState ground)
+	private void generateSubRock(BlockPos pos, int heightOld, float plateauOld, LevelAccessor level, RandomSource rand, BlockState ground)
 	{
 		int height = 5 + rand.nextInt((int) ((heightOld - 6)*0.75));
 		BlockPos newPos = pos.offset(rand.nextInt(10) - 5, 0, rand.nextInt(10) - 5);
@@ -65,7 +66,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 		generateRock(newPos, height, plateauSize, level, rand, ground);
 	}
 	
-	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, Random random, BlockState ground)
+	private BlockPos generateRock(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, RandomSource random, BlockState ground)
 	{
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();
 		

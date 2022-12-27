@@ -7,7 +7,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -177,15 +176,15 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 	{
 		if(level != null)
 		{
-			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.completion", (byte) percentCompletion(stack)));
+			tooltip.add(Component.translatable("item.minestuck.sburb_code.completion", (byte) percentCompletion(stack)));
 			if(hasAllBlocks(getRecordedBlocks(stack)))
-				tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.paradox_hint"));
+				tooltip.add(Component.translatable("item.minestuck.sburb_code.paradox_hint"));
 		}
 		
 		if(Screen.hasShiftDown())
 		{
-			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.additional_info"));
+			tooltip.add(Component.translatable("item.minestuck.sburb_code.additional_info"));
 		} else
-			tooltip.add(new TranslatableComponent("item.minestuck.sburb_code.shift_for_more_info"));
+			tooltip.add(Component.translatable("item.minestuck.sburb_code.shift_for_more_info"));
 	}
 }

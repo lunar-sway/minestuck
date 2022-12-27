@@ -42,19 +42,15 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
-		Biome.BiomeCategory category = landTypes.getTerrain().getBiomeCategory();
 		
 		baseBiomes = biomes;
 		
 		GenerationBuilder generationBuilder = new GenerationBuilder();
 		addBiomeGeneration(generationBuilder, blocks, landTypes);
 		
-		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).biomeCategory(category).build()
-				.setRegistryName(biomes.NORMAL.value().getRegistryName()));
-		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).biomeCategory(category).build()
-				.setRegistryName(biomes.ROUGH.value().getRegistryName()));
-		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.BiomeCategory.OCEAN).build()
-				.setRegistryName(biomes.OCEAN.value().getRegistryName()));
+		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).build());
+		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).build());
+		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).build());
 	}
 	
 	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)

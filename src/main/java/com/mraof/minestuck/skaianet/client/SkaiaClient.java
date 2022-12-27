@@ -37,7 +37,7 @@ public class SkaiaClient
 	public static int playerId;	//The id that this player is expected to have.
 	
 	@SubscribeEvent
-	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		openServers.clear();
 		connections.clear();

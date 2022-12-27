@@ -121,7 +121,7 @@ public class AlchemyHelper
 		if(!item.isEmpty())
 		{
 			nbt = new CompoundTag();
-			nbt.putString("contentID", item.getItem().getRegistryName().toString());
+			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(item.getItem()).toString());
 		}
 		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get());
 		stack.setTag(nbt);
@@ -135,7 +135,7 @@ public class AlchemyHelper
 		if(!itemIn.isEmpty())
 		{
 			nbt = new CompoundTag();
-			nbt.putString("contentID", itemIn.getItem().getRegistryName().toString());
+			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(itemIn.getItem()).toString());
 		}
 		ItemStack stack = itemOut;
 		

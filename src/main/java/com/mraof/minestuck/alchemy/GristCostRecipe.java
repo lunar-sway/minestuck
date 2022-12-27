@@ -16,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -164,7 +163,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	//Helper class for implementing serializer classes
-	public abstract static class AbstractSerializer<T extends GristCostRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T>
+	public abstract static class AbstractSerializer<T extends GristCostRecipe> implements RecipeSerializer<T>
 	{
 		@Override
 		public T fromJson(ResourceLocation recipeId, JsonObject json)

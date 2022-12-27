@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +39,7 @@ public class SummonerScreen extends Screen
 	
 	SummonerScreen(SummonerBlockEntity be)
 	{
-		super(new TextComponent("Summoner")); //TODO convert to translatable text string
+		super(Component.literal("Summoner")); //TODO convert to translatable text string
 		
 		this.be = be;
 		this.summonRange = be.getSummonRange();
@@ -52,17 +51,17 @@ public class SummonerScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("+"), button -> changeRange(1)));
-		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
-		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("++"), button -> changeRange(10)));
-		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
+		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("+"), button -> changeRange(1)));
+		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("-"), button -> changeRange(-1)));
+		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("++"), button -> changeRange(10)));
+		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("--"), button -> changeRange(-10)));
 		
-		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, Component.literal("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(be.getSummonedEntity()).toString());
 		addRenderableWidget(entityTypeTextField);
 		
 		addRenderableWidget(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
-		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, Component.literal("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -88,7 +87,7 @@ public class SummonerScreen extends Screen
 	
 	private Component getTriggerableButtonMessage()
 	{
-		return this.isUntriggerable ? new TextComponent("UNTRIGGERABLE") : new TextComponent("TRIGGERABLE");
+		return this.isUntriggerable ? Component.literal("UNTRIGGERABLE") : Component.literal("TRIGGERABLE");
 	}
 	
 	@Override

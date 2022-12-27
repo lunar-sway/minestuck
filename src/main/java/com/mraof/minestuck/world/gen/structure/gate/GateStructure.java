@@ -2,37 +2,40 @@ package com.mraof.minestuck.world.gen.structure.gate;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-import java.util.Random;
+import java.util.Optional;
 
-public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
+public class GateStructure extends Structure
 {
-	public GateStructure(Codec<NoneFeatureConfiguration> codec)
+	public static final Codec<GateStructure> CODEC = simpleCodec(GateStructure::new);
+	
+	public GateStructure(Structure.StructureSettings settings)
 	{
-		super(codec, PieceGeneratorSupplier.simple(GateStructure::checkLocation, GateStructure::generatePieces));
+		super(settings);
 	}
 	
 	@Override
-	public GenerationStep.Decoration step()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return GenerationStep.Decoration.SURFACE_STRUCTURES;
+		return Optional.of(new GenerationStub(context.chunkPos().getWorldPosition(), builder -> generatePieces(builder, context)));
 	}
 	
-	private static boolean checkLocation(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
+	@Override
+	public StructureType<?> type()
 	{
-		return true;
+		return MSStructures.LAND_GATE.get();
 	}
 	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 	{
 		ChunkGenerator generator = context.chunkGenerator();
 		ChunkPos pos = context.chunkPos();
@@ -41,12 +44,12 @@ public class GateStructure extends StructureFeature<NoneFeatureConfiguration>
 		if(factory == null)
 			factory = GatePillarPiece::new;
 		
-		builder.addPiece(factory.create(generator, context.heightAccessor(), context.random(), pos.getMinBlockX(), pos.getMinBlockZ()));
+		builder.addPiece(factory.create(generator, context.heightAccessor(), context.randomState(), context.random(), pos.getMinBlockX(), pos.getMinBlockZ()));
 	}
 	
 	public interface PieceFactory
 	{
-		GatePiece create(ChunkGenerator generator, LevelHeightAccessor level, Random rand, int minX, int minZ);
+		GatePiece create(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource rand, int minX, int minZ);
 	}
 	
 	private static PieceFactory getFactory(ChunkGenerator generator)

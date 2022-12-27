@@ -10,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public interface FinishUseItemEffect
@@ -18,11 +17,10 @@ public interface FinishUseItemEffect
 	ItemStack onItemUseFinish(ItemStack stack, Level level, LivingEntity entityIn);
 	
 	
-	FinishUseItemEffect SPAWN_BREADCRUMBS = (stack, worldIn, entityIn) -> {
+	FinishUseItemEffect SPAWN_BREADCRUMBS = (stack, level, entityIn) -> {
 		if(!entityIn.level.isClientSide && entityIn instanceof Player player)
 		{
-			Random rand = new Random();
-			int num = rand.nextInt(10);
+			int num = entityIn.getRandom().nextInt(10);
 			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), num);
 			
 			player.addItem(crumbs);

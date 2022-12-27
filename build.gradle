@@ -63,7 +63,7 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = "UTF-8"
 
 minecraft {
-    mappings channel: 'parchment', version: '2022.08.07-1.18.2'
+    mappings channel: project.getProperty('mc_mappings_channel'), version: project.getProperty('mc_mappings_version')
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -133,16 +133,17 @@ minecraft {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${project.getProperty('mc_forge_version')}"
+    minecraft "net.minecraftforge:forge:${mc_forge_version}"
 
 	// http://dvs1.progwml6.com/files/maven
-    compileOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${project.getProperty('mc_jei_version')}")
-    compileOnly fg.deobf("com.refinedmods:refinedstorage:${project.getProperty('mc_refined_storage_version')}") {
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${mc_jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${mc_jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${mc_jei_version}")
+    compileOnly fg.deobf("com.refinedmods:refinedstorage:${mc_refined_storage_version}") {
         transitive false
     }
 
-    implementation fg.deobf("software.bernie.geckolib:geckolib-${project.getProperty('mc_gecko_version')}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-${mc_gecko_version}")
     implementation fg.deobf("commoble.infiniverse:${infiniverse_branch}:${infiniverse_version}")
 
     compileOnly fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.18.2-1.2.0.126')

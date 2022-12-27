@@ -10,6 +10,7 @@ import net.minecraft.data.worldgen.placement.TreePlacements;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
@@ -18,11 +19,11 @@ import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,33 +59,33 @@ public final class MSCFeatures
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> FIRE_FIELD = REGISTER.register("fire_field", () -> new ConfiguredFeature<>(MSFeatures.FIRE_FIELD.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COARSE_DIRT_DISK = REGISTER.register("coarse_dirt_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.COARSE_DIRT.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.COARSE_DIRT), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 4), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SNOW_BLOCK_DISK = REGISTER.register("snow_block_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.SNOW_BLOCK.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SNOW_BLOCK), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 4), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_SNOW_BLOCK_DISK = REGISTER.register("small_snow_block_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.SNOW_BLOCK.defaultBlockState(), UniformInt.of(2, 3), 2, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SNOW_BLOCK), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 3), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> ICE_DISK = REGISTER.register("ice_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.ICE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.ICE), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 3), 1)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SAND_DISK = REGISTER.register("sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.SAND.defaultBlockState(), UniformInt.of(2, 5), 2, List.of(Blocks.SANDSTONE.defaultBlockState(), Blocks.SAND.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SAND), BlockPredicate.matchesBlocks(Blocks.SANDSTONE, Blocks.SAND), UniformInt.of(2, 5), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RED_SAND_DISK = REGISTER.register("red_sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.RED_SAND.defaultBlockState(), UniformInt.of(2, 5), 2, List.of(Blocks.RED_SANDSTONE.defaultBlockState(), Blocks.RED_SAND.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.RED_SAND), BlockPredicate.matchesBlocks(Blocks.RED_SANDSTONE, Blocks.RED_SAND), UniformInt.of(2, 5), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SLIME_DISK = REGISTER.register("slime_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.SLIME_BLOCK.defaultBlockState(), UniformInt.of(2, 6), 2, List.of(Blocks.MYCELIUM.defaultBlockState(), Blocks.DIRT.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SLIME_BLOCK), BlockPredicate.matchesBlocks(Blocks.MYCELIUM, Blocks.DIRT), UniformInt.of(2, 6), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> NETHERRACK_DISK = REGISTER.register("netherrack_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.NETHERRACK.defaultBlockState(), UniformInt.of(2, 3), 1, Collections.emptyList())));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> OAK_LEAVES_DISK = REGISTER.register("oak_leaves_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(Blocks.OAK_LEAVES.defaultBlockState(), UniformInt.of(2, 3), 2, Collections.emptyList())));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.OAK_LEAVES), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COAGULATED_BLOOD_DISK = REGISTER.register("coagulated_blood_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(MSBlocks.COAGULATED_BLOOD.get().defaultBlockState(), UniformInt.of(2, 5), 2, Collections.emptyList())));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.COAGULATED_BLOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 5), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COBBLESTONE_SURFACE_DISK = REGISTER.register("cobblestone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
-			new DiskConfiguration(Blocks.COBBLESTONE.defaultBlockState(), UniformInt.of(2, 5), 1, List.of(Blocks.GRAVEL.defaultBlockState(), Blocks.COBBLESTONE.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.COBBLESTONE), BlockPredicate.matchesBlocks(Blocks.GRAVEL, Blocks.COBBLESTONE), UniformInt.of(2, 5), 1)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> STONE_SURFACE_DISK = REGISTER.register("stone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
-			new DiskConfiguration(Blocks.STONE.defaultBlockState(), UniformInt.of(2, 4), 2, List.of(Blocks.GRAVEL.defaultBlockState(), Blocks.STONE.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.STONE), BlockPredicate.matchesBlocks(Blocks.GRAVEL, Blocks.STONE), UniformInt.of(2, 4), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> END_GRASS_SURFACE_DISK = REGISTER.register("end_grass_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
-			new DiskConfiguration(MSBlocks.END_GRASS.get().defaultBlockState(), UniformInt.of(2, 4), 1, List.of(Blocks.END_STONE.defaultBlockState(), MSBlocks.END_GRASS.get().defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.END_GRASS.get()), BlockPredicate.matchesBlocks(Blocks.END_STONE, MSBlocks.END_GRASS.get()), UniformInt.of(2, 4), 1)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> END_STONE_SURFACE_DISK = REGISTER.register("end_stone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
-			new DiskConfiguration(Blocks.END_STONE.defaultBlockState(), UniformInt.of(2, 3), 1, List.of(MSBlocks.END_GRASS.get().defaultBlockState(), Blocks.END_STONE.defaultBlockState()))));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.END_STONE), BlockPredicate.matchesBlocks(MSBlocks.END_GRASS.get(), Blocks.END_STONE), UniformInt.of(2, 3), 1)));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> MESA = REGISTER.register("mesa", () -> new ConfiguredFeature<>(MSFeatures.MESA.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> STONE_MOUND = REGISTER.register("stone_mound", () -> new ConfiguredFeature<>(MSFeatures.STONE_MOUND.get(), new BlockStateConfiguration(Blocks.STONE.defaultBlockState())));

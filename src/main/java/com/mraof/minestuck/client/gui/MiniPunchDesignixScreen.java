@@ -6,7 +6,6 @@ import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.blockentity.machine.MiniPunchDesignixBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -67,7 +66,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, new TextComponent(menu.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 	}
 }

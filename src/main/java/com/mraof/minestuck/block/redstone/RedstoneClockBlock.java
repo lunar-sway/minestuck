@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * Generates a redstone pulse through its block entity at a modifiable increment. Used as a compact means of creating redstone clocks
@@ -65,7 +65,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		super.tick(state, level, pos, rand);
 		
@@ -110,7 +110,7 @@ public class RedstoneClockBlock extends MSDirectionalBlock implements EntityBloc
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(stateIn.getValue(POWERED))
 			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);

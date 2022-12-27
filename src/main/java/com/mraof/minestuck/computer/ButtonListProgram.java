@@ -12,8 +12,6 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
@@ -68,14 +66,14 @@ public abstract class ButtonListProgram extends ComputerProgram
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, TextComponent.EMPTY, button1 -> onButtonPressed(gui, button1));
+			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, Component.empty(), button1 -> onButtonPressed(gui, button1));
 			buttonMap.put(button, new UnlocalizedString(""));
 			gui.addRenderableWidget(button);
 		}
 		
-		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, new TextComponent("^"), button1 -> onButtonPressed(gui, button1));
+		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, Component.literal("^"), button1 -> onButtonPressed(gui, button1));
 		gui.addRenderableWidget(upButton);
-		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, new TextComponent("v"), button1 -> onButtonPressed(gui, button1));
+		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, Component.literal("v"), button1 -> onButtonPressed(gui, button1));
 		gui.addRenderableWidget(downButton);
 	}
 	
@@ -164,7 +162,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		
 		public Component asTextComponent()
 		{
-			return new TranslatableComponent(string, formatData);
+			return Component.translatable(string, formatData);
 		}
 	}
 	

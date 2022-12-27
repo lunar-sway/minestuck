@@ -4,12 +4,11 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Random;
 
 public class EndLeavesBlock extends FlammableLeavesBlock
 {
@@ -27,7 +26,7 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	}
 	
 	@Override
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(!state.getValue(PERSISTENT) && state.getValue(DISTANCE) > LEAF_SUSTAIN_DISTANCE)
 		{

@@ -3,11 +3,11 @@ name: Build
 on:
   push:
     branches: 
-      - '1.18'
+      - '1.19'
       - 'upcoming-content'
   pull_request:
     branches: 
-      - '1.18'
+      - '1.19'
       - 'upcoming-content'
 
 permissions:

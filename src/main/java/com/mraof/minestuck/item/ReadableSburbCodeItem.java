@@ -6,7 +6,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -123,9 +122,9 @@ public abstract class ReadableSburbCodeItem extends Item
 		public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
 		{
 			if(Screen.hasShiftDown())
-				tooltip.add(new TranslatableComponent("item.minestuck.completed_sburb_code.additional_info"));
+				tooltip.add(Component.translatable("item.minestuck.completed_sburb_code.additional_info"));
 			else
-				tooltip.add(new TranslatableComponent("item.minestuck.completed_sburb_code.shift_for_more_info"));
+				tooltip.add(Component.translatable("item.minestuck.completed_sburb_code.shift_for_more_info"));
 		}
 		
 	}

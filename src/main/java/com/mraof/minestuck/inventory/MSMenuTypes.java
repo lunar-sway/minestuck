@@ -9,7 +9,7 @@ import net.minecraftforge.registries.*;
 
 public class MSMenuTypes
 {
-	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Minestuck.MOD_ID);
+	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<MenuType<MiniCruxtruderMenu>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> new MenuType<>((IContainerFactory<MiniCruxtruderMenu>) MiniCruxtruderMenu::new));
 	public static final RegistryObject<MenuType<MiniTotemLatheMenu>> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> new MenuType<>((IContainerFactory<MiniTotemLatheMenu>) MiniTotemLatheMenu::new));

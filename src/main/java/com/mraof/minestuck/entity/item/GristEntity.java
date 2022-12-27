@@ -187,7 +187,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		compound.putString("Type", gristType.getRegistryName().toString());
+		compound.putString("Type", String.valueOf(GristTypes.getRegistry().getKey(gristType)));
 	}
 	
 	@Override
@@ -256,7 +256,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(gristType);
+		buffer.writeRegistryId(GristTypes.getRegistry(), gristType);
 		buffer.writeLong(gristValue);
 	}
 	

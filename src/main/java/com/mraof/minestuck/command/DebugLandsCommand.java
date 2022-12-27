@@ -9,7 +9,7 @@ import com.mraof.minestuck.skaianet.CommandActionHandler;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class DebugLandsCommand
 {
 	public static final String MUST_ENTER = "commands.minestuck.debuglands.must_enter";
-	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(MUST_ENTER));
+	public static final SimpleCommandExceptionType MUST_ENTER_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(MUST_ENTER));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{

@@ -11,8 +11,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -37,7 +36,7 @@ public class ComputerScreen extends Screen
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
-		super(new TextComponent("Computer"));
+		super(Component.literal("Computer"));
 		
 		this.mc = mc;
 		this.font = mc.font;
@@ -86,7 +85,7 @@ public class ComputerScreen extends Screen
 		if(be.programSelected != -1 && (program == null || program.getId() != be.programSelected))
 			program = ComputerProgram.getProgram(be.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize) / 2 + 95, (height - ySize) / 2 + 10, 70, 20, TextComponent.EMPTY, button -> changeProgram());
+		programButton = new ExtendedButton((width - xSize) / 2 + 95, (height - ySize) / 2 + 10, 70, 20, Component.empty(), button -> changeProgram());
 		addRenderableWidget(programButton);
 		if(be.programSelected != -1)
 			program.onInitGui(this);
@@ -108,7 +107,7 @@ public class ComputerScreen extends Screen
 		if(program != null)
 		{
 			program.onUpdateGui(this);
-			programButton.setMessage(new TranslatableComponent(program.getName()));
+			programButton.setMessage(Component.translatable(program.getName()));
 		}
 		
 	}

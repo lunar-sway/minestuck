@@ -8,14 +8,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-
-import java.util.Random;
 
 public class DynamicDimensions
 {
@@ -29,12 +27,12 @@ public class DynamicDimensions
 			RandomSource random = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(server.getWorldData().worldGenSettings().seed())
 					.forkPositional().fromHashOf(worldKey.location());
 			
-			LandTypePair.Named named = landTypes.createNamedRandomly(new Random(random.nextLong()));
+			LandTypePair.Named named = landTypes.createNamedRandomly(random.fork());
 			long seed = random.nextLong();
 			
 			ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), server.registryAccess().registryOrThrow(Registry.DENSITY_FUNCTION_REGISTRY),
-					seed, named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
-			return new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolder(LAND_TYPE), chunkGenerator);
+					named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
+			return new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolderOrThrow(LAND_TYPE), chunkGenerator);
 		});
 		
 		return worldKey;

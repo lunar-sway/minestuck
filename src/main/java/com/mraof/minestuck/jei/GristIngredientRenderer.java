@@ -8,7 +8,6 @@ import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.item.TooltipFlag;
 
 import javax.annotation.Nullable;
@@ -44,7 +43,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 	{
 		List<Component> list = new ArrayList<>();
 		list.add(ingredient.getType().getDisplayName());
-		list.add(new TextComponent(String.valueOf(ingredient.getType().getRegistryName())).withStyle(ChatFormatting.DARK_GRAY));
+		list.add(Component.literal(String.valueOf(ingredient.getType())).withStyle(ChatFormatting.DARK_GRAY));
 		return list;
 	}
 }

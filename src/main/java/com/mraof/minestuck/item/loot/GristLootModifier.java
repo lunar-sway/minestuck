@@ -1,21 +1,18 @@
 package com.mraof.minestuck.item.loot;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * A global loot modifier that when applied to loot,
@@ -26,6 +23,11 @@ import java.util.List;
  */
 public class GristLootModifier extends LootModifier
 {
+	public static final Codec<GristLootModifier> CODEC = RecordCodecBuilder.create(instance ->
+			codecStart(instance)
+			.and(Codec.FLOAT.fieldOf("multiplier").forGetter(modifier -> modifier.multiplier)
+			).apply(instance, GristLootModifier::new));
+	
 	private final float multiplier;
 	public GristLootModifier(LootItemCondition[] conditionsIn, float multiplier)
 	{
@@ -35,12 +37,12 @@ public class GristLootModifier extends LootModifier
 	
 	@Nonnull
 	@Override
-	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context)
+	protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context)
 	{
 		if(context.hasParam(LootContextParams.ORIGIN))
 		{
 			Vec3 pos = context.getParam(LootContextParams.ORIGIN);
-			List<ItemStack> remainingLoot = Lists.newArrayList();
+			ObjectArrayList<ItemStack> remainingLoot = new ObjectArrayList<>();
 			
 			for(ItemStack stack : generatedLoot)
 			{
@@ -59,20 +61,9 @@ public class GristLootModifier extends LootModifier
 		return generatedLoot;
 	}
 	
-	public static class Serializer extends GlobalLootModifierSerializer<GristLootModifier>
+	@Override
+	public Codec<? extends GristLootModifier> codec()
 	{
-		@Override
-		public GristLootModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] lootConditions)
-		{
-			return new GristLootModifier(lootConditions, GsonHelper.getAsFloat(object, "multiplier"));
-		}
-		
-		@Override
-		public JsonObject write(GristLootModifier instance)
-		{
-			JsonObject json = makeConditions(instance.conditions);
-			json.addProperty("multiplier", instance.multiplier);
-			return json;
-		}
+		return CODEC;
 	}
 }

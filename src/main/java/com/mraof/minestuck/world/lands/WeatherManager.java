@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.lands;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.storage.ServerLevelData;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -15,9 +15,9 @@ public class WeatherManager
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	@SubscribeEvent
-	public static void onWorldLoad(WorldEvent.Load event)
+	public static void onWorldLoad(LevelEvent.Load event)
 	{
-		if(event.getWorld() instanceof ServerLevel level)
+		if(event.getLevel() instanceof ServerLevel level)
 		{
 			LandTypePair.getTypes(level).ifPresent(landTypes -> {
 				LandProperties properties = LandProperties.create(landTypes);

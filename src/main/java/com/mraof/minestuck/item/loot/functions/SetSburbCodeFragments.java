@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -39,7 +40,7 @@ public class SetSburbCodeFragments extends LootItemConditionalFunction
 		return IncompleteSburbCodeItem.setRecordedInfo(stack, pickRandomHieroglyphs(context.getRandom()));
 	}
 	
-	private Set<Block> pickRandomHieroglyphs(Random random)
+	private Set<Block> pickRandomHieroglyphs(RandomSource random)
 	{
 		ITag<Block> hieroglyphs = Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(MSTags.Blocks.GREEN_HIEROGLYPHS);
 		

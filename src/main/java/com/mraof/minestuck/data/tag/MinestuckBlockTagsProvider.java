@@ -234,7 +234,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		for(Block block : blocks)
 		{
 			if(!block.defaultBlockState().requiresCorrectToolForDrops())
-				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block.getRegistryName()));
+				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block));
 		}
 	}
 	

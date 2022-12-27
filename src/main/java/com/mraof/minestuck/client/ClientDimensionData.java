@@ -51,7 +51,7 @@ public class ClientDimensionData
 	}
 	
 	@SubscribeEvent
-	public static void onLogout(ClientPlayerNetworkEvent.LoggedOutEvent event)
+	public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event)
 	{
 		landTypes.clear();
 		currentWorld = null;

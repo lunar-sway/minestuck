@@ -12,8 +12,9 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MusicPlayerPacket;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.SimpleMenuProvider;
@@ -27,11 +28,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -69,7 +70,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	
 	private static IItemHandler getItemHandler(ItemStack itemStack)
 	{
-		return itemStack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).orElseThrow(() ->
+		return itemStack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseThrow(() ->
 				new IllegalArgumentException("Expected an item handler for the music player item, but " + itemStack + " does not expose an item handler."));
 	}
 	
@@ -136,9 +137,9 @@ public class MusicPlayerWeapon extends WeaponItem
 				musicPlayingCap.setMusicPlaying(ItemStack.EMPTY, EnumCassetteType.NONE);
 				MSPacketHandler.sendToTrackingAndSelf(packet, playerIn); //This will stop the music before opening the GUI
 				
-				NetworkHooks.openGui((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
+				NetworkHooks.openScreen((ServerPlayer) playerIn, new SimpleMenuProvider((pContainerId, pInventory, pPlayer) ->
 						new CassetteContainerMenu(pContainerId, pInventory, itemStackHandlerMusicPlayer, musicPlayer),
-						new TranslatableComponent(TITLE)));
+						Component.translatable(TITLE)));
 			}
 		}
 		return InteractionResultHolder.sidedSuccess(musicPlayer, level.isClientSide);
@@ -188,7 +189,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		IMusicPlaying musicPlaying = getMusicPlaying(attacker);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
-			Random r = attacker.level.getRandom();
+			RandomSource r = attacker.level.getRandom();
 			
 			double attackerLuckValue;
 			double targetLuckValue;

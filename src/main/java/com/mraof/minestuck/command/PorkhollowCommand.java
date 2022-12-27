@@ -9,11 +9,10 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.Util;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +23,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 	public static final String RECEIVE = "commands.minestuck.porkhollow.receive";
 	public static final String TAKE = "commands.minestuck.porkhollow.take";
 	public static final String INSUFFICIENT = "commands.minestuck.porkhollow.insufficient";
-	private static final SimpleCommandExceptionType NOT_ENOUGH = new SimpleCommandExceptionType(new TranslatableComponent(INSUFFICIENT));
+	private static final SimpleCommandExceptionType NOT_ENOUGH = new SimpleCommandExceptionType(Component.translatable(INSUFFICIENT));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
@@ -49,8 +48,8 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		if(PlayerSavedData.getData(player).tryTakeBoondollars(amount))
 		{
 			PlayerSavedData.getData(target).addBoondollars(amount);
-			source.sendSuccess(new TranslatableComponent(SEND, amount, target.getDisplayName()), true);
-			target.sendMessage(new TranslatableComponent(RECEIVE, amount, player.getDisplayName()), Util.NIL_UUID);
+			source.sendSuccess(Component.translatable(SEND, amount, target.getDisplayName()), true);
+			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}
@@ -69,7 +68,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 					entity.setNoPickUpDelay();
 			}
 			
-			source.sendSuccess(new TranslatableComponent(TAKE, amount), true);
+			source.sendSuccess(Component.translatable(TAKE, amount), true);
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}

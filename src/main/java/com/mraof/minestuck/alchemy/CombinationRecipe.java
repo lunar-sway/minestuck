@@ -11,7 +11,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -74,7 +73,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 		return MSRecipeTypes.COMBINATION.get();
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<CombinationRecipe>
+	public static class Serializer implements RecipeSerializer<CombinationRecipe>
 	{
 		@Override
 		public CombinationRecipe fromJson(ResourceLocation recipeId, JsonObject json)

@@ -55,10 +55,10 @@ public class Echeladder
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getPlayer()).getEcheladder();
-		echeladder.updateEcheladderBonuses((ServerPlayer) event.getPlayer());
+		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getEntity()).getEcheladder();
+		echeladder.updateEcheladderBonuses((ServerPlayer) event.getEntity());
 		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
-			event.getPlayer().heal(event.getPlayer().getMaxHealth());
+			event.getEntity().heal(event.getEntity().getMaxHealth());
 	}
 	
 	private final PlayerSavedData savedData;

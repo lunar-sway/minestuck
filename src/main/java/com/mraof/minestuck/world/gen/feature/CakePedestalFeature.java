@@ -5,10 +5,9 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConfiguration>
 {
@@ -20,13 +19,13 @@ public class CakePedestalFeature extends AbstractTemplateFeature<NoneFeatureConf
 	}
 	
 	@Override
-	protected ResourceLocation pickTemplate(Random random)
+	protected ResourceLocation pickTemplate(RandomSource random)
 	{
 		return STRUCTURE_CAKE_PEDESTAL;
 	}
 	
 	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random)
+	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
 	{
 		return minWorldHeightInSize(level, pos, templateSize);
 	}

@@ -12,30 +12,30 @@ import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformFloat;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.carver.CarverDebugSettings;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.heightproviders.UniformHeight;
 import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-
-import java.util.List;
-import java.util.Random;
 
 public class RockLandType extends TerrainLandType
 {
@@ -51,14 +51,14 @@ public class RockLandType extends TerrainLandType
 	{
 		return new RockLandType(Variant.ROCK, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(ROCK, STONE, ORE)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
-				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_ROCK));
+				.music(MSSoundEvents.MUSIC_ROCK));
 	}
 	
 	public static TerrainLandType createPetrification()
 	{
 		return new RockLandType(Variant.PETRIFICATION, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
-				.category(Biome.BiomeCategory.EXTREME_HILLS).music(MSSoundEvents.MUSIC_PETRIFICATION));
+				.music(MSSoundEvents.MUSIC_PETRIFICATION));
 	}
 	
 	private RockLandType(Variant variation, Builder builder)
@@ -103,7 +103,7 @@ public class RockLandType extends TerrainLandType
 	{
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.DISK,
-				new DiskConfiguration(Blocks.CLAY.defaultBlockState(), UniformInt.of(2, 5), 2, List.of(blocks.getBlockState("ocean_surface"), Blocks.CLAY.defaultBlockState())),
+				new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.CLAY), BlockPredicate.matchesBlocks(blocks.getBlockState("ocean_surface").getBlock(), Blocks.CLAY), UniformInt.of(2, 5), 2),
 				CountPlacement.of(25), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID), LandBiomeType.OCEAN);
 		
 		if(this.type == Variant.ROCK)
@@ -170,7 +170,7 @@ public class RockLandType extends TerrainLandType
 		//cave carver that creates more cavernous sections, may end up as just a placeholder for noise based cave generation
 		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
 						UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)),
-						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), CarverDebugSettings.DEFAULT,
+						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), Registry.BLOCK.getOrCreateTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES),
 						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F)))),
 				LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
@@ -187,7 +187,7 @@ public class RockLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		NakagatorVillagePieces.addPieces(register, random);
 	}

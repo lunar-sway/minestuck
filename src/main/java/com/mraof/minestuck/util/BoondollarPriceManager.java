@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -58,7 +59,7 @@ public class BoondollarPriceManager extends SimpleJsonResourceReloadListener
 		LOGGER.info("Loaded {} boondollar prices", this.pricings.size());
 	}
 	
-	public Optional<Integer> findPrice(ItemStack stack, Random rand)
+	public Optional<Integer> findPrice(ItemStack stack, RandomSource rand)
 	{
 		return pricings.stream().filter(pricing -> pricing.appliesTo(stack)).findAny().map(pricing -> pricing.generatePrice(rand));
 	}

@@ -18,7 +18,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -212,7 +211,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
-					renderTooltip(poseStack, new TranslatableComponent(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
+					renderTooltip(poseStack, Component.translatable(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
 							xcor, ycor);
 	}
 	
@@ -299,7 +298,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	public static void onPlayerLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		normalTab = NormalGuiType.CAPTCHA_DECK;
 		editmodeTab = EditmodeGuiType.DEPLOY_LIST;

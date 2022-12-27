@@ -8,7 +8,7 @@ import com.mraof.minestuck.network.StructureCorePacket;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -33,7 +33,7 @@ public class StructureCoreScreen extends Screen
 	
 	StructureCoreScreen(StructureCoreBlockEntity be)
 	{
-		super(new TextComponent("Structure Core"));
+		super(Component.literal("Structure Core"));
 		
 		this.be = be;
 		this.actionType = be.getActionType();
@@ -45,14 +45,14 @@ public class StructureCoreScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("+"), button -> changeRange(1)));
-		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
-		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("++"), button -> changeRange(10)));
-		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
+		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("+"), button -> changeRange(1)));
+		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("-"), button -> changeRange(-1)));
+		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("++"), button -> changeRange(10)));
+		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("--"), button -> changeRange(-10)));
 		
-		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, yOffset + 40, 135, 20, new TextComponent(actionType.getNameNoSpaces()), button -> changeActionType()));
+		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, yOffset + 40, 135, 20, Component.literal(actionType.getNameNoSpaces()), button -> changeActionType()));
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, Component.literal("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class StructureCoreScreen extends Screen
 	private void changeActionType()
 	{
 		actionType = StructureCoreBlockEntity.ActionType.fromInt(actionType.ordinal() < StructureCoreBlockEntity.ActionType.values().length - 1 ? actionType.ordinal() + 1 : 0);
-		typeButton.setMessage(new TextComponent(actionType.getNameNoSpaces()));
+		typeButton.setMessage(Component.literal(actionType.getNameNoSpaces()));
 	}
 	
 	/**

@@ -105,7 +105,7 @@ public class MSNBTUtil
 		ListTag listTag = new ListTag();
 		for(Block blockIterate : blocks)
 		{
-			String blockName = String.valueOf(blockIterate.getRegistryName());
+			String blockName = String.valueOf(ForgeRegistries.BLOCKS.getKey(blockIterate));
 			listTag.add(StringTag.valueOf(blockName));
 		}
 		
@@ -114,7 +114,7 @@ public class MSNBTUtil
 	
 	public static boolean tryAddBlockToSet(CompoundTag nbt, String key, Block block)
 	{
-		StringTag blockIdTag = StringTag.valueOf(String.valueOf(block.getRegistryName()));
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(ForgeRegistries.BLOCKS.getKey(block)));
 		
 		if(!nbt.contains(key, Tag.TAG_LIST))
 		{

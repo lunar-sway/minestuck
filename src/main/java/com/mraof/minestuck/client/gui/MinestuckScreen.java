@@ -10,7 +10,6 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -84,7 +83,7 @@ public abstract class MinestuckScreen extends Screen
 			}
 			else
 			{
-				renderTooltip(poseStack, new TextComponent(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
+				renderTooltip(poseStack, Component.literal(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
 			}
 		}
 	}

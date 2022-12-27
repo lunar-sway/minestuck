@@ -15,7 +15,7 @@ public class GristTypes
 {
 	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "grist"), Minestuck.MOD_ID);
 	
-	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry(GristType.class, () -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE).hasTags());
+	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry(() -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE).hasTags());
 	
 	public static final RegistryObject<GristType> BUILD = GRIST_TYPES.register("build", () -> new GristType(new GristType.Properties(1.0F, 1).candy(MSItems.BUILD_GUSHERS).notUnderlingType()));
 	public static final RegistryObject<GristType> AMBER = GRIST_TYPES.register("amber", () -> new GristType(new GristType.Properties(0.5F, 1.5F).candy(MSItems.AMBER_GUMMY_WORM)));
@@ -56,7 +56,7 @@ public class GristTypes
 		@Override
 		public GristType createDummy(ResourceLocation key)
 		{
-			return new GristType.DummyType().setRegistryName(key);
+			return new GristType.DummyType();
 		}
 	}
 }

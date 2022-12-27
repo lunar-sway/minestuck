@@ -61,7 +61,7 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 		{
 			JsonObject json = super.serializeToJson(context);
 			if(modusType != null)
-				json.addProperty("modus", modusType.getRegistryName().toString());
+				json.addProperty("modus", String.valueOf(ModusTypes.REGISTRY.get().getKey(modusType)));
 			return json;
 		}
 	}

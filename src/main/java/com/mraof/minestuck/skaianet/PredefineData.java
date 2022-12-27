@@ -10,7 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -61,9 +61,9 @@ public final class PredefineData
 		if(title != null)
 			title.write(nbt, "title");
 		if(terrainLandType != null)
-			nbt.putString("landTerrain", terrainLandType.getRegistryName().toString());
+			nbt.putString("landTerrain", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType).toString());
 		if(titleLandType != null)
-			nbt.putString("landTitle", titleLandType.getRegistryName().toString());
+			nbt.putString("landTitle", LandTypes.TITLE_REGISTRY.get().getKey(titleLandType).toString());
 		
 		return nbt;
 	}
@@ -91,7 +91,7 @@ public final class PredefineData
 		
 		if(terrainLandType != null && !landType.isAspectCompatible(terrainLandType))
 		{
-			source.sendSuccess(new TranslatableComponent(RESETTING_TERRAIN_TYPE, terrainLandType.getRegistryName()).withStyle(ChatFormatting.YELLOW), true);
+			source.sendSuccess(Component.translatable(RESETTING_TERRAIN_TYPE, LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType)).withStyle(ChatFormatting.YELLOW), true);
 			terrainLandType = null;
 		}
 		this.titleLandType = landType;
@@ -112,8 +112,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(new TranslatableComponent(GENERATED_TITLE, title.asTextComponent()), true);
-			else source.sendSuccess(new TranslatableComponent(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).withStyle(ChatFormatting.YELLOW), true);
+				source.sendSuccess(Component.translatable(GENERATED_TITLE, title.asTextComponent()), true);
+			else source.sendSuccess(Component.translatable(CHANGED_TITLE, previous.asTextComponent(), title.asTextComponent()).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	
@@ -142,8 +142,8 @@ public final class PredefineData
 			}
 			
 			if(previous == null)
-				source.sendSuccess(new TranslatableComponent(GENERATED_TITLE_LAND, titleLandType.getRegistryName()), true);
-			else source.sendSuccess(new TranslatableComponent(CHANGED_TITLE_LAND, previous.getRegistryName(), titleLandType.getRegistryName()).withStyle(ChatFormatting.YELLOW), true);
+				source.sendSuccess(Component.translatable(GENERATED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)), true);
+			else source.sendSuccess(Component.translatable(CHANGED_TITLE_LAND, LandTypes.TITLE_REGISTRY.get().getKey(previous), LandTypes.TITLE_REGISTRY.get().getKey(titleLandType)).withStyle(ChatFormatting.YELLOW), true);
 		}
 	}
 	

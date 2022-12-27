@@ -7,9 +7,10 @@ import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.MSDimensions;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -108,13 +109,13 @@ public class MSLootEvents
 		Level level = villagerEntity.level;
 		if(level instanceof ServerLevel serverLevel)
 		{
-			BlockPos templePos = serverLevel.findNearestMapFeature(MSTags.Structures.SCANNER_LOCATED, villagerEntity.blockPosition(), 100, true);
+			BlockPos templePos = serverLevel.findNearestMapStructure(MSTags.Structures.SCANNER_LOCATED, villagerEntity.blockPosition(), 100, true);
 			if(templePos != null)
 			{
 				ItemStack itemstack = MapItem.create(serverLevel, templePos.getX(), templePos.getZ(), (byte) 2, true, true);
 				MapItem.renderBiomePreviewMap(serverLevel, itemstack);
 				MapItemSavedData.addTargetDecoration(itemstack, templePos, "+", MapDecoration.Type.RED_X);
-				itemstack.setHoverName(new TranslatableComponent(FROG_TEMPLE_MAP));
+				itemstack.setHoverName(Component.translatable(FROG_TEMPLE_MAP));
 				
 				return new MerchantOffer(new ItemStack(Items.EMERALD, 8), new ItemStack(Items.COMPASS), itemstack, 12, 7, 0.2F);
 			}
@@ -126,7 +127,7 @@ public class MSLootEvents
 	/**
 	 * Creates a enchanted weapon, uses EnchantedItemForEmeraldsTrade in {@link VillagerTrades} as a base
 	 */
-	public static MerchantOffer createEnchantedItemOffer(Random random, ItemStack weaponStack, int baseEmeraldCost, int maxUses, int villagerXp, float priceMultiplier)
+	public static MerchantOffer createEnchantedItemOffer(RandomSource random, ItemStack weaponStack, int baseEmeraldCost, int maxUses, int villagerXp, float priceMultiplier)
 	{
 		int emeraldCostMod = 5 + random.nextInt(15);
 		EnchantmentHelper.enchantItem(random, weaponStack, emeraldCostMod, false);

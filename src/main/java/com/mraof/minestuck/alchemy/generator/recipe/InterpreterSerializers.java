@@ -13,9 +13,7 @@ public final class InterpreterSerializers
 {
 	public static final DeferredRegister<InterpreterSerializer<?>> REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "recipe_interpreter"), Minestuck.MOD_ID);
 	
-	@SuppressWarnings("unchecked")
-	public static final Supplier<IForgeRegistry<InterpreterSerializer<?>>> REGISTRY = REGISTER.makeRegistry((Class<InterpreterSerializer<?>>) (Object) InterpreterSerializer.class,
-			() -> new RegistryBuilder<InterpreterSerializer<?>>().disableSaving().disableSync());
+	public static final Supplier<IForgeRegistry<InterpreterSerializer<?>>> REGISTRY = REGISTER.makeRegistry(() -> new RegistryBuilder<InterpreterSerializer<?>>().disableSaving().disableSync());
 	
 	public static final RegistryObject<InterpreterSerializer<DefaultInterpreter>> DEFAULT = REGISTER.register("default", DefaultInterpreter.Serializer::new);
 	public static final RegistryObject<InterpreterSerializer<CookingCostInterpreter>> COOKING = REGISTER.register("cooking", CookingCostInterpreter.Serializer::new);

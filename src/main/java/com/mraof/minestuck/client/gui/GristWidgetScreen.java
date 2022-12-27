@@ -10,7 +10,6 @@ import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -72,10 +71,10 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 			{
 				if(!GuiUtil.addSuffix(cost).equals(String.valueOf(cost)) && mouseX - leftPos < imageWidth - 9 - font.width("£("+GuiUtil.addSuffix(has)+")")
 						&& mouseX - leftPos >= imageWidth - 9 - font.width(costText))
-					renderTooltip(poseStack, new TextComponent(String.valueOf(cost)), mouseX - this.leftPos, mouseY - this.topPos);
+					renderTooltip(poseStack, Component.literal(String.valueOf(cost)), mouseX - this.leftPos, mouseY - this.topPos);
 				else if(!GuiUtil.addSuffix(has).equals(String.valueOf(has)) && mouseX - leftPos < imageWidth - 9 - font.width(")")
 						&& mouseX - leftPos >= imageWidth - 9 - font.width(GuiUtil.addSuffix(has)+")"))
-					renderTooltip(poseStack, new TextComponent(String.valueOf(has)), mouseX - this.leftPos, mouseY - this.topPos);
+					renderTooltip(poseStack, Component.literal(String.valueOf(has)), mouseX - this.leftPos, mouseY - this.topPos);
 			}
 		}
 	}
@@ -104,7 +103,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, new TextComponent(menu.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;
