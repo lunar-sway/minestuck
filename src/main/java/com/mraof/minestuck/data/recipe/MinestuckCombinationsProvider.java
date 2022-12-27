@@ -842,6 +842,10 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.DERSE_PANTS.get()).namedInput(Items.LEATHER_LEGGINGS).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DERSE_SHOES.get()).namedInput(Items.LEATHER_BOOTS).or().input(MSBlocks.BLACK_CROWN_STAINED_GLASS.get()).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.AMPHIBEANIE.get()).namedInput(MSItems.CRUMPLY_HAT.get()).and().input(MSItems.FROG.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.NOSTRILDAMUS.get()).namedInput(MSItems.TEMPLE_SCANNER.get()).or().input(Items.EMERALD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PONYTAIL.get()).namedInput(Items.HANGING_ROOTS).or().input(Items.SADDLE).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSBlocks.PRIMED_TNT.get()).input(Items.TNT).or().input(ItemTags.BUTTONS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.UNSTABLE_TNT.get()).input(Items.TNT).or().input(Items.REDSTONE_TORCH).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.INSTANT_TNT.get()).input(Items.TNT).or().input(Items.REDSTONE).build(consumer);

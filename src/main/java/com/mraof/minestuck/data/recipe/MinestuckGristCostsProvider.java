@@ -610,6 +610,9 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.DERSE_SHIRT.get()).grist(CHALK, 45).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DERSE_PANTS.get()).grist(CHALK, 40).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DERSE_SHOES.get()).grist(CHALK, 25).grist(SHALE, 5).grist(MERCURY, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.AMPHIBEANIE.get()).grist(CAULK, 20).grist(MARBLE, 10).grist(AMBER, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.NOSTRILDAMUS.get()).grist(TAR, 20).grist(MARBLE, 10).grist(GOLD, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PONYTAIL.get()).grist(AMBER, 20).grist(MARBLE, 3).grist(QUARTZ, 2).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CARDBOARD_TUBE.get()).grist(BUILD, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST.get()).grist(BUILD, 1).grist(AMBER, 1).build(recipeSaver);
