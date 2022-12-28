@@ -156,7 +156,7 @@ public class MusicPlayerWeapon extends WeaponItem
 	@SubscribeEvent
 	public static void playerTick(TickEvent.PlayerTickEvent tickEvent)
 	{
-		if(tickEvent.side.isServer() && tickEvent.phase == TickEvent.Phase.END)
+		if(tickEvent.side.isServer() && tickEvent.phase == TickEvent.Phase.END && tickEvent.player.isAlive())
 		{
 			Player player = tickEvent.player;
 			IMusicPlaying musicPlayingCap = getMusicPlaying(player);
