@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.player.EnumEcheladderBonuses;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
@@ -82,7 +82,7 @@ public class ImpEntity extends UnderlingEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
-			firstKillBonus(entity, EnumEcheladderBonuses.IMP);
+			firstKillBonus(entity, EcheladderBonusType.IMP);
 		}
 	}
 	

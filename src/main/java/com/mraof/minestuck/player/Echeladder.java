@@ -64,7 +64,7 @@ public class Echeladder
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
-	EnumSet<EnumEcheladderBonuses> usedBonuses = EnumSet.noneOf(EnumEcheladderBonuses.class);
+	EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
 	public Echeladder(PlayerSavedData savedData, PlayerIdentifier identifier)
 	{
@@ -133,7 +133,7 @@ public class Echeladder
 		}
 	}
 	
-	public void checkBonus(EnumEcheladderBonuses type)
+	public void checkBonus(EcheladderBonusType type)
 	{
 		if(!usedBonuses.contains(type))
 		{
@@ -186,7 +186,7 @@ public class Echeladder
 		
 		ListTag bonuses = new ListTag();
 		
-		for(EnumEcheladderBonuses bonus : usedBonuses)
+		for(EcheladderBonusType bonus : usedBonuses)
 		{
 			bonuses.add(StringTag.valueOf(bonus.toString()));
 		}
@@ -201,7 +201,7 @@ public class Echeladder
 		
 		for(Tag tag : nbt.getList("rungBonuses", Tag.TAG_STRING))
 		{
-			usedBonuses.add(EnumEcheladderBonuses.fromString(tag.getAsString()));
+			usedBonuses.add(EcheladderBonusType.fromString(tag.getAsString()));
 		}
 	}
 	

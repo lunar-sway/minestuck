@@ -359,7 +359,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
-	protected static void firstKillBonus(Entity killer, EnumEcheladderBonuses type)
+	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)
 	{
 		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
 		{

@@ -3,7 +3,7 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.player.EnumEcheladderBonuses;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -84,7 +84,7 @@ public class LichEntity extends UnderlingEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
-			firstKillBonus(killer, EnumEcheladderBonuses.LICH);
+			firstKillBonus(killer, EcheladderBonusType.LICH);
 		}
 	}
 	

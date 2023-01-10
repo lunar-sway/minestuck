@@ -5,7 +5,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.EnumEcheladderBonuses;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -32,13 +32,13 @@ public class AlchemyHelper
 		
 		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{
-			e.checkBonus(EnumEcheladderBonuses.ALCHEMY_1);
+			e.checkBonus(EcheladderBonusType.ALCHEMY_1);
 			GristSet cost = event.getCost();
 			double value = cost.getValue();
 			if(value >= 50)
-				e.checkBonus(EnumEcheladderBonuses.ALCHEMY_2);
+				e.checkBonus(EcheladderBonusType.ALCHEMY_2);
 			if(value >= 500)
-				e.checkBonus(EnumEcheladderBonuses.ALCHEMY_3);
+				e.checkBonus(EcheladderBonusType.ALCHEMY_3);
 		}
 		
 	}

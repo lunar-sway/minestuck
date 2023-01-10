@@ -1,6 +1,6 @@
 package com.mraof.minestuck.player;
 
-public enum EnumEcheladderBonuses
+public enum EcheladderBonusType
 {
 	IMP(10),
 	OGRE(120),
@@ -12,7 +12,7 @@ public enum EnumEcheladderBonuses
 	ALCHEMY_3(3000);
 	private final int bonus;
 	
-	EnumEcheladderBonuses(int bonus)
+	EcheladderBonusType(int bonus)
 	{
 		this.bonus = bonus;
 	}
@@ -28,9 +28,9 @@ public enum EnumEcheladderBonuses
 		return this.name().toLowerCase();
 	}
 	
-	public static EnumEcheladderBonuses fromString(String string)
+	public static EcheladderBonusType fromString(String string)
 	{
-		for(EnumEcheladderBonuses c : values())
+		for(EcheladderBonusType c : values())
 		{
 			if(c.toString().equalsIgnoreCase(string))
 				return c;
