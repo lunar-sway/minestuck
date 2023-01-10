@@ -64,7 +64,7 @@ public class Echeladder
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
-	EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
+	private final EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
 	public Echeladder(PlayerSavedData savedData, PlayerIdentifier identifier)
 	{
