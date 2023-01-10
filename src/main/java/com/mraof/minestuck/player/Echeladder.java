@@ -133,6 +133,11 @@ public class Echeladder
 		}
 	}
 	
+	/**
+	 * Check if the bonus has already been given to the player, give it if it hasn't.
+	 * @param type
+	 */
+	
 	public void checkBonus(EcheladderBonusType type)
 	{
 		if(!usedBonuses.contains(type))
