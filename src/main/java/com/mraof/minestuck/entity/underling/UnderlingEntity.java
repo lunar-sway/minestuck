@@ -5,12 +5,9 @@ import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -362,7 +359,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
-	protected static void firstKillBonus(Entity killer, byte type)
+	protected static void firstKillBonus(Entity killer, EnumEcheladderBonuses type)
 	{
 		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
 		{

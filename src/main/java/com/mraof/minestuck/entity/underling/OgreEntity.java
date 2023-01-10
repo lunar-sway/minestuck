@@ -4,7 +4,7 @@ import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EnumEcheladderBonuses;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -85,7 +85,7 @@ public class OgreEntity extends UnderlingEntity
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
-			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 1));
+			firstKillBonus(entity, EnumEcheladderBonuses.OGRE);
 		}
 	}
 }
