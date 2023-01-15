@@ -7,7 +7,12 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+
+import java.util.UUID;
 
 /**
  * Abstract class for handling the actions of Geckolib animated mobs. It keeps track of which animation is in use via a MobAnimation and EntityDataAccessor
@@ -18,6 +23,9 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 * Retains the action from MobAnimation
 	 */
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedPathfinderMob.class, EntityDataSerializers.INT);
+	
+	private static final UUID FREEZE_MOB_UUID = UUID.fromString("e4c7543e-335c-4217-8d15-25c157e8ce88");
+	private static final AttributeModifier STATIONARY_MOB_MODIFIER = new AttributeModifier(FREEZE_MOB_UUID, "Stationary Animation Modifier", -10, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	
 	private MobAnimation mobAnimation = MobAnimation.DEFAULT_IDLE_ANIMATION;
 	
@@ -41,9 +49,6 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	{
 		super.tick();
 		
-		if(mobAnimation != null && mobAnimation.freezesMovement())
-			this.getNavigation().stop();
-		
 		if(remainingAnimationTicks > 0)
 		{
 			remainingAnimationTicks--;
@@ -58,6 +63,8 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 **/
 	public void endCurrentAction()
 	{
+		unfreezeMob(); //it is assumed that the idle animation does not require the mob to be frozen, this is a second measure to ensure they do not get stuck
+		
 		this.setCurrentAnimation(MobAnimation.DEFAULT_IDLE_ANIMATION);
 	}
 	
@@ -81,6 +88,20 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 		return MobAnimation.Actions.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
+	public void freezeMob()
+	{
+		AttributeInstance instance = getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
+		if(instance != null && !instance.hasModifier(STATIONARY_MOB_MODIFIER))
+			instance.addTransientModifier(STATIONARY_MOB_MODIFIER);
+	}
+	
+	public void unfreezeMob()
+	{
+		AttributeInstance instance = getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
+		if(instance != null)
+			instance.removeModifier(STATIONARY_MOB_MODIFIER);
+	}
+	
 	/**
 	 * Used to set the entity's animation and action
 	 *
@@ -88,6 +109,11 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 */
 	public void setCurrentAnimation(MobAnimation animation)
 	{
+		if(animation.freezesMovement())
+			freezeMob();
+		else
+			unfreezeMob();
+		
 		this.entityData.set(CURRENT_ACTION, animation.getAction().ordinal());
 		this.mobAnimation = animation;
 		this.remainingAnimationTicks = animation.getAnimationLength();
