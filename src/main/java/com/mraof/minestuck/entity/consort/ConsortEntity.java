@@ -94,7 +94,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D, PANIC_ANIMATION));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -432,12 +432,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
 	{
 		return true;
-	}
-	
-	@Override
-	public MobAnimation getPanicAnimation()
-	{
-		return PANIC_ANIMATION;
 	}
 	
 	@Override

@@ -7,19 +7,20 @@ import net.minecraft.world.entity.ai.goal.PanicGoal;
 public class AnimatedPanicGoal extends PanicGoal
 {
 	private final AnimatedPathfinderMob entity;
+	private final MobAnimation panicAnimation;
 	
-	public AnimatedPanicGoal(AnimatedPathfinderMob entity, double speedModifier)
+	public AnimatedPanicGoal(AnimatedPathfinderMob entity, double speedModifier, MobAnimation panicAnimation)
 	{
 		super(entity, speedModifier);
 		this.entity = entity;
+		this.panicAnimation = panicAnimation;
 	}
 	
 	@Override
 	public void start()
 	{
-		MobAnimation animation = this.entity.getPanicAnimation();
-		if(animation != null)
-			this.entity.setCurrentAnimation(animation);
+		if(panicAnimation != null)
+			this.entity.setCurrentAnimation(panicAnimation);
 		super.start();
 	}
 	

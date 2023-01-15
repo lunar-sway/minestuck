@@ -66,7 +66,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 *
 	 * @return The action this entity is currently executing
 	 */
-	protected MobAnimation getCurrentAnimation()
+	public MobAnimation getCurrentAnimation()
 	{
 		return mobAnimation;
 	}
@@ -91,19 +91,6 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 		this.entityData.set(CURRENT_ACTION, animation.getAction().ordinal());
 		this.mobAnimation = animation;
 		this.remainingAnimationTicks = animation.getAnimationLength();
-	}
-	
-	/**
-	 * Typically used by passive mobs
-	 */
-	public MobAnimation getPanicAnimation()
-	{
-		return null;
-	}
-	
-	public MobAnimation getDefaultAttackAnimation()
-	{
-		return null;
 	}
 	
 	@Override
