@@ -74,25 +74,18 @@ public class MobAnimation
 	public enum Actions
 	{
 		//passive/neutral actions
-		IDLE(false),
-		TALK(false),
-		PANIC(false),
+		IDLE,
+		TALK,
+		PANIC,
 		
 		//aggressive actions
-		PUNCH(true),
-		CLAW(true),
-		BITE(true),
-		MELEE(true), //weapon
-		SLAM(true),
-		SHOOT(true), //projectile
-		SHOVE(true);
-		
-		private final boolean isAttack; //whether this action represents an attack
-		
-		Actions(boolean isAttack)
-		{
-			this.isAttack = isAttack;
-		}
+		PUNCH,
+		CLAW,
+		BITE,
+		MELEE, //weapon
+		SLAM,
+		SHOOT, //projectile
+		SHOVE;
 		
 		/**
 		 * Converts int back into enum
@@ -103,11 +96,6 @@ public class MobAnimation
 				return Actions.values()[ordinal];
 			else
 				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for actions!");
-		}
-		
-		public boolean isAttack()
-		{
-			return isAttack;
 		}
 	}
 }
