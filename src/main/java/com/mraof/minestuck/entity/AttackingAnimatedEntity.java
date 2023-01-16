@@ -1,21 +1,18 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.animation.MobAnimationPhases;
-import net.minecraft.core.BlockPos;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
- * Through the use of MobAnimationPhases, additional code can be deployed at the changing point of each animation phase of specific animations.
+ * Through the use of PhasedMobAnimation, additional code can be deployed at the changing point of each animation phase of specific animations.
  */
-public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements MobAnimationPhases.Phases.Holder
+public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements PhasedMobAnimation.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
@@ -32,25 +29,25 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	}
 	
 	@Override
-	public MobAnimationPhases.Phases getPhase()
+	public PhasedMobAnimation.Phases getPhase()
 	{
-		return MobAnimationPhases.Phases.values()[this.entityData.get(CURRENT_ACTION)];
+		return PhasedMobAnimation.Phases.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	@Override
-	public void setAnimationPhase(MobAnimationPhases.Phases phase, MobAnimation.Actions animation)
+	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Actions animation)
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 		
-		if(phase == MobAnimationPhases.Phases.ANTICIPATION) //first tick of animation
+		if(phase == PhasedMobAnimation.Phases.ANTICIPATION) //first tick of animation
 			anticipationPhaseStart(animation);
-		else if(phase == MobAnimationPhases.Phases.INITIATION)
+		else if(phase == PhasedMobAnimation.Phases.INITIATION)
 			initiationPhaseStart(animation);
-		else if(phase == MobAnimationPhases.Phases.CONTACT)
+		else if(phase == PhasedMobAnimation.Phases.CONTACT)
 			contactPhaseStart(animation);
-		else if(phase == MobAnimationPhases.Phases.RECOVERY)
+		else if(phase == PhasedMobAnimation.Phases.RECOVERY)
 			recoveryPhaseStart(animation);
-		else if(phase == MobAnimationPhases.Phases.NEUTRAL) //last tick of animation
+		else if(phase == PhasedMobAnimation.Phases.NEUTRAL) //last tick of animation
 			neutralPhaseStart(animation);
 	}
 	

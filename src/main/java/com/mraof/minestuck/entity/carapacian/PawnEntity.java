@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.animation.MobAnimationPhases;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.item.MSItems;
@@ -38,12 +38,11 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 
-public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, MobAnimationPhases.Phases.Holder
+public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, PhasedMobAnimation.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
-	public static final MobAnimationPhases MELEE_PHASES = new MobAnimationPhases(3, 6, 7, 18);
-	public static final MobAnimation MELEE_ANIMATION = new MobAnimation(MobAnimation.Actions.MELEE, MELEE_PHASES.getTotalAnimationLength(), true, false);
+	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(MobAnimation.Actions.MELEE, true, false, 3, 6, 7, 18);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
@@ -82,7 +81,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, MELEE_ANIMATION, MELEE_PHASES));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, MELEE_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 0, true, false, entity -> attackEntitySelector.isEntityApplicable(entity)));
 	}
@@ -95,13 +94,13 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
-	public MobAnimationPhases.Phases getPhase()
+	public PhasedMobAnimation.Phases getPhase()
 	{
-		return MobAnimationPhases.Phases.values()[this.entityData.get(CURRENT_ACTION)];
+		return PhasedMobAnimation.Phases.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	@Override
-	public void setAnimationPhase(MobAnimationPhases.Phases phase, MobAnimation.Actions actions)
+	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Actions actions)
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 	}

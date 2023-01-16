@@ -2,8 +2,7 @@ package com.mraof.minestuck.entity.ai;
 
 import com.mojang.math.Vector3d;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
-import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.animation.MobAnimationPhases;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -12,13 +11,12 @@ import java.util.EnumSet;
 import java.util.Objects;
 
 /**
- * An abstract goal for handling MobAnimationPhases compliant animated actions
+ * An abstract goal for handling PhasedMobAnimation compliant animated actions
  */
-public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimationPhases.Phases.Holder> extends Goal
+public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends Goal
 {
 	protected final T entity;
-	protected final MobAnimation animation;
-	protected final MobAnimationPhases phases;
+	protected final PhasedMobAnimation animation;
 	
 	/**
 	 * Starts at 0 and counts up, when this int matches any of the ints in phases, it transitions to the start of that given phase
@@ -27,11 +25,10 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimati
 	
 	protected Vector3d lookTarget;
 	
-	public MobAnimationPhaseGoal(T entity, MobAnimation animation, MobAnimationPhases phases)
+	public MobAnimationPhaseGoal(T entity, PhasedMobAnimation animation)
 	{
 		this.entity = entity;
 		this.animation = animation;
-		this.phases = phases;
 		
 		//code block has some redundancy with the tick function in AnimatedPathfinderMob, however entities who are not members of that class are expected to be able to use this goal
 		if(animation.freezesMovement() && !animation.freezesSight())
@@ -51,7 +48,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimati
 	@Override
 	public boolean canContinueToUse()
 	{
-		return phases.getCurrentPhase(time) != MobAnimationPhases.Phases.NEUTRAL;
+		return animation.getCurrentPhase(time) != PhasedMobAnimation.Phases.NEUTRAL;
 	}
 	
 	@Override
@@ -67,7 +64,7 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimati
 			this.lookTarget = new Vector3d(target.getX(), target.getEyeY(), target.getZ());
 		}
 		
-		this.entity.setAnimationPhase(MobAnimationPhases.Phases.ANTICIPATION, animation.getAction());
+		this.entity.setAnimationPhase(PhasedMobAnimation.Phases.ANTICIPATION, animation.getAction());
 	}
 	
 	@Override
@@ -87,6 +84,6 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & MobAnimati
 			this.entity.getLookControl().setLookAt(lookTarget.x, lookTarget.y, lookTarget.z);
 		
 		this.time++;
-		phases.attemptPhaseChange(time, entity, animation);
+		animation.attemptPhaseChange(time, entity);
 	}
 }

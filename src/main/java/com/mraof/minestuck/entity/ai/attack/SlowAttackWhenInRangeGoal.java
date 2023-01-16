@@ -1,8 +1,7 @@
 package com.mraof.minestuck.entity.ai.attack;
 
 import com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal;
-import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.animation.MobAnimationPhases;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 
@@ -10,13 +9,13 @@ import javax.annotation.Nonnull;
 
 /**
  * A goal for performing a slow melee attack when within hitting range.
- * The attack will occur at the start of the Contact MobAnimationPhases.Phases
+ * The attack will occur at the start of the Contact PhasedMobAnimation.Phases
  */
-public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPhases.Phases.Holder> extends MobAnimationPhaseGoal<T>
+public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
 {
-	public SlowAttackWhenInRangeGoal(T entity, MobAnimation animation, MobAnimationPhases phases)
+	public SlowAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation)
 	{
-		super(entity, animation, phases);
+		super(entity, animation);
 	}
 	
 	@Override
@@ -31,7 +30,7 @@ public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & MobAnimationPha
 	{
 		super.tick();
 		
-		if(time == phases.getContactStartTime())
+		if(time == animation.getContactStartTime())
 		{
 			LivingEntity target = this.entity.getTarget();
 			if(target != null && this.isValidTarget(target))

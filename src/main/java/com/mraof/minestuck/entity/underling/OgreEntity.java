@@ -6,14 +6,11 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.entity.animation.MobAnimationPhases;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,8 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final MobAnimationPhases PUNCH_PHASES = new MobAnimationPhases(8, 10, 13, 18);
-	public static final MobAnimation PUNCH_ANIMATION = new MobAnimation(MobAnimation.Actions.PUNCH, PUNCH_PHASES.getTotalAnimationLength(), true,true);
+	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(MobAnimation.Actions.PUNCH, true,true, 8, 10, 13, 18);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
@@ -49,7 +45,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, PUNCH_PHASES));
+		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	

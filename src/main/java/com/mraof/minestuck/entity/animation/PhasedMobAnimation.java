@@ -6,19 +6,20 @@ import net.minecraft.world.entity.PathfinderMob;
  * A supplement to MobAnimation that allows for certain code to be performed at the point where one phase of an animation ends and the other begins.
  * Primarily intended for use with {@link com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal}
  */
-public class MobAnimationPhases
+public class PhasedMobAnimation extends MobAnimation
 {
 	private final int initiationStart;
 	private final int contactStart;
 	private final int recoveryStart;
 	private final int recoveryEnd;
 	
-	public MobAnimationPhases(int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
+	public PhasedMobAnimation(Actions actions, boolean freezeMovement, boolean freezeSight, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
 	{
+		super(actions, recoveryEnd, freezeMovement, freezeSight);
 		this.initiationStart = initiationStart;
 		this.contactStart = contactStart;
 		this.recoveryStart = recoveryStart;
-		this.recoveryEnd = recoveryEnd;
+		this.recoveryEnd = recoveryEnd; //recoveryEnd is identical to animationLength in MobAnimation
 	}
 	
 	public Phases getCurrentPhase(int time)
@@ -61,20 +62,20 @@ public class MobAnimationPhases
 	/**
 	 * Is called every tick to check whether its time to transition to a new phase
 	 */
-	public <T extends PathfinderMob & MobAnimationPhases.Phases.Holder> void attemptPhaseChange(int time, T entity, MobAnimation animation)
+	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity)
 	{
 		if(time == getInitiationStartTime())
-			entity.setAnimationPhase(Phases.INITIATION, animation.getAction());
+			entity.setAnimationPhase(Phases.INITIATION, getAction());
 		else if(time == getContactStartTime())
-			entity.setAnimationPhase(Phases.CONTACT, animation.getAction());
+			entity.setAnimationPhase(Phases.CONTACT, getAction());
 		else if(time == getRecoveryStartTime())
-			entity.setAnimationPhase(Phases.RECOVERY, animation.getAction());
+			entity.setAnimationPhase(Phases.RECOVERY, getAction());
 		else if(time >= getTotalAnimationLength())
-			entity.setAnimationPhase(Phases.NEUTRAL, animation.getAction());
+			entity.setAnimationPhase(Phases.NEUTRAL, getAction());
 	}
 	
 	/**
-	 * A list of all the phases, the transition to ANTICIPATION is not included in a MobAnimationPhases object because the transition time is equivalent to the start of when its called.
+	 * A list of all the phases, the transition to ANTICIPATION is not included in a PhasedMobAnimation object because the transition time is equivalent to the start of when its called.
 	 * Contains the Holder interface
 	 */
 	public enum Phases
@@ -109,14 +110,14 @@ public class MobAnimationPhases
 			/**
 			 * @return the current phase of the entity's animation
 			 */
-			MobAnimationPhases.Phases getPhase();
+			PhasedMobAnimation.Phases getPhase();
 			
 			/**
 			 * Used to set the entity's animation phase.
 			 *
 			 * @param phase The new phase of the entity's animation
 			 */
-			void setAnimationPhase(MobAnimationPhases.Phases phase, MobAnimation.Actions animation);
+			void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Actions animation);
 			
 			/**
 			 * @return true if the animation has not reached its apex
@@ -133,7 +134,7 @@ public class MobAnimationPhases
 			 */
 			default boolean isActive()
 			{
-				MobAnimationPhases.Phases state = this.getPhase();
+				PhasedMobAnimation.Phases state = this.getPhase();
 				return state != NEUTRAL;
 			}
 		}
