@@ -13,6 +13,11 @@ public class PhasedMobAnimation extends MobAnimation
 	private final int recoveryStart;
 	private final int recoveryEnd;
 	
+	/**
+	 * @param initiationStart not the first frame of animation
+	 * @param contactStart the apex of animations, when attacks connect
+	 * @param recoveryEnd same as animationLength in MobAnimation
+	 */
 	public PhasedMobAnimation(Actions actions, boolean freezeMovement, boolean freezeSight, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
 	{
 		super(actions, recoveryEnd, freezeMovement, freezeSight);

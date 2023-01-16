@@ -16,6 +16,12 @@ public class MobAnimation
 	private final boolean freezeMovement;
 	private final boolean freezeSight;
 	
+	/**
+	 * @param actions category of the animation
+	 * @param animationLength last frame of the animation
+	 * @param freezeMovement whether the entity can move voluntarily during an animation, handled both in Goals and is updated upon the change of animation in AnimatedPathfinderMob
+	 * @param freezeSight whether the entity has their facing direction locked, handled by Goals
+	 */
 	public MobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
 	{
 		this.actions = actions;
