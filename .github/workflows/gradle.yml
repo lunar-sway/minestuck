@@ -29,7 +29,7 @@ jobs:
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@v1
     - name: Gradle Build
-      timeout-minutes: 10
+      timeout-minutes: 15
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
