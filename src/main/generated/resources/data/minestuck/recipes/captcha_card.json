@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "c": {
+      "item": "minestuck:raw_cruxite"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    }
+  },
   "pattern": [
     "ppp",
     "pcp",
     "ppp"
   ],
-  "key": {
-    "p": {
-      "item": "minecraft:paper"
-    },
-    "c": {
-      "item": "minestuck:raw_cruxite"
-    }
-  },
   "result": {
     "item": "minestuck:captcha_card"
   }

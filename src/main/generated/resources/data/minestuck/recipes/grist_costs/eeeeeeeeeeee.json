@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:eeeeeeeeeeee"
-  },
   "grist_cost": {
     "minestuck:artifact": -17,
     "minestuck:build": 1
+  },
+  "ingredient": {
+    "item": "minestuck:eeeeeeeeeeee"
   }
 }

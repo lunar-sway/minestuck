@@ -1553,6 +1553,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(ColorSelectorScreen.SELECT_COLOR, "Select Color");
 		add(ColorSelectorScreen.COLOR_SELECTED, "If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!");
 		add(ColorSelectorScreen.DEFAULT_COLOR_SELECTED, "Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!");
+		add(StructureCoreScreen.TITLE, "Structure Core");
+		add(StatStorerScreen.TITLE, "Stat Storer");
+		add(RemoteObserverScreen.TITLE, "Remote Observer");
+		add(ComputerScreen.TITLE, "Computer");
+		add(TransportalizerScreen.TITLE, "Transportalizer");
+		add(AreaEffectScreen.TITLE, "Area Effect Block");
 		addColor("blue", "Blue");
 		addColor("orchid", "Orchid");
 		addColor("red", "Red");
@@ -1592,8 +1598,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
+		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
+		add(SummonerScreen.TITLE, "Summoner");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");

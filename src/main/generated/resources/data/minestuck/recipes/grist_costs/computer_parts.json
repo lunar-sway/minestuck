@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:computer_parts"
-  },
   "grist_cost": {
     "minestuck:build": 20,
-    "minestuck:rust": 5,
-    "minestuck:gold": 1
+    "minestuck:gold": 1,
+    "minestuck:rust": 5
+  },
+  "ingredient": {
+    "item": "minestuck:computer_parts"
   }
 }

@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:tar_licorice"
-  },
   "grist_cost": {
     "minestuck:tar": 3
+  },
+  "ingredient": {
+    "item": "minestuck:tar_licorice"
   }
 }

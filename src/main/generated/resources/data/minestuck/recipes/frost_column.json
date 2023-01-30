@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#",
-    "#",
-    "#"
-  ],
   "key": {
     "#": {
       "item": "minestuck:frost_bricks"
     }
   },
+  "pattern": [
+    "#",
+    "#",
+    "#"
+  ],
   "result": {
-    "item": "minestuck:frost_column",
-    "count": 3
+    "count": 3,
+    "item": "minestuck:frost_column"
   }
 }

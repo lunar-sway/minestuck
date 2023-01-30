@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class ComputerScreen extends Screen
 {
 	
+	public static final String TITLE = "minestuck.computer";
 	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/bsod_message.png");
 	
@@ -36,7 +37,7 @@ public class ComputerScreen extends Screen
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
-		super(Component.literal("Computer"));
+		super(Component.translatable(TITLE));
 		
 		this.mc = mc;
 		this.font = mc.font;

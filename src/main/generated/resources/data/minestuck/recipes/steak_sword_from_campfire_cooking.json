@@ -1,9 +1,9 @@
 {
   "type": "minecraft:campfire_cooking",
+  "cookingtime": 600,
+  "experience": 0.5,
   "ingredient": {
     "item": "minestuck:beef_sword"
   },
-  "result": "minestuck:steak_sword",
-  "experience": 0.5,
-  "cookingtime": 600
+  "result": "minestuck:steak_sword"
 }

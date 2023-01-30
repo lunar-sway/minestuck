@@ -15,6 +15,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class StructureCoreScreen extends Screen
 {
+	public static final String TITLE = "minestuck.structure_core";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -33,7 +34,7 @@ public class StructureCoreScreen extends Screen
 	
 	StructureCoreScreen(StructureCoreBlockEntity be)
 	{
-		super(Component.literal("Structure Core"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.actionType = be.getActionType();

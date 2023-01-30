@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:blender"
-  },
   "grist_cost": {
     "minestuck:build": 16
+  },
+  "ingredient": {
+    "item": "minestuck:blender"
   }
 }

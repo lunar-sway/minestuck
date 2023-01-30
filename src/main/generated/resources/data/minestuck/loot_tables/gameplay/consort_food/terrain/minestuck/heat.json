@@ -2,140 +2,140 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "main",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:onion"
+          "name": "minestuck:onion",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:chocolate_beetle"
+          "name": "minestuck:chocolate_beetle",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:beetroot_soup"
+          "name": "minecraft:beetroot_soup",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:beef"
+          "name": "minecraft:beef",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minestuck:steak_sword"
+          "name": "minestuck:steak_sword",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:beetroot"
+          "name": "minecraft:beetroot",
+          "weight": 8
         },
         {
           "type": "minecraft:loot_table",
-          "weight": 2,
-          "name": "minestuck:gameplay/special/hot_cake"
+          "name": "minestuck:gameplay/special/hot_cake",
+          "weight": 2
         }
-      ]
+      ],
+      "name": "main",
+      "rolls": 1.0
     },
     {
-      "name": "special",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 6.0
+                "max": 6.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:tab"
+          "name": "minestuck:tab",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:irradiated_steak"
+          "name": "minestuck:irradiated_steak",
+          "weight": 8
         }
-      ]
+      ],
+      "name": "special",
+      "rolls": 1.0
     }
   ]
 }

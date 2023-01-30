@@ -20,6 +20,7 @@ import java.util.Optional;
 
 public class SummonerScreen extends Screen
 {
+	public static final String TITLE = "minestuck.summoner";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -39,7 +40,7 @@ public class SummonerScreen extends Screen
 	
 	SummonerScreen(SummonerBlockEntity be)
 	{
-		super(Component.literal("Summoner")); //TODO convert to translatable text string
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.summonRange = be.getSummonRange();

@@ -19,6 +19,7 @@ import java.util.Optional;
 
 public class RemoteObserverScreen extends Screen
 {
+	public static final String TITLE = "minestuck.remote_observer";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -38,7 +39,7 @@ public class RemoteObserverScreen extends Screen
 	
 	RemoteObserverScreen(RemoteObserverBlockEntity be)
 	{
-		super(Component.literal("Stat Storer"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.activeType = be.getActiveType();

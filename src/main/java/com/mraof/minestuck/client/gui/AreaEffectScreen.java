@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AreaEffectScreen extends Screen
 {
+	public static final String TITLE = "minestuck.area_effect";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -45,7 +46,7 @@ public class AreaEffectScreen extends Screen
 	
 	AreaEffectScreen(AreaEffectBlockEntity be)
 	{
-		super(Component.literal("Area Effect Block"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.isAllMobs = be.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);

@@ -15,6 +15,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class StatStorerScreen extends Screen
 {
+	public static final String TITLE = "minestuck.stat_storer";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -32,7 +33,7 @@ public class StatStorerScreen extends Screen
 	
 	StatStorerScreen(StatStorerBlockEntity be)
 	{
-		super(Component.literal("Stat Storer"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.activeType = be.getActiveType();

@@ -15,6 +15,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
 {
+	public static final String TITLE = "minestuck.transportalizer";
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
@@ -27,7 +28,7 @@ public class TransportalizerScreen extends Screen
 	
 	TransportalizerScreen(TransportalizerBlockEntity be)
 	{
-		super(Component.literal("Transportalizer"));
+		super(Component.translatable(TITLE));
 
 		this.be = be;
 	}
