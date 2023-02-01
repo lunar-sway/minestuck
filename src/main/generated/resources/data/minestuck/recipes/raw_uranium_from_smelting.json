@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.2,
   "ingredient": {
     "tag": "minestuck:ores/uranium"
   },
-  "result": "minestuck:raw_uranium",
-  "experience": 0.2,
-  "cookingtime": 200
+  "result": "minestuck:raw_uranium"
 }

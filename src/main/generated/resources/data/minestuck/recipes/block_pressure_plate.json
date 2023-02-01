@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "s": {
+      "item": "minecraft:stone"
+    }
+  },
   "pattern": [
     "sps",
     "sis",
     "srs"
   ],
-  "key": {
-    "p": {
-      "item": "minecraft:stone_pressure_plate"
-    },
-    "s": {
-      "item": "minecraft:stone"
-    },
-    "i": {
-      "item": "minecraft:iron_ingot"
-    },
-    "r": {
-      "item": "minecraft:redstone"
-    }
-  },
   "result": {
     "item": "minestuck:block_pressure_plate"
   }

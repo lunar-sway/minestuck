@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "nin",
-    "pep",
-    "nin"
-  ],
   "key": {
     "e": {
       "item": "minestuck:energy_core"
@@ -19,6 +14,11 @@
       "item": "minecraft:ender_pearl"
     }
   },
+  "pattern": [
+    "nin",
+    "pep",
+    "nin"
+  ],
   "result": {
     "item": "minestuck:plutonium_core"
   }

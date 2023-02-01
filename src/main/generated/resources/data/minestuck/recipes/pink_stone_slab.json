@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "minestuck:pink_stone"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "minestuck:pink_stone_slab",
-    "count": 6
+    "count": 6,
+    "item": "minestuck:pink_stone_slab"
   }
 }

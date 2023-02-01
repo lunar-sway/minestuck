@@ -1,25 +1,25 @@
 {
   "parent": "minestuck:minestuck/connect",
+  "criteria": {
+    "use_artifact": {
+      "conditions": {},
+      "trigger": "minestuck:cruxite_artifact"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minestuck:cruxite_apple",
-      "nbt": "{color:10542335}"
-    },
-    "title": {
-      "translate": "advancements.minestuck.entry.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.entry.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:cruxite_apple",
+      "nbt": "{color:10542335}"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "use_artifact": {
-      "trigger": "minestuck:cruxite_artifact",
-      "conditions": {}
+    "title": {
+      "translate": "advancements.minestuck.entry.title"
     }
   },
   "requirements": [

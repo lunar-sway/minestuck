@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#",
-    "#"
-  ],
   "key": {
     "#": {
       "item": "minestuck:polished_green_stone"
     }
   },
+  "pattern": [
+    "#",
+    "#"
+  ],
   "result": {
-    "item": "minestuck:vertical_green_stone_bricks",
-    "count": 2
+    "count": 2,
+    "item": "minestuck:vertical_green_stone_bricks"
   }
 }

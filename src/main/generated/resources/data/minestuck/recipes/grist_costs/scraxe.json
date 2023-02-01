@@ -1,12 +1,12 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:scraxe"
-  },
   "grist_cost": {
     "minestuck:build": 272,
-    "minestuck:tar": 102,
+    "minestuck:ruby": 20,
     "minestuck:rust": 41,
-    "minestuck:ruby": 20
+    "minestuck:tar": 102
+  },
+  "ingredient": {
+    "item": "minestuck:scraxe"
   }
 }

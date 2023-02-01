@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:onion"
-  },
   "grist_cost": {
     "minestuck:iodine": 3
+  },
+  "ingredient": {
+    "item": "minestuck:onion"
   }
 }

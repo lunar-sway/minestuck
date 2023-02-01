@@ -1,10 +1,10 @@
 {
   "type": "minestuck:source_grist_cost",
-  "ingredient": {
-    "item": "minecraft:blue_concrete"
-  },
   "grist_cost": {
     "minestuck:cobalt": 1
+  },
+  "ingredient": {
+    "item": "minecraft:blue_concrete"
   },
   "sources": [
     "minecraft:blue_concrete_powder"

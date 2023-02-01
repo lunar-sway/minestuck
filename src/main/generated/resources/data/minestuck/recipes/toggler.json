@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iti",
-    "rir",
-    "iri"
-  ],
   "key": {
-    "t": {
-      "item": "minecraft:repeater"
-    },
     "i": {
       "item": "minecraft:iron_ingot"
     },
     "r": {
       "item": "minecraft:redstone"
+    },
+    "t": {
+      "item": "minecraft:repeater"
     }
   },
+  "pattern": [
+    "iti",
+    "rir",
+    "iri"
+  ],
   "result": {
     "item": "minestuck:toggler"
   }

@@ -1,24 +1,24 @@
 {
   "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "touch_return_node": {
+      "conditions": {},
+      "trigger": "minestuck:return_node"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minecraft:red_bed"
-    },
-    "title": {
-      "translate": "advancements.minestuck.return_node.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.return_node.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:red_bed"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "touch_return_node": {
-      "trigger": "minestuck:return_node",
-      "conditions": {}
+    "title": {
+      "translate": "advancements.minestuck.return_node.title"
     }
   },
   "requirements": [

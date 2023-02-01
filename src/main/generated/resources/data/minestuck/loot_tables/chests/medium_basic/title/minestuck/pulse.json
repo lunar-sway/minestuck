@@ -2,57 +2,57 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:beef"
+          "name": "minecraft:beef",
+          "weight": 8
         }
-      ]
+      ],
+      "name": "supplies",
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minecraft:repeater"
+          "name": "minecraft:repeater",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:razor_blade",
           "quality": -1,
-          "name": "minestuck:razor_blade"
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:thresh_dvd",
           "quality": 2,
-          "name": "minestuck:thresh_dvd"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

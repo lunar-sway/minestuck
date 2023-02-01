@@ -1,27 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "igi",
-    "iei",
-    "crc"
-  ],
   "key": {
+    "c": {
+      "item": "minestuck:raw_cruxite"
+    },
     "e": {
       "item": "minestuck:energy_core"
     },
-    "c": {
-      "item": "minestuck:raw_cruxite"
+    "g": {
+      "item": "minecraft:glass_pane"
     },
     "i": {
       "item": "minecraft:iron_ingot"
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "g": {
-      "item": "minecraft:glass_pane"
     }
   },
+  "pattern": [
+    "igi",
+    "iei",
+    "crc"
+  ],
   "result": {
     "item": "minestuck:temple_scanner"
   }
