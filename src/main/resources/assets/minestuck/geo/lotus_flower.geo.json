@@ -3,166 +3,160 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.lotus",
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 5,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0.25, 0]
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
 			},
 			"bones": [
 				{
-					"name": "base",
-					"pivot": [0, 0, 0],
+					"name": "leafbase",
+					"pivot": [8, 1.2, 8],
 					"cubes": [
-						{"origin": [-9, 0.05, -9], "size": [18, 0, 18], "uv": [0, 0]}
+						{
+							"origin": [-10, 0.6, -10],
+							"size": [36, 0, 36],
+							"uv": {
+								"up": {"uv": [0, 34], "uv_size": [36, 36]}
+							}
+						}
 					]
 				},
 				{
 					"name": "root",
-					"parent": "base",
-					"pivot": [0, 0, 0],
-					"cubes": [
-						{"origin": [-3, 0.5, -3], "size": [6, 0, 6], "uv": [1, 16], "mirror": true}
-					]
+					"pivot": [8, 1.2, 8]
 				},
 				{
-					"name": "fourpetals",
+					"name": "petalbase",
 					"parent": "root",
-					"pivot": [0, 0.5, 0]
+					"pivot": [8, 1.2, 8]
 				},
 				{
 					"name": "petal1",
-					"parent": "fourpetals",
-					"pivot": [2.25, 0.5, 0],
+					"parent": "petalbase",
+					"pivot": [8, 1.2, 6],
+					"rotation": [-55, 0, 0],
 					"cubes": [
-						{"origin": [2.25, 0.5, -2], "size": [0, 5, 4], "uv": [4, 7]}
-					]
-				},
-				{
-					"name": "petaltip1",
-					"parent": "petal1",
-					"pivot": [2.25, 5.5, 0],
-					"cubes": [
-						{"origin": [2.25, 5.5, -2], "size": [0, 7, 4], "uv": [4, 0]}
+						{
+							"origin": [-2, 1.2, -12],
+							"size": [20, 0, 18],
+							"uv": {
+								"up": {"uv": [16, 34], "uv_size": [-16, -16]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal2",
-					"parent": "fourpetals",
-					"pivot": [0, 0.5, 2.45],
+					"parent": "petalbase",
+					"pivot": [6, 1.2, 8],
+					"rotation": [0, 0, 55],
 					"cubes": [
-						{"origin": [-2, 0.5, 2.45], "size": [4, 5, 0], "uv": [4, 11]}
-					]
-				},
-				{
-					"name": "petaltip2",
-					"parent": "petal2",
-					"pivot": [0, 5.5, 2.45],
-					"cubes": [
-						{"origin": [-2, 5.5, 2.45], "size": [4, 7, 0], "uv": [4, 4]}
+						{
+							"origin": [-12, 1.2, -2],
+							"size": [18, 0, 20],
+							"uv": {
+								"up": {"uv": [32, 18], "uv_size": [-16, 16]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal3",
-					"parent": "fourpetals",
-					"pivot": [-2.65, 0.5, 0],
+					"parent": "petalbase",
+					"pivot": [8, 1.2, 10],
+					"rotation": [55, 0, 0],
 					"cubes": [
-						{"origin": [-2.65, 0.5, -2], "size": [0, 5, 4], "uv": [8, 7]}
-					]
-				},
-				{
-					"name": "petaltip3",
-					"parent": "petal3",
-					"pivot": [-2.65, 5.5, 0],
-					"cubes": [
-						{"origin": [-2.65, 5.5, -2], "size": [0, 7, 4], "uv": [8, 0]}
+						{
+							"origin": [-2, 1.2, 10],
+							"size": [20, 0, 18],
+							"uv": {
+								"up": {"uv": [0, 18], "uv_size": [16, 16]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal4",
-					"parent": "fourpetals",
-					"pivot": [0, 0.5, -2.75],
+					"parent": "petalbase",
+					"pivot": [10, 1.2, 8],
+					"rotation": [0, 0, -55],
 					"cubes": [
-						{"origin": [-2, 0.5, -2.75], "size": [4, 5, 0], "uv": [8, 11]}
+						{
+							"origin": [10, 1.2, -2],
+							"size": [18, 0, 20],
+							"uv": {
+								"up": {"uv": [16, 34], "uv_size": [16, -16]}
+							}
+						}
 					]
 				},
 				{
-					"name": "petaltip4",
-					"parent": "petal4",
-					"pivot": [0, 5.5, -2.75],
-					"cubes": [
-						{"origin": [-2, 5.5, -2.75], "size": [4, 7, 0], "uv": [8, 4]}
-					]
-				},
-				{
-					"name": "fourpetals2",
+					"name": "petalmid",
 					"parent": "root",
-					"pivot": [0, 0.5, 0],
+					"pivot": [8, 11.2, 8],
 					"rotation": [0, -45, 0]
 				},
 				{
 					"name": "petal5",
-					"parent": "fourpetals2",
-					"pivot": [2.01294, 0.47, 0],
+					"parent": "petalmid",
+					"pivot": [8, 11.2, 0],
+					"rotation": [-107.5, 0, 0],
 					"cubes": [
-						{"origin": [2.14142, 0.5, -2], "size": [0, 4.7, 4], "uv": [4, 7]}
-					]
-				},
-				{
-					"name": "petaltip5",
-					"parent": "petal5",
-					"pivot": [2.16284, 5.17, 0],
-					"cubes": [
-						{"origin": [2.14142, 5.2, -2], "size": [0, 6.58, 4], "uv": [4, 0]}
+						{
+							"origin": [0, 11.2, -14],
+							"size": [16, 0, 14],
+							"uv": {
+								"up": {"uv": [48, 34], "uv_size": [-16, -14]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal6",
-					"parent": "fourpetals2",
-					"pivot": [0, 0.47, 2.27881],
+					"parent": "petalmid",
+					"pivot": [0, 11.2, 8],
+					"rotation": [0, 0, 107.5],
 					"cubes": [
-						{"origin": [-2, 0.5, 2.42426], "size": [4, 4.7, 0], "uv": [4, 11]}
-					]
-				},
-				{
-					"name": "petaltip6",
-					"parent": "petal6",
-					"pivot": [-0.00429, 5.195, 2.41594],
-					"cubes": [
-						{"origin": [-2, 5.2, 2.42426], "size": [4, 6.58, 0], "uv": [4, 4]}
+						{
+							"origin": [-14, 11.2, 0],
+							"size": [14, 0, 16],
+							"uv": {
+								"up": {"uv": [62, 36], "uv_size": [-14, -16]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal7",
-					"parent": "fourpetals2",
-					"pivot": [-2.54468, 0.47, 0],
+					"parent": "petalmid",
+					"pivot": [8, 11.2, 16],
+					"rotation": [107.5, 0, 0],
 					"cubes": [
-						{"origin": [-2.70711, 0.5, -2], "size": [0, 4.7, 4], "uv": [8, 7]}
-					]
-				},
-				{
-					"name": "petaltip7",
-					"parent": "petal7",
-					"pivot": [-2.70378, 5.195, -0.01768],
-					"cubes": [
-						{"origin": [-2.70611, 5.2, -2], "size": [0, 6.58, 4], "uv": [8, 0]}
+						{
+							"origin": [0, 11.2, 16],
+							"size": [16, 0, 14],
+							"uv": {
+								"up": {"uv": [32, 20], "uv_size": [16, 14]}
+							}
+						}
 					]
 				},
 				{
 					"name": "petal8",
-					"parent": "fourpetals2",
-					"pivot": [-0.13294, 0.47, -2.39477],
+					"parent": "petalmid",
+					"pivot": [16, 11.2, 8],
+					"rotation": [0, 0, -107.5],
 					"cubes": [
-						{"origin": [-2.14142, 0.5, -2.56569], "size": [4, 4.7, 0], "uv": [8, 11]}
-					]
-				},
-				{
-					"name": "petaltip8",
-					"parent": "petal8",
-					"pivot": [-0.13294, 5.195, -2.5612],
-					"cubes": [
-						{"origin": [-2.14142, 5.2, -2.56569], "size": [4, 6.58, 0], "uv": [8, 4]}
+						{
+							"origin": [16, 11.2, 0],
+							"size": [14, 0, 16],
+							"uv": {
+								"up": {"uv": [48, 20], "uv_size": [14, 16]}
+							}
+						}
 					]
 				}
 			]

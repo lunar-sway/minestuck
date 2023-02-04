@@ -2,7 +2,6 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"lotus.idle": {
-			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"root": {
@@ -26,111 +25,20 @@
 						}
 					}
 				},
-				"petal1": {
+				"leafbase": {
 					"rotation": {
-						"vector": [0, 0, 12.5]
-					},
-					"position": {
-						"vector": [0.25, 0, 0]
-					}
-				},
-				"petaltip1": {
-					"rotation": {
-						"vector": [0, 0, -42.5]
-					}
-				},
-				"petal2": {
-					"rotation": {
-						"vector": [-12.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0, 0.25]
-					}
-				},
-				"petaltip2": {
-					"rotation": {
-						"vector": [42.5, 0, 0]
-					}
-				},
-				"petal3": {
-					"rotation": {
-						"vector": [0, 0, -12.5]
-					},
-					"position": {
-						"vector": [-0.25, 0, 0]
-					}
-				},
-				"petaltip3": {
-					"rotation": {
-						"vector": [0, 0, 42.5]
-					}
-				},
-				"petal4": {
-					"rotation": {
-						"vector": [12.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0, -0.25]
-					}
-				},
-				"petaltip4": {
-					"rotation": {
-						"vector": [-42.5, 0, 0]
-					}
-				},
-				"fourpetals2": {
-					"scale": {
-						"vector": [1, 0.9, 1]
-					}
-				},
-				"petal5": {
-					"rotation": {
-						"vector": [0, 0, 12.5]
-					}
-				},
-				"petaltip5": {
-					"rotation": {
-						"vector": [0, 0, -35]
-					}
-				},
-				"petal6": {
-					"rotation": {
-						"vector": [-12.5, 0, 0]
-					}
-				},
-				"petaltip6": {
-					"rotation": {
-						"vector": [35, 0, 0]
-					}
-				},
-				"petal7": {
-					"rotation": {
-						"vector": [0, 0, -12.5]
-					}
-				},
-				"petaltip7": {
-					"rotation": {
-						"vector": [0, 0, 35]
-					}
-				},
-				"petal8": {
-					"rotation": {
-						"vector": [12.5, 0, 0]
-					}
-				},
-				"petaltip8": {
-					"rotation": {
-						"vector": [-35, 0, 0]
-					}
-				},
-				"base": {
-					"scale": {
-						"vector": [2, 2, 2]
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"4.0": {
+							"vector": [0, -360, 0]
+						}
 					}
 				}
 			}
 		},
 		"lotus.open": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 6,
 			"bones": {
 				"root": {
@@ -164,189 +72,187 @@
 				"petal1": {
 					"rotation": {
 						"0.0": {
-							"vector": [0, 0, 12.5]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [0, 0, 80]
-						}
-					},
-					"position": {
-						"vector": [0.25, 0, 0]
-					}
-				},
-				"petaltip1": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -42.5]
-						},
-						"2.0": {
-							"vector": [0, 0, 17.5]
+						"1.0": {
+							"vector": [52.5, 0, 0]
 						}
 					}
 				},
 				"petal2": {
 					"rotation": {
 						"0.0": {
-							"vector": [-12.5, 0, 0]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [-72.5, 0, 0]
-						}
-					},
-					"position": {
-						"vector": [0, 0, 0.25]
-					}
-				},
-				"petaltip2": {
-					"rotation": {
-						"0.0": {
-							"vector": [42.5, 0, 0]
-						},
-						"2.0": {
-							"vector": [-25, 0, 0]
+						"1.0": {
+							"vector": [0, 0, -50]
 						}
 					}
 				},
 				"petal3": {
 					"rotation": {
 						"0.0": {
-							"vector": [0, 0, -12.5]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [0, 0, -82.5]
-						}
-					},
-					"position": {
-						"vector": [-0.25, 0, 0]
-					}
-				},
-				"petaltip3": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 42.5]
-						},
-						"2.0": {
-							"vector": [0, 0, -15]
+						"1.0": {
+							"vector": [-47.5, 0, 0]
 						}
 					}
 				},
 				"petal4": {
 					"rotation": {
 						"0.0": {
-							"vector": [12.5, 0, 0]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [80, 0, 0]
+						"1.0": {
+							"vector": [0, 0, 50]
 						}
-					},
+					}
+				},
+				"petalmid": {
 					"position": {
-						"vector": [0, 0, -0.25]
-					}
-				},
-				"petaltip4": {
-					"rotation": {
 						"0.0": {
-							"vector": [-42.5, 0, 0]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [10, 0, 0]
-						}
-					}
-				},
-				"fourpetals2": {
-					"scale": {
-						"vector": [1, 0.9, 1]
-					}
-				},
-				"petal5": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 12.5]
+						"0.68": {
+							"vector": [0, -4, 0]
 						},
-						"2.0": {
-							"vector": [0, 0, 75]
-						}
-					}
-				},
-				"petaltip5": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -35]
+						"1.0": {
+							"vector": [0, -3, 0]
 						},
-						"2.0": {
-							"vector": [0, 0, 15]
-						}
-					}
-				},
-				"petal6": {
-					"rotation": {
-						"0.0": {
-							"vector": [-12.5, 0, 0]
+						"1.12": {
+							"vector": [0, -2, 0]
 						},
-						"2.0": {
-							"vector": [-72.5, 0, 0]
-						}
-					}
-				},
-				"petaltip6": {
-					"rotation": {
-						"0.0": {
-							"vector": [35, 0, 0]
+						"1.16": {
+							"vector": [0, -1, 0]
 						},
-						"2.0": {
-							"vector": [-20, 0, 0]
-						}
-					}
-				},
-				"petal7": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -12.5]
-						},
-						"2.0": {
-							"vector": [0, 0, -72.5]
-						}
-					}
-				},
-				"petaltip7": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 35]
-						},
-						"2.0": {
-							"vector": [0, 0, -22.5]
+						"1.36": {
+							"vector": [0, -3, 0]
 						}
 					}
 				},
 				"petal8": {
 					"rotation": {
 						"0.0": {
-							"vector": [12.5, 0, 0]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [72.5, 0, 0]
+						"1.0": {
+							"vector": [0, 0, 92.5]
+						},
+						"1.08": {
+							"vector": [0, 0, 92.5]
+						},
+						"1.12": {
+							"vector": [0, 0, 112.5]
+						},
+						"1.36": {
+							"vector": [0, 0, 92.5]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-3, -5, 0]
 						}
 					}
 				},
-				"petaltip8": {
+				"petal5": {
 					"rotation": {
 						"0.0": {
-							"vector": [-35, 0, 0]
+							"vector": [0, 0, 0]
 						},
-						"2.0": {
-							"vector": [25, 0, 0]
+						"1.0": {
+							"vector": [92.5, 0, 0]
+						},
+						"1.08": {
+							"vector": [92.5, 0, 0]
+						},
+						"1.12": {
+							"vector": [112.5, 0, 0]
+						},
+						"1.36": {
+							"vector": [92.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -5, 4]
 						}
 					}
 				},
-				"base": {
-					"scale": {
-						"vector": [2, 2, 2]
+				"petal6": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, -92.5]
+						},
+						"1.08": {
+							"vector": [0, 0, -92.5]
+						},
+						"1.12": {
+							"vector": [0, 0, -112.5]
+						},
+						"1.36": {
+							"vector": [0, 0, -92.5]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [3, -5, 0]
+						}
+					}
+				},
+				"petal7": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-92.5, 0, 0]
+						},
+						"1.08": {
+							"vector": [-92.5, 0, 0]
+						},
+						"1.12": {
+							"vector": [-112.5, 0, 0]
+						},
+						"1.36": {
+							"vector": [-92.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, -5, -3]
+						}
+					}
+				},
+				"leafbase": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.04": {
+							"vector": [0, -360, 0],
+							"easing": "easeInOutExpo"
+						}
 					}
 				}
 			}
 		},
 		"lotus.open.idle": {
-			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"root": {
@@ -354,7 +260,7 @@
 						"0.0": {
 							"vector": [0, 0, 0]
 						},
-						"3.96": {
+						"4.0": {
 							"vector": [0, -180, 0]
 						}
 					},
@@ -365,289 +271,196 @@
 				},
 				"petal1": {
 					"rotation": {
-						"vector": [0, 0, 80]
-					}
-				},
-				"petaltip1": {
-					"rotation": {
-						"vector": [0, 0, 17.5]
+						"vector": [50, 0, 0]
 					}
 				},
 				"petal2": {
 					"rotation": {
-						"vector": [-72.5, 0, 0]
-					}
-				},
-				"petaltip2": {
-					"rotation": {
-						"vector": [-25, 0, 0]
+						"vector": [0, 0, -50]
 					}
 				},
 				"petal3": {
 					"rotation": {
-						"vector": [0, 0, -82.5]
-					}
-				},
-				"petaltip3": {
-					"rotation": {
-						"vector": [0, 0, -15]
+						"vector": [-50, 0, 0]
 					}
 				},
 				"petal4": {
 					"rotation": {
-						"vector": [80, 0, 0]
+						"vector": [0, 0, 50]
 					}
 				},
-				"petaltip4": {
-					"rotation": {
-						"vector": [10, 0, 0]
-					}
-				},
-				"petal5": {
-					"rotation": {
-						"vector": [0, 0, 75]
-					}
-				},
-				"petaltip5": {
-					"rotation": {
-						"vector": [0, 0, 15]
-					}
-				},
-				"petal6": {
-					"rotation": {
-						"vector": [-72.5, 0, 0]
-					}
-				},
-				"petaltip6": {
-					"rotation": {
-						"vector": [-20, 0, 0]
-					}
-				},
-				"petal7": {
-					"rotation": {
-						"vector": [0, 0, -72.5]
-					}
-				},
-				"petaltip7": {
-					"rotation": {
-						"vector": [0, 0, -22.5]
+				"petalmid": {
+					"position": {
+						"vector": [0, -4, 0]
 					}
 				},
 				"petal8": {
 					"rotation": {
-						"vector": [72.5, 0, 0]
+						"vector": [0, 0, 92.5]
+					},
+					"position": {
+						"vector": [-3, -5, 0]
 					}
 				},
-				"petaltip8": {
+				"petal5": {
 					"rotation": {
-						"vector": [25, 0, 0]
+						"vector": [92.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -5, 3]
 					}
 				},
-				"base": {
-					"scale": {
-						"vector": [2, 2, 2]
+				"petal6": {
+					"rotation": {
+						"vector": [0, 0, -92.5]
+					},
+					"position": {
+						"vector": [3, -5, 0]
+					}
+				},
+				"petal7": {
+					"rotation": {
+						"vector": [-92.5, 0, 0]
+					},
+					"position": {
+						"vector": [0, -5, -3]
 					}
 				}
 			}
 		},
 		"lotus.vanish": {
-			"animation_length": 0.65,
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.8,
 			"bones": {
 				"root": {
 					"rotation": {
 						"0.0": {
-							"vector": [0, -180, 0],
-							"easing": "easeOutCubic"
+							"vector": [0, 0, 0]
 						},
-						"0.64": {
-							"vector": [0, -180, 0],
-							"easing": "easeOutCubic"
-						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeOutCubic"
-						},
-						"0.64": {
-							"vector": [0, 0, 0],
-							"easing": "easeOutCubic"
+						"0.8": {
+							"vector": [0, -360, 0],
+							"easing": "easeInBack",
+							"easingArgs": [2]
 						}
 					},
 					"scale": {
 						"0.0": {
 							"vector": [1, 1, 1]
 						},
-						"0.64": {
+						"0.8": {
 							"vector": [0, 0, 0],
-							"easing": "easeInOutBack",
-							"easingArgs": [1]
+							"easing": "easeInBack",
+							"easingArgs": [2]
 						}
 					}
 				},
 				"petal1": {
 					"rotation": {
 						"0.0": {
-							"vector": [0, 0, 80]
+							"vector": [52.5, 0, 0]
 						},
-						"0.64": {
-							"vector": [0, 0, 80]
-						}
-					}
-				},
-				"petaltip1": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 17.5]
-						},
-						"0.64": {
-							"vector": [0, 0, 17.5]
+						"0.76": {
+							"vector": [37.5, 0, 0]
 						}
 					}
 				},
 				"petal2": {
 					"rotation": {
 						"0.0": {
-							"vector": [-72.5, 0, 0]
+							"vector": [0, 0, -50]
 						},
-						"0.64": {
-							"vector": [-72.5, 0, 0]
-						}
-					}
-				},
-				"petaltip2": {
-					"rotation": {
-						"0.0": {
-							"vector": [-25, 0, 0]
-						},
-						"0.64": {
-							"vector": [-25, 0, 0]
+						"0.76": {
+							"vector": [0, 0, -37.5]
 						}
 					}
 				},
 				"petal3": {
 					"rotation": {
 						"0.0": {
-							"vector": [0, 0, -82.5]
+							"vector": [-47.5, 0, 0]
 						},
-						"0.64": {
-							"vector": [0, 0, -82.5]
-						}
-					}
-				},
-				"petaltip3": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -15]
-						},
-						"0.64": {
-							"vector": [0, 0, -15]
+						"0.76": {
+							"vector": [-37.5, 0, 0]
 						}
 					}
 				},
 				"petal4": {
 					"rotation": {
 						"0.0": {
-							"vector": [80, 0, 0]
+							"vector": [0, 0, 50]
 						},
-						"0.64": {
-							"vector": [80, 0, 0]
-						}
-					}
-				},
-				"petaltip4": {
-					"rotation": {
-						"0.0": {
-							"vector": [10, 0, 0]
-						},
-						"0.64": {
-							"vector": [10, 0, 0]
-						}
-					}
-				},
-				"petal5": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 75]
-						},
-						"0.64": {
-							"vector": [0, 0, 75]
-						}
-					}
-				},
-				"petaltip5": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 15]
-						},
-						"0.64": {
-							"vector": [0, 0, 15]
-						}
-					}
-				},
-				"petal6": {
-					"rotation": {
-						"0.0": {
-							"vector": [-72.5, 0, 0]
-						},
-						"0.64": {
-							"vector": [-72.5, 0, 0]
-						}
-					}
-				},
-				"petaltip6": {
-					"rotation": {
-						"0.0": {
-							"vector": [-20, 0, 0]
-						},
-						"0.64": {
-							"vector": [-20, 0, 0]
-						}
-					}
-				},
-				"petal7": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -72.5]
-						},
-						"0.64": {
-							"vector": [0, 0, -72.5]
-						}
-					}
-				},
-				"petaltip7": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, -22.5]
-						},
-						"0.64": {
-							"vector": [0, 0, -22.5]
+						"0.76": {
+							"vector": [0, 0, 37.5]
 						}
 					}
 				},
 				"petal8": {
 					"rotation": {
 						"0.0": {
-							"vector": [72.5, 0, 0]
+							"vector": [0, 0, 100]
 						},
-						"0.64": {
-							"vector": [72.5, 0, 0]
+						"0.08": {
+							"vector": [0, 0, 105]
+						},
+						"0.76": {
+							"vector": [0, 0, 52.5]
 						}
+					},
+					"position": {
+						"vector": [-3, -5, 0]
 					}
 				},
-				"petaltip8": {
+				"petal5": {
 					"rotation": {
 						"0.0": {
-							"vector": [25, 0, 0]
+							"vector": [100, 0, 0]
 						},
-						"0.64": {
-							"vector": [25, 0, 0]
+						"0.08": {
+							"vector": [105, 0, 0]
+						},
+						"0.76": {
+							"vector": [52.5, 0, 0]
 						}
+					},
+					"position": {
+						"vector": [0, -5, 4]
 					}
 				},
-				"base": {
-					"scale": {
-						"vector": [2, 2, 2]
+				"petal6": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, -100]
+						},
+						"0.08": {
+							"vector": [0, 0, -105]
+						},
+						"0.76": {
+							"vector": [0, 0, -52.5]
+						}
+					},
+					"position": {
+						"vector": [3, -5, 0]
+					}
+				},
+				"petal7": {
+					"rotation": {
+						"0.0": {
+							"vector": [-100, 0, 0]
+						},
+						"0.08": {
+							"vector": [-105, 0, 0]
+						},
+						"0.76": {
+							"vector": [-52.5, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, -5, -3]
+					}
+				},
+				"petalmid": {
+					"position": {
+						"vector": [0, -3, 0]
 					}
 				}
 			}
