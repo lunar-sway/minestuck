@@ -14,6 +14,7 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.material.FluidState;
@@ -45,6 +46,7 @@ public class ClientEventHandler
 			}
 			
 		}
+		
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)

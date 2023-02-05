@@ -6,23 +6,32 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.weapon.PogoEffect;
 import com.mraof.minestuck.network.ClientEditPacket;
+import com.mraof.minestuck.network.EditmodeFillPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -30,8 +39,13 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -129,6 +143,94 @@ public final class ClientEditHandler
 		}
 		if(cost.isEmpty())
 			toolTip.add(new TranslatableComponent(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
+	}
+	
+	@SubscribeEvent
+	public static void onClientTick(TickEvent.ClientTickEvent event)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || event.phase == TickEvent.Phase.END)
+			return;
+		
+		Player player = mc.player;
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		boolean isDragging = cap.isEditDragging();
+		boolean isDown = mc.options.keyUse.isDown();
+		
+		if (isDown)
+		{
+			if(!canEditDrag(player))
+			{
+				cap.setEditDragging(false);
+				cap.setEditPos1(null);
+				cap.setEditPos2(null);
+				return;
+			}
+			
+			if (!isDragging)
+			{
+				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
+				{
+					cap.setEditPos1(BlockPos.of(blockHit.getBlockPos().offset(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? 0 : 1, blockHit.getDirection())));
+					cap.setEditTraceHit(blockHit.getLocation());
+					cap.setEditTraceDirection(blockHit.getDirection());
+				}
+			}
+			
+			if (cap.getEditPos1() != null) {
+				
+				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);;
+				BlockPos pos2;
+				if (blockHit.getBlockPos() == null) {
+					Vec3 Vec3 = player.getEyePosition();
+					Vec3 Vec31 = player.getLookAngle();
+					Vec3 Vec32 = Vec3.add(Vec31.x * mc.player.getReachDistance(), Vec31.y * mc.player.getReachDistance(), Vec31.z * mc.player.getReachDistance());
+					pos2 = new BlockPos(Vec32.x, Vec32.y, Vec32.z);
+				} else pos2 = BlockPos.of(blockHit.getBlockPos().offset(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? 0 : 1, blockHit.getDirection()));
+				
+				BlockPos pos1 = cap.getEditPos1();
+				ItemStack stack = (!player.getMainHandItem().isEmpty() ? player.getMainHandItem() : player.getOffhandItem());
+				
+				if((Math.max(pos1.getX(),pos2.getX())-Math.min(pos1.getX(), pos2.getX())+1)*
+						(Math.max(pos1.getY(),pos2.getY())-Math.min(pos1.getY(), pos2.getY())+1)*
+						(Math.max(pos1.getZ(),pos2.getZ())-Math.min(pos1.getZ(), pos2.getZ())+1) <= (player.isCreative() ? 256 : stack.getCount()))
+					cap.setEditPos2(pos2);
+			}
+		} else if (isDragging)
+		{
+			if (cap.getEditPos1() != null)
+			{
+				MSPacketHandler.sendToServer(new EditmodeFillPacket(cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			}
+			cap.setEditPos1(null);
+			cap.setEditPos2(null);
+		}
+		
+		cap.setEditDragging(isDown);
+	}
+	
+	private static boolean canEditDrag(Player player)
+	{
+		return (((player.level.isClientSide() ? ServerEditHandler.getData(player) != null : ClientEditHandler.isActive()) && !DeployList.containsItemStack(player.getItemInHand(player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND), ServerEditHandler.getData(player).connection, player.level))
+				&& ((player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem)));
+	}
+	
+	//based on the Item class function of the same name
+	private static BlockHitResult getPlayerPOVHitResult(Level level, Player playerEntity)
+	{
+		float xRot = playerEntity.getXRot();
+		float yRot = playerEntity.getYRot();
+		Vec3 eyeVec = playerEntity.getEyePosition(1.0F);
+		float f2 = Mth.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f3 = Mth.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
+		float f4 = -Mth.cos(-xRot * ((float) Math.PI / 180F));
+		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
+		float xComponent = f3 * f4;
+		float zComponent = f2 * f4;
+		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
+		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
 	
 	@SubscribeEvent
