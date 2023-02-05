@@ -73,21 +73,19 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> SMALL_SNOW_BLOCK_DISK = REGISTER.register("small_snow_block_disk", () -> placed(MSCFeatures.SMALL_SNOW_BLOCK_DISK,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> ICE_DISK = REGISTER.register("ice_disk", () -> placed(MSCFeatures.ICE_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> SAND_DISK = REGISTER.register("sand_disk", () -> placed(MSCFeatures.SAND_DISK,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> RED_SAND_DISK = REGISTER.register("red_sand_disk", () -> placed(MSCFeatures.RED_SAND_DISK,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> SLIME_DISK = REGISTER.register("slime_disk", () -> placed(MSCFeatures.SLIME_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> EXTRA_SLIME_DISK = REGISTER.register("extra_slime_disk", () -> placed(MSCFeatures.SLIME_DISK,
-			worldGenModifiers(CountPlacement.of(2), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(32), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> NETHERRACK_DISK = REGISTER.register("netherrack_disk", () -> placed(MSCFeatures.NETHERRACK_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> OAK_LEAVES_DISK = REGISTER.register("oak_leaves_disk", () -> placed(MSCFeatures.OAK_LEAVES_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> COAGULATED_BLOOD_DISK = REGISTER.register("coagulated_blood_disk", () -> placed(MSCFeatures.COAGULATED_BLOOD_DISK,
-			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(64), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> COBBLESTONE_SURFACE_DISK = REGISTER.register("cobblestone_surface_disk", () -> placed(MSCFeatures.COBBLESTONE_SURFACE_DISK,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> STONE_SURFACE_DISK = REGISTER.register("stone_surface_disk", () -> placed(MSCFeatures.STONE_SURFACE_DISK,
@@ -180,10 +178,14 @@ public final class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> SPARSE_DESERT_BUSH_PATCH = REGISTER.register("sparse_desert_bush_patch", () -> placed(MSCFeatures.DESERT_BUSH_PATCH,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> MOSS_CARPET_PATCH = REGISTER.register("moss_carpet_patch", () -> placed(MSCFeatures.MOSS_CARPET_PATCH,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> SPARSE_MOSS_CARPET_PATCH = REGISTER.register("sparse_moss_carpet_patch", () -> placed(MSCFeatures.MOSS_CARPET_PATCH,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(80), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> BLOOMING_CACTUS_PATCH = REGISTER.register("blooming_cactus_patch", () -> placed(MSCFeatures.BLOOMING_CACTUS_PATCH,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> WATERLILY_PATCH = REGISTER.register("waterlily_patch", () -> placed(VegetationFeatures.PATCH_WATERLILY,
-			worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(15), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> PUMPKIN = REGISTER.register("pumpkin", () -> placed(MSCFeatures.PUMPKIN,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
