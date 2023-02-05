@@ -293,7 +293,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			return new BlockPos(0, 0, 0);
 		else return computerPos.pos();
 	}
-
+	
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event) {
 		if(event.phase != TickEvent.Phase.END || event.side == LogicalSide.CLIENT)

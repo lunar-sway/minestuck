@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.computer.editmode.EditToolsCapabilityProvider;
+import com.mraof.minestuck.computer.editmode.IEditTools;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
 import com.mraof.minestuck.network.MusicPlayerPacket;
@@ -22,15 +24,21 @@ public class MSCapabilities
 	{
 	});
 	
+	public static final Capability<IEditTools> EDIT_TOOLS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>()
+	{
+	});
+	
 	public static void register(RegisterCapabilitiesEvent event)
 	{
 		event.register(IMusicPlaying.class);
+		event.register(IEditTools.class);
 	}
 	
 	/**
-	 * Attaches a provider of the music playing capability to any player
+	 * Attaches a provider of the music playing and edit tools capability to any player
 	 *
 	 * @see MusicPlayingCapabilityProvider
+	 * @see EditToolsCapabilityProvider
 	 */
 	@SubscribeEvent
 	public static void entityAttachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> attachCapabilitiesEvent)
@@ -39,6 +47,8 @@ public class MSCapabilities
 		{
 			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "musicplaying"),
 					new MusicPlayingCapabilityProvider());
+			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "edittools"),
+					new EditToolsCapabilityProvider());
 		}
 	}
 }
