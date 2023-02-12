@@ -60,8 +60,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Actions.TALK, 80, true,false); //TODO adjust as needed - 4 secs for now
-	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Actions.PANIC, MobAnimation.LOOPING_ANIMATION, false,false);
+	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Actions.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
+	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Actions.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
@@ -457,13 +457,26 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Actions.IDLE)
+		MobAnimation.Actions action = event.getAnimatable().getCurrentAction();
+		
+		if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
-		return PlayState.CONTINUE;
+		if(action == MobAnimation.Actions.PANIC)
+		{
+			//TODO add a system for the panic animation intended to precede this
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
+			return PlayState.CONTINUE;
+		} else if(action != MobAnimation.Actions.IDLE)
+		{
+			return PlayState.STOP;
+		} else
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
 	}
 	
 	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
@@ -495,11 +508,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
 			return PlayState.CONTINUE;
 		}
-		if(action == MobAnimation.Actions.PANIC)
-		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", false).addAnimation("panicrun", true));
-			return PlayState.CONTINUE;
-		}
+		
 		return PlayState.STOP;
 	}
 }
