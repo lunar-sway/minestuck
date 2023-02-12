@@ -4,10 +4,10 @@ import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -29,9 +29,7 @@ public class MusicPlayerItemCapProvider implements ICapabilityProvider, INBTSeri
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == cap)
-			return (lazyInitSupplierItemHandler).cast();
-		return LazyOptional.empty();
+		return ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, lazyInitSupplierItemHandler);
 	}
 	
 	private @Nonnull ItemStackHandler getCachedInventory()
