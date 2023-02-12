@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.machine.ComputerBlock;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
@@ -22,7 +23,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -143,6 +143,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	public boolean isBroken()
+	{
+		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
 	}
 	
 	public boolean hasProgram(int id)
@@ -288,7 +293,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		if(player.level.isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
 		{
-			if(player.level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
+			if(player.level.getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
 			{
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
 				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());

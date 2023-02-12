@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.loot;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nonnull;
 import java.util.List;
