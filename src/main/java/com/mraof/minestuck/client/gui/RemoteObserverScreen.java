@@ -20,6 +20,7 @@ import java.util.Optional;
 public class RemoteObserverScreen extends Screen
 {
 	public static final String TITLE = "minestuck.remote_observer";
+	public static final String CURRENT_ENTITY_TYPE_MESSAGE = "minestuck.remote_observer.current_entity_type";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -53,7 +54,7 @@ public class RemoteObserverScreen extends Screen
 		
 		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 5, 135, 20, Component.literal(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		
-		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, Component.literal("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, Component.translatable(CURRENT_ENTITY_TYPE_MESSAGE));    //TODO Maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(be.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
 		addRenderableWidget(entityTypeTextField);
 		entityTypeTextField.setVisible(activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT);
