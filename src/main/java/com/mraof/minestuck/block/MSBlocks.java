@@ -167,6 +167,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_MYCELIUM_BRICKS = REGISTER.register("cracked_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
+	public static final RegistryObject<Block> MYCELIUM_STONE_CRUXITE_ORE = REGISTER.register("mycelium_stone_cruxite_ore", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<Block> MYCELIUM_STONE_URANIUM_ORE = REGISTER.register("mycelium_stone_uranium_ore", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	
 	public static final RegistryObject<Block> BLACK_SAND = REGISTER.register("black_sand", () -> new SandBlock(0x181915, Block.Properties.of(Material.SAND, MaterialColor.COLOR_BLACK).strength(0.5F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> BLACK_STONE = REGISTER.register("black_stone", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(2.5F, 6.0F)));

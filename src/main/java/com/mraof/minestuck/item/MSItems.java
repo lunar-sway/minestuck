@@ -668,6 +668,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> STEEL_BEAM = registerBlockItem(MSBlocks.STEEL_BEAM, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MYCELIUM_COBBLESTONE = registerBlockItem(MSBlocks.MYCELIUM_COBBLESTONE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE = registerBlockItem(MSBlocks.MYCELIUM_STONE, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> POLISHED_MYCELIUM_STONE = registerBlockItem(MSBlocks.POLISHED_MYCELIUM_STONE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICKS = registerBlockItem(MSBlocks.MYCELIUM_BRICKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MYCELIUM_COLUMN = registerBlockItem(MSBlocks.MYCELIUM_COLUMN, MSItemGroup.LANDS);

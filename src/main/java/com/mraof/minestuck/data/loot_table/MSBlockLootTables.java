@@ -133,6 +133,8 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(STEEL_BEAM.get());
 		dropSelf(MYCELIUM_COBBLESTONE.get());
 		add(MYCELIUM_STONE.get(), createSingleItemTableWithSilkTouch(MYCELIUM_STONE.get(), MYCELIUM_COBBLESTONE.get()));
+		add(MYCELIUM_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
+		add(MYCELIUM_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		dropSelf(POLISHED_MYCELIUM_STONE.get());
 		dropSelf(MYCELIUM_BRICKS.get());
 		dropSelf(MYCELIUM_COLUMN.get());

@@ -149,6 +149,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STEEL_BEAM, "Steel Beam");
 		addBlock(MSBlocks.MYCELIUM_COBBLESTONE, "Mycelium Cobblestone");
 		addBlock(MSBlocks.MYCELIUM_STONE, "Mycelium Stone");
+		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Mycelium Stone Uranium Ore");
+		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Mycelium Stone Cruxite Ore");
 		addBlock(MSBlocks.POLISHED_MYCELIUM_STONE, "Polished Mycelium Stone");
 		addBlock(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
 		addBlock(MSBlocks.MYCELIUM_COLUMN, "Mycelium Column");
