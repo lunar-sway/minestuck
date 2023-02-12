@@ -2,8 +2,8 @@
     "credit": "Made with Blockbench by blankMushroom",
     "texture_size": [64, 64],
     "textures": {
-        "computer": "minestuck:block/computer/computer_off",
-        "particle": "minestuck:block/computer/computer_off"
+        "computer": "minestuck:block/computer/computer_game_loaded",
+        "particle": "minestuck:block/computer/computer_game_loaded"
     },
     "elements": [
         {

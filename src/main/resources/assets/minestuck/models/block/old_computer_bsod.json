@@ -2,8 +2,8 @@
     "credit": "Made by Ishumire",
     "texture_size": [64, 64],
     "textures": {
-        "1": "minestuck:block/old_computer_bsod",
-        "particle": "minestuck:block/computer/gray_keys"
+        "1": "minestuck:block/computer/old_computer_bsod",
+        "particle": "minestuck:block/computer/old_computer_bsod"
     },
     "display": {
         "thirdperson_righthand": {
