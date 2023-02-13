@@ -69,6 +69,8 @@ public class FungiLandType extends TerrainLandType
 		registry.setBlock("bush", Blocks.BROWN_MUSHROOM);
 		registry.setBlock("structure_wool_1", Blocks.LIME_WOOL);
 		registry.setBlock("structure_wool_3", Blocks.GRAY_WOOL);
+		registry.setBlock("cruxite_ore", MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+		registry.setBlock("uranium_ore", MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
 	}
 	
 	@Override
@@ -102,15 +104,7 @@ public class FungiLandType extends TerrainLandType
 						new OreConfiguration(blocks.getGroundType(), Blocks.GRAVEL.defaultBlockState(), 33),
 						CountPlacement.of(10), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(256)), BiomeFilter.biome()),
 				LandBiomeType.any());
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.MYCELIUM_STONE_CRUXITE_ORE.get().defaultBlockState(), 4),
-						CountPlacement.of(24), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), BiomeFilter.biome()),
-				LandBiomeType.any());
-		
-		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-						new OreConfiguration(blocks.getGroundType(), MSBlocks.MYCELIUM_STONE_URANIUM_ORE.get().defaultBlockState(), 2),
-						CountPlacement.of(12), InSquarePlacement.spread(), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(32)), BiomeFilter.biome()),
-				LandBiomeType.any());
+);
 	}
 	
 	@Override
