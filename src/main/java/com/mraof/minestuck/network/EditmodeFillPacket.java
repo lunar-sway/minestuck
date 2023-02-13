@@ -27,7 +27,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import static com.mraof.minestuck.computer.editmode.ServerEditHandler.isBlockItem;
 
@@ -98,7 +97,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 					
 					int c = stack.getCount();
 					BlockPos pos = new BlockPos(x, y, z);
-					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.onItemUseFirst(new UseOnContext(player, hand, new BlockHitResult(new Vec3(f, f1, f2), side, pos, true))) == InteractionResult.SUCCESS)
+					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(f, f1, f2), side, pos, false))) == InteractionResult.SUCCESS)
 					{
 						if(player.isCreative())
 							stack.setCount(c);
@@ -112,10 +111,10 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	
 	private static boolean editModePlaceCheck(Level level, Player player, InteractionHand hand)
 	{
-		if(level.isClientSide() && ServerEditHandler.getData(player) != null)
+		if(!level.isClientSide() && ServerEditHandler.getData(player) != null)
 		{
 			EditData data = ServerEditHandler.getData(player);
-			SburbConnection connection = ObfuscationReflectionHelper.getPrivateValue(EditData.class, data, "connection");
+			SburbConnection connection = data.getConnection();
 			
 			ItemStack stack = player.getMainHandItem();
 			
@@ -142,7 +141,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 					return false;
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(level, connection.getClientIdentifier(), GristCost.findCostForItem(stack, null, false, level)))
+			else if(!(stack.getItem() instanceof BlockItem) || !GristHelper.canAfford(level, connection.getClientIdentifier(), GristCost.findCostForItem(stack, null, false, level)))
 				return false;
 		}
 		return true;

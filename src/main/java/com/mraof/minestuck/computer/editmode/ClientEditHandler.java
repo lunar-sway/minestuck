@@ -1,5 +1,12 @@
 package com.mraof.minestuck.computer.editmode;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -16,9 +23,12 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -39,10 +49,15 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ScreenOpenEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
@@ -172,7 +187,7 @@ public final class ClientEditHandler
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 				{
-					cap.setEditPos1(BlockPos.of(blockHit.getBlockPos().offset(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? 0 : 1, blockHit.getDirection())));
+					cap.setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 					cap.setEditTraceHit(blockHit.getLocation());
 					cap.setEditTraceDirection(blockHit.getDirection());
 				}
@@ -180,22 +195,17 @@ public final class ClientEditHandler
 			
 			if (cap.getEditPos1() != null) {
 				
-				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);;
+				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				BlockPos pos2;
 				if (blockHit.getBlockPos() == null) {
-					Vec3 Vec3 = player.getEyePosition();
-					Vec3 Vec31 = player.getLookAngle();
-					Vec3 Vec32 = Vec3.add(Vec31.x * mc.player.getReachDistance(), Vec31.y * mc.player.getReachDistance(), Vec31.z * mc.player.getReachDistance());
-					pos2 = new BlockPos(Vec32.x, Vec32.y, Vec32.z);
-				} else pos2 = BlockPos.of(blockHit.getBlockPos().offset(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? 0 : 1, blockHit.getDirection()));
+					Vec3 vec30 = player.getEyePosition();
+					Vec3 vec31 = player.getLookAngle();
+					Vec3 vec32 = vec30.add(vec31.x * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue(), vec31.y * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue(), vec31.z * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
+					pos2 = new BlockPos(vec32.x, vec32.y, vec32.z);
+				} else pos2 = blockHit.getBlockPos();
 				
-				BlockPos pos1 = cap.getEditPos1();
-				ItemStack stack = (!player.getMainHandItem().isEmpty() ? player.getMainHandItem() : player.getOffhandItem());
+				cap.setEditPos2(pos2);
 				
-				if((Math.max(pos1.getX(),pos2.getX())-Math.min(pos1.getX(), pos2.getX())+1)*
-						(Math.max(pos1.getY(),pos2.getY())-Math.min(pos1.getY(), pos2.getY())+1)*
-						(Math.max(pos1.getZ(),pos2.getZ())-Math.min(pos1.getZ(), pos2.getZ())+1) <= (player.isCreative() ? 256 : stack.getCount()))
-					cap.setEditPos2(pos2);
 			}
 		} else if (isDragging)
 		{
@@ -212,8 +222,7 @@ public final class ClientEditHandler
 	
 	private static boolean canEditDrag(Player player)
 	{
-		return (((player.level.isClientSide() ? ServerEditHandler.getData(player) != null : ClientEditHandler.isActive()) && !DeployList.containsItemStack(player.getItemInHand(player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND), ServerEditHandler.getData(player).connection, player.level))
-				&& ((player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem)));
+		return ((ClientEditHandler.isActive() && ClientDeployList.getEntry(player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem()) == null && (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem)));
 	}
 	
 	//based on the Item class function of the same name
@@ -231,6 +240,65 @@ public final class ClientEditHandler
 		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
+	}
+	
+	@SubscribeEvent
+	public static void renderWorld(DrawSelectionEvent.HighlightBlock event)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		
+		if (mc.player != null && mc.getCameraEntity() == mc.player)
+		{
+			
+			LocalPlayer player = mc.player;
+			Camera info = event.getCamera();
+			
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+			
+			double d1 = info.getPosition().x;
+			double d2 = info.getPosition().y;
+			double d3 = info.getPosition().z;
+			
+			if (cap.isEditDragging() && cap.getEditPos1() != null)
+			{
+				BlockPos posA = cap.getEditPos1();
+				BlockPos posB = cap.getEditPos2();
+				
+				if(posB != null)
+				{
+					
+					AABB boundingBox = new AABB(Math.min(posA.getX(), posB.getX()), Math.min(posA.getY(), posB.getY()), Math.min(posA.getZ(), posB.getZ()),
+							Math.max(posA.getX(), posB.getX()) + 1, Math.max(posA.getY(), posB.getY()) + 1, Math.max(posA.getZ(), posB.getZ()) + 1).move(-d1, -d2, -d3).deflate(0.002);
+					
+					RenderSystem.defaultBlendFunc();
+					RenderSystem.lineWidth(2.0F);
+					RenderSystem.disableTexture();
+					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
+					
+					drawReviseToolOutline(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.lines()), Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 0.5f);
+					
+					RenderSystem.depthMask(true);
+					RenderSystem.enableTexture();
+					RenderSystem.disableBlend();
+				}
+			}
+		}
+	}
+	
+	private static void drawReviseToolOutline(PoseStack poseStack, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
+		PoseStack.Pose pose = poseStack.last();
+		Matrix4f matrix4f = pose.pose();
+		shapeIn.forAllEdges((startX, startY, startZ, endX, endY, endZ) -> {
+			float dX = (float)(endX - startX);
+			float dY = (float)(endY - startY);
+			float dZ = (float)(endZ - startZ);
+			float length = Mth.sqrt(dX * dX + dY * dY + dZ * dZ);
+			dX /= length;
+			dY /= length;
+			dZ /= length;
+			bufferIn.vertex(matrix4f, (float)(startX + xIn), (float)(startY + yIn), (float)(startZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+			bufferIn.vertex(matrix4f, (float)(endX + xIn), (float)(endY + yIn), (float)(endZ + zIn)).color(red, green, blue, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+		});
 	}
 	
 	@SubscribeEvent
@@ -279,6 +347,9 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
+		if(canEditDrag(event.getPlayer()))
+			event.setCanceled(true);
+		
 		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
