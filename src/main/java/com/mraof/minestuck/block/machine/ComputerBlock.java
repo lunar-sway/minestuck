@@ -143,6 +143,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				stackInHand.shrink(1);
 				blockEntity.installedPrograms.put(id, true);
+				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				blockEntity.setChanged();
 				level.sendBlockUpdated(pos, state, state, 3);
 			}
@@ -209,6 +210,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	{
 		OFF,
 		ON,
+		GAME_LOADED,
 		BROKEN;
 		
 		@Override
