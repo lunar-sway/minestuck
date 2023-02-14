@@ -71,6 +71,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_STONE_CRUXITE_ORE = REGISTER.register("end_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> SHADE_STONE_CRUXITE_ORE = REGISTER.register("shade_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> PINK_STONE_CRUXITE_ORE = REGISTER.register("pink_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
+	public static final RegistryObject<Block> MYCELIUM_STONE_CRUXITE_ORE = REGISTER.register("mycelium_stone_cruxite_ore", () -> cruxiteOre(copy(STONE_CRUXITE_ORE.get())));
 	
 	private static Block cruxiteOre(BlockBehaviour.Properties properties)
 	{
@@ -86,7 +87,6 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_STONE_URANIUM_ORE = REGISTER.register("end_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> SHADE_STONE_URANIUM_ORE = REGISTER.register("shade_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> PINK_STONE_URANIUM_ORE = REGISTER.register("pink_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
-	public static final RegistryObject<Block> MYCELIUM_STONE_CRUXITE_ORE = REGISTER.register("mycelium_stone_cruxite_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
 	public static final RegistryObject<Block> MYCELIUM_STONE_URANIUM_ORE = REGISTER.register("mycelium_stone_uranium_ore", () -> uraniumOre(copy(STONE_CRUXITE_ORE.get())));
 	
 	private static Block uraniumOre(BlockBehaviour.Properties properties)
