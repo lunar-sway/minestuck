@@ -10,6 +10,7 @@ public class EditTools implements IEditTools
 	private BlockPos editPos2 = null;
 	private Vec3 editTraceHit = new Vec3(0,0,0);
 	private Direction editTraceDirection = Direction.NORTH;
+	private double editReachDistance = 0;
 	private boolean isEditDragging = false;
 	
 	@Override
@@ -33,6 +34,9 @@ public class EditTools implements IEditTools
 	}
 	
 	@Override
+	public double getEditReachDistance() { return editReachDistance; }
+	
+	@Override
 	public void setEditPos1(BlockPos pos) {
 		editPos1 = pos;
 	}
@@ -51,6 +55,9 @@ public class EditTools implements IEditTools
 	public void setEditTraceDirection(Direction direction) {
 		editTraceDirection = direction;
 	}
+	
+	@Override
+	public void setEditReachDistance(double reachDistance) { editReachDistance = reachDistance; }
 	
 	@Override
 	public boolean isEditDragging() {
