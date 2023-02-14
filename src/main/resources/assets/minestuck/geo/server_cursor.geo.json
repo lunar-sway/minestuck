@@ -1,0 +1,89 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.server_cursor",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 4,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "cursor",
+					"pivot": [0.25, 1.75, 0],
+					"rotation": [0, 0, -90]
+				},
+				{
+					"name": "roof1",
+					"parent": "cursor",
+					"pivot": [0.75, 0, 0],
+					"cubes": [
+						{"origin": [-0.25, 0, 0], "size": [1, 4, 1], "uv": [0, 11]},
+						{"origin": [4.75, 0, 0], "size": [1, 4, 12], "uv": [0, 1]},
+						{"origin": [3.75, 0, 0], "size": [1, 4, 9], "uv": [0, 3]},
+						{"origin": [2.75, 0, 0], "size": [1, 4, 7], "uv": [0, 0]},
+						{"origin": [1.75, 0, 0], "size": [1, 4, 5], "uv": [1, 7]},
+						{"origin": [0.75, 0, 0], "size": [1, 4, 3], "uv": [2, 7]}
+					]
+				},
+				{
+					"name": "roof2",
+					"parent": "cursor",
+					"pivot": [18.75, 0, -25],
+					"cubes": [
+						{"origin": [5.75, 0, -12], "size": [1, 4, 2], "uv": [0, 1]},
+						{"origin": [0.75, 0, -1], "size": [6, 4, 1], "uv": [1, 10]},
+						{"origin": [0.75, 0, -7], "size": [6, 4, 4], "uv": [0, 3]},
+						{"origin": [3.75, 0, -8], "size": [3, 4, 1], "uv": [1, 7]},
+						{"origin": [1.75, 0, -3], "size": [5, 4, 2], "uv": [0, 8]},
+						{"origin": [4.75, 0, -10], "size": [2, 4, 2], "uv": [1, 2]}
+					]
+				},
+				{
+					"name": "topleft",
+					"parent": "cursor",
+					"pivot": [24.75, 0, -14],
+					"cubes": [
+						{"origin": [7.75, 0, -9], "size": [8, 4, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "middle",
+					"parent": "cursor",
+					"pivot": [13.75, 0, 2],
+					"cubes": [
+						{"origin": [11.75, 0, 0], "size": [4, 4, 4], "uv": [6, 10]}
+					]
+				},
+				{
+					"name": "topright",
+					"parent": "cursor",
+					"pivot": [11, 0, 5],
+					"cubes": [
+						{"origin": [10.75, 0, 5], "size": [4, 4, 4], "uv": [0, 9]},
+						{"origin": [6.75, 0, 1], "size": [4, 4, 8], "uv": [0, 5]}
+					]
+				},
+				{
+					"name": "bottomright",
+					"parent": "cursor",
+					"pivot": [24.75, 0, -14],
+					"cubes": [
+						{"origin": [16.75, 0, 0], "size": [8, 4, 8], "uv": [0, 5]}
+					]
+				},
+				{
+					"name": "bottomleft",
+					"parent": "cursor",
+					"pivot": [24.75, 0, -14],
+					"cubes": [
+						{"origin": [16.75, 0, -9], "size": [8, 4, 8], "uv": [0, 8]}
+					]
+				}
+			]
+		}
+	]
+}

@@ -198,7 +198,7 @@ public final class ClientEditHandler
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				BlockPos pos2;
 				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
-				if (blockHit.getBlockPos() == null) {
+				if (blockHit.getType() == BlockHitResult.Type.MISS) {
 					Vec3 eyePosition = player.getEyePosition();
 					Vec3 lookDirection = player.getLookAngle();
 					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
