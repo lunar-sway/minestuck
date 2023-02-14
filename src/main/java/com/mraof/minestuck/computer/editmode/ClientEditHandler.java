@@ -248,7 +248,7 @@ public final class ClientEditHandler
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
 			LocalPlayer player = mc.player;
