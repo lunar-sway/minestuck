@@ -73,6 +73,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
+		add(MYCELIUM_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
@@ -82,6 +83,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(SHADE_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(MYCELIUM_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
