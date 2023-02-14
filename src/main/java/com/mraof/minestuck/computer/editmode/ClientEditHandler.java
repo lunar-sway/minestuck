@@ -27,6 +27,7 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -187,6 +188,8 @@ public final class ClientEditHandler
 					cap.setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 					cap.setEditTraceHit(blockHit.getLocation());
 					cap.setEditTraceDirection(blockHit.getDirection());
+					cap.setEditReachDistance(Math.sqrt(cap.getEditPos1().distToLowCornerSqr(player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z)));
+					
 				}
 			}
 			
@@ -194,11 +197,12 @@ public final class ClientEditHandler
 				
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				BlockPos pos2;
+				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
 				if (blockHit.getBlockPos() == null) {
-					Vec3 vec30 = player.getEyePosition();
-					Vec3 vec31 = player.getLookAngle();
-					Vec3 vec32 = vec30.add(vec31.x * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue(), vec31.y * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue(), vec31.z * player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue());
-					pos2 = new BlockPos(vec32.x, vec32.y, vec32.z);
+					Vec3 eyePosition = player.getEyePosition();
+					Vec3 lookDirection = player.getLookAngle();
+					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
+					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
 				} else pos2 = blockHit.getBlockPos();
 				
 				cap.setEditPos2(pos2);
@@ -244,7 +248,7 @@ public final class ClientEditHandler
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
+		if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
 			LocalPlayer player = mc.player;
@@ -267,19 +271,19 @@ public final class ClientEditHandler
 					AABB boundingBox = new AABB(Math.min(posA.getX(), posB.getX()), Math.min(posA.getY(), posB.getY()), Math.min(posA.getZ(), posB.getZ()),
 							Math.max(posA.getX(), posB.getX()) + 1, Math.max(posA.getY(), posB.getY()) + 1, Math.max(posA.getZ(), posB.getZ()) + 1).move(-d1, -d2, -d3).deflate(0.002);
 					
+					//set blend func to default, set the width of the line, disable textures because we are using lines, and disable the depth mask because it doesn't matter with lines, and is slower if enabled.
 					RenderSystem.defaultBlendFunc();
 					RenderSystem.lineWidth(2.0F);
 					RenderSystem.disableTexture();
 					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 					
+					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
 					Tesselator tesselator = Tesselator.getInstance();
 					BufferBuilder bufferBuilder = tesselator.getBuilder();
+					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
 					
-					RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
-					
-					bufferBuilder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
-					drawReviseToolOutline(event.getPoseStack(), bufferBuilder, Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 0.5f);
-					tesselator.end();
+					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 1);
+					renderTypeBuffer.endBatch();
 					
 					RenderSystem.depthMask(true);
 					RenderSystem.enableTexture();

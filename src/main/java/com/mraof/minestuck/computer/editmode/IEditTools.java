@@ -20,10 +20,12 @@ public interface IEditTools
 	BlockPos getEditPos2();
 	Vec3 getEditTraceHit();
 	Direction getEditTraceDirection();
+	double getEditReachDistance();
 	void setEditPos1(BlockPos pos);
 	void setEditPos2(BlockPos pos);
 	void setEditTraceHit(Vec3 hit);
 	void setEditTraceDirection(Direction direction);
+	void setEditReachDistance(double reachDistance);
 	
 	boolean isEditDragging();
 	void setEditDragging(boolean v);
