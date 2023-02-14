@@ -2,11 +2,9 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -27,6 +25,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -56,9 +55,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
@@ -243,11 +240,11 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void renderWorld(DrawSelectionEvent.HighlightBlock event)
+	public static void renderWorld(RenderLevelStageEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (mc.player != null && mc.getCameraEntity() == mc.player)
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
 			LocalPlayer player = mc.player;
@@ -275,7 +272,14 @@ public final class ClientEditHandler
 					RenderSystem.disableTexture();
 					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 					
-					drawReviseToolOutline(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.lines()), Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 0.5f);
+					Tesselator tesselator = Tesselator.getInstance();
+					BufferBuilder bufferBuilder = tesselator.getBuilder();
+					
+					RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
+					
+					bufferBuilder.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+					drawReviseToolOutline(event.getPoseStack(), bufferBuilder, Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 0.5f);
+					tesselator.end();
 					
 					RenderSystem.depthMask(true);
 					RenderSystem.enableTexture();
@@ -284,7 +288,8 @@ public final class ClientEditHandler
 			}
 		}
 	}
-	
+
+	//taken directly from MachineOutlineRenderer's drawPhernaliaPlacementOutline function, which was taken from the LevelRenderer's drawShape function.
 	private static void drawReviseToolOutline(PoseStack poseStack, VertexConsumer bufferIn, VoxelShape shapeIn, double xIn, double yIn, double zIn, float red, float green, float blue, float alpha) {
 		PoseStack.Pose pose = poseStack.last();
 		Matrix4f matrix4f = pose.pose();
