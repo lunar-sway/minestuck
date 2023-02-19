@@ -12,7 +12,12 @@
 			},
 			"bones": [
 				{
+					"name": "head",
+					"pivot": [0, 0, 0]
+				},
+				{
 					"name": "cursor",
+					"parent": "head",
 					"pivot": [0.25, 1.75, 0],
 					"rotation": [0, 0, -90]
 				},

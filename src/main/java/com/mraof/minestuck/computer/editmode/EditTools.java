@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.UUID;
+
 public class EditTools implements IEditTools
 {
 	private BlockPos editPos1 = null;
@@ -12,6 +14,7 @@ public class EditTools implements IEditTools
 	private Direction editTraceDirection = Direction.NORTH;
 	private double editReachDistance = 0;
 	private boolean isEditDragging = false;
+	private UUID editCursorID = null;
 	
 	@Override
 	public BlockPos getEditPos1() {
@@ -37,6 +40,9 @@ public class EditTools implements IEditTools
 	public double getEditReachDistance() { return editReachDistance; }
 	
 	@Override
+	public UUID getEditCursorID() { return editCursorID; }
+	
+	@Override
 	public void setEditPos1(BlockPos pos) {
 		editPos1 = pos;
 	}
@@ -58,6 +64,9 @@ public class EditTools implements IEditTools
 	
 	@Override
 	public void setEditReachDistance(double reachDistance) { editReachDistance = reachDistance; }
+	
+	@Override
+	public void setEditCursorID(UUID uuid) { editCursorID = uuid; }
 	
 	@Override
 	public boolean isEditDragging() {

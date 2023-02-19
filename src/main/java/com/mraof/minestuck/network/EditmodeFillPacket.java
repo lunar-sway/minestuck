@@ -32,13 +32,15 @@ import static com.mraof.minestuck.computer.editmode.ServerEditHandler.isBlockIte
 
 public class EditmodeFillPacket implements PlayToServerPacket
 {
+	final boolean isDragging;
 	final BlockPos positionStart;
 	final BlockPos positionEnd;
 	final Vec3 hitVector;
 	final Direction side;
 	
-	public EditmodeFillPacket(BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
+	public EditmodeFillPacket(boolean isDragging, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
 	{
+		this.isDragging = isDragging;
 		this.positionStart = positionStart;
 		this.positionEnd = positionEnd;
 		this.hitVector = hitVector;
@@ -48,6 +50,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
+		buffer.writeBoolean(isDragging);
 		buffer.writeInt(positionStart.getX());
 		buffer.writeInt(positionStart.getY());
 		buffer.writeInt(positionStart.getZ());
@@ -62,51 +65,59 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	
 	public static EditmodeFillPacket decode(FriendlyByteBuf buffer)
 	{
+		boolean isDragging = buffer.readBoolean();
 		BlockPos positionStart = new BlockPos(buffer.readInt(),buffer.readInt(),buffer.readInt());
 		BlockPos positionEnd = new BlockPos(buffer.readInt(),buffer.readInt(),buffer.readInt());
 		Vec3 hitVector = new Vec3(buffer.readDouble(),buffer.readDouble(),buffer.readDouble());
 		Direction side = buffer.readEnum(Direction.class);
 		
-		return new EditmodeFillPacket(positionStart,positionEnd,hitVector,side);
+		return new EditmodeFillPacket(isDragging,positionStart,positionEnd,hitVector,side);
 	}
 	
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		InteractionHand hand = player.getMainHandItem().getItem() instanceof BlockItem ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-		ItemStack stack = player.getItemInHand(hand);
-		
-		if(!(stack.getItem() instanceof BlockItem))
-			return;
-		
-		float f = (float)(hitVector.x - (double)positionStart.getX());
-		float f1 = (float)(hitVector.y - (double)positionStart.getY());
-		float f2 = (float)(hitVector.z - (double)positionStart.getZ());
-		
-		
-		
-		boolean swingArm = false;
-		for (int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
-			for (int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
-				for (int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
-				{
-					if(stack.isEmpty())
-						return;
-					
-					
-					
-					int c = stack.getCount();
-					BlockPos pos = new BlockPos(x, y, z);
-					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(f, f1, f2), side, pos, false))) == InteractionResult.SUCCESS)
+		if(!isDragging)
+		{
+			InteractionHand hand = player.getMainHandItem().getItem() instanceof BlockItem ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+			ItemStack stack = player.getItemInHand(hand);
+			
+			if(!(stack.getItem() instanceof BlockItem))
+				return;
+			
+			float f = (float) (hitVector.x - (double) positionStart.getX());
+			float f1 = (float) (hitVector.y - (double) positionStart.getY());
+			float f2 = (float) (hitVector.z - (double) positionStart.getZ());
+			
+			
+			boolean swingArm = false;
+			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
+				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
+					for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
 					{
-						if(player.isCreative())
-							stack.setCount(c);
-						swingArm = true;
+						if(stack.isEmpty())
+							return;
+						
+						
+						int c = stack.getCount();
+						BlockPos pos = new BlockPos(x, y, z);
+						if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(f, f1, f2), side, pos, false))) == InteractionResult.SUCCESS)
+						{
+							if(player.isCreative())
+								stack.setCount(c);
+							swingArm = true;
+						}
 					}
-				}
-		
-		if(swingArm)
-			player.swing(hand);
+			
+			if(swingArm)
+				player.swing(hand);
+			
+			ServerEditHandler.removeCursorEntity(player);
+		}
+		else
+		{
+			ServerEditHandler.updateEditTools(player, isDragging, positionStart, positionEnd, side);
+		}
 	}
 	
 	private static boolean editModePlaceCheck(Level level, Player player, InteractionHand hand)

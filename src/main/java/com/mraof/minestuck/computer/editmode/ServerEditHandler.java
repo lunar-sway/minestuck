@@ -4,6 +4,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.entity.DecoyEntity;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.alchemy.GristCostRecipe;
@@ -16,6 +18,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -23,6 +26,7 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
@@ -31,6 +35,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -583,6 +588,65 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		
 		if(inventoryChanged)
 			player.getServer().getPlayerList().sendAllPlayerInfo(player);
+	}
+	
+	public static void updateEditTools(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2, Direction side)
+	{
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		cap.setEditDragging(isDragging);
+		cap.setEditPos1(pos1);
+		cap.setEditPos2(pos2);
+		
+		double posX = pos2.getX() + (pos1.getX() < pos2.getX() ? 1 : 0);
+		double posY = pos2.getY() + (pos1.getY() > pos2.getY() ? 0 : 1);
+		double posZ = pos2.getZ() + (pos1.getZ() < pos2.getZ() ? 1 : 0);
+		boolean flipCursor = pos1.getY() > pos2.getY();
+		
+		if(cap.getEditCursorID() == null)
+		{
+			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), flipCursor));
+		} else
+		{
+			updateCursorEntity(player, new Vec3(posX,posY,posZ), flipCursor, cap.getEditCursorID());
+		}
+	}
+	
+	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, boolean flip)
+	{
+		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
+		cursor.noPhysics = true;
+		cursor.setNoGravity(true);
+		cursor.setInvulnerable(true);
+		
+		float flipRot = flip ? 180 : 0;
+		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, 0, flipRot);
+		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+		player.getLevel().addFreshEntity(cursor);
+		
+		return cursor.getUUID();
+	}
+	
+	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, boolean flip, UUID uuid)
+	{
+		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
+		
+		float flipRot = flip == true ? 180 : 0;
+		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, 0, flipRot);
+		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
+	}
+	
+	public static void removeCursorEntity(ServerPlayer player)
+	{
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		
+		if(cap.getEditCursorID() != null)
+		{
+			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
+			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+			cursor.remove(Entity.RemovalReason.DISCARDED);
+		}
+		
+		cap.setEditCursorID(null);
 	}
 	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
