@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
-import static com.mraof.minestuck.item.MSItems.SHUNT;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AlchemyHelper
@@ -66,15 +65,21 @@ public class AlchemyHelper
 		
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
-		ItemStack newItem = new ItemStack(item);
+		
+		int count = 1;
+		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
+			count = 0;
+		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
+			count = tag.getInt("contentSize");
+		
+		CompoundTag capabilityData = null;
+		if(tag.contains("contentCaps", Tag.TAG_COMPOUND))
+			capabilityData = tag.getCompound("contentCaps");
+		
+		ItemStack newItem = new ItemStack(item, count, capabilityData);
 		
 		if(tag.contains("contentTags"))
 			newItem.setTag(tag.getCompound("contentTags"));
-		
-		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
-			newItem.setCount(0);
-		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
-			newItem.setCount(tag.getInt("contentSize"));
 		
 		return newItem;
 		
@@ -118,15 +123,7 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack item, boolean registerToCard)
 	{
-		CompoundTag nbt = null;
-		if(!item.isEmpty())
-		{
-			nbt = new CompoundTag();
-			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(item.getItem()).toString());
-		}
-		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get());
-		stack.setTag(nbt);
-		return stack;
+		return createEncodedItem(item, new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get()));
 	}
 	
 	@Nonnull
@@ -138,17 +135,9 @@ public class AlchemyHelper
 			nbt = new CompoundTag();
 			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(itemIn.getItem()).toString());
 		}
-		ItemStack stack = itemOut;
 		
-		
-		stack.setTag(nbt);
-		return stack;
-	}
-	
-	@Nonnull
-	public static ItemStack createEncodedItem(ItemStack itemIn, Item itemOut)
-	{
-		return createEncodedItem(itemIn, new ItemStack(itemOut));
+		itemOut.setTag(nbt);
+		return itemOut;
 	}
 	
 	@Nonnull
@@ -160,6 +149,9 @@ public class AlchemyHelper
 		{
 			if(item.hasTag())
 				stack.getOrCreateTag().put("contentTags", item.getTag());
+			CompoundTag capsData = item.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
+			if(!capsData.isEmpty())
+				stack.getOrCreateTag().put("contentCaps", capsData);
 			stack.getOrCreateTag().putInt("contentSize", item.getCount());
 		}
 		
@@ -171,9 +163,7 @@ public class AlchemyHelper
 	{
 		ItemStack stack = createEncodedItem(item, true);
 		stack.getOrCreateTag().putBoolean("punched", false);
-			if(item.hasTag())
-				stack.getOrCreateTag().put("contentTags", item.getTag());
-			stack.getOrCreateTag().putInt("contentSize", 0);
+		stack.getOrCreateTag().putInt("contentSize", 0);
 		return stack;
 	}
 	
@@ -182,25 +172,7 @@ public class AlchemyHelper
 		card.removeTagKey("contentID");
 		card.removeTagKey("punched");
 		card.removeTagKey("contentTags");
+		card.removeTagKey("contentCaps");
 		card.removeTagKey("contentSize");
-	}
-	
-	public static ItemStack changeEncodeSize(ItemStack stack, int size)
-	{
-		stack.getOrCreateTag().putInt("contentSize", size);
-		
-		return stack;
-	}
-	
-	public static ItemStack createShunt(ItemStack item)
-	{
-		ItemStack stack = createEncodedItem(item, SHUNT.get());
-		stack.getOrCreateTag().putBoolean("punched", true);
-		
-		if(item.hasTag())
-			stack.getOrCreateTag().put("contentTags", item.getTag());
-		stack.getOrCreateTag().putInt("contentSize", item.getCount());
-		
-		return stack;
 	}
 }

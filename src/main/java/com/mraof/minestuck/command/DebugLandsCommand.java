@@ -24,8 +24,9 @@ public class DebugLandsCommand
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
-		dispatcher.register(Commands.literal("debuglands").then(Commands.argument("lands", ListArgument.list(LandTypePairArgument.nullablePairs()))
-				.executes(context -> createDebugLands(context.getSource(), ListArgument.getListArgument(context, "lands")))));
+		dispatcher.register(Commands.literal("debuglands").requires(source -> source.hasPermission(2))
+				.then(Commands.argument("lands", ListArgument.list(LandTypePairArgument.nullablePairs()))
+						.executes(context -> createDebugLands(context.getSource(), ListArgument.getListArgument(context, "lands")))));
 	}
 	
 	private static int createDebugLands(CommandSourceStack source, List<LandTypePair> landTypes) throws CommandSyntaxException

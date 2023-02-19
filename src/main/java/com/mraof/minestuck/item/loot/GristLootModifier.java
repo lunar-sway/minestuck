@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.loot;
 
+import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.alchemy.GristCostRecipe;

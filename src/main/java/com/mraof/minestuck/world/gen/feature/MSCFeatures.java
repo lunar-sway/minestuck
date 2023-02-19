@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
@@ -65,7 +65,7 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_SNOW_BLOCK_DISK = REGISTER.register("small_snow_block_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
 			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SNOW_BLOCK), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 3), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> ICE_DISK = REGISTER.register("ice_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.ICE), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 3), 1)));
+			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.ICE), BlockPredicate.matchesBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT), UniformInt.of(2, 6), 1)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SAND_DISK = REGISTER.register("sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
 			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SAND), BlockPredicate.matchesBlocks(Blocks.SANDSTONE, Blocks.SAND), UniformInt.of(2, 5), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RED_SAND_DISK = REGISTER.register("red_sand_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
@@ -74,8 +74,6 @@ public final class MSCFeatures
 			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.SLIME_BLOCK), BlockPredicate.matchesBlocks(Blocks.MYCELIUM, Blocks.DIRT), UniformInt.of(2, 6), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> NETHERRACK_DISK = REGISTER.register("netherrack_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
 			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.NETHERRACK), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 1)));
-	public static final RegistryObject<ConfiguredFeature<?, ?>> OAK_LEAVES_DISK = REGISTER.register("oak_leaves_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
-			new DiskConfiguration(RuleBasedBlockStateProvider.simple(Blocks.OAK_LEAVES), BlockPredicate.alwaysTrue(), UniformInt.of(2, 3), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COAGULATED_BLOOD_DISK = REGISTER.register("coagulated_blood_disk", () -> new ConfiguredFeature<>(MSFeatures.DISK.get(),
 			new DiskConfiguration(RuleBasedBlockStateProvider.simple(MSBlocks.COAGULATED_BLOOD.get()), BlockPredicate.alwaysTrue(), UniformInt.of(2, 5), 2)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> COBBLESTONE_SURFACE_DISK = REGISTER.register("cobblestone_surface_disk", () -> new ConfiguredFeature<>(MSFeatures.GRASSY_SURFACE_DISK.get(),
@@ -115,7 +113,7 @@ public final class MSCFeatures
 			new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(TreePlacements.PINE_CHECKED, 1 / 3F)), TreePlacements.SPRUCE_CHECKED)));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> STRAWBERRY_PATCH = REGISTER.register("strawberry_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
-			FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.STRAWBERRY.get())), List.of(Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT), 64)));
+			FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.STRAWBERRY.get())), List.of(Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT), 4)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> GLOWING_MUSHROOM_PATCH = REGISTER.register("glowing_mushroom_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.GLOWING_MUSHROOM.get().defaultBlockState()))))));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> TALL_END_GRASS_PATCH = REGISTER.register("tall_end_grass_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
@@ -128,8 +126,18 @@ public final class MSCFeatures
 			FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> DESERT_BUSH_PATCH = REGISTER.register("desert_bush_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 			FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.DESERT_BUSH.get()))))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> MOSS_CARPET_PATCH = REGISTER.register("moss_carpet_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState())), BlockPredicate.matchesBlock(Blocks.GRASS_BLOCK, new BlockPos(0, -1, 0))))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> AZALEA_PATCH = REGISTER.register("azalea_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.AZALEA.defaultBlockState())), BlockPredicate.matchesBlock(Blocks.GRASS_BLOCK, new BlockPos(0, -1, 0))))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> CRIMSON_FUNGUS_PATCH = REGISTER.register("crimson_fungus_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			FeatureUtils.simpleRandomPatchConfiguration(96, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.CRIMSON_FUNGUS.defaultBlockState())), BlockPredicate.matchesBlock(Blocks.MYCELIUM, new BlockPos(0, -1, 0))))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> WARPED_FUNGUS_PATCH = REGISTER.register("warped_fungus_patch", () -> new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+			FeatureUtils.simpleRandomPatchConfiguration(96, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.WARPED_FUNGUS.defaultBlockState())), BlockPredicate.matchesBlock(Blocks.MYCELIUM, new BlockPos(0, -1, 0))))));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PUMPKIN = REGISTER.register("pumpkin", () -> new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.PUMPKIN))));
+	
+	public static final RegistryObject<ConfiguredFeature<?, ?>> CEILING_ROOTS = REGISTER.register("ceiling_roots", () -> new ConfiguredFeature<>(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.HANGING_ROOTS))));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> new ConfiguredFeature<>(MSFeatures.RABBIT_PLACEMENT.get(), FeatureConfiguration.NONE));
 	
