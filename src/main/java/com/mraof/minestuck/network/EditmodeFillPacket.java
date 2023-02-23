@@ -4,10 +4,7 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristCost;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.computer.editmode.DeployEntry;
-import com.mraof.minestuck.computer.editmode.DeployList;
-import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -112,11 +109,11 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			if(swingArm)
 				player.swing(hand);
 			
-			ServerEditHandler.removeCursorEntity(player);
+			EditRevise.removeCursorEntity(player);
 		}
 		else
 		{
-			ServerEditHandler.updateEditTools(player, isDragging, positionStart, positionEnd, side);
+			EditRevise.updateEditToolsServer(player, isDragging, positionStart, positionEnd, side);
 		}
 	}
 	

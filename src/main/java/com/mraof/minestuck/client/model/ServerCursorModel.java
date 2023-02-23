@@ -28,8 +28,8 @@ public class ServerCursorModel extends AnimatedGeoModel<ServerCursorEntity>
 	public void setLivingAnimations(ServerCursorEntity entity, Integer uniqueID, AnimationEvent customPredicate)
 	{
 		super.setLivingAnimations(entity, uniqueID, customPredicate);
-		IBone head = this.getAnimationProcessor().getBone("head");
+		IBone cursor = this.getAnimationProcessor().getBone("head");
 		
-		head.setRotationZ(head.getRotationZ() + entity.getXRot() * ((float) Math.PI / 180F));
+		cursor.setRotationZ(cursor.getRotationZ() + entity.getXRot() * ((float) Math.PI / 180F));
 	}
 }

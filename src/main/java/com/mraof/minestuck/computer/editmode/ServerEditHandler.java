@@ -590,65 +590,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			player.getServer().getPlayerList().sendAllPlayerInfo(player);
 	}
 	
-	public static void updateEditTools(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2, Direction side)
-	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
-		cap.setEditDragging(isDragging);
-		cap.setEditPos1(pos1);
-		cap.setEditPos2(pos2);
-		
-		double posX = pos2.getX() + (pos1.getX() < pos2.getX() ? 1 : 0);
-		double posY = pos2.getY() + (pos1.getY() > pos2.getY() ? 0 : 1);
-		double posZ = pos2.getZ() + (pos1.getZ() < pos2.getZ() ? 1 : 0);
-		boolean flipCursor = pos1.getY() > pos2.getY();
-		
-		if(cap.getEditCursorID() == null)
-		{
-			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), flipCursor));
-		} else
-		{
-			updateCursorEntity(player, new Vec3(posX,posY,posZ), flipCursor, cap.getEditCursorID());
-		}
-	}
-	
-	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, boolean flip)
-	{
-		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
-		cursor.noPhysics = true;
-		cursor.setNoGravity(true);
-		cursor.setInvulnerable(true);
-		
-		float flipRot = flip ? 180 : 0;
-		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, 0, flipRot);
-		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
-		player.getLevel().addFreshEntity(cursor);
-		
-		return cursor.getUUID();
-	}
-	
-	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, boolean flip, UUID uuid)
-	{
-		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
-		
-		float flipRot = flip == true ? 180 : 0;
-		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, 0, flipRot);
-		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
-	}
-	
-	public static void removeCursorEntity(ServerPlayer player)
-	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
-		
-		if(cap.getEditCursorID() != null)
-		{
-			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
-			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
-			cursor.remove(Entity.RemovalReason.DISCARDED);
-		}
-		
-		cap.setEditCursorID(null);
-	}
-	
 	/*@SubscribeEvent(priority=EventPriority.LOWEST, receiveCanceled=false) TODO Do something about command security
 	public static void onCommandEvent(CommandEvent event)
 	{

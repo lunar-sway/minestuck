@@ -79,6 +79,13 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	public Packet<?> getAddEntityPacket() { return NetworkHooks.getEntitySpawningPacket(this); }
 	
 	@Override
+	protected float tickHeadTurn(float pYRot, float pAnimStep) {
+		this.yBodyRot = this.getYRot();
+		this.yHeadRot = this.getYRot();
+		return pAnimStep;
+	}
+	
+	@Override
 	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport)
 	{
 		this.setPos(pX, pY, pZ);

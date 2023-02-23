@@ -6,6 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.network.EditmodeFillPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -15,8 +17,11 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.ClipContext;
@@ -30,6 +35,8 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.UUID;
 
 public class EditRevise
 {
@@ -117,11 +124,81 @@ public class EditRevise
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
 	
+	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2, Direction side)
+	{
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		cap.setEditDragging(isDragging);
+		cap.setEditPos1(pos1);
+		cap.setEditPos2(pos2);
+		
+		boolean signX = pos1.getX() < pos2.getX();
+		boolean signY = pos1.getY() > pos2.getY();
+		boolean signZ = pos1.getZ() < pos2.getZ();
+		
+		double posX = pos2.getX() + (signX ? 1 : 0);
+		double posY = pos2.getY() + (signY ? 0 : 1);
+		double posZ = pos2.getZ() + (signZ ? 1 : 0);
+		boolean flipCursor = signY;
+		
+		float cursorLean = 0f;
+		if (signX && !signZ)
+			cursorLean = 360.0f; //+X -Z = 0
+		if (signX && signZ)
+			cursorLean = 90.0f; //+X +Z = 90
+		if (!signX && signZ)
+			cursorLean = 180.0f; //-X +Z = 180
+		if (!signX && !signZ)
+			cursorLean = 270.0f; //-X -Z = 270
+		
+		if(cap.getEditCursorID() == null)
+		{
+			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor));
+		} else
+		{
+			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
+		}
+	}
+	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, float cursorLean, boolean flip)
+	{
+		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
+		cursor.noPhysics = true;
+		cursor.setNoGravity(true);
+		cursor.setInvulnerable(true);
+		
+		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+		player.getLevel().addFreshEntity(cursor);
+		
+		return cursor.getUUID();
+	}
+	
+	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, float cursorLean, boolean flip, UUID uuid)
+	{
+		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
+		
+		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
+	}
+	
+	public static void removeCursorEntity(ServerPlayer player)
+	{
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		
+		if(cap.getEditCursorID() != null)
+		{
+			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
+			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+			cursor.remove(Entity.RemovalReason.DISCARDED);
+		}
+		
+		cap.setEditCursorID(null);
+	}
+	
 	public static void renderOutlines(RenderLevelStageEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_CUTOUT_MIPPED_BLOCKS_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
 			LocalPlayer player = mc.player;
