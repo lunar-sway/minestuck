@@ -125,11 +125,11 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			if(swingArm)
 				player.swing(hand);
 			
-			EditDrag.removeCursorEntity(player);
+			EditToolDrag.removeCursorEntity(player);
 		}
 		else
 		{
-			EditDrag.updateEditToolsServer(player, isDragging, positionStart, positionEnd, side);
+			EditToolDrag.updateEditToolsServer(player, isDragging, positionStart, positionEnd, side);
 		}
 	}
 	

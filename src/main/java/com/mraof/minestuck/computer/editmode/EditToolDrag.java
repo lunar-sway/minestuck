@@ -38,7 +38,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-public class EditDrag
+public class EditToolDrag
 {
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{

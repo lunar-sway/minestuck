@@ -134,14 +134,14 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		EditDrag.doRecycleCode(event);
-		EditDrag.doReviseCode(event);
+		EditToolDrag.doRecycleCode(event);
+		EditToolDrag.doReviseCode(event);
 	}
 	
 	@SubscribeEvent
 	public static void renderWorld(RenderLevelStageEvent event)
 	{
-		EditDrag.renderOutlines(event);
+		EditToolDrag.renderOutlines(event);
 	}
 	
 	@SubscribeEvent
@@ -190,7 +190,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(EditDrag.canEditRevise(event.getPlayer()))
+		if(EditToolDrag.canEditRevise(event.getPlayer()))
 			event.setCanceled(true);
 		
 		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
@@ -223,7 +223,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(EditDrag.canEditRecycle(event.getPlayer()))
+		if(EditToolDrag.canEditRecycle(event.getPlayer()))
 			event.setCanceled(true);
 		
 		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())

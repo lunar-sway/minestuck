@@ -78,6 +78,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	@Override
 	public Packet<?> getAddEntityPacket() { return NetworkHooks.getEntitySpawningPacket(this); }
 	
+	//Ensures that the head and body always face the same way as the root Y rotation.
 	@Override
 	protected float tickHeadTurn(float pYRot, float pAnimStep) {
 		this.yBodyRot = this.getYRot();
