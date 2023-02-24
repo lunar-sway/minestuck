@@ -18,12 +18,21 @@ import java.util.UUID;
 
 public interface IEditTools
 {
+	enum ToolMode
+	{
+		REVISE,
+		RECYCLE
+	}
+	
+	ToolMode getToolMode();
 	BlockPos getEditPos1();
 	BlockPos getEditPos2();
 	Vec3 getEditTraceHit();
 	Direction getEditTraceDirection();
 	double getEditReachDistance();
 	UUID getEditCursorID();
+	
+	void setToolMode(ToolMode mode);
 	void setEditPos1(BlockPos pos);
 	void setEditPos2(BlockPos pos);
 	void setEditTraceHit(Vec3 hit);

@@ -19,6 +19,7 @@ public class ServerCursorRenderer extends GeoEntityRenderer<ServerCursorEntity>
 	public RenderType getRenderType(ServerCursorEntity animatable, float partialTicks, PoseStack stack,
 									MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
 									ResourceLocation textureLocation) {
+		
 		return RenderType.entitySolid(getTextureLocation(animatable));
 	}
 }

@@ -1,47 +1,28 @@
 package com.mraof.minestuck.computer.editmode;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.weapon.PogoEffect;
 import com.mraof.minestuck.network.ClientEditPacket;
-import com.mraof.minestuck.network.EditmodeFillPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -49,16 +30,8 @@ import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
@@ -161,13 +134,14 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		EditRevise.doReviseCode(event);
+		EditDrag.doRecycleCode(event);
+		EditDrag.doReviseCode(event);
 	}
 	
 	@SubscribeEvent
 	public static void renderWorld(RenderLevelStageEvent event)
 	{
-		EditRevise.renderOutlines(event);
+		EditDrag.renderOutlines(event);
 	}
 	
 	@SubscribeEvent
@@ -216,7 +190,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(EditRevise.canEditDrag(event.getPlayer()))
+		if(EditDrag.canEditRevise(event.getPlayer()))
 			event.setCanceled(true);
 		
 		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
@@ -249,6 +223,9 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
+		if(EditDrag.canEditRecycle(event.getPlayer()))
+			event.setCanceled(true);
+		
 		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			BlockState block = event.getWorld().getBlockState(event.getPos());

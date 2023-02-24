@@ -38,23 +38,28 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.UUID;
 
-public class EditRevise
+public class EditDrag
 {
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if (mc.player == null || event.phase == TickEvent.Phase.END)
 			return;
-	
+		
 		Player player = mc.player;
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		
+		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
+			return;
+		
 		boolean isDragging = cap.isEditDragging();
 		boolean isDown = mc.options.keyUse.isDown();
 		
 		if (isDown)
 		{
-			if(!canEditDrag(player))
+			if(!canEditRevise(player))
 			{
+				cap.setToolMode(null);
 				cap.setEditDragging(false);
 				cap.setEditPos1(null);
 				cap.setEditPos2(null);
@@ -66,6 +71,8 @@ public class EditRevise
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 				{
+					cap.setToolMode(IEditTools.ToolMode.REVISE);
+					
 					cap.setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 					cap.setEditTraceHit(blockHit.getLocation());
 					cap.setEditTraceDirection(blockHit.getDirection());
@@ -87,14 +94,16 @@ public class EditRevise
 				} else pos2 = player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
 				
 				cap.setEditPos2(pos2);
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
 		} else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
+			cap.setToolMode(null);
+			
 			cap.setEditPos1(null);
 			cap.setEditPos2(null);
 		}
@@ -102,9 +111,86 @@ public class EditRevise
 		cap.setEditDragging(isDown);
 	}
 	
-	public static boolean canEditDrag(Player player)
+	public static boolean canEditRevise(Player player)
 	{
-		return ((ClientEditHandler.isActive() && ClientDeployList.getEntry(player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem()) == null && (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem)));
+		return (ClientEditHandler.isActive() && ClientDeployList.getEntry(player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem()) == null && (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
+	}
+	
+	public static void doRecycleCode(TickEvent.ClientTickEvent event)
+	{
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || event.phase == TickEvent.Phase.END)
+			return;
+		
+		Player player = mc.player;
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		
+		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
+			return;
+		
+		boolean isDragging = cap.isEditDragging();
+		boolean isDown = mc.options.keyAttack.isDown();
+		
+		if (isDown)
+		{
+			if(!canEditRecycle(player))
+			{
+				cap.setToolMode(null);
+				cap.setEditDragging(false);
+				cap.setEditPos1(null);
+				cap.setEditPos2(null);
+				return;
+			}
+			
+			if (!isDragging)
+			{
+				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
+				{
+					cap.setToolMode(IEditTools.ToolMode.RECYCLE);
+					
+					cap.setEditPos1(blockHit.getBlockPos());
+					cap.setEditTraceHit(blockHit.getLocation());
+					cap.setEditTraceDirection(blockHit.getDirection());
+					cap.setEditReachDistance(Math.sqrt(cap.getEditPos1().distToLowCornerSqr(player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z)));
+					
+				}
+			}
+			
+			if (cap.getEditPos1() != null) {
+				
+				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+				BlockPos pos2;
+				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
+				if (blockHit.getType() == BlockHitResult.Type.MISS) {
+					Vec3 eyePosition = player.getEyePosition();
+					Vec3 lookDirection = player.getLookAngle();
+					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
+					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
+				} else pos2 = blockHit.getBlockPos();
+				
+				cap.setEditPos2(pos2);
+				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			}
+		} else if (isDragging)
+		{
+			if (cap.getEditPos1() != null)
+			{
+				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			}
+			
+			cap.setToolMode(null);
+			
+			cap.setEditPos1(null);
+			cap.setEditPos2(null);
+		}
+		
+		cap.setEditDragging(isDown);
+	}
+	
+	public static boolean canEditRecycle(Player player)
+	{
+		return (ClientEditHandler.isActive());
 	}
 	
 	//based on the Item class function of the same name
@@ -232,7 +318,7 @@ public class EditRevise
 					BufferBuilder bufferBuilder = tesselator.getBuilder();
 					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
 					
-					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox),0, 0, 0, 0, 1, 0, 1);
+					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox),0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
 					renderTypeBuffer.endBatch();
 					
 					RenderSystem.depthMask(true);

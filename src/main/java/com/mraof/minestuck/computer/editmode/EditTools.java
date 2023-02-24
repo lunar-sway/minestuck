@@ -8,6 +8,9 @@ import java.util.UUID;
 
 public class EditTools implements IEditTools
 {
+	
+	
+	private ToolMode toolMode = null;
 	private BlockPos editPos1 = null;
 	private BlockPos editPos2 = null;
 	private Vec3 editTraceHit = new Vec3(0,0,0);
@@ -15,6 +18,9 @@ public class EditTools implements IEditTools
 	private double editReachDistance = 0;
 	private boolean isEditDragging = false;
 	private UUID editCursorID = null;
+	
+	@Override
+	public ToolMode getToolMode() { return toolMode; }
 	
 	@Override
 	public BlockPos getEditPos1() {
@@ -41,6 +47,9 @@ public class EditTools implements IEditTools
 	
 	@Override
 	public UUID getEditCursorID() { return editCursorID; }
+	
+	@Override
+	public void setToolMode(ToolMode mode) { toolMode = mode; }
 	
 	@Override
 	public void setEditPos1(BlockPos pos) {
