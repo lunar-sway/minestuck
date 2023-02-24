@@ -6,6 +6,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mraof.minestuck.block.machine.MachineBlock;
+import com.mraof.minestuck.block.machine.MachineMultiblock;
+import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.network.EditmodeFillPacket;
@@ -24,6 +27,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -113,8 +117,11 @@ public class EditToolDrag
 	
 	public static boolean canEditRevise(Player player)
 	{
-		return (ClientEditHandler.isActive() && ClientDeployList.getEntry(player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem()) == null && (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
+		return (ClientEditHandler.isActive()
+				&& !isBlockDeployable(player)
+				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
 	}
+	
 	
 	public static void doRecycleCode(TickEvent.ClientTickEvent event)
 	{
@@ -190,7 +197,21 @@ public class EditToolDrag
 	
 	public static boolean canEditRecycle(Player player)
 	{
-		return (ClientEditHandler.isActive());
+		return (ClientEditHandler.isActive() && !isMultiblock(player));
+	}
+	
+	private static boolean isBlockDeployable(Player player)
+	{
+		ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
+	
+		return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof MachineBlock;
+	}
+
+	private static boolean isMultiblock(Player player)
+	{
+		BlockPos blockLookingAt = getPlayerPOVHitResult(player.getLevel(), player).getBlockPos();
+		
+		return (player.getLevel().getBlockState(blockLookingAt) != null && player.getLevel().getBlockState(blockLookingAt).getBlock() instanceof MultiMachineBlock);
 	}
 	
 	//based on the Item class function of the same name
@@ -244,6 +265,7 @@ public class EditToolDrag
 			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
 		}
 	}
+	
 	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, float cursorLean, boolean flip)
 	{
 		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
