@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item.crafting.alchemy;
+package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.skaianet.Session;
 import net.minecraft.server.MinecraftServer;

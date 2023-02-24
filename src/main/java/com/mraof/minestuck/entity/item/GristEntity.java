@@ -1,17 +1,17 @@
 package com.mraof.minestuck.entity.item;
 
+
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.network.GristEntityPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -25,12 +25,11 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Material;
-import com.mraof.minestuck.skaianet.SessionHandler;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-
 import javax.annotation.Nullable;
+
 import java.util.function.Predicate;
 
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
@@ -162,7 +161,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public long getPlayerCacheRoom(Player entityIn)
 	{
-		if(entityIn instanceof ServerPlayer)
+		if(entityIn != null && !entityIn.getLevel().isClientSide())
 		{
 			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
 			
@@ -195,15 +194,14 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void tick()
 	{
+		super.tick();
+		
 		long canPickUp = getPlayerCacheRoom(closestPlayer);
 		
 		if(this.level.isClientSide == true)
 		{
 			shaderAlpha = Math.max(shaderAlpha - 7, 0);
 		}
-		
-		
-		super.tick();
 		
 		this.xo = this.getX();
 		this.yo = this.getY();
@@ -222,7 +220,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		// Periodically re-evaluate whether the grist should be following this particular player
 		if(this.targetCycle < this.cycle - 20 + this.getId() % 100) //Why should I care about the entityId
 		{
-			// If the grist isn't following anyone, or the player is out of range, or the player can't pick up the grist, pick someone else.
 			if(this.closestPlayer == null || canPickUp < gristValue || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
 				this.closestPlayer = this.level.getNearestPlayer(

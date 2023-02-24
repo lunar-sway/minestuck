@@ -26,8 +26,9 @@ import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-import static com.mraof.minestuck.world.storage.ClientPlayerData.rung;
+import static com.mraof.minestuck.player.ClientPlayerData.rung;
 
 public class GristHelper
 {
@@ -48,9 +49,9 @@ public class GristHelper
 	public static GristType getPrimaryGrist(Random random)
 	{
 		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
-				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
+				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).collect(Collectors.toList());
 		
-		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();
+		return WeightedRandom.getRandomItem(random, typeList).orElseThrow(null).getData();
 	}
 	
 	/**

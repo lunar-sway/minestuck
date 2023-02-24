@@ -1,14 +1,14 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.GristGutter;
+import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy;
 
+
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.Util;
@@ -16,7 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 
 public class GristType extends ForgeRegistryEntry<GristType> implements Comparable<GristType>
 {
@@ -116,7 +119,7 @@ public class GristType extends ForgeRegistryEntry<GristType> implements Comparab
 	public List<GristType> getSecondaryTypes()
 	{
 		return Objects.requireNonNull(GristTypes.getRegistry().tags())
-				.getTag(this.getSecondaryTypesTag()).stream().toList();
+				.getTag(this.getSecondaryTypesTag()).stream().collect(Collectors.toList());
 	}
 	
 	public TagKey<GristType> getSecondaryTypesTag()
