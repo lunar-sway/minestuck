@@ -189,7 +189,7 @@ public class GristHelper
 			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
 					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
 					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
-					8000,9000,10000,20000,30000,40000,50000,90000000};
+					8000,9000,10000,20000,30000,40000,50000,500000};
 	// the function that controls how much grist is spliced from the gutter
 	// will crash the game if set below 20
 	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set)
