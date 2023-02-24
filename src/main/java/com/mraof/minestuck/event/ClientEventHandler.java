@@ -6,8 +6,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
-import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
@@ -53,12 +53,12 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(event.getPlayer() != null && event.getPlayer().containerMenu instanceof ConsortMerchantContainer
+			if(event.getPlayer() != null && event.getPlayer().containerMenu instanceof ConsortMerchantMenu
 					&& event.getPlayer().containerMenu.getItems().contains(stack))
 			{
 				String unlocalized = stack.getDescriptionId();
 				
-				EnumConsort type = ((ConsortMerchantContainer)event.getPlayer().containerMenu).getConsortType();
+				EnumConsort type = ((ConsortMerchantMenu)event.getPlayer().containerMenu).getConsortType();
 				String arg1 = I18n.get(type.getConsortType().getDescriptionId());
 				
 				String name = "store."+unlocalized;
@@ -81,6 +81,10 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onFogRender(EntityViewRenderEvent.RenderFogEvent event)
 	{
+		// Don't change fog distance for spectators
+		if(event.getCamera().getEntity().isSpectator())
+			return;
+		
 		LevelReader level = event.getCamera().getEntity().level;
 		BlockPos blockPos = event.getCamera().getBlockPosition();
 		Vec3 pos = event.getCamera().getPosition();

@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -24,6 +25,7 @@ import net.minecraftforge.common.Tags;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
 public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>
@@ -35,9 +37,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
-		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.lootTable()
+		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
 						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))));
+		
+		lootProcessor.accept(MSLootTables.SBURB_CODE_LIBRARY_LOOT_INJECT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))).apply(SetSburbCodeFragments.builder()))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(UniformGenerator.between(0, 2))
@@ -63,7 +69,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
-						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(5).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(2).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).setWeight(4).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(MSItems.RAW_URANIUM.get()).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(MSItems.BUG_ON_A_STICK.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -74,7 +80,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.GOLDEN_GRASSHOPPER.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.CARVING_TOOL.get()).setWeight(5).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-						.add(LootItem.lootTableItem(MSItems.STONE_SLAB.get()).setWeight(2).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(MSItems.STONE_TABLET.get()).setWeight(2).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSItems.HASHMAP_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.QUEUE_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
 						.add(LootItem.lootTableItem(MSItems.QUEUESTACK_MODUS_CARD.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
@@ -159,7 +165,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(5).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(50, 250))))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(2).setQuality(0).apply(SetBoondollarCount.builder(UniformGenerator.between(250, 1000))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.FOREST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.FOREST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CANE.get()).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.DEUCE_CLUB.get()).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
@@ -181,7 +187,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SPRUCE_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
-		lootProcessor.accept(locationFor(LandTypes.TAIGA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.TAIGA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CANE.get()).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.DEUCE_CLUB.get()).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
@@ -204,7 +210,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.BIRCH_PLANKS).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.OAK_LEAVES).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 15))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.FROST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.FROST, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.FLINT_AND_STEEL).setWeight(10).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.0F, 0.25F))))
@@ -216,7 +222,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SNOW_BLOCK).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.SPRUCE_SAPLING).setWeight(15).setQuality(-1))));
 		
-		lootProcessor.accept(locationFor(LandTypes.FUNGI, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.FUNGI, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.PARADISES_PORTABELLO.get()).setWeight(3).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -229,7 +235,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.FUNGAL_SPORE.get()).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(6, 11))))
 						.add(LootItem.lootTableItem(MSItems.SUSHROOM.get()).setWeight(1).setQuality(0))));
 		
-		lootProcessor.accept(locationFor(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.HEAT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.BLACKSMITH_HAMMER.get()).setWeight(2).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.BISICKLE.get()).setWeight(2).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -247,7 +253,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.CAST_IRON.get()).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
 						.add(LootItem.lootTableItem(MSBlocks.CHISELED_CAST_IRON.get()).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.ROCK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -259,7 +265,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.GRAVEL).setWeight(10).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
 						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
-		lootProcessor.accept(locationFor(LandTypes.PETRIFICATION, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.PETRIFICATION, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.STONE_PICKAXE).setWeight(15).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -272,7 +278,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.BRICK).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
 						.add(LootItem.lootTableItem(Items.BRICKS).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CACTACEAE_CUTLASS.get()).setWeight(4).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(Items.GOLDEN_SWORD).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -289,7 +295,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationFor(LandTypes.LUSH_DESERTS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.LUSH_DESERTS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CACTACEAE_CUTLASS.get()).setWeight(4).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(Items.GOLDEN_SWORD).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -306,7 +312,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SMOOTH_SANDSTONE).setWeight(6).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationFor(LandTypes.RED_SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SAND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CACTACEAE_CUTLASS.get()).setWeight(4).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(Items.GOLDEN_SWORD).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -324,7 +330,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(3).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.CACTUS).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -337,7 +343,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.CHISELED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(Items.RED_SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
-		lootProcessor.accept(locationFor(LandTypes.RED_SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.RED_SANDSTONE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.GOLD_INGOT).setWeight(2).setQuality(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
@@ -351,7 +357,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.SANDSTONE).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.RED_SAND).setWeight(8).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.SHADE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.SHADE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.RED_MUSHROOM).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
@@ -364,7 +370,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.POGO_HAMMER.get()).setWeight(3).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -384,7 +390,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(4).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))));
 		
-		lootProcessor.accept(locationFor(LandTypes.RAINBOW, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.RAINBOW, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.SHEARS).setWeight(10).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -399,7 +405,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.GLASS).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))
 						.add(LootItem.lootTableItem(Items.TERRACOTTA).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 16))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.FLORA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.FLORA, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SICKLE.get()).setWeight(8).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -423,7 +429,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE.get()).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))
 						.add(LootItem.lootTableItem(Items.MOSSY_COBBLESTONE).setWeight(9).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(8, 24))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.END, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.END, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.STONE_HOE).setWeight(5).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -438,13 +444,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.END_GRASS.get()).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
 						.add(LootItem.lootTableItem(MSBlocks.COARSE_END_STONE.get()).setWeight(8).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))));
 		
-		lootProcessor.accept(locationFor(LandTypes.RAIN, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTerrain(LandTypes.RAIN, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.BEACON).setWeight(1).setQuality(-2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.FROGS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.FROGS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.BUG_NET.get()).setWeight(6).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
@@ -455,14 +461,14 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.MINI_FROG_STATUE.get()).setWeight(5).setQuality(3))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.WIND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.WIND, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.POGO_HAMMER.get()).setWeight(1).setQuality(2).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.LIGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.LIGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.TORCH).setWeight(10).setQuality(-1)))
@@ -472,7 +478,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.GLOWSTONE_DUST).setWeight(12).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.CLOCKWORK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.CLOCKWORK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.BISICKLE.get()).setWeight(5).setQuality(0)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -482,7 +488,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.REPEATER).setWeight(4).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.SILENCE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.SILENCE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.NIGHT_CLUB.get()).setWeight(1).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
@@ -490,13 +496,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.THUNDER, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.THUNDER, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.PULSE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.PULSE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.BEEF).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3)))))
@@ -505,7 +511,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.RAZOR_BLADE.get()).setWeight(4).setQuality(-1))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.THOUGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.THOUGHT, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SPEAR_CANE.get()).setWeight(1).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -514,7 +520,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.THOUGHT_DIRT.get()).setWeight(15).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 10))))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.BUCKETS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.BUCKETS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
@@ -529,7 +535,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.OBSIDIAN_BUCKET.get()).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.CAKE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.CAKE, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SILVER_SPOON.get()).setWeight(5).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F))))
 						.add(LootItem.lootTableItem(MSItems.FUDGESICKLE.get()).setWeight(2).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
@@ -551,7 +557,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.COCOA_BEANS).setWeight(3).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.THRESH_DVD.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.RABBITS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.RABBITS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1)))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(Items.RABBIT).setWeight(10).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
@@ -564,7 +570,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.GOLD_SEEDS.get()).setWeight(3).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSItems.SBAHJ_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.MONSTERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.MONSTERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SPIKED_CLUB.get()).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -575,7 +581,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.GUNPOWDER).setWeight(8).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
-		lootProcessor.accept(locationFor(LandTypes.UNDEAD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.UNDEAD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SPIKED_CLUB.get()).setWeight(2).setQuality(0).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -587,7 +593,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.STRING).setWeight(10).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSItems.CREW_POSTER.get()).setWeight(4).setQuality(2))));
 		
-		lootProcessor.accept(locationFor(LandTypes.TOWERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
+		lootProcessor.accept(locationForTitle(LandTypes.TOWERS, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.IRON_CANE.get()).setWeight(5).setQuality(1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(1))
@@ -598,15 +604,15 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 		
 	}
 	
-	public static ResourceLocation locationFor(TerrainLandType landAspect, ResourceLocation baseLoot)
+	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landAspect.getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/terrain/" + landName.toString().replace(':', '/'));
 	}
 	
-	public static ResourceLocation locationFor(TitleLandType landAspect, ResourceLocation baseLoot)
+	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landAspect.getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
 	}
 }

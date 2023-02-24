@@ -31,7 +31,7 @@ public abstract class CoreCompatibleScatteredStructurePiece extends ScatteredFea
 	}
 	
 	/**
-	 * Refers to whether the end of the structure has been reached, via the activation of a WRITE type StructureCoreTileEntity
+	 * Refers to whether the end of the structure has been reached, via the activation of a WRITE type StructureCoreBlockEntity
 	 */
 	public boolean hasBeenCompleted() {
 		return hasBeenCompleted;

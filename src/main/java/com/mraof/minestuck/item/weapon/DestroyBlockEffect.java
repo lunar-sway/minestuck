@@ -23,22 +23,22 @@ public interface DestroyBlockEffect
 {
 	void onDestroyBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entity);
 	
-	DestroyBlockEffect DOUBLE_FARM = (stack, worldIn, state, pos, entity) -> {
+	DestroyBlockEffect DOUBLE_FARM = (stack, levelIn, state, pos, entity) -> {
 		if((state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state)))
-			CropBlock.dropResources(state, worldIn, pos);
+			CropBlock.dropResources(state, levelIn, pos);
 	};
 	
 	static DestroyBlockEffect extraHarvests(boolean melonOverload, float percentage, int maxBonusItems, Supplier<Item> itemDropped, Supplier<Block> harvestedBlock)
 	{
-		return (stack, worldIn, state, pos, entity) -> {
-			if(state == harvestedBlock.get().defaultBlockState() && !worldIn.isClientSide)
+		return (stack, levelIn, state, pos, entity) -> {
+			if(state == harvestedBlock.get().defaultBlockState() && !levelIn.isClientSide)
 			{
 				int harvestCounter = 0;
 				for(float i = entity.getRandom().nextFloat(); i <= percentage && harvestCounter < maxBonusItems; i = entity.getRandom().nextFloat())
 				{
 					ItemStack harvestItemStack = new ItemStack(itemDropped.get(), 1);
-					ItemEntity item = new ItemEntity(worldIn, pos.getX(), pos.getY(), pos.getZ(), harvestItemStack);
-					worldIn.addFreshEntity(item);
+					ItemEntity item = new ItemEntity(levelIn, pos.getX(), pos.getY(), pos.getZ(), harvestItemStack);
+					levelIn.addFreshEntity(item);
 					
 					harvestCounter++;
 				}

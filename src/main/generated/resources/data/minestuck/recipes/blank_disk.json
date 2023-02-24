@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " c ",
+    "cnc",
+    " c "
+  ],
+  "key": {
+    "n": {
+      "item": "minecraft:gold_nugget"
+    },
+    "c": {
+      "item": "minestuck:raw_cruxite"
+    }
+  },
+  "result": {
+    "item": "minestuck:blank_disk"
+  }
+}

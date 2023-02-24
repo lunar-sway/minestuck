@@ -3,9 +3,10 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.command.argument.GristSetArgument;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -42,8 +43,8 @@ public class SendGristCommand
 		{
 			if(GristHelper.canAfford(player, grist))
 			{
-				GristHelper.decrease(player.level, IdentifierHandler.encode(player), grist);
-				GristHelper.increase(player.level, IdentifierHandler.encode(target), grist);
+				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.SENDGRIST);
+				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(target), grist, GristHelper.EnumSource.SENDGRIST);
 				source.sendSuccess(new TranslatableComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendMessage(new TranslatableComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.NIL_UUID);
 				return 1;

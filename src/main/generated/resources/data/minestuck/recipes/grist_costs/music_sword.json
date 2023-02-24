@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:music_sword"
+  },
+  "grist_cost": {
+    "minestuck:build": 18760,
+    "minestuck:marble": 1876,
+    "minestuck:rust": 1407,
+    "minestuck:amber": 2345
+  }
+}

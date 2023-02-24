@@ -1,18 +1,19 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
-public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
+public final class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 {
 	private final ModusFactory<T> factory;
-	private final Item modusItem;
+	private final Supplier<Item> modusItem;
 	
-	public ModusType(ModusFactory<T> factory, Item modusItem)
+	public ModusType(ModusFactory<T> factory, Supplier<Item> modusItem)
 	{
 		this.factory = Objects.requireNonNull(factory);
 		this.modusItem = Objects.requireNonNull(modusItem);
@@ -30,7 +31,7 @@ public class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
 	
 	public Item getItem()
 	{
-		return modusItem;
+		return modusItem.get();
 	}
 	
 	public interface ModusFactory<T extends Modus>

@@ -9,15 +9,25 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MSTags
 {
 	public static class Blocks
 	{
+		// If other colored hieroglyph sets are added, switch to creating a tag for each analogous block instead of the whole set
+		// I.e. a tag for lotus, a tag for frogs, a tag for skaia etc. instead of a tag for all hieroglyphs
+		public static final TagKey<Block> GREEN_HIEROGLYPHS = tag("green_hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Block> RAINBOW_LOGS = tag("logs/rainbow");
@@ -43,7 +53,8 @@ public class MSTags
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
-		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACABLE = tag("portable_block_replacable");
+		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
+		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -80,6 +91,7 @@ public class MSTags
 		public static final TagKey<Item> MODUS_CARD = tag("modus_card");
 		public static final TagKey<Item> CASSETTES = tag("cassettes");
 		public static final TagKey<Item> BUGS = tag("bugs");
+		public static final TagKey<Item> CONSORT_SNACKS = tag("consort_snacks");
 		public static final TagKey<Item> CREATIVE_SHOCK_RIGHT_CLICK_LIMIT = tag("creative_shock_right_click_limit");
 
 		private static TagKey<Item> tag(String name)
@@ -147,13 +159,23 @@ public class MSTags
 		}
 	}
 	
-	public static class ConfiguredFeatures
+	public static class Structures
 	{
-		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");	//TODO should contain frog temple
+		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");
 		
 		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
 		{
 			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
+	}
+	
+	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
+	{
+		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
+	}
+	
+	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
+	{
+		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
 	}
 }

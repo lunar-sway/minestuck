@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
@@ -16,13 +16,13 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class ComputerScreen extends Screen
 {
-
+	
 	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
 	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/bsod_message.png");
 	
@@ -32,24 +32,24 @@ public class ComputerScreen extends Screen
 	private Button programButton;
 	
 	public final Minecraft mc;
-	public final ComputerTileEntity te;
+	public final ComputerBlockEntity be;
 	private ComputerProgram program;
 	
-	ComputerScreen(Minecraft mc, ComputerTileEntity te)
+	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
 		super(new TextComponent("Computer"));
 		
 		this.mc = mc;
 		this.font = mc.font;
-		this.te = te;
-		te.gui = this;
+		this.be = be;
+		be.gui = this;
 	}
 	
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground(poseStack);
-		boolean bsod = te.hasProgram(-1);
+		boolean bsod = be.isBroken();
 		int yOffset = (this.height / 2) - (ySize / 2);
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -57,10 +57,12 @@ public class ComputerScreen extends Screen
 		RenderSystem.setShaderTexture(0, bsod ? guiBsod : guiBackground);
 		this.blit(poseStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
 		
-		if(!bsod && program != null)
-			program.paintGui(poseStack, this, te);
-		else {
-			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+		if(!bsod)
+		{
+			if(program != null)
+				program.paintGui(poseStack, this, be);
+			else
+				font.draw(poseStack, "Insert disk.", (width - xSize) / 2F + 15, (height - ySize) / 2F + 45, 4210752);
 		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
@@ -73,20 +75,21 @@ public class ComputerScreen extends Screen
 	}
 	
 	@Override
-	public void init() {
+	public void init()
+	{
 		super.init();
 		
-		if(te.programSelected == -1 && !te.hasProgram(-1))
-			for(Entry<Integer, Boolean> entry : te.installedPrograms.entrySet())
-				if(entry.getValue() && (te.programSelected == -1 || te.programSelected > entry.getKey()))
-						te.programSelected = entry.getKey();
+		if(be.programSelected == -1 && !be.isBroken())
+			for(Entry<Integer, Boolean> entry : be.installedPrograms.entrySet())
+				if(entry.getValue() && (be.programSelected == -1 || be.programSelected > entry.getKey()))
+					be.programSelected = entry.getKey();
 		
-		if(te.programSelected != -1 && (program == null || program.getId() != te.programSelected))
-			program = ComputerProgram.getProgram(te.programSelected);
+		if(be.programSelected != -1 && (program == null || program.getId() != be.programSelected))
+			program = ComputerProgram.getProgram(be.programSelected);
 		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, TextComponent.EMPTY, button -> changeProgram());
+		programButton = new ExtendedButton((width - xSize) / 2 + 95, (height - ySize) / 2 + 10, 70, 20, TextComponent.EMPTY, button -> changeProgram());
 		addRenderableWidget(programButton);
-		if(te.programSelected != -1)
+		if(be.programSelected != -1)
 			program.onInitGui(this);
 		
 		updateGui();
@@ -95,14 +98,16 @@ public class ComputerScreen extends Screen
 	public void updateGui()
 	{
 		
-		programButton.active = te.installedPrograms.size() > 1;
+		programButton.active = be.installedPrograms.size() > 1;
 		
-		if(te.hasProgram(-1)) {
+		if(be.isBroken())
+		{
 			clearWidgets();
 			return;
 		}
 		
-		if(program != null) {
+		if(program != null)
+		{
 			program.onUpdateGui(this);
 			programButton.setMessage(new TranslatableComponent(program.getName()));
 		}
@@ -111,11 +116,11 @@ public class ComputerScreen extends Screen
 	
 	private void changeProgram()
 	{
-		if(te.hasProgram(-1))
+		if(be.isBroken())
 			return;
 		
-		te.programSelected = getNextProgram();
-		program = ComputerProgram.getProgram(te.programSelected);
+		be.programSelected = getNextProgram();
+		program = ComputerProgram.getProgram(be.programSelected);
 		if(program != null)
 		{
 			clearWidgets();
@@ -126,27 +131,13 @@ public class ComputerScreen extends Screen
 		updateGui();
 	}
 	
-	private int getNextProgram() {
-	   	if (te.installedPrograms.size() == 1) {
-	   		return te.programSelected;
-	   	}
-		Iterator<Entry<Integer, Boolean>> it = te.installedPrograms.entrySet().iterator();
-		//int place = 0;
-	   	boolean found = false;
-	   	int lastProgram = te.programSelected;
-        while (it.hasNext()) {
-			Map.Entry<Integer, Boolean> pairs = it.next();
-            int program = pairs.getKey();
-            if (found) {
-            	return program;
-            } else if (program==te.programSelected) {
-            	found = true;
-            } else {
-            	lastProgram = program;
-            }
-            //place++;
-        }
-		return lastProgram;
+	private int getNextProgram()
+	{
+		List<Integer> installedProgramIdList = new ArrayList<>(be.installedPrograms.keySet()).stream().sorted().collect(Collectors.toList()); //turned into a list for ease of manipulation and getting information from, immediately sorted so that the keys are in order
+		
+		int selectedProgramIndex = installedProgramIdList.indexOf(be.programSelected);
+		
+		return selectedProgramIndex < installedProgramIdList.size() - 1 ? installedProgramIdList.get(selectedProgramIndex + 1) : installedProgramIdList.get(0);
 	}
 	
 	@Override

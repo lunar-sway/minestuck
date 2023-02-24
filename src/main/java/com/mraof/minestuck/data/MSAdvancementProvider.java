@@ -1,8 +1,5 @@
 package com.mraof.minestuck.data;
 
-import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.advancements.*;
 import com.mraof.minestuck.block.MSBlocks;
@@ -18,27 +15,21 @@ import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
+import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.common.data.ExistingFileHelper;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class MSAdvancementProvider implements DataProvider
+public class MSAdvancementProvider extends AdvancementProvider
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	public static final String ROOT = "minestuck.root";
 	public static final String SEARCHING = "minestuck.searching";
 	public static final String LONG_TIME_COMING = "minestuck.long_time_coming";
@@ -58,15 +49,14 @@ public class MSAdvancementProvider implements DataProvider
 	public static final String BUGS = "minestuck.bugs";
 	public static final String SHADY_BUYER = "minestuck.shady_buyer";
 	
-	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-	private final DataGenerator generator;
-	
-	public MSAdvancementProvider(DataGenerator generator)
+	public MSAdvancementProvider(DataGenerator generator, ExistingFileHelper fileHelper)
 	{
-		this.generator = generator;
+		super(generator, fileHelper);
 	}
 	
-	protected void buildAdvancements(Consumer<Advancement> advancementSaver)
+	@SuppressWarnings("unused")
+	@Override
+	protected void registerAdvancements(Consumer<Advancement> advancementSaver, ExistingFileHelper fileHelper)
 	{
 		Advancement root = Advancement.Builder.advancement().display(MSItems.RAW_CRUXITE.get(), new TranslatableComponent(title(ROOT)), new TranslatableComponent(desc(ROOT)), new ResourceLocation("minestuck:textures/gui/advancement_bg.png"), FrameType.TASK, false, false, false).addCriterion("raw_cruxite", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.RAW_CRUXITE.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/root");
 		Advancement searching = Advancement.Builder.advancement().parent(root).display(Items.COMPASS, new TranslatableComponent(title(SEARCHING)), new TranslatableComponent(desc(SEARCHING)), null, FrameType.TASK, true, true, false).addCriterion("possess_scanner", InventoryChangeTrigger.TriggerInstance.hasItems(MSItems.TEMPLE_SCANNER.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/searching");
@@ -80,19 +70,19 @@ public class MSAdvancementProvider implements DataProvider
 		Advancement frenchFry = Advancement.Builder.advancement().parent(alchemy).display(MSItems.FRENCH_FRY.get(), new TranslatableComponent(title(FRENCH_FRY)), new TranslatableComponent(desc(FRENCH_FRY)), null, FrameType.TASK, true, true, false).addCriterion("has_french_fry", ConsumeItemTrigger.TriggerInstance.usedItem(MSItems.FRENCH_FRY.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/french_fry");
 		Advancement melonOverload = Advancement.Builder.advancement().parent(alchemy).display(MSItems.MELONSBANE.get(), new TranslatableComponent(title(MELON_OVERLOAD)), new TranslatableComponent(desc(MELON_OVERLOAD)), null, FrameType.TASK, true, true, true).addCriterion("melon_overload", EventTrigger.Instance.melonOverload()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/melon_overload");
 		Advancement treeModus = Advancement.Builder.advancement().parent(newModus).display(MSItems.TREE_MODUS_CARD.get(), new TranslatableComponent(title(TREE_MODUS)), new TranslatableComponent(desc(TREE_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/tree_modus");
-		Advancement killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER.get(), new TranslatableComponent(title(KILL_OGRE)), new TranslatableComponent(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/kill_ogre");
-		Advancement returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, new TranslatableComponent(title(RETURN_NODE)), new TranslatableComponent(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EnterBlockTrigger.TriggerInstance.entersBlock(MSBlocks.RETURN_NODE.get())).save(advancementSaver, Minestuck.MOD_ID+":minestuck/return_node");
+		Advancement killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER.get(), new TranslatableComponent(title(KILL_OGRE)), new TranslatableComponent(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE.get()))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/kill_ogre");
+		Advancement returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, new TranslatableComponent(title(RETURN_NODE)), new TranslatableComponent(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/return_node");
 		Advancement dungeon = Advancement.Builder.advancement().parent(returnNode).display(MSBlocks.FROST_BRICKS.get(), new TranslatableComponent(title(DUNGEON)), new TranslatableComponent(desc(DUNGEON)), null, FrameType.TASK, true, true, false).addCriterion("imp_dungeon", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.IMP_DUNGEON.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/dungeon");
-		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_SLAB.get(), new TranslatableComponent(title(COMMUNE)), new TranslatableComponent(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.CONSORT_VILLAGE.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
+		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), new TranslatableComponent(title(COMMUNE)), new TranslatableComponent(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", LocationTrigger.TriggerInstance.located(LocationPredicate.inFeature(Objects.requireNonNull(MSConfiguredStructures.CONSORT_VILLAGE.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
 		Advancement bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), new TranslatableComponent(title(BUGS)), new TranslatableComponent(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.OR)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/bugs");
 		Advancement shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE.get(), new TranslatableComponent(title(SHADY_BUYER)), new TranslatableComponent(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/shady_buyer");
 	}
 	
 	private static Advancement.Builder changeModusCriteria(Advancement.Builder builder)
 	{
-		for(ModusType<?> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
+		for(Supplier<? extends ModusType<?>> type : Arrays.asList(ModusTypes.STACK, ModusTypes.QUEUE, ModusTypes.QUEUE_STACK, ModusTypes.TREE, ModusTypes.HASH_MAP, ModusTypes.SET))
 		{
-			builder = builder.addCriterion(type.getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.getItem()));
+			builder = builder.addCriterion(type.get().getRegistryName().getPath(), InventoryChangeTrigger.TriggerInstance.hasItems(type.get().getItem()));
 		}
 		return builder;
 	}
@@ -113,34 +103,6 @@ public class MSAdvancementProvider implements DataProvider
 	private static String desc(String name)
 	{
 		return "advancements."+name+".description";
-	}
-	
-	@Override
-	public void run(HashCache cache)
-	{
-		Path outputFolder = generator.getOutputFolder();
-		Set<ResourceLocation> savedAdvancements = Sets.newHashSet();
-		
-		buildAdvancements(advancement -> save(cache, outputFolder, savedAdvancements, advancement));
-	}
-	
-	private static void save(HashCache cache, Path outputFolder, Set<ResourceLocation> savedAdvancements, Advancement advancement)
-	{
-		if(!savedAdvancements.add(advancement.getId()))
-		{
-			throw new IllegalStateException("Duplicate advancement " + advancement.getId());
-		} else
-		{
-			Path jsonPath = outputFolder.resolve("data/" + advancement.getId().getNamespace() + "/advancements/" + advancement.getId().getPath() + ".json");
-			
-			try
-			{
-				DataProvider.save(GSON, cache, advancement.deconstruct().serializeToJson(), jsonPath);
-			} catch(IOException e)
-			{
-				LOGGER.error("Couldn't save advancement {}", jsonPath, e);
-			}
-		}
 	}
 	
 	@Override

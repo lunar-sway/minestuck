@@ -1,16 +1,16 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.item.crafting.alchemy.*;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -53,7 +53,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
-	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());	//TODO this filter isn't being saved. F1X PLZ
+	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
 	private int consortRep;
@@ -117,8 +117,8 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	
 	protected void applyGristType(GristType type)
 	{
-		if(!type.isUnderlingType())	//Utility grist type
-			throw new IllegalArgumentException("Can't set underling grist type to "+type.getRegistryName());
+		if(!type.isUnderlingType())    //Utility grist type
+			throw new IllegalArgumentException("Can't set underling grist type to " + type.getRegistryName());
 		entityData.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
 		
 		onGristTypeUpdated(type);
@@ -198,7 +198,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 					if(candy > 0)
 						this.level.addFreshEntity(new ItemEntity(level, randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(),new GristAmount(gristType.getType(), gristAmount)));
+						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.getType(), gristAmount)));
 				}
 			}
 			
@@ -356,10 +356,10 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress*modifiers[i]/totalModifier));
+				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress * modifiers[i] / totalModifier));
 		else
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (progress*modifiers[i]));
+				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
 	protected static void firstKillBonus(Entity killer, byte type)

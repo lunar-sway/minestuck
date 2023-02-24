@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:nostrildamus"
+  },
+  "grist_cost": {
+    "minestuck:tar": 20,
+    "minestuck:marble": 10,
+    "minestuck:gold": 1
+  }
+}

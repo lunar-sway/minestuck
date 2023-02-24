@@ -2,9 +2,9 @@ package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.entity.IEntityMultiPart;
 import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -44,19 +44,19 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 	@Override
 	protected SoundEvent getAmbientSound()
 	{
-		return MSSoundEvents.ENTITY_BASILISK_AMBIENT;
+		return MSSoundEvents.ENTITY_BASILISK_AMBIENT.get();
 	}
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn)
 	{
-		return MSSoundEvents.ENTITY_BASILISK_HURT;
+		return MSSoundEvents.ENTITY_BASILISK_HURT.get();
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound()
 	{
-		return MSSoundEvents.ENTITY_BASILISK_DEATH;
+		return MSSoundEvents.ENTITY_BASILISK_DEATH.get();
 	}
 	
 	@Override
@@ -78,12 +78,6 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		applyGristModifier(Attributes.MAX_HEALTH, 20 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 2.7 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.xpReward = (int) (6 * type.getPower() + 4);
-	}
-	
-	@Override
-	public Level getLevel()
-	{
-		return this.level;
 	}
 	
 	@Override

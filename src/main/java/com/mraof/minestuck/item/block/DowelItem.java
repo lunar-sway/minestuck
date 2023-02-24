@@ -2,8 +2,8 @@ package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.item.AlchemizedColored;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
-import com.mraof.minestuck.tileentity.ItemStackTileEntity;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -75,12 +75,12 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		BlockEntity te = level.getBlockEntity(pos);
-		if(te instanceof ItemStackTileEntity)
+		BlockEntity be = level.getBlockEntity(pos);
+		if(be instanceof ItemStackBlockEntity)
 		{
 			ItemStack newStack = stack.copy();
 			newStack.setCount(1);
-			((ItemStackTileEntity) te).setStack(newStack);
+			((ItemStackBlockEntity) be).setStack(newStack);
 		}
 		return true;
 	}

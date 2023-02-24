@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minestuck:stone_uranium_ore",
+    "minestuck:deepslate_uranium_ore",
     "minestuck:netherrack_uranium_ore",
     "minestuck:cobblestone_uranium_ore",
     "minestuck:sandstone_uranium_ore",
@@ -9,6 +10,7 @@
     "minestuck:end_stone_uranium_ore",
     "minestuck:shade_stone_uranium_ore",
     "minestuck:pink_stone_uranium_ore",
+    "minestuck:mycelium_stone_uranium_ore",
     "minestuck:end_stone_iron_ore",
     "minestuck:sandstone_iron_ore",
     "minestuck:red_sandstone_iron_ore",
@@ -25,6 +27,7 @@
     "minestuck:chiseled_green_stone_bricks",
     "minestuck:horizontal_green_stone_bricks",
     "minestuck:vertical_green_stone_bricks",
+    "minestuck:green_stone_brick_embedded_ladder",
     "minestuck:green_stone_brick_trim",
     "minestuck:green_stone_brick_frog",
     "minestuck:green_stone_brick_iguana_left",

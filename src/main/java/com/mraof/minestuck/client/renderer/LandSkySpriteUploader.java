@@ -53,12 +53,12 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	
 	private Stream<ResourceLocation> planetLocations()
 	{
-		return LandTypes.TERRAIN_REGISTRY.getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "planets/planet_"+name.getPath()));
+		return LandTypes.TERRAIN_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "planets/planet_"+name.getPath()));
 	}
 	
 	private Stream<ResourceLocation> overlayLocations()
 	{
-		return LandTypes.TITLE_REGISTRY.getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "overlays/overlay_"+name.getPath()));
+		return LandTypes.TITLE_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "overlays/overlay_"+name.getPath()));
 	}
 	
 	private Stream<ResourceLocation> extras()

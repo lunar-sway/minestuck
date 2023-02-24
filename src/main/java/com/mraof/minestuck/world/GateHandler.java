@@ -5,9 +5,9 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.biome.LandBiomeSet;
-import com.mraof.minestuck.world.biome.LandBiomeSetWrapper;
-import com.mraof.minestuck.world.gen.structure.LandGatePlacement;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
+import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
+import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -32,7 +32,7 @@ public class GateHandler
 	public static final String DESTROYED = "minestuck.gate_destroyed";
 	public static final String MISSING_LAND = "minestuck.gate_missing_land";
 	
-	public static final int gateHeight1 = 144, gateHeight2 = 192;
+	public static final int GATE_HEIGHT_1 = 124, GATE_HEIGHT_2 = 154; //intervals of 30 blocks: 124/154/184/214/244/274/304
 	
 	public static void teleport(Type gateType, ServerLevel level, ServerPlayer player)
 	{
@@ -48,7 +48,7 @@ public class GateHandler
 			{
 				BlockState block = destinationWorld.getBlockState(destination.pos());
 				
-				if(block.getBlock() != MSBlocks.GATE.get())
+				if(!block.is(MSBlocks.GATE_MAIN.get()))
 				{
 					LOGGER.debug("Can't find destination gate at {}. Probably broken.", destination);
 					player.sendMessage(new TranslatableComponent(DESTROYED), Util.NIL_UUID);
@@ -63,11 +63,11 @@ public class GateHandler
 	private static GlobalPos findPosNearLandGate(ServerLevel level)
 	{
 		BlockPos pos = Type.LAND_GATE.getPosition(level);
-		Optional<LandBiomeSetWrapper> optional = LandBiomeSet.getSet(level.getChunkSource().getGenerator());
+		Optional<RegistryBackedBiomeSet> optional = LandBiomeSetType.getSet(level.getChunkSource().getGenerator());
 		if(pos != null && optional.isPresent())
 		{
 			Random rand = level.random;
-			LandBiomeSetWrapper biomes = optional.get();
+			RegistryBackedBiomeSet biomes = optional.get();
 			while(true)    //TODO replace with a more friendly version without a chance of freezing the game
 			{
 				int radius = 160 + rand.nextInt(60);
@@ -136,8 +136,8 @@ public class GateHandler
 	
 	public enum Type
 	{
-		GATE_1(false, world -> new BlockPos(0, gateHeight1, 0), GateHandler::findPosNearLandGate),
-		GATE_2(true, world -> new BlockPos(0, gateHeight2, 0), GateHandler::findClientLandGate),
+		GATE_1(false, world -> new BlockPos(0, GATE_HEIGHT_1, 0), GateHandler::findPosNearLandGate),
+		GATE_2(true, world -> new BlockPos(0, GATE_HEIGHT_2, 0), GateHandler::findClientLandGate),
 		LAND_GATE(true, LandGatePlacement::findLandGatePos, GateHandler::findServerSecondGate);
 		
 		private final boolean isDestinationGate;

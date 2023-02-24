@@ -54,7 +54,7 @@ Adds Homestuck to your Minecraft!
     # Does this dependency have to exist - if not, ordering below must be specified
     mandatory=true #mandatory
     # The version range of the dependency
-    versionRange="[40,)" #mandatory
+    versionRange="[40.1.67,)" #mandatory
     # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
     ordering="NONE"
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
@@ -64,6 +64,13 @@ Adds Homestuck to your Minecraft!
     modId="geckolib3"
     mandatory=true
     versionRange="[3.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.minestuck]]
+    modId="infiniverse"
+    mandatory=true
+    versionRange="[1.0,1.1)"
     ordering="NONE"
     side="BOTH"
 

@@ -2,7 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.ComputerScreen;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 /**
  * The static interface will probably later be merged with DeployList,
  * GristStorage and other similar classes that store static data.
- * 
+ *
  * @author Kirderf1
  */
 public abstract class ComputerProgram
@@ -37,7 +37,7 @@ public abstract class ComputerProgram
 		try
 		{
 			return programs.get(id).newInstance();
-		} catch (Exception e)
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -71,7 +71,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerTileEntity te);
+	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be);
 	
 	/**
 	 * Returns an unlocalized string of the name of the program. Used for the

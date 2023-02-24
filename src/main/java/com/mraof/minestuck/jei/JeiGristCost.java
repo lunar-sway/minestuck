@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 
-import com.mraof.minestuck.item.crafting.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Objects;

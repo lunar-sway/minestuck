@@ -3,20 +3,20 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.inventory.ConsortMerchantContainer;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantContainer>
+public class ConsortShopScreen extends AbstractContainerScreen<ConsortMerchantMenu>
 {
 	private final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/consort_shop.png");
 	private ResourceLocation portrait;
 	
-	public ConsortShopScreen(ConsortMerchantContainer screenContainer, Inventory inv, Component titleIn)
+	public ConsortShopScreen(ConsortMerchantMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
 		imageWidth = 192;

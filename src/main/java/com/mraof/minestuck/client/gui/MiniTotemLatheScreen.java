@@ -2,15 +2,15 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.inventory.MiniTotemLatheContainer;
-import com.mraof.minestuck.tileentity.machine.MiniTotemLatheTileEntity;
+import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
+import com.mraof.minestuck.blockentity.machine.MiniTotemLatheBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
+public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/totem_lathe.png");
 	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/totem_lathe.png");
@@ -22,9 +22,9 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
 	private static final int goX = 85;
 	private static final int goY = 53;
 	
-	public MiniTotemLatheScreen(MiniTotemLatheContainer screenContainer, Inventory inv, Component titleIn)
+	public MiniTotemLatheScreen(MiniTotemLatheMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniTotemLatheTileEntity.TYPE, screenContainer, inv, titleIn);
+		super(MiniTotemLatheBlockEntity.TYPE, screenContainer, inv, titleIn);
 	}
 	
 	@Override
@@ -49,7 +49,7 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheContainer>
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniTotemLatheTileEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniTotemLatheBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, progressHeight, progressWidth, progressHeight);
 	}
 

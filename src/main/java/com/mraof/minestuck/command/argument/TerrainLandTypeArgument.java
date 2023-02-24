@@ -40,18 +40,18 @@ public class TerrainLandTypeArgument implements ArgumentType<TerrainLandType>
 	{
 		int start2 = reader.getCursor();
 		ResourceLocation gristName = ResourceLocation.read(reader);
-		if(!LandTypes.TERRAIN_REGISTRY.containsKey(gristName))
+		if(!LandTypes.TERRAIN_REGISTRY.get().containsKey(gristName))
 		{
 			reader.setCursor(start2);
 			throw INVALID_TYPE.createWithContext(reader, gristName);
 		}
-		return LandTypes.TERRAIN_REGISTRY.getValue(gristName);
+		return LandTypes.TERRAIN_REGISTRY.get().getValue(gristName);
 	}
 	
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return SharedSuggestionProvider.suggestResource(LandTypes.TERRAIN_REGISTRY.getValues().stream().map(TerrainLandType::getRegistryName), builder);
+		return SharedSuggestionProvider.suggestResource(LandTypes.TERRAIN_REGISTRY.get().getValues().stream().map(TerrainLandType::getRegistryName), builder);
 	}
 	
 	@Override

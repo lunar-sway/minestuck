@@ -3,11 +3,11 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -91,7 +91,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 			{
 				if(!level.isClientSide)
 				{
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SHIELD_BLOCK, SoundSource.NEUTRAL, 0.6F, 4.0F);
+					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
 					++bounce;
 				}
 				
@@ -174,7 +174,8 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 		return MSItems.SORCERERS_PINBALL.get();
 	}
 	
-	public ItemStack getItemFromItemStack() {
+	public ItemStack getItemFromItemStack()
+	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}

@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.TransportalizerPacket;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -16,21 +16,21 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
 {
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/transportalizer.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
 	private static final int guiHeight = 98;
 
-	TransportalizerTileEntity te;
+	TransportalizerBlockEntity be;
 	private EditBox destinationTextField;
 	private Button doneButton;
 	
 	
-	TransportalizerScreen(TransportalizerTileEntity te)
+	TransportalizerScreen(TransportalizerBlockEntity be)
 	{
 		super(new TextComponent("Transportalizer"));
 
-		this.te = te;
+		this.be = be;
 	}
 
 	@Override
@@ -38,9 +38,9 @@ public class TransportalizerScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
 		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, new TextComponent("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextField.setCanLoseFocus(false);
 		this.destinationTextField.setMaxLength(4);
-		this.destinationTextField.setValue(te.getDestId());
-		this.destinationTextField.setFocus(true);
+		this.destinationTextField.setValue(be.getDestId());
 		destinationTextField.setResponder(s -> doneButton.active = s.length() == 4);
 		addRenderableWidget(destinationTextField);
 		setInitialFocus(destinationTextField);
@@ -61,7 +61,7 @@ public class TransportalizerScreen extends Screen
 		RenderSystem.setShaderTexture(0, guiBackground);
 		this.blit(poseStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
 		
-		font.draw(poseStack, te.getId(), (this.width / 2F) - font.width(te.getId()) / 2F, yOffset + 10, te.isActive() ? 0x404040 : 0xFF0000);
+		font.draw(poseStack, be.getId(), (this.width / 2F) - font.width(be.getId()) / 2F, yOffset + 10, be.isActive() ? 0x404040 : 0xFF0000);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 
@@ -70,7 +70,7 @@ public class TransportalizerScreen extends Screen
 		if(this.destinationTextField.getValue().length() == 4)
 		{
 			//Debug.print("Sending transportalizer packet with destination of " + this.destinationTextField.getText());
-			TransportalizerPacket packet = new TransportalizerPacket(te.getBlockPos(), destinationTextField.getValue().toUpperCase());
+			TransportalizerPacket packet = new TransportalizerPacket(be.getBlockPos(), destinationTextField.getValue().toUpperCase());
 			MSPacketHandler.sendToServer(packet);
 			this.minecraft.setScreen(null);
 		}

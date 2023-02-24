@@ -1,5 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
@@ -8,13 +9,16 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +33,7 @@ import java.util.stream.Stream;
  * This class also handles the main saving and loading.
  * @author kirderf1
  */
-public final class SkaianetHandler
+public final class SkaianetHandler extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -38,23 +42,25 @@ public final class SkaianetHandler
 	public static final String STOP_RESUME = "minestuck.stop_resume_message";
 	public static final String CLOSED = "minestuck.closed_message";
 	
-	private static SkaianetHandler INSTANCE;
-	
 	final InfoTracker infoTracker = new InfoTracker(this);
 	final ComputerWaitingList openedServers = new ComputerWaitingList(infoTracker, false, "opened server");
 	private final ComputerWaitingList resumingClients = new ComputerWaitingList(infoTracker, true, "resuming client");
 	private final ComputerWaitingList resumingServers = new ComputerWaitingList(infoTracker, false, "resuming server");
 	final SessionHandler sessionHandler;
 	
-	MinecraftServer mcServer;
+	final MinecraftServer mcServer;
 	
-	private SkaianetHandler()
+	private SkaianetHandler(MinecraftServer mcServer)
 	{
+		this.mcServer = mcServer;
+		
 		sessionHandler = new DefaultSessionHandler(this);
 	}
 	
-	private SkaianetHandler(CompoundTag nbt)
+	private SkaianetHandler(MinecraftServer mcServer, CompoundTag nbt)
 	{
+		this.mcServer = mcServer;
+		
 		SessionHandler sessions;
 		if(nbt.contains("session", Tag.TAG_COMPOUND))
 			sessions = new GlobalSessionHandler(this, nbt.getCompound("session"));
@@ -347,7 +353,8 @@ public final class SkaianetHandler
 		infoTracker.requestInfo(player, p1);
 	}
 	
-	private CompoundTag write(CompoundTag compound)
+	@Override
+	public CompoundTag save(CompoundTag compound)
 	{
 		//checkData();
 		
@@ -459,17 +466,17 @@ public final class SkaianetHandler
 		MinecraftForge.EVENT_BUS.post(new SburbEvent.OnEntry(mcServer, c.get(), sessionHandler.getPlayerSession(target)));
 	}
 	
-	public void movingComputer(ComputerTileEntity oldTE, ComputerTileEntity newTE)
+	public void movingComputer(ComputerBlockEntity oldBE, ComputerBlockEntity newBE)
 	{
-		ComputerReference oldRef = ComputerReference.of(oldTE), newRef = ComputerReference.of(newTE);
-		if(!oldTE.owner.equals(newTE.owner))
-			throw new IllegalStateException("Moving computers with different owners! ("+oldTE.owner+" and "+newTE.owner+")");
+		ComputerReference oldRef = ComputerReference.of(oldBE), newRef = ComputerReference.of(newBE);
+		if(!oldBE.owner.equals(newBE.owner))
+			throw new IllegalStateException("Moving computers with different owners! ("+oldBE.owner+" and "+newBE.owner+")");
 		
-		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldTE, newRef));
+		sessionHandler.getConnectionStream().forEach(c -> c.updateComputer(oldBE, newRef));
 		
-		resumingClients.replace(oldTE.owner, oldRef, newRef);
-		resumingServers.replace(oldTE.owner, oldRef, newRef);
-		openedServers.replace(oldTE.owner, oldRef, newRef);
+		resumingClients.replace(oldBE.owner, oldRef, newRef);
+		resumingServers.replace(oldBE.owner, oldRef, newRef);
+		openedServers.replace(oldBE.owner, oldRef, newRef);
 	}
 	
 	public static SkaianetHandler get(Level level)
@@ -480,38 +487,24 @@ public final class SkaianetHandler
 		return get(server);
 	}
 	
+	private static final String DATA_NAME = Minestuck.MOD_ID+"_skaianet";
+	
 	public static SkaianetHandler get(MinecraftServer server)
 	{
 		Objects.requireNonNull(server);
-		if(INSTANCE == null)
-			INSTANCE = new SkaianetHandler();
-		INSTANCE.mcServer = server;
-		return INSTANCE;
+		
+		ServerLevel level = server.overworld();
+		
+		DimensionDataStorage storage = level.getDataStorage();
+		
+		return storage.computeIfAbsent(nbt -> new SkaianetHandler(server, nbt), () -> new SkaianetHandler(server), DATA_NAME);
 	}
 	
-	/**
-	 * Called when reading skaianet persistence data.
-	 * Should only be called by minestuck itself (specifically {@link com.mraof.minestuck.MSWorldPersistenceHook}).
-	 */
-	public static void init(CompoundTag nbt)
+	// Always save skaianet data, since it's difficult to reliably tell when skaianet data has changed.
+	@Override
+	public boolean isDirty()
 	{
-		if(nbt != null)
-		{
-			try
-			{
-				INSTANCE = new SkaianetHandler(nbt);
-			} catch(Exception e)
-			{
-				LOGGER.error("Caught unhandled exception while loading Skaianet:", e);
-			}
-		}
-	}
-	
-	public static CompoundTag write()
-	{
-		if(INSTANCE == null)
-			return null;
-		else return INSTANCE.write(new CompoundTag());
+		return true;
 	}
 	
 	/**
@@ -519,7 +512,6 @@ public final class SkaianetHandler
 	 */
 	public static void clear()
 	{
-		INSTANCE = null;
 		TitleSelectionHook.playersInTitleSelection.clear();
 	}
 }

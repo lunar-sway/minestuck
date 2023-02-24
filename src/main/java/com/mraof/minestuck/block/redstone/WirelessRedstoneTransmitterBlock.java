@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.redstone;
 
 import com.mraof.minestuck.block.BlockUtil;
+import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneTransmitterBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.redstone.WirelessRedstoneTransmitterTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
- * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the tile entity
+ * Checks for redstone power inputs and transmits that signal to any wireless redstone receiver present at the location stored in the block entity
  * GUI is limited by creative shock
  */
 public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock implements EntityBlock
@@ -48,14 +48,14 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new WirelessRedstoneTransmitterTileEntity(pos, state);
+		return new WirelessRedstoneTransmitterBlockEntity(pos, state);
 	}
 	
 	@Nullable
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSTileEntityTypes.WIRELESS_REDSTONE_TRANSMITTER.get(), WirelessRedstoneTransmitterTileEntity::serverTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.WIRELESS_REDSTONE_TRANSMITTER.get(), WirelessRedstoneTransmitterBlockEntity::serverTick) : null;
 	}
 	
 	@Override
@@ -64,7 +64,7 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	{
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
-			if(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterTileEntity transmitter)
+			if(level.getBlockEntity(pos) instanceof WirelessRedstoneTransmitterBlockEntity transmitter)
 			{
 				if(level.isClientSide)
 				{
@@ -105,14 +105,18 @@ public class WirelessRedstoneTransmitterBlock extends HorizontalDirectionalBlock
 	{
 		if(!level.isClientSide)
 		{
-			BlockState state = level.getBlockState(pos);
-			int powerInt = level.getBestNeighborSignal(pos);
-			level.setBlockAndUpdate(pos, state.setValue(POWER, powerInt));
+			BlockState oldState = level.getBlockState(pos);
+			int newPower = level.getBestNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != powerInt > 0)
-				level.setBlockAndUpdate(pos, state.setValue(POWERED, powerInt > 0));
-			else level.sendBlockUpdated(pos, state, state, 2);
+			BlockState newState = setPower(oldState, newPower);
+			if(oldState != newState)
+				level.setBlockAndUpdate(pos, newState);
 		}
+	}
+	
+	public static BlockState setPower(BlockState state, int newPower)
+	{
+		return state.setValue(POWER, newPower).setValue(POWERED, newPower > 0);
 	}
 	
 	@Override

@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +36,7 @@ public class TransportalizerPacket implements PlayToServerPacket
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			if(player.level.getBlockEntity(pos) instanceof TransportalizerTileEntity transportalizer)
+			if(player.level.getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
 			{
 				transportalizer.setDestId(destId);
 			}

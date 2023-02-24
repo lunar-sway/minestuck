@@ -81,7 +81,8 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 		return MSItems.SHURIKEN.get();
 	}
 	
-	public ItemStack getItemFromItemStack() {
+	public ItemStack getItemFromItemStack()
+	{
 		ItemStack itemstack = this.getItemRaw();
 		return itemstack.isEmpty() ? new ItemStack(this.getDefaultItem()) : itemstack;
 	}
