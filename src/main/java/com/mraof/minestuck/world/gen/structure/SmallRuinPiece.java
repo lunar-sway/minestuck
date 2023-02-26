@@ -180,7 +180,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		if(!boundingBox.isInside(new BlockPos(xPos, 64, zPos)))
 			return false;
 		
-		int minY = 256, maxY = 0;
+		int minY = level.getMaxBuildHeight(), maxY = level.getMinBuildHeight();
 		for(int x = xPos - 1; x <= xPos + 1; x++)
 			for(int z = zPos - 1; z <= zPos + 1; z++)
 			{
@@ -193,7 +193,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		
 		if(maxY - minY < 3)
 		{
-			OgreEntity ogre = MSEntityTypes.OGRE.create(level.getLevel());
+			OgreEntity ogre = MSEntityTypes.OGRE.get().create(level.getLevel());
 			if(ogre == null)
 				throw new IllegalStateException("Unable to create a new ogre. Entity factory returned null!");
 			ogre.setPersistenceRequired();

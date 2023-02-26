@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.mraof.minestuck.block.MSBlockShapes.*;
@@ -31,9 +32,9 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	private final PlacementEntry wheelPlacement;
 	private final PlacementEntry rodPlacement;
 	
-	public TotemLatheMultiblock(String modId)
+	public TotemLatheMultiblock(DeferredRegister<Block> register)
 	{
-		super(modId);
+		super(register);
 		slotPlacement = registerPlacement(new BlockPos(3, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
 		registerPlacement(new BlockPos(1, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));

@@ -8,5 +8,6 @@
   },
   "sources": [
     "minecraft:coal"
-  ]
+  ],
+  "multiplier": 3.0
 }

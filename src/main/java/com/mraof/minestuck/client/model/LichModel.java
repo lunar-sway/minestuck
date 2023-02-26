@@ -122,7 +122,7 @@ public class LichModel<T extends LichEntity> extends HierarchicalModel<T>
 				PartPose.offset(2.5F, -8, -5.6F));
 		root.addOrReplaceChild("right_horn_spike", CubeListBuilder.create().texOffs(38, 0)
 						.addBox(0, 0, 0, 1, 3, 1),
-				PartPose.offset(2.5F, -8, -4.5F));
+				PartPose.offset(2.5F, -8, 4.5F));
 		
 		return LayerDefinition.create(mesh, 64, 64);
 	}

@@ -70,7 +70,7 @@ public class CastleWallPiece extends CastlePiece
 		{
 			for(int depth = 8; depth < startPiece.castleLength; depth += 8)
 				for(int row = -startPiece.castleWidth + 8; row < startPiece.castleWidth; row += 8)
-					this.getNextComponentNormal(startPiece, accessor, rand, row, depth, StructureCastlePieces.Type.RANDOM_ROOM);//TODO change this so it generates the whole floor smartly
+					this.getNextComponentNormal(startPiece, accessor, rand, row, depth, StructureCastlePieces.Type.RANDOM_ROOM);
 			this.cornerPiece = false;
 			startPiece.z += 8;
 			startPiece.castleWidth -= 8;

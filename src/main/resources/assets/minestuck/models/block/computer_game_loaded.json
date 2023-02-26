@@ -1,0 +1,162 @@
+{
+    "credit": "Made with Blockbench by blankMushroom",
+    "texture_size": [64, 64],
+    "textures": {
+        "computer": "minestuck:block/computer/computer_game_loaded",
+        "particle": "minestuck:block/computer/computer_game_loaded"
+    },
+    "elements": [
+        {
+            "name": "computer",
+            "from": [1, 0, 7],
+            "to": [15, 3, 16],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 7]},
+            "faces": {
+                "north": {"uv": [5.5, 4.5, 9, 5.25], "texture": "#computer"},
+                "east": {"uv": [3, 5.75, 5.25, 6.5], "texture": "#computer"},
+                "south": {"uv": [5.5, 5.25, 9, 6], "texture": "#computer"},
+                "west": {"uv": [5.25, 6, 7.5, 6.75], "texture": "#computer"},
+                "up": {"uv": [3.5, 2.25, 0, 0], "texture": "#computer"},
+                "down": {"uv": [3.5, 2.25, 0, 4.5], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "keyboard",
+            "from": [4, 0, 0],
+            "to": [15, 1, 5],
+            "faces": {
+                "north": {"uv": [6.5, 2, 9.25, 2.25], "texture": "#computer"},
+                "east": {"uv": [4.5, 6.75, 5.75, 7], "texture": "#computer"},
+                "south": {"uv": [6.5, 2.25, 9.25, 2.5], "texture": "#computer"},
+                "west": {"uv": [5.75, 6.75, 7, 7], "texture": "#computer"},
+                "up": {"uv": [2.75, 5.75, 0, 4.5], "texture": "#computer"},
+                "down": {"uv": [5.5, 4.5, 2.75, 5.75], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "mouse",
+            "from": [1, 0, 1],
+            "to": [3, 1, 4],
+            "rotation": {"angle": 0, "axis": "y", "origin": [-3, 0, 0]},
+            "faces": {
+                "north": {"uv": [6, 7, 6.5, 7.25], "texture": "#computer"},
+                "east": {"uv": [7, 3.75, 7.75, 4], "texture": "#computer"},
+                "south": {"uv": [6.5, 7, 7, 7.25], "texture": "#computer"},
+                "west": {"uv": [7, 4, 7.75, 4.25], "texture": "#computer"},
+                "up": {"uv": [7, 3.75, 6.5, 3], "texture": "#computer"},
+                "down": {"uv": [4, 6.5, 3.5, 7.25], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "keyboardwire",
+            "from": [12, 0.2, 5],
+            "to": [13, 0.2, 7],
+            "rotation": {"angle": 0, "axis": "y", "origin": [12, 0, 5]},
+            "faces": {
+                "north": {"uv": [0, 0, 0.25, 0], "texture": "#computer"},
+                "east": {"uv": [0, 0, 0.5, 0], "texture": "#computer"},
+                "south": {"uv": [0, 0, 0.25, 0], "texture": "#computer"},
+                "west": {"uv": [0, 0, 0.5, 0], "texture": "#computer"},
+                "up": {"uv": [4.75, 7.5, 4.5, 7], "texture": "#computer"},
+                "down": {"uv": [5, 7, 4.75, 7.5], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "mousewire",
+            "from": [1, 0.2, 4],
+            "to": [3, 0.2, 7],
+            "rotation": {"angle": 0, "axis": "y", "origin": [2, 0, 5]},
+            "faces": {
+                "north": {"uv": [0, 0, 0.5, 0], "texture": "#computer"},
+                "east": {"uv": [0, 0, 0.75, 0], "texture": "#computer"},
+                "south": {"uv": [0, 0, 0.5, 0], "texture": "#computer"},
+                "west": {"uv": [0, 0, 0.75, 0], "texture": "#computer"},
+                "up": {"uv": [7, 4.5, 6.5, 3.75], "texture": "#computer"},
+                "down": {"uv": [4.5, 6.5, 4, 7.25], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "monstbase",
+            "from": [6, 3, 12],
+            "to": [10, 4, 15],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 3, 12]},
+            "faces": {
+                "north": {"uv": [0.5, 7, 1.5, 7.25], "texture": "#computer"},
+                "east": {"uv": [4.5, 6.5, 5.25, 6.75], "texture": "#computer"},
+                "south": {"uv": [1.5, 7, 2.5, 7.25], "texture": "#computer"},
+                "west": {"uv": [7, 3.5, 7.75, 3.75], "texture": "#computer"},
+                "up": {"uv": [7.5, 0.75, 6.5, 0], "texture": "#computer"},
+                "down": {"uv": [7.5, 0.75, 6.5, 1.5], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "monstbar",
+            "from": [7, 4, 14],
+            "to": [9, 6, 15],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 12]},
+            "faces": {
+                "north": {"uv": [2.5, 7, 3, 7.5], "texture": "#computer"},
+                "east": {"uv": [5, 7, 5.25, 7.5], "texture": "#computer"},
+                "south": {"uv": [7, 3, 7.5, 3.5], "texture": "#computer"},
+                "west": {"uv": [5.25, 7, 5.5, 7.5], "texture": "#computer"},
+                "up": {"uv": [7.5, 4.5, 7, 4.25], "texture": "#computer"},
+                "down": {"uv": [6, 7, 5.5, 7.25], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "monitor",
+            "from": [2, 6, 13],
+            "to": [14, 15, 14],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 12]},
+            "faces": {
+                "north": {"uv": [3.5, 0, 6.5, 2.25], "texture": "#computer"},
+                "east": {"uv": [3, 6.5, 3.25, 8.75], "texture": "#computer"},
+                "south": {"uv": [3.5, 2.25, 6.5, 4.5], "texture": "#computer"},
+                "west": {"uv": [3.25, 6.5, 3.5, 8.75], "texture": "#computer"},
+                "up": {"uv": [9.5, 1.75, 6.5, 1.5], "texture": "#computer"},
+                "down": {"uv": [9.5, 1.75, 6.5, 2], "texture": "#computer"}
+            }
+        },
+        {
+            "name": "monstback",
+            "from": [5, 6, 14],
+            "to": [11, 11, 15],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 12]},
+            "faces": {
+                "north": {"uv": [0, 5.75, 1.5, 7], "texture": "#computer"},
+                "east": {"uv": [0, 7, 0.25, 8.25], "texture": "#computer"},
+                "south": {"uv": [1.5, 5.75, 3, 7], "texture": "#computer"},
+                "west": {"uv": [0.25, 7, 0.5, 8.25], "texture": "#computer"},
+                "up": {"uv": [8, 2.75, 6.5, 2.5], "texture": "#computer"},
+                "down": {"uv": [8, 2.75, 6.5, 3], "texture": "#computer"}
+            }
+        }
+    ],
+    "display": {
+        "gui": {
+            "rotation":    [ 30, 45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale":       [ 0.625, 0.625, 0.625 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 0, 0],
+            "scale":[ 0.5, 0.5, 0.5 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation":    [ 75, 45, 0 ],
+            "translation": [ 0, 2.5, 0 ],
+            "scale":       [ 0.375, 0.375, 0.375 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -45, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 0, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        }
+    }
+}

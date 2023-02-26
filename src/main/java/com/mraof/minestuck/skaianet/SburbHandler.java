@@ -4,20 +4,15 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.world.lands.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -33,7 +28,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 /**
  * A class for managing sburb-related stuff from outside this package that is dependent on connections and sessions.
@@ -164,13 +158,13 @@ public final class SburbHandler
 		
 		if(titleLandType == null)
 		{
-			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS) &&
-					(terrainLandType == null || LandTypes.FROGS.isAspectCompatible(terrainLandType)))
-				titleLandType = LandTypes.FROGS;
+			if(title.getHeroAspect() == EnumAspect.SPACE && !session.getUsedTitleLandTypes(mcServer).contains(LandTypes.FROGS.get()) &&
+					(terrainLandType == null || LandTypes.FROGS.get().isAspectCompatible(terrainLandType)))
+				titleLandType = LandTypes.FROGS.get();
 			else
 			{
 				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
-				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL)
+				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
 					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
 					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
@@ -207,7 +201,7 @@ public final class SburbHandler
 		generateAndSetTitle(mcServer.getLevel(Level.OVERWORLD), c.getClientIdentifier());
 		LandTypePair landTypes = genLandAspects(mcServer, c);		//This is where the Land dimension is actually registered, but it also needs the player's Title to be determined.
 		
-		ResourceKey<Level> dimType = LandTypes.createLandDimension(mcServer, identifier, landTypes);
+		ResourceKey<Level> dimType = LandTypeGenerator.createLandDimension(mcServer, identifier, landTypes);
 		MSDimensions.sendLandTypesToAll(mcServer);
 		
 		c.setLand(dimType);
@@ -254,7 +248,7 @@ public final class SburbHandler
 	
 	static GristType generateGristType(Random rand)
 	{
-		List<GristType> types = GristTypes.values().stream().filter(type -> type.isInCategory(GristType.SpawnCategory.COMMON)).collect(Collectors.toList());
+		List<GristType> types = GristType.SpawnCategory.COMMON.gristTypes().toList();
 		return types.get(rand.nextInt(types.size()));
 	}
 	

@@ -3,15 +3,19 @@ package com.mraof.minestuck.world.lands.title;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
+import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.phys.Vec3;
 
 public class MonstersLandType extends TitleLandType
@@ -36,12 +40,12 @@ public class MonstersLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.LIGHT_GRAY_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.PURPLE_CARPET.defaultBlockState());
-		if(registry.getCustomBlock("torch") == null)
-			registry.setBlockState("torch", Blocks.REDSTONE_TORCH.defaultBlockState());
-		if(registry.getCustomBlock("wall_torch") == null)
-			registry.setBlockState("wall_torch", Blocks.REDSTONE_WALL_TORCH.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.LIGHT_GRAY_WOOL);
+		registry.setBlock("carpet", Blocks.PURPLE_CARPET);
+		if(registry.isUsingDefault("torch"))
+			registry.setBlock("torch", Blocks.REDSTONE_TORCH);
+		if(registry.isUsingDefault("wall_torch"))
+			registry.setBlock("wall_torch", Blocks.REDSTONE_WALL_TORCH);
 	}
 	
 	@Override
@@ -68,9 +72,15 @@ public class MonstersLandType extends TitleLandType
 	}
 	
 	@Override
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	{
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.MONSTER_ROOM, LandBiomeType.any());
+	}
+	
+	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return type == Variant.UNDEAD ? MSSoundEvents.MUSIC_UNDEAD : MSSoundEvents.MUSIC_MONSTERS;
+		return type == Variant.UNDEAD ? MSSoundEvents.MUSIC_UNDEAD.get() : MSSoundEvents.MUSIC_MONSTERS.get();
 	}
 	
 	public enum Variant

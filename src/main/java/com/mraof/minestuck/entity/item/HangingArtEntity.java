@@ -20,13 +20,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends HangingEntity implements IEntityAdditionalSpawnData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public T art;
+	private T art;
 	
 	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level)
 	{
@@ -56,26 +57,24 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		artList.removeIf(art -> art.getSizeX() * art.getSizeY() < maxSize);
 		
 		if(!artList.isEmpty())
-				this.art = artList.get(this.random.nextInt(artList.size()));
+			this.art = artList.get(this.random.nextInt(artList.size()));
 		
 		
 		this.setDirection(direction);
 	}
 	
-	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level, BlockPos pos, Direction direction, String title)
+	public HangingArtEntity(EntityType<? extends HangingArtEntity<T>> type, Level level, BlockPos pos, Direction direction, T art)
 	{
 		this(type, level, pos, direction);
 		
-		for(T art : this.getArtSet())
-		{
-			if(art.getTitle().equals(title))
-			{
-				this.art = art;
-				break;
-			}
-		}
+		this.art = art;
 		
 		this.setDirection(direction);
+	}
+	
+	public T getArt()
+	{
+		return art;
 	}
 	
 	@Override
@@ -83,27 +82,24 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	{
 		super.addAdditionalSaveData(compound);
 		compound.putString("Motive", this.art.getTitle());
+		compound.putByte("Facing", (byte) this.direction.get2DDataValue());
 	}
 	
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound)
 	{
-		String s = compound.getString("Motive");
+		String artTitle = compound.getString("Motive");
 		
-		for(T art : this.getArtSet())
-			if(art.getTitle().equals(s))
-			{
-				this.art = art;
-				break;
-			}
-		
-		if(this.art == null)
+		Optional<T> optionalArt = this.getArtSet().stream().filter(art -> art.getTitle().equals(artTitle)).findAny();
+		if(optionalArt.isPresent())
+			this.art = optionalArt.get();
+		else
 		{
 			this.art = this.getDefault();
-			LOGGER.warn("Could not load art {} for type {}, resorting to the default type.", s, this.getType().getDescriptionId());
+			LOGGER.warn("Could not load art {} for type {}, resorting to the default type.", artTitle, this.getType().getDescriptionId());
 		}
 		super.readAdditionalSaveData(compound);
-		recalculateBoundingBox();	//Fixes a vanilla-related bug where pos and bb isn't updated when loaded from nbt
+		this.setDirection(Direction.from2DDataValue(compound.getByte("Facing")));
 	}
 	
 	@Override
@@ -130,7 +126,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			
 			this.spawnAtLocation(this.getStackDropped());
 		}
-			
+		
 	}
 	
 	@Override
@@ -147,10 +143,10 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	
 	@Override
 	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
-			boolean teleport)
+					   boolean teleport)
 	{
 		BlockPos blockpos = this.pos.offset(x - this.getX(), y - this.getY(), z - this.getZ());
-		this.setPos((double) blockpos.getX(), (double) blockpos.getY(), (double) blockpos.getZ());
+		this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
 	}
 	
 	@Override
@@ -171,7 +167,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	@Override
 	public void readSpawnData(FriendlyByteBuf data)
 	{
-		Direction facing = Direction.values()[data.readByte()%Direction.values().length];
+		Direction facing = Direction.values()[data.readByte() % Direction.values().length];
 		
 		this.pos = new BlockPos(data.readInt(), data.readInt(), data.readInt());
 		
@@ -181,12 +177,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 			str.append(data.readChar());
 		
 		String name = str.toString();
-		for(T art : this.getArtSet())
-			if(art.getTitle().equals(name))
-			{
-				this.art = art;
-				break;
-			}
+		this.art = this.getArtSet().stream().filter(art -> art.getTitle().equals(name)).findAny().orElseGet(this::getDefault);
 		
 		this.setDirection(facing);
 	}
@@ -208,11 +199,11 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 		String getTitle();
 		
 		int getSizeX();
+		
 		int getSizeY();
 		
 		int getOffsetX();
+		
 		int getOffsetY();
 	}
-
-	public Direction getFacingDirection() {return direction;}
 }

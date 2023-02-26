@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.network.PlayToClientPacket;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;

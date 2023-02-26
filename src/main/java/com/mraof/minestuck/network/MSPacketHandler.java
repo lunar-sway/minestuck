@@ -46,6 +46,7 @@ public class MSPacketHandler
 		registerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
@@ -66,12 +67,13 @@ public class MSPacketHandler
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(GristEntityPacket.class, GristEntityPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
+		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 	}
 	
 	private static int nextIndex;
-	
 	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, StandardPacket::encode, decoder, StandardPacket::consume);
@@ -105,5 +107,10 @@ public class MSPacketHandler
 	public static <MSG> void sendToTracking(MSG message, Entity entity)
 	{
 		INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
+	}
+	
+	public static <MSG> void sendToTrackingAndSelf(MSG message, Entity entity)
+	{
+		INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 	}
 }

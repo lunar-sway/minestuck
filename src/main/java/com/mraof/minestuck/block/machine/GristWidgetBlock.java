@@ -2,23 +2,21 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.tileentity.MSTileEntityTypes;
-import com.mraof.minestuck.tileentity.machine.GristWidgetTileEntity;
-import net.minecraft.core.BlockPos;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
+public class GristWidgetBlock extends SmallMachineBlock<GristWidgetBlockEntity>
 {
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	public GristWidgetBlock(Properties properties)
 	{
-		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSTileEntityTypes.GRIST_WIDGET, properties);
+		super(MSBlockShapes.GRIST_WIDGET.createRotatedShapes(), MSBlockEntityTypes.GRIST_WIDGET, properties);
 		registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(HAS_CARD, false));
 	}
 	
@@ -27,12 +25,5 @@ public class GristWidgetBlock extends SmallMachineBlock<GristWidgetTileEntity>
 	{
 		super.createBlockStateDefinition(builder);
 		builder.add(HAS_CARD);
-	}
-	
-	public static void updateItem(boolean b, Level level, BlockPos pos)
-	{
-		BlockState oldState = level.getBlockState(pos);
-		if(oldState.getBlock() instanceof GristWidgetBlock)
-			level.setBlock(pos, oldState.setValue(HAS_CARD, b), Block.UPDATE_CLIENTS);
 	}
 }

@@ -4,8 +4,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.UnderlingSpawnListEvent;
-import com.mraof.minestuck.item.crafting.alchemy.GristHelper;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -36,7 +36,7 @@ public final class UnderlingController
 	public static WeightedRandomList<MobSpawnSettings.SpawnerData> getUnderlingList(BlockPos pos)
 	{
 		
-		BlockPos spawn = new BlockPos(0, 0, 0);//world.getSpawnPoint(); TODO
+		BlockPos spawn = new BlockPos(0, 0, 0);
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distSqr(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
 		
@@ -74,15 +74,15 @@ public final class UnderlingController
 		}
 		
 		if(impWeight > 0 && MinestuckConfig.SERVER.naturalImpSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.IMP, impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.IMP.get(), impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
 		if(ogreWeight > 0 && MinestuckConfig.SERVER.naturalOgreSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.OGRE, ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.OGRE.get(), ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
 		if(basiliskWeight > 0 && MinestuckConfig.SERVER.naturalBasiliskSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.BASILISK, basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.BASILISK.get(), basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
 		if(lichWeight > 0 && MinestuckConfig.SERVER.naturalLichSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.LICH, lichWeight, 1, Math.max(1, lichWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.LICH.get(), lichWeight, 1, Math.max(1, lichWeight/2)));
 		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.GICLOPS, giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.GICLOPS.get(), giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
 		
 		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		

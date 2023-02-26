@@ -1,8 +1,8 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.crafting.alchemy.GristType;
-import com.mraof.minestuck.item.crafting.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
@@ -121,5 +121,20 @@ public class GristLayerInfo
 		GristType anyType = anyGristLayer.getTypeAt(x, z);
 		
 		return new TranslatableComponent(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
+	}
+	
+	public GristTypeLayer getCommonGristLayer()
+	{
+		return commonGristLayer;
+	}
+	
+	public GristTypeLayer getUncommonGristLayer()
+	{
+		return uncommonGristLayer;
+	}
+	
+	public GristTypeLayer getAnyGristLayer()
+	{
+		return anyGristLayer;
 	}
 }

@@ -8,8 +8,8 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.tileentity.ComputerTileEntity;
-import com.mraof.minestuck.tileentity.TransportalizerTileEntity;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
@@ -82,7 +82,7 @@ public class EntryProcess
 				{
 					if(!canModifyEntryBlocks(player.level, player))
 					{
-						player.sendMessage(new TextComponent("You are not allowed to enter here."), Util.NIL_UUID);	//TODO translation key
+						player.sendMessage(new TextComponent("You are not allowed to enter here."), Util.NIL_UUID);    //TODO translation key
 						return;
 					}
 					
@@ -95,7 +95,7 @@ public class EntryProcess
 						}
 						
 						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = new BlockPos(0, 100, 0);//landWorld.getDimension().getSpawnPoint(); TODO
+						BlockPos pos = new BlockPos(0, 100, 0);
 						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
 						
 						return;
@@ -105,8 +105,7 @@ public class EntryProcess
 					if(landDimension == null)
 					{
 						player.sendMessage(new TextComponent("Something went wrong while creating your Land. More details in the server console."), Util.NIL_UUID);
-					}
-					else
+					} else
 					{
 						ServerLevel oldLevel = (ServerLevel) player.level;
 						ServerLevel newLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
@@ -133,7 +132,7 @@ public class EntryProcess
 		} catch(Exception e)
 		{
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendMessage(new TextComponent("[Minestuck] Something went wrong during entry. "+ (player.getServer().isDedicatedServer()?"Check the console for the error message.":"Notify the server owner about this.")).withStyle(ChatFormatting.RED), Util.NIL_UUID);
+			player.sendMessage(new TextComponent("[Minestuck] Something went wrong during entry. " + (player.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED), Util.NIL_UUID);
 		}
 	}
 	
@@ -151,7 +150,7 @@ public class EntryProcess
 		creative = player.gameMode.isCreative();
 		
 		topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(level, x, y, z) : y + artifactRange;
-		yDiff = 127 - topY;
+		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
 		xDiff = 0 - x;
 		zDiff = 0 - z;
 		
@@ -161,7 +160,7 @@ public class EntryProcess
 		boolean foundComputer = false;
 		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
 		{
-			int zWidth = (int) Math.sqrt((artifactRange+0.5) * (artifactRange+0.5) - (blockX - x) * (blockX - x));
+			int zWidth = (int) Math.sqrt((artifactRange + 0.5) * (artifactRange + 0.5) - (blockX - x) * (blockX - x));
 			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
 			{
 				LevelChunk c = level.getChunk(blockX >> 4, blockZ >> 4);
@@ -169,12 +168,12 @@ public class EntryProcess
 				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
 				
 				int blockY;
-				for(blockY = Math.max(0, y - height); blockY <= Math.min(topY, y + height); blockY++)
+				for(blockY = Math.max(level.getMinBuildHeight(), y - height); blockY <= Math.min(topY, y + height); blockY++)
 				{
 					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
 					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
 					BlockState block = level.getBlockState(pos);
-					BlockEntity te = level.getBlockEntity(pos);
+					BlockEntity be = level.getBlockEntity(pos);
 					
 					Block gotBlock = block.getBlock();
 					
@@ -182,20 +181,19 @@ public class EntryProcess
 					{
 						blockMoves.add(new BlockMove(c, pos, pos1, Blocks.AIR.defaultBlockState(), true));
 						continue;
-					}
-					else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
+					} else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 					{
 						player.displayClientMessage(new TextComponent("You are not allowed to move command blocks."), false);
 						return false;
-					} else if(te instanceof ComputerTileEntity)		//If the block is a computer
+					} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
 					{
-						if(!((ComputerTileEntity)te).owner.equals(IdentifierHandler.encode(player)))	//You can't Enter with someone else's computer
+						if(!((ComputerBlockEntity) be).owner.equals(IdentifierHandler.encode(player)))    //You can't Enter with someone else's computer
 						{
 							player.displayClientMessage(new TextComponent("You are not allowed to move other players' computers."), false);
 							return false;
 						}
 						
-						foundComputer = true;	//You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
+						foundComputer = true;    //You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
 					}
 					
 					//Shouldn't this line check if the block is an edge block?
@@ -255,10 +253,10 @@ public class EntryProcess
 			AABB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
 			List<Entity> list = level0.getEntities(player, entityTeleportBB);
 			Iterator<Entity> iterator = list.iterator();
-			while (iterator.hasNext())
+			while(iterator.hasNext())
 			{
 				Entity e = iterator.next();
-				if(origin.distToCenterSqr(e.getX(), e.getY(), e.getZ()) <= artifactRange*artifactRange)
+				if(origin.distToCenterSqr(e.getX(), e.getY(), e.getZ()) <= artifactRange * artifactRange)
 				{
 					if(MinestuckConfig.SERVER.entryCrater.get() || e instanceof Player || !creative && e instanceof ItemEntity)
 					{
@@ -270,11 +268,10 @@ public class EntryProcess
 						}
 						//These entities should no longer be in the world, and this list is later used for entities that *should* remain.
 						iterator.remove();
-					}
-					else	//Copy instead of teleport
+					} else    //Copy instead of teleport
 					{
 						Entity newEntity = e.getType().create(level1);
-						if (newEntity != null)
+						if(newEntity != null)
 						{
 							newEntity.restoreFrom(e);
 							newEntity.setPos(newEntity.getX() + xDiff, newEntity.getY() + yDiff, newEntity.getZ() + zDiff);
@@ -287,7 +284,7 @@ public class EntryProcess
 			LOGGER.debug("Removing original blocks");
 			for(BlockMove move : blockMoves)
 			{
-				removeTileEntity(level0, move.source, creative);	//Tile entities need special treatment
+				removeBlockEntity(level0, move.source, creative);    //Block entities need special treatment
 				
 				if(MinestuckConfig.SERVER.entryCrater.get() && level0.getBlockState(move.source).getBlock() != Blocks.BEDROCK)
 				{
@@ -317,13 +314,13 @@ public class EntryProcess
 				iterator = removalList.iterator();
 				if(MinestuckConfig.SERVER.entryCrater.get())
 				{
-					while (iterator.hasNext())
+					while(iterator.hasNext())
 					{
 						iterator.next().remove(Entity.RemovalReason.CHANGED_DIMENSION);
 					}
 				} else
 				{
-					while (iterator.hasNext())
+					while(iterator.hasNext())
 					{
 						Entity e = iterator.next();
 						if(e instanceof ItemEntity)
@@ -342,33 +339,36 @@ public class EntryProcess
 	}
 	
 	/**
-	 * Determines if it is appropriate to remove the tile entity in the specified location,
-	 * and removes both the tile entity and its corresponding block if so.
+	 * Determines if it is appropriate to remove the block entity in the specified location,
+	 * and removes both the block entity and its corresponding block if so.
 	 * This method is expressly designed to prevent drops from appearing when the block is removed.
-	 * It will also deliberately trigger block updates based on the removal of the tile entity's block.
-	 * @param level The world where the tile entity is located
-	 * @param pos The position at which the tile entity is located
+	 * It will also deliberately trigger block updates based on the removal of the block entity's block.
+	 *
+	 * @param level    The world where the block entity is located
+	 * @param pos      The position at which the block entity is located
 	 * @param creative Whether or not creative-mode rules should be employed
 	 */
-	private static void removeTileEntity(ServerLevel level, BlockPos pos, boolean creative)
+	private static void removeBlockEntity(ServerLevel level, BlockPos pos, boolean creative)
 	{
-		BlockEntity tileEntity = level.getBlockEntity(pos);
-		if(tileEntity != null)
+		BlockEntity blockEntity = level.getBlockEntity(pos);
+		if(blockEntity != null)
 		{
 			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
 				String name = level.getBlockState(pos).getBlock().getRegistryName().toString();
-				try {
+				try
+				{
 					level.removeBlockEntity(pos);
 					level.removeBlock(pos, true);
-				} catch (Exception e) {
-					LOGGER.warn("Exception encountered when removing tile entity " + name + " during entry:", e);
+				} catch(Exception e)
+				{
+					LOGGER.warn("Exception encountered when removing block entity " + name + " during entry:", e);
 				}
 			} else
 			{
-				if(tileEntity instanceof ComputerTileEntity)	//Avoid duplicating computer data when a computer is kept in the overworld
-					((ComputerTileEntity) tileEntity).programData = new CompoundTag();
-				else if(tileEntity instanceof TransportalizerTileEntity)
+				if(blockEntity instanceof ComputerBlockEntity)    //Avoid duplicating computer data when a computer is kept in the overworld
+					((ComputerBlockEntity) blockEntity).programData = new CompoundTag();
+				else if(blockEntity instanceof TransportalizerBlockEntity)
 					level.removeBlockEntity(pos);
 			}
 		}
@@ -395,8 +395,8 @@ public class EntryProcess
 	private static void copyBlockDirect(LevelAccessor levelAccessor, ChunkAccess cSrc, ChunkAccess cDst, int xSrc, int ySrc, int zSrc, int xDst, int yDst, int zDst)
 	{
 		BlockPos dest = new BlockPos(xDst, yDst, zDst);
-		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc >> 4);
-		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst >> 4);
+		LevelChunkSection blockStorageSrc = getBlockStorage(cSrc, ySrc);
+		LevelChunkSection blockStorageDst = getBlockStorage(cDst, yDst);
 		int y = yDst;
 		xSrc &= 15; ySrc &= 15; zSrc &= 15; xDst &= 15; yDst &= 15; zDst &= 15;
 		
@@ -404,7 +404,7 @@ public class EntryProcess
 		BlockState state = blockStorageSrc.getBlockState(xSrc, ySrc, zSrc);
 		blockStorageDst.setBlockState(xDst, yDst, zDst, state);
 		if(isEmpty != blockStorageDst.hasOnlyAir())
-			levelAccessor.getChunkSource().getLightEngine().updateSectionStatus(dest, blockStorageDst.hasOnlyAir());	//I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
+			levelAccessor.getChunkSource().getLightEngine().updateSectionStatus(dest, blockStorageDst.hasOnlyAir());    //I assume this adds or removes a light storage section here depending on if it is needed (because a section with just air doesn't have to be regarded)
 		
 		cDst.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(xDst, y, zDst, state);
 		cDst.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(xDst, y, zDst, state);
@@ -414,7 +414,7 @@ public class EntryProcess
 	
 	private static LevelChunkSection getBlockStorage(ChunkAccess c, int y)
 	{
-		return c.getSections()[y];
+		return c.getSection(c.getSectionIndex(y));
 	}
 	
 	/**
@@ -445,8 +445,8 @@ public class EntryProcess
 	
 	public static void placeGates(ServerLevel level)
 	{
-		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight1, 0), GateHandler.Type.GATE_1, 0);
-		GateBlock.placeGate(level, new BlockPos(0, GateHandler.gateHeight2, 0), GateHandler.Type.GATE_2, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.GATE_HEIGHT_1, 0), GateHandler.Type.GATE_1, 0);
+		GateBlock.placeGate(level, new BlockPos(0, GateHandler.GATE_HEIGHT_2, 0), GateHandler.Type.GATE_2, 0);
 	}
 	
 	private static class BlockMove
@@ -484,24 +484,25 @@ public class EntryProcess
 				copyBlockDirect(level, chunkFrom, chunkTo, source.getX(), source.getY(), source.getZ(), dest.getX(), dest.getY(), dest.getZ());
 			}
 			
-			BlockEntity tileEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
-			BlockEntity newTE = null;
-			if(tileEntity != null)
+			BlockEntity blockEntity = chunkFrom.getBlockEntity(source, LevelChunk.EntityCreationType.CHECK);
+			BlockEntity newBE = null;
+			if(blockEntity != null)
 			{
-				CompoundTag nbt = tileEntity.saveWithId();
+				CompoundTag nbt = blockEntity.saveWithId();
 				nbt.putInt("x", dest.getX());
 				nbt.putInt("y", dest.getY());
 				nbt.putInt("z", dest.getZ());
-				newTE = BlockEntity.loadStatic(dest, block, nbt);
-				if(newTE != null)
-					level.setBlockEntity(newTE);
-				else LOGGER.warn("Unable to create a new tile entity {} when teleporting blocks to the medium!", tileEntity.getType().getRegistryName());
+				newBE = BlockEntity.loadStatic(dest, block, nbt);
+				if(newBE != null)
+					level.setBlockEntity(newBE);
+				else
+					LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", blockEntity.getType().getRegistryName());
 				
 			}
 			
 			for(EntryBlockProcessing processing : blockProcessors)
 			{
-				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, tileEntity, newTE);
+				processing.copyOver((ServerLevel) chunkFrom.getLevel(), source, level, dest, block, blockEntity, newBE);
 			}
 		}
 	}

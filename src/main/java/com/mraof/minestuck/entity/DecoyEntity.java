@@ -46,15 +46,15 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	
 	public DecoyEntity(Level level)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, level);
+		super(MSEntityTypes.PLAYER_DECOY.get(), level);
 		inventory = new Inventory(null);
-		if(!level.isClientSide)	//If not spawned the way it should
+		if(!level.isClientSide)    //If not spawned the way it should
 			markedForDespawn = true;
 	}
 	
 	public DecoyEntity(ServerLevel level, ServerPlayer player)
 	{
-		super(MSEntityTypes.PLAYER_DECOY, level);
+		super(MSEntityTypes.PLAYER_DECOY.get(), level);
 		this.setBoundingBox(player.getBoundingBox());
 		this.player = new DecoyPlayer(level, this, player);
 		for(String key : player.getPersistentData().getAllKeys())
@@ -107,13 +107,12 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 				try
 				{
 					foodStats = FoodData.class.getConstructor(Player.class).newInstance(player);
-				}
-				catch(NoSuchMethodException ex)
+				} catch(NoSuchMethodException ex)
 				{
 					throw new NoSuchMethodException("Found no known constructor for net.minecraft.util.FoodStats.");
 				}
 			}
-			foodStats.readAdditionalSaveData(foodStatsNBT);	//Exact copy of food stack
+			foodStats.readAdditionalSaveData(foodStatsNBT);    //Exact copy of food stack
 		} catch(Exception e)
 		{
 			foodStats = null;
@@ -149,7 +148,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		yHeadRot = additionalData.readFloat();
 		isFlying = additionalData.readBoolean();
 		yHeadRotO = yHeadRot;
-		this.setYRot(yHeadRot);	//I don't know how much of this that is necessary
+		this.setYRot(yHeadRot);    //I don't know how much of this that is necessary
 		yRotO = getYRot();
 		yBodyRot = getYRot();
 	}
@@ -175,7 +174,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		}
 		super.tick();
 		
-		yHeadRot = yHeadRotO;	//Neutralize the effect of the LookHelper
+		yHeadRot = yHeadRotO;    //Neutralize the effect of the LookHelper
 		setYRot(yRotO);
 		setXRot(xRotO);
 		
@@ -191,21 +190,24 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	public boolean locationChanged() {
-		return originX >= this.getX()+1 || originX <= this.getX()-1 ||
-				originY >= this.getY()+1 || originY <= this.getY()-1 ||
-				originZ >= this.getZ()+1 || originZ <= this.getZ()-1;
+	public boolean locationChanged()
+	{
+		return originX >= this.getX() + 1 || originX <= this.getX() - 1 ||
+				originY >= this.getY() + 1 || originY <= this.getY() - 1 ||
+				originZ >= this.getZ() + 1 || originZ <= this.getZ() - 1;
 	}
 	
 	@Override
-	public boolean hurt(DamageSource damageSource, float par2) {
-		if (!level.isClientSide && (!gameType.equals(GameType.CREATIVE) || damageSource.isBypassInvul()))
+	public boolean hurt(DamageSource damageSource, float par2)
+	{
+		if(!level.isClientSide && (!gameType.equals(GameType.CREATIVE) || damageSource.isBypassInvul()))
 			ServerEditHandler.reset(damageSource, par2, ServerEditHandler.getData(this));
 		return true;
 	}
 	
 	@Override
-	public boolean shouldShowName() {
+	public boolean shouldShowName()
+	{
 		return username != null;
 	}
 	
@@ -255,7 +257,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		return false;
 	}
 	
-	private static class DecoyPlayer extends FakePlayer	//Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
+	private static class DecoyPlayer extends FakePlayer    //Never spawned into the world. Only used for the InventoryPlayer and FoodStats.
 	{
 		
 		DecoyEntity decoy;

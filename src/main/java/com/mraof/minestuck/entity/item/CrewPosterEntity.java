@@ -20,7 +20,7 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 	
 	public CrewPosterEntity(Level level, BlockPos pos, Direction direction)
 	{
-		super(MSEntityTypes.MIDNIGHT_CREW_POSTER, level, pos, direction);
+		super(MSEntityTypes.MIDNIGHT_CREW_POSTER.get(), level, pos, direction);
 	}
 	
 	@Override
@@ -65,18 +65,32 @@ public class CrewPosterEntity extends HangingArtEntity<CrewPosterEntity.Midnight
 		
 		@Override
 		public String getTitle()
-		{return title;}
+		{
+			return title;
+		}
+		
 		@Override
 		public int getSizeX()
-		{return sizeX;}
+		{
+			return sizeX;
+		}
+		
 		@Override
 		public int getSizeY()
-		{return sizeY;}
+		{
+			return sizeY;
+		}
+		
 		@Override
 		public int getOffsetX()
-		{return offsetX;}
+		{
+			return offsetX;
+		}
+		
 		@Override
 		public int getOffsetY()
-		{return offsetY;}
+		{
+			return offsetY;
+		}
 	}
 }

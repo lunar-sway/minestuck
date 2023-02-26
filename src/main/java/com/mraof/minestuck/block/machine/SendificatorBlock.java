@@ -1,7 +1,8 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.tileentity.machine.SendificatorTileEntity;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,6 +13,8 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -42,7 +45,7 @@ public class SendificatorBlock extends MachineProcessBlock implements EntityBloc
 	{
 		if(player instanceof ServerPlayer serverPlayer)
 		{
-			if(level.getBlockEntity(pos) instanceof SendificatorTileEntity sendificator)
+			if(level.getBlockEntity(pos) instanceof SendificatorBlockEntity sendificator)
 			{
 				sendificator.openMenu(serverPlayer);
 			}
@@ -54,6 +57,13 @@ public class SendificatorBlock extends MachineProcessBlock implements EntityBloc
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new SendificatorTileEntity(pos, state);
+		return new SendificatorBlockEntity(pos, state);
+	}
+	
+	@Nullable
+	@Override
+	public <E extends BlockEntity> BlockEntityTicker<E> getTicker(Level level, BlockState state, BlockEntityType<E> placedType)
+	{
+		return createMachineTicker(level, placedType, MSBlockEntityTypes.SENDIFICATOR.get());
 	}
 }

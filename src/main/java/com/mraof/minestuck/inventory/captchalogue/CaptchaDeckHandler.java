@@ -3,15 +3,15 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.item.crafting.alchemy.AlchemyHelper;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.world.storage.ClientPlayerData;
-import com.mraof.minestuck.world.storage.PlayerData;
-import com.mraof.minestuck.world.storage.PlayerSavedData;
+import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -51,13 +51,13 @@ public class CaptchaDeckHandler
 	
 	public static Modus createClientModus(ResourceLocation name)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
 		return type != null ? type.createClientSide() : null;
 	}
 	
 	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
 	{
-		ModusType<?> type = ModusTypes.REGISTRY.getValue(name);
+		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
 		return type != null ? type.createServerSide(savedData) : null;
 	}
 	
@@ -84,9 +84,9 @@ public class CaptchaDeckHandler
 	
 	public static void useItem(ServerPlayer player)
 	{
-		if(!(player.containerMenu instanceof CaptchaDeckContainer container) || !canPlayerUseModus(player))
+		if(!(player.containerMenu instanceof CaptchaDeckMenu containerMenu) || !canPlayerUseModus(player))
 			 return;
-		ItemStack stack = container.getContainerItem();
+		ItemStack stack = containerMenu.getMenuItem();
 		if(stack.isEmpty())
 			return;
 		Modus modus = getModus(player);
@@ -95,7 +95,7 @@ public class CaptchaDeckHandler
 		if(type != null)
 		{
 			ItemStack newItem = changeModus(player, stack, modus, type);
-			container.setContainerItem(newItem);
+			containerMenu.setMenuItem(newItem);
 		}
 		else if(stack.getItem().equals(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isPunchedCard(stack)
 				&& modus != null)
@@ -173,15 +173,18 @@ public class CaptchaDeckHandler
 		{
 			Slot slot = slotIndex >= 0 && slotIndex < player.containerMenu.slots.size() ? player.containerMenu.getSlot(slotIndex) : null;
 			
-			if(slot != null && !slot.getItem().isEmpty() && slot.mayPickup(player))
+			if(slot != null)
 			{
-				ItemStack stack = slot.remove(slot.getItem().getMaxStackSize());
-				captchalogueItem(player, stack);
-				//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+				ItemStack stack = slot.safeTake(slot.getItem().getCount(), Integer.MAX_VALUE, player);
 				if(!stack.isEmpty())
-					launchItem(player, stack);
-				
-				player.containerMenu.broadcastChanges();
+				{
+					captchalogueItem(player, stack);
+					//It is not guaranteed that we can put the item back, so if it wasn't captchalogued, launch it
+					if(!stack.isEmpty())
+						launchItem(player, stack);
+					
+					player.containerMenu.broadcastChanges();
+				}
 			}
 		}
 	}

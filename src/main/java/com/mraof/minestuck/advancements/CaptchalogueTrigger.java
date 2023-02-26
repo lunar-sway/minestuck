@@ -26,7 +26,7 @@ public class CaptchalogueTrigger extends SimpleCriterionTrigger<CaptchalogueTrig
 	@Override
 	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
 	{
-		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
+		ModusType<?> modus = json.has("modus") ? ModusTypes.REGISTRY.get().getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
 		ItemPredicate item = json.has("item") ? ItemPredicate.fromJson(json.get("item")) : null;
 		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
 		return new Instance(predicate, modus, item, count);

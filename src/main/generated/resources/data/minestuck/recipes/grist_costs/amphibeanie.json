@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minestuck:amphibeanie"
+  },
+  "grist_cost": {
+    "minestuck:caulk": 20,
+    "minestuck:marble": 10,
+    "minestuck:amber": 2
+  }
+}

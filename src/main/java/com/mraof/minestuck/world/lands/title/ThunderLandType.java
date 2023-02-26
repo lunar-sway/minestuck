@@ -31,8 +31,8 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlockState("structure_wool_2", Blocks.BLUE_WOOL.defaultBlockState());
-		registry.setBlockState("carpet", Blocks.GREEN_CARPET.defaultBlockState());
+		registry.setBlock("structure_wool_2", Blocks.BLUE_WOOL);
+		registry.setBlock("carpet", Blocks.GREEN_CARPET);
 		
 	}
 	
@@ -62,6 +62,6 @@ public class ThunderLandType extends TitleLandType
 	@Override
 	public SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_THUNDER;
+		return MSSoundEvents.MUSIC_THUNDER.get();
 	}
 }

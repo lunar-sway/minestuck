@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;

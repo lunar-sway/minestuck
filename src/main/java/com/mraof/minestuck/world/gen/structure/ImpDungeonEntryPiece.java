@@ -27,10 +27,10 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	
 	public static StructurePiece create(ChunkPos pos, Random rand)
 	{
-		return new ImpDungeonEntryPiece(pos.getBlockX(rand.nextInt(16)), pos.getBlockZ(rand.nextInt(16)), rand, getRandomHorizontalDirection(rand));
+		return new ImpDungeonEntryPiece(pos.getBlockX(rand.nextInt(16)), pos.getBlockZ(rand.nextInt(16)), getRandomHorizontalDirection(rand));
 	}
 	
-	private ImpDungeonEntryPiece(int x, int z, Random rand, Direction orientation)
+	private ImpDungeonEntryPiece(int x, int z, Direction orientation)
 	{
 		super(MSStructurePieces.IMP_ENTRY.get(), 0, makeBoundingBox(x, 64, z, orientation, 6, 4, 11));
 		setOrientation(orientation);
@@ -60,9 +60,9 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 	{
-		checkHeight(level, structureBoundingBoxIn);
+		checkHeight(level, box);
 		
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 		
@@ -73,62 +73,63 @@ public class ImpDungeonEntryPiece extends StructurePiece
 		BlockState torch = blocks.getBlockState("wall_torch");
 		
 		for(int x = 1; x < 5; x++)
-			buildFloorTile(floorBlock, x, 0, level, randomIn, structureBoundingBoxIn);
+			buildFloorTile(floorBlock, x, 0, level, randomIn, box);
 		
 		for(int z = 0; z < 5; z++)
 		{
-			buildFloorTile(wallBlock, 0, z, level, randomIn, structureBoundingBoxIn);
-			buildFloorTile(wallBlock, 5, z, level, randomIn, structureBoundingBoxIn);
-			buildWall(wallBlock, 0, z, level, randomIn, structureBoundingBoxIn, 0);
-			buildWall(wallBlock, 5, z, level, randomIn, structureBoundingBoxIn, 0);
+			buildFloorTile(wallBlock, 0, z, level, randomIn, box);
+			buildFloorTile(wallBlock, 5, z, level, randomIn, box);
+			buildWall(wallBlock, 0, z, level, randomIn, box, 0);
+			buildWall(wallBlock, 5, z, level, randomIn, box, 0);
 		}
 		
 		for(int x = 1; x < 5; x++)
-			buildWall(wallBlock, x, 5, level, randomIn, structureBoundingBoxIn, 0);
-		if(this.getBlock(level, 1, 2, 5, boundingBox) == wallBlock)
-			this.placeBlock(level, wallDecor, 1, 2, 5, boundingBox);
-		if(this.getBlock(level, 4, 2, 5, boundingBox) == wallBlock)
-			this.placeBlock(level, wallDecor, 4, 2, 5, boundingBox);
+			buildWall(wallBlock, x, 5, level, randomIn, box, 0);
 		
-		generateBox(level, structureBoundingBoxIn, 1, 0, 1, 1, 0, 4, floorBlock, floorBlock, false);
-		generateBox(level, structureBoundingBoxIn, 4, 0, 1, 4, 0, 4, floorBlock, floorBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, 0, 5, 4, 0, 5, wallBlock, wallBlock, false);
-		generateAirBox(level, structureBoundingBoxIn, 1, 1, 0, 4, 4, 4);
+		if(this.getBlock(level, 1, 2, 5, box) == wallBlock)
+			this.placeBlock(level, wallDecor, 1, 2, 5, box);
+		if(this.getBlock(level, 4, 2, 5, box) == wallBlock)
+			this.placeBlock(level, wallDecor, 4, 2, 5, box);
 		
-		generateAirBox(level, structureBoundingBoxIn, 2, 0, 2, 3, 0, 4);
-		generateBox(level, structureBoundingBoxIn, 2, 0, 1, 3, 0, 1, floorStairs, floorStairs, false);
-		generateAirBox(level, structureBoundingBoxIn, 2, -1, 3, 3, -1, 5);
-		generateBox(level, structureBoundingBoxIn, 2, -1, 2, 3, -1, 2, floorStairs, floorStairs, false);
-		generateBox(level, structureBoundingBoxIn, 1, -1, 6, 4, -1, 6, wallBlock, wallBlock, false);
-		generateAirBox(level, structureBoundingBoxIn, 2, -2, 4, 3, -2, 6);
-		generateBox(level, structureBoundingBoxIn, 2, -2, 3, 3, -2, 3, floorStairs, floorStairs, false);
-		generateBox(level, structureBoundingBoxIn, 1, -2, 7, 4, -2, 10, wallBlock, wallBlock, false);
-		generateAirBox(level, structureBoundingBoxIn, 2, -3, 5, 3, -3, 9);
-		generateBox(level, structureBoundingBoxIn, 2, -3, 4, 3, -3, 4, floorStairs, floorStairs, false);
-		generateAirBox(level, structureBoundingBoxIn, 2, -4, 6, 3, -4, 9);
-		generateBox(level, structureBoundingBoxIn, 2, -4, 5, 3, -4, 5, floorStairs, floorStairs, false);
-		generateAirBox(level, structureBoundingBoxIn, 2, -5, 7, 3, -5, 9);
-		generateBox(level, structureBoundingBoxIn, 2, -5, 6, 3, -5, 6, floorStairs, floorStairs, false);
-		generateBox(level, structureBoundingBoxIn, 1, -6, 6, 4, -6, 8, floorBlock, floorBlock, false);
+		generateBox(level, box, 1, 0, 1, 1, 0, 4, floorBlock, floorBlock, false);
+		generateBox(level, box, 4, 0, 1, 4, 0, 4, floorBlock, floorBlock, false);
+		generateBox(level, box, 1, 0, 5, 4, 0, 5, wallBlock, wallBlock, false);
+		generateAirBox(level, box, 1, 1, 0, 4, 4, 4);
 		
-		generateBox(level, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY(), 10, 4, -3, 10, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, -5, 6, 1, -3, 9, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, -1, 2, 1, -1, 5, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, -2, 3, 1, -2, 6, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, -3, 4, 1, -3, 5, wallBlock, wallBlock, false);
-		placeBlock(level, wallBlock, 1, -4, 5, structureBoundingBoxIn);
-		generateBox(level, structureBoundingBoxIn, 4, -5, 6, 4, -3, 9, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 4, -1, 2, 4, -1, 5, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 4, -2, 3, 4, -2, 6, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 4, -3, 4, 4, -3, 5, wallBlock, wallBlock, false);
-		placeBlock(level, wallBlock, 4, -4, 5, structureBoundingBoxIn);
-		generateAirBox(level, structureBoundingBoxIn, 2, compoHeight - boundingBox.minY(), 9, 3, -6, 9);
-		generateBox(level, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY(), 9, 1, -6, 9, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 4, compoHeight - boundingBox.minY(), 9, 4, -6, 9, wallBlock, wallBlock, false);
-		generateBox(level, structureBoundingBoxIn, 1, compoHeight - boundingBox.minY(), 8, 4, -7, 8, wallBlock, wallBlock, false);
+		generateAirBox(level, box, 2, 0, 2, 3, 0, 4);
+		generateBox(level, box, 2, 0, 1, 3, 0, 1, floorStairs, floorStairs, false);
+		generateAirBox(level, box, 2, -1, 3, 3, -1, 5);
+		generateBox(level, box, 2, -1, 2, 3, -1, 2, floorStairs, floorStairs, false);
+		generateBox(level, box, 1, -1, 6, 4, -1, 6, wallBlock, wallBlock, false);
+		generateAirBox(level, box, 2, -2, 4, 3, -2, 6);
+		generateBox(level, box, 2, -2, 3, 3, -2, 3, floorStairs, floorStairs, false);
+		generateBox(level, box, 1, -2, 7, 4, -2, 10, wallBlock, wallBlock, false);
+		generateAirBox(level, box, 2, -3, 5, 3, -3, 9);
+		generateBox(level, box, 2, -3, 4, 3, -3, 4, floorStairs, floorStairs, false);
+		generateAirBox(level, box, 2, -4, 6, 3, -4, 9);
+		generateBox(level, box, 2, -4, 5, 3, -4, 5, floorStairs, floorStairs, false);
+		generateAirBox(level, box, 2, -5, 7, 3, -5, 9);
+		generateBox(level, box, 2, -5, 6, 3, -5, 6, floorStairs, floorStairs, false);
+		generateBox(level, box, 1, -6, 6, 4, -6, 8, floorBlock, floorBlock, false);
 		
-		placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 2, -3, 8, structureBoundingBoxIn);
-		placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 3, -3, 8, structureBoundingBoxIn);
+		generateBox(level, box, 1, compoHeight - boundingBox.minY(), 10, 4, -3, 10, wallBlock, wallBlock, false);
+		generateBox(level, box, 1, -5, 6, 1, -3, 9, wallBlock, wallBlock, false);
+		generateBox(level, box, 1, -1, 2, 1, -1, 5, wallBlock, wallBlock, false);
+		generateBox(level, box, 1, -2, 3, 1, -2, 6, wallBlock, wallBlock, false);
+		generateBox(level, box, 1, -3, 4, 1, -3, 5, wallBlock, wallBlock, false);
+		placeBlock(level, wallBlock, 1, -4, 5, box);
+		generateBox(level, box, 4, -5, 6, 4, -3, 9, wallBlock, wallBlock, false);
+		generateBox(level, box, 4, -1, 2, 4, -1, 5, wallBlock, wallBlock, false);
+		generateBox(level, box, 4, -2, 3, 4, -2, 6, wallBlock, wallBlock, false);
+		generateBox(level, box, 4, -3, 4, 4, -3, 5, wallBlock, wallBlock, false);
+		placeBlock(level, wallBlock, 4, -4, 5, box);
+		generateAirBox(level, box, 2, compoHeight - boundingBox.minY(), 9, 3, -6, 9);
+		generateBox(level, box, 1, compoHeight - boundingBox.minY(), 9, 1, -6, 9, wallBlock, wallBlock, false);
+		generateBox(level, box, 4, compoHeight - boundingBox.minY(), 9, 4, -6, 9, wallBlock, wallBlock, false);
+		generateBox(level, box, 1, compoHeight - boundingBox.minY(), 8, 4, -7, 8, wallBlock, wallBlock, false);
+		
+		placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.EAST), 2, -3, 8, box);
+		placeBlock(level, torch.setValue(WallTorchBlock.FACING, Direction.WEST), 3, -3, 8, box);
 	}
 	
 	protected void checkHeight(LevelAccessor level, BoundingBox bb)

@@ -8,8 +8,6 @@ import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillagePieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -64,12 +62,6 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	{}
 	
 	/**
-	 * Override this to set biome generation settings.
-	 */
-	default void setBiomeGeneration(BiomeGenerationSettings.Builder builder, StructureBlockRegistry blocks, LandBiomeType type, Biome baseBiome)
-	{}
-	
-	/**
 	 * Override this to register land type-specific village centers.
 	 */
 	default void addVillageCenters(CenterRegister register)
@@ -93,6 +85,6 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	
 	default SoundEvent getBackgroundMusic()
 	{
-		return MSSoundEvents.MUSIC_DEFAULT;
+		return MSSoundEvents.MUSIC_DEFAULT.get();
 	}
 }

@@ -37,9 +37,9 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 	}
 	
 	@Override
-		public LootPoolEntryType getType()	//getType
+	public LootPoolEntryType getType()
 	{
-		return MSLootTables.landTableEntryType();
+		return MSLootTables.LAND_TABLE_ENTRY.get();
 	}
 	
 	@Override

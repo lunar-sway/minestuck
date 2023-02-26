@@ -18,9 +18,9 @@ public class CassetteItem extends RecordItem
 {
 	public final EnumCassetteType cassetteID;
 	
-	public CassetteItem(int comparatorValueIn, Supplier<SoundEvent> soundIn, EnumCassetteType cassetteName, Properties builder)
+	public CassetteItem(int comparatorValueIn, EnumCassetteType cassetteName, Properties builder)
 	{
-		super(comparatorValueIn, soundIn, builder);
+		super(comparatorValueIn, cassetteName::getSoundEvent, builder);
 		this.cassetteID = cassetteName;
 	}
 	

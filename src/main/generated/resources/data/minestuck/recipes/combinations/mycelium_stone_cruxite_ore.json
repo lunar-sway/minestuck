@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:raw_cruxite"
+  },
+  "input2": {
+    "item": "minestuck:mycelium_stone"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:mycelium_stone_cruxite_ore"
+  }
+}

@@ -13,11 +13,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.function.Supplier;
 
 public final class StructureBlockRegistry
 {
@@ -116,9 +117,9 @@ public final class StructureBlockRegistry
 		registerBlock("stained_glass_2", Blocks.LIGHT_GRAY_STAINED_GLASS.defaultBlockState());
 		registerBlock("slime", Blocks.SLIME_BLOCK.defaultBlockState());
 		
-		defaultRegistry.setBlockState("surface", Blocks.GRASS_BLOCK.defaultBlockState());
-		defaultRegistry.setBlockState("upper", Blocks.DIRT.defaultBlockState());
-		defaultRegistry.setBlockState("ocean_surface", Blocks.GRAVEL.defaultBlockState());
+		defaultRegistry.setBlock("surface", Blocks.GRASS_BLOCK);
+		defaultRegistry.setBlock("upper", Blocks.DIRT);
+		defaultRegistry.setBlock("ocean_surface", Blocks.GRAVEL);
 	}
 	
 	public static StructureBlockRegistry getOrDefault(ChunkGenerator generator)
@@ -157,6 +158,16 @@ public final class StructureBlockRegistry
 	private final Map<String, BlockState> blockRegistry = new HashMap<>();
 	private RuleTest groundType = OreFeatures.NATURAL_STONE;
 	
+	public void setBlock(String name, Supplier<? extends Block> block)
+	{
+		setBlock(name, block.get());
+	}
+	
+	public void setBlock(String name, Block block)
+	{
+		setBlockState(name, block.defaultBlockState());
+	}
+	
 	public void setBlockState(String name, BlockState state)
 	{
 		if(state == null || name == null)
@@ -165,19 +176,11 @@ public final class StructureBlockRegistry
 			throw new IllegalStateException("Structure block \""+name+"\" isn't registered, and can therefore not be set.");
 		if(!staticRegistry.get(name).extention.isInstance(state.getBlock()))
 			throw new IllegalArgumentException("The provided block must extend \""+staticRegistry.get(name).extention+"\".");
-		if(name.equals("ground"))
-			throw new IllegalArgumentException("Should use setGroundState() for setting the ground block.");
 		
 		blockRegistry.put(name, state);
-	}
-	
-	public void setGroundState(BlockState state, RuleTest groundType)
-	{
-		Objects.requireNonNull(state,  "Null parameters not allowed.");
-		Objects.requireNonNull(groundType,  "Null parameters not allowed.");
 		
-		blockRegistry.put("ground", state);
-		this.groundType = groundType;
+		if(name.equals("ground"))
+			groundType = new BlockStateMatchTest(state);
 	}
 	
 	public BlockState getBlockState(String name)
@@ -192,9 +195,9 @@ public final class StructureBlockRegistry
 		else return staticRegistry.get(name).getBlockState(this);
 	}
 	
-	public BlockState getCustomBlock(String name)
+	public boolean isUsingDefault(String name)
 	{
-		return blockRegistry.get(name);
+		return blockRegistry.get(name) == null;
 	}
 	
 	public BlockState getStairs(String name, Direction facing, boolean upsideDown)

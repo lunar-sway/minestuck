@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "ingredient": {
+    "item": "minecraft:amethyst_shard"
+  },
+  "grist_cost": {
+    "minestuck:amethyst": 3
+  }
+}

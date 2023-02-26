@@ -376,7 +376,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "weight": 2,
           "quality": 3,
           "functions": [
             {
@@ -571,7 +571,7 @@
               "add": false
             }
           ],
-          "name": "minestuck:stone_slab"
+          "name": "minestuck:stone_tablet"
         },
         {
           "type": "minecraft:item",
