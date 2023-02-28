@@ -34,13 +34,17 @@ public class GristToast implements Toast
 	private boolean increase;
 	private long lastChanged;
 	private boolean changed;
+	private int cache_limit;
+	private long gristTotal;
 	
-	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, int cache_limit, long gristTotal)
 	{
 		this.type = pType;
 		this.difference = pDifference;
 		this.source = pSource;
 		this.increase = pIncrease;
+		this.cache_limit = cache_limit;
+		this.gristTotal = gristTotal;
 	}
 	
 	public int width() { return Mth.floor(160.0F * SCALE_X); }
@@ -140,16 +144,18 @@ public class GristToast implements Toast
 	}
 	
 	//adds pDifference to the toast's current grist value.
-	private void addGrist(long pDifference)
+	private void addGrist(long pDifference, int pCache_limit)
 	{
+		if(pCache_limit <= this.gristTotal + pDifference)
+			this.gristTotal += pDifference;
 		
 		this.difference += pDifference;
+		this.cache_limit = pCache_limit;
 		this.changed = true;
 		
 	}
-	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, int cache_limit, long gristTotal)
 	{
 		
 		//try to find an existing toast with the same properties as the one being added.
@@ -157,9 +163,9 @@ public class GristToast implements Toast
 		
 		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using pDifference.
 		if (gristToast == null)
-			pToastGui.addToast(new GristToast(pType, pDifference, pSource, pIncrease));
+			pToastGui.addToast(new GristToast(pType, pDifference, pSource, pIncrease, cache_limit, gristTotal));
 		else
-			gristToast.addGrist(pDifference);
+			gristToast.addGrist(pDifference, cache_limit);
 	}
 	
 	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase, int cache_limit, GristSet gristTotal)
@@ -171,12 +177,18 @@ public class GristToast implements Toast
 			//the pair has to be split into two new variables because Map.Entry is immutable.
 			GristType type = pairs.getType();
 			long difference = pairs.getAmount();
+			long total = 0;
+			
+			List<GristAmount> totalReqs = gristTotal.getAmounts();
+			for(GristAmount totalPairs: totalReqs)
+				if(totalPairs.getType().equals(type))
+					total = totalPairs.getAmount();
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase, cache_limit, total);
 			else
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase));
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase), cache_limit, total);
 		}
 	}
 	

@@ -21,7 +21,7 @@ public class GristToastPacket implements PlayToClientPacket
 		this.gristValue = gristValue;
 		this.source = source;
 		this.increase = increase;
-		this.cache_limit = 0;
+		this.cache_limit = cache_limit;
 		this.gristTotal = gristTotal;
 	}
 	

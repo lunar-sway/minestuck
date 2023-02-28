@@ -183,9 +183,14 @@ public class GristHelper
 	{
 		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
 		int gristCap = rungGrist[rung];//uses the values in the rungGrist array to determine the current grist cap
-		
-		
-		return set.capGrist(gristCap);//returns the result of capGrist
+		if (gristCap < 0)
+		{
+			return null;
+		}
+		else
+		{
+			return set.capGrist(gristCap);//returns the result of capGrist
+		}
 	}
 	public static final int[] rungGrist =// will crash the game if set below 20
 			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
