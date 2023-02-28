@@ -16,6 +16,8 @@ import net.minecraft.util.Mth;
 
 import java.util.List;
 
+import static net.minecraft.client.gui.GuiComponent.fill;
+
 /**
  * A class that handles Grist Notification popups whenever you gain or lose grist.
  * Utilizes vanilla Minecraft's Toasts system, which is what the advancement and recipe popups use.
@@ -87,17 +89,24 @@ public class GristToast implements Toast
 		}
 		
 		//Changes the colors depending on whether the grist amount is gained or lost.
-		if(this.increase)
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
-		} else
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("-" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
-		}
+			if(this.increase)
+			{
+				pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
+				pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
+				pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
+				fill(pPoseStack,0 , 0, 160 + (int)(146 * this.gristCache / this.cacheLimit), 32, 0x19B3EF);
+				
+				if(this.gristCache >= this.cacheLimit)
+				{
+					pToastComponent.blit(pPoseStack, 0, 0, 200, 200, 200, 200);
+				}
+			}
+			else
+			{
+				pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
+				pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
+				pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("-" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
+			}
 		
 		posestack = RenderSystem.getModelViewStack();
 		posestack.pushPose();

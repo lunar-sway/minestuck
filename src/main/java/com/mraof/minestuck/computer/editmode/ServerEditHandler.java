@@ -430,8 +430,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getPlayer());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				GristHelper.decreaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1),
-						GristHelper.limitGristByPlayerRung(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1)), GristHelper.EnumSource.SERVER);
+				GristHelper.decreaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.limitGristByPlayerRung(event.getWorld(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1)), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
@@ -440,8 +439,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getWorld());
 				if(set != null && !set.isEmpty())
 				{
-					GristHelper.increaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), set,
-							GristHelper.limitGristByPlayerRung(event.getWorld(), data.connection.getClientIdentifier(), set), GristHelper.EnumSource.SERVER);
+					GristHelper.increaseAndNotify(event.getWorld(), data.connection.getClientIdentifier(), set, GristHelper.limitGristByPlayerRung(event.getWorld(), data.connection.getClientIdentifier(), set), GristHelper.EnumSource.SERVER);
 				}
 			}
 		}

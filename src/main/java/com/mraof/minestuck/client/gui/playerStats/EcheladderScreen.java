@@ -6,8 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import com.mraof.minestuck.alchemy.GristHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -19,8 +17,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import org.lwjgl.glfw.GLFW;
 
 import javax.annotation.Nullable;
@@ -171,7 +167,6 @@ public class EcheladderScreen extends PlayerStatsScreen
 		Random rand = new Random(452619373);
 		for(int i = 0; i < scrollIndex/14; i++)
 			rand.nextInt(0xFFFFFF);
-		Title playerTitle = ClientPlayerData.getTitle();
 		for(int i = 0; i < rows; i++)
 		{
 			int y = yOffset + 177 + scroll - i*14;
@@ -196,46 +191,8 @@ public class EcheladderScreen extends PlayerStatsScreen
 				fill(poseStack, xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
-			
-			String s = null;
-			if(playerTitle != null)
-			{
-				//this is all the clauses for the echeladder
-				String playerBoots = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(0));
-				String playerLeggings = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(1));
-				String playerChestplate = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(2));
-				String playerHat = String.valueOf((Minecraft.getInstance().player).getInventory().armor.get(3));
-				String playerClass = (playerTitle.getHeroClass().toString());
-				String playerAspect = (playerTitle.getHeroAspect().toString());
-				String playerColor = String.valueOf(ClientPlayerData.getPlayerColor());
-				String playerBoon = String.valueOf(ClientPlayerData.getBoondollars());
-				String playerModus = String.valueOf(ClientPlayerData.getModus());
-				String consortRep = String.valueOf(ClientPlayerData.getConsortReputation());
-				String wearingArmorSet = playerChestplate + playerBoots + playerHat + playerLeggings;
-				
-				if(I18n.exists("echeladder.rung." + rung + "." + playerAspect + "." + playerClass))
-				{
-					s = I18n.get("echeladder.rung." + rung + "." + playerAspect + "." + playerClass);
-				} else if(I18n.exists("echeladder.rung." + rung + "." + playerColor))
-				{
-					s = I18n.get("echeladder.rung." + rung + "." + playerColor);
-				} else if(I18n.exists("echeladder.rung." + rung + "." + playerAspect))
-				{
-					s = I18n.get("echeladder.rung." + rung + "." + playerAspect);
-				}
-			}
-			if(s == null)
-			{
-				if(I18n.exists("echeladder.rung." + rung))
-				{
-					s = I18n.get("echeladder.rung." + rung);
-				} else
-				{
-					s = "Rung " + (rung + 1);
-				}
-			}
-			mc.font.draw(poseStack, s, xOffset + ladderXOffset -
-					mc.font.width(s) / 2, y + 2, textColor);
+			String s = I18n.exists("echeladder.rung."+rung) ? I18n.get("echeladder.rung."+rung) : "Rung "+(rung+1);
+			mc.font.draw(poseStack, s, xOffset+ladderXOffset - mc.font.width(s) / 2, y + 2, textColor);
 		}
 	}
 	

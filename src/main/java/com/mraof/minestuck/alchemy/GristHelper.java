@@ -154,7 +154,7 @@ public class GristHelper
 	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
-		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, true);
+		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, false);
 	}
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
