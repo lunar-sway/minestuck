@@ -216,9 +216,8 @@ public class GristHelper
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			Level level = player.getPlayer(server).level;
-			int cache_limit = rungGrist[rung];
-			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cache_limit, total);
+			int cacheLimit = rungGrist[rung];
+			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cacheLimit, total);
 			
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
