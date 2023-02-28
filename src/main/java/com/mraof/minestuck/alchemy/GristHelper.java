@@ -151,10 +151,10 @@ public class GristHelper
 		increase(level, player, set.copy().scale(-1));
 	}
 	
-	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
+	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
-		notify(level.getServer(), player, set, source, false);
+		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, true);
 	}
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
@@ -179,8 +179,6 @@ public class GristHelper
 			gutter.spillGrist(level, playerEntity);//this isn't currently being used
 		}
 	}
-	
-	
 	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
 	{
 		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
@@ -189,18 +187,16 @@ public class GristHelper
 		
 		return set.capGrist(gristCap);//returns the result of capGrist
 	}
-	
-	public static final int[] rungGrist =//never set this below 20.
+	public static final int[] rungGrist =// will crash the game if set below 20
 			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
 					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
 					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
-					8000,9000,10000,20000,30000,40000,50000,500000};
-	// the function that controls how much grist is spliced from the gutter
-	// will crash the game if set below 20
-	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
+					8000,9000,10000,20000,30000,40000,50000,90000000};// the function that controls how much grist is spliced from the gutter
+	
+	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
-		notify(level.getServer(), player, set, source, true);
+		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, true);
 	}
 	
 	/**
@@ -211,11 +207,13 @@ public class GristHelper
 	 * @param source Indicates where the notification is coming from. See EnumSource.
 	 * @param increase Indicates whether the grist is gained or lost.
 	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
+			Level level = player.getPlayer(server).level;
+			int cache_limit = rungGrist[rung];
+			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cache_limit, total);
 			
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));

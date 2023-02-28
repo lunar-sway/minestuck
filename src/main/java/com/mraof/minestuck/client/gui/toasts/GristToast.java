@@ -162,7 +162,7 @@ public class GristToast implements Toast
 			gristToast.addGrist(pDifference);
 	}
 	
-	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase)
+	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase, int cache_limit, GristSet gristTotal)
 	{
 		
 		List<GristAmount> reqs = set.getAmounts();
