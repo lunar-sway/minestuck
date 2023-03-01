@@ -7,6 +7,7 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
@@ -92,14 +93,18 @@ public class GristToast implements Toast
 			if(this.increase)
 			{
 				pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
-				pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
-				pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
-				fill(pPoseStack,0 , 0, 160 + (int)(146 * this.gristCache / this.cacheLimit), 32, 0x19B3EF);
-				
-				if(this.gristCache >= this.cacheLimit)
+				if(this.gristCache >= (long)this.cacheLimit)
 				{
-					pToastComponent.blit(pPoseStack, 0, 0, 200, 200, 200, 200);
+					pToastComponent.blit(pPoseStack, 30 + pToastComponent.getMinecraft().font.width(this.type.getDisplayName()) + 2, 7, 176, 80, 68, 8);
 				}
+				
+				GuiComponent.fill(pPoseStack,30, 18, 30 + (int)(90 * this.gristCache / this.cacheLimit), 24, 0xff19B3EF); //0xE64C10
+				
+				pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
+				pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + this.gristCache + " / " + this.cacheLimit), 30.0F, 18.0F, 0x000000);
+				
+				
+				
 			}
 			else
 			{
@@ -186,12 +191,15 @@ public class GristToast implements Toast
 			//the pair has to be split into two new variables because Map.Entry is immutable.
 			GristType type = pairs.getType();
 			long difference = pairs.getAmount();
-			long total = 0;
+			long total = gristCache.getGrist(type);
 			
-			List<GristAmount> totalReqs = gristCache.getAmounts();
+			/*List<GristAmount> totalReqs = gristCache.getAmounts();
 			for(GristAmount totalPairs : totalReqs)
-				if(totalPairs.getType().equals(type))
+			{
+				if(totalPairs.getType() == type)
 					total = totalPairs.getAmount();
+			}*/
+			
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)

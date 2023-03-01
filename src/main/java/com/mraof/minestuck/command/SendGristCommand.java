@@ -9,6 +9,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -43,9 +44,9 @@ public class SendGristCommand
 		{
 			if(GristHelper.canAfford(player, grist))
 			{
-				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.limitGristByPlayerRung(player.level, IdentifierHandler.encode(player), grist), GristHelper.EnumSource.SENDGRIST);
+				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.SENDGRIST);
 				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(target), grist,
-						GristHelper.limitGristByPlayerRung(player.level, IdentifierHandler.encode(player), grist), GristHelper.EnumSource.SENDGRIST);
+						GristHelper.EnumSource.SENDGRIST);
 				source.sendSuccess(new TranslatableComponent(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendMessage(new TranslatableComponent(RECEIVE, player.getDisplayName(), grist.asTextComponent()), Util.NIL_UUID);
 				return 1;
