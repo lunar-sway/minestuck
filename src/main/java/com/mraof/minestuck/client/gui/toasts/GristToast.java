@@ -97,14 +97,11 @@ public class GristToast implements Toast
 				{
 					pToastComponent.blit(pPoseStack, 30 + pToastComponent.getMinecraft().font.width(this.type.getDisplayName()) + 2, 7, 176, 80, 68, 8);
 				}
-				
-				GuiComponent.fill(pPoseStack,30, 18, 30 + (int)(90 * this.gristCache / this.cacheLimit), 24, 0xff19B3EF); //0xE64C10
+				GuiComponent.fill(pPoseStack,30, 30, 30 + (int)(90 * this.gristCache / this.cacheLimit), 27, 0xff19B3EF); //0xE64C10
+				GuiComponent.fill(pPoseStack,30, 26, 30 + (int)(90 * this.gristCache / this.cacheLimit), 27, 0xff7ED8E5); //0xE64C10
 				
 				pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
 				pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + this.gristCache + " / " + this.cacheLimit), 30.0F, 18.0F, 0x000000);
-				
-				
-				
 			}
 			else
 			{
