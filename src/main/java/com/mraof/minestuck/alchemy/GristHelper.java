@@ -151,10 +151,11 @@ public class GristHelper
 		increase(level, player, set.copy().scale(-1));
 	}
 	
-	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source)
+	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
-		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, false);
+		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
+		notify(level.getServer(), player, set, total, source, false);
 	}
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
@@ -198,10 +199,11 @@ public class GristHelper
 					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
 					8000,9000,10000,20000,30000,40000,50000,90000000};// the function that controls how much grist is spliced from the gutter
 	
-	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source)
+	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
-		notify(level.getServer(), player, set, limitGristByPlayerRung(level, player, set), source, true);
+		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
+		notify(level.getServer(), player, set, total, source, true);
 	}
 	
 	/**
