@@ -1,10 +1,14 @@
 package com.mraof.minestuck.item.weapon;
 
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -58,6 +62,16 @@ public interface ItemRightClickEffect
 				
 				return InteractionResultHolder.success(newItem);
 			}
+			return InteractionResultHolder.pass(itemStackIn);
+		};
+	}
+	
+	static ItemRightClickEffect consumeGUpgrade(double amount)
+	{
+		return (world, player, hand) -> {
+			ItemStack itemStackIn = player.getItemInHand(hand);
+			PlayerSavedData.get(world).getData((ServerPlayer) player).addGutterMultiplier(amount);
+			
 			return InteractionResultHolder.pass(itemStackIn);
 		};
 	}

@@ -2,16 +2,20 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,10 +47,12 @@ public abstract class MinestuckScreen extends Screen
 		boolean showName = false;
 		GristType tooltipType = null;
 		GristSet clientGrist = ClientPlayerData.getClientGrist();
+		int clientRung = ClientPlayerData.getRung();
+		int cacheLimit = GristHelper.rungGrist[clientRung];
 
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);
-		types = types.stream().skip(page * rows * columns).limit(rows * columns).collect(Collectors.toList());
+		types = types.stream().skip((long) page * rows * columns).limit(rows * columns).collect(Collectors.toList());
 
 		int offset = 0;
 		for (GristType type : types)
@@ -56,6 +62,7 @@ public abstract class MinestuckScreen extends Screen
 			int gristXOffset = xOffset + (gristDisplayXOffset * column - column);
 			int gristYOffset = yOffset + (gristDisplayYOffset * row - row);
 			String amount = GuiUtil.addSuffix(clientGrist.getGrist(type));
+			String cap = GuiUtil.addSuffix(GristHelper.rungGrist[clientRung]);
 
 			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
@@ -71,8 +78,9 @@ public abstract class MinestuckScreen extends Screen
 			}
 
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());
-			minecraft.font.draw(poseStack, amount, gristXOffset + gristCountX, gristYOffset + gristCountY, 0xddddee);
-			
+			minecraft.font.draw(poseStack, amount + " / " +  cap, gristXOffset + gristCountX - 2, gristYOffset + gristCountY + 10, 0x19b3ef);
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
 			offset++;
 		}
 		if (tooltipType != null)
