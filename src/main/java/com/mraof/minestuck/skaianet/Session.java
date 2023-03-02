@@ -2,10 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristGutter;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -30,6 +27,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
+	private double gutterMultiplier;
 	String name;
 	
 	/**
@@ -114,6 +112,7 @@ public final class Session
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 		gutter.setSession(this);
+		gutterMultiplier = 0;
 	}
 	
 	/**
@@ -266,7 +265,15 @@ public final class Session
 		}
 		return rungAverage / playerCount;
 	}
-	
+	/*public double getGutterMultiplier()
+	{
+		int pCount = this.getPlayerList().size();
+		for(PlayerIdentifier pi : this.getPlayerList())
+		{
+			this.gutterMultiplier += ;
+		}
+		return gutterMultiplier / pCount;
+	};*/
 	
 	/**
 	 * Writes this session to an nbt tag.

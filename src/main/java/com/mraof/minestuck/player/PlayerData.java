@@ -75,6 +75,7 @@ public final class PlayerData
 	private Modus modus;
 	private long boondollars;
 	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
+	private double gutterMultiplier;
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
@@ -211,6 +212,19 @@ public final class PlayerData
 			markDirty();
 		}
 	}
+	public double getGutterMultipler()
+	{
+		return gutterMultiplier;
+	}
+	public double addGutterMultiplier(double amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Multiplier amount may not be negative.");
+		gutterMultiplier = amount;
+		markDirty();
+		return amount;
+	};
+	
 	
 	public long getBoondollars()
 	{
