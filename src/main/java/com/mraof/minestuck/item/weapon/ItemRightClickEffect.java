@@ -2,8 +2,11 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -70,8 +73,11 @@ public interface ItemRightClickEffect
 	{
 		return (world, player, hand) -> {
 			ItemStack itemStackIn = player.getItemInHand(hand);
-			PlayerSavedData.get(world).getData((ServerPlayer) player).addGutterMultiplier(amount);
+			Session playerSession = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
+			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
+			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
 			
+			playerSession.increaseGutterMultiplier(amount);
 			return InteractionResultHolder.pass(itemStackIn);
 		};
 	}

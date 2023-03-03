@@ -249,12 +249,10 @@ public final class Session
 	
 
 	final GristGutter gutter;
-	
 	public GristGutter getGristGutter()
 	{
 		return gutter;
 	}
-	
 	public double getSessionPowerlevel(MinecraftServer mcServer)
 	{
 		int playerCount = this.getPlayerList().size();
@@ -265,15 +263,16 @@ public final class Session
 		}
 		return rungAverage / playerCount;
 	}
-	/*public double getGutterMultiplier()
+	public double increaseGutterMultiplier(double amount)
 	{
-		int pCount = this.getPlayerList().size();
-		for(PlayerIdentifier pi : this.getPlayerList())
-		{
-			this.gutterMultiplier += ;
-		}
-		return gutterMultiplier / pCount;
-	};*/
+		this.gutterMultiplier += amount;
+		
+		return gutterMultiplier;
+	}
+	public double getGutterMultiplier()
+	{
+		return gutterMultiplier;
+	}
 	
 	/**
 	 * Writes this session to an nbt tag.

@@ -25,9 +25,10 @@ public class GristGutter extends GristSet
 		this.session = session;
 	}
 	
-	public double getGutterCapacity()
+	public double getGutterCapacity(Session session)
 	{
-		double gutcap = (GUTTER_CAPACITY);
+		double gutMul = session.getGutterMultiplier();
+		double gutcap = (GUTTER_CAPACITY * gutMul);
 		return gutcap;
 	}
 	public long getGutterTotal()
@@ -45,9 +46,8 @@ public class GristGutter extends GristSet
 	public GristSet gristToSpill = new GristSet();
 	public void spillGrist(Level level, Player player)
 	{
-	//isn't being used by anything to my knowledge
-		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity ->
-						entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
+	//isn't being used by anything, but when i delete it everything breaks
+		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
 	}
 	@Override
 	public GristGutter addGrist(GristType type, long amount)
@@ -56,11 +56,12 @@ public class GristGutter extends GristSet
 		{
 			GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
 			long originalAmount = this.gristTypes.getOrDefault(type, 0L);
-			long maximumAllowed = (long) (gutterTotal - getGutterCapacity() + originalAmount);
+			long maximumAllowed = (long) (gutterTotal - getGutterCapacity(session) + originalAmount);
 			
 			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
 			gutterTotal += amount;//adds grist to gutter
 			
+			//logger
 			LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
 			LOGGER.debug("Total: " + getGutterTotal());
 			for(GristType t : this.gristTypes.keySet())
@@ -73,7 +74,7 @@ public class GristGutter extends GristSet
 			if(gutterTotal > GUTTER_CAPACITY)
 			{
 				System.out.println("gutter has capped out");
-				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity());
+				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity(session));
 				this.gristTypes.put(type, maximumAllowed);
 				sOverflowGrist.addGrist(type, sOverflowAmount);
 				gristToSpill.addGrist(sOverflowGrist);
