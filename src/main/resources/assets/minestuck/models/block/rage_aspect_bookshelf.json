@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/rage_aspect_planks",
+    "side": "minestuck:block/rage_aspect_bookshelf"
+  }
+}
