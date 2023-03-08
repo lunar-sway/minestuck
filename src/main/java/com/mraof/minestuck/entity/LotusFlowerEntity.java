@@ -39,11 +39,14 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 {
 	// Animation lengths
 	private static final int OPENING_LENGTH = 120;        //6 sec open animation * 20 ticks/sec = 120
-	private static final int OPEN_IDLE_LENGTH = 320;    //4 sec idle animation * 4 loops * 20 ticks/sec = 320
+	private static final int GROWTH_LENGTH = 21;		//1.04 sec grow animation * 20 ticks/sec = ~21
+	private static final int OPEN_IDLE_LENGTH = 240;    //4 sec idle animation * 3 loops * 20 ticks/sec = 240
 	private static final int VANISHING_LENGTH = 13;        //0.65 sec vanish animation * 20 ticks/sec = 13
 	
 	// Animation start times
 	private static final int IDLE_TIME = -1;
+	private static final int GROWTH_STOP = IDLE_TIME - 1;
+	private static final int GROWTH_START = GROWTH_STOP - GROWTH_LENGTH;
 	private static final int OPEN_START = 0;
 	private static final int OPEN_IDLE_START = OPEN_START + OPENING_LENGTH;
 	private static final int VANISH_START = OPEN_IDLE_START + OPEN_IDLE_LENGTH;
@@ -124,6 +127,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			if(eventTimer == OPEN_IDLE_START)
 				spawnLoot();
 			else if(eventTimer >= MinestuckConfig.SERVER.lotusRestorationTime.get() * 20) //600(default) seconds from animation start to flower restoration
+				setEventTimer(GROWTH_START);
+			else if(eventTimer == GROWTH_STOP)
 				setEventTimer(IDLE_TIME);
 		}
 	}
@@ -142,7 +147,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	private void restoreFromBonemeal()
 	{
 		if(!level.isClientSide)
-			setEventTimer(IDLE_TIME);
+			setEventTimer(GROWTH_START);
 		
 		Vec3 posVec = position();
 		for(int i = 0; i < 10; i++)
@@ -166,13 +171,15 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		if(eventTimer >= ANIMATION_END)
 			return Animation.EMPTY;
 		else if(eventTimer >= VANISH_START)
-			return Animation.VANISH; //TODO Lotus Flower petals spazz out underneath the petals for just a tick here
+			return Animation.VANISH;
 		else if(eventTimer >= OPEN_IDLE_START)
 			return Animation.OPEN_IDLE;
 		else if(eventTimer >= OPEN_START)
 			return Animation.OPEN;
+		else if(eventTimer < IDLE_TIME)
+			return Animation.GROW;
 		else
-			return Animation.IDLE; //TODO relevant to all animation steps but looping of animations is choppy
+			return Animation.IDLE;
 	}
 	
 	protected void updateAndSendAnimation(Animation animation)
@@ -298,7 +305,8 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 		OPEN("lotus.open"),
 		OPEN_IDLE("lotus.open.idle"),
 		VANISH("lotus.vanish"),
-		EMPTY("lotus.empty");
+		EMPTY("lotus.bud"),
+		GROW("lotus.grow");
 		
 		private final String animationName;
 		

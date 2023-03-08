@@ -465,72 +465,33 @@
 				}
 			}
 		},
-		"lotus.empty": {
-			"loop": true,
+		"lotus.bud": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.4,
 			"bones": {
 				"root": {
-					"rotation": {
-						"vector": [0, -360, 0]
-					},
 					"scale": {
-						"vector": [0, 0, 0]
+						"vector": [0.2, 0.2, 0.2]
 					}
-				},
-				"petal1": {
-					"rotation": {
-						"vector": [37.5, 0, 0]
-					}
-				},
-				"petal2": {
-					"rotation": {
-						"vector": [0, 0, -37.5]
-					}
-				},
-				"petal3": {
-					"rotation": {
-						"vector": [-37.5, 0, 0]
-					}
-				},
-				"petal4": {
-					"rotation": {
-						"vector": [0, 0, 37.5]
-					}
-				},
-				"petal8": {
-					"rotation": {
-						"vector": [0, 0, 52.5]
-					},
-					"position": {
-						"vector": [-3, -5, 0]
-					}
-				},
-				"petal5": {
-					"rotation": {
-						"vector": [52.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, -5, 4]
-					}
-				},
-				"petal6": {
-					"rotation": {
-						"vector": [0, 0, -52.5]
-					},
-					"position": {
-						"vector": [3, -5, 0]
-					}
-				},
-				"petal7": {
-					"rotation": {
-						"vector": [-52.5, 0, 0]
-					},
-					"position": {
-						"vector": [0, -5, -3]
-					}
-				},
-				"petalmid": {
-					"position": {
-						"vector": [0, -3, 0]
+				}
+			}
+		},
+		"lotus.grow": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1.04,
+			"bones": {
+				"root": {
+					"scale": {
+						"0.0": {
+							"vector": [0.2, 0.2, 0.2],
+							"easing": "easeOutBack",
+							"easingArgs": [3]
+						},
+						"1.0": {
+							"vector": [1, 1, 1],
+							"easing": "easeInOutBack",
+							"easingArgs": [2]
+						}
 					}
 				}
 			}
