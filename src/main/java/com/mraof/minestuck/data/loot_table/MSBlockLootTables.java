@@ -283,6 +283,45 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TIME_ASPECT_SAPLING.get());
 		dropSelf(VOID_ASPECT_SAPLING.get());
 		
+		add(BLOOD_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(BREATH_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DOOM_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HEART_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HOPE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIFE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIGHT_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(MIND_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAGE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(SPACE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TIME_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(VOID_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		add(GLOWING_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(FROST_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAINBOW_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(END_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DEAD_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TREATED_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		dropSelf(BLOOD_ASPECT_LADDER.get());
+		dropSelf(BREATH_ASPECT_LADDER.get());
+		dropSelf(DOOM_ASPECT_LADDER.get());
+		dropSelf(HEART_ASPECT_LADDER.get());
+		dropSelf(HOPE_ASPECT_LADDER.get());
+		dropSelf(LIFE_ASPECT_LADDER.get());
+		dropSelf(LIGHT_ASPECT_LADDER.get());
+		dropSelf(MIND_ASPECT_LADDER.get());
+		dropSelf(RAGE_ASPECT_LADDER.get());
+		dropSelf(SPACE_ASPECT_LADDER.get());
+		dropSelf(TIME_ASPECT_LADDER.get());
+		dropSelf(VOID_ASPECT_LADDER.get());
+		dropSelf(GLOWING_LADDER.get());
+		dropSelf(FROST_LADDER.get());
+		dropSelf(RAINBOW_LADDER.get());
+		dropSelf(END_LADDER.get());
+		dropSelf(DEAD_LADDER.get());
+		dropSelf(TREATED_LADDER.get());
+		
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), MSBlockLootTables::desertBushDrop);
 		dropSelf(BLOOMING_CACTUS.get());
@@ -541,6 +580,10 @@ public class MSBlockLootTables extends BlockLoot
 	private static LootTable.Builder voidAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
+	}
+	private static LootTable.Builder bookshelfDrop(Block block)
+	{
+		return createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F));
 	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
