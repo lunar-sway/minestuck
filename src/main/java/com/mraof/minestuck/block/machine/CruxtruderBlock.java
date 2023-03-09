@@ -1,14 +1,12 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.CruxtruderLidBlock;
-import com.mraof.minestuck.block.MSBlockShapes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -100,7 +98,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 			level.destroyBlock(pos, false);
 		
 		BlockPos offsetPos;
-		if(state.getBlock().getRegistryName().getPath().equals("cruxtruder_corner"))
+		if(state.is(MSBlocks.CRUXTRUDER.CORNER.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -109,7 +107,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("cruxtruder_side"))
+		else if(state.is(MSBlocks.CRUXTRUDER.SIDE.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -121,7 +119,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("cruxtruder_center"))
+		else if(state.is(MSBlocks.CRUXTRUDER.CENTER.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -139,7 +137,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("cruxtruder_tube"))
+		else if(state.is(MSBlocks.CRUXTRUDER.TUBE.get()))
 		{
 			offsetPos = new BlockPos(0, 1, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));

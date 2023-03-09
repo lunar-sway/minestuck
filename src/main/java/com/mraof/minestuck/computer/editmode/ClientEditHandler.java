@@ -188,7 +188,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(EditToolDrag.canEditRevise(event.getPlayer()))
+		if(EditToolDrag.canEditRevise(event.getEntity()))
 			event.setCanceled(true);
 		
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
@@ -221,7 +221,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(EditToolDrag.canEditRecycle(event.getPlayer()))
+		if(EditToolDrag.canEditRecycle(event.getEntity()))
 			event.setCanceled(true);
 		
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())

@@ -1,16 +1,13 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mojang.datafixers.kinds.IdF;
 import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MSBlockShapes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -99,7 +96,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			level.destroyBlock(pos, false);
 			
 		BlockPos offsetPos;
-		if(state.getBlock().getRegistryName().getPath().equals("alchemiter_totem_corner"))
+		if(state.is(MSBlocks.ALCHEMITER.TOTEM_CORNER.get()))
 		{
 			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -111,7 +108,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_corner"))
+		else if(state.is(MSBlocks.ALCHEMITER.CORNER.get()))
 		{
 			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -120,7 +117,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_left_side"))
+		else if(state.is(MSBlocks.ALCHEMITER.LEFT_SIDE.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -132,7 +129,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_right_side"))
+		else if(state.is(MSBlocks.ALCHEMITER.RIGHT_SIDE.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -144,7 +141,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_totem_pad"))
+		else if(state.is(MSBlocks.ALCHEMITER.TOTEM_PAD.get()))
 		{
 			offsetPos = new BlockPos(0, 1, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -153,7 +150,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_lower_rod"))
+		else if(state.is(MSBlocks.ALCHEMITER.LOWER_ROD.get()))
 		{
 			offsetPos = new BlockPos(0, 1, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -162,13 +159,13 @@ public class AlchemiterBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_upper_rod"))
+		else if(state.is(MSBlocks.ALCHEMITER.UPPER_ROD.get()))
 		{
 			offsetPos = new BlockPos(0, -1, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("alchemiter_center"))
+		else if(state.is(MSBlocks.ALCHEMITER.CENTER.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0);
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));

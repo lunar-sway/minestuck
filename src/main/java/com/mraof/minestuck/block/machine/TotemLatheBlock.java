@@ -5,10 +5,8 @@ import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -94,7 +92,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			level.destroyBlock(pos, false);
 		
 		BlockPos offsetPos;
-		if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_card_slot"))
+		if(state.is(MSBlocks.TOTEM_LATHE.CARD_SLOT.get()))
 		{
 			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -103,7 +101,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_left"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -115,7 +113,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_right"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -127,7 +125,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_corner"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_CORNER.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -136,7 +134,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_middle"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.MIDDLE.get()))
 		{
 			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -148,22 +146,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_rod"))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_dowel_rod"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.ROD.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -178,7 +161,22 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_wheel"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.is(MSBlocks.TOTEM_LATHE.WHEEL.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -187,7 +185,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_top_corner"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.TOP_CORNER.get()))
 		{
 			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -196,7 +194,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_top"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.TOP.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
@@ -208,7 +206,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
 			
 		}
-		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_carver"))
+		else if(state.is(MSBlocks.TOTEM_LATHE.CARVER.get()))
 		{
 			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
 			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));

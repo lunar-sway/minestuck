@@ -8,7 +8,8 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -160,7 +161,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
-						player.sendMessage(new TranslatableComponent("grist.missing",str.toString()), null);
+						player.sendSystemMessage(Component.translatable("grist.missing", str.toString()));
 					}
 					return false;
 				}
@@ -193,7 +194,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 								str.append(", ");
 							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
 						}
-						player.sendMessage(new TranslatableComponent("grist.missing",str.toString()), null);
+						player.sendSystemMessage(Component.translatable("grist.missing",str.toString()));
 					}
 					return false;
 				}

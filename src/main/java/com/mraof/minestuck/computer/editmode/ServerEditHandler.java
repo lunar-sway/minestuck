@@ -2,34 +2,26 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.item.block.MultiblockItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.util.MSCapabilities;
-import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +30,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -418,7 +409,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				event.setCanceled(true);
 			
 			if(block.getBlock() instanceof MultiMachineBlock)
-				((MultiMachineBlock)block.getBlock()).findAndDestroyConnected(block, event.getWorld(), event.getPos());
+				((MultiMachineBlock)block.getBlock()).findAndDestroyConnected(block, event.getLevel(), event.getPos());
 		}
 	}
 	

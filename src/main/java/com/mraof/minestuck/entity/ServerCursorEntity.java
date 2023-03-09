@@ -15,6 +15,7 @@ import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -49,7 +50,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		canSwitchAnimation = !waitForFinish(event);
 		
 		if(!waitForFinish(event))
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, animation.looping));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, animation.looping ? ILoopType.EDefaultLoopTypes.LOOP : ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 		
 		return PlayState.CONTINUE;
 	}
@@ -133,7 +134,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		if(event.getController().getCurrentAnimation() == null)
 			return false;
 		
-		if(!event.getController().getCurrentAnimation().loop)
+		if(!(event.getController().getCurrentAnimation().loop == ILoopType.EDefaultLoopTypes.LOOP))
 			return event.getController().getAnimationState() == AnimationState.Running;
 		else
 			return false;
