@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/doom_aspect_ladder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/doom_aspect_ladder"
+    },
+    "facing=south": {
+      "model": "minestuck:block/doom_aspect_ladder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/doom_aspect_ladder",
+      "y": 270
+    }
+  }
+}
