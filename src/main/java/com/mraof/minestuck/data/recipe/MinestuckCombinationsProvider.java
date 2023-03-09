@@ -407,6 +407,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.STARSHARD_TRI_BLADE.get()).input(MSItems.LIGHT_OF_MY_KNIFE.get()).or().input(Items.NETHER_STAR).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).input(MSItems.DAGGER.get()).or().namedInput(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).input(MSItems.DAGGER.get()).or().namedInput(Items.BONE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SHADOWRAZOR.get()).input(MSItems.TOOTHRIPPER.get()).and().namedInput(MSItems.SORROW_GUSHERS.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(MSItems.BATTLEAXE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
