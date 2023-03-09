@@ -39,25 +39,21 @@ public class GutterThumbDriveItem extends Item
 			Player player = pContext.getPlayer();
 			Level level = pContext.getLevel();
 			InteractionHand pUsedHand = player.getUsedItemHand();
-			int mod = 1;
 			
-			for(pContext.getClickLocation())
+			if(level.getBlockEntity(blockPos) instanceof ComputerBlockEntity)
 			{
-				if(level.getBlockEntity(blockPos) instanceof ComputerBlockEntity)
-				{
-					ItemStack itemStack = player.getItemInHand(pUsedHand);
-					Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
-					level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
-					level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
+				ItemStack itemStack = player.getItemInHand(pUsedHand);
+				Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
+				level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
+				level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
 					
-					playerSession.increaseGutterMultiplier(2.0);
-					itemStack.shrink(1);
-				}
+				playerSession.increaseGutterMultiplier(2.0);
+				itemStack.shrink(1);
 			}
 		}
-		
-		return super.useOn(pContext);
 	}
+	return super.useOn(pContext);
+}
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
