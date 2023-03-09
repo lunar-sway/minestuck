@@ -1,13 +1,14 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.block.*;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -68,12 +69,154 @@ public class TotemLatheBlock extends MultiMachineBlock
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
 		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+				&& !(otherState.isAir() || state.isAir())
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.checkStates();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+	
+	/**
+	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
+	 * @param state The blockstate of the block being currently destroyed.
+	 * @param level The server level/world
+	 * @param pos The position of the block currently being destroyed.
+	 */
+	@Override
+	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	{
+		
+		if(state.isAir() || !(state.getBlock() instanceof TotemLatheBlock))
+			return;
+		else
+			level.destroyBlock(pos, false);
+		
+		BlockPos offsetPos;
+		if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_card_slot"))
+		{
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_left"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_right"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_bottom_corner"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_middle"))
+		{
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_rod"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_dowel_rod"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_wheel"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_top_corner"))
+		{
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_top"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("totem_lathe_carver"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
 	}
 	
 	@Override

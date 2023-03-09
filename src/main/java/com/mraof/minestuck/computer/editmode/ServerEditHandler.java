@@ -2,6 +2,8 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.block.machine.MachineMultiblock;
+import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -12,6 +14,7 @@ import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.item.block.MultiblockItem;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -19,6 +22,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSRotationUtil;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -413,6 +417,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(block.getDestroySpeed(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
 				event.setCanceled(true);
+			
+			if(block.getBlock() instanceof MultiMachineBlock)
+				((MultiMachineBlock)block.getBlock()).findAndDestroyConnected(block, event.getWorld(), event.getPos());
 		}
 	}
 	

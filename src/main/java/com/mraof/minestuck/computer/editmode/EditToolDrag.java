@@ -211,7 +211,7 @@ public class EditToolDrag
 	{
 		BlockPos blockLookingAt = getPlayerPOVHitResult(player.getLevel(), player).getBlockPos();
 		
-		return (player.getLevel().getBlockState(blockLookingAt) != null && player.getLevel().getBlockState(blockLookingAt).getBlock() instanceof MultiMachineBlock);
+		return (player.getLevel().getBlockState(blockLookingAt) != null && (player.getLevel().getBlockState(blockLookingAt).getBlock() instanceof MultiMachineBlock));
 	}
 	
 	//based on the Item class function of the same name

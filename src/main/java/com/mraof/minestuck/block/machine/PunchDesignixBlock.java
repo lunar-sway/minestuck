@@ -1,5 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
+import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -72,6 +73,60 @@ public class PunchDesignixBlock extends MultiMachineBlock
 			}
 			
 			super.onRemove(state, level, pos, newState, isMoving);
+		}
+	}
+	
+	/**
+	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
+	 * @param state The blockstate of the block being currently destroyed.
+	 * @param level The server level/world
+	 * @param pos The position of the block currently being destroyed.
+	 */
+	@Override
+	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	{
+		
+		if(state.isAir() || !(state.getBlock() instanceof PunchDesignixBlock))
+			return;
+		else
+			level.destroyBlock(pos, false);
+		
+		BlockPos offsetPos;
+		if(state.getBlock().getRegistryName().getPath().equals("punch_designix_left_leg"))
+		{
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("punch_designix_right_leg"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, 1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("punch_designix_slot"))
+		{
+			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+		}
+		else if(state.getBlock().getRegistryName().getPath().equals("punch_designix_keyboard"))
+		{
+			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
+			offsetPos = new BlockPos(0, -1, 0);
+			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
+			
 		}
 	}
 	
