@@ -1,9 +1,8 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -14,16 +13,16 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 import java.util.function.Supplier;
 
 public class StructureScannerItem extends Item
 {
-	private final TagKey<ConfiguredStructureFeature<?, ?>> structure;
+	private final TagKey<Structure> structure;
 	private final Supplier<Item> fuelItem;
 	
-	public StructureScannerItem(Properties properties, TagKey<ConfiguredStructureFeature<?, ?>> structure, Supplier<Item> fuelItem)
+	public StructureScannerItem(Properties properties, TagKey<Structure> structure, Supplier<Item> fuelItem)
 	{
 		super(properties);
 		this.structure = structure;
@@ -65,25 +64,20 @@ public class StructureScannerItem extends Item
 		{
 			if(foundItem || playerIn.isCreative())
 			{
-				BlockPos structureBlockPos = level.findNearestMapFeature(structure, playerIn.blockPosition(), 100, false);
+				BlockPos structureBlockPos = level.findNearestMapStructure(structure, playerIn.blockPosition(), 100, false);
 				
 				if(structureBlockPos != null)
 				{
 					BlockPos playerBlockPos = playerIn.blockPosition();
-					TranslatableComponent message = new TranslatableComponent(getDescriptionId() + ".successMessage", (int) Math.sqrt(playerBlockPos.distSqr(structureBlockPos.above(64))));
-					message.withStyle(ChatFormatting.AQUA);
-					playerIn.sendMessage(message, Util.NIL_UUID);
+					playerIn.sendSystemMessage(Component.translatable(getDescriptionId() + ".successMessage",
+							(int) Math.sqrt(playerBlockPos.distSqr(structureBlockPos.above(64)))).withStyle(ChatFormatting.AQUA));
 				} else
 				{
-					TranslatableComponent message = new TranslatableComponent(getDescriptionId() + ".failMessage");
-					message.withStyle(ChatFormatting.RED);
-					playerIn.sendMessage(message, Util.NIL_UUID);
+					playerIn.sendSystemMessage(Component.translatable(getDescriptionId() + ".failMessage").withStyle(ChatFormatting.RED));
 				}
 			} else
 			{
-				TranslatableComponent message = new TranslatableComponent(getDescriptionId() + ".noFuelMessage");
-				message.withStyle(ChatFormatting.RED);
-				playerIn.sendMessage(message, Util.NIL_UUID);
+				playerIn.sendSystemMessage(Component.translatable(getDescriptionId() + ".noFuelMessage").withStyle(ChatFormatting.RED));
 			}
 		}
 		return InteractionResultHolder.success(item);

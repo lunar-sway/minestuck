@@ -1,6 +1,23 @@
 {
-  "replace": false,
   "values": [
-    "minestuck:green_stone_brick_embedded_ladder"
+    "minestuck:green_stone_brick_embedded_ladder",
+    "minestuck:glowing_ladder",
+    "minestuck:frost_ladder",
+    "minestuck:rainbow_ladder",
+    "minestuck:end_ladder",
+    "minestuck:dead_ladder",
+    "minestuck:treated_ladder",
+    "minestuck:blood_aspect_ladder",
+    "minestuck:breath_aspect_ladder",
+    "minestuck:doom_aspect_ladder",
+    "minestuck:heart_aspect_ladder",
+    "minestuck:hope_aspect_ladder",
+    "minestuck:life_aspect_ladder",
+    "minestuck:light_aspect_ladder",
+    "minestuck:mind_aspect_ladder",
+    "minestuck:rage_aspect_ladder",
+    "minestuck:space_aspect_ladder",
+    "minestuck:time_aspect_ladder",
+    "minestuck:void_aspect_ladder"
   ]
 }

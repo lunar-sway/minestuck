@@ -2,55 +2,53 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:silver_spoon"
+          "name": "minestuck:silver_spoon",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:fudgesickle"
+          "name": "minestuck:fudgesickle",
+          "quality": 1,
+          "weight": 2
         }
-      ]
+      ],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "name": "minecraft:cake",
           "quality": -1,
-          "name": "minecraft:cake"
+          "weight": 8
         },
         {
           "type": "minecraft:item",
@@ -58,108 +56,110 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
+          "name": "minestuck:apple_cake",
           "quality": -1,
-          "name": "minestuck:apple_cake"
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "name": "minestuck:cold_cake",
           "quality": -2,
-          "name": "minestuck:cold_cake"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "name": "minestuck:hot_cake",
           "quality": -2,
-          "name": "minestuck:hot_cake"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "name": "minestuck:blue_cake",
           "quality": 1,
-          "name": "minestuck:blue_cake"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "name": "minestuck:red_cake",
           "quality": 1,
-          "name": "minestuck:red_cake"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "name": "minestuck:negative_cake",
           "quality": 1,
-          "name": "minestuck:negative_cake"
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "name": "minestuck:carrot_cake",
           "quality": 1,
-          "name": "minestuck:carrot_cake"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:cookie"
+          "name": "minecraft:cookie",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minestuck:candy_corn"
+          "name": "minestuck:candy_corn",
+          "weight": 3
         }
-      ]
+      ],
+      "name": "supplies",
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "quality": -1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:sugar"
+          "name": "minecraft:sugar",
+          "quality": -1,
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minecraft:milk_bucket"
+          "name": "minecraft:milk_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minecraft:cocoa_beans"
+          "name": "minecraft:cocoa_beans",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:thresh_dvd",
           "quality": 2,
-          "name": "minestuck:thresh_dvd"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

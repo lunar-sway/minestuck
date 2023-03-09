@@ -60,7 +60,7 @@ public class CaptchalogueTrigger extends SimpleCriterionTrigger<CaptchalogueTrig
 		{
 			JsonObject json = super.serializeToJson(context);
 			if(modus != null)
-				json.addProperty("modus", modus.getRegistryName().toString());
+				json.addProperty("modus", String.valueOf(ModusTypes.REGISTRY.get().getKey(modus)));
 			json.add("item", item.serializeToJson());
 			json.add("count", count.serializeToJson());
 			

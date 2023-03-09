@@ -7,14 +7,13 @@ import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Title;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -88,8 +87,7 @@ public interface OnHitEffect
 				ItemEntity item = new ItemEntity(target.level, target.getX(), target.getY(), target.getZ(), loot.get(0).copy());
 				target.level.addFreshEntity(item);
 				
-				TranslatableComponent message = new TranslatableComponent(stack.getDescriptionId() + ".message", loot.get(0).getHoverName());
-				attacker.sendMessage(message.withStyle(ChatFormatting.GOLD), Util.NIL_UUID);
+				attacker.sendSystemMessage(Component.translatable(stack.getDescriptionId() + ".message", loot.get(0).getHoverName()).withStyle(ChatFormatting.GOLD));
 			}
 		}
 	};
@@ -103,8 +101,7 @@ public interface OnHitEffect
 			List<String> messages = ImmutableList.of("machinations", "stir", "suffering", "will", "done", "conspiracies", "waiting", "strife", "search", "blessings", "seek", "shadow");
 			
 			String key = messages.get(attacker.getRandom().nextInt(messages.size()));
-			TranslatableComponent message = new TranslatableComponent("message.horrorterror." + key);
-			attacker.sendMessage(message.withStyle(ChatFormatting.DARK_PURPLE), Util.NIL_UUID);
+			attacker.sendSystemMessage(Component.translatable("message.horrorterror." + key).withStyle(ChatFormatting.DARK_PURPLE));
 			boolean potionBool = attacker.getRandom().nextBoolean();
 			if(potionBool)
 				attacker.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 2));
@@ -144,7 +141,7 @@ public interface OnHitEffect
 			sord.setPickUpDelay(40);
 			attacker.level.addFreshEntity(sord);
 			stack.shrink(1);
-			attacker.sendMessage(new TranslatableComponent(sord.getItem().getDescriptionId() + "." + SORD_DROP_MESSAGE), Util.NIL_UUID);
+			attacker.sendSystemMessage(Component.translatable(sord.getItem().getDescriptionId() + "." + SORD_DROP_MESSAGE));
 		}
 	};
 	

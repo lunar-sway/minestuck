@@ -2,8 +2,6 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "item",
-      "rolls": 4.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -13,51 +11,51 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:carving_tool"
+          "name": "minestuck:carving_tool",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:mini_frog_statue"
+          "name": "minestuck:mini_frog_statue",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:mini_wizard_statue"
+          "name": "minestuck:mini_wizard_statue",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
@@ -65,67 +63,67 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:stone_tablet"
+          "name": "minestuck:stone_tablet",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:thresh_dvd"
+          "name": "minestuck:thresh_dvd",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:crew_poster"
+          "name": "minestuck:crew_poster",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:sbahj_poster"
+          "name": "minestuck:sbahj_poster",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -138,8 +136,8 @@
               ]
             }
           ],
-          "weight": 5,
-          "name": "minestuck:gamebro_magazine"
+          "name": "minestuck:gamebro_magazine",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -152,8 +150,8 @@
               ]
             }
           ],
-          "weight": 5,
-          "name": "minestuck:gamegrl_magazine"
+          "name": "minestuck:gamegrl_magazine",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
@@ -163,8 +161,8 @@
               "consort": "salamander"
             }
           ],
-          "weight": 2,
-          "name": "minestuck:ace_of_clubs"
+          "name": "minestuck:ace_of_clubs",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -174,8 +172,8 @@
               "consort": "nakagator"
             }
           ],
-          "weight": 2,
-          "name": "minestuck:ace_of_spades"
+          "name": "minestuck:ace_of_spades",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -185,8 +183,8 @@
               "consort": "turtle"
             }
           ],
-          "weight": 2,
-          "name": "minestuck:ace_of_hearts"
+          "name": "minestuck:ace_of_hearts",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -196,72 +194,72 @@
               "consort": "iguana"
             }
           ],
-          "weight": 2,
-          "name": "minestuck:ace_of_diamonds"
+          "name": "minestuck:ace_of_diamonds",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:clubs_suitarang"
+          "name": "minestuck:clubs_suitarang",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:diamonds_suitarang"
+          "name": "minestuck:diamonds_suitarang",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:hearts_suitarang"
+          "name": "minestuck:hearts_suitarang",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:spades_suitarang"
+          "name": "minestuck:spades_suitarang",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -277,19 +275,19 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:battery"
+          "name": "minestuck:battery",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -309,25 +307,25 @@
               "consort": "salamander"
             }
           ],
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:crumply_hat"
+          "name": "minestuck:crumply_hat",
+          "weight": 8
         }
-      ]
+      ],
+      "name": "item",
+      "rolls": 4.0
     },
     {
-      "name": "block",
-      "rolls": 2.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -335,7 +333,9 @@
           "name": "minestuck:gameplay/consort_general",
           "pool": "block"
         }
-      ]
+      ],
+      "name": "block",
+      "rolls": 2.0
     }
   ]
 }

@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.MSArmorItem;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -15,14 +16,15 @@ public final class ArmorModels
 	
 	public static void register(MSArmorItem item, HumanoidModel<?> model)
 	{
-		if (map.containsKey(item.getRegistryName()))
+		ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(item);
+		if (map.containsKey(itemId))
 			throw new IllegalArgumentException("A model has already been registered with this item.");
-		map.put(item.getRegistryName(), model);
+		map.put(itemId, model);
 	}
 	
 	@Nullable
 	public static HumanoidModel<?> get(Item item)
 	{
-		return map.get(item.getRegistryName());
+		return map.get(ForgeRegistries.ITEMS.getKey(item));
 	}
 }

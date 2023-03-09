@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.*;
@@ -24,25 +25,25 @@ import net.minecraft.world.level.block.state.properties.ChestType;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.material.Fluids;
 
 import java.util.List;
-import java.util.Random;
 
 public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 {
 	private boolean createRan = false; //boolean check to prevent certain objects(the lotus flower entity) from spawning several times over
 	private static final FrogTemplePiece.Selector HIEROGLYPHS = new FrogTemplePiece.Selector();
 	
-	public FrogTemplePiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int x, int z)
+	public FrogTemplePiece(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource random, int x, int z)
 	{
 		super(MSStructurePieces.FROG_TEMPLE.get(), x - 21, 64, z - 35, 42, 100, 70, getRandomHorizontalDirection(random));
 		
 		int posHeightPicked = generator.getBaseHeight((boundingBox.minX() + boundingBox.maxX())/2,
-				(boundingBox.minZ() + boundingBox.maxZ())/2, Heightmap.Types.OCEAN_FLOOR_WG, level);
+				(boundingBox.minZ() + boundingBox.maxZ())/2, Heightmap.Types.OCEAN_FLOOR_WG, level, randomState);
 		
 		
 		boundingBox = boundingBox.moved(0, posHeightPicked - boundingBox.minY(), 0); //takes the lowest Ocean Floor gen viable height
@@ -62,7 +63,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		BlockState wallBlock = MSBlocks.GREEN_STONE_BRICKS.get().defaultBlockState();
 		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.get().defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
@@ -79,7 +80,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		buildFrog(stoneBlock, level, boundingBoxIn);
 	}
 	
-	private void generateLoot(WorldGenLevel level, BoundingBox box, Random randomIn, ChunkPos chunkPos)
+	private void generateLoot(WorldGenLevel level, BoundingBox box, RandomSource randomIn, ChunkPos chunkPos)
 	{
 		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.EAST), 21, 49, 20 + 14, box);
 		placeBlock(level, MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER.get().defaultBlockState().setValue(LotusTimeCapsuleBlock.FACING, Direction.NORTH), 21, 49, 21 + 14, box);
@@ -150,7 +151,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 	}
 	
-	private void buildWallsAndFloors(BlockState block, WorldGenLevel level, BoundingBox boundingBox, Random rand)
+	private void buildWallsAndFloors(BlockState block, WorldGenLevel level, BoundingBox boundingBox, RandomSource rand)
 	{
 		generateBox(level, boundingBox, 14, 48, 27, 27, 48, 41, block, block, false); //lotus room floor
 		generateBox(level, boundingBox, 13, 50, 27, 28, 54, 42, true, rand, HIEROGLYPHS); //lotus room hieroglyphs
@@ -282,7 +283,7 @@ public class FrogTemplePiece extends CoreCompatibleScatteredStructurePiece
 		}
 		
 		@Override
-		public void next(Random rand, int x, int y, int z, boolean wall)
+		public void next(RandomSource rand, int x, int y, int z, boolean wall)
 		{
 			WeightedEntry.Wrapper<Block> wrappedBlock = WeightedRandom.getRandomItem(rand, weightedBlockList, totalWeight).orElseThrow();
 			this.next = wrappedBlock.getData().defaultBlockState(); //sets the next blockstate to an element of the weighted list as long as the optional is present

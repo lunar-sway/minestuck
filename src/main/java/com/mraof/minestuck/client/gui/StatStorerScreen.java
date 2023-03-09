@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -32,7 +32,7 @@ public class StatStorerScreen extends Screen
 	
 	StatStorerScreen(StatStorerBlockEntity be)
 	{
-		super(new TextComponent("Stat Storer"));
+		super(Component.literal("Stat Storer"));
 		
 		this.be = be;
 		this.activeType = be.getActiveType();
@@ -41,14 +41,14 @@ public class StatStorerScreen extends Screen
 	@Override
 	public void init()
 	{
-		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 15, 135, 20, new TextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
+		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 15, 135, 20, Component.literal(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
-		this.divideTextField = new EditBox(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, new TextComponent("Divide comparator output strength")); //TODO make these translatable
+		this.divideTextField = new EditBox(this.font, this.width / 2 - 18, yOffset + 50, 40, 18, Component.literal("Divide comparator output strength")); //TODO make these translatable
 		this.divideTextField.setValue(String.valueOf(be.getDivideValueBy()));
 		addRenderableWidget(divideTextField);
 		setInitialFocus(divideTextField);
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 - 18, yOffset + 70, 40, 20, Component.literal("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class StatStorerScreen extends Screen
 	private void changeActiveType()
 	{
 		activeType = StatStorerBlockEntity.ActiveType.fromInt(activeType.ordinal() < StatStorerBlockEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
-		typeButton.setMessage(new TextComponent(activeType.getNameNoSpaces()));
+		typeButton.setMessage(Component.literal(activeType.getNameNoSpaces()));
 	}
 	
 	@Override

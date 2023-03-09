@@ -13,7 +13,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -23,8 +23,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-
-import java.util.Random;
 
 public class ForestLandType extends TerrainLandType
 {
@@ -41,14 +39,14 @@ public class ForestLandType extends TerrainLandType
 	{
 		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
-				.category(Biome.BiomeCategory.FOREST).music(MSSoundEvents.MUSIC_FOREST));
+				.music(MSSoundEvents.MUSIC_FOREST));
 	}
 	
 	public static TerrainLandType createTaiga()
 	{
 		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
-				.category(Biome.BiomeCategory.TAIGA).music(MSSoundEvents.MUSIC_TAIGA));
+				.music(MSSoundEvents.MUSIC_TAIGA));
 	}
 	
 	private ForestLandType(Variant variation, Builder builder)
@@ -145,7 +143,7 @@ public class ForestLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		IguanaVillagePieces.addPieces(register, random);
 	}

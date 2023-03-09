@@ -1,14 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#",
-    "#"
-  ],
   "key": {
     "#": {
       "item": "minestuck:frost_brick_slab"
     }
   },
+  "pattern": [
+    "#",
+    "#"
+  ],
   "result": {
     "item": "minestuck:chiseled_frost_bricks"
   }

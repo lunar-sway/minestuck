@@ -10,7 +10,7 @@ public abstract class LandBiome
 	
 	public static Biome createNormalBiome(Biome.Precipitation precipitation, float temperature, float downfall)
 	{
-		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.BiomeCategory.NONE)
+		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation)
 				.temperature(temperature).downfall(downfall);
 		
 		return builder.build();
@@ -18,7 +18,7 @@ public abstract class LandBiome
 	
 	public static Biome createRoughBiome(Biome.Precipitation precipitation, float temperature, float downfall)
 	{
-		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.BiomeCategory.NONE)
+		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation)
 				.temperature(temperature).downfall(downfall);
 		
 		return builder.build();
@@ -26,7 +26,7 @@ public abstract class LandBiome
 	
 	public static Biome createOceanBiome(Biome.Precipitation precipitation, float temperature, float downfall)
 	{
-		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation).biomeCategory(Biome.BiomeCategory.OCEAN)
+		Biome.BiomeBuilder builder = createBiomeBase().precipitation(precipitation)
 				.temperature(temperature).downfall(downfall);
 		
 		return builder.build();

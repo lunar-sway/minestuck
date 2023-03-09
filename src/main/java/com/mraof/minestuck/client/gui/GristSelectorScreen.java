@@ -10,8 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -35,7 +34,7 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 
 	public GristSelectorScreen(T screen)
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		this.otherScreen = screen;
 	}
 
@@ -49,8 +48,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.init();
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
-		this.previousButton = addRenderableWidget(new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, new TextComponent("<"), button -> prevPage()));
-		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, new TextComponent(">"), button -> nextPage()));
+		this.previousButton = addRenderableWidget(new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, Component.literal("<"), button -> prevPage()));
+		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, Component.literal(">"), button -> nextPage()));
 		
 		previousButton.visible = false;
 		nextButton.visible = GristTypes.getRegistry().getValues().size() > rows * columns;

@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
@@ -87,12 +87,12 @@ public class GristToast implements Toast
 		{
 			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("+" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("+" + this.difference), 30.0F, 18.0F, 0x000000);
 		} else
 		{
 			pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
 			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent("-" + String.valueOf(this.difference)), 30.0F, 18.0F, 0x000000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("-" + this.difference), 30.0F, 18.0F, 0x000000);
 		}
 		
 		posestack = RenderSystem.getModelViewStack();

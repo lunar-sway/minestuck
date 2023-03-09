@@ -1,9 +1,9 @@
 {
   "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.1,
   "ingredient": {
     "item": "minestuck:brown_stone"
   },
-  "result": "minestuck:polished_brown_stone",
-  "experience": 0.1,
-  "cookingtime": 200
+  "result": "minestuck:polished_brown_stone"
 }

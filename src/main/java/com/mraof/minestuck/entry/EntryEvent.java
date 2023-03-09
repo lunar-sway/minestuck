@@ -5,11 +5,11 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 
 import java.util.Objects;
-import java.util.Random;
 
 /**
  * Handles special events leading up to the player entering, that may motivate the player to hurry up with entry.
@@ -32,7 +32,7 @@ public class EntryEvent
 		if (level != null && level.isLoaded(pos.pos()))
 		{
 			// Spawn some kind of fireball in the sky near the computer
-			Random rand = level.getRandom();
+			RandomSource rand = level.getRandom();
 			
 			double x = pos.pos().getX() + 0.5 + RADIUS * invertedPyramidDist(rand);
 			double y = 256;
@@ -56,7 +56,7 @@ public class EntryEvent
 	/**
 	 * A random distribution in the range -1 to 1 that is less likely to be near 0 and more likely to be near -1 or 1.
 	 */
-	private static double invertedPyramidDist(Random rand)
+	private static double invertedPyramidDist(RandomSource rand)
 	{
 		double value = rand.nextDouble() - rand.nextDouble();
 		if (value > 0)

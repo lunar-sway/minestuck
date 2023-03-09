@@ -14,7 +14,7 @@ import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.MiscOverworldPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-
-import java.util.Random;
 
 public class FrostLandType extends TerrainLandType
 {
@@ -37,7 +35,7 @@ public class FrostLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.IGUANA).names(FROST, ICE, SNOW)
 				.skylight(7/8F).fogColor(0.5, 0.6, 0.98).skyColor(0.6, 0.7, 0.9)
-				.biomeSet(MSBiomes.SNOW_LAND).category(Biome.BiomeCategory.ICY).music(MSSoundEvents.MUSIC_FROST));
+				.biomeSet(MSBiomes.SNOW_LAND).music(MSSoundEvents.MUSIC_FROST));
 	}
 	
 	@Override
@@ -125,7 +123,7 @@ public class FrostLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		IguanaVillagePieces.addPieces(register, random);
 	}

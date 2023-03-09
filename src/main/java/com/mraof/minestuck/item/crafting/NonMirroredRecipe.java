@@ -10,7 +10,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class NonMirroredRecipe extends ShapedRecipe
 {
@@ -53,7 +52,7 @@ public class NonMirroredRecipe extends ShapedRecipe
         return true;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>>  implements RecipeSerializer<NonMirroredRecipe>
+    public static class Serializer implements RecipeSerializer<NonMirroredRecipe>
     {
         @Override
         public NonMirroredRecipe fromJson(ResourceLocation recipeId, JsonObject json) {

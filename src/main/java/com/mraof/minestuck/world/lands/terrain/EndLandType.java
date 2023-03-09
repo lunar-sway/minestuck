@@ -12,7 +12,7 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.placement.EndPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -24,8 +24,6 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
-import java.util.Random;
-
 public class EndLandType extends TerrainLandType
 {
 	public static final String END = "minestuck.end";
@@ -35,7 +33,7 @@ public class EndLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.NAKAGATOR).names(END, DIMENSION)
 				.fogColor(0.0, 0.4, 0.2).skyColor(0.3, 0.1, 0.5)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.THEEND).music(MSSoundEvents.MUSIC_END));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_END));
 	}
 	
 	@Override
@@ -95,7 +93,7 @@ public class EndLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		NakagatorVillagePieces.addPieces(register, random);
 	}

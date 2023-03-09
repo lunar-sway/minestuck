@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -73,7 +74,7 @@ public class CombinationRecipeBuilder
 	public CombinationRecipeBuilder namedInput(ItemLike item)
 	{
 		input(Ingredient.of(item));
-		return namedSource(Objects.requireNonNull(item.asItem().getRegistryName()).getPath());
+		return namedSource(Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item.asItem())).getPath());
 	}
 	
 	public CombinationRecipeBuilder namedSource(String str)
@@ -104,13 +105,13 @@ public class CombinationRecipeBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(output.getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
 		build(recipeSaver, new ResourceLocation(name.getNamespace(), name.getPath() + suffix));
 	}
 	
 	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(output.getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
 		build(recipeSaver, new ResourceLocation(modId, name.getPath() + suffix));
 	}
 	
@@ -142,7 +143,7 @@ public class CombinationRecipeBuilder
 			json.add("input2", input2.toJson());
 			json.addProperty("mode", mode.asString());
 			JsonObject outputJson = new JsonObject();
-			outputJson.addProperty("item", output.getItem().getRegistryName().toString());
+			outputJson.addProperty("item", ForgeRegistries.ITEMS.getKey(output.getItem()).toString());
 			if(output.getCount() > 1)
 			{
 				outputJson.addProperty("count", output.getCount());

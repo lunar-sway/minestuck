@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
@@ -282,6 +282,45 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SPACE_ASPECT_SAPLING.get());
 		dropSelf(TIME_ASPECT_SAPLING.get());
 		dropSelf(VOID_ASPECT_SAPLING.get());
+		
+		add(BLOOD_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(BREATH_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DOOM_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HEART_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HOPE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIFE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIGHT_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(MIND_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAGE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(SPACE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TIME_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(VOID_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		add(GLOWING_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(FROST_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAINBOW_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(END_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DEAD_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TREATED_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		dropSelf(BLOOD_ASPECT_LADDER.get());
+		dropSelf(BREATH_ASPECT_LADDER.get());
+		dropSelf(DOOM_ASPECT_LADDER.get());
+		dropSelf(HEART_ASPECT_LADDER.get());
+		dropSelf(HOPE_ASPECT_LADDER.get());
+		dropSelf(LIFE_ASPECT_LADDER.get());
+		dropSelf(LIGHT_ASPECT_LADDER.get());
+		dropSelf(MIND_ASPECT_LADDER.get());
+		dropSelf(RAGE_ASPECT_LADDER.get());
+		dropSelf(SPACE_ASPECT_LADDER.get());
+		dropSelf(TIME_ASPECT_LADDER.get());
+		dropSelf(VOID_ASPECT_LADDER.get());
+		dropSelf(GLOWING_LADDER.get());
+		dropSelf(FROST_LADDER.get());
+		dropSelf(RAINBOW_LADDER.get());
+		dropSelf(END_LADDER.get());
+		dropSelf(DEAD_LADDER.get());
+		dropSelf(TREATED_LADDER.get());
 		
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), MSBlockLootTables::desertBushDrop);
@@ -542,6 +581,10 @@ public class MSBlockLootTables extends BlockLoot
 	{
 		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	private static LootTable.Builder bookshelfDrop(Block block)
+	{
+		return createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F));
+	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
@@ -562,6 +605,8 @@ public class MSBlockLootTables extends BlockLoot
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName().getNamespace().equals(Minestuck.MOD_ID)).collect(Collectors.toList());
+		return ForgeRegistries.BLOCKS.getEntries().stream()
+				.filter(entry -> entry.getKey().location().getNamespace().equals(Minestuck.MOD_ID))
+				.map(Map.Entry::getValue).toList();
 	}
 }

@@ -4,13 +4,14 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSDirectionalBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.blockentity.redstone.RemoteComparatorBlockEntity;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * Will send out a redstone signal on its sides if the block it is observing(of a distance set by DISTANCE_1_16) matches the block directly behind it.
@@ -131,7 +131,7 @@ public class RemoteComparatorBlock extends MSDirectionalBlock implements EntityB
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(stateIn.getValue(POWERED))
 			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);

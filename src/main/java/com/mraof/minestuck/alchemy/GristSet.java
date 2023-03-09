@@ -8,10 +8,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -251,7 +250,7 @@ public class GristSet
 		{
 			if (!first)
 				build.append(',');
-			build.append(entry.getKey().getRegistryName()).append("=").append(entry.getValue());
+			build.append(entry.getKey()).append("=").append(entry.getValue());
 			first = false;
 		}
 
@@ -266,16 +265,16 @@ public class GristSet
 		{
 			if(component == null)
 				component = grist.asTextComponent();
-			else component = new TranslatableComponent(GRIST_COMMA, component, grist.asTextComponent());
+			else component = Component.translatable(GRIST_COMMA, component, grist.asTextComponent());
 		}
 		if(component != null)
 			return component;
-		else return new TextComponent("");
+		else return Component.empty();
 	}
 	
 	public Component createMissingMessage()
 	{
-		return new TranslatableComponent(MISSING_MESSAGE, asTextComponent());
+		return Component.translatable(MISSING_MESSAGE, asTextComponent());
 	}
 	
 	
@@ -284,7 +283,7 @@ public class GristSet
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
+	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
 	{
 		for(GristAmount amount : getAmounts())
 		{
@@ -306,7 +305,7 @@ public class GristSet
 		JsonObject json = new JsonObject();
 		for(Map.Entry<GristType, Long> entry : gristTypes.entrySet())
 		{
-			ResourceLocation id = entry.getKey().getRegistryName();
+			ResourceLocation id = GristTypes.getRegistry().getKey(entry.getKey());
 			if(id == null)
 			{
 				LOGGER.warn("Found grist type without a registry name! ({})", entry.getKey());

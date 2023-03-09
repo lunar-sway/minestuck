@@ -10,10 +10,11 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
@@ -26,7 +27,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by kirderf1
@@ -43,7 +43,7 @@ public class ConsortVillageCenter
 		}
 	}
 	
-	public static ConsortVillageCenter.VillageCenter getVillageStart(int x, int z, Random rand, List<ConsortVillagePieces.PieceWeight> list, LandTypePair landTypes)
+	public static ConsortVillageCenter.VillageCenter getVillageStart(int x, int z, RandomSource rand, List<ConsortVillagePieces.PieceWeight> list, LandTypePair landTypes)
 	{
 		List<CenterEntry> weightList = Lists.newArrayList();
 		
@@ -61,7 +61,7 @@ public class ConsortVillageCenter
 	
 	public interface CenterFactory
 	{
-		VillageCenter createPiece(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand);
+		VillageCenter createPiece(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand);
 	}
 	
 	public abstract static class VillageCenter extends ConsortVillagePieces.ConsortVillagePiece
@@ -86,7 +86,7 @@ public class ConsortVillageCenter
 	
 	public static class VillageMarketCenter extends VillageCenter
 	{
-		public static VillageCenter create(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public static VillageCenter create(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			return new VillageMarketCenter(pieceWeightList, x, z, getRandomHorizontalDirection(rand));
 		}
@@ -104,7 +104,7 @@ public class ConsortVillageCenter
 		
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			switch(this.getOrientation())
 			{	//The vanilla code for "rotating coords based on facing" is messy
@@ -133,7 +133,7 @@ public class ConsortVillageCenter
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -237,7 +237,7 @@ public class ConsortVillageCenter
 	
 	public static class RockCenter extends VillageCenter
 	{
-		public RockCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public RockCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			super(MSStructurePieces.ROCK_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 7 - 1, 68, z + 7 - 1), 0);
 			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
@@ -249,7 +249,7 @@ public class ConsortVillageCenter
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.WEST);
@@ -258,7 +258,7 @@ public class ConsortVillageCenter
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -311,7 +311,7 @@ public class ConsortVillageCenter
 	
 	public static class CactusPyramidCenter extends VillageCenter
 	{
-		public CactusPyramidCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public CactusPyramidCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			super(MSStructurePieces.CACTUS_PYRAMID_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 16 - 1, 73, z + 16 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
@@ -323,7 +323,7 @@ public class ConsortVillageCenter
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 7, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 			ConsortVillagePieces.generateAndAddRoadPiece((VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 7, Direction.WEST);
@@ -332,7 +332,7 @@ public class ConsortVillageCenter
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{

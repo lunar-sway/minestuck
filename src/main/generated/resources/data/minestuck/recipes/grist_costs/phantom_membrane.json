@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:phantom_membrane"
-  },
   "grist_cost": {
     "minestuck:caulk": 26,
-    "minestuck:sulfur": 8,
-    "minestuck:mercury": 12
+    "minestuck:mercury": 12,
+    "minestuck:sulfur": 8
+  },
+  "ingredient": {
+    "item": "minecraft:phantom_membrane"
   }
 }

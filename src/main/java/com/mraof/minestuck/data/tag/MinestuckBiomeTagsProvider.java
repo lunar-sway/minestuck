@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.MSBiomes;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
-import net.minecraftforge.common.Tags;
+import net.minecraft.tags.BiomeTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 	@Override
 	protected void addTags()
 	{
-		this.tag(HAS_FROG_TEMPLE).addTag(Tags.Biomes.IS_OVERWORLD);
+		this.tag(HAS_FROG_TEMPLE).addTag(BiomeTags.IS_OVERWORLD);
 		
 		this.tag(LAND_NORMAL).add(MSBiomes.DEFAULT_LAND.NORMAL, MSBiomes.NO_RAIN_LAND.NORMAL, MSBiomes.SNOW_LAND.NORMAL, MSBiomes.HIGH_HUMID_LAND.NORMAL);
 		this.tag(LAND_OCEAN).add(MSBiomes.DEFAULT_LAND.OCEAN, MSBiomes.NO_RAIN_LAND.OCEAN, MSBiomes.SNOW_LAND.OCEAN, MSBiomes.HIGH_HUMID_LAND.OCEAN);

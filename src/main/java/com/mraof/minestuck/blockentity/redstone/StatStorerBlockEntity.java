@@ -20,8 +20,8 @@ import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.event.world.SaplingGrowTreeEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.level.SaplingGrowTreeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -307,7 +307,7 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onSaplingGrow(SaplingGrowTreeEvent event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getWorld());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.SAPLING_GROWN, event.getPos(), (Level) event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -327,7 +327,7 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent
 	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getWorld());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)

@@ -628,7 +628,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.TUIX_BAR.get()).grist(BUILD, 5).grist(IODINE, 1).build(recipeSaver);
 		for(GristType type : GristTypes.values())
 		{
-			if(type.getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
+			if(GristTypes.getRegistry().getKey(type).getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);
 		}
 		GristCostRecipeBuilder.of(MSItems.APPLE_JUICE.get()).grist(AMBER, 4).grist(SULFUR, 1).build(recipeSaver);
@@ -707,7 +707,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSBlocks.END_GRASS.get()).grist(BUILD, 4).grist(CAULK, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG.get()).grist(BUILD, 7).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.FROST_LOG.get()).grist(BUILD, 7).grist(COBALT, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.TREATED_PLANKS.get()).grist(BUILD, 2).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.SBAHJ_POSTER.get()).grist(BUILD, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CREW_POSTER.get()).grist(TAR, 3).grist(RUST, 2).build(recipeSaver);

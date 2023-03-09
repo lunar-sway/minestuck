@@ -8,6 +8,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
@@ -15,8 +16,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, value = Dist.CLIENT)
 public class MSMusicTicker    //TODO Introduce types (something similar to vanilla) such that this class could be reused for prospit, derse etc
@@ -85,7 +84,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 		}
 	}
 	
-	private static SoundEvent getLandSoundEvent(Random rand, LandTypePair pair)
+	private static SoundEvent getLandSoundEvent(RandomSource rand, LandTypePair pair)
 	{
 		if(rand.nextInt(5) == 0)
 		{

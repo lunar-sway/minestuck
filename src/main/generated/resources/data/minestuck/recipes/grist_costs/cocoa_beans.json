@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 1,
+    "minestuck:iodine": 3
+  },
   "ingredient": {
     "item": "minecraft:cocoa_beans"
-  },
-  "grist_cost": {
-    "minestuck:iodine": 3,
-    "minestuck:amber": 1
   }
 }

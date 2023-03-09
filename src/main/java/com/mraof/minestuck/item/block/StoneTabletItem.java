@@ -8,7 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -37,7 +36,7 @@ public class StoneTabletItem extends BlockItem //stone slab is the same as stone
 		super.appendHoverText(stack, level, tooltip, flagIn);
 		
 		if(hasText(stack))
-			tooltip.add(new TranslatableComponent(getDescriptionId() + ".carved").withStyle(ChatFormatting.GRAY));
+			tooltip.add(Component.translatable(getDescriptionId() + ".carved").withStyle(ChatFormatting.GRAY));
 	}
 	
 	public static boolean hasText(ItemStack stack)

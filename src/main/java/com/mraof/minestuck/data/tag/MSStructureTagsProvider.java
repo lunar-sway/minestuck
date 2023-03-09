@@ -6,15 +6,15 @@ import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
-public class MSStructureTagsProvider extends TagsProvider<ConfiguredStructureFeature<?, ?>>
+public class MSStructureTagsProvider extends TagsProvider<Structure>
 {
 	public MSStructureTagsProvider(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(generator, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, Minestuck.MOD_ID, existingFileHelper);
+		super(generator, BuiltinRegistries.STRUCTURES, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	@Override

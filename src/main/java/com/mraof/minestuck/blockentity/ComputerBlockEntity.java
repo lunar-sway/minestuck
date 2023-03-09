@@ -21,6 +21,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -257,7 +258,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		ItemStack diskStack = ProgramData.getItem(programId);
 		if(!diskStack.isEmpty() && blankDisksStored > 0 && hasAllCode())
 		{
-			Random random = level.getRandom();
+			RandomSource random = level.getRandom();
 			
 			float rx = random.nextFloat() * 0.8F + 0.1F;
 			float ry = random.nextFloat() * 0.8F + 0.1F;

@@ -15,6 +15,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
@@ -63,7 +64,7 @@ public class PulseLandType extends TitleLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
 		builder.addModified(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
-				FeatureModifier.withTargets(List.of(blocks.getBlockState("surface"), blocks.getBlockState("upper"))), LandBiomeType.ROUGH);
+				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
 	}
 	
 	@Override

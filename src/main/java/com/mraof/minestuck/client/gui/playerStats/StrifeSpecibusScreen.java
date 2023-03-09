@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.player.KindAbstratusType;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class StrifeSpecibusScreen extends PlayerStatsScreen
@@ -19,7 +19,7 @@ public class StrifeSpecibusScreen extends PlayerStatsScreen
 	
 	public StrifeSpecibusScreen()
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		guiWidth = 228;
 		guiHeight = 150;
 	}

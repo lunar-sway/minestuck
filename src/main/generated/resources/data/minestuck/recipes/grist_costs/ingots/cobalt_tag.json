@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "tag": "forge:ingots/cobalt"
-  },
   "grist_cost": {
     "minestuck:cobalt": 18
+  },
+  "ingredient": {
+    "tag": "forge:ingots/cobalt"
   }
 }

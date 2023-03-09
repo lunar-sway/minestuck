@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -31,9 +31,9 @@ public abstract class AbstractGateBlock extends Block
 	}
 	
 	@Override
-	public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+	public void initializeClient(Consumer<IClientBlockExtensions> consumer)
 	{
-		consumer.accept(new IBlockRenderProperties()
+		consumer.accept(new IClientBlockExtensions()
 		{
 			@Override
 			public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine manager)

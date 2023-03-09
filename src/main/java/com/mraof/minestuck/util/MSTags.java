@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -40,6 +40,8 @@ public class MSTags
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Block> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
+		public static final TagKey<Block> ASPECT_BOOKSHELVES = tag("bookshelves/aspect");
+		public static final TagKey<Block> ASPECT_LADDERS = tag("ladders/aspect");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -161,11 +163,11 @@ public class MSTags
 	
 	public static class Structures
 	{
-		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");
+		public static final TagKey<Structure> SCANNER_LOCATED = tag("scanner_located");
 		
-		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
+		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	

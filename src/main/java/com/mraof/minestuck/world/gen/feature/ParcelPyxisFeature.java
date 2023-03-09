@@ -3,14 +3,13 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class ParcelPyxisFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -24,7 +23,7 @@ public class ParcelPyxisFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
 		BlockState state = MSBlocks.PARCEL_PYXIS.get().defaultBlockState().rotate(level, pos, rotation);
 		

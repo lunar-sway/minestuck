@@ -5,23 +5,20 @@ import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -112,14 +109,14 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
+		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getId()));
 	}
 	
 	protected void applyGristType(GristType type)
 	{
 		if(!type.isUnderlingType())    //Utility grist type
-			throw new IllegalArgumentException("Can't set underling grist type to " + type.getRegistryName());
-		entityData.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
+			throw new IllegalArgumentException("Can't set underling grist type to " + type);
+		entityData.set(GRIST_TYPE, String.valueOf(GristTypes.getRegistry().getKey(type)));
 		
 		onGristTypeUpdated(type);
 		setHealth(getMaxHealth());
@@ -231,7 +228,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	public Component getName()
 	{
 		if(getCustomName() == null)
-			return new TranslatableComponent(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
+			return Component.translatable(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
 		else return super.getName();
 	}
 	
@@ -291,7 +288,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		}
 	}
 	
-	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends Mob> type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn)
+	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends Mob> type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn)
 	{
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
@@ -352,7 +349,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		}
 		
 		if(playerList.length > 0)
-			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType().getRegistryName());
+			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
@@ -362,7 +359,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
-	protected static void firstKillBonus(Entity killer, byte type)
+	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)
 	{
 		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
 		{

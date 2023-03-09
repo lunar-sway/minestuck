@@ -41,7 +41,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> WHITE_CHESS_DIRT = REGISTER.register("white_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.SNOW).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_DIRT = REGISTER.register("dark_gray_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
 	public static final RegistryObject<Block> LIGHT_GRAY_CHESS_DIRT = REGISTER.register("light_gray_chess_dirt", () -> new Block(Block.Properties.of(Material.DIRT, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.GRAVEL)));
-	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of(Material.PORTAL, MaterialColor.COLOR_CYAN).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noDrops()));
+	public static final RegistryObject<Block> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> new SkaiaPortalBlock(Block.Properties.of(Material.PORTAL, MaterialColor.COLOR_CYAN).noCollission().lightLevel(state -> 11).strength(-1.0F, 3600000.0F).noLootTable()));
 	
 	public static final RegistryObject<Block> BLACK_CHESS_BRICKS = REGISTER.register("black_chess_bricks", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	public static final RegistryObject<Block> DARK_GRAY_CHESS_BRICKS = REGISTER.register("dark_gray_chess_bricks", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.TERRACOTTA_GRAY).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -75,7 +75,7 @@ public class MSBlocks
 	
 	private static Block cruxiteOre(BlockBehaviour.Properties properties)
 	{
-		return new OreBlock(properties, UniformInt.of(2, 5));
+		return new DropExperienceBlock(properties, UniformInt.of(2, 5));
 	}
 	
 	public static final RegistryObject<Block> STONE_URANIUM_ORE = REGISTER.register("stone_uranium_ore", () -> uraniumOre(Block.Properties.of(Material.STONE).strength(3.0F, 3.0F).requiresCorrectToolForDrops().lightLevel(state -> 3)));
@@ -91,7 +91,7 @@ public class MSBlocks
 	
 	private static Block uraniumOre(BlockBehaviour.Properties properties)
 	{
-		return new OreBlock(properties, UniformInt.of(2, 5));
+		return new DropExperienceBlock(properties, UniformInt.of(2, 5));
 	}
 	
 	public static final RegistryObject<Block> NETHERRACK_COAL_ORE = REGISTER.register("netherrack_coal_ore", () -> coalOre(copy(Blocks.COAL_ORE)));
@@ -100,22 +100,22 @@ public class MSBlocks
 	
 	private static Block coalOre(BlockBehaviour.Properties properties)
 	{
-		return new OreBlock(properties, UniformInt.of(0, 2));
+		return new DropExperienceBlock(properties, UniformInt.of(0, 2));
 	}
 	
-	public static final RegistryObject<Block> END_STONE_IRON_ORE = REGISTER.register("end_stone_iron_ore", () -> new OreBlock(copy(Blocks.IRON_ORE)));
-	public static final RegistryObject<Block> SANDSTONE_IRON_ORE = REGISTER.register("sandstone_iron_ore", () -> new OreBlock(copy(Blocks.IRON_ORE)));
-	public static final RegistryObject<Block> RED_SANDSTONE_IRON_ORE = REGISTER.register("red_sandstone_iron_ore", () -> new OreBlock(copy(Blocks.IRON_ORE)));
+	public static final RegistryObject<Block> END_STONE_IRON_ORE = REGISTER.register("end_stone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
+	public static final RegistryObject<Block> SANDSTONE_IRON_ORE = REGISTER.register("sandstone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
+	public static final RegistryObject<Block> RED_SANDSTONE_IRON_ORE = REGISTER.register("red_sandstone_iron_ore", () -> new DropExperienceBlock(copy(Blocks.IRON_ORE)));
 	
-	public static final RegistryObject<Block> SANDSTONE_GOLD_ORE = REGISTER.register("sandstone_gold_ore", () -> new OreBlock(copy(Blocks.GOLD_ORE)));
-	public static final RegistryObject<Block> RED_SANDSTONE_GOLD_ORE = REGISTER.register("red_sandstone_gold_ore", () -> new OreBlock(copy(Blocks.GOLD_ORE)));
-	public static final RegistryObject<Block> SHADE_STONE_GOLD_ORE = REGISTER.register("shade_stone_gold_ore", () -> new OreBlock(copy(Blocks.GOLD_ORE)));
-	public static final RegistryObject<Block> PINK_STONE_GOLD_ORE = REGISTER.register("pink_stone_gold_ore", () -> new OreBlock(copy(Blocks.GOLD_ORE)));
+	public static final RegistryObject<Block> SANDSTONE_GOLD_ORE = REGISTER.register("sandstone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
+	public static final RegistryObject<Block> RED_SANDSTONE_GOLD_ORE = REGISTER.register("red_sandstone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
+	public static final RegistryObject<Block> SHADE_STONE_GOLD_ORE = REGISTER.register("shade_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
+	public static final RegistryObject<Block> PINK_STONE_GOLD_ORE = REGISTER.register("pink_stone_gold_ore", () -> new DropExperienceBlock(copy(Blocks.GOLD_ORE)));
 	
 	public static final RegistryObject<Block> END_STONE_REDSTONE_ORE = REGISTER.register("end_stone_redstone_ore", () -> new RedStoneOreBlock(copy(Blocks.REDSTONE_ORE)));
-	public static final RegistryObject<Block> STONE_QUARTZ_ORE = REGISTER.register("stone_quartz_ore", () -> new OreBlock(copy(Blocks.NETHER_QUARTZ_ORE), UniformInt.of(2, 5)));
-	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = REGISTER.register("pink_stone_lapis_ore", () -> new OreBlock(copy(Blocks.LAPIS_ORE), UniformInt.of(2, 5)));
-	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = REGISTER.register("pink_stone_diamond_ore", () -> new OreBlock(copy(Blocks.DIAMOND_ORE), UniformInt.of(3, 7)));
+	public static final RegistryObject<Block> STONE_QUARTZ_ORE = REGISTER.register("stone_quartz_ore", () -> new DropExperienceBlock(copy(Blocks.NETHER_QUARTZ_ORE), UniformInt.of(2, 5)));
+	public static final RegistryObject<Block> PINK_STONE_LAPIS_ORE = REGISTER.register("pink_stone_lapis_ore", () -> new DropExperienceBlock(copy(Blocks.LAPIS_ORE), UniformInt.of(2, 5)));
+	public static final RegistryObject<Block> PINK_STONE_DIAMOND_ORE = REGISTER.register("pink_stone_diamond_ore", () -> new DropExperienceBlock(copy(Blocks.DIAMOND_ORE), UniformInt.of(3, 7)));
 	
 	
 	
@@ -331,7 +331,47 @@ public class MSBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = REGISTER.register("time_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = REGISTER.register("void_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	
+	//Bookshelves
+	public static final RegistryObject<Block> BLOOD_ASPECT_BOOKSHELF = REGISTER.register("blood_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = REGISTER.register("breath_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = REGISTER.register("doom_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = REGISTER.register("heart_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = REGISTER.register("hope_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = REGISTER.register("life_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = REGISTER.register("light_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = REGISTER.register("mind_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = REGISTER.register("rage_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = REGISTER.register("space_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = REGISTER.register("time_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = REGISTER.register("void_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
+	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+	
+	//Ladders
+	public static final RegistryObject<Block> BLOOD_ASPECT_LADDER = REGISTER.register("blood_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> BREATH_ASPECT_LADDER = REGISTER.register("breath_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> DOOM_ASPECT_LADDER = REGISTER.register("doom_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> HEART_ASPECT_LADDER = REGISTER.register("heart_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> HOPE_ASPECT_LADDER = REGISTER.register("hope_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> LIFE_ASPECT_LADDER = REGISTER.register("life_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> LIGHT_ASPECT_LADDER = REGISTER.register("light_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> MIND_ASPECT_LADDER = REGISTER.register("mind_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> RAGE_ASPECT_LADDER = REGISTER.register("rage_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> SPACE_ASPECT_LADDER = REGISTER.register("space_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> TIME_ASPECT_LADDER = REGISTER.register("time_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> VOID_ASPECT_LADDER = REGISTER.register("void_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	
+	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
+	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Land Plant Blocks
 	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11)));
@@ -461,10 +501,10 @@ public class MSBlocks
 	
 	
 	//Core Functional Land Blocks
-	public static final RegistryObject<Block> GATE = REGISTER.register("gate", () -> new GateBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
-	public static final RegistryObject<Block> GATE_MAIN = REGISTER.register("gate_main", () -> new GateBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
-	public static final RegistryObject<Block> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
-	public static final RegistryObject<Block> RETURN_NODE_MAIN = REGISTER.register("return_node_main", () -> new ReturnNodeBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noDrops()));
+	public static final RegistryObject<Block> GATE = REGISTER.register("gate", () -> new GateBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
+	public static final RegistryObject<Block> GATE_MAIN = REGISTER.register("gate_main", () -> new GateBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 25.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
+	public static final RegistryObject<Block> RETURN_NODE = REGISTER.register("return_node", () -> new ReturnNodeBlock(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
+	public static final RegistryObject<Block> RETURN_NODE_MAIN = REGISTER.register("return_node_main", () -> new ReturnNodeBlock.Main(Block.Properties.of(Material.PORTAL).noCollission().strength(-1.0F, 10.0F).sound(SoundType.GLASS).lightLevel(state -> 11).noLootTable()));
 	
 	
 	//Misc Functional Land Blocks
@@ -551,12 +591,12 @@ public class MSBlocks
 	public static final RegistryObject<Block> GLOWYSTONE_DUST = REGISTER.register("glowystone_dust", () -> new GlowystoneWireBlock(Block.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()));
 	
 	
-	public static final RegistryObject<LiquidBlock> OIL = REGISTER.register("oil", () -> new FlowingModFluidBlock(MSFluids.OIL, new Vec3(0.0, 0.0, 0.0), 0.75f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-	public static final RegistryObject<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3(0.8, 0.0, 0.0), 0.25f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-	public static final RegistryObject<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new FlowingModFluidBlock(MSFluids.BRAIN_JUICE, new Vec3(0.55, 0.25, 0.7), 0.25f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-	public static final RegistryObject<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new FlowingWaterColorsBlock(MSFluids.WATER_COLORS, 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-	public static final RegistryObject<LiquidBlock> ENDER = REGISTER.register("ender", () -> new FlowingModFluidBlock(MSFluids.ENDER, new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
-	public static final RegistryObject<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new FlowingModFluidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+	public static final RegistryObject<LiquidBlock> OIL = REGISTER.register("oil", () -> new FlowingModFluidBlock(MSFluids.OIL, new Vec3(0.0, 0.0, 0.0), 0.75f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+	public static final RegistryObject<LiquidBlock> BLOOD = REGISTER.register("blood", () -> new FlowingModFluidBlock(MSFluids.BLOOD, new Vec3(0.8, 0.0, 0.0), 0.25f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+	public static final RegistryObject<LiquidBlock> BRAIN_JUICE = REGISTER.register("brain_juice", () -> new FlowingModFluidBlock(MSFluids.BRAIN_JUICE, new Vec3(0.55, 0.25, 0.7), 0.25f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+	public static final RegistryObject<LiquidBlock> WATER_COLORS = REGISTER.register("water_colors", () -> new FlowingWaterColorsBlock(MSFluids.WATER_COLORS, 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+	public static final RegistryObject<LiquidBlock> ENDER = REGISTER.register("ender", () -> new FlowingModFluidBlock(MSFluids.ENDER, new Vec3(0, 0.35, 0.35), (Float.MAX_VALUE), Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+	public static final RegistryObject<LiquidBlock> LIGHT_WATER = REGISTER.register("light_water", () -> new FlowingModFluidBlock(MSFluids.LIGHT_WATER, new Vec3(0.2, 0.3, 1.0), 0.01f, Block.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
 	
 	
 	private static Function<BlockState, MaterialColor> logColors(MaterialColor topColor, MaterialColor barkColor)

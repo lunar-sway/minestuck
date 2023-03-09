@@ -8,7 +8,7 @@ import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,7 +29,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	
 	public InventoryEditmodeScreen(int windowId, Inventory playerInventory)
 	{
-		super(new EditmodeMenu(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
+		super(new EditmodeMenu(windowId, playerInventory), playerInventory, Component.translatable(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
 	}

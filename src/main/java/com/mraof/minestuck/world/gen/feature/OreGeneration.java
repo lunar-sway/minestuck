@@ -6,8 +6,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +24,7 @@ public class OreGeneration
 	public static final int uraniumStratumMaxAboveBottom = 96; //similar to 1.18 diamond ore distribution
 	public static final int uraniumStratumMinAboveBottom = -60;
 	
+	/*TODO biome modifiers
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onBiomeLoad(BiomeLoadingEvent event)
 	{
@@ -43,4 +42,5 @@ public class OreGeneration
 			}
 		}
 	}
+	 */
 }

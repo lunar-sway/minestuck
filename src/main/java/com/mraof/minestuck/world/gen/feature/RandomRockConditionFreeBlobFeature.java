@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -10,7 +11,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 
 import java.util.Iterator;
-import java.util.Random;
 
 public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockBlobConfig>
 {
@@ -24,7 +24,7 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		RandomRockBlockBlobConfig config = context.config();
 		
 		float randFloat = rand.nextFloat();
@@ -70,11 +70,11 @@ public class RandomRockConditionFreeBlobFeature extends Feature<RandomRockBlockB
 			int ySize = config.startRadius + rand.nextInt(2);
 			int zSize = config.startRadius + rand.nextInt(2);
 			float f = (float) (xSize + ySize + zSize) * 0.333F + 0.5F;
-			Iterator iterator = BlockPos.betweenClosedStream(pos.offset(-xSize, -ySize, -zSize), pos.offset(xSize, ySize, zSize)).iterator();
+			Iterator<BlockPos> iterator = BlockPos.betweenClosedStream(pos.offset(-xSize, -ySize, -zSize), pos.offset(xSize, ySize, zSize)).iterator();
 			
 			while(iterator.hasNext())
 			{
-				BlockPos blockpos1 = (BlockPos) iterator.next();
+				BlockPos blockpos1 = iterator.next();
 				
 				if(blockpos1.distSqr(pos) <= (double) (f * f))
 					setBlock(level, blockpos1, randomStone);

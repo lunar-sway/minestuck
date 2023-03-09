@@ -6,8 +6,6 @@ import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
-import java.util.Random;
-
 public abstract class CoreCompatibleScatteredStructurePiece extends ScatteredFeaturePiece
 {
 	private boolean hasBeenCompleted = false;

@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MSBlockEntityTypes
 {
-	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Minestuck.MOD_ID);
+	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<BlockEntityType<ComputerBlockEntity>> COMPUTER = REGISTER.register("computer", () -> BlockEntityType.Builder.of(ComputerBlockEntity::new, MSBlocks.COMPUTER.get(), MSBlocks.CROCKERTOP.get(), MSBlocks.HUBTOP.get(), MSBlocks.LAPTOP.get(), MSBlocks.LUNCHTOP.get()).build(null));
 	public static final RegistryObject<BlockEntityType<MiniCruxtruderBlockEntity>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> BlockEntityType.Builder.of(MiniCruxtruderBlockEntity::new, MSBlocks.MINI_CRUXTRUDER.get()).build(null));

@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "c": {
+      "tag": "forge:chests"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "tag": "forge:rods"
+    }
+  },
   "pattern": [
     "ici",
     " r ",
     " r "
   ],
-  "key": {
-    "c": {
-      "tag": "forge:chests"
-    },
-    "r": {
-      "tag": "forge:rods"
-    },
-    "i": {
-      "item": "minecraft:iron_ingot"
-    }
-  },
   "result": {
     "item": "minestuck:mailbox"
   }

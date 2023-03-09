@@ -7,15 +7,15 @@ import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
-import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.village.SalamanderVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.NetherPlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -25,8 +25,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-
-import java.util.Random;
 
 public class FungiLandType extends TerrainLandType
 {
@@ -41,7 +39,7 @@ public class FungiLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.SALAMANDER).names(FUNGI, DANK, MUST, MOLD, MILDEW, MYCELIUM)
 				.fogColor(0.69, 0.76, 0.61).skyColor(0.69, 0.76, 0.61)
-				.category(Biome.BiomeCategory.MUSHROOM).music(MSSoundEvents.MUSIC_FUNGI));
+				.music(MSSoundEvents.MUSIC_FUNGI));
 	}
 	
 	@Override
@@ -113,7 +111,7 @@ public class FungiLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		SalamanderVillagePieces.addPieces(register, random);
 	}

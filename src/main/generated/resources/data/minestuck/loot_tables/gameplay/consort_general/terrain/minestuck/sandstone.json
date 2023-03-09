@@ -2,119 +2,119 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "item",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minecraft:golden_sword"
+          "name": "minecraft:golden_sword",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 5.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 5.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:redstone",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gunpowder"
+          "name": "minecraft:gunpowder",
+          "weight": 8
         }
-      ]
+      ],
+      "name": "item",
+      "rolls": 1.0
     },
     {
-      "name": "block",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 8.0,
-                "max": 20.0
+                "max": 20.0,
+                "min": 8.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:smooth_sandstone"
+          "name": "minecraft:smooth_sandstone",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 8.0,
-                "max": 20.0
+                "max": 20.0,
+                "min": 8.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:chiseled_sandstone"
+          "name": "minecraft:chiseled_sandstone",
+          "weight": 6
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 8.0,
-                "max": 20.0
+                "max": 20.0,
+                "min": 8.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:stone_bricks"
+          "name": "minecraft:stone_bricks",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 6,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 8.0,
-                "max": 20.0
+                "max": 20.0,
+                "min": 8.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:chiseled_stone_bricks"
+          "name": "minecraft:chiseled_stone_bricks",
+          "weight": 6
         }
-      ]
+      ],
+      "name": "block",
+      "rolls": 1.0
     }
   ]
 }
