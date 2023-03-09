@@ -51,7 +51,7 @@ public class GutterBallItem extends Item
 		{
 			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_ball.desc"));
 		} else {
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.ancient_thumb_drive.press_shift"));
+			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_ball."));
 		}
 	}
 }

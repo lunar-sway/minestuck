@@ -41,7 +41,7 @@ public class GutterThumbDriveItem extends Item
 			InteractionHand pUsedHand = player.getUsedItemHand();
 			int mod = 1;
 			
-			for(BlockPos blockPos : BlockPos.betweenClosed(player.blockPosition().offset(2 * mod, mod, 2 * mod), player.blockPosition().offset(-2 * mod, -1 * mod, -2 * mod)))
+			for(pContext.getClickLocation())
 			{
 				if(level.getBlockEntity(blockPos) instanceof ComputerBlockEntity)
 				{
