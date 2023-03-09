@@ -98,7 +98,6 @@ public class GristGutter extends GristSet
 	
 	/**
 	 * this is how we take grist from the gutter and throw it into the player's cache
-	 * we use the xMover variable (comprised of the minimum of something or other)...
 	 */
 	public GristSet splice(int i)
 	{
@@ -106,7 +105,7 @@ public class GristGutter extends GristSet
 		
 		for(GristType t : this.gristTypes.keySet())
 		{
-			int xMover = (int) Math.min(gristTypes.get(t), i);
+			long xMover = Math.max(Math.min(gristTypes.get(t), i), 0);
 			spliceSet.addGrist(t, xMover);//spliceSet calls addgrist with the amount and type specified
 			
 			gutterTotal -= xMover;//takes grist from the gutter

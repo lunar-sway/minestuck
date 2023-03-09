@@ -62,9 +62,6 @@ public class ServerEventHandler
 {
 	public static long lastDay;
 	
-	private static Session session;
-	private static MinecraftServer mcServer;
-	
 	@SubscribeEvent
 	public static void serverStarting(ServerStartingEvent event)
 	{
@@ -264,7 +261,6 @@ public class ServerEventHandler
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			
 			Player player = event.player;
 			
 			if(data.getTitle() != null)
@@ -274,40 +270,31 @@ public class ServerEventHandler
 			}
 			
 			Level level = player.level;
+			SessionHandler sessionHandler = SessionHandler.get(level);
+			Session session = sessionHandler.getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
 			long gameTime = level.getGameTime();
 			int inputTime = 200;
 			
-			NonNegativeGristSet playerCache = new NonNegativeGristSet
-					(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
+			NonNegativeGristSet playerCache = new NonNegativeGristSet(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
 			if(session == null)
 			{
 				return;
-			}//every tick, the server will try to put some of the gutter's grist into each player's cache
+			}
 			if(gameTime % inputTime == 0)
-			{
-				int sPl = (int) session.getSessionPowerlevel(mcServer);
+			{//every tick, the server will try to put some of the gutter's grist into each player's cache
+				int gutterMultiplier = (int) session.getGutterMultiplier();
 				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
-				int spliceAmount = (int) (GristHelper.rungGrist[rung] / 20 * Math.max(sPl, 1.0));//determines the appropriate splice amount
-				Session session = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
-				
+				int spliceAmount = (int) (GristHelper.rungGrist[rung] * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);//determines the appropriate splice amount
 				
 				GristGutter sessionGutter = session.getGristGutter();//get's the grist gutter
-				
-				playerCache.addGrist(sessionGutter.splice(spliceAmount));//adds splice some grist from the splice set
-				
-				
-				GristSet rungGrist = GristHelper.limitGristByPlayerRung
-						(level, IdentifierHandler.encode(player), playerCache);
+				playerCache.addGrist(sessionGutter.splice(spliceAmount));//splices some grist from the splice set
+				GristSet rungGrist = GristHelper.limitGristByPlayerRung(level, IdentifierHandler.encode(player), playerCache);
 				
 				sessionGutter.addGrist(rungGrist);
-				
 				data.setGristCache(playerCache);
 			}
 		}
-		
 	}
-	
-	
 	@SubscribeEvent
 	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
 	{

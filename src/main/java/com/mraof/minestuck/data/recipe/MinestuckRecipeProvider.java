@@ -168,6 +168,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapelessRecipeBuilder.shapeless(MSBlocks.COMPUTER.get()).requires(MSItems.ENERGY_CORE.get()).requires(MSItems.COMPUTER_PARTS.get()).unlockedBy("has_computer_parts", has(MSItems.COMPUTER_PARTS.get())).requires(Items.QUARTZ).requires(Items.REDSTONE).requires(MSItems.RAW_CRUXITE.get()).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.URANIUM_COOKER.get()).define('e', MSItems.ENERGY_CORE.get()).define('i', Tags.Items.INGOTS_IRON).define('F', Items.FURNACE).pattern("iii").pattern("iFi").pattern("iei").unlockedBy("has_energy_core", has(MSItems.ENERGY_CORE.get())).save(recipeBuilder);
+		ShapelessRecipeBuilder.shapeless(MSItems.GUTTER_THUMB_DRIVE.get()).requires(MSItems.ANCIENT_THUMB_DRIVE.get()).requires(Items.HONEYCOMB).unlockedBy("has_ancient_thumb_drive", has(MSItems.ANCIENT_THUMB_DRIVE.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(Items.SPRUCE_PLANKS).requires(MSBlocks.WOODEN_CACTUS.get()).group("planks").unlockedBy("has_cactus", has(MSBlocks.WOODEN_CACTUS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "spruce_planks_from_wooden_cactus"));
 		ShapedRecipeBuilder.shaped(MSBlocks.APPLE_CAKE.get()).define('m', Items.MILK_BUCKET).define('a', Items.APPLE).define('w', Items.WHEAT).define('e', Items.EGG).pattern("mmm").pattern("aea").pattern("www").unlockedBy("has_egg", has(Items.EGG)).save(recipeBuilder);

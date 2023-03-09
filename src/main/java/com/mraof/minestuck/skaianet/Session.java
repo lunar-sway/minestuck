@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -112,7 +113,7 @@ public final class Session
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 		gutter.setSession(this);
-		gutterMultiplier = 0;
+		gutterMultiplier = 1;
 	}
 	
 	/**
@@ -253,16 +254,6 @@ public final class Session
 	{
 		return gutter;
 	}
-	public double getSessionPowerlevel(MinecraftServer mcServer)
-	{
-		int playerCount = this.getPlayerList().size();
-		double rungAverage = 0.0;
-		for(PlayerIdentifier pi : this.getPlayerList())
-		{
-			rungAverage += PlayerSavedData.get(mcServer).getData(pi).getEcheladder().getRung();
-		}
-		return rungAverage / playerCount;
-	}
 	public double increaseGutterMultiplier(double amount)
 	{
 		this.gutterMultiplier += amount;
@@ -287,12 +278,10 @@ public final class Session
 		if(isCustom())
 			nbt.putString("name", name);
 		ListTag list = new ListTag();
-		for(SburbConnection c : connections)
-			list.add(c.write());
+		for(SburbConnection c : connections) list.add(c.write());
 		nbt.put("connections", list);
 		ListTag predefineList = new ListTag();
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
-			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet()) predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
 		return nbt;

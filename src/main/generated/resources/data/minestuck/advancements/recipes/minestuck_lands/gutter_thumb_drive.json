@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minestuck:gutter_thumb_drive"
+    ]
+  },
+  "criteria": {
+    "has_ancient_thumb_drive": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minestuck:ancient_thumb_drive"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minestuck:gutter_thumb_drive"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ancient_thumb_drive",
+      "has_the_recipe"
+    ]
+  ]
+}
