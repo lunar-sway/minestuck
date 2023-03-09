@@ -10,7 +10,7 @@ import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -48,8 +48,7 @@ public interface ItemRightClickEffect
 		if(world.isClientSide)
 		{
 			int key = player.getRandom().nextInt(20);
-			TranslatableComponent message = new TranslatableComponent("message.eightball." + key);
-			player.sendMessage(message.withStyle(ChatFormatting.BLUE), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable("message.eightball." + key).withStyle(ChatFormatting.BLUE));
 		}
 		return InteractionResultHolder.success(player.getItemInHand(hand));
 	};
@@ -65,19 +64,6 @@ public interface ItemRightClickEffect
 				
 				return InteractionResultHolder.success(newItem);
 			}
-			return InteractionResultHolder.pass(itemStackIn);
-		};
-	}
-	
-	static ItemRightClickEffect consumeGUpgrade(double amount)
-	{
-		return (world, player, hand) -> {
-			ItemStack itemStackIn = player.getItemInHand(hand);
-			Session playerSession = SessionHandler.get(world).getPlayerSession(IdentifierHandler.encode(player));
-			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
-			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
-			
-			playerSession.increaseGutterMultiplier(amount);
 			return InteractionResultHolder.pass(itemStackIn);
 		};
 	}

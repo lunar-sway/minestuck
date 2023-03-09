@@ -1,30 +1,30 @@
 {
   "parent": "minestuck:minestuck/alchemy",
-  "display": {
-    "icon": {
-      "item": "minestuck:french_fry"
-    },
-    "title": {
-      "translate": "advancements.minestuck.french_fry.title"
-    },
-    "description": {
-      "translate": "advancements.minestuck.french_fry.description"
-    },
-    "frame": "task",
-    "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
   "criteria": {
     "has_french_fry": {
-      "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
           "items": [
             "minestuck:french_fry"
           ]
         }
-      }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.minestuck.french_fry.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:french_fry"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.minestuck.french_fry.title"
     }
   },
   "requirements": [

@@ -8,9 +8,9 @@ import net.minecraft.world.entity.vehicle.Boat;
 
 public class MetalBoatRenderer extends BoatRenderer
 {
-	public MetalBoatRenderer(EntityRendererProvider.Context context)
+	public MetalBoatRenderer(EntityRendererProvider.Context context, boolean hasChest)
 	{
-		super(context);
+		super(context, hasChest);
 	}
 	
 	@Override

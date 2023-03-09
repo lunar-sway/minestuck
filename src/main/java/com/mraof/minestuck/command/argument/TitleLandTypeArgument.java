@@ -11,9 +11,7 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Arrays;
@@ -23,12 +21,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class TitleLandTypeArgument implements ArgumentType<TitleLandType>
 {
-	public static final ArgumentSerializer<TitleLandTypeArgument> SERIALIZER = new EmptyArgumentSerializer<>(TitleLandTypeArgument::titleLandType);
 	
 	private static final List<String> EXAMPLES = Arrays.asList("minestuck:frost", "minestuck:shade");
 	
 	public static final String INVALID = "argument.title_land_type.invalid";
-	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID, o));
+	public static final DynamicCommandExceptionType INVALID_TYPE = new DynamicCommandExceptionType(o -> Component.translatable(INVALID, o));
 	
 	public static TitleLandTypeArgument titleLandType()
 	{
@@ -51,7 +48,7 @@ public class TitleLandTypeArgument implements ArgumentType<TitleLandType>
 	@Override
 	public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder)
 	{
-		return SharedSuggestionProvider.suggestResource(LandTypes.TITLE_REGISTRY.get().getValues().stream().map(TitleLandType::getRegistryName), builder);
+		return SharedSuggestionProvider.suggestResource(LandTypes.TITLE_REGISTRY.get().getKeys(), builder);
 	}
 	
 	@Override

@@ -4,16 +4,15 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
-
-import java.util.Random;
 
 public class CastleStaircasePiece extends CastleRoomPiece
 {
@@ -34,13 +33,13 @@ public class CastleStaircasePiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+	public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 	{
 		this.direction = rand.nextInt(4);
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator generator, RandomSource random, BoundingBox structureBoundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		BlockState chessTile = (isBlack ? MSBlocks.BLACK_CHESS_DIRT.get() : MSBlocks.WHITE_CHESS_DIRT.get()).defaultBlockState();
 		BlockState chessTile1 = (isBlack ? MSBlocks.DARK_GRAY_CHESS_DIRT.get() : MSBlocks.LIGHT_GRAY_CHESS_DIRT.get()).defaultBlockState();

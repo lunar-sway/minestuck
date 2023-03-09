@@ -38,33 +38,19 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public String getUniqueId(GristAmount ingredient, UidContext context)
 	{
-		return "grist:" + ingredient.getType().getRegistryName();
+		return "grist:" + getResourceLocation(ingredient);
 	}
-
-	@SuppressWarnings("removal")	//getResourceLocation() replaces this. This function is fine to remove as soon as it is not required by IIngredientHelper
-	@Override
-	public String getModId(GristAmount ingredient)
-	{
-		return getResourceLocation(ingredient).getNamespace();
-	}
-
+	
 	@Override
 	public Iterable<Integer> getColors(GristAmount ingredient)
 	{
 		return Collections.emptyList();	//Not dealing with this right now
 	}
 	
-	@SuppressWarnings("removal")	//getResourceLocation() replaces this. This function is fine to remove as soon as it is not required by IIngredientHelper
-	@Override
-	public String getResourceId(GristAmount ingredient)
-	{
-		return getResourceLocation(ingredient).getPath();
-	}
-	
 	@Override
 	public ResourceLocation getResourceLocation(GristAmount ingredient)
 	{
-		return ingredient.getType().getRegistryName();
+		return GristTypes.getRegistry().getKey(ingredient.getType());
 	}
 	
 	@Override
@@ -80,6 +66,6 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 			return "grist:null";
 		else if(ingredient.getType() == null)
 			return "grist:null:"+ingredient.getAmount();
-		else return "grist:"+ingredient.getType().getRegistryName()+":"+ingredient.getAmount();
+		else return "grist:"+getResourceLocation(ingredient)+":"+ingredient.getAmount();
 	}
 }

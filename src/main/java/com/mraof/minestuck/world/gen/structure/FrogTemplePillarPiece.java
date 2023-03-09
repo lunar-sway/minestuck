@@ -5,8 +5,9 @@ import com.mraof.minestuck.block.MSDirectionalBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,15 +16,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
-import java.util.Random;
-
 public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 {
 	private final boolean eroded;
 	private final boolean uraniumFilled;
 	private final int randReduction;
 	
-	public FrogTemplePillarPiece(Random random, int x, int y, int z) //this constructor is used when the structure is first initialized
+	public FrogTemplePillarPiece(RandomSource random, int x, int y, int z) //this constructor is used when the structure is first initialized
 	{
 		super(MSStructurePieces.FROG_TEMPLE_PILLAR.get(), x - 2, y, z - 2, 5, 46, 5, getRandomHorizontalDirection(random));
 		eroded = random.nextBoolean();
@@ -50,7 +49,7 @@ public class FrogTemplePillarPiece extends ScatteredFeaturePiece
 	
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGenerator, RandomSource randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		BlockState columnBlock = MSBlocks.GREEN_STONE_COLUMN.get().defaultBlockState().setValue(MSDirectionalBlock.FACING, Direction.UP);
 		if(eroded)

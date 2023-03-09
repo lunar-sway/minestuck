@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -10,8 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Random;
 
 public class BugNetItem extends Item
 {
@@ -29,7 +28,7 @@ public class BugNetItem extends Item
 			Player playerIn = (Player) entityLiving;
 			if(!playerIn.isCreative() && level.getBlockState(pos).getBlock() == Blocks.TALL_GRASS)
 			{
-				Random rand = playerIn.getRandom();
+				RandomSource rand = playerIn.getRandom();
 				
 				if(!level.isClientSide)
 				{

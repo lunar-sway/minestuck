@@ -17,7 +17,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -25,7 +24,7 @@ import java.util.function.Supplier;
 /**
  * Base class for land types that make up the base of a land.
  */
-public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType> implements ILandType<TerrainLandType>
+public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
 	private final ResourceLocation groupName;
@@ -37,7 +36,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	private final Vec3 fogColor, skyColor;
 	
 	private final LandBiomeSetType biomeSet;
-	private final Biome.BiomeCategory biomeCategory;
 	private final Supplier<SoundEvent> backgroundMusic;
 	
 	protected TerrainLandType(Builder builder)
@@ -51,7 +49,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		this.fogColor = builder.fogColor;
 		this.skyColor = builder.skyColor;
 		this.biomeSet = builder.biomeSet;
-		this.biomeCategory = builder.biomeCategory;
 		this.backgroundMusic = builder.backgroundMusic;
 	}
 	
@@ -80,7 +77,7 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	public final ResourceLocation getGroup()
 	{
 		if(groupName == null)
-			return this.getRegistryName();
+			return LandTypes.TERRAIN_REGISTRY.get().getKey(this);
 		else return groupName;
 	}
 	
@@ -98,11 +95,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	public final LandBiomeSetType getBiomeSet()
 	{
 		return this.biomeSet;
-	}
-	
-	public final Biome.BiomeCategory getBiomeCategory()
-	{
-		return this.biomeCategory;
 	}
 	
 	@Override
@@ -141,7 +133,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private Vec3 fogColor = new Vec3(0, 0, 0);
 		private Vec3 skyColor = new Vec3(0, 0, 0);
 		private LandBiomeSetType biomeSet = MSBiomes.DEFAULT_LAND;
-		private Biome.BiomeCategory biomeCategory = Biome.BiomeCategory.NONE;
 		private Supplier<SoundEvent> backgroundMusic = MSSoundEvents.MUSIC_DEFAULT;
 		
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
@@ -188,12 +179,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		public Builder biomeSet(LandBiomeSetType biomeSet)
 		{
 			this.biomeSet = biomeSet;
-			return this;
-		}
-		
-		public Builder category(Biome.BiomeCategory biomeCategory)
-		{
-			this.biomeCategory = biomeCategory;
 			return this;
 		}
 		

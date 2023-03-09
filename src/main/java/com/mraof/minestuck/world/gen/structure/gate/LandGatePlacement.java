@@ -1,16 +1,19 @@
 package com.mraof.minestuck.world.gen.structure.gate;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
@@ -19,14 +22,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
+import java.util.Optional;
 
-public final class LandGatePlacement implements StructurePlacement
+public final class LandGatePlacement extends StructurePlacement
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final LandGatePlacement INSTANCE = new LandGatePlacement();
+	public static final Codec<LandGatePlacement> CODEC = RecordCodecBuilder.create(instance -> placementCodec(instance).apply(instance, LandGatePlacement::new));
 	
-	public static final Codec<LandGatePlacement> CODEC = Codec.unit(LandGatePlacement.INSTANCE);
+	public LandGatePlacement()
+	{
+		this(Vec3i.ZERO, FrequencyReductionMethod.DEFAULT, 1, 0, Optional.empty());
+	}
+	
+	public LandGatePlacement(Vec3i locateOffset, FrequencyReductionMethod frequencyReductionMethod, float frequency, int salt, @SuppressWarnings({"deprecation", "OptionalUsedAsFieldOrParameterType"}) Optional<ExclusionZone> exclusionZone)
+	{
+		super(locateOffset, frequencyReductionMethod, frequency, salt, exclusionZone);
+	}
 	
 	@Override
 	public StructurePlacementType<LandGatePlacement> type()
@@ -35,11 +47,11 @@ public final class LandGatePlacement implements StructurePlacement
 	}
 	
 	@Override
-	public boolean isFeatureChunk(ChunkGenerator generator, long seed, int chunkX, int chunkZ)
+	public boolean isPlacementChunk(ChunkGenerator generator, RandomState state, long seed, int chunkX, int chunkZ)
 	{
 		if(generator instanceof LandChunkGenerator landGenerator)
 		{
-			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition();
+			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(state);
 			return chunkPos.x == chunkX && chunkPos.z == chunkZ;
 		} else
 			return false;
@@ -52,12 +64,12 @@ public final class LandGatePlacement implements StructurePlacement
 			// (Last checked mc 1.18) RegistryObject's refers to objects in regular / builtin registries,
 			// but some registries also have separate dynamic registries that are world-specific
 			// We need a configured structure from the dynamic registry and not the builtin registry for getStartForFeature() to work
-			ConfiguredStructureFeature<?, ?> landGate = level.registryAccess().registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY)
+			Structure landGate = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
 					.get(MSConfiguredStructures.LAND_GATE.getKey());
 			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
 			
-			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition();
-			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForFeature(landGate);
+			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(level.getChunkSource().randomState());
+			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForStructure(landGate);
 			
 			if(start != null)
 			{

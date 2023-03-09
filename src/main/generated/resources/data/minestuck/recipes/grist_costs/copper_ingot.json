@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:copper_ingot"
-  },
   "grist_cost": {
     "minestuck:shale": 9
+  },
+  "ingredient": {
+    "item": "minecraft:copper_ingot"
   }
 }

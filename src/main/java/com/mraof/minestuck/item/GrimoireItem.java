@@ -1,8 +1,7 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -24,7 +23,7 @@ public class GrimoireItem extends Item
 	{
 		playerIn.level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE.get(), SoundSource.AMBIENT, 0.5F, 0.8F);
 		if(level.isClientSide)
-			playerIn.sendMessage(new TranslatableComponent(getDescriptionId() + ".message"), Util.NIL_UUID);
+			playerIn.sendSystemMessage(Component.translatable(getDescriptionId() + ".message"));
 		return super.use(level, playerIn, handIn);
 	}
 }

@@ -7,13 +7,12 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class CheckLandCommand
 {
 	public static final String CHECK = "commands.minestuck.check_land";
 	public static final String FAIL = "commands.minestuck.check_land.fail";
-	private static final SimpleCommandExceptionType FAIL_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(FAIL));
+	private static final SimpleCommandExceptionType FAIL_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(FAIL));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
@@ -24,7 +23,7 @@ public class CheckLandCommand
 	{
 		LandTypePair.Named landTypes = LandTypePair.getNamed(source.getLevel()).orElseThrow(FAIL_EXCEPTION::create);
 		
-		Component toSend = new TranslatableComponent(CHECK, landTypes.asComponent());
+		Component toSend = Component.translatable(CHECK, landTypes.asComponent());
 		source.sendSuccess(toSend, false);
 		return 1;
 	}

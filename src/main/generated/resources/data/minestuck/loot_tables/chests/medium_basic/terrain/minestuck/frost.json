@@ -2,129 +2,129 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.25
+                "max": 0.25,
+                "min": 0.0
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minecraft:flint_and_steel"
+          "name": "minecraft:flint_and_steel",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:coal"
+          "name": "minecraft:coal",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:diamond"
+          "name": "minecraft:diamond",
+          "quality": 2
         }
-      ]
+      ],
+      "name": "supplies",
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 20,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 10.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:snowball",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 10.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:snowball"
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:snow",
           "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:snow"
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:snow_block",
           "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:snow_block"
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "name": "minecraft:spruce_sapling",
           "quality": -1,
-          "name": "minecraft:spruce_sapling"
+          "weight": 15
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

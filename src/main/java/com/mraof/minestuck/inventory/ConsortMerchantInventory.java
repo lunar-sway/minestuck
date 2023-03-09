@@ -3,11 +3,10 @@ package com.mraof.minestuck.inventory;
 import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -68,7 +67,7 @@ public class ConsortMerchantInventory implements Container
 			int amountPurchased = (int) Math.min(prices[index] != 0 ? playerData.getBoondollars() / prices[index] : Integer.MAX_VALUE, all ? stack.getCount() : 1);
 			if (amountPurchased == 0)
 			{
-				player.sendMessage(new TranslatableComponent(CANT_AFFORD), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(CANT_AFFORD));
 			} else
 			{
 				playerData.takeBoondollars(amountPurchased * prices[index]);

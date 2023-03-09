@@ -8,8 +8,7 @@ import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TreeSylladexScreen extends SylladexScreen
@@ -33,7 +32,7 @@ public class TreeSylladexScreen extends SylladexScreen
 	public void init()
 	{
 		super.init();
-		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, TextComponent.EMPTY, button -> changeSetting());
+		guiButton = new ExtendedButton((width - GUI_WIDTH)/2 + 15, (height - GUI_HEIGHT)/2 + 175, 120, 20, Component.empty(), button -> changeSetting());
 		addRenderableWidget(guiButton);
 	}
 	
@@ -43,7 +42,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		guiButton.x = (width - GUI_WIDTH)/2 + 15;
 		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
 		boolean autobalance = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.autoBalance : MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
-		guiButton.setMessage(new TranslatableComponent(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
+		guiButton.setMessage(Component.translatable(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
 		guiButton.active = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
 		super.render(poseStack, mouseX, mouseY, f);
 	}

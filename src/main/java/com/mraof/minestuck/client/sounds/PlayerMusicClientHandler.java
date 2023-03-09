@@ -40,7 +40,7 @@ public class PlayerMusicClientHandler
 			if(cassetteType != EnumCassetteType.NONE)
 			{
 				EntityBoundSoundInstance soundInstance = new EntityBoundSoundInstance(
-						cassetteType.getSoundEvent(), SoundSource.PLAYERS, volume, pitch, entity);
+						cassetteType.getSoundEvent(), SoundSource.PLAYERS, volume, pitch, entity, 0);//TODO
 				
 				entitiesMap.put(entityID, soundInstance);
 				soundManager.play(soundInstance);

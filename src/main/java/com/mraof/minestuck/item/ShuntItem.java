@@ -2,8 +2,6 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -27,10 +25,10 @@ public class ShuntItem extends Item
 			ItemStack content = AlchemyHelper.getDecodedItem(stack);
 			
 			if (!content.isEmpty())
-				tooltip.add(new TextComponent("(").append(content.getHoverName()).append(")"));
+				tooltip.add(Component.literal("(").append(content.getHoverName()).append(")"));
 			else
-				tooltip.add(new TextComponent("(").append(new TranslatableComponent(getDescriptionId()+".invalid")).append(")"));
+				tooltip.add(Component.literal("(").append(Component.translatable(getDescriptionId()+".invalid")).append(")"));
 		} else
-			tooltip.add(new TextComponent("(").append(new TranslatableComponent(getDescriptionId()+".empty")).append(")"));
+			tooltip.add(Component.literal("(").append(Component.translatable(getDescriptionId()+".empty")).append(")"));
 	}
 }

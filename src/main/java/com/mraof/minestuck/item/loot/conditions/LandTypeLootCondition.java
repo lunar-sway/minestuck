@@ -65,8 +65,8 @@ public class LandTypeLootCondition implements LootItemCondition
 		{
 			serializeSet(json, "terrain_group", value.terrainGroups, ResourceLocation::toString);
 			serializeSet(json, "title_group", value.titleGroups, ResourceLocation::toString);
-			serializeSet(json, "terrain_type", value.terrainTypes, type -> type.getRegistryName().toString());
-			serializeSet(json, "title_type", value.titleTypes, type -> type.getRegistryName().toString());
+			serializeSet(json, "terrain_type", value.terrainTypes, type -> LandTypes.TERRAIN_REGISTRY.get().getKey(type).toString());
+			serializeSet(json, "title_type", value.titleTypes, type -> LandTypes.TITLE_REGISTRY.get().getKey(type).toString());
 			
 			json.addProperty("inverse", value.inverted);
 		}

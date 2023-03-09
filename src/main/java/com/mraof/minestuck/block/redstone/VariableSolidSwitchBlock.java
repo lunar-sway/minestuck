@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +20,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * Can be right clicked without crouching to increase the power/light values the block gives off by one or right clicked with an empty hand to reduce the power/light values by one.
@@ -91,7 +91,7 @@ public class VariableSolidSwitchBlock extends Block
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{

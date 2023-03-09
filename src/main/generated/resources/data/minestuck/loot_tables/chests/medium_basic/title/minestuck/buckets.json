@@ -2,74 +2,74 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "weapons",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "supplies",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:bucket"
+          "name": "minecraft:bucket",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "name": "minecraft:water_bucket"
+          "name": "minecraft:water_bucket",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minecraft:lava_bucket"
+          "name": "minecraft:lava_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:oil_bucket"
+          "name": "minestuck:oil_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:blood_bucket"
+          "name": "minestuck:blood_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:brain_juice_bucket"
+          "name": "minestuck:brain_juice_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:water_colors_bucket"
+          "name": "minestuck:water_colors_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:ender_bucket"
+          "name": "minestuck:ender_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:obsidian_bucket"
+          "name": "minestuck:obsidian_bucket",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:thresh_dvd",
           "quality": 2,
-          "name": "minestuck:thresh_dvd"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

@@ -4,29 +4,37 @@ import com.mojang.serialization.Codec;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class FrogTempleStructure extends StructureFeature<NoneFeatureConfiguration>
+import java.util.Optional;
+
+public class FrogTempleStructure extends Structure
 {
-	public FrogTempleStructure(Codec<NoneFeatureConfiguration> codec)
+	public static final Codec<FrogTempleStructure> CODEC = simpleCodec(FrogTempleStructure::new);
+	
+	public FrogTempleStructure(StructureSettings settings)
 	{
-		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.OCEAN_FLOOR_WG), FrogTempleStructure::generatePieces));
+		super(settings);
 	}
 	
 	@Override
-	public GenerationStep.Decoration step()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return GenerationStep.Decoration.SURFACE_STRUCTURES;
+		return onTopOfChunkCenter(context, Heightmap.Types.OCEAN_FLOOR_WG, builder -> generatePieces(builder, context));
 	}
 	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	@Override
+	public StructureType<?> type()
+	{
+		return MSStructures.FROG_TEMPLE.get();
+	}
+	
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 	{
 		final WorldgenRandom random = context.random();
-		FrogTemplePiece mainPiece = new FrogTemplePiece(context.chunkGenerator(), context.heightAccessor(), random, context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ());
+		FrogTemplePiece mainPiece = new FrogTemplePiece(context.chunkGenerator(), context.heightAccessor(), context.randomState(), random, context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ());
 		builder.addPiece(mainPiece);
 		
 		int y = mainPiece.getBoundingBox().minY(); //determines height of pillars from the variable height of the main structure

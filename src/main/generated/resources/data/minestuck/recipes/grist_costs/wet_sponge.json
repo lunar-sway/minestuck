@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:wet_sponge"
-  },
   "grist_cost": {
     "minestuck:amber": 20,
-    "minestuck:sulfur": 30,
-    "minestuck:cobalt": 10
+    "minestuck:cobalt": 10,
+    "minestuck:sulfur": 30
+  },
+  "ingredient": {
+    "item": "minecraft:wet_sponge"
   }
 }

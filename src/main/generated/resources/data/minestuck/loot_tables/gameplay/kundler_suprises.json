@@ -2,66 +2,66 @@
   "type": "minecraft:empty",
   "pools": [
     {
-      "name": "computer",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:melon_slice"
+          "name": "minecraft:melon_slice",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:stick"
+          "name": "minecraft:stick",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:egg"
+          "name": "minecraft:egg",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:dirt"
+          "name": "minecraft:dirt",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:pumpkin"
+          "name": "minecraft:pumpkin",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:cobblestone"
+          "name": "minecraft:cobblestone",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:redstone"
+          "name": "minecraft:redstone",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minestuck:surprise_embryo"
+          "name": "minestuck:surprise_embryo",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minestuck:gamegrl_magazine"
+          "name": "minestuck:gamegrl_magazine",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minestuck:gamebro_magazine"
+          "name": "minestuck:gamebro_magazine",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minecraft:dead_horn_coral"
+          "name": "minecraft:dead_horn_coral",
+          "weight": 10
         }
-      ]
+      ],
+      "name": "computer",
+      "rolls": 1.0
     }
   ]
 }

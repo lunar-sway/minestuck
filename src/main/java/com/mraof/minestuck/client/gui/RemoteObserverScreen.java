@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -38,7 +38,7 @@ public class RemoteObserverScreen extends Screen
 	
 	RemoteObserverScreen(RemoteObserverBlockEntity be)
 	{
-		super(new TextComponent("Stat Storer"));
+		super(Component.literal("Stat Storer"));
 		
 		this.be = be;
 		this.activeType = be.getActiveType();
@@ -50,19 +50,19 @@ public class RemoteObserverScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 5, 135, 20, new TextComponent(activeType.getNameNoSpaces()), button -> changeActiveType()));
+		addRenderableWidget(typeButton = new ExtendedButton(this.width / 2 - 67, (height - GUI_HEIGHT) / 2 + 5, 135, 20, Component.literal(activeType.getNameNoSpaces()), button -> changeActiveType()));
 		
-		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 53, yOffset + 29, 105, 18, Component.literal("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(be.getCurrentEntityType()).toString()); //TODO somewhere along the line, if the active type is not current entity present and the gui is exited, returning to current entity present active type has pig as the entity type
 		addRenderableWidget(entityTypeTextField);
 		entityTypeTextField.setVisible(activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT);
 		
-		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("+"), button -> changeRange(1)));
-		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
-		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("++"), button -> changeRange(10)));
-		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 51, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
+		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 51, 20, 20, Component.literal("+"), button -> changeRange(1)));
+		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 51, 20, 20, Component.literal("-"), button -> changeRange(-1)));
+		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 51, 20, 20, Component.literal("++"), button -> changeRange(10)));
+		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 51, 20, 20, Component.literal("--"), button -> changeRange(-10)));
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 - 20, yOffset + 73, 40, 20, Component.literal("DONE"), button -> finish()));
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class RemoteObserverScreen extends Screen
 	private void changeActiveType()
 	{
 		activeType = RemoteObserverBlockEntity.ActiveType.fromInt(activeType.ordinal() < RemoteObserverBlockEntity.ActiveType.values().length - 1 ? activeType.ordinal() + 1 : 0);
-		typeButton.setMessage(new TextComponent(activeType.getNameNoSpaces()));
+		typeButton.setMessage(Component.literal(activeType.getNameNoSpaces()));
 		
 		entityTypeTextField.setVisible(activeType == RemoteObserverBlockEntity.ActiveType.CURRENT_ENTITY_PRESENT);
 	}

@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.util.CoordPair;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +50,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		
 		int tallness = 7;
 		int height = rand.nextInt(tallness) + tallness + 3;
@@ -77,7 +78,7 @@ public class MesaFeature extends Feature<NoneFeatureConfiguration>
 	}
 	
 	//TODO: Figure out how this code even works, make it more readable (and possibly more efficient), and make the same changes to RockDecorator.generateRock()
-	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, Random random, boolean isAlt, BlockState groundBlock)
+	private BlockPos generateMesa(BlockPos rockPos, int height, float plateauSize, LevelAccessor level, RandomSource random, boolean isAlt, BlockState groundBlock)
 	{
 		BoundingBox boundingBox = new BoundingBox(rockPos.getX() - 8, level.getMinBuildHeight(), rockPos.getZ() - 8, rockPos.getX() + 7, level.getMaxBuildHeight(), rockPos.getZ() + 7);	//Extra solution to prevent the code to run indefinitely
 		float xSlope = random.nextFloat(), zSlope = random.nextFloat();

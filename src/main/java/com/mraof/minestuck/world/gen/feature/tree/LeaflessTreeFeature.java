@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.gen.feature.tree;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.RotatedPillarBlock;
@@ -11,8 +13,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
-
-import java.util.Random;
 
 /**
  * A feature which places a set of branches in a similar manner to fancy oak trees,
@@ -30,7 +30,7 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		BlockState state = context.config().state;
 		
 		int size = rand.nextInt(3);
@@ -91,7 +91,7 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		{
 			float f = i/(float) (length);
 			BlockPos pos = pos0.offset(xDiff*f, yDiff*f, zDiff*f);
-			if(TreeFeature.isFree(level, pos))
+			if(TreeFeature.validTreePos(level, pos) || level.isStateAtPosition(pos, oldState -> oldState.is(BlockTags.LOGS)))
 				setBlock(level, pos, state);
 			else return;
 		}

@@ -18,8 +18,8 @@ public class LandTypes
 	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"), Minestuck.MOD_ID);
 	public static final DeferredRegister<TitleLandType> TITLE_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"), Minestuck.MOD_ID);
 	
-	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(TerrainLandType.class, RegistryBuilder::new);
-	public static final Supplier<IForgeRegistry<TitleLandType>> TITLE_REGISTRY = TITLE_REGISTER.makeRegistry(TitleLandType.class, RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<TitleLandType>> TITLE_REGISTRY = TITLE_REGISTER.makeRegistry(RegistryBuilder::new);
 	
 	public static final RegistryObject<TerrainLandType> TERRAIN_NULL = TERRAIN_REGISTER.register("null", NullTerrainLandType::new);
 	public static final RegistryObject<TerrainLandType> FOREST = TERRAIN_REGISTER.register("forest", ForestLandType::createForest);

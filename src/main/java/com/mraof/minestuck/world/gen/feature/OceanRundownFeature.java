@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -31,10 +31,10 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
 		ChunkGenerator generator = context.chunkGenerator();
-		Random rand = context.random();
-		
+		RandomSource rand = context.random();
+		/*TODO replace use of biome source. Perhaps just check if the surface block is a fluid?
 		BlockPos pos2, pos3;
-		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), level.getSeaLevel(), pos.getZ(), 3, generator.climateSampler())
+		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), level.getSeaLevel(), pos.getZ(), 3, context.climateSampler())
 				.stream().anyMatch(biome -> Biome.getBiomeCategory(biome) == Biome.BiomeCategory.OCEAN))
 		{
 			return false;
@@ -109,6 +109,7 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 		}
 		
 		return true;
+		*/return false;
 	}
 	
 	private static int lineposZ(BlockPos p1, BlockPos p2, int x)

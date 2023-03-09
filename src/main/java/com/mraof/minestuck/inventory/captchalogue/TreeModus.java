@@ -11,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -274,7 +275,7 @@ public class TreeModus extends Modus
 		
 		private String itemToString()
 		{
-			ResourceLocation name = stack.getItem().getRegistryName();
+			ResourceLocation name = ForgeRegistries.ITEMS.getKey(stack.getItem());
 			if(name == null)
 				throw new IllegalStateException("Item "+stack.getItem()+" does not have a registry name, but ended up in a tree modus!");
 			return name.getPath()+":"+name.getNamespace();	//Don't want the items to be sorted mod-wise.

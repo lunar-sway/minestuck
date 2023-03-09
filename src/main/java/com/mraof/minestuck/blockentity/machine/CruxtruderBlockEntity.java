@@ -3,14 +3,13 @@ package com.mraof.minestuck.blockentity.machine;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
@@ -78,7 +77,7 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
 						level.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
-						player.sendMessage(new TranslatableComponent(EMPTY), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(EMPTY));
 					} else
 					{
 						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.get().defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));

@@ -2,9 +2,8 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -43,16 +42,16 @@ public interface DestroyBlockEffect
 					harvestCounter++;
 				}
 				
-				if(melonOverload && harvestCounter >= 9 && entity instanceof ServerPlayer player)
+				if(melonOverload && harvestCounter >= 9)
 				{
-					TranslatableComponent message = new TranslatableComponent(stack.getDescriptionId() + ".message");
-					entity.sendMessage(message.withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(stack.getDescriptionId() + ".message").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
 					
 					entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 1800, 3));
 					entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1800, 3));
 					entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 1800, 3));
 					
-					MSCriteriaTriggers.MELON_OVERLOAD.trigger(player);
+					if(entity instanceof ServerPlayer player)
+						MSCriteriaTriggers.MELON_OVERLOAD.trigger(player);
 				}
 			}
 		};

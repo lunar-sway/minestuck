@@ -5,7 +5,7 @@ import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -139,7 +139,7 @@ public class BasiliskEntity extends UnderlingEntity implements IEntityMultiPart
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
-			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 2));
+			firstKillBonus(entity, EcheladderBonusType.BASILISK);
 		}
 	}
 }

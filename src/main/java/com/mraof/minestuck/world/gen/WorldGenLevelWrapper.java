@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -37,11 +38,10 @@ import net.minecraft.world.ticks.LevelTickAccess;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class WorldGenLevelWrapper implements WorldGenLevel
+public abstract class WorldGenLevelWrapper implements WorldGenLevel	//TODO go through and override anything that needs overriding
 {
 	protected final WorldGenLevel level;
 	
@@ -124,7 +124,7 @@ public abstract class WorldGenLevelWrapper implements WorldGenLevel
 	}
 	
 	@Override
-	public Random getRandom()
+	public RandomSource getRandom()
 	{
 		return this.level.getRandom();
 	}

@@ -3,7 +3,6 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.loot.GristLootModifier;
-import com.mraof.minestuck.item.loot.MSLootTables;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -19,7 +18,7 @@ public class MSLootModifiers extends GlobalLootModifierProvider
 	@Override
 	protected void start()
 	{
-		add("grist_mining", MSLootTables.GRIST_MODIFIER.get(), new GristLootModifier(
+		add("grist_mining", new GristLootModifier(
 				new LootItemCondition[]{new CanToolPerformAction(MSItemTypes.GRIST_HARVEST)}, 1));
 	}
 }

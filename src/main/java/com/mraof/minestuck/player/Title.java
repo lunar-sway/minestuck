@@ -5,7 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -82,7 +81,7 @@ public final class Title
 	
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(FORMAT, heroClass.asTextComponent(), heroAspect.asTextComponent());
+		return Component.translatable(FORMAT, heroClass.asTextComponent(), heroAspect.asTextComponent());
 	}
 	
 	@Override

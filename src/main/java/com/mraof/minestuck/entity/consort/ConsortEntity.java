@@ -4,13 +4,12 @@ import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.SimpleTexturedEntity;
-import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.Util;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -23,6 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -44,7 +44,6 @@ import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
@@ -125,7 +124,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 				{
 					Component text = message.getMessage(this, serverPlayer);
 					if(text != null)
-						player.sendMessage(text, Util.NIL_UUID);
+						player.sendSystemMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
@@ -354,7 +353,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 		{
 			Component text = message.getFromChain(this, player, chain);
 			if(text != null)
-				player.sendMessage(text, Util.NIL_UUID);
+				player.sendSystemMessage(text);
 		}
 	}
 	
@@ -410,7 +409,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 		return homeDimension;
 	}
 	
-	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
+	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
 	}

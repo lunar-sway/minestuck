@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:garnet_twix"
-  },
   "grist_cost": {
     "minestuck:garnet": 3
+  },
+  "ingredient": {
+    "item": "minestuck:garnet_twix"
   }
 }

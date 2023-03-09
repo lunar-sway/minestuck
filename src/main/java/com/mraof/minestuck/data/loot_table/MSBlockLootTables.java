@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
@@ -562,6 +562,8 @@ public class MSBlockLootTables extends BlockLoot
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName().getNamespace().equals(Minestuck.MOD_ID)).collect(Collectors.toList());
+		return ForgeRegistries.BLOCKS.getEntries().stream()
+				.filter(entry -> entry.getKey().location().getNamespace().equals(Minestuck.MOD_ID))
+				.map(Map.Entry::getValue).toList();
 	}
 }

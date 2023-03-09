@@ -4,9 +4,10 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.WallTorchBlock;
@@ -18,14 +19,12 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
-import java.util.Random;
-
 public class ImpDungeonEntryPiece extends StructurePiece
 {
 	protected boolean definedHeight = false;
 	protected int compoHeight;
 	
-	public static StructurePiece create(ChunkPos pos, Random rand)
+	public static StructurePiece create(ChunkPos pos, RandomSource rand)
 	{
 		return new ImpDungeonEntryPiece(pos.getBlockX(rand.nextInt(16)), pos.getBlockZ(rand.nextInt(16)), getRandomHorizontalDirection(rand));
 	}
@@ -51,7 +50,7 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	}
 	
 	@Override
-	public void addChildren(StructurePiece piece, StructurePieceAccessor builder, Random rand)
+	public void addChildren(StructurePiece piece, StructurePieceAccessor builder, RandomSource rand)
 	{
 		ImpDungeonPieces.EntryCorridor corridor = ImpDungeonPieces.EntryCorridor.create(this.getOrientation(), boundingBox.minX(), boundingBox.minZ(), rand);
 		compoHeight = corridor.getBoundingBox().maxY() - 1;
@@ -60,7 +59,7 @@ public class ImpDungeonEntryPiece extends StructurePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox box, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		checkHeight(level, box);
 		
@@ -155,7 +154,7 @@ public class ImpDungeonEntryPiece extends StructurePiece
 		definedHeight = true;
 	}
 	
-	protected void buildWall(BlockState block, int x, int z, WorldGenLevel level, Random rand, BoundingBox boundingBox, int minY)
+	protected void buildWall(BlockState block, int x, int z, WorldGenLevel level, RandomSource rand, BoundingBox boundingBox, int minY)
 	{
 		float f = 0.5F + z * 0.2F;
 		for(int y = 1; y < 4; y++)
@@ -169,7 +168,7 @@ public class ImpDungeonEntryPiece extends StructurePiece
 		}
 	}
 	
-	protected void buildFloorTile(BlockState block, int x, int z, WorldGenLevel level, Random rand, BoundingBox boundingBox)
+	protected void buildFloorTile(BlockState block, int x, int z, WorldGenLevel level, RandomSource rand, BoundingBox boundingBox)
 	{
 		int y = 0;
 		

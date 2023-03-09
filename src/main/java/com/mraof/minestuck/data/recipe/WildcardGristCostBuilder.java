@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -29,7 +30,7 @@ public class WildcardGristCostBuilder
 	
 	public static WildcardGristCostBuilder of(ItemLike item)
 	{
-		return new WildcardGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
+		return new WildcardGristCostBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
 	public static WildcardGristCostBuilder of(Ingredient ingredient)
@@ -62,13 +63,13 @@ public class WildcardGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	

@@ -1,43 +1,43 @@
 [
   {
-    "source_type": "recipe_serializer",
+    "interpreter_type": "minestuck:default",
     "source": "minecraft:crafting_shaped",
-    "interpreter_type": "minestuck:default"
+    "source_type": "recipe_serializer"
   },
   {
-    "source_type": "recipe_serializer",
+    "interpreter_type": "minestuck:default",
     "source": "minecraft:crafting_shapeless",
-    "interpreter_type": "minestuck:default"
+    "source_type": "recipe_serializer"
   },
   {
-    "source_type": "recipe_serializer",
+    "interpreter_type": "minestuck:default",
     "source": "minestuck:non_mirrored",
-    "interpreter_type": "minestuck:default"
+    "source_type": "recipe_serializer"
   },
   {
-    "source_type": "recipe_type",
+    "interpreter_type": "minestuck:default",
     "source": "stonecutting",
-    "interpreter_type": "minestuck:default"
+    "source_type": "recipe_type"
   },
   {
-    "source_type": "recipe_type",
+    "interpreter_type": "minestuck:smithing",
     "source": "smithing",
-    "interpreter_type": "minestuck:smithing"
+    "source_type": "recipe_type"
   },
   {
-    "source_type": "recipe_type",
-    "source": "smelting",
-    "interpreter_type": "minestuck:cooking",
     "interpreter": {
       "minestuck:tar": 1
-    }
+    },
+    "interpreter_type": "minestuck:cooking",
+    "source": "smelting",
+    "source_type": "recipe_type"
   },
   {
-    "source_type": "recipe_type",
-    "source": "minestuck:irradiating",
-    "interpreter_type": "minestuck:cooking",
     "interpreter": {
       "minestuck:uranium": 1
-    }
+    },
+    "interpreter_type": "minestuck:cooking",
+    "source": "minestuck:irradiating",
+    "source_type": "recipe_type"
   }
 ]

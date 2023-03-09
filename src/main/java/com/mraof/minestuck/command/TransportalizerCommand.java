@@ -13,7 +13,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 
@@ -26,9 +26,9 @@ public class TransportalizerCommand
 	public static final String FAILURE = "commands.minestuck.tpz.failure";
 	public static final String RESULT = "commands.minestuck.tpz.result";
 	public static final String FAILURE_RESULT = "commands.minestuck.tpz.failure_result";
-	private static final DynamicCommandExceptionType NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(o -> new TranslatableComponent(NOT_FOUND, o));
-	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(TransportalizerBlockEntity.BLOCKED_DESTINATION));
-	private static final SimpleCommandExceptionType RESULT_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(FAILURE_RESULT));
+	private static final DynamicCommandExceptionType NOT_FOUND_EXCEPTION = new DynamicCommandExceptionType(o -> Component.translatable(NOT_FOUND, o));
+	private static final SimpleCommandExceptionType BLOCKED_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(TransportalizerBlockEntity.BLOCKED_DESTINATION));
+	private static final SimpleCommandExceptionType RESULT_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(FAILURE_RESULT));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
@@ -59,12 +59,12 @@ public class TransportalizerCommand
 			{
 				newEntity.setPortalCooldown();
 				count++;
-			} else source.sendFailure(new TranslatableComponent(FAILURE, entity.getDisplayName()));
+			} else source.sendFailure(Component.translatable(FAILURE, entity.getDisplayName()));
 		}
 		
 		if(count == 0)
 			throw RESULT_EXCEPTION.create();
-		else source.sendSuccess(new TranslatableComponent(RESULT, count), true);
+		else source.sendSuccess(Component.translatable(RESULT, count), true);
 		
 		return count;
 	}

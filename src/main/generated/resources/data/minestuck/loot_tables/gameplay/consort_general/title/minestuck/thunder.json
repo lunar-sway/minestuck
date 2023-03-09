@@ -2,22 +2,22 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "item",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "name": "minestuck:iron_cane"
+          "name": "minestuck:iron_cane",
+          "weight": 3
         }
-      ]
+      ],
+      "name": "item",
+      "rolls": 1.0
     },
     {
-      "name": "block",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "block",
+      "rolls": 1.0
     }
   ]
 }

@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item.loot;
 
+import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
 import com.mraof.minestuck.item.loot.conditions.LandTypeLootCondition;
@@ -10,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -38,6 +39,6 @@ public class MSLootTables
 	public static final DeferredRegister<LootPoolEntryType> ENTRY_REGISTER = DeferredRegister.create(Registry.LOOT_ENTRY_REGISTRY, Minestuck.MOD_ID);
 	public static final RegistryObject<LootPoolEntryType> LAND_TABLE_ENTRY = ENTRY_REGISTER.register("land_table", () -> new LootPoolEntryType(new LandTableLootEntry.SerializerImpl()));
 	
-	public static final DeferredRegister<GlobalLootModifierSerializer<?>> MODIFIER_REGISTER = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Minestuck.MOD_ID);
-	public static final RegistryObject<GristLootModifier.Serializer> GRIST_MODIFIER = MODIFIER_REGISTER.register("grist", GristLootModifier.Serializer::new);
+	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> MODIFIER_REGISTER = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Minestuck.MOD_ID);
+	public static final RegistryObject<Codec<GristLootModifier>> GRIST_MODIFIER = MODIFIER_REGISTER.register("grist", () -> GristLootModifier.CODEC);
 }

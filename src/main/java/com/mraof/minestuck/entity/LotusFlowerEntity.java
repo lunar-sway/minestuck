@@ -7,12 +7,11 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.Util;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -113,7 +112,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 				restoreFromBonemeal();
 			} else if(level.isClientSide && player.distanceToSqr(this) < 36)
 			{
-				player.sendMessage(new TranslatableComponent(REGROW), Util.NIL_UUID);
+				player.sendSystemMessage(Component.translatable(REGROW));
 			}
 			
 			return InteractionResult.SUCCESS;

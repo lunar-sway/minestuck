@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 public class GlowystoneWireBlock extends Block
@@ -264,7 +264,7 @@ public class GlowystoneWireBlock extends Block
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		double x = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
 		double y = pos.getY() + 0.0625;

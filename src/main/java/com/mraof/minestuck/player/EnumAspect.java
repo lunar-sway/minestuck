@@ -1,10 +1,9 @@
 package com.mraof.minestuck.player;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.RandomSource;
 
 import java.util.EnumSet;
-import java.util.Random;
 import java.util.Set;
 
 /**
@@ -25,7 +24,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	 * @return null if <code>unavailableAspects</code> contains 12 or more aspects or
 	 * an <code>EnumAspect</code> of the chosen aspect.
 	 */
-	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects, Random rand)
+	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects, RandomSource rand)
 	{
 		if(unavailableAspects == null)
 			unavailableAspects = EnumSet.noneOf(EnumAspect.class);
@@ -96,7 +95,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	 */
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(getTranslationKey());
+		return Component.translatable(getTranslationKey());
 	}
 	
 	public String getTranslationKey()

@@ -1,11 +1,9 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -117,7 +115,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		{
 			foodStats = null;
 			LOGGER.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
-			sourcePlayer.sendMessage(new TextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
+			sourcePlayer.sendSystemMessage(Component.literal("An issue came up while creating the decoy. More info in the server logs."));
 		}
 	}
 	
@@ -214,7 +212,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	@Override
 	public Component getName()
 	{
-		return new TextComponent(username != null ? username : "DECOY");
+		return Component.literal(username != null ? username : "DECOY");
 	}
 	
 	@Override

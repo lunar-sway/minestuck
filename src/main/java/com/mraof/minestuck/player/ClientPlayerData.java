@@ -39,7 +39,7 @@ public final class ClientPlayerData
 	private static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
-	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		modus = null;
 		title = null;

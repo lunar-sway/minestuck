@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#",
-    "#",
-    "#"
-  ],
   "key": {
     "#": {
       "item": "minecraft:sandstone"
     }
   },
+  "pattern": [
+    "#",
+    "#",
+    "#"
+  ],
   "result": {
-    "item": "minestuck:sandstone_column",
-    "count": 3
+    "count": 3,
+    "item": "minestuck:sandstone_column"
   }
 }

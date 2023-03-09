@@ -2,46 +2,46 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:pogo_hammer"
+          "name": "minestuck:pogo_hammer",
+          "quality": 2
         }
-      ]
+      ],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "supplies",
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:crew_poster",
           "quality": 2,
-          "name": "minestuck:crew_poster"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

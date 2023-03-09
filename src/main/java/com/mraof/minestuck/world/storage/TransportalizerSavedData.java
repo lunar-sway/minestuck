@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -15,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * Keeps track of all transportalizer codes and the locations that they are linked to.
@@ -80,7 +80,7 @@ public class TransportalizerSavedData extends SavedData
 		return removed;
 	}
 	
-	public String findNewId(Random random, GlobalPos location)
+	public String findNewId(RandomSource random, GlobalPos location)
 	{
 		String unusedId;
 		do

@@ -4,9 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.inventory.captchalogue.ModusType;
+import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
@@ -17,7 +15,6 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.inventory.captchalogue.StartingModusManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -52,7 +49,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		ServerPlayer player = (ServerPlayer) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		MSDimensions.sendDimensionData(player);
 	}
@@ -60,7 +57,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		ServerPlayer player = (ServerPlayer) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
@@ -360,7 +357,7 @@ public final class PlayerData
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 			setModus(modus);
-		} else LOGGER.warn("Couldn't create a starting modus type {}.", type.getRegistryName());
+		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.get().getKey(type));
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayer player)

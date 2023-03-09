@@ -1,10 +1,10 @@
 {
+  "type": "minestuck:grist",
   "conditions": [
     {
-      "condition": "forge:can_tool_perform_action",
-      "action": "grist_harvest"
+      "action": "grist_harvest",
+      "condition": "forge:can_tool_perform_action"
     }
   ],
-  "multiplier": 1.0,
-  "type": "minestuck:grist"
+  "multiplier": 1.0
 }

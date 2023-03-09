@@ -11,7 +11,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -115,7 +114,7 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 					break;
 				else if(mouseX < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || minecraft.gameMode.hasInfiniteItems()))
-					renderTooltip(poseStack, new TranslatableComponent(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name),
+					renderTooltip(poseStack, Component.translatable(mode ? NormalGuiType.values()[i].name : EditmodeGuiType.values()[i].name),
 							mouseX, mouseY);
 		RenderSystem.enableDepthTest();
 	}

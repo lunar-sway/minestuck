@@ -115,7 +115,7 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	public static String itemString(Item item)
 	{
-		return Objects.requireNonNull(item.getRegistryName()).toString();
+		return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).toString();
 	}
 	
 	private static class TagSource implements Source

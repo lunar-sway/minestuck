@@ -14,7 +14,7 @@ import net.minecraft.world.item.EnderpearlItem;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.ExplosionEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -106,24 +106,21 @@ public class CreativeShockEffect extends MobEffect
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getEntity() instanceof Player player)
-		{
-			if(doesCreativeShockLimit(player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
-				event.setCanceled(true);
-		}
+		if(doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
 	{
-		if(doesCreativeShockLimit(event.getPlayer(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+		if(doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 			event.setNewSpeed(0);
 	}
 	
 	@SubscribeEvent
 	public static void onHarvestCheck(PlayerEvent.HarvestCheck event)
 	{
-		if(doesCreativeShockLimit(event.getPlayer(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+		if(doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 			event.setCanHarvest(false);
 	}
 	
@@ -141,7 +138,7 @@ public class CreativeShockEffect extends MobEffect
 	@SubscribeEvent
 	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event)
 	{
-		if(doesCreativeShockLimit(event.getPlayer(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
+		if(doesCreativeShockLimit(event.getEntity(), LIMIT_BLOCK_PLACEMENT_AND_BREAKING))
 		{
 			if(event.getItemStack().getItem() instanceof CruxiteArtifactItem //Cruxite check prevents players from using an artifact to enter while under effects of Creative Shock
 					|| event.getItemStack().getItem() instanceof EnderpearlItem

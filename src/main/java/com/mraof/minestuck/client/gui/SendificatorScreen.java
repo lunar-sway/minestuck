@@ -12,7 +12,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -60,25 +59,25 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		
 		int yOffset = (height - imageHeight) / 2;
 		
-		updateButton = addRenderableWidget(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, new TextComponent("Update"), button -> updateDestinationPos()));
+		updateButton = addRenderableWidget(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, Component.literal("Update"), button -> updateDestinationPos()));
 		
-		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, new TextComponent("X value of destination block pos")); //TODO make these translatable
+		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, Component.literal("X value of destination block pos")); //TODO make these translatable
 		destinationTextFieldX.setMaxLength(10);
 		addRenderableWidget(destinationTextFieldX);
 		destinationTextFieldX.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, new TextComponent("Y value of destination block pos"));
+		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, Component.literal("Y value of destination block pos"));
 		destinationTextFieldY.setMaxLength(3);
 		addRenderableWidget(destinationTextFieldY);
 		destinationTextFieldY.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, new TextComponent("Z value of destination block pos"));
+		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, Component.literal("Z value of destination block pos"));
 		destinationTextFieldZ.setMaxLength(10);
 		addRenderableWidget(destinationTextFieldZ);
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorBlockEntity
-		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, new TextComponent(menu.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();

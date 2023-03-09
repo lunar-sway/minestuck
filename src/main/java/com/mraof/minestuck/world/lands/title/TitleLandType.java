@@ -10,7 +10,6 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
@@ -18,7 +17,7 @@ import javax.annotation.Nullable;
  * Base class for land types that are associated with some aspect.
  * These land types make up the second half of a land together with a {@link TerrainLandType}.
  */
-public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> implements ILandType<TitleLandType>
+public abstract class TitleLandType implements ILandType
 {
 	public static final Codec<TitleLandType> CODEC = CodecUtil.registryCodec(LandTypes.TITLE_REGISTRY);
 	private final ResourceLocation groupName;
@@ -65,7 +64,7 @@ public abstract class TitleLandType extends ForgeRegistryEntry<TitleLandType> im
 	public ResourceLocation getGroup()
 	{
 		if(groupName == null)
-			return this.getRegistryName();
+			return LandTypes.TITLE_REGISTRY.get().getKey(this);
 		else return groupName;
 	}
 	

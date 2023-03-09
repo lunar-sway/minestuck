@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -20,8 +19,8 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -78,7 +77,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	@Override
@@ -156,9 +155,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		
 		if(canSend())
 		{
-			if(itemHandler.getStackInSlot(0).hasContainerItem())
+			if(itemHandler.getStackInSlot(0).hasCraftingRemainingItem())
 			{
-				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getContainerItem());
+				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getCraftingRemainingItem());
 			} else
 			{
 				if(level != null)
@@ -200,7 +199,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			if(side == Direction.UP)
 				return inputHandler.cast();
@@ -214,7 +213,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	
 	public void openMenu(ServerPlayer player)
 	{
-		NetworkHooks.openGui(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
+		NetworkHooks.openScreen(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
 	}
 	
 	@Nullable

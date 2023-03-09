@@ -8,17 +8,15 @@ import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillagePieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import java.util.Random;
 
 /**
  * Simple interface for all functions that are available for both types of land types.
  * A new land type should extend either {@link com.mraof.minestuck.world.lands.terrain.TerrainLandType}
  * or {@link com.mraof.minestuck.world.lands.title.TitleLandType}.
  */
-public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A>
+public interface ILandType
 {
 	/**
 	 * Returns a list of translation keys that can be used for the name of this land type.
@@ -75,7 +73,7 @@ public interface ILandType<A extends ILandType<?>> extends IForgeRegistryEntry<A
 	/**
 	 * Override this to register land type-specific village buildings.
 	 */
-	default void addVillagePieces(PieceRegister register, Random random)
+	default void addVillagePieces(PieceRegister register, RandomSource random)
 	{}
 	
 	interface PieceRegister

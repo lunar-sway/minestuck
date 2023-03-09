@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -10,8 +11,6 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Random;
 
 public class AspectSaplingBlock extends BushBlock implements BonemealableBlock
 {
@@ -36,13 +35,13 @@ public class AspectSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 
 	@Override
-	public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state)
 	{
 		return false;
 	}
 
 	@Override
-	public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
+	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state) {
 
 		//Nothing here yet as the trees are unfinished
 	}

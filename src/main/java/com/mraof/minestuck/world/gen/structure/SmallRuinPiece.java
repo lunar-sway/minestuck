@@ -2,15 +2,16 @@ package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.OgreEntity;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
@@ -22,15 +23,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
-import java.util.Random;
-
 public class SmallRuinPiece extends ScatteredFeaturePiece
 {
 	private final boolean[] torches = new boolean[4];
 	private final boolean[] placedOgres = new boolean[4];
 	private boolean placedChest;
 	
-	public SmallRuinPiece(Random random, int minX, int minZ, float skyLight)
+	public SmallRuinPiece(RandomSource random, int minX, int minZ, float skyLight)
 	{
 		super(MSStructurePieces.SMALL_RUIN.get(), minX, 64, minZ, 7, 4, 10, getRandomHorizontalDirection(random));
 		
@@ -66,7 +65,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 	}
 
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox boundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		if(!updateAverageGroundHeight(level, boundingBoxIn, 0)) //where the height is determined, uses ScatteredStructurePiece "Heightmap.Type.MOTION_BLOCKING_NO_LEAVES"
 			return;
@@ -128,13 +127,13 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 			placedOgres[3] = placeUnderling(this.boundingBox.maxX() + 3, this.boundingBox.maxZ() + 3, boundingBoxIn, level, randomIn);
 	}
 	
-	private boolean generateChest(WorldGenLevel level, BoundingBox boundingBoxIn, Random randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
+	private boolean generateChest(WorldGenLevel level, BoundingBox boundingBoxIn, RandomSource randomIn, int x, int y, int z, Direction direction, ResourceLocation lootTable)
 	{
 		BlockPos blockpos = new BlockPos(this.getWorldX(x, z), this.getWorldY(y), this.getWorldZ(x, z));
 		return createChest(level, boundingBoxIn, randomIn, blockpos, lootTable, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, direction));
 	}
 	
-	private void buildWall(BlockState block, int x, int z, WorldGenLevel level, Random rand, BoundingBox boundingBox, int minY)
+	private void buildWall(BlockState block, int x, int z, WorldGenLevel level, RandomSource rand, BoundingBox boundingBox, int minY)
 	{
 		
 		float f = z * 0.2F;
@@ -149,7 +148,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		}
 	}
 	
-	private boolean buildFloorTile(BlockState block, int x, int z, WorldGenLevel level, Random rand, BoundingBox boundingBox)
+	private boolean buildFloorTile(BlockState block, int x, int z, WorldGenLevel level, RandomSource rand, BoundingBox boundingBox)
 	{
 		int y = 0;
 		
@@ -175,7 +174,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		return b;
 	}
 	
-	private boolean placeUnderling(int xPos, int zPos, BoundingBox boundingBox, WorldGenLevel level, Random rand)
+	private boolean placeUnderling(int xPos, int zPos, BoundingBox boundingBox, WorldGenLevel level, RandomSource rand)
 	{
 		if(!boundingBox.isInside(new BlockPos(xPos, 64, zPos)))
 			return false;

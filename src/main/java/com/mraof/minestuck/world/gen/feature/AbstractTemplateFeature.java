@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -16,11 +17,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-
-import java.util.Random;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> extends Feature<T>
 {
@@ -29,9 +28,9 @@ public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> ex
 		super(pCodec);
 	}
 	
-	protected abstract ResourceLocation pickTemplate(Random random);
+	protected abstract ResourceLocation pickTemplate(RandomSource random);
 	
-	protected abstract int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random);
+	protected abstract int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random);
 	
 	protected static int minWorldHeightInSize(WorldGenLevel level, BlockPos pos, Vec3i templateSize)
 	{
@@ -48,9 +47,9 @@ public abstract class AbstractTemplateFeature<T extends FeatureConfiguration> ex
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
 		ChunkGenerator generator = context.chunkGenerator();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
-		StructureManager templates = level.getLevel().getStructureManager();
+		StructureTemplateManager templates = level.getLevel().getStructureManager();
 		StructureTemplate template = templates.getOrCreate(this.pickTemplate(rand));
 		
 		ChunkPos chunkPos = new ChunkPos(pos);

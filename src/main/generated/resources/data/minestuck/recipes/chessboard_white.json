@@ -1,19 +1,19 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "chessboard",
+  "key": {
+    "B": {
+      "item": "minecraft:black_terracotta"
+    },
+    "W": {
+      "item": "minecraft:white_terracotta"
+    }
+  },
   "pattern": [
     "WBW",
     "BWB",
     "WBW"
   ],
-  "key": {
-    "W": {
-      "item": "minecraft:white_terracotta"
-    },
-    "B": {
-      "item": "minecraft:black_terracotta"
-    }
-  },
   "result": {
     "item": "minestuck:chessboard"
   }

@@ -4,6 +4,7 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -60,9 +61,9 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
-	protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty)
+	protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty)
 	{
-		super.populateDefaultEquipmentSlots(difficulty);
+		super.populateDefaultEquipmentSlots(random, difficulty);
 		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(random.nextDouble() < .25 ? Items.BOW : random.nextDouble() < .2 ? MSItems.REGISWORD.get() : random.nextDouble() < .02 ? MSItems.SORD.get() : Items.STONE_SWORD));
 	}
 	
@@ -183,12 +184,12 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag)
 	{
-		spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		spawnDataIn = super.finalizeSpawn(level, difficultyIn, reason, spawnDataIn, dataTag);
 		
-		populateDefaultEquipmentSlots(difficultyIn);
-		this.populateDefaultEquipmentEnchantments(difficultyIn);
+		populateDefaultEquipmentSlots(level.getRandom(), difficultyIn);
+		this.populateDefaultEquipmentEnchantments(level.getRandom(), difficultyIn);
 		
 		setCombatTask();
 		return spawnDataIn;

@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.plant.DoubleLogBlock;
 import com.mraof.minestuck.block.plant.EndLeavesBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelSimulatedReader;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -14,9 +15,6 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraftforge.common.IPlantable;
-
-import java.util.Random;
 
 
 public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
@@ -47,7 +45,7 @@ public class EndTreeFeature extends Feature<NoneFeatureConfiguration>
 	//The point of using this algorithm, pretty much copy-pasted from the code on chorus plants, was to make these trees more reminiscent of chorus plants.
 	//As it stands, however, they don't branch horizontally, the way a chorus plant would.
 	//It's not necessary to fix this for end trees to exist and be enjoyed, but fixing it would be a good idea.
-	private boolean subGenerate(WorldGenLevel level, Random rand, BlockPos curr, BlockPos origin, int range, int step, int maxSteps)
+	private boolean subGenerate(WorldGenLevel level, RandomSource rand, BlockPos curr, BlockPos origin, int range, int step, int maxSteps)
 	{
 		int height = rand.nextInt(Math.max(1, 4 - step)) + 1;
 		

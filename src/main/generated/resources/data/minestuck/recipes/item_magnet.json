@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iri",
-    "geg",
-    "iri"
-  ],
   "key": {
     "e": {
       "item": "minestuck:plutonium_core"
+    },
+    "g": {
+      "item": "minecraft:glass_pane"
     },
     "i": {
       "item": "minecraft:iron_ingot"
     },
     "r": {
       "item": "minecraft:redstone"
-    },
-    "g": {
-      "item": "minecraft:glass_pane"
     }
   },
+  "pattern": [
+    "iri",
+    "geg",
+    "iri"
+  ],
   "result": {
     "item": "minestuck:item_magnet"
   }

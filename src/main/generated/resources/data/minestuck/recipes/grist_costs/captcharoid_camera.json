@@ -1,8 +1,5 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:captcharoid_camera"
-  },
   "grist_cost": {
     "minestuck:build": 5000,
     "minestuck:caulk": 500,
@@ -10,5 +7,8 @@
     "minestuck:marble": 500,
     "minestuck:mercury": 500,
     "minestuck:shale": 500
+  },
+  "ingredient": {
+    "item": "minestuck:captcharoid_camera"
   }
 }

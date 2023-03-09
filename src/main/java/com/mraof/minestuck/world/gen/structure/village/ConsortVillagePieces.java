@@ -13,11 +13,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -34,13 +35,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
-import java.util.Random;
 
 public class ConsortVillagePieces
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static List<PieceWeight> getStructureVillageWeightedPieceList(Random random, LandTypePair landTypes)
+	public static List<PieceWeight> getStructureVillageWeightedPieceList(RandomSource random, LandTypePair landTypes)
 	{
 		List<PieceWeight> list = Lists.newArrayList();
 		
@@ -54,7 +54,7 @@ public class ConsortVillagePieces
 	}
 	
 	//TODO make sure that components don't generate near the ocean
-	private static StructurePiece generateAndAddComponent(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing)
+	private static StructurePiece generateAndAddComponent(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing)
 	{
 		if (Math.abs(structureMinX - start.getBoundingBox().minX()) <= 112 && Math.abs(structureMinZ - start.getBoundingBox().minZ()) <= 112)
 		{
@@ -71,7 +71,7 @@ public class ConsortVillagePieces
 		else return null;
 	}
 	
-	private static ConsortVillagePiece generateComponent(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing)
+	private static ConsortVillagePiece generateComponent(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int structureMinX, int structureMinY, int structureMinZ, Direction facing)
 	{
 		int i = updatePieceWeight(start.pieceWeightList);
 		
@@ -135,7 +135,7 @@ public class ConsortVillagePieces
 	
 	public interface PieceFactory
 	{
-		ConsortVillagePiece createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing);
+		ConsortVillagePiece createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing);
 	}
 	
 	public static class PieceWeight
@@ -188,7 +188,7 @@ public class ConsortVillagePieces
 				tagCompound.putBoolean("spawn"+i, spawns[i]);
 		}
 		
-		protected StructurePiece getNextComponentNN(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int offsetY, int offsetXZ)
+		protected StructurePiece getNextComponentNN(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int offsetY, int offsetXZ)
 		{
 			Direction direction = this.getOrientation();
 			
@@ -213,7 +213,7 @@ public class ConsortVillagePieces
 			}
 		}
 		
-		protected StructurePiece getNextComponentPP(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int offsetY, int offsetXZ)
+		protected StructurePiece getNextComponentPP(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int offsetY, int offsetXZ)
 		{
 			Direction direction = this.getOrientation();
 			
@@ -357,7 +357,7 @@ public class ConsortVillagePieces
 	{
 		private int length;
 		
-		VillagePath(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		VillagePath(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.VILLAGE_PATH.get(), 0, boundingBox, 0);
 			this.setOrientation(facing);
@@ -378,7 +378,7 @@ public class ConsortVillagePieces
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			boolean flag = false;
 			
@@ -446,7 +446,7 @@ public class ConsortVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGeneratorIn);
 			BlockState pathBlock = blocks.getBlockState("village_path");
@@ -460,7 +460,7 @@ public class ConsortVillagePieces
 			}
 		}
 
-		public static BoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static BoundingBox findPieceBox(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			for(int i = 7 * Mth.nextInt(rand, 3, 5); i >= 7; i -= 7)
 			{
@@ -475,7 +475,7 @@ public class ConsortVillagePieces
 	}
 	
 	
-	protected static StructurePiece generateAndAddRoadPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction direction)
+	protected static StructurePiece generateAndAddRoadPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction direction)
 	{
 		if (Math.abs(x - start.getBoundingBox().minX()) <= 112 && Math.abs(z - start.getBoundingBox().minZ()) <= 112)
 		{

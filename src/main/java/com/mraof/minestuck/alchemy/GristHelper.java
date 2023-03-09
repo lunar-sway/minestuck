@@ -17,6 +17,7 @@ import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.Level;
@@ -46,7 +47,7 @@ public class GristHelper
 	/**
 	 * Returns a random grist type. Used for creating randomly aligned underlings.
 	 */
-	public static GristType getPrimaryGrist(Random random)
+	public static GristType getPrimaryGrist(RandomSource random)
 	{
 		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
 				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).collect(Collectors.toList());
@@ -57,7 +58,7 @@ public class GristHelper
 	/**
 	 * Returns a secondary grist type based on primary grist
 	 */
-	public static GristType getSecondaryGrist(Random random, GristType primary)
+	public static GristType getSecondaryGrist(RandomSource random, GristType primary)
 	{
 		List<GristType> secondaryTypes = primary.getSecondaryTypes();
 		if(secondaryTypes.size() > 0)
@@ -71,7 +72,7 @@ public class GristHelper
 	 */
 	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
 	{
-		Random random = entity.getRandom();
+		RandomSource random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
 		double effectivePowerLevel = 1;
