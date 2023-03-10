@@ -472,7 +472,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 					{
 						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
 					}
-					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
+					if(!entry.inAtheneum())
+						player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
+				
 				} else
 				{
 					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);

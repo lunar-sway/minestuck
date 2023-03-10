@@ -17,6 +17,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import javax.annotation.Nonnull;
@@ -38,27 +39,53 @@ public final class DeployList
 	
 	public static void registerItems()
 	{
-		
-		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
-		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+		//Deployables
+		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0, false);
+		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0, false);
 		registerItem("artifact_card", new GristSet(), null, 0, HAS_NOT_ENTERED,
-				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true));
-		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0);
+				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true), false);
+		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new GristSet(), new GristSet(GristTypes.BUILD, 100), 0, false);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
-				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4));
+				(isPrimary, connection) -> new GristSet(connection.getBaseGrist(), 4), false);
 		registerItem("portable_cruxtruder", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines),
-				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)));
-		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()));
-		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()));
-		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()));
-		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new GristSet(GristTypes.BUILD, 4000), 2);
-		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD.get()), true));
+				(connection, level) -> MiniCruxtruderItem.getCruxtruderWithColor(ColorHandler.getColorForPlayer(connection.getClientIdentifier(), level)), false);
+		registerItem("portable_punch_designix", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_PUNCH_DESIGNIX.get()), false);
+		registerItem("portable_totem_lathe", new GristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()), false);
+		registerItem("portable_alchemiter", new GristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()), false);
+		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new GristSet(GristTypes.BUILD, 4000), 2, false);
+		registerItem("card_punched_card", new GristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD.get()), true), false);
+		
+		//Atheneum
+		registerItem("stone", new ItemStack(Blocks.STONE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("cobblestone", new ItemStack(Blocks.COBBLESTONE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("oak_planks", new ItemStack(Blocks.OAK_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("oak_slab", new ItemStack(Blocks.OAK_SLAB), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("oak_stairs", new ItemStack(Blocks.OAK_STAIRS), new GristSet(GristTypes.BUILD, 2), 0, true);
+		registerItem("oak_fence", new ItemStack(Blocks.OAK_FENCE), new GristSet(GristTypes.BUILD, 2), 0, true);
+		registerItem("oak_log", new ItemStack(Blocks.OAK_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("ladder", new ItemStack(Blocks.LADDER), new GristSet(GristTypes.BUILD, 16), 0, true);
+		registerItem("birch_planks", new ItemStack(Blocks.BIRCH_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("spruce_planks", new ItemStack(Blocks.SPRUCE_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("dark_oak_planks", new ItemStack(Blocks.DARK_OAK_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("acacia_planks", new ItemStack(Blocks.ACACIA_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("jungle_planks", new ItemStack(Blocks.JUNGLE_PLANKS), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("birch_log", new ItemStack(Blocks.BIRCH_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("spruce_log", new ItemStack(Blocks.SPRUCE_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("dark_oak_log", new ItemStack(Blocks.DARK_OAK_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("acacia_log", new ItemStack(Blocks.ACACIA_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("jungle_log", new ItemStack(Blocks.JUNGLE_LOG), new GristSet(GristTypes.BUILD, 4), 0, true);
+		registerItem("andesite", new ItemStack(Blocks.ANDESITE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("diorite", new ItemStack(Blocks.DIORITE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("granite", new ItemStack(Blocks.GRANITE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("polished_andesite", new ItemStack(Blocks.POLISHED_ANDESITE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("polished_diorite", new ItemStack(Blocks.POLISHED_DIORITE), new GristSet(GristTypes.BUILD, 1), 0, true);
+		registerItem("polished_granite", new ItemStack(Blocks.POLISHED_GRANITE), new GristSet(GristTypes.BUILD, 1), 0, true);
 		
 	}
 	
-	public static void registerItem(String name, ItemStack stack, GristSet cost, int tier)
+	public static void registerItem(String name, ItemStack stack, GristSet cost, int tier, boolean atheneum)
 	{
-		registerItem(name, stack, cost, cost, tier);
+		registerItem(name, stack, cost, cost, tier, atheneum);
 	}
 	
 	/**
@@ -71,36 +98,37 @@ public final class DeployList
 	 * First cost will always be used when not in hardmode.
 	 * @param tier The tier of the item; what connection position required in an unfinished chain to deploy.
 	 * All will be available to all players when the chain is complete.
+	 * @param atheneum Whether the item is a deployable (ex: sburb machines and such) or an atheneum item (ex: basic building blocks like oak planks or stone).
 	 */
-	public static void registerItem(String name, ItemStack stack, GristSet cost1, GristSet cost2, int tier)
+	public static void registerItem(String name, ItemStack stack, GristSet cost1, GristSet cost2, int tier, boolean atheneum)
 	{
-		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack);
+		registerItem(name, cost1, cost2, tier, null, (connection, world) -> stack, atheneum);
 	}
 	
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item)
+	public static void registerItem(String name, GristSet cost, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, boolean atheneum)
 	{
-		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost);
+		registerItem(name, tier, condition, item, (isPrimary, connection) -> cost, atheneum);
 	}
 	
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item)
+	public static void registerItem(String name, GristSet cost1, GristSet cost2, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, boolean atheneum)
 	{
-		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2);
+		registerItem(name, tier, condition, item, (isPrimary, connection) -> isPrimary ? cost1 : cost2, atheneum);
 	}
 	
 	/**
 	 * Not thread-safe. Make sure to only call this on the main thread
 	 */
-	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
+	public static void registerItem(String name, int tier, IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, boolean atheneum)
 	{
 		if(containsEntry(name))
 			throw new IllegalStateException("Item stack already added to the deploy list: "+name);
-		list.add(new DeployEntry(name, tier, condition, item, grist));
+		list.add(new DeployEntry(name, tier, condition, item, grist, atheneum));
 	}
 	
 	public static List<DeployEntry> getItemList(MinecraftServer server, SburbConnection c)

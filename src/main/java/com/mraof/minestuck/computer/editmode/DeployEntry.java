@@ -18,14 +18,16 @@ public class DeployEntry
 	private DeployList.IAvailabilityCondition condition;
 	private BiFunction<SburbConnection, Level, ItemStack> item;
 	private BiFunction<Boolean, SburbConnection, GristSet> grist;
+	private boolean atheneum;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, boolean atheneum)
 	{
 		this.name = name;
 		this.tier = tier;
 		this.condition = condition;
 		this.item = item;
 		this.grist = grist;
+		this.atheneum = atheneum;
 	}
 	
 	public String getName()
@@ -42,6 +44,8 @@ public class DeployEntry
 	{
 		return (condition == null || condition.test(c)) && this.tier <= tier && getCurrentCost(c) != null;
 	}
+	
+	public boolean inAtheneum() { return atheneum; }
 	
 	public ItemStack getItemStack(SburbConnection c, Level level)
 	{

@@ -72,6 +72,7 @@ public class MSPacketHandler
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
+		registerMessage(AtheneumPacket.class, AtheneumPacket::decode);
 	}
 	
 	private static int nextIndex;
