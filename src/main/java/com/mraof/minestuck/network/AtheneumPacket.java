@@ -23,14 +23,14 @@ public class AtheneumPacket implements PlayToBothPacket
 		this.inventory = inventory;
 	}
 	
-	public static AtheneumPacket update(List<ItemStack> inventory, boolean scrollLeft, boolean scrollRight)
+	public static AtheneumPacket update(List<ItemStack> inventory, boolean scrollUp, boolean scrollDown)
 	{
-		return new AtheneumPacket(scrollLeft, scrollRight, inventory);
+		return new AtheneumPacket(scrollUp, scrollDown, inventory);
 	}
 	
-	public static AtheneumPacket scroll(boolean isRight)
+	public static AtheneumPacket scroll(boolean isBottom)
 	{
-		return new AtheneumPacket(isRight, false, null);
+		return new AtheneumPacket(isBottom, false, null);
 	}
 	
 	@Override

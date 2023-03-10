@@ -55,19 +55,19 @@ public class AtheneumMenu extends AbstractContainerMenu
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotIndex)
 	{
-		if(slotIndex >= 14 && slotIndex < this.slots.size())
+		if(slotIndex >= 21 && slotIndex < this.slots.size())
 		{
 			Slot slot = this.slots.get(slotIndex);
 			ItemStack stack = slot.getItem();
 			slot.set(ItemStack.EMPTY);
 			return stack;
 		}
-		if(slotIndex >= 0 && slotIndex < 14)
+		if(slotIndex >= 0 && slotIndex < 21)
 		{
 			Slot slot = this.slots.get(slotIndex);
 			ItemStack stack = slot.getItem();
 			if(!stack.isEmpty())
-				for(int i = 14; i < slots.size(); i++)
+				for(int i = 21; i < slots.size(); i++)
 					if(!getSlot(i).hasItem())
 					{
 						getSlot(i).set(stack);
@@ -80,7 +80,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 	private void addSlots()
 	{
 		
-		for(int i = 0; i < 14; i++)
+		for(int i = 0; i < 21; i++)
 				addSlot(new InventorySlot(inventory, i, 26+(i%7)*18, 14+(i/7)*18));
 		
 		for(int i = 0; i < 9; i++)
@@ -94,11 +94,9 @@ public class AtheneumMenu extends AbstractContainerMenu
 			throw new IllegalStateException("Creating an editmode inventory menu, but the player is not in editmode");
 		List<ItemStack> itemList = new ArrayList<>();
 		SburbConnection c = editData.getConnection();
-		//List<ItemStack> tools = DeployList.getEditmodeTools();
-		//Fill list with harvestTool items when implemented
 		
 		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c);
-		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
+		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null || deployEntry.inAtheneum() == false);
 		
 		for(int i = 0; i < atheneumItems.size(); i++)
 		{
@@ -129,10 +127,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
 		
 		ArrayList<ItemStack> itemList = new ArrayList<>();
-		for(int i = 0; i < 14; i++)
+		for(int i = 0; i < 21; i++)
 		{
-			itemList.add(this.items.size() <= i + scroll*7? ItemStack.EMPTY:this.items.get(i + scroll*7));
-			this.inventory.setItem(i, itemList.get(i));
+			//itemList.add(this.items.size() <= i? ItemStack.EMPTY:this.items.get(i));
+			//itemList.removeIf(ItemStack::isEmpty);
+			this.inventory.setItem(i, this.items.get(i));
 		}
 		
 		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0,  scroll*7 < items.size());
