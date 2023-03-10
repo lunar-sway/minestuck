@@ -215,6 +215,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(DEAD_LOG.get());
 		dropSelf(PETRIFIED_LOG.get());
 		dropSelf(GLOWING_WOOD.get());
+		dropSelf(SHADE_WOOD.get());
 		dropSelf(FROST_WOOD.get());
 		dropSelf(RAINBOW_WOOD.get());
 		dropSelf(END_WOOD.get());

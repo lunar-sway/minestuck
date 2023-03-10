@@ -744,6 +744,7 @@ public class MSItems
 	
 	//Land Tree Blocks
 	public static final RegistryObject<BlockItem> GLOWING_LOG = registerBlockItem(MSBlocks.GLOWING_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHADE_WOOD = registerBlockItem(MSBlocks.SHADE_WOOD, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FROST_LOG = registerBlockItem(MSBlocks.FROST_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_LOG = registerBlockItem(MSBlocks.RAINBOW_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_LOG = registerBlockItem(MSBlocks.END_LOG, MSItemGroup.LANDS);

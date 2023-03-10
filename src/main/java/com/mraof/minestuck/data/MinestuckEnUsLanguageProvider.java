@@ -231,6 +231,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_LOG, "Dead Log");
 		addBlock(MSBlocks.PETRIFIED_LOG, "Petrified Log");
 		addBlock(MSBlocks.GLOWING_WOOD, "Glowing Wood");
+		addBlock(MSBlocks.SHADE_WOOD, "Shade Wood");
 		addBlock(MSBlocks.FROST_WOOD, "Frost Wood");
 		addBlock(MSBlocks.RAINBOW_WOOD, "Rainbow Wood");
 		addBlock(MSBlocks.END_WOOD, "End Wood");
