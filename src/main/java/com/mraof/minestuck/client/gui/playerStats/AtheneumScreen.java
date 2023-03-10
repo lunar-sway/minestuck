@@ -4,8 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.AtheneumMenu;
-import com.mraof.minestuck.inventory.EditmodeMenu;
-import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.AtheneumPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -70,15 +69,15 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 	{
 		if(xcor >= xOffset + arrowX && xcor < xOffset + arrowX + 18)
 		{
-			EditmodeInventoryPacket packet = null;
+			AtheneumPacket packet = null;
 			if(less && ycor >= yOffset + upArrowY && ycor < yOffset + upArrowY + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = EditmodeInventoryPacket.scroll(false);
+				packet = AtheneumPacket.scroll(false);
 			} else if(more && ycor >= yOffset + downArrowY && ycor < yOffset + downArrowY + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = EditmodeInventoryPacket.scroll(true);
+				packet = AtheneumPacket.scroll(true);
 			}
 			if(packet != null)
 			{

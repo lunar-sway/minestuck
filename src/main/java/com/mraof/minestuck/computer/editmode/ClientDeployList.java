@@ -46,6 +46,7 @@ public final class ClientDeployList
 		private ItemStack item;
 		private GristSet cost;
 		private int index;
+		private boolean atheneum;
 		
 		public GristSet getCost()
 		{
@@ -56,5 +57,7 @@ public final class ClientDeployList
 		{
 			return index;
 		}
+		
+		public boolean inAtheneum() { return atheneum; }
 	}
 }

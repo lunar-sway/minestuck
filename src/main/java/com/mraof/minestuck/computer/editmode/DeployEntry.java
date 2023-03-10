@@ -73,10 +73,12 @@ public class DeployEntry
 		{
 			ItemStack stack = getItemStack(c, level);
 			GristSet cost = getCurrentCost(c);
+			boolean athe = inAtheneum();
 			CompoundTag tag = new CompoundTag();
 			stack.save(tag);
 			tag.putInt("i", i);
 			tag.put("cost", cost.write(new ListTag()));
+			tag.putBoolean("athe", athe);
 			list.add(tag);
 		}
 	}

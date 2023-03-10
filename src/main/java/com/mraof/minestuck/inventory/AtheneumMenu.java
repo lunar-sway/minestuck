@@ -5,7 +5,6 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.AtheneumPacket;
-import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +23,7 @@ import java.util.List;
 public class AtheneumMenu extends AbstractContainerMenu
 {
 	private final Player player;
-	private final Container inventory = new SimpleContainer(21);
+	private final Container inventory = new SimpleContainer(14);
 	private List<ItemStack> items  = new ArrayList<>();
 	private int scroll;
 	
@@ -56,19 +55,19 @@ public class AtheneumMenu extends AbstractContainerMenu
 	@Override
 	public ItemStack quickMoveStack(Player player, int slotIndex)
 	{
-		if(slotIndex >= 21 && slotIndex < this.slots.size())
+		if(slotIndex >= 14 && slotIndex < this.slots.size())
 		{
 			Slot slot = this.slots.get(slotIndex);
 			ItemStack stack = slot.getItem();
 			slot.set(ItemStack.EMPTY);
 			return stack;
 		}
-		if(slotIndex >= 0 && slotIndex < 21)
+		if(slotIndex >= 0 && slotIndex < 14)
 		{
 			Slot slot = this.slots.get(slotIndex);
 			ItemStack stack = slot.getItem();
 			if(!stack.isEmpty())
-				for(int i = 21; i < slots.size(); i++)
+				for(int i = 14; i < slots.size(); i++)
 					if(!getSlot(i).hasItem())
 					{
 						getSlot(i).set(stack);
@@ -81,8 +80,8 @@ public class AtheneumMenu extends AbstractContainerMenu
 	private void addSlots()
 	{
 		
-		for(int i = 0; i < 21; i++)
-			addSlot(new InventorySlot(inventory, i, 26+(i%7)*18, 14+(i/7)*18));
+		for(int i = 0; i < 14; i++)
+				addSlot(new InventorySlot(inventory, i, 26+(i%7)*18, 14+(i/7)*18));
 		
 		for(int i = 0; i < 9; i++)
 			addSlot(new ToolbarSlot(player.getInventory(), i, 8+i*18, 74));
@@ -99,11 +98,12 @@ public class AtheneumMenu extends AbstractContainerMenu
 		//Fill list with harvestTool items when implemented
 		
 		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c);
-		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null || !deployEntry.inAtheneum());
+		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
 		
 		for(int i = 0; i < atheneumItems.size(); i++)
 		{
-			itemList.add(atheneumItems.get(i).getItemStack(c, player.level));
+			if(!atheneumItems.get(i).getItemStack(c, player.level).isEmpty())
+				itemList.add(atheneumItems.get(i).getItemStack(c, player.level));
 		}
 		
 		boolean changed = false;
@@ -129,13 +129,13 @@ public class AtheneumMenu extends AbstractContainerMenu
 			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
 		
 		ArrayList<ItemStack> itemList = new ArrayList<>();
-		for(int i = 0; i < 21; i++)
+		for(int i = 0; i < 14; i++)
 		{
 			itemList.add(this.items.size() <= i + scroll*7? ItemStack.EMPTY:this.items.get(i + scroll*7));
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0, scroll*7 + 21 < items.size());
+		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0,  scroll*7 < items.size());
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
