@@ -744,7 +744,9 @@ public class MSItems
 	
 	//Land Tree Blocks
 	public static final RegistryObject<BlockItem> GLOWING_LOG = registerBlockItem(MSBlocks.GLOWING_LOG, MSItemGroup.LANDS);
-	public static final RegistryObject<BlockItem> SHADE_WOOD = registerBlockItem(MSBlocks.SHADE_WOOD, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHADEWOOD_LOG = registerBlockItem(MSBlocks.SHADEWOOD_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FROST_LOG = registerBlockItem(MSBlocks.FROST_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_LOG = registerBlockItem(MSBlocks.RAINBOW_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_LOG = registerBlockItem(MSBlocks.END_LOG, MSItemGroup.LANDS);
@@ -766,9 +768,12 @@ public class MSItems
 	public static final RegistryObject<BlockItem> END_PLANKS = registerBlockItem(MSBlocks.END_PLANKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> DEAD_PLANKS = registerBlockItem(MSBlocks.DEAD_PLANKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> TREATED_PLANKS = registerBlockItem(MSBlocks.TREATED_PLANKS, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHADEWOOD_PLANKS = registerBlockItem(MSBlocks.SHADEWOOD_PLANKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FROST_LEAVES = registerBlockItem(MSBlocks.FROST_LEAVES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_LEAVES = registerBlockItem(MSBlocks.RAINBOW_LEAVES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_LEAVES = registerBlockItem(MSBlocks.END_LEAVES, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHADEWOOD_LEAVES = registerBlockItem(MSBlocks.SHADEWOOD_LEAVES, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHROOMY_SHADEWOOD_LEAVES = registerBlockItem(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_SAPLING = registerBlockItem(MSBlocks.RAINBOW_SAPLING, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_SAPLING = registerBlockItem(MSBlocks.END_SAPLING, MSItemGroup.LANDS);
 	

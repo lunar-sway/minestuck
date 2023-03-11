@@ -215,7 +215,9 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(DEAD_LOG.get());
 		dropSelf(PETRIFIED_LOG.get());
 		dropSelf(GLOWING_WOOD.get());
-		dropSelf(SHADE_WOOD.get());
+		dropSelf(SHADEWOOD_LOG.get());
+		dropSelf(SCARRED_SHADEWOOD_LOG.get());
+		dropSelf(ROTTED_SHADEWOOD_LOG.get());
 		dropSelf(FROST_WOOD.get());
 		dropSelf(RAINBOW_WOOD.get());
 		dropSelf(END_WOOD.get());
@@ -224,6 +226,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(DEAD_WOOD.get());
 		dropSelf(PETRIFIED_WOOD.get());
 		dropSelf(GLOWING_PLANKS.get());
+		dropSelf(SHADEWOOD_PLANKS.get());
 		dropSelf(FROST_PLANKS.get());
 		dropSelf(RAINBOW_PLANKS.get());
 		dropSelf(END_PLANKS.get());
@@ -231,6 +234,8 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TREATED_PLANKS.get());
 		add(FROST_LEAVES.get(), MSBlockLootTables::frostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), MSBlockLootTables::rainbowLeavesDrop);
+		add(SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
+		add(SHROOMY_SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
 		add(END_LEAVES.get(), MSBlockLootTables::endLeavesDrop);
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
@@ -494,6 +499,10 @@ public class MSBlockLootTables extends BlockLoot
 	private static LootTable.Builder endLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
+	}
+	private static LootTable.Builder shadewoodLeavesDrop(Block block)
+	{
+		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES);
 	}
 	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{

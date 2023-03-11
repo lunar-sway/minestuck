@@ -253,7 +253,9 @@ public class MSBlocks
 	public static final RegistryObject<Block> DEAD_LOG = REGISTER.register("dead_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, logColors(MaterialColor.WOOD, MaterialColor.PODZOL)).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> PETRIFIED_LOG = REGISTER.register("petrified_log", () -> new RotatedPillarBlock(Block.Properties.of(Material.WOOD, logColors(MaterialColor.WOOD, MaterialColor.PODZOL)).strength(2.0F).sound(SoundType.STONE)));
 	public static final RegistryObject<Block> GLOWING_WOOD = REGISTER.register("glowing_wood", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SHADE_WOOD = REGISTER.register("shade_wood", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SHADEWOOD_LOG = REGISTER.register("shadewood_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> SCARRED_SHADEWOOD_LOG = REGISTER.register("scarred_shadewood_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> ROTTED_SHADEWOOD_LOG = REGISTER.register("rotted_shadewood_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_WOOD = REGISTER.register("frost_wood", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.ICE).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> RAINBOW_WOOD = REGISTER.register("rainbow_wood", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> END_WOOD = REGISTER.register("end_wood", () -> new FlammableLogBlock(1, 250, Block.Properties.of(Material.WOOD, MaterialColor.SAND).strength(2.0F).sound(SoundType.WOOD)));
@@ -271,14 +273,15 @@ public class MSBlocks
 	public static final RegistryObject<Block> DEAD_PLANKS = REGISTER.register("dead_planks", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
 	public static final RegistryObject<Block> TREATED_PLANKS = REGISTER.register("treated_planks", () -> new FlammableBlock(0, 0, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	
+	public static final RegistryObject<Block> SHADEWOOD_PLANKS = REGISTER.register("shadewood_planks", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> FROST_LEAVES = REGISTER.register("frost_leaves", () -> new FlammableLeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
 	public static final RegistryObject<Block> RAINBOW_LEAVES = REGISTER.register("rainbow_leaves", () -> new FlammableLeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
 	public static final RegistryObject<Block> END_LEAVES = REGISTER.register("end_leaves", () -> new EndLeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
 	
 	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	
+	public static final RegistryObject<Block> SHADEWOOD_LEAVES = REGISTER.register("shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
+	public static final RegistryObject<Block> SHROOMY_SHADEWOOD_LEAVES = REGISTER.register("shroomy_shadewood_leaves", () -> new FlammableLeavesBlock(Block.Properties.of(Material.LEAVES).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(MSBlocks::leafSpawns).isSuffocating(MSBlocks::never).isViewBlocking(MSBlocks::never)));
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = REGISTER.register("blood_aspect_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BREATH_ASPECT_LOG = REGISTER.register("breath_aspect_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));

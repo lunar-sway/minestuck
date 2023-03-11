@@ -231,7 +231,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.DEAD_LOG, "Dead Log");
 		addBlock(MSBlocks.PETRIFIED_LOG, "Petrified Log");
 		addBlock(MSBlocks.GLOWING_WOOD, "Glowing Wood");
-		addBlock(MSBlocks.SHADE_WOOD, "Shade Wood");
+		addBlock(MSBlocks.SHADEWOOD_LOG, "Shadewood Log");
+		addBlock(MSBlocks.SCARRED_SHADEWOOD_LOG, "Scarred Shadewood Log");
+		addBlock(MSBlocks.ROTTED_SHADEWOOD_LOG, "Rotted Shadewood Log");
 		addBlock(MSBlocks.FROST_WOOD, "Frost Wood");
 		addBlock(MSBlocks.RAINBOW_WOOD, "Rainbow Wood");
 		addBlock(MSBlocks.END_WOOD, "End Wood");
@@ -245,9 +247,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_PLANKS, "End Planks");
 		addBlock(MSBlocks.DEAD_PLANKS, "Dead Planks");
 		addBlock(MSBlocks.TREATED_PLANKS, "Treated Planks");
+		addBlock(MSBlocks.SHADEWOOD_PLANKS, "Shadewood Planks");
 		addBlock(MSBlocks.FROST_LEAVES, "Frost Leaves");
 		addBlock(MSBlocks.RAINBOW_LEAVES, "Rainbow Leaves");
 		addBlock(MSBlocks.END_LEAVES, "End Leaves");
+		addBlock(MSBlocks.SHADEWOOD_LEAVES, "Shadewood Leaves");
+		addBlock(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, "Shroomy Shadewood Leaves");
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
 		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
