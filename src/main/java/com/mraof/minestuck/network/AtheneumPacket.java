@@ -13,13 +13,13 @@ import java.util.List;
 public class AtheneumPacket implements PlayToBothPacket
 {
 	
-	private final boolean b1, b2;
+	private final boolean scrollUp, scrollDown;
 	private final List<ItemStack> inventory;
 	
-	private AtheneumPacket(boolean b1, boolean b2, List<ItemStack> inventory)
+	private AtheneumPacket(boolean scrollUp, boolean scrollDown, List<ItemStack> inventory)
 	{
-		this.b1 = b1;
-		this.b2 = b2;
+		this.scrollUp = scrollUp;
+		this.scrollDown = scrollDown;
 		this.inventory = inventory;
 	}
 	
@@ -36,10 +36,10 @@ public class AtheneumPacket implements PlayToBothPacket
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeBoolean(b1);
+		buffer.writeBoolean(scrollUp);
 		if(inventory != null)
 		{
-			buffer.writeBoolean(b2);
+			buffer.writeBoolean(scrollDown);
 			for(ItemStack stack : inventory)
 				buffer.writeItem(stack);
 		}
@@ -68,8 +68,8 @@ public class AtheneumPacket implements PlayToBothPacket
 		if(Minecraft.getInstance().screen instanceof AtheneumScreen)
 		{
 			AtheneumScreen gui = (AtheneumScreen) Minecraft.getInstance().screen;
-			gui.less = b1;
-			gui.more = b2;
+			gui.less = scrollUp;
+			gui.more = scrollDown;
 			gui.getMenu().receiveUpdatePacket(this);
 		}
 	}
@@ -78,7 +78,7 @@ public class AtheneumPacket implements PlayToBothPacket
 	public void execute(ServerPlayer player)
 	{
 		if(player.containerMenu instanceof AtheneumMenu)
-			((AtheneumMenu)player.containerMenu).updateScroll(b1);
+			((AtheneumMenu)player.containerMenu).updateScroll(scrollUp);
 	}
 	
 	public List<ItemStack> getInventory()

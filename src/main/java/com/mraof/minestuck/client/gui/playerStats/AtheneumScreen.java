@@ -32,6 +32,9 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 		super(new AtheneumMenu(windowId, playerInventory), playerInventory, Component.translatable(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
+		
+		titleLabelX = 6;
+		titleLabelY = 4;
 	}
 	
 	@Override
@@ -73,11 +76,11 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 			if(less && ycor >= yOffset + upArrowY && ycor < yOffset + upArrowY + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = AtheneumPacket.scroll(false);
+				packet = AtheneumPacket.scroll(true);
 			} else if(more && ycor >= yOffset + downArrowY && ycor < yOffset + downArrowY + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = AtheneumPacket.scroll(true);
+				packet = AtheneumPacket.scroll(false);
 			}
 			if(packet != null)
 			{

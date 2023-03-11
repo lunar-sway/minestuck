@@ -25,6 +25,7 @@ public final class ClientDeployList
 			entry.index = tag.getInt("i");
 			
 			entry.cost = GristSet.read(tag.getList("cost", Tag.TAG_COMPOUND));
+			entry.atheneum = tag.getBoolean("athe");
 			
 			entryList.add(entry);
 		}

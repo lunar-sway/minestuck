@@ -428,15 +428,19 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(!event.getEntity().level.isClientSide && getData(event.getEntity()) != null)
 		{
 			EditData data = getData(event.getEntity());
+			BlockState block = event.getLevel().getBlockState(event.getPos());
+			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+				if(entry != null && entry.inAtheneum())
+					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
+				else
+					GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
-				BlockState block = event.getLevel().getBlockState(event.getPos());
-				ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
-				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
+				GristSet set = entry != null && entry.inAtheneum() ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
 				if(set != null && !set.isEmpty())
 				{
 					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
