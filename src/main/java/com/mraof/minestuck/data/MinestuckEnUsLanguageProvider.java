@@ -624,6 +624,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
 		addItem(MSItems.MUSIC_SWORD, "Music Sword");
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
+		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
+		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.NIFE, "nife.");
 		addItemExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
@@ -677,8 +679,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.DICE, "Dungeons and Dragons anybody?");
 		addItem(MSItems.FLUORITE_OCTET, "Fluorite Octet");
 		addItemTooltip(MSItems.FLUORITE_OCTET, "Magical Dice! Let 'em roll!");
+		addItem(MSItems.MAKESHIFT_CLAWS_DRAWN, "Makeshift Claws");
+		addItem(MSItems.MAKESHIFT_CLAWS_SHEATHED, "Makeshift Claws");
 		addItem(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		addItem(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		addItem(MSItems.ATOMIKITTY_KATAR_DRAWN, "Atomikitty Katar");
+		addItem(MSItems.ATOMIKITTY_KATAR_SHEATHED, "Atomikitty Katar");
 		addItem(MSItems.SKELETONIZER_DRAWN, "Skeletonizer");
 		addItemTooltip(MSItems.SKELETONIZER_DRAWN, "Why don't skeletons get upset? Because nothing gets under their skin! This weapon sure might however.");
 		addItem(MSItems.SKELETONIZER_SHEATHED, "Skeletonizer");
@@ -691,6 +697,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN, "Effective against liches!");
 		addItem(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Tears of the Enderlich");
 		addItemTooltip(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED, "Effective against liches!");
+		addItem(MSItems.LION_LACERATORS_DRAWN, "Lion Lacerators");
+		addItemTooltip(MSItems.LION_LACERATORS_DRAWN, "Nya :33");
+		addItem(MSItems.LION_LACERATORS_SHEATHED, "Lion Lacerators");
+		addItemTooltip(MSItems.LION_LACERATORS_SHEATHED, "Nya :33");
 		addItem(MSItems.ACTION_CLAWS_DRAWN, "Action Claws");
 		addItem(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		addItem(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
@@ -711,6 +721,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Delays down your imminent doom");
 		addItem(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
 		addItem(MSItems.FAN, "Fan");
+		addItem(MSItems.RAZOR_FAN, "Razor Fan");
+		addItem(MSItems.SHAVING_FAN, "Shaving Fan");
+		addItem(MSItems.FIRESTARTER, "Firestarter");
+		addItem(MSItems.STAR_RAY, "Star Ray");
+		addItemTooltip(MSItems.STAR_RAY, "The power of the sun within the palm of your hand.");
 		addItem(MSItems.TYPHONIC_TRIVIALIZER, "Typhonic Trivializer");
 		addItemTooltip(MSItems.TYPHONIC_TRIVIALIZER, "It's easy being breezy, with this denizen's boon");
 		addItem(MSItems.SICKLE, "Sickle");
@@ -734,6 +749,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CANDY_SICKLE, "Candy Sickle");
 		addItem(MSItems.SCYTHE, "Scythe");
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
+		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
+		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.DEUCE_CLUB, "Deuce Club");
 		addItemTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
 		addItem(MSItems.STALE_BAGUETTE, "Stale Baguette");
