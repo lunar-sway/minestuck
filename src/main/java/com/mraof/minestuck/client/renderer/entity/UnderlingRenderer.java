@@ -25,6 +25,7 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * A renderer that applies the correct grist texture/color to the underlings
@@ -113,7 +114,10 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	private ResourceLocation getGristTexture(T entity)
 	{
 		String textureName = entity.getGristType().getRegistryName().getPath();
-		if(!textureName.equals("marble") && !textureName.equals("diamond"))
+		// possible solution for when all grist types are implemented?
+		// GristTypes.getRegistry().getValues().stream().map(g -> g.getEffectiveName().getPath()).noneMatch(name -> name.equals(textureName));
+		String[] workingTextures = {"marble", "diamond", "ruby", "rust", "shale", "sulfur", "tar"};
+		if(Arrays.stream(workingTextures).noneMatch(name -> name.equals(textureName)))
 		{
 			return this.modelProvider.getTextureLocation(entity); //default
 		}
