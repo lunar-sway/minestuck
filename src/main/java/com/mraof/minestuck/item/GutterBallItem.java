@@ -49,9 +49,9 @@ public class GutterBallItem extends Item
 	{
 		if(Screen.hasShiftDown())
 		{
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_ball.desc"));
+			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.desc"));
 		} else {
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_ball."));
+			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.press_shift"));
 		}
 	}
 }
