@@ -87,11 +87,14 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		return pAnimStep;
 	}
 	
+	//Remove linear interpolation so that the position is more immediately clear.
 	@Override
 	public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements, boolean pTeleport)
 	{
 		this.setPos(pX, pY, pZ);
 		this.setRot(pYaw, pPitch);
+		this.yBodyRot = this.getYRot();
+		this.yHeadRot = this.getYRot();
 	}
 	
 	@Override
@@ -134,7 +137,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		if(event.getController().getCurrentAnimation() == null)
 			return false;
 		
-		if(!(event.getController().getCurrentAnimation().loop == ILoopType.EDefaultLoopTypes.LOOP))
+		if(event.getController().getCurrentAnimation().loop == ILoopType.EDefaultLoopTypes.PLAY_ONCE)
 			return event.getController().getAnimationState() == AnimationState.Running;
 		else
 			return false;

@@ -243,15 +243,18 @@ public class EditToolDrag
 		cap.setEditPos1(pos1);
 		cap.setEditPos2(pos2);
 		
+		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
 		boolean signY = pos1.getY() > pos2.getY();
 		boolean signZ = pos1.getZ() < pos2.getZ();
 		
+		//uses each sign to offset the cursor to the correct corner.
 		double posX = pos2.getX() + (signX ? 1 : 0);
 		double posY = pos2.getY() + (signY ? 0 : 1);
 		double posZ = pos2.getZ() + (signZ ? 1 : 0);
-		boolean flipCursor = signY;
+		boolean flipCursor = signY; //uses the sign to determine whether the cursor should be upside down or not.
 		
+		//some math to find out which way the cursor should point relative to the selection-origin.
 		float cursorLean = 0f;
 		if (signX && !signZ)
 			cursorLean = 360.0f; //+X -Z = 0/360
@@ -264,10 +267,12 @@ public class EditToolDrag
 		
 		if(cap.getEditCursorID() == null)
 		{
+			//creates the cursor and stores its UUID if one does not currently exist.
 			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor));
 		}
 		else
 		{
+			//if it does exist already, update its position, rotation, and animation
 			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
 		}
 	}
@@ -280,6 +285,8 @@ public class EditToolDrag
 		cursor.setInvulnerable(true);
 		
 		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setYBodyRot(cursorLean - 45.0f);
+		cursor.setYHeadRot(cursorLean - 45.0f);
 		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
 		player.getLevel().addFreshEntity(cursor);
 		
@@ -291,9 +298,14 @@ public class EditToolDrag
 		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
 		
 		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setYBodyRot(cursorLean - 45.0f);
+		cursor.setYHeadRot(cursorLean - 45.0f);
 		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
 	}
 	
+	/**only called server-side, when an edit tool has finished being used (I.E when you release the right mouse button while using revise)
+	 *
+	 */
 	public static void removeCursorEntity(ServerPlayer player)
 	{
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
@@ -302,6 +314,7 @@ public class EditToolDrag
 		{
 			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
 			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+			//todo: after the geckolib remodel update, make a system where the cursor entity only gets removed once its current animation is done.
 			cursor.remove(Entity.RemovalReason.DISCARDED);
 		}
 		
@@ -312,6 +325,7 @@ public class EditToolDrag
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
+		//make sure the stage is after translucent blocks so that the outlines render over everything.
 		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
