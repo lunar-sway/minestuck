@@ -102,10 +102,10 @@ public class AtheneumMenu extends AbstractContainerMenu
 		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c);
 		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null || !deployEntry.inAtheneum());
 		
-		for(int i = 0; i < atheneumItems.size(); i++)
+		for(DeployEntry atheneumItem : atheneumItems)
 		{
-			if(!atheneumItems.get(i).getItemStack(c, player.level).isEmpty())
-				itemList.add(atheneumItems.get(i).getItemStack(c, player.level));
+			if(!atheneumItem.getItemStack(c, player.level).isEmpty())
+				itemList.add(atheneumItem.getItemStack(c, player.level));
 		}
 		
 		boolean changed = false;
@@ -134,7 +134,6 @@ public class AtheneumMenu extends AbstractContainerMenu
 		for(int i = 0; i < INVENTORY_SIZE; i++)
 		{
 			itemList.add(this.items.size() <= i+(scroll*INVENTORY_COLUMNS)? ItemStack.EMPTY:this.items.get(i+(scroll*INVENTORY_COLUMNS)));
-			//itemList.removeIf(ItemStack::isEmpty);
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		

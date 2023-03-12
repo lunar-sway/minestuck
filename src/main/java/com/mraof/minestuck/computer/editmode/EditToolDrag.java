@@ -19,7 +19,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -83,29 +82,34 @@ public class EditToolDrag
 				}
 			}
 			
-			if (cap.getEditPos1() != null) {
+			if (cap.getEditPos1() != null)
+			{
 				
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				BlockPos pos2;
 				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
-				if (blockHit.getType() == BlockHitResult.Type.MISS) {
+				if (blockHit.getType() == BlockHitResult.Type.MISS)
+				{
 					Vec3 eyePosition = player.getEyePosition();
 					Vec3 lookDirection = player.getLookAngle();
 					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
 					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
-				} else pos2 = player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
+				}
+				else
+					pos2 = player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
 				
 				cap.setEditPos2(pos2);
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
-		} else if (isDragging)
+		}
+		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
-			cap.setToolMode(null);
 			
+			cap.setToolMode(null);
 			cap.setEditPos1(null);
 			cap.setEditPos2(null);
 		}
@@ -167,17 +171,21 @@ public class EditToolDrag
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				BlockPos pos2;
 				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
-				if (blockHit.getType() == BlockHitResult.Type.MISS) {
+				if (blockHit.getType() == BlockHitResult.Type.MISS)
+				{
 					Vec3 eyePosition = player.getEyePosition();
 					Vec3 lookDirection = player.getLookAngle();
 					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
 					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
-				} else pos2 = blockHit.getBlockPos();
+				}
+				else
+					pos2 = blockHit.getBlockPos();
 				
 				cap.setEditPos2(pos2);
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
-		} else if (isDragging)
+		}
+		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
@@ -185,7 +193,6 @@ public class EditToolDrag
 			}
 			
 			cap.setToolMode(null);
-			
 			cap.setEditPos1(null);
 			cap.setEditPos2(null);
 		}
@@ -229,7 +236,7 @@ public class EditToolDrag
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
 	
-	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2, Direction side)
+	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2)
 	{
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
 		cap.setEditDragging(isDragging);
@@ -247,7 +254,7 @@ public class EditToolDrag
 		
 		float cursorLean = 0f;
 		if (signX && !signZ)
-			cursorLean = 360.0f; //+X -Z = 0
+			cursorLean = 360.0f; //+X -Z = 0/360
 		if (signX && signZ)
 			cursorLean = 90.0f; //+X +Z = 90
 		if (!signX && signZ)
@@ -258,7 +265,8 @@ public class EditToolDrag
 		if(cap.getEditCursorID() == null)
 		{
 			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor));
-		} else
+		}
+		else
 		{
 			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
 		}

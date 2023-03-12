@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -111,7 +110,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							}
 						} else
 						{
-							if(editModeDestroyCheck(player.getLevel(), player, InteractionHand.MAIN_HAND) && !player.getLevel().getBlockState(pos).isAir())
+							if(editModeDestroyCheck(player.getLevel(), player) && !player.getLevel().getBlockState(pos).isAir())
 							{
 								
 								ServerEditHandler.onBlockBreak(new PlayerInteractEvent.LeftClickBlock(player, pos, null));
@@ -130,7 +129,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		}
 		else
 		{
-			EditToolDrag.updateEditToolsServer(player, isDragging, positionStart, positionEnd, side);
+			EditToolDrag.updateEditToolsServer(player, isDragging, positionStart, positionEnd);
 		}
 	}
 	
@@ -172,7 +171,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		return true;
 	}
 	
-	private static boolean editModeDestroyCheck(Level level, Player player, InteractionHand hand)
+	private static boolean editModeDestroyCheck(Level level, Player player)
 	{
 		if(!level.isClientSide() && ServerEditHandler.getData(player) != null)
 		{
