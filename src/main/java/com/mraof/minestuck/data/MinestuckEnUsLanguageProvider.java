@@ -705,6 +705,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		addItem(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		addItem(MSItems.LIPSTICK, "Jade Lipstick");
+		addItem(MSItems.MAGENTA_MAULER, "Magenta Mauler");
+		addItem(MSItems.MAGENTA_MAULER_LIPSTICK, "Lilac Lipstick");
 		addItem(MSItems.THISTLEBLOWER, "Thistleblower");
 		addItem(MSItems.THISTLEBLOWER_LIPSTICK, "Rosy Lipstick");
 		addItem(MSItems.EMERALD_IMMOLATOR, "Emerald Immolator");
@@ -714,6 +716,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.FROSTTOOTH_LIPSTICK, "Feels cold and sharp");
 		addItem(MSItems.OBSIDIATOR, "Obsidiator");
 		addItem(MSItems.OBSIDIATOR_LIPSTICK, "Fuschia Lipstick");
+		addItem(MSItems.DEVILS_DELIGHT, "Devil's Delight");
+		addItem(MSItems.DEVILS_DELIGHT_LIPSTICK, "Burgundy Lipstick");
+		addItem(MSItems.DEMONBANE_RAGRIPPER, "Demonbane Ragripper");
+		addItemTooltip(MSItems.DEMONBANE_RAGRIPPER, "It's said to be the deadliest chainsaw in the universe.");
+		addItem(MSItems.DEMONBANE_RAGRIPPER_LIPSTICK, "Blood Lipstick");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		addItem(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		addItem(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
@@ -751,6 +758,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
+		addItem(MSItems.HELLBRINGERS_HOE_INACTIVE, "Hellbringer's Hoe");
+		addItem(MSItems.HELLBRINGERS_HOE_ACTIVE, "Hellbringer's Hoe");
 		addItem(MSItems.DEUCE_CLUB, "Deuce Club");
 		addItemTooltip(MSItems.DEUCE_CLUB, "The weakest club in the world");
 		addItem(MSItems.STALE_BAGUETTE, "Stale Baguette");
@@ -1177,6 +1186,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.LIP_BALM, "message", "Your lips are slightly more moisturized, but is it enough?");
 		addItem(MSItems.ELECTRIC_AUTOHARP, "Electric Autoharp");
 		addItem(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
+		addItem(MSItems.CRYPTID_PHOTO, "Cryptid Photo");
+		addItemTooltip(MSItems.CRYPTID_PHOTO, "You can make out a blurry figure surrounded by trees.");
 		addItem(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addItemTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		addItem(MSItems.CUEBALL, "Magic Cueball");

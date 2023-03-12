@@ -160,13 +160,13 @@ public interface ItemRightClickEffect
 		return (world, player, hand) -> {
 			player.addEffect(effect.get());
 			
-			ItemStack itemStack = player.getItemInHand(player.getUsedItemHand());
+			ItemStack itemStack = player.getItemInHand(hand);
 			
 			player.swing(hand, true);
 			player.getCooldowns().addCooldown(itemStack.getItem(), cooldownTickDuration);
 			itemStack.hurtAndBreak(durabilityCost, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			
-			return InteractionResultHolder.success(itemStack);
+			return InteractionResultHolder.pass(itemStack);
 		};
 	}
 	
