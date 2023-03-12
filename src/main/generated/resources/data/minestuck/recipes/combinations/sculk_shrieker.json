@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:sculk_sensor"
+  },
+  "input2": {
+    "item": "minecraft:bell"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:sculk_shrieker"
+  }
+}
