@@ -2,14 +2,11 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -335,6 +332,10 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				}
 				else event.setCanceled(true);
 			}
+			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.getEntryForItem(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level) != null)
+			{
+				event.setCanceled(false);
+			}
 			else
 			{
 				event.setCanceled(true);
@@ -566,7 +567,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack))
+						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))))
 							break listSearch;
 					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
@@ -576,7 +577,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack))
+						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))))
 							break listSearch;
 					stack.setTag(null);
 					inventoryChanged = true;
@@ -677,7 +678,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	public static void cleanStackNBT(ItemStack stack, SburbConnection c, Level level)
 	{
-		if(!DeployList.containsItemStack(stack, c, level))
+		if(!DeployList.containsItemStack(stack, c, level) || !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), c, level)))
 			stack.setTag(null);
 	}
 	

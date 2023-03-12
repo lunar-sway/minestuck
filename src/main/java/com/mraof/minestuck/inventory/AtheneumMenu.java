@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.computer.editmode.EditData;
@@ -7,8 +8,6 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.AtheneumPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -16,6 +15,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -150,6 +150,18 @@ public class AtheneumMenu extends AbstractContainerMenu
 		{
 			inventory.setItem(i, packet.getInventory().get(i));
 		}
+	}
+	
+	@Override
+	public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer)
+	{
+		super.clicked(pSlotId, pButton, pClickType, pPlayer);
+		
+		if(pClickType == ClickType.PICKUP && pButton == 1)
+		{
+			this.setCarried(AlchemyHelper.createCard(this.slots.get(pSlotId).getItem(), true));
+		}
+		
 	}
 	
 	private static class ToolbarSlot extends Slot
