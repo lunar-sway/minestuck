@@ -772,7 +772,18 @@ public class MSItems
 	public static final RegistryObject<BlockItem> END_LEAVES = registerBlockItem(MSBlocks.END_LEAVES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_SAPLING = registerBlockItem(MSBlocks.RAINBOW_SAPLING, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_SAPLING = registerBlockItem(MSBlocks.END_SAPLING, MSItemGroup.LANDS);
-	
+	public static final RegistryObject<BlockItem> GLOWING_BOOKSHELF = registerBlockItem(MSBlocks.GLOWING_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> FROST_BOOKSHELF = registerBlockItem(MSBlocks.FROST_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> RAINBOW_BOOKSHELF = registerBlockItem(MSBlocks.RAINBOW_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> END_BOOKSHELF = registerBlockItem(MSBlocks.END_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> DEAD_BOOKSHELF = registerBlockItem(MSBlocks.DEAD_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> TREATED_BOOKSHELF = registerBlockItem(MSBlocks.TREATED_BOOKSHELF, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> GLOWING_LADDER = registerBlockItem(MSBlocks.GLOWING_LADDER, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> FROST_LADDER = registerBlockItem(MSBlocks.FROST_LADDER, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> RAINBOW_LADDER = registerBlockItem(MSBlocks.RAINBOW_LADDER, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> END_LADDER = registerBlockItem(MSBlocks.END_LADDER, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> DEAD_LADDER = registerBlockItem(MSBlocks.DEAD_LADDER, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> TREATED_LADDER = registerBlockItem(MSBlocks.TREATED_LADDER, MSItemGroup.LANDS);
 	
 	
 	//Aspect Tree Blocks
@@ -824,8 +835,30 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SPACE_ASPECT_SAPLING = registerBlockItem(MSBlocks.SPACE_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> TIME_ASPECT_SAPLING = registerBlockItem(MSBlocks.TIME_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> VOID_ASPECT_SAPLING = registerBlockItem(MSBlocks.VOID_ASPECT_SAPLING, new Item.Properties().rarity(Rarity.UNCOMMON));
-	
-	
+	public static final RegistryObject<BlockItem> BLOOD_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.BLOOD_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> BREATH_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.BREATH_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> DOOM_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.DOOM_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> HEART_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.HEART_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> HOPE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.HOPE_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> LIFE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.LIFE_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> LIGHT_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.LIGHT_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> MIND_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.MIND_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> RAGE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.RAGE_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> SPACE_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.SPACE_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> TIME_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.TIME_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> VOID_ASPECT_BOOKSHELF = registerBlockItem(MSBlocks.VOID_ASPECT_BOOKSHELF);
+	public static final RegistryObject<BlockItem> BLOOD_ASPECT_LADDER = registerBlockItem(MSBlocks.BLOOD_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> BREATH_ASPECT_LADDER = registerBlockItem(MSBlocks.BREATH_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> DOOM_ASPECT_LADDER = registerBlockItem(MSBlocks.DOOM_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> HEART_ASPECT_LADDER = registerBlockItem(MSBlocks.HEART_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> HOPE_ASPECT_LADDER = registerBlockItem(MSBlocks.HOPE_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> LIFE_ASPECT_LADDER = registerBlockItem(MSBlocks.LIFE_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> LIGHT_ASPECT_LADDER = registerBlockItem(MSBlocks.LIGHT_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> MIND_ASPECT_LADDER = registerBlockItem(MSBlocks.MIND_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> RAGE_ASPECT_LADDER = registerBlockItem(MSBlocks.RAGE_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> SPACE_ASPECT_LADDER = registerBlockItem(MSBlocks.SPACE_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> TIME_ASPECT_LADDER = registerBlockItem(MSBlocks.TIME_ASPECT_LADDER);
+	public static final RegistryObject<BlockItem> VOID_ASPECT_LADDER = registerBlockItem(MSBlocks.VOID_ASPECT_LADDER);
 	
 	//Land Plant Blocks
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM = registerBlockItem(MSBlocks.GLOWING_MUSHROOM, MSItemGroup.LANDS);
