@@ -25,9 +25,7 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AnimatedPathfinderMob.class, EntityDataSerializers.INT);
 	
 	private static final UUID FREEZE_MOB_UUID = UUID.fromString("e4c7543e-335c-4217-8d15-25c157e8ce88");
-	private static final AttributeModifier STATIONARY_MOB_MODIFIER = new AttributeModifier(FREEZE_MOB_UUID, "Stationary Animation Modifier", -10, AttributeModifier.Operation.MULTIPLY_TOTAL);
-	
-	private MobAnimation mobAnimation = MobAnimation.DEFAULT_IDLE_ANIMATION;
+	private static final AttributeModifier STATIONARY_MOB_MODIFIER = new AttributeModifier(FREEZE_MOB_UUID, "Stationary Animation Modifier", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 	
 	private int remainingAnimationTicks; //starts off as the time value stored in mobAnimation when set. Will be set to -1 for looping animations
 	
@@ -73,16 +71,6 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 *
 	 * @return The action this entity is currently executing
 	 */
-	public MobAnimation getCurrentAnimation()
-	{
-		return mobAnimation;
-	}
-	
-	/**
-	 * Get the current action to coordinate animations
-	 *
-	 * @return The action this entity is currently executing
-	 */
 	protected MobAnimation.Actions getCurrentAction()
 	{
 		return MobAnimation.Actions.values()[this.entityData.get(CURRENT_ACTION)];
@@ -115,23 +103,6 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 			unfreezeMob();
 		
 		this.entityData.set(CURRENT_ACTION, animation.getAction().ordinal());
-		this.mobAnimation = animation;
 		this.remainingAnimationTicks = animation.getAnimationLength();
-	}
-	
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound)
-	{
-		super.addAdditionalSaveData(compound);
-		compound.put("mobAnimation", mobAnimation.getCompoundTag());
-	}
-	
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound)
-	{
-		if(compound.contains("mobAnimation"))
-			mobAnimation = MobAnimation.createTrackerFromCompoundTag(compound.getCompound("mobAnimation"));
-		else
-			mobAnimation = MobAnimation.DEFAULT_IDLE_ANIMATION;
 	}
 }
