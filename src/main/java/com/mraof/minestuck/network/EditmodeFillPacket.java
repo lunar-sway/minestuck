@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,7 +20,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.EventBus;
 
 import static com.mraof.minestuck.computer.editmode.ServerEditHandler.isBlockItem;
 
@@ -112,11 +115,15 @@ public class EditmodeFillPacket implements PlayToServerPacket
 						{
 							if(editModeDestroyCheck(player.getLevel(), player) && !player.getLevel().getBlockState(pos).isAir())
 							{
-								
-								ServerEditHandler.onBlockBreak(new PlayerInteractEvent.LeftClickBlock(player, pos, null));
-								player.getLevel().destroyBlock(pos, false, player);
-								
-								swingArm = true;
+								PlayerInteractEvent.LeftClickBlock evt = new PlayerInteractEvent.LeftClickBlock(player, pos, side);
+								ServerEditHandler.onLeftClickBlockControl(evt);
+								if(!evt.isCanceled())
+								{
+									ServerEditHandler.onBlockBreak(evt);
+									player.swinging = false;
+									player.getLevel().destroyBlock(pos, false, player);
+								}
+								//swingArm = true;
 							}
 						}
 					}

@@ -19,6 +19,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -238,7 +239,16 @@ public class EditToolDrag
 	
 	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2)
 	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		if (player == null)
+			throw new NullPointerException("Server Player is NULL in updateEditToolsServer()!");
+		else if (player.getLevel().isClientSide)
+		{
+			player.sendSystemMessage(Component.literal("Server Player is clientside in updateEditToolsServer()!"));
+			return;
+		}
+		
+		
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
 		cap.setEditDragging(isDragging);
 		cap.setEditPos1(pos1);
 		cap.setEditPos2(pos2);

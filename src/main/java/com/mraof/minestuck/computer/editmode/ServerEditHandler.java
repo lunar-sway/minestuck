@@ -382,7 +382,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost))
+				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost) && !entry.inAtheneum())
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(cost.createMissingMessage());
@@ -405,8 +405,10 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		{
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
+			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
+					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && !entry.inAtheneum())))
 				event.setCanceled(true);
 			
 			if(block.getBlock() instanceof MultiMachineBlock)
