@@ -30,7 +30,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public boolean isFlying;
 	public GameType gameType;
 	public String username;
 	private UUID playerId;
@@ -74,7 +73,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		this.setHealth(player.getHealth());
 		username = player.getGameProfile().getName();
 		playerId = player.getUUID();
-		isFlying = player.getAbilities().flying;
+		setNoGravity(player.getAbilities().flying);
 		player.getAbilities().addSaveData(this.capabilities);
 		foodStatsNBT = new CompoundTag();
 		player.getFoodData().addAdditionalSaveData(foodStatsNBT);
@@ -137,7 +136,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		buffer.writeUtf(username, 16);
 		buffer.writeUUID(playerId);
 		buffer.writeFloat(yHeadRot);
-		buffer.writeBoolean(isFlying);
 	}
 	
 	@Override
@@ -146,7 +144,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		username = additionalData.readUtf(16);
 		playerId = additionalData.readUUID();
 		yHeadRot = additionalData.readFloat();
-		isFlying = additionalData.readBoolean();
 		yHeadRotO = yHeadRot;
 		this.setYRot(yHeadRot);    //I don't know how much of this that is necessary
 		yRotO = getYRot();
@@ -177,9 +174,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		yHeadRot = yHeadRotO;    //Neutralize the effect of the LookHelper
 		setYRot(yRotO);
 		setXRot(xRotO);
-		
-		if(isFlying)
-			this.setPos(this.getX(), yo, this.getZ());
 		
 		if(!level.isClientSide)
 		{
