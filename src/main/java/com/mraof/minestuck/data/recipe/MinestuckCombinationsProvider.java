@@ -405,6 +405,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PILLOW_TALK.get()).input(MSItems.UNBREAKABLE_KATANA.get()).and().input(Items.BAMBOO).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KRAKENS_EYE.get()).input(Items.HEART_OF_THE_SEA).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).input(MSItems.DAGGER.get()).and().input(Items.DIAMOND).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NIFE.get()).input(MSItems.DAGGER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LIGHT_OF_MY_KNIFE.get()).input(MSItems.DAGGER.get()).and().input(Items.LANTERN).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.STARSHARD_TRI_BLADE.get()).input(MSItems.LIGHT_OF_MY_KNIFE.get()).or().input(Items.NETHER_STAR).build(consumer);
@@ -455,6 +456,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SCYTHE.get()).input(MSItems.SICKLE.get()).and().input(Items.WOODEN_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EIGHTBALL_SCYTHE.get()).input(MSItems.SCYTHE.get()).and().input(MSItems.EIGHTBALL.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SUNRAY_HARVESTER.get()).input(MSItems.SCYTHE.get()).and().input(Items.LAVA_BUCKET).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SKAITHE.get()).input(MSItems.SCYTHE.get()).and().input(MSBlocks.CHESSBOARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.HELLBRINGERS_HOE_INACTIVE.get()).input(Items.NETHERITE_HOE).or().input(MSItems.CRYPTID_PHOTO.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.STALE_BAGUETTE.get()).input(Items.BREAD).or().namedInput(Items.STICK).build(consumer);
@@ -510,6 +512,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA.get()).namedInput(MSItems.CANE.get()).and().namedInput(Items.SHIELD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UPPER_CRUST_CRUST_CANE.get()).input(MSItems.PRIM_AND_PROPER_WALKING_POLE.get()).or().namedInput(MSItems.STALE_BAGUETTE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UPPER_CRUST_CRUST_CANE.get()).input(MSItems.PRIM_AND_PROPER_WALKING_POLE.get()).or().namedInput(Items.BREAD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.KISSY_CUTIE_HEART_HITTER.get()).input(MSItems.IRON_CANE.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.KISSY_CUTIE_HEART_SPLITTER.get()).input(MSItems.SCYTHE.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ZEPHYR_CANE.get()).namedInput(MSItems.IRON_CANE.get()).or().namedInput(Items.FEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ZEPHYR_CANE.get()).namedInput(MSItems.IRON_CANE.get()).or().namedInput(Items.PHANTOM_MEMBRANE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPEAR_CANE.get()).input(MSItems.CANE.get()).or().namedInput(Items.IRON_SWORD).build(consumer);
@@ -555,6 +559,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.EATING_FORK_GEM.get()).input(MSItems.NOSFERATU_SPOON.get()).and().input(Items.PRISMARINE_CRYSTALS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DEVIL_FORK.get()).input(MSItems.NOSFERATU_SPOON.get()).and().input(Items.BLAZE_POWDER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SKAIA_FORK.get()).input(MSItems.FORK.get()).and().input(MSBlocks.CHESSBOARD.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SKAIAN_CROCKER_ROCKER.get()).input(MSItems.SKAIA_FORK.get()).or().input(MSItems.CROCKER_FORK.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPORK.get()).input(MSItems.FORK.get()).or().input(MSItems.WOODEN_SPOON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.GOLDEN_SPORK.get()).input(MSItems.SPORK.get()).or().input(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BIDENT.get()).input(MSItems.BI_DYE.get()).and().input(Items.TRIDENT).build(consumer);

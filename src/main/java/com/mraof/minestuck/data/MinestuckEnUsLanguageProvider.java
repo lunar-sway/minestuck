@@ -627,6 +627,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.DAGGER, "Dagger");
+		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
 		addItem(MSItems.NIFE, "nife.");
 		addItemExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
 		addItem(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
@@ -758,6 +759,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
+		addItem(MSItems.SKAITHE, "Skaithe");
 		addItem(MSItems.HELLBRINGERS_HOE_INACTIVE, "Hellbringer's Hoe");
 		addItem(MSItems.HELLBRINGERS_HOE_ACTIVE, "Hellbringer's Hoe");
 		addItem(MSItems.DEUCE_CLUB, "Deuce Club");
@@ -822,6 +824,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.IRON_CANE, "Iron-Tipped Cane");
 		addItemTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addItemStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
+		addItem(MSItems.KISSY_CUTIE_HEART_HITTER, "Kissy Cutie Heart Hitter");
+		addItemTooltip(MSItems.KISSY_CUTIE_HEART_HITTER, "Furiosity wills The cat.");
+		addItem(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Kissy Cutie Heart Splitter");
+		addItemTooltip(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Meowing into primetime!");
 		addItem(MSItems.ZEPHYR_CANE, "Zephyr Cane");
 		addItemTooltip(MSItems.ZEPHYR_CANE, "Catch your breath and relax with this casual weapon by your side.");
 		addItem(MSItems.SPEAR_CANE, "Spear Cane");
@@ -869,6 +875,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.CROCKER_FORK, "Did something change?");
 		addItem(MSItems.SKAIA_FORK, "Skaia War Fork");
 		addItemTooltip(MSItems.SKAIA_FORK, "The elegance and grace of Skaia, and the ability to poke things of a fork!");
+		addItem(MSItems.SKAIAN_CROCKER_ROCKER, "Skaian Crocker Rocker");
 		addItem(MSItems.FORK, "Fork");
 		addItem(MSItems.CANDY_FORK, "Candy Fork");
 		addItem(MSItems.TUNING_FORK, "Tuning Fork");
