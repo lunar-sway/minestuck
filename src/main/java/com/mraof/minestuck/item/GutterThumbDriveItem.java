@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +21,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Supplier;
-
 
 public class GutterThumbDriveItem extends Item
 {
@@ -39,6 +36,7 @@ public class GutterThumbDriveItem extends Item
 			Player player = pContext.getPlayer();
 			Level level = pContext.getLevel();
 			InteractionHand pUsedHand = player.getUsedItemHand();
+			BlockPos blockPos = pContext.getClickedPos();
 			
 			if(level.getBlockEntity(blockPos) instanceof ComputerBlockEntity)
 			{
@@ -51,9 +49,8 @@ public class GutterThumbDriveItem extends Item
 				itemStack.shrink(1);
 			}
 		}
+		return super.useOn(pContext);
 	}
-	return super.useOn(pContext);
-}
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)

@@ -42,10 +42,9 @@ GristEntityPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
-		if(entity instanceof GristEntity)
+		if(entity instanceof GristEntity gristEntity)
 		{
-			((GristEntity) entity).setAnimationFromPacket(animation);
+			gristEntity.setAnimationFromPacket(animation);
 		}
 	}
 	

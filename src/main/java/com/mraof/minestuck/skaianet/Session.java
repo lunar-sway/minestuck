@@ -28,6 +28,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
+	final GristGutter gutter;
 	private double gutterMultiplier;
 	String name;
 	
@@ -248,8 +249,6 @@ public final class Session
 		predefinedPlayers.put(player, data);
 	}
 	
-
-	final GristGutter gutter;
 	public GristGutter getGristGutter()
 	{
 		return gutter;

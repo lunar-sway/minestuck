@@ -13,9 +13,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Supplier;
-
-import static com.mraof.minestuck.item.MSItems.GUTTER_THUMB_DRIVE;
 
 public class AncientThumbDrive extends Item
 {
