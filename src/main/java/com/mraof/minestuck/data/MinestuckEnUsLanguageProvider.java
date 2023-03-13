@@ -630,6 +630,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
 		addItem(MSItems.STARSHARD_TRI_BLADE, "Starshard Tri-Blade");
 		addItem(MSItems.TOOTHRIPPER, "Toothripper");
+		addItem(MSItems.SHADOWRAZOR, "Shadowrazor");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
