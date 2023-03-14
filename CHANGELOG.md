@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Bookshelves for various minestuck wood types
+- Ladders for various minestuck wood types
+- Combination recipes and grist costs for items introduced in minecraft 1.19
+
+### Changed
+
+- Update to minecraft 1.19.2
+
+### Removed
+
+- Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
 ## [1.18.2-1.9.2.0] - 2023-03-13
 
@@ -20,6 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Reapply stone tablet crash fix that was mistakenly reverted during the mc1.16->mc1.18 move.
-- Fix some player decoy behavior when entering editmode while flying.
-- Machine guis with a GO-button can now be started with the keypad enter key.
+- Reapply stone tablet crash fix that was mistakenly reverted during the mc1.16->mc1.18 move
+- Fix some player decoy behavior when entering editmode while flying
+- Machine guis with a GO-button can now be started with the keypad enter key
