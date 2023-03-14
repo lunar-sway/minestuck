@@ -11,9 +11,9 @@ import javax.annotation.Nonnull;
  * A goal for performing a slow melee attack when within hitting range.
  * The attack will occur at the start of the Contact PhasedMobAnimation.Phases
  */
-public class SlowAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
+public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
 {
-	public SlowAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation)
+	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation)
 	{
 		super(entity, animation);
 	}
