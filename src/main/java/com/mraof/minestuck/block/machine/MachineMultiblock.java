@@ -81,6 +81,10 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return false;
 	}
 	
+	/**
+	 * Checks if the machine is valid or not, based on a given position and its matching placement entry.
+	 * @return true if the machine is not valid i.e. missing some important block. False otherwise.
+	 */
 	protected boolean isInvalidFromPlacement(BlockGetter level, BlockPos pos, PlacementEntry entry)
 	{
 		BlockState worldState = level.getBlockState(pos);
@@ -132,21 +136,35 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 			return stateValidator.test(machineState, worldState);
 		}
 		
+		/**
+		 * Calculates the zero position of the machine based on this placement entry
+		 * and its corresponding in-world position, as well as its block state.
+		 */
 		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
 		{
 			return getZeroPos(pos, findRotation(rotatedState));
 		}
 		
-		public BlockPos getPos(BlockPos pos, Rotation rotation)
+		/**
+		 * Calculates the position for this placement based on the zero position of the machine and the rotation of the machine.
+		 */
+		public BlockPos getPos(BlockPos zeroPos, Rotation rotation)
 		{
-			return pos.offset(this.pos.rotate(rotation));
+			return zeroPos.offset(this.pos.rotate(rotation));
 		}
 		
+		/**
+		 * Calculates the zero position of the machine based on this placement entry
+		 * and its corresponding in-world position, as well as the rotation of the machine.
+		 */
 		public BlockPos getZeroPos(BlockPos pos, Rotation rotation)
 		{
 			return pos.subtract(this.pos.rotate(rotation));
 		}
 		
+		/**
+		 * Finds the rotation of the machine based on this placement entry and its corresponding in-world block state.
+		 */
 		public Rotation findRotation(BlockState rotatedState)
 		{
 			for(Rotation rotation : Rotation.values())
