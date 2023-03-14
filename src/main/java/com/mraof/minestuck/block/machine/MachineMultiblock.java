@@ -22,9 +22,9 @@ import java.util.function.Supplier;
 public abstract class MachineMultiblock implements ItemLike    //An abstraction for large machines that might be expanded upon in the future
 {
 	//No placed state or states are identical
-	public static final BiPredicate<BlockState, BlockState> BASE_PREDICATE = (state1, state2) -> state1 == null || state1.equals(state2);
+	public static final BiPredicate<BlockState, BlockState> BASE_PREDICATE = (state1, state2) -> state1.getBlock() == state2.getBlock();
 	//The above or states has the same block and direction
-	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.or((state1, state2) -> state2 != null && state1.getBlock() == state2.getBlock() && state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
+	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.and((state1, state2) -> state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
 	private final DeferredRegister<Block> register;
 	private final Set<RegistryObject<? extends Block>> registryEntries = new HashSet<>();
@@ -44,16 +44,16 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier)
 	{
-		return registerPlacement(pos, stateSupplier, DEFAULT_PREDICATE);
+		return registerPlacement(pos, stateSupplier, true, DEFAULT_PREDICATE);
 	}
 	
-	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator)
+	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, BiPredicate<BlockState, BlockState> stateValidator)
 	{
 		for(PlacementEntry entry : blockEntries)
 			if(entry.pos.equals(pos))
 				throw new IllegalArgumentException("Can't add placement for the same position " + pos + " twice.");
 		
-		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, pos);
+		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, mustExist, pos);
 		blockEntries.add(entry);
 		return entry;
 	}
@@ -76,7 +76,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	private boolean isInvalid(BlockGetter level, BlockPos pos, Rotation rotation)
 	{
 		for(PlacementEntry entry : blockEntries)
-			if(!entry.matchesWithRotation(level, pos, rotation))
+			if(entry.mustExist && !entry.matchesWithRotation(level, pos, rotation))
 				return true;
 		return false;
 	}
@@ -109,12 +109,14 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		@Nonnull
 		private final Supplier<BlockState> stateSupplier;
 		private final BiPredicate<BlockState, BlockState> stateValidator;
+		private final boolean mustExist;
 		private final BlockPos pos;
 		
-		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, BlockPos pos)
+		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, boolean mustExist, BlockPos pos)
 		{
 			this.stateSupplier = Objects.requireNonNull(stateSupplier);
 			this.stateValidator = Objects.requireNonNull(stateValidator);
+			this.mustExist = mustExist;
 			this.pos = pos;
 		}
 		

@@ -41,7 +41,7 @@ public class TotemLatheMultiblock extends MachineMultiblock
 		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(3, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
 		rodPlacement = registerPlacement(new BlockPos(2, 1, 0), applyDirection(ROD, Direction.NORTH));
-		dowelPlacement = registerPlacement(new BlockPos(1, 1, 0), Blocks.AIR::defaultBlockState, (blockState, blockState2) -> true);
+		dowelPlacement = registerPlacement(new BlockPos(1, 1, 0), Blocks.AIR::defaultBlockState, false, BASE_PREDICATE);
 		wheelPlacement = registerPlacement(new BlockPos(0, 1, 0), applyDirection(WHEEL, Direction.NORTH));
 		registerPlacement(new BlockPos(3, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
 		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP, Direction.NORTH));
