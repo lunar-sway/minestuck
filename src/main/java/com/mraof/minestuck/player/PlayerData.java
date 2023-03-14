@@ -74,6 +74,7 @@ public final class PlayerData
 	private boolean givenModus;
 	private Modus modus;
 	private long boondollars;
+	private int caegerStorage;
 	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
@@ -109,6 +110,7 @@ public final class PlayerData
 		}
 		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
+		caegerStorage = nbt.getInt("caegerStorage");
 		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
 		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
@@ -138,6 +140,7 @@ public final class PlayerData
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
 		nbt.put("grist_cache", gristCache.write(new ListTag()));
+		nbt.putInt("caegerStorage", caegerStorage);
 		
 		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
@@ -215,6 +218,37 @@ public final class PlayerData
 	public long getBoondollars()
 	{
 		return boondollars;
+	}
+	
+	public int getCaegers()
+	{
+		return caegerStorage;
+	}
+	
+	public int addCaegers(int amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Caeger amount may not be negative.");
+		caegerStorage = Math.max(0, Math.min(413, caegerStorage + amount));
+		markDirty();
+		return amount;
+	}
+	
+	public int takeCaegers(int amount)
+	{
+		if(amount > 0)
+		{
+			if(caegerStorage - amount < 0)
+			{
+				amount = caegerStorage;
+				caegerStorage = 0;
+				markDirty();
+				return amount;
+			}
+			caegerStorage = Math.max(0, Math.min(413, caegerStorage - amount));
+			markDirty();
+		}
+		return amount;
 	}
 	
 	public void addBoondollars(long amount)

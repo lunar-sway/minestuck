@@ -37,6 +37,7 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
+
 public class ClientProxy
 {
 	private static void registerRenderers()

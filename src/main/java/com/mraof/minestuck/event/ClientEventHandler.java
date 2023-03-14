@@ -7,6 +7,8 @@ import com.mraof.minestuck.client.gui.ColorSelectorScreen;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
+import com.mraof.minestuck.particle.MSParticleTypes;
+import com.mraof.minestuck.particle.custom.*;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -20,6 +22,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -32,6 +35,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientEventHandler
 {
+	
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
@@ -46,7 +50,6 @@ public class ClientEventHandler
 			
 		}
 	}
-	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public static void addCustomTooltip(ItemTooltipEvent event)
 	{
@@ -131,5 +134,31 @@ public class ClientEventHandler
 			event.setGreen((float) fogColor.y());
 			event.setBlue((float) fogColor.z());
 		}
+	}
+	
+	@SubscribeEvent
+	public static void registerParticleFactories(final ParticleFactoryRegisterEvent event)
+	{
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.LOW_ROLL.get(),
+				LowRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CAEGER.get(),
+				CaegerParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.MID_ROLL.get(),
+				MidRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.HIGH_ROLL.get(),
+				HighRollParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CAEGER_SCRATCH.get(),
+				CaegerScratchParticle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.CRIT_13.get(),
+				Crit13Particle.Provider::new);
+		
+		Minecraft.getInstance().particleEngine.register(MSParticleTypes.SLASH.get(),
+				SlashParticle.Provider::new);
+		
 	}
 }
