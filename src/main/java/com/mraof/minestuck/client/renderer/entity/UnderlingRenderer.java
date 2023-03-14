@@ -114,9 +114,8 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	private ResourceLocation getGristTexture(T entity)
 	{
 		String textureName = entity.getGristType().getRegistryName().getPath();
-		// possible solution for when all grist types are implemented?
-		// GristTypes.getRegistry().getValues().stream().map(g -> g.getEffectiveName().getPath()).noneMatch(name -> name.equals(textureName));
-		String[] workingTextures = {"marble", "diamond", "ruby", "rust", "shale", "sulfur", "tar", "mercury", "iodine"};
+		// TODO remove this check once all grist textures are added
+		String[] workingTextures = {"iodine", "shale", "tar", "marble", "mercury", "sulfur", "garnet", "ruby", "rust", "diamond", "gold"};
 		if(Arrays.stream(workingTextures).noneMatch(name -> name.equals(textureName)))
 		{
 			return this.modelProvider.getTextureLocation(entity); //default
