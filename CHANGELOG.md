@@ -21,6 +21,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
+### Fixed
+
+- More gui text has translation keys now, making them translatable by a resource pack
+
 ## [1.18.2-1.9.2.0] - 2023-03-13
 
 ### Added
