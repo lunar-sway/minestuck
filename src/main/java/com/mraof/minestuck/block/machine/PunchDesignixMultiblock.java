@@ -22,10 +22,10 @@ public class PunchDesignixMultiblock extends MachineMultiblock
 	public PunchDesignixMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(RIGHT_LEG, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(LEFT_LEG, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 1, 0), applyDirection(KEYBOARD, Direction.NORTH));
-		slotPlacement = registerPlacement(new BlockPos(1, 1, 0), applyDirection(SLOT, Direction.NORTH));
+		addDirectionPlacement(new BlockPos(0, 0, 0), RIGHT_LEG, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(1, 0, 0), LEFT_LEG, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(0, 1, 0), KEYBOARD, Direction.NORTH);
+		slotPlacement = addDirectionPlacement(new BlockPos(1, 1, 0), SLOT, Direction.NORTH);
 	}
 	
 	public boolean isInvalidFromSlot(LevelAccessor level, BlockPos pos)

@@ -35,17 +35,17 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public TotemLatheMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		slotPlacement = registerPlacement(new BlockPos(3, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
-		registerPlacement(new BlockPos(2, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_CORNER, Direction.NORTH));
-		registerPlacement(new BlockPos(3, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
-		rodPlacement = registerPlacement(new BlockPos(2, 1, 0), applyDirection(ROD, Direction.NORTH));
-		dowelPlacement = registerPlacement(new BlockPos(1, 1, 0), Blocks.AIR::defaultBlockState, false, BASE_PREDICATE);
-		wheelPlacement = registerPlacement(new BlockPos(0, 1, 0), applyDirection(WHEEL, Direction.NORTH));
-		registerPlacement(new BlockPos(3, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
-		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 2, 0), applyDirection(CARVER, Direction.NORTH));
+		slotPlacement = addDirectionPlacement(new BlockPos(3, 0, 0), CARD_SLOT, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(2, 0, 0), BOTTOM_LEFT, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(1, 0, 0), BOTTOM_RIGHT, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(0, 0, 0), BOTTOM_CORNER, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(3, 1, 0), MIDDLE, Direction.NORTH);
+		rodPlacement = addDirectionPlacement(new BlockPos(2, 1, 0), ROD, Direction.NORTH);
+		dowelPlacement = addPlacement(new BlockPos(1, 1, 0), Blocks.AIR::defaultBlockState, false);
+		wheelPlacement = addDirectionPlacement(new BlockPos(0, 1, 0), WHEEL, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(3, 2, 0), TOP_CORNER, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(2, 2, 0), TOP, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(1, 2, 0), CARVER, Direction.NORTH);
 	}
 	
 	public boolean isInvalidFromSlot(BlockGetter level, BlockPos pos)

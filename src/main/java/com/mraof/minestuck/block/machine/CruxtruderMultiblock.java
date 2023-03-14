@@ -23,17 +23,17 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	public CruxtruderMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CORNER, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(SIDE, Direction.NORTH));
-		registerPlacement(new BlockPos(2, 0, 0), applyDirection(CORNER, Direction.EAST));
-		registerPlacement(new BlockPos(2, 0, 1), applyDirection(SIDE, Direction.EAST));
-		registerPlacement(new BlockPos(2, 0, 2), applyDirection(CORNER, Direction.SOUTH));
-		registerPlacement(new BlockPos(1, 0, 2), applyDirection(SIDE, Direction.SOUTH));
-		registerPlacement(new BlockPos(0, 0, 2), applyDirection(CORNER, Direction.WEST));
-		registerPlacement(new BlockPos(0, 0, 1), applyDirection(SIDE, Direction.WEST));
-		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CENTER, Direction.NORTH));
-		tubePlacement = registerPlacement(new BlockPos(1, 1, 1), applyDirection(TUBE, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 2, 1), () -> MSBlocks.CRUXTRUDER_LID.get().defaultBlockState(), false, BASE_PREDICATE);
+		addDirectionPlacement(new BlockPos(0, 0, 0), CORNER, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(1, 0, 0), SIDE, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(2, 0, 0), CORNER, Direction.EAST);
+		addDirectionPlacement(new BlockPos(2, 0, 1), SIDE, Direction.EAST);
+		addDirectionPlacement(new BlockPos(2, 0, 2), CORNER, Direction.SOUTH);
+		addDirectionPlacement(new BlockPos(1, 0, 2), SIDE, Direction.SOUTH);
+		addDirectionPlacement(new BlockPos(0, 0, 2), CORNER, Direction.WEST);
+		addDirectionPlacement(new BlockPos(0, 0, 1), SIDE, Direction.WEST);
+		addDirectionPlacement(new BlockPos(1, 0, 1), CENTER, Direction.NORTH);
+		tubePlacement = addDirectionPlacement(new BlockPos(1, 1, 1), TUBE, Direction.NORTH);
+		addPlacement(new BlockPos(1, 2, 1), MSBlocks.CRUXTRUDER_LID.lazyMap(Block::defaultBlockState), false);
 	}
 	
 	public BlockPos getBEPos(BlockPos placementPos, Rotation rotation)

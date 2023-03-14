@@ -24,7 +24,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	//No placed state or states are identical
 	public static final BiPredicate<BlockState, BlockState> BASE_PREDICATE = (state1, state2) -> state1.getBlock() == state2.getBlock();
 	//The above or states has the same block and direction
-	public static final BiPredicate<BlockState, BlockState> DEFAULT_PREDICATE = BASE_PREDICATE.and((state1, state2) -> state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
+	public static final BiPredicate<BlockState, BlockState> ROTATION_PREDICATE = BASE_PREDICATE.and((state1, state2) -> state1.getValue(MachineBlock.FACING) == state2.getValue(MachineBlock.FACING));
 	
 	private final DeferredRegister<Block> register;
 	private final Set<RegistryObject<? extends Block>> registryEntries = new HashSet<>();
@@ -42,12 +42,17 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return registryObject;
 	}
 	
-	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier)
+	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, @SuppressWarnings("SameParameterValue") boolean mustExist)
 	{
-		return registerPlacement(pos, stateSupplier, true, DEFAULT_PREDICATE);
+		return addPlacement(pos, stateSupplier, mustExist, BASE_PREDICATE);
 	}
 	
-	protected PlacementEntry registerPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, BiPredicate<BlockState, BlockState> stateValidator)
+	protected PlacementEntry addDirectionPlacement(BlockPos pos, RegistryObject<Block> regBlock, Direction direction)
+	{
+		return addPlacement(pos, applyDirection(regBlock, direction), true, ROTATION_PREDICATE);
+	}
+	
+	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, BiPredicate<BlockState, BlockState> stateValidator)
 	{
 		for(PlacementEntry entry : blockEntries)
 			if(entry.pos.equals(pos))
@@ -142,6 +147,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		 * Calculates the zero position of the machine based on this placement entry
 		 * and its corresponding in-world position, as well as its block state.
 		 */
+		@SuppressWarnings("unused")
 		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
 		{
 			return getZeroPos(pos, findRotation(rotatedState));

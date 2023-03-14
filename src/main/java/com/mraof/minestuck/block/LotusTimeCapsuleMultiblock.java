@@ -16,13 +16,10 @@ public class LotusTimeCapsuleMultiblock extends MachineMultiblock
 	{
 		super(register);
 		
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CORNER, Direction.WEST));
-		
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(CORNER, Direction.NORTH));
-		
-		registerPlacement(new BlockPos(0, 0, 1), applyDirection(CORNER, Direction.SOUTH));
-		
-		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CORNER, Direction.EAST));
+		addDirectionPlacement(new BlockPos(0, 0, 0), CORNER, Direction.WEST);
+		addDirectionPlacement(new BlockPos(1, 0, 0), CORNER, Direction.NORTH);
+		addDirectionPlacement(new BlockPos(0, 0, 1), CORNER, Direction.SOUTH);
+		addDirectionPlacement(new BlockPos(1, 0, 1), CORNER, Direction.EAST);
 	}
 	
 }
