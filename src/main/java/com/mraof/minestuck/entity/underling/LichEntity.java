@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Actions.CLAW, 12, false, false), 4, 8, 10);
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 12, false, false), 4, 8, 10);
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{

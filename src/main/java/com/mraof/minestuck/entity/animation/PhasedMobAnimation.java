@@ -24,7 +24,7 @@ public class PhasedMobAnimation
 		this.initiationStart = initiationStart;
 		this.contactStart = contactStart;
 		this.recoveryStart = recoveryStart;
-		this.recoveryEnd = animation.getAnimationLength(); //recoveryEnd is identical to animationLength in MobAnimation
+		this.recoveryEnd = animation.animationLength(); //recoveryEnd is identical to animationLength in MobAnimation
 	}
 	
 	public Phases getCurrentPhase(int time)
@@ -75,13 +75,13 @@ public class PhasedMobAnimation
 	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity)
 	{
 		if(time == getInitiationStartTime())
-			entity.setAnimationPhase(Phases.INITIATION, animation.getAction());
+			entity.setAnimationPhase(Phases.INITIATION, animation.action());
 		else if(time == getContactStartTime())
-			entity.setAnimationPhase(Phases.CONTACT, animation.getAction());
+			entity.setAnimationPhase(Phases.CONTACT, animation.action());
 		else if(time == getRecoveryStartTime())
-			entity.setAnimationPhase(Phases.RECOVERY, animation.getAction());
+			entity.setAnimationPhase(Phases.RECOVERY, animation.action());
 		else if(time >= getTotalAnimationLength())
-			entity.setAnimationPhase(Phases.NEUTRAL, animation.getAction());
+			entity.setAnimationPhase(Phases.NEUTRAL, animation.action());
 	}
 	
 	/**
@@ -127,7 +127,7 @@ public class PhasedMobAnimation
 			 *
 			 * @param phase The new phase of the entity's animation
 			 */
-			void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Actions animation);
+			void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Action animation);
 			
 			/**
 			 * @return true if the animation has not reached its apex

@@ -26,7 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Actions.PUNCH, 18, true, true), 8, 10, 13);
+	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 18, true, true), 8, 10, 13);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{

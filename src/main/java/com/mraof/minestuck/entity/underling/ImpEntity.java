@@ -29,7 +29,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Actions.CLAW, 10, true, false), 2, 4, 5);
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, true, false), 2, 4, 5);
 	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{

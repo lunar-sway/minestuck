@@ -35,7 +35,7 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 	}
 	
 	@Override
-	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Actions animation)
+	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Action animation)
 	{
 		this.entityData.set(CURRENT_ACTION, phase.ordinal());
 		
@@ -51,23 +51,23 @@ public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob impl
 			neutralPhaseStart(animation);
 	}
 	
-	public void anticipationPhaseStart(MobAnimation.Actions animation)
+	public void anticipationPhaseStart(MobAnimation.Action animation)
 	{
 	}
 	
-	public void initiationPhaseStart(MobAnimation.Actions animation)
+	public void initiationPhaseStart(MobAnimation.Action animation)
 	{
 	}
 	
-	public void contactPhaseStart(MobAnimation.Actions animation)
+	public void contactPhaseStart(MobAnimation.Action animation)
 	{
 	}
 	
-	public void recoveryPhaseStart(MobAnimation.Actions animation)
+	public void recoveryPhaseStart(MobAnimation.Action animation)
 	{
 	}
 	
-	public void neutralPhaseStart(MobAnimation.Actions animation)
+	public void neutralPhaseStart(MobAnimation.Action animation)
 	{
 	}
 }

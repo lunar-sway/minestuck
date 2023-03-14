@@ -60,8 +60,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Actions.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
-	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Actions.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
+	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
+	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
@@ -446,7 +446,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Actions.IDLE)
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
@@ -457,19 +457,19 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		MobAnimation.Actions action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
 		
 		if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(action == MobAnimation.Actions.PANIC)
+		if(action == MobAnimation.Action.PANIC)
 		{
 			//TODO add a system for the panic animation intended to precede this
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
 			return PlayState.CONTINUE;
-		} else if(action != MobAnimation.Actions.IDLE)
+		} else if(action != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		} else
@@ -481,7 +481,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Actions.IDLE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
@@ -502,8 +502,8 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		MobAnimation.Actions action = event.getAnimatable().getCurrentAction();
-		if(action == MobAnimation.Actions.TALK)
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		if(action == MobAnimation.Action.TALK)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
 			return PlayState.CONTINUE;

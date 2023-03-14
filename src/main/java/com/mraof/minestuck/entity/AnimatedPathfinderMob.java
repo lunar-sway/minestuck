@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import java.util.UUID;
 
 /**
- * Abstract class for handling the actions of Geckolib animated mobs. It keeps track of which animation is in use via a MobAnimation and EntityDataAccessor
+ * Abstract class for handling the action of Geckolib animated mobs. It keeps track of which animation is in use via a MobAnimation and EntityDataAccessor
  */
 public abstract class AnimatedPathfinderMob extends PathfinderMob
 {
@@ -68,9 +68,9 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 *
 	 * @return The action this entity is currently executing
 	 */
-	protected MobAnimation.Actions getCurrentAction()
+	protected MobAnimation.Action getCurrentAction()
 	{
-		return MobAnimation.Actions.values()[this.entityData.get(CURRENT_ACTION)];
+		return MobAnimation.Action.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	public void freezeMob()
@@ -94,12 +94,12 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 */
 	public void setCurrentAnimation(MobAnimation animation)
 	{
-		if(animation.freezesMovement())
+		if(animation.freezeMovement())
 			freezeMob();
 		else
 			unfreezeMob();
 		
-		this.entityData.set(CURRENT_ACTION, animation.getAction().ordinal());
-		this.remainingAnimationTicks = animation.getAnimationLength();
+		this.entityData.set(CURRENT_ACTION, animation.action().ordinal());
+		this.remainingAnimationTicks = animation.animationLength();
 	}
 }
