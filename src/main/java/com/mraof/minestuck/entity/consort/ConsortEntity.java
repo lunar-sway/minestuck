@@ -3,13 +3,14 @@ package com.mraof.minestuck.entity.consort;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.AnimatedCreatureEntity;
+import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
+import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.Util;
@@ -55,9 +56,12 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvider, IAnimatable
+public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, IAnimatable
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
+	
+	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
+	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final EnumConsort consortType;
@@ -90,7 +94,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvide
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D, PANIC_ANIMATION));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -141,8 +145,7 @@ public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvide
 					if(text != null)
 						player.sendMessage(text, Util.NIL_UUID);
 					handleConsortRepFromTalking(serverPlayer);
-					setCurrentAction(Actions.TALK, 40); // TODO adjust as needed - 2 secs for now
-					this.getNavigation().stop();
+					setCurrentAnimation(TALK_ANIMATION);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -434,16 +437,16 @@ public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvide
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
@@ -454,18 +457,31 @@ public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvide
 	
 	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		
+		if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
-		return PlayState.CONTINUE;
+		if(action == MobAnimation.Action.PANIC)
+		{
+			//TODO add a system for the panic animation intended to precede this
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
+			return PlayState.CONTINUE;
+		} else if(action != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		} else
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
 	}
 	
 	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != Actions.NONE)
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
@@ -486,17 +502,13 @@ public class ConsortEntity extends AnimatedCreatureEntity implements MenuProvide
 	
 	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
 	{
-		Actions action = event.getAnimatable().getCurrentAction();
-		if(action == Actions.TALK)
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		if(action == MobAnimation.Action.TALK)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
 			return PlayState.CONTINUE;
 		}
-		if(action == Actions.PANIC)
-		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("panic", false).addAnimation("panicrun", true));
-			return PlayState.CONTINUE;
-		}
+		
 		return PlayState.STOP;
 	}
 }

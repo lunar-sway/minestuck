@@ -6,7 +6,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 /**
  * Collection of helper functions for common-side animations.
  */
-public final class AnimationUtil
+public final class AnimationControllerUtil
 {
 	/**
 	 * Helper to create a new animation controller with custom animation speed
