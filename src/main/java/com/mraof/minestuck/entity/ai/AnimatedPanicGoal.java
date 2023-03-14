@@ -19,8 +19,7 @@ public class AnimatedPanicGoal extends PanicGoal
 	@Override
 	public void start()
 	{
-		if(panicAnimation != null)
-			this.entity.setCurrentAnimation(panicAnimation);
+		this.entity.setCurrentAnimation(panicAnimation);
 		super.start();
 	}
 	

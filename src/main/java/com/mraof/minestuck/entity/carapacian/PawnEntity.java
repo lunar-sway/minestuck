@@ -42,7 +42,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
-	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(MobAnimation.Actions.MELEE, true, false, 3, 6, 7, 18);
+	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Actions.MELEE, 18, true, false), 3, 6, 7);
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);

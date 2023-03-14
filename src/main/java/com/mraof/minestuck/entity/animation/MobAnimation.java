@@ -4,31 +4,17 @@ import net.minecraft.nbt.CompoundTag;
 
 /**
  * Keeps track of a given animation. Can store stages of the animation in which to perform additional actions/events
+ *
+ * @param actions         category of the animation
+ * @param animationLength last frame of the animation
+ * @param freezeMovement  whether the entity can move voluntarily during an animation, handled both in Goals and is updated upon the change of animation in AnimatedPathfinderMob
+ * @param freezeSight     whether the entity has their facing direction locked, handled by Goals
  */
-public class MobAnimation
+public record MobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
 {
 	public static final int LOOPING_ANIMATION = -1; //when set to -1, it will continue looping until another animation overrides it
 	public static final MobAnimation.Actions IDLE_ACTION = Actions.IDLE;
 	public static final MobAnimation DEFAULT_IDLE_ANIMATION = new MobAnimation(IDLE_ACTION, LOOPING_ANIMATION, false, false);
-	
-	private final Actions actions;
-	private final int animationLength;
-	private final boolean freezeMovement;
-	private final boolean freezeSight;
-	
-	/**
-	 * @param actions category of the animation
-	 * @param animationLength last frame of the animation
-	 * @param freezeMovement whether the entity can move voluntarily during an animation, handled both in Goals and is updated upon the change of animation in AnimatedPathfinderMob
-	 * @param freezeSight whether the entity has their facing direction locked, handled by Goals
-	 */
-	public MobAnimation(Actions actions, int animationLength, boolean freezeMovement, boolean freezeSight)
-	{
-		this.actions = actions;
-		this.animationLength = animationLength;
-		this.freezeMovement = freezeMovement;
-		this.freezeSight = freezeSight;
-	}
 	
 	public Actions getAction()
 	{

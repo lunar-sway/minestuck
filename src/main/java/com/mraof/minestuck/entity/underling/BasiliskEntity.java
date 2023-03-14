@@ -28,7 +28,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation BITE_ANIMATION = new PhasedMobAnimation(MobAnimation.Actions.BITE, true,false, 2, 4, 5, 14);
+	public static final PhasedMobAnimation BITE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Actions.BITE, 14, true, false), 2, 4, 5);
 	
 	private final BasiliskPartEntity[] parts;
 	private final BasiliskPartEntity head;

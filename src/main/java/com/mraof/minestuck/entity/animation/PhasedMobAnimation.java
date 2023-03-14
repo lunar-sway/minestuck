@@ -6,8 +6,9 @@ import net.minecraft.world.entity.PathfinderMob;
  * A supplement to MobAnimation that allows for certain code to be performed at the point where one phase of an animation ends and the other begins.
  * Primarily intended for use with {@link com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal}
  */
-public class PhasedMobAnimation extends MobAnimation
+public class PhasedMobAnimation
 {
+	private final MobAnimation animation;
 	private final int initiationStart;
 	private final int contactStart;
 	private final int recoveryStart;
@@ -16,15 +17,14 @@ public class PhasedMobAnimation extends MobAnimation
 	/**
 	 * @param initiationStart not the first frame of animation
 	 * @param contactStart the apex of animations, when attacks connect
-	 * @param recoveryEnd same as animationLength in MobAnimation
 	 */
-	public PhasedMobAnimation(Actions actions, boolean freezeMovement, boolean freezeSight, int initiationStart, int contactStart, int recoveryStart, int recoveryEnd)
+	public PhasedMobAnimation(MobAnimation animation, int initiationStart, int contactStart, int recoveryStart)
 	{
-		super(actions, recoveryEnd, freezeMovement, freezeSight);
+		this.animation = animation;
 		this.initiationStart = initiationStart;
 		this.contactStart = contactStart;
 		this.recoveryStart = recoveryStart;
-		this.recoveryEnd = recoveryEnd; //recoveryEnd is identical to animationLength in MobAnimation
+		this.recoveryEnd = animation.getAnimationLength(); //recoveryEnd is identical to animationLength in MobAnimation
 	}
 	
 	public Phases getCurrentPhase(int time)
@@ -56,6 +56,11 @@ public class PhasedMobAnimation extends MobAnimation
 		return recoveryStart;
 	}
 	
+	public MobAnimation getAnimation()
+	{
+		return animation;
+	}
+	
 	/**
 	 * Equivalent to getting recoveryEnd value
 	 */
@@ -70,13 +75,13 @@ public class PhasedMobAnimation extends MobAnimation
 	public <T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> void attemptPhaseChange(int time, T entity)
 	{
 		if(time == getInitiationStartTime())
-			entity.setAnimationPhase(Phases.INITIATION, getAction());
+			entity.setAnimationPhase(Phases.INITIATION, animation.getAction());
 		else if(time == getContactStartTime())
-			entity.setAnimationPhase(Phases.CONTACT, getAction());
+			entity.setAnimationPhase(Phases.CONTACT, animation.getAction());
 		else if(time == getRecoveryStartTime())
-			entity.setAnimationPhase(Phases.RECOVERY, getAction());
+			entity.setAnimationPhase(Phases.RECOVERY, animation.getAction());
 		else if(time >= getTotalAnimationLength())
-			entity.setAnimationPhase(Phases.NEUTRAL, getAction());
+			entity.setAnimationPhase(Phases.NEUTRAL, animation.getAction());
 	}
 	
 	/**

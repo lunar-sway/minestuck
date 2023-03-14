@@ -60,8 +60,6 @@ public abstract class AnimatedPathfinderMob extends PathfinderMob
 	 **/
 	public void endCurrentAction()
 	{
-		unfreezeMob(); //it is assumed that the idle animation does not require the mob to be frozen, this is a second measure to ensure they do not get stuck
-		
 		this.setCurrentAnimation(MobAnimation.DEFAULT_IDLE_ANIMATION);
 	}
 	
