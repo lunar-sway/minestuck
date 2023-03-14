@@ -76,58 +76,11 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		}
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		
-		if(state.isAir() || !(state.getBlock() instanceof PunchDesignixBlock))
-			return;
-		else
-			level.destroyBlock(pos, false);
-		
-		BlockPos offsetPos;
-		if(state.is(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.SLOT.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
+		BlockPos mainPos = this.getMainPos(state, pos);
+		MSBlocks.PUNCH_DESIGNIX.removeFromSlot(level, mainPos);
 	}
 	
     /**

@@ -3,9 +3,7 @@ package com.mraof.minestuck.block.machine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -78,10 +76,10 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		blockEntries.forEach(entry -> entry.placeWithRotation(level, pos, rotation));
 	}
 	
-	private boolean isInvalid(BlockGetter level, BlockPos pos, Rotation rotation)
+	private boolean isInvalid(BlockGetter level, BlockPos zeroPos, Rotation rotation)
 	{
 		for(PlacementEntry entry : blockEntries)
-			if(entry.mustExist && !entry.matchesWithRotation(level, pos, rotation))
+			if(entry.mustExist && !entry.matchesWithRotation(level, entry.getPos(zeroPos, rotation), rotation))
 				return true;
 		return false;
 	}
@@ -96,6 +94,12 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		Rotation rotation = entry.findRotation(worldState);
 		BlockPos zeroPos = entry.getZeroPos(pos, rotation);
 		return isInvalid(level, zeroPos, rotation);
+	}
+	
+	protected void removeAt(LevelAccessor level, BlockPos zeroPos, Rotation rotation)
+	{
+		for(PlacementEntry entry : blockEntries)
+			entry.removeIfMatching(level, zeroPos, rotation);
 	}
 	
 	public BoundingBox getBoundingBox(Rotation rotation)
@@ -138,9 +142,16 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		
 		private boolean matchesWithRotation(BlockGetter level, BlockPos pos, Rotation rotation)
 		{
-			BlockState machineState = getRotatedState(rotation);
-			BlockState worldState = level.getBlockState(pos.offset(this.pos.rotate(rotation)));
+			BlockState machineState = this.getRotatedState(rotation);
+			BlockState worldState = level.getBlockState(pos);
 			return stateValidator.test(machineState, worldState);
+		}
+		
+		private void removeIfMatching(LevelAccessor level, BlockPos zeroPos, Rotation rotation)
+		{
+			BlockPos pos = this.getPos(zeroPos, rotation);
+			if(matchesWithRotation(level, pos, rotation))
+				level.destroyBlock(pos, false);
 		}
 		
 		/**

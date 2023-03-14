@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.CruxtruderLidBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -82,76 +81,11 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		
-		if(state.isAir() || !(state.getBlock() instanceof CruxtruderBlock || state.getBlock() instanceof CruxtruderLidBlock))
-			return;
-		else
-			level.destroyBlock(pos, false);
-		
-		BlockPos offsetPos;
-		if(state.is(MSBlocks.CRUXTRUDER.CORNER.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.CRUXTRUDER.SIDE.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.CRUXTRUDER.CENTER.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, -1);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.CRUXTRUDER.TUBE.get()))
-		{
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.getBlock() instanceof CruxtruderLidBlock)
-		{
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
+		BlockPos mainPos = this.getMainPos(state, pos);
+		MSBlocks.CRUXTRUDER.removeFromTube(level, mainPos);
 	}
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)

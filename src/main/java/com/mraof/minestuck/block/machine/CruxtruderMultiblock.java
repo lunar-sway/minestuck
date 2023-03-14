@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Material;
@@ -39,5 +40,12 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	public BlockPos getBEPos(BlockPos placementPos, Rotation rotation)
 	{
 		return tubePlacement.getPos(placementPos, rotation);
+	}
+	
+	public void removeFromTube(LevelAccessor level, BlockPos pos)
+	{
+		Rotation rotation = tubePlacement.findRotation(level.getBlockState(pos));
+		BlockPos zeroPos = tubePlacement.getZeroPos(pos, rotation);
+		this.removeAt(level, zeroPos, rotation);
 	}
 }

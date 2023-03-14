@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -31,5 +32,12 @@ public class PunchDesignixMultiblock extends MachineMultiblock
 	public boolean isInvalidFromSlot(LevelAccessor level, BlockPos pos)
 	{
 		return isInvalidFromPlacement(level, pos, slotPlacement);
+	}
+	
+	public void removeFromSlot(LevelAccessor level, BlockPos pos)
+	{
+		Rotation rotation = slotPlacement.findRotation(level.getBlockState(pos));
+		BlockPos zeroPos = slotPlacement.getZeroPos(pos, rotation);
+		this.removeAt(level, zeroPos, rotation);
 	}
 }
