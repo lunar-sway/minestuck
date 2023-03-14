@@ -14,7 +14,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -105,41 +104,32 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	{
 		@Nonnull
 		private final Supplier<BlockState> stateSupplier;
-		@Nullable
 		private final BiPredicate<BlockState, BlockState> stateValidator;
 		private final BlockPos pos;
 		
-		private PlacementEntry(Supplier<BlockState> stateSupplier, @Nullable BiPredicate<BlockState, BlockState> stateValidator, BlockPos pos)
+		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, BlockPos pos)
 		{
 			this.stateSupplier = Objects.requireNonNull(stateSupplier);
-			this.stateValidator = stateValidator;
+			this.stateValidator = Objects.requireNonNull(stateValidator);
 			this.pos = pos;
 		}
 		
 		private BlockState getRotatedState(Rotation rotation)
 		{
-			BlockState state = stateSupplier.get();
-			if(state != null)
-				state = state.rotate(rotation);
-			return state;
+			return Objects.requireNonNull(stateSupplier.get()).rotate(rotation);
 		}
 		
 		private void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
 		{
 			BlockState state = getRotatedState(rotation);
-			if(state != null)
-				level.setBlock(pos.offset(this.pos.rotate(rotation)), state, Block.UPDATE_ALL);
+			level.setBlock(pos.offset(this.pos.rotate(rotation)), state, Block.UPDATE_ALL);
 		}
 		
 		private boolean matchesWithRotation(BlockGetter level, BlockPos pos, Rotation rotation)
 		{
 			BlockState machineState = getRotatedState(rotation);
-			
-			if(stateValidator != null)
-			{
-				BlockState worldState = level.getBlockState(pos.offset(this.pos.rotate(rotation)));
-				return stateValidator.test(machineState, worldState);
-			} else return true;
+			BlockState worldState = level.getBlockState(pos.offset(this.pos.rotate(rotation)));
+			return stateValidator.test(machineState, worldState);
 		}
 		
 		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
@@ -159,17 +149,10 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		
 		public Rotation findRotation(BlockState rotatedState)
 		{
-			BlockState defaultState = stateSupplier.get();
-			if(defaultState != null)
-			{
-				if(stateValidator != null)
-				{
-					for(Rotation rotation : Rotation.values())
-						if(stateValidator.test(defaultState.rotate(rotation), rotatedState))
-							return rotation;
-				} else return Rotation.NONE;
-			}
-			throw new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+defaultState);
+			for(Rotation rotation : Rotation.values())
+				if(stateValidator.test(getRotatedState(rotation), rotatedState))
+					return rotation;
+			throw new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+stateSupplier.get());
 		}
 	}
 	
