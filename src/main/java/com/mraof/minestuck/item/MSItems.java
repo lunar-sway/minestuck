@@ -747,6 +747,10 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADEWOOD_LOG = registerBlockItem(MSBlocks.SHADEWOOD_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.SCARRED_SHADEWOOD_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.ROTTED_SHADEWOOD_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> STRIPPED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SHADEWOOD_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> STRIPPED_SCARRED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> STRIPPED_ROTTED_SHADEWOOD_LOG = registerBlockItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG, MSItemGroup.LANDS);
+	
 	public static final RegistryObject<BlockItem> FROST_LOG = registerBlockItem(MSBlocks.FROST_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_LOG = registerBlockItem(MSBlocks.RAINBOW_LOG, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_LOG = registerBlockItem(MSBlocks.END_LOG, MSItemGroup.LANDS);
