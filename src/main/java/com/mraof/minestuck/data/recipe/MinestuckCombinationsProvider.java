@@ -34,17 +34,17 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 	{
 		//Wood
 		final ItemLike[][] woodItems = {
-				{Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG},
-				{Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS},
-				{Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.BIRCH_SLAB, Blocks.JUNGLE_SLAB, Blocks.ACACIA_SLAB, Blocks.DARK_OAK_SLAB},
-				{Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS},
-				{Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING},
-				{Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES,Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES},
-				{Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR},
-				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE},
-				{Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE},
-				{Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR, Blocks.ACACIA_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR}};
-		//0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak
+				{Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG, Blocks.MANGROVE_LOG},
+				{Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS, Blocks.MANGROVE_PLANKS},
+				{Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.BIRCH_SLAB, Blocks.JUNGLE_SLAB, Blocks.ACACIA_SLAB, Blocks.DARK_OAK_SLAB, Blocks.MANGROVE_SLAB},
+				{Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS, Blocks.MANGROVE_STAIRS},
+				{Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING, Blocks.MANGROVE_PROPAGULE},
+				{Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES,Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.MANGROVE_LEAVES},
+				{Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR, Blocks.MANGROVE_DOOR},
+				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE, Blocks.MANGROVE_FENCE},
+				{Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.MANGROVE_FENCE_GATE},
+				{Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR, Blocks.ACACIA_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.MANGROVE_TRAPDOOR}};
+		//0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak, 6: mangrove
 		// [0] || [1] -> [2]
 		int[][] woodCombinations = {{0, 1, 5}, {2, 3, 4}};
 		//0: log, 1: planks, 2: slab, 3: stairs, 4: sapling, 5: leaves, 6: door, 7: fence, 8: fence gate, 9: trapdoor
@@ -215,9 +215,14 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.TORCH).input(Items.REDSTONE_TORCH).or().input(ItemTags.COALS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.AMETHYST_SHARD).input(Items.COAL).or().input(Items.PISTON).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GLOW_INK_SAC).input(Items.LEATHER).or().input(Items.GLOWSTONE).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.PEARLESCENT_FROGLIGHT).input(Items.MAGMA_CREAM).or().input(Items.SAND).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.VERDANT_FROGLIGHT).input(Items.MAGMA_CREAM).or().input(Items.SNOW_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.OCHRE_FROGLIGHT).input(Items.MAGMA_CREAM).or().input(Items.GRASS_BLOCK).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.ECHO_SHARD).input(Items.SCULK).or().input(Items.DIAMOND).buildFor(consumer, Minestuck.MOD_ID);
 		//Plants
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GRASS_BLOCK).input(Items.DIRT).and().namedInput(Items.WHEAT_SEEDS).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.MUD).input(Items.DIRT).and().namedInput(Items.WATER_BUCKET).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.MYCELIUM).input(Items.GRASS_BLOCK).and().input(Tags.Items.MUSHROOMS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CACTUS).input(Items.SAND).and().input(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.DEAD_BUSH).input(Items.SAND).or().namedInput(Items.GRASS).buildFor(consumer, Minestuck.MOD_ID);
@@ -239,6 +244,12 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(Items.GLOW_BERRIES).input(Items.GLOWSTONE_DUST).and().input(Items.SWEET_BERRIES).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.GLOW_LICHEN).input(Items.GLOWSTONE_DUST).or().input(Items.VINE).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.HANGING_ROOTS).input(Items.VINE).or().input(Items.DEAD_BUSH).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.MANGROVE_ROOTS).input(Items.HANGING_ROOTS).and().input(Items.STICK).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SCULK).input(Items.MOSS_BLOCK).or().input(Items.SOUL_SOIL).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SCULK_VEIN).input(Items.SCULK).and().input(Items.GLOW_LICHEN).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SCULK_CATALYST).input(Items.SCULK).or().input(Items.SPAWNER).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SCULK_SENSOR).input(Items.SCULK).and().input(Items.STRING).buildFor(consumer, Minestuck.MOD_ID);
+		CombinationRecipeBuilder.of(Items.SCULK_SHRIEKER).input(Items.SCULK_SENSOR).or().input(Items.BELL).buildFor(consumer, Minestuck.MOD_ID);
 		//Transport
 		CombinationRecipeBuilder.of(Items.MINECART).input(ItemTags.BOATS).or().input(Items.RAIL).buildFor(consumer, Minestuck.MOD_ID);
 		CombinationRecipeBuilder.of(Items.CHEST_MINECART).input(Items.MINECART).and().input(Items.CHEST).buildFor(consumer, Minestuck.MOD_ID);
@@ -407,6 +418,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.STARSHARD_TRI_BLADE.get()).input(MSItems.LIGHT_OF_MY_KNIFE.get()).or().input(Items.NETHER_STAR).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).input(MSItems.DAGGER.get()).or().namedInput(Items.ROTTEN_FLESH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).input(MSItems.DAGGER.get()).or().namedInput(Items.BONE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SHADOWRAZOR.get()).input(MSItems.TOOTHRIPPER.get()).and().namedInput(MSItems.SORROW_GUSHERS.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(MSItems.BATTLEAXE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);

@@ -1,8 +1,8 @@
 {
     "parent": "block/cube_bottom_top",
     "textures": {
-        "bottom": "minestuck:block/stripped_shadewood_top",
-        "top": "minestuck:block/stripped_shadewood_top",
-        "side": "minestuck:block/stripped_shadewood_side"
+        "bottom": "minestuck:block/stripped_shadewood_log_top",
+        "top": "minestuck:block/stripped_shadewood_log_top",
+        "side": "minestuck:block/stripped_shadewood_log_side"
     }
 }

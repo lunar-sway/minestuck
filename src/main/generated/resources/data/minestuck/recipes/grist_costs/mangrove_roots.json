@@ -4,6 +4,6 @@
     "minestuck:build": 2
   },
   "ingredient": {
-    "item": "minestuck:treated_planks"
+    "item": "minecraft:mangrove_roots"
   }
 }

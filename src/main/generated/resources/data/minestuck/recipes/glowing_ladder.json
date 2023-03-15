@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "ladder",
+  "key": {
+    "p": {
+      "item": "minestuck:glowing_planks"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "s s",
+    "sps",
+    "s s"
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:glowing_ladder"
+  }
+}

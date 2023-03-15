@@ -1,11 +1,11 @@
 {
     "parent": "block/block",
     "textures": {
-        "side": "minestuck:block/stripped_shadewood_side",
-        "top": "minestuck:block/scarred_stripped_shadewood_top",
-        "bottom": "minestuck:block/scarred_stripped_shadewood_top",
-        "front": "minestuck:block/scarred_stripped_shadewood_side",
-        "particle": "minestuck:block/stripped_shadewood_side"
+        "side": "minestuck:block/stripped_shadewood_log_side",
+        "top": "minestuck:block/stripped_scarred_shadewood_log_top",
+        "bottom": "minestuck:block/stripped_scarred_shadewood_log_top",
+        "front": "minestuck:block/stripped_scarred_shadewood_log_side",
+        "particle": "minestuck:block/stripped_shadewood_log_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
