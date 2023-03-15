@@ -35,9 +35,7 @@ public class PunchDesignixMultiblock extends MachineMultiblock
 	
 	public void removeFromSlot(LevelAccessor level, BlockPos pos)
 	{
-		slotPlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation -> {
-			BlockPos zeroPos = slotPlacement.getZeroPos(pos, rotation);
-			this.removeAt(level, zeroPos, rotation);
-		});
+		slotPlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation ->
+				this.removeAt(level, slotPlacement.getPlacement(pos, rotation)));
 	}
 }

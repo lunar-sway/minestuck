@@ -71,15 +71,15 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		registryEntries.forEach(blockRegistryObject -> blockRegistryObject.ifPresent(consumer));
 	}
 	
-	public void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
+	public void placeWithRotation(LevelAccessor level, Placement placement)
 	{
-		blockEntries.forEach(entry -> entry.placeWithRotation(level, pos, rotation));
+		blockEntries.forEach(entry -> entry.placeWithRotation(level, placement));
 	}
 	
-	private boolean isInvalid(BlockGetter level, BlockPos zeroPos, Rotation rotation)
+	private boolean isInvalid(BlockGetter level, Placement placement)
 	{
 		for(PlacementEntry entry : blockEntries)
-			if(entry.mustExist && !entry.matchesWithRotation(level, entry.getPos(zeroPos, rotation), rotation))
+			if(entry.mustExist && !entry.matchesWithRotation(level, entry.getPos(placement), placement.rotation))
 				return true;
 		return false;
 	}
@@ -92,14 +92,13 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	{
 		BlockState worldState = level.getBlockState(pos);
 		Rotation rotation = entry.findRotationOrThrow(worldState);
-		BlockPos zeroPos = entry.getZeroPos(pos, rotation);
-		return isInvalid(level, zeroPos, rotation);
+		return isInvalid(level, entry.getPlacement(pos, rotation));
 	}
 	
-	protected void removeAt(LevelAccessor level, BlockPos zeroPos, Rotation rotation)
+	protected void removeAt(LevelAccessor level, Placement placement)
 	{
 		for(PlacementEntry entry : blockEntries)
-			entry.removeIfMatching(level, zeroPos, rotation);
+			entry.removeIfMatching(level, placement);
 	}
 	
 	public BoundingBox getBoundingBox(Rotation rotation)
@@ -113,6 +112,9 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return getMainBlock().asItem();
 	}
 	
+	/**
+	 * Represents the placement of one block in the machine.
+	 */
 	protected static class PlacementEntry
 	{
 		@Nonnull
@@ -134,10 +136,10 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 			return Objects.requireNonNull(stateSupplier.get()).rotate(rotation);
 		}
 		
-		private void placeWithRotation(LevelAccessor level, BlockPos pos, Rotation rotation)
+		private void placeWithRotation(LevelAccessor level, Placement placement)
 		{
-			BlockState state = getRotatedState(rotation);
-			level.setBlock(pos.offset(this.pos.rotate(rotation)), state, Block.UPDATE_ALL);
+			BlockState state = this.getRotatedState(placement.rotation);
+			level.setBlock(this.getPos(placement), state, Block.UPDATE_ALL);
 		}
 		
 		private boolean matchesWithRotation(BlockGetter level, BlockPos pos, Rotation rotation)
@@ -147,42 +149,31 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 			return stateValidator.test(machineState, worldState);
 		}
 		
-		private void removeIfMatching(LevelAccessor level, BlockPos zeroPos, Rotation rotation)
+		private void removeIfMatching(LevelAccessor level, Placement placement)
 		{
-			BlockPos pos = this.getPos(zeroPos, rotation);
-			if(matchesWithRotation(level, pos, rotation))
+			BlockPos pos = this.getPos(placement);
+			if(matchesWithRotation(level, pos, placement.rotation))
 				level.destroyBlock(pos, false);
 		}
 		
 		/**
-		 * Calculates the zero position of the machine based on this placement entry
-		 * and its corresponding in-world position, as well as its block state.
+		 * Calculates the position for this entry based on the placement of the machine.
 		 */
-		@SuppressWarnings("unused")
-		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
+		public BlockPos getPos(Placement placement)
 		{
-			return getZeroPos(pos, findRotationOrThrow(rotatedState));
+			return placement.zeroPos.offset(this.pos.rotate(placement.rotation));
 		}
 		
 		/**
-		 * Calculates the position for this placement based on the zero position of the machine and the rotation of the machine.
+		 * Calculates the placement of the machine given the position and rotation of the block corresponding this entry.
 		 */
-		public BlockPos getPos(BlockPos zeroPos, Rotation rotation)
+		public Placement getPlacement(BlockPos pos, Rotation rotation)
 		{
-			return zeroPos.offset(this.pos.rotate(rotation));
+			return new Placement(pos.subtract(this.pos.rotate(rotation)), rotation);
 		}
 		
 		/**
-		 * Calculates the zero position of the machine based on this placement entry
-		 * and its corresponding in-world position, as well as the rotation of the machine.
-		 */
-		public BlockPos getZeroPos(BlockPos pos, Rotation rotation)
-		{
-			return pos.subtract(this.pos.rotate(rotation));
-		}
-		
-		/**
-		 * Finds the rotation of the machine based on this placement entry and its corresponding in-world block state.
+		 * Finds the rotation of the machine based on this entry and its corresponding in-world block state.
 		 */
 		public Optional<Rotation> findRotation(BlockState rotatedState)
 		{
@@ -198,6 +189,12 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 					new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+stateSupplier.get()));
 		}
 	}
+	
+	/**
+	 * Represents how a machine might be placed in a level.
+	 */
+	public record Placement(BlockPos zeroPos, Rotation rotation)
+	{}
 	
 	protected static Supplier<BlockState> applyDirection(RegistryObject<Block> regBlock, Direction direction)
 	{

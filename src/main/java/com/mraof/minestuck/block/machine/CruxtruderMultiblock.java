@@ -39,14 +39,12 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	
 	public BlockPos getBEPos(BlockPos placementPos, Rotation rotation)
 	{
-		return tubePlacement.getPos(placementPos, rotation);
+		return tubePlacement.getPos(new Placement(placementPos, rotation));
 	}
 	
 	public void removeFromTube(LevelAccessor level, BlockPos pos)
 	{
-		tubePlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation -> {
-			BlockPos zeroPos = tubePlacement.getZeroPos(pos, rotation);
-			this.removeAt(level, zeroPos, rotation);
-		});
+		tubePlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation ->
+			this.removeAt(level, tubePlacement.getPlacement(pos, rotation)));
 	}
 }

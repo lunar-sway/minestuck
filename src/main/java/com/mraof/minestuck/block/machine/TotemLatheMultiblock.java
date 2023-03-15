@@ -57,23 +57,21 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public BlockPos getDowelPos(BlockPos tilePos, BlockState slotState)
 	{
 		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return dowelPlacement.getPos(slotPlacement.getZeroPos(tilePos, rotation), rotation);
+		return dowelPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
 	}
 	public BlockPos getWheelPos(BlockPos tilePos, BlockState slotState)
 	{
 		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return wheelPlacement.getPos(slotPlacement.getZeroPos(tilePos, rotation), rotation);
+		return wheelPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
 	}
 	public BlockPos getRodPos(BlockPos tilePos, BlockState slotState)
 	{
 		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return rodPlacement.getPos(slotPlacement.getZeroPos(tilePos, rotation), rotation);
+		return rodPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
 	}
 	public void removeFromSlot(LevelAccessor level, BlockPos pos)
 	{
-		slotPlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation -> {
-			BlockPos zeroPos = slotPlacement.getZeroPos(pos, rotation);
-			this.removeAt(level, zeroPos, rotation);
-		});
+		slotPlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation ->
+				this.removeAt(level, slotPlacement.getPlacement(pos, rotation)));
 	}
 }
