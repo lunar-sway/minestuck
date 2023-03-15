@@ -25,7 +25,7 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> implements EntityBlock
+public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> implements EntityBlock, EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasBlockEntity;
@@ -85,7 +85,7 @@ public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> imp
 	}
 	
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.machine.findPlacementFromTube(level, this.getMainPos(state, pos));
 		if(placement.isPresent())

@@ -30,7 +30,7 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultiblock>
+public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
@@ -80,7 +80,7 @@ public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultibloc
 	}
 	
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		

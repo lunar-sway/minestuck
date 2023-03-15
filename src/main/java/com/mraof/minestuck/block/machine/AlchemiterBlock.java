@@ -30,7 +30,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock>
+public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean recursive, corner;
@@ -86,14 +86,8 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock>
 		}
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.getMainPos(state, pos, level)
 				.flatMap(mainPos -> this.machine.findPlacementFromPad(level, mainPos));

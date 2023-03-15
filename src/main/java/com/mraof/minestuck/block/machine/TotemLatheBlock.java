@@ -32,7 +32,7 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock>
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
@@ -81,7 +81,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock>
 	}
 	
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
