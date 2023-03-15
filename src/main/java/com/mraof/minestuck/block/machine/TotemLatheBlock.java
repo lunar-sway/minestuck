@@ -5,6 +5,7 @@ import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -26,14 +27,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class TotemLatheBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock>
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -79,13 +83,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		var placement = MSBlocks.TOTEM_LATHE.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
-			MSBlocks.TOTEM_LATHE.removeAt(level, placement.get());
+			this.machine.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : MSBlocks.TOTEM_LATHE.guessPlacement(pos, state))
-				MSBlocks.TOTEM_LATHE.removeAt(level, placementGuess);
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -113,7 +117,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		protected final Map<Direction, VoxelShape> activeShape;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
+		public Rod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
@@ -139,7 +143,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		protected final Map<Direction, VoxelShape> carvedShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.carvedShape = carvedShape.createRotatedShapes();
@@ -164,19 +168,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
-
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
 	}
 	
 	public static class Slot extends TotemLatheBlock implements EntityBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(TotemLatheMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}

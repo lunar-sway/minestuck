@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
@@ -31,13 +30,13 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlchemiterBlock extends MultiMachineBlock
+public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock>
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean recursive, corner;
 	protected final BlockPos mainPos;
 	
-	public AlchemiterBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public AlchemiterBlock(AlchemiterMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -97,13 +96,13 @@ public class AlchemiterBlock extends MultiMachineBlock
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
 		var placement = this.getMainPos(state, pos, level)
-				.flatMap(mainPos -> MSBlocks.ALCHEMITER.findPlacementFromPad(level, mainPos));
+				.flatMap(mainPos -> this.machine.findPlacementFromPad(level, mainPos));
 		if(placement.isPresent())
-			MSBlocks.ALCHEMITER.removeAt(level, placement.get());
+			this.machine.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : MSBlocks.ALCHEMITER.guessPlacement(pos, state))
-				MSBlocks.ALCHEMITER.removeAt(level, placementGuess);
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -140,7 +139,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		
-		public Pad(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Pad(AlchemiterMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, false, false, new BlockPos(0, 0, 0), properties);
 		}

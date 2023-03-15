@@ -1,16 +1,14 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.MSBlockShapes;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MultiMachineBlock extends MachineBlock
+public class MultiMachineBlock<T extends MachineMultiblock> extends MachineBlock
 {
-	protected final MachineMultiblock machine;
+	protected final T machine;
 	
-	public MultiMachineBlock(MachineMultiblock machine, Properties properties)
+	public MultiMachineBlock(T machine, Properties properties)
 	{
 		super(properties);
 		this.machine = machine;

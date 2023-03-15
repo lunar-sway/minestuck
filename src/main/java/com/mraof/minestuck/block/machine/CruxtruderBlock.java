@@ -1,9 +1,9 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -20,15 +20,18 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> implements EntityBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasBlockEntity;
 	protected final BlockPos mainPos;
 	
-	public CruxtruderBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
+	public CruxtruderBlock(CruxtruderMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -84,13 +87,13 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		var placement = MSBlocks.CRUXTRUDER.findPlacementFromTube(level, this.getMainPos(state, pos));
+		var placement = this.machine.findPlacementFromTube(level, this.getMainPos(state, pos));
 		if(placement.isPresent())
-			MSBlocks.CRUXTRUDER.removeAt(level, placement.get());
+			this.machine.removeAt(level, placement.get());
 		else
 		{
-			for(var placementGuess : MSBlocks.CRUXTRUDER.guessPlacement(pos, state))
-				MSBlocks.CRUXTRUDER.removeAt(level, placementGuess);
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
