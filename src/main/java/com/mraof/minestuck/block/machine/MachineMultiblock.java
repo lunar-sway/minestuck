@@ -42,21 +42,21 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	
 	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, @SuppressWarnings("SameParameterValue") boolean mustExist)
 	{
-		return addPlacement(pos, stateSupplier, mustExist, BASE_PREDICATE);
+		return addPlacement(pos, stateSupplier, mustExist, false, BASE_PREDICATE);
 	}
 	
 	protected PlacementEntry addDirectionPlacement(BlockPos pos, RegistryObject<Block> regBlock, Direction direction)
 	{
-		return addPlacement(pos, applyDirection(regBlock, direction), true, ROTATION_PREDICATE);
+		return addPlacement(pos, applyDirection(regBlock, direction), true, true, ROTATION_PREDICATE);
 	}
 	
-	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, BiPredicate<BlockState, BlockState> stateValidator)
+	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, boolean isDirectional, BiPredicate<BlockState, BlockState> stateValidator)
 	{
 		for(PlacementEntry entry : blockEntries)
 			if(entry.pos.equals(pos))
 				throw new IllegalArgumentException("Can't add placement for the same position " + pos + " twice.");
 		
-		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, mustExist, pos);
+		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, mustExist, isDirectional, pos);
 		blockEntries.add(entry);
 		return entry;
 	}
@@ -119,14 +119,15 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		@Nonnull
 		private final Supplier<BlockState> stateSupplier;
 		private final BiPredicate<BlockState, BlockState> stateValidator;
-		private final boolean mustExist;
+		private final boolean mustExist, isDirectional;
 		private final BlockPos pos;
 		
-		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, boolean mustExist, BlockPos pos)
+		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, boolean mustExist, boolean isDirectional, BlockPos pos)
 		{
 			this.stateSupplier = Objects.requireNonNull(stateSupplier);
 			this.stateValidator = Objects.requireNonNull(stateValidator);
 			this.mustExist = mustExist;
+			this.isDirectional = isDirectional;
 			this.pos = pos;
 		}
 		
@@ -176,6 +177,9 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		 */
 		public Optional<Placement> findPlacement(BlockPos pos, BlockState rotatedState)
 		{
+			if(!this.isDirectional)
+				return Optional.empty();
+			
 			for(Rotation rotation : Rotation.values())
 				if(stateValidator.test(getRotatedState(rotation), rotatedState))
 					return Optional.of(this.getPlacement(pos, rotation));
