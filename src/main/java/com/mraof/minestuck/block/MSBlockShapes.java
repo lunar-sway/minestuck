@@ -129,5 +129,5 @@ public static CustomVoxelShape PUNCH_DESIGNIX_TOP_RIGHT = PUNCH_DESIGNIX_TOP_RIG
 	public static CustomVoxelShape OLD_COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0,0,0,3,1,4}, /*keyboard*/new double[]{4,0,0,16,1,5}, /*body*/new double[]{1,0,6,15,13,16});
 	public static CustomVoxelShape LUNCHTOP_OPEN = new CustomVoxelShape(/*base*/new double[]{4,0,1.5,12,3,15.5}, /*core*/new double[]{5,3,2.5,11,5,7.5});
 	
-	public static CustomVoxelShape MIRROR = new CustomVoxelShape(new double[]{0,0,14}, new double[]{16,16,16});
+	public static CustomVoxelShape MIRROR = new CustomVoxelShape(new double[]{16,16,16,0,0,14});
 }

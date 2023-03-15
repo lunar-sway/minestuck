@@ -1,9 +1,9 @@
 {
     "credit": "Made with Blockbench",
     "textures": {
-        "0": "mirror_front",
-        "1": "mirror_back",
-        "particle": "mirror_front"
+        "0": "minestuck:block/mirror_front",
+        "1": "minestuck:block/mirror_back",
+        "particle": "minestuck:block/mirror_front"
     },
     "elements": [
         {
