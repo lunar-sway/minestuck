@@ -9,6 +9,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
+
 public class AlchemiterMultiblock extends MachineMultiblock
 {
 	public final RegistryObject<Block> CENTER = register("alchemiter_center", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_CENTER, true, false, new BlockPos(1, 0, -1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
@@ -53,5 +55,10 @@ public class AlchemiterMultiblock extends MachineMultiblock
 	public boolean isInvalidFromPad(LevelAccessor level, BlockPos pos)
 	{
 		return isInvalidFromPlacement(level, pos, totemPadPos);
+	}
+	
+	public Optional<Placement> findPlacementFromPad(LevelAccessor level, BlockPos pos)
+	{
+		return this.totemPadPos.findPlacement(pos, level.getBlockState(pos));
 	}
 }
