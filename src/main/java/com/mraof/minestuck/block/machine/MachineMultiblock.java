@@ -40,14 +40,15 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return registryObject;
 	}
 	
-	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, @SuppressWarnings("SameParameterValue") boolean mustExist)
+	@SuppressWarnings("SameParameterValue")
+	protected PlacementEntry addPlacement(int x, int y, int z, Supplier<BlockState> stateSupplier, boolean mustExist)
 	{
-		return addPlacement(pos, stateSupplier, mustExist, false, BASE_PREDICATE);
+		return addPlacement(new BlockPos(x, y, z), stateSupplier, mustExist, false, BASE_PREDICATE);
 	}
 	
-	protected PlacementEntry addDirectionPlacement(BlockPos pos, RegistryObject<Block> regBlock, Direction direction)
+	protected PlacementEntry addDirectionPlacement(int x, int y, int z, RegistryObject<Block> regBlock, Direction direction)
 	{
-		return addPlacement(pos, applyDirection(regBlock, direction), true, true, ROTATION_PREDICATE);
+		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), true, true, ROTATION_PREDICATE);
 	}
 	
 	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, boolean isDirectional, BiPredicate<BlockState, BlockState> stateValidator)
@@ -115,6 +116,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	}
 	
 	@Override
+	@Nonnull
 	public Item asItem()
 	{
 		return getMainBlock().asItem();

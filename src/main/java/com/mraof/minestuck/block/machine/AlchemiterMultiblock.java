@@ -28,28 +28,28 @@ public class AlchemiterMultiblock extends MachineMultiblock
 	{
 		super(register);
 		
-		addDirectionPlacement(new BlockPos(0, 0, 0), CORNER, Direction.WEST);
-		addDirectionPlacement(new BlockPos(0, 0, 1), LEFT_SIDE, Direction.WEST);
-		addDirectionPlacement(new BlockPos(0, 0, 2), RIGHT_SIDE, Direction.WEST);
-		addDirectionPlacement(new BlockPos(1, 0, 1), CENTER, Direction.WEST);
+		addDirectionPlacement(0, 0, 0, CORNER, Direction.WEST);
+		addDirectionPlacement(0, 0, 1, LEFT_SIDE, Direction.WEST);
+		addDirectionPlacement(0, 0, 2, RIGHT_SIDE, Direction.WEST);
+		addDirectionPlacement(1, 0, 1, CENTER, Direction.WEST);
 		
-		addDirectionPlacement(new BlockPos(3, 0, 0), CORNER, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(2, 0, 0), LEFT_SIDE, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(1, 0, 0), RIGHT_SIDE, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(2, 0, 1), CENTER, Direction.NORTH);
+		addDirectionPlacement(3, 0, 0, CORNER, Direction.NORTH);
+		addDirectionPlacement(2, 0, 0, LEFT_SIDE, Direction.NORTH);
+		addDirectionPlacement(1, 0, 0, RIGHT_SIDE, Direction.NORTH);
+		addDirectionPlacement(2, 0, 1, CENTER, Direction.NORTH);
 		
-		addDirectionPlacement(new BlockPos(0, 0, 3), CORNER, Direction.SOUTH);
-		addDirectionPlacement(new BlockPos(2, 0, 3), RIGHT_SIDE, Direction.SOUTH);
-		addDirectionPlacement(new BlockPos(1, 0, 3), LEFT_SIDE, Direction.SOUTH);
-		addDirectionPlacement(new BlockPos(1, 0, 2), CENTER, Direction.SOUTH);
+		addDirectionPlacement(0, 0, 3, CORNER, Direction.SOUTH);
+		addDirectionPlacement(2, 0, 3, RIGHT_SIDE, Direction.SOUTH);
+		addDirectionPlacement(1, 0, 3, LEFT_SIDE, Direction.SOUTH);
+		addDirectionPlacement(1, 0, 2, CENTER, Direction.SOUTH);
 		
-		addDirectionPlacement(new BlockPos(3, 0, 3), TOTEM_CORNER, Direction.EAST);
-		addDirectionPlacement(new BlockPos(3, 0, 2), LEFT_SIDE, Direction.EAST);
-		addDirectionPlacement(new BlockPos(3, 0, 1), RIGHT_SIDE, Direction.EAST);
-		addDirectionPlacement(new BlockPos(2, 0, 2), CENTER, Direction.EAST);
-		totemPadPos = addDirectionPlacement(new BlockPos(3, 1, 3), TOTEM_PAD, Direction.EAST);
-		addDirectionPlacement(new BlockPos(3, 2, 3), LOWER_ROD, Direction.EAST);
-		addDirectionPlacement(new BlockPos(3, 3, 3), UPPER_ROD, Direction.EAST);
+		addDirectionPlacement(3, 0, 3, TOTEM_CORNER, Direction.EAST);
+		addDirectionPlacement(3, 0, 2, LEFT_SIDE, Direction.EAST);
+		addDirectionPlacement(3, 0, 1, RIGHT_SIDE, Direction.EAST);
+		addDirectionPlacement(2, 0, 2, CENTER, Direction.EAST);
+		totemPadPos = addDirectionPlacement(3, 1, 3, TOTEM_PAD, Direction.EAST);
+		addDirectionPlacement(3, 2, 3, LOWER_ROD, Direction.EAST);
+		addDirectionPlacement(3, 3, 3, UPPER_ROD, Direction.EAST);
 	}
 	
 	public boolean isInvalidFromPad(LevelAccessor level, BlockPos pos)

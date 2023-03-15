@@ -37,17 +37,17 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public TotemLatheMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		slotPlacement = addDirectionPlacement(new BlockPos(3, 0, 0), CARD_SLOT, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(2, 0, 0), BOTTOM_LEFT, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(1, 0, 0), BOTTOM_RIGHT, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(0, 0, 0), BOTTOM_CORNER, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(3, 1, 0), MIDDLE, Direction.NORTH);
-		rodPlacement = addDirectionPlacement(new BlockPos(2, 1, 0), ROD, Direction.NORTH);
-		dowelPlacement = addPlacement(new BlockPos(1, 1, 0), Blocks.AIR::defaultBlockState, false);
-		wheelPlacement = addDirectionPlacement(new BlockPos(0, 1, 0), WHEEL, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(3, 2, 0), TOP_CORNER, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(2, 2, 0), TOP, Direction.NORTH);
-		addDirectionPlacement(new BlockPos(1, 2, 0), CARVER, Direction.NORTH);
+		slotPlacement = addDirectionPlacement(3, 0, 0, CARD_SLOT, Direction.NORTH);
+		addDirectionPlacement(2, 0, 0, BOTTOM_LEFT, Direction.NORTH);
+		addDirectionPlacement(1, 0, 0, BOTTOM_RIGHT, Direction.NORTH);
+		addDirectionPlacement(0, 0, 0, BOTTOM_CORNER, Direction.NORTH);
+		addDirectionPlacement(3, 1, 0, MIDDLE, Direction.NORTH);
+		rodPlacement = addDirectionPlacement(2, 1, 0, ROD, Direction.NORTH);
+		dowelPlacement = addPlacement(1, 1, 0, Blocks.AIR::defaultBlockState, false);
+		wheelPlacement = addDirectionPlacement(0, 1, 0, WHEEL, Direction.NORTH);
+		addDirectionPlacement(3, 2, 0, TOP_CORNER, Direction.NORTH);
+		addDirectionPlacement(2, 2, 0, TOP, Direction.NORTH);
+		addDirectionPlacement(1, 2, 0, CARVER, Direction.NORTH);
 	}
 	
 	public boolean isInvalidFromSlot(BlockGetter level, BlockPos pos)
