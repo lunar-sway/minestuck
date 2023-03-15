@@ -114,13 +114,11 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	private ResourceLocation getGristTexture(T entity)
 	{
 		String textureName = entity.getGristType().getRegistryName().getPath();
-		// TODO remove this check once all grist textures are added
-		String[] workingTextures = {"iodine", "shale", "tar", "cobalt", "marble", "mercury", "sulfur", "garnet", "ruby", "rust", "diamond", "gold", "garnet", "artifact"};
-		if(Arrays.stream(workingTextures).noneMatch(name -> name.equals(textureName)))
-		{
-			return this.modelProvider.getTextureLocation(entity); //default
+		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		if (!Minecraft.getInstance().getResourceManager().hasResource(textureLocation)) {
+			return this.modelProvider.getTextureLocation(entity);
 		}
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		return textureLocation;
 	}
 	
 	/**
