@@ -178,7 +178,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(MINI_FROG_STATUE.get(), MINI_WIZARD_STATUE.get(), MINI_TYPHEUS_STATUE.get());
 		needsWoodPickaxe(CASSETTE_PLAYER.get());
 		needsWoodPickaxe(PARCEL_PYXIS.get(), PYXIS_LID.get());
-		
+		needsWoodPickaxe(MIRROR.get());
 		
 		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
 		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
