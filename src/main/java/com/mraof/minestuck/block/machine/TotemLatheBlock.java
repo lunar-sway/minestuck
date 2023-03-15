@@ -79,8 +79,14 @@ public class TotemLatheBlock extends MultiMachineBlock
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		BlockPos mainPos = this.getMainPos(state, pos);
-		MSBlocks.TOTEM_LATHE.removeFromSlot(level, mainPos);
+		var placement = MSBlocks.TOTEM_LATHE.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			MSBlocks.TOTEM_LATHE.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : MSBlocks.TOTEM_LATHE.guessPlacement(pos, state))
+				MSBlocks.TOTEM_LATHE.removeAt(level, placementGuess);
+		}
 	}
 	
 	@Override

@@ -11,6 +11,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
+
 import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class TotemLatheMultiblock extends MachineMultiblock
@@ -65,9 +67,9 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	{
 		return rodPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
 	}
-	public void removeFromSlot(LevelAccessor level, BlockPos pos)
+	
+	public Optional<Placement> findPlacementFromSlot(LevelAccessor level, BlockPos pos)
 	{
-		slotPlacement.findPlacement(pos, level.getBlockState(pos))
-				.ifPresent(placement -> this.removeAt(level, placement));
+		return slotPlacement.findPlacement(pos, level.getBlockState(pos));
 	}
 }

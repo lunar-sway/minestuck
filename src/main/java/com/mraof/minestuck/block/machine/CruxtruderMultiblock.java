@@ -10,6 +10,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
+
 import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class CruxtruderMultiblock extends MachineMultiblock
@@ -42,9 +44,8 @@ public class CruxtruderMultiblock extends MachineMultiblock
 		return tubePlacement.getPos(new Placement(placementPos, rotation));
 	}
 	
-	public void removeFromTube(LevelAccessor level, BlockPos pos)
+	public Optional<Placement> findPlacementFromTube(LevelAccessor level, BlockPos pos)
 	{
-		tubePlacement.findPlacement(pos, level.getBlockState(pos))
-				.ifPresent(placement -> this.removeAt(level, placement));
+		return tubePlacement.findPlacement(pos, level.getBlockState(pos));
 	}
 }

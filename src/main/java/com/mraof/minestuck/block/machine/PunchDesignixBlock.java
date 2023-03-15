@@ -79,8 +79,15 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		BlockPos mainPos = this.getMainPos(state, pos);
-		MSBlocks.PUNCH_DESIGNIX.removeFromSlot(level, mainPos);
+		var placement = MSBlocks.PUNCH_DESIGNIX.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		
+		if(placement.isPresent())
+			MSBlocks.PUNCH_DESIGNIX.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : MSBlocks.PUNCH_DESIGNIX.guessPlacement(pos, state))
+				MSBlocks.PUNCH_DESIGNIX.removeAt(level, placementGuess);
+		}
 	}
 	
     /**

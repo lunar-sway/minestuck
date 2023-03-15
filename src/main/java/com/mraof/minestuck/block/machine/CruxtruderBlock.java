@@ -84,8 +84,14 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	@Override
 	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
 	{
-		BlockPos mainPos = this.getMainPos(state, pos);
-		MSBlocks.CRUXTRUDER.removeFromTube(level, mainPos);
+		var placement = MSBlocks.CRUXTRUDER.findPlacementFromTube(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			MSBlocks.CRUXTRUDER.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : MSBlocks.CRUXTRUDER.guessPlacement(pos, state))
+				MSBlocks.CRUXTRUDER.removeAt(level, placementGuess);
+		}
 	}
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)
