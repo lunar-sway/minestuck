@@ -91,7 +91,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	protected boolean isInvalidFromPlacement(BlockGetter level, BlockPos pos, PlacementEntry entry)
 	{
 		BlockState worldState = level.getBlockState(pos);
-		Rotation rotation = entry.findRotation(worldState);
+		Rotation rotation = entry.findRotationOrThrow(worldState);
 		BlockPos zeroPos = entry.getZeroPos(pos, rotation);
 		return isInvalid(level, zeroPos, rotation);
 	}
@@ -161,7 +161,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		@SuppressWarnings("unused")
 		public BlockPos getZeroPos(BlockPos pos, BlockState rotatedState)
 		{
-			return getZeroPos(pos, findRotation(rotatedState));
+			return getZeroPos(pos, findRotationOrThrow(rotatedState));
 		}
 		
 		/**
@@ -184,12 +184,18 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		/**
 		 * Finds the rotation of the machine based on this placement entry and its corresponding in-world block state.
 		 */
-		public Rotation findRotation(BlockState rotatedState)
+		public Optional<Rotation> findRotation(BlockState rotatedState)
 		{
 			for(Rotation rotation : Rotation.values())
 				if(stateValidator.test(getRotatedState(rotation), rotatedState))
-					return rotation;
-			throw new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+stateSupplier.get());
+					return Optional.of(rotation);
+			return Optional.empty();
+		}
+		
+		public Rotation findRotationOrThrow(BlockState rotatedState)
+		{
+			return this.findRotation(rotatedState).orElseThrow(() ->
+					new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+stateSupplier.get()));
 		}
 	}
 	
