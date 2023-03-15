@@ -631,8 +631,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.NIFE, "nife.");
 		addItemExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
 		addItem(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
+		addItem(MSItems.THOUSAND_DEGREE_KNIFE, "Thousand Degree Knife");
+		addItemTooltip(MSItems.THOUSAND_DEGREE_KNIFE, "Wow! All those online videos WERE real all along!");
 		addItem(MSItems.STARSHARD_TRI_BLADE, "Starshard Tri-Blade");
 		addItem(MSItems.TOOTHRIPPER, "Toothripper");
+		addItem(MSItems.PRINCESS_PERIL, "Princess Peril");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -723,6 +726,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.DEMONBANE_RAGRIPPER, "It's said to be the deadliest chainsaw in the universe.");
 		addItem(MSItems.DEMONBANE_RAGRIPPER_LIPSTICK, "Blood Lipstick");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
+		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
+		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		addItem(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		addItem(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
@@ -757,6 +762,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CANDY_SICKLE, "Candy Sickle");
 		addItem(MSItems.SCYTHE, "Scythe");
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
+		addItem(MSItems.TIME_FLAYER, "Time Flayer");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.SKAITHE, "Skaithe");
@@ -782,6 +788,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.BARBER_BASHER, "Barber Basher");
 		addItem(MSItems.METAL_BAT, "Metal Bat");
 		addItemTooltip(MSItems.METAL_BAT, "Regular weapons not working for you? Try beating foes with an average bat!");
+		addItem(MSItems.CRICKET_BAT, "Cricket Bat");
 		addItem(MSItems.CLOWN_CLUB, "Clown Club");
 		addItemTooltip(MSItems.CLOWN_CLUB, "Rage inducing. Why would you make this");
 		addItem(MSItems.SPIKED_CLUB, "Spiked Club");
