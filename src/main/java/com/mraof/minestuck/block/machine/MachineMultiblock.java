@@ -91,8 +91,7 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 	protected boolean isInvalidFromPlacement(BlockGetter level, BlockPos pos, PlacementEntry entry)
 	{
 		BlockState worldState = level.getBlockState(pos);
-		Rotation rotation = entry.findRotationOrThrow(worldState);
-		return isInvalid(level, entry.getPlacement(pos, rotation));
+		return isInvalid(level, entry.findPlacementOrThrow(pos, worldState));
 	}
 	
 	protected void removeAt(LevelAccessor level, Placement placement)
@@ -173,20 +172,20 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		}
 		
 		/**
-		 * Finds the rotation of the machine based on this entry and its corresponding in-world block state.
+		 * Checks possible rotations of the block and returns the placement for the rotation that matches.
 		 */
-		public Optional<Rotation> findRotation(BlockState rotatedState)
+		public Optional<Placement> findPlacement(BlockPos pos, BlockState rotatedState)
 		{
 			for(Rotation rotation : Rotation.values())
 				if(stateValidator.test(getRotatedState(rotation), rotatedState))
-					return Optional.of(rotation);
+					return Optional.of(this.getPlacement(pos, rotation));
 			return Optional.empty();
 		}
 		
-		public Rotation findRotationOrThrow(BlockState rotatedState)
+		public Placement findPlacementOrThrow(BlockPos pos, BlockState rotatedState)
 		{
-			return this.findRotation(rotatedState).orElseThrow(() ->
-					new IllegalArgumentException("No valid rotation found to match state "+rotatedState+" with "+stateSupplier.get()));
+			return this.findPlacement(pos, rotatedState).orElseThrow(() ->
+					new IllegalArgumentException("No valid rotation found to match state " + rotatedState + " with " + stateSupplier.get()));
 		}
 	}
 	

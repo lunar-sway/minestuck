@@ -6,7 +6,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,22 +55,19 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	
 	public BlockPos getDowelPos(BlockPos tilePos, BlockState slotState)
 	{
-		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return dowelPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
+		return dowelPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
 	}
 	public BlockPos getWheelPos(BlockPos tilePos, BlockState slotState)
 	{
-		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return wheelPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
+		return wheelPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
 	}
 	public BlockPos getRodPos(BlockPos tilePos, BlockState slotState)
 	{
-		Rotation rotation = slotPlacement.findRotationOrThrow(slotState);
-		return rodPlacement.getPos(slotPlacement.getPlacement(tilePos, rotation));
+		return rodPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
 	}
 	public void removeFromSlot(LevelAccessor level, BlockPos pos)
 	{
-		slotPlacement.findRotation(level.getBlockState(pos)).ifPresent(rotation ->
-				this.removeAt(level, slotPlacement.getPlacement(pos, rotation)));
+		slotPlacement.findPlacement(pos, level.getBlockState(pos))
+				.ifPresent(placement -> this.removeAt(level, placement));
 	}
 }
