@@ -528,6 +528,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
 		addBlock(MSBlocks.MINI_TYPHEUS_STATUE, "Small Denizen Statue"); //Referred to as typheus in all code except name here. Its generic now but more denizen statues may get added
 		addBlock(MSBlocks.GLOWYSTONE_DUST, "Glowystone Dust");
+		addBlock(MSBlocks.MIRROR, "Mirror");
 		addBlock(MSBlocks.OIL, "Oil");
 		addBlock(MSBlocks.BLOOD, "Blood");
 		addBlock(MSBlocks.BRAIN_JUICE, "Brain Juice");
