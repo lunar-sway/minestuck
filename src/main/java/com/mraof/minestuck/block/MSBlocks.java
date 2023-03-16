@@ -387,18 +387,18 @@ public class MSBlocks
 	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Land Plant Blocks
-	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11)));
-	public static final RegistryObject<Block> DESERT_BUSH = REGISTER.register("desert_bush", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<Block> BLOOMING_CACTUS = REGISTER.register("blooming_cactus", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<Block> PETRIFIED_GRASS = REGISTER.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE)));
-	public static final RegistryObject<Block> PETRIFIED_POPPY = REGISTER.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE)));
+	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> DESERT_BUSH = REGISTER.register("desert_bush", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> BLOOMING_CACTUS = REGISTER.register("blooming_cactus", () -> new DesertFloraBlock(Block.Properties.of(Material.PLANT).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> PETRIFIED_GRASS = REGISTER.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XYZ)));
+	public static final RegistryObject<Block> PETRIFIED_POPPY = REGISTER.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XZ)));
 	
 	public static final RegistryObject<StemGrownBlock> STRAWBERRY = REGISTER.register("strawberry", () -> new StrawberryBlock(Block.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<AttachedStemBlock> ATTACHED_STRAWBERRY_STEM = REGISTER.register("attached_strawberry_stem", () -> new AttachedStemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
 	public static final RegistryObject<StemBlock> STRAWBERRY_STEM = REGISTER.register("strawberry_stem", () -> new StemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
 	
-	public static final RegistryObject<Block> TALL_END_GRASS = REGISTER.register("tall_end_grass", () -> new TallEndGrassBlock(Block.Properties.of(Material.REPLACEABLE_PLANT, DyeColor.GREEN).noCollission().randomTicks().strength(0.1F).sound(SoundType.NETHER_WART)));
-	public static final RegistryObject<Block> GLOWFLOWER = REGISTER.register("glowflower", () -> new FlowerBlock(MobEffects.GLOWING, 20, Block.Properties.of(Material.PLANT, DyeColor.YELLOW).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS)));
+	public static final RegistryObject<Block> TALL_END_GRASS = REGISTER.register("tall_end_grass", () -> new TallEndGrassBlock(Block.Properties.of(Material.REPLACEABLE_PLANT, DyeColor.GREEN).noCollission().randomTicks().strength(0.1F).sound(SoundType.NETHER_WART).offsetType(BlockBehaviour.OffsetType.XYZ)));
+	public static final RegistryObject<Block> GLOWFLOWER = REGISTER.register("glowflower", () -> new FlowerBlock(MobEffects.GLOWING, 20, Block.Properties.of(Material.PLANT, DyeColor.YELLOW).noCollission().strength(0).lightLevel(state -> 12).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
 	
 	
 	

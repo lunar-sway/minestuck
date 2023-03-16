@@ -38,14 +38,14 @@ public class GlowingMushroomBlock extends BushBlock
 				if(level.getBlockState(checkPos).is(this))
 				{
 					count++;
-					if (count >= 5)
+					if(count >= 5)
 						return;
 				}
 			
-			for (int i = 0; i < 5; ++i)
+			for(int i = 0; i < 5; ++i)
 			{
 				BlockPos spreadPos = pos.offset(random.nextInt(3) - 1, random.nextInt(2) - random.nextInt(2), random.nextInt(3) - 1);
-				if (level.isEmptyBlock(spreadPos) && this.canSpread(level, spreadPos, this.defaultBlockState()))
+				if(level.isEmptyBlock(spreadPos) && this.canSpread(level, spreadPos, this.defaultBlockState()))
 				{
 					level.setBlock(spreadPos, this.defaultBlockState(), Block.UPDATE_CLIENTS);
 					return;
