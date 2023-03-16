@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased 4/13]
+
+### Added
+
+- Bookshelves for various minestuck wood types
+- Ladders for various minestuck wood types
+
+### Removed
+
+- Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
+
 ## [Unreleased]
 
 ### Added
