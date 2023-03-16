@@ -108,6 +108,8 @@ public class MSItems
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> HALLOWED_SKEWER = REGISTER.register("hallowed_skewer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(9)), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> GENESIS_GODSTABBER = REGISTER.register("genesis_godstabber", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(9)), new Item.Properties().defaultDurability(1561).tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> NIFE = REGISTER.register("nife", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 1, -2.0F).add(OnHitEffect.SORD_DROP), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> LIGHT_OF_MY_KNIFE = REGISTER.register("light_of_my_knife", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)).add(OnHitEffect.setOnFire(35)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> THOUSAND_DEGREE_KNIFE = REGISTER.register("thousand_degree_knife", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)).add(OnHitEffect.setOnFire(35)), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant()));
@@ -117,6 +119,8 @@ public class MSItems
 	public static final RegistryObject<Item> PRINCESS_PERIL = REGISTER.register("princess_peril", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 5, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().defaultDurability(1650).tab(MSItemGroup.WEAPONS)));
 	
 	
+	//Keys
+	public static final RegistryObject<Item> HOUSE_KEY = REGISTER.register("house_key", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	
 	
 	//Axes
@@ -230,6 +234,7 @@ public class MSItems
 	public static final RegistryObject<Item> EIGHTBALL_SCYTHE = REGISTER.register("eightball_scythe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.RANDOM_DAMAGE).set(ItemRightClickEffect.EIGHTBALL), new Item.Properties().defaultDurability(600).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> TIME_FLAYER = REGISTER.register("time_flayer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.TIME_SLOWNESS_AOE).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SUNRAY_HARVESTER = REGISTER.register("sunray_harvester", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.setOnFire(35)), new Item.Properties().defaultDurability(1200).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> GREEN_SUN_RAYREAPER = REGISTER.register("green_sun_rayreaper", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 7, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.setOnFire(10)), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SKAITHE = REGISTER.register("skaithe", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> HELLBRINGERS_HOE_INACTIVE = REGISTER.register("hellbringers_hoe_inactive", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.HELLBRINGERS_HOE_ACTIVE)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> HELLBRINGERS_HOE_ACTIVE = REGISTER.register("hellbringers_hoe_active", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 2, -2.4F).efficiency(10.0F).set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.HELLBRINGERS_HOE_INACTIVE)).add(OnHitEffect.setOnFire(10)), new Item.Properties()));
@@ -323,7 +328,7 @@ public class MSItems
 	public static final RegistryObject<Item> GOLDEN_SPORK = REGISTER.register("golden_spork", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 5, -2.5F).efficiency(1.0F).set(MSItemTypes.SHOVEL_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	
 	public static final RegistryObject<Item> BIDENT = REGISTER.register("bident", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
-	
+	public static final RegistryObject<Item> DOUBLE_ENDED_TRIDENT = REGISTER.register("double_ended_trident", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 6, -2.9F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	
 	
 	//Needles/Wands

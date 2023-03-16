@@ -1,0 +1,15 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1890,
+    "minestuck:cobalt": 6046,
+    "minestuck:garnet": 568,
+    "minestuck:gold": 1512,
+    "minestuck:quartz": 1,
+    "minestuck:ruby": 568,
+    "minestuck:tar": 3778
+  },
+  "ingredient": {
+    "item": "minestuck:time_flayer"
+  }
+}

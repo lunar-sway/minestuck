@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:shadowrazor"
+  },
+  "input2": {
+    "item": "minestuck:gamegrl_magazine"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:princess_peril"
+  }
+}
