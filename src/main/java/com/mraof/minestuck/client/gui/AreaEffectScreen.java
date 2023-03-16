@@ -20,13 +20,24 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class AreaEffectScreen extends Screen
 {
+	public static final String TITLE = "minestuck.area_effect";
+	public static final String MIN_POS_MESSAGE = "minestuck.area_effect.min_pose_message";
+	public static final String MAX_POS_MESSAGE = "minestuck.area_effect.max_pose_message";
+	public static final String X_MIN_MESSAGE = "minestuck.area_effect.x_min_message";
+	public static final String Y_MIN_MESSAGE = "minestuck.area_effect.Y_min_message";
+	public static final String Z_MIN_MESSAGE = "minestuck.area_effect.z_min_message";
+	public static final String X_MAX_MESSAGE = "minestuck.area_effect.x_max_message";
+	public static final String Y_MAX_MESSAGE = "minestuck.area_effect.y_max_message";
+	public static final String Z_MAX_MESSAGE = "minestuck.area_effect.z_max_message";
+	public static final String CURRENT_EFFECT_MESSAGE = "minestuck.area_effect.current_effect";
+	public static final String CURRENT_EFFECT_AMPLIFIER_MESSAGE = "minestuck.area_effect.current_effect_amplifier";
+	public static final String DONE_MESSAGE = "minestuck.area_effect.done";
+	public static final String ALL_MOBS_MESSAGE = "minestuck.area_effect.all_mobs";
+	public static final String JUST_PLAYERS_MESSAGE = "minestuck.area_effect.just_players";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_large.png");
 	
 	private static final int GUI_WIDTH = 150;
 	private static final int GUI_HEIGHT = 132;
-	
-	private static final String MIN_POS_MESSAGE = "Min Pos Facing Offset"; //TODO make translatable (lang file + translation key)
-	private static final String MAX_POS_MESSAGE = "Max Pos Facing Offset";
 	
 	private final AreaEffectBlockEntity be;
 	private EditBox minPosDestinationTextFieldX;
@@ -45,7 +56,7 @@ public class AreaEffectScreen extends Screen
 	
 	AreaEffectScreen(AreaEffectBlockEntity be)
 	{
-		super(Component.literal("Area Effect Block"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.isAllMobs = be.getBlockState().getValue(AreaEffectBlock.ALL_MOBS);
@@ -56,47 +67,47 @@ public class AreaEffectScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		this.minPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, Component.literal("X value of min effect pos")); //TODO make these translatable
+		this.minPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 15, 40, 20, Component.translatable(X_MIN_MESSAGE));
 		this.minPosDestinationTextFieldX.setValue(String.valueOf(be.getMinAreaOffset().getX()));
 		addRenderableWidget(minPosDestinationTextFieldX);
 		
-		this.minPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, Component.literal("Y value of min effect pos"));
+		this.minPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 15, 40, 20, Component.translatable(Y_MIN_MESSAGE));
 		this.minPosDestinationTextFieldY.setValue(String.valueOf(be.getMinAreaOffset().getY()));
 		addRenderableWidget(minPosDestinationTextFieldY);
 		
-		this.minPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, Component.literal("Z value of min effect pos"));
+		this.minPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 15, 40, 20, Component.translatable(Z_MIN_MESSAGE));
 		this.minPosDestinationTextFieldZ.setValue(String.valueOf(be.getMinAreaOffset().getZ()));
 		addRenderableWidget(minPosDestinationTextFieldZ);
 		
-		this.maxPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, Component.literal("X value of max effect pos"));
+		this.maxPosDestinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 50, 40, 20, Component.translatable(X_MAX_MESSAGE));
 		this.maxPosDestinationTextFieldX.setValue(String.valueOf(be.getMaxAreaOffset().getX()));
 		addRenderableWidget(maxPosDestinationTextFieldX);
 		
-		this.maxPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, Component.literal("Y value of max effect pos"));
+		this.maxPosDestinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(Y_MAX_MESSAGE));
 		this.maxPosDestinationTextFieldY.setValue(String.valueOf(be.getMaxAreaOffset().getY()));
 		addRenderableWidget(maxPosDestinationTextFieldY);
 		
-		this.maxPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, Component.literal("Z value of max effect pos"));
+		this.maxPosDestinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 50, 40, 20, Component.translatable(Z_MAX_MESSAGE));
 		this.maxPosDestinationTextFieldZ.setValue(String.valueOf(be.getMaxAreaOffset().getZ()));
 		addRenderableWidget(maxPosDestinationTextFieldZ);
 		
 		
-		this.effectTextField = new EditBox(this.font, this.width / 2 - 65, yOffset + 79, 105, 18, Component.literal("Current Effect"));
+		this.effectTextField = new EditBox(this.font, this.width / 2 - 65, yOffset + 79, 105, 18, Component.translatable(CURRENT_EFFECT_MESSAGE));
 		this.effectTextField.setValue(String.valueOf(ForgeRegistries.MOB_EFFECTS.getKey(be.getEffect())));
 		addRenderableWidget(effectTextField);
 		
-		this.effectAmplifierTextField = new EditBox(this.font, this.width / 2 + 45, yOffset + 79, 20, 18, Component.literal("Current Effect Amplifier"));
+		this.effectAmplifierTextField = new EditBox(this.font, this.width / 2 + 45, yOffset + 79, 20, 18, Component.translatable(CURRENT_EFFECT_AMPLIFIER_MESSAGE));
 		this.effectAmplifierTextField.setValue(String.valueOf(be.getEffectAmplifier()));
 		addRenderableWidget(effectAmplifierTextField);
 		
 		addRenderableWidget(allMobsButton = new ExtendedButton(this.width / 2 - 65, yOffset + 105, 85, 20, getAllMobsButtonMessage(), button -> cycleIsAllMobs()));
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 105, 40, 20, Component.literal("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 105, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
 	}
 	
 	private Component getAllMobsButtonMessage()
 	{
-		return this.isAllMobs ? Component.literal("ALL MOBS") : Component.literal("JUST PLAYERS");
+		return this.isAllMobs ? Component.translatable(ALL_MOBS_MESSAGE) : Component.translatable(JUST_PLAYERS_MESSAGE);
 	}
 	
 	/**
@@ -128,8 +139,8 @@ public class AreaEffectScreen extends Screen
 		RenderSystem.setShaderTexture(0, GUI_BACKGROUND);
 		this.blit(poseStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.draw(poseStack, MIN_POS_MESSAGE, (width / 2) - font.width(MIN_POS_MESSAGE) / 2, yOffset + 5, 0x404040);
-		font.draw(poseStack, MAX_POS_MESSAGE, (width / 2) - font.width(MAX_POS_MESSAGE) / 2, yOffset + 40, 0x404040);
+		font.draw(poseStack, Component.translatable(MIN_POS_MESSAGE), (width / 2) - font.width(Component.translatable(MIN_POS_MESSAGE)) / 2, yOffset + 5, 0x404040);
+		font.draw(poseStack, Component.translatable(MAX_POS_MESSAGE), (width / 2) - font.width(Component.translatable(MAX_POS_MESSAGE)) / 2, yOffset + 40, 0x404040);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
 	

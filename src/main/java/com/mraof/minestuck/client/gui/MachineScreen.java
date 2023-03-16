@@ -36,7 +36,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if(keyCode == GLFW.GLFW_KEY_ENTER && goButton != null)
+		if((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && goButton != null)
 		{
 			this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
