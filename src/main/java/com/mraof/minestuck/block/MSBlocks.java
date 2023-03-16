@@ -331,47 +331,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> TIME_ASPECT_SAPLING = REGISTER.register("time_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<Block> VOID_ASPECT_SAPLING = REGISTER.register("void_aspect_sapling", () -> new AspectSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	
-	//Bookshelves
-	public static final RegistryObject<Block> BLOOD_ASPECT_BOOKSHELF = REGISTER.register("blood_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> BREATH_ASPECT_BOOKSHELF = REGISTER.register("breath_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DOOM_ASPECT_BOOKSHELF = REGISTER.register("doom_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HEART_ASPECT_BOOKSHELF = REGISTER.register("heart_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> HOPE_ASPECT_BOOKSHELF = REGISTER.register("hope_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIFE_ASPECT_BOOKSHELF = REGISTER.register("life_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> LIGHT_ASPECT_BOOKSHELF = REGISTER.register("light_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> MIND_ASPECT_BOOKSHELF = REGISTER.register("mind_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAGE_ASPECT_BOOKSHELF = REGISTER.register("rage_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> SPACE_ASPECT_BOOKSHELF = REGISTER.register("space_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TIME_ASPECT_BOOKSHELF = REGISTER.register("time_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> VOID_ASPECT_BOOKSHELF = REGISTER.register("void_aspect_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
 	
-	public static final RegistryObject<Block> GLOWING_BOOKSHELF = REGISTER.register("glowing_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> FROST_BOOKSHELF = REGISTER.register("frost_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> RAINBOW_BOOKSHELF = REGISTER.register("rainbow_bookshelf", () -> new FlammableBlock(5, 20, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> END_BOOKSHELF = REGISTER.register("end_bookshelf", () -> new FlammableBlock(1, 250, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> DEAD_BOOKSHELF = REGISTER.register("dead_bookshelf", () -> new FlammableBlock(5, 5, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	public static final RegistryObject<Block> TREATED_BOOKSHELF = REGISTER.register("treated_bookshelf", () -> new FlammableBlock(0, 0, Block.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-	
-	//Ladders
-	public static final RegistryObject<Block> BLOOD_ASPECT_LADDER = REGISTER.register("blood_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> BREATH_ASPECT_LADDER = REGISTER.register("breath_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> DOOM_ASPECT_LADDER = REGISTER.register("doom_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> HEART_ASPECT_LADDER = REGISTER.register("heart_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> HOPE_ASPECT_LADDER = REGISTER.register("hope_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> LIFE_ASPECT_LADDER = REGISTER.register("life_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> LIGHT_ASPECT_LADDER = REGISTER.register("light_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> MIND_ASPECT_LADDER = REGISTER.register("mind_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> RAGE_ASPECT_LADDER = REGISTER.register("rage_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> SPACE_ASPECT_LADDER = REGISTER.register("space_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> TIME_ASPECT_LADDER = REGISTER.register("time_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> VOID_ASPECT_LADDER = REGISTER.register("void_aspect_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	
-	public static final RegistryObject<Block> GLOWING_LADDER = REGISTER.register("glowing_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> FROST_LADDER = REGISTER.register("frost_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> RAINBOW_LADDER = REGISTER.register("rainbow_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> END_LADDER = REGISTER.register("end_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> DEAD_LADDER = REGISTER.register("dead_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
-	public static final RegistryObject<Block> TREATED_LADDER = REGISTER.register("treated_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of(Material.WOOD).strength(2.0F, 3.0F).sound(SoundType.WOOD).noOcclusion()));
 	
 	//Land Plant Blocks
 	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11)));

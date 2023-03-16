@@ -8,18 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Bookshelves for various minestuck wood types
-- Ladders for various minestuck wood types
 - Combination recipes and grist costs for items introduced in minecraft 1.19
 
 ### Changed
 
 - Update to minecraft 1.19.2
 - Minestuck now uses a biome modifier to add ores to the overworld (minestuck:overworld_ores)
-
-### Removed
-
-- Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
 ### Fixed
 
