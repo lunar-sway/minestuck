@@ -5,6 +5,7 @@ import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -26,14 +27,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class TotemLatheBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -76,144 +80,16 @@ public class TotemLatheBlock extends MultiMachineBlock
 		super.onRemove(state, level, pos, newState, isMoving);
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
-		
-		if(state.isAir() || !(state.getBlock() instanceof TotemLatheBlock))
-			return;
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
 		else
-			level.destroyBlock(pos, false);
-		
-		BlockPos offsetPos;
-		if(state.is(MSBlocks.TOTEM_LATHE.CARD_SLOT.get()))
 		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.BOTTOM_CORNER.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.MIDDLE.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.ROD.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.WHEEL.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.TOP_CORNER.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.TOP.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.TOTEM_LATHE.CARVER.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -241,7 +117,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		protected final Map<Direction, VoxelShape> activeShape;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
+		public Rod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
@@ -267,7 +143,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		protected final Map<Direction, VoxelShape> carvedShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.carvedShape = carvedShape.createRotatedShapes();
@@ -292,19 +168,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
-
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
 	}
 	
 	public static class Slot extends TotemLatheBlock implements EntityBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(TotemLatheMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}

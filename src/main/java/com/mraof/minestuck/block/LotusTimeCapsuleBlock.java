@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
-import com.mraof.minestuck.block.machine.MachineMultiblock;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.util.CustomVoxelShape;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -11,13 +11,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class LotusTimeCapsuleBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class LotusTimeCapsuleBlock extends MultiMachineBlock<LotusTimeCapsuleMultiblock>
 {
 	protected final Map<Direction, VoxelShape> shape;
 	
-	public LotusTimeCapsuleBlock(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+	public LotusTimeCapsuleBlock(LotusTimeCapsuleMultiblock machine, CustomVoxelShape shape, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();

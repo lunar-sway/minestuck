@@ -1,11 +1,11 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -24,15 +24,19 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
+import java.util.Optional;
 
-public class AlchemiterBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean recursive, corner;
 	protected final BlockPos mainPos;
 	
-	public AlchemiterBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
+	public AlchemiterBlock(AlchemiterMultiblock machine, CustomVoxelShape shape, boolean recursive, boolean corner, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -52,9 +56,9 @@ public class AlchemiterBlock extends MultiMachineBlock
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		BlockPos mainPos = getMainPos(state, pos, level);
+		Optional<BlockPos> mainPos = getMainPos(state, pos, level);
 		
-		if (level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
+		if(mainPos.isPresent() && level.getBlockEntity(mainPos.get()) instanceof AlchemiterBlockEntity alchemiter)
 		{
 			alchemiter.onRightClick(level, player, state, hit.getDirection());
 		}
@@ -68,117 +72,31 @@ public class AlchemiterBlock extends MultiMachineBlock
 	{
 		if(state.getBlock() != newState.getBlock())
 		{
-			BlockPos mainPos = getMainPos(state, pos, level);
-			if(level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
-			{
-				alchemiter.breakMachine();
-				if(mainPos.equals(pos))
-					alchemiter.dropItem(null);
-			}
+			getMainPos(state, pos, level).ifPresent(mainPos -> {
+				if(level.getBlockEntity(mainPos) instanceof AlchemiterBlockEntity alchemiter)
+				{
+					alchemiter.breakMachine();
+					if(mainPos.equals(pos))
+						alchemiter.dropItem(null);
+				}
+			});
+			
 			
 			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
-		
-		if(state.isAir() || !(state.getBlock() instanceof AlchemiterBlock))
-			return;
+		var placement = this.getMainPos(state, pos, level)
+				.flatMap(mainPos -> this.machine.findPlacementFromPad(level, mainPos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
 		else
-			level.destroyBlock(pos, false);
-			
-		BlockPos offsetPos;
-		if(state.is(MSBlocks.ALCHEMITER.TOTEM_CORNER.get()))
 		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.CORNER.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.LEFT_SIDE.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.RIGHT_SIDE.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.TOTEM_PAD.get()))
-		{
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.LOWER_ROD.get()))
-		{
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.UPPER_ROD.get()))
-		{
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.ALCHEMITER.CENTER.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(-1, 0, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, 1);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 0, -1);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -186,19 +104,19 @@ public class AlchemiterBlock extends MultiMachineBlock
      * returns the block position of the "Main" block
      * aka the block with the BlockEntity for the machine
      */
-	public BlockPos getMainPos(BlockState state, BlockPos pos, BlockGetter level)
+	public Optional<BlockPos> getMainPos(BlockState state, BlockPos pos, BlockGetter level)
 	{
 		return getMainPos(state, pos, level, 4);
 	}
 	
-	protected BlockPos getMainPos(BlockState state, BlockPos pos, BlockGetter level, int count)
+	protected Optional<BlockPos> getMainPos(BlockState state, BlockPos pos, BlockGetter level, int count)
 	{
 		Direction direction = state.getValue(FACING);
 		
 		BlockPos newPos = pos.offset(mainPos.rotate(MSRotationUtil.fromDirection(direction)));
 		
 		if(!recursive)
-			return newPos;
+			return Optional.of(newPos);
 		else
 		{
 			BlockState newState = level.getBlockState(newPos);
@@ -206,7 +124,8 @@ public class AlchemiterBlock extends MultiMachineBlock
 					&& newState.getValue(FACING).equals(this.corner ? state.getValue(FACING).getClockWise() : state.getValue(FACING)))
 			{
 				return ((AlchemiterBlock) newState.getBlock()).getMainPos(newState, newPos, level, count - 1);
-			} else return new BlockPos(0, -1 , 0);
+			} else
+				return Optional.empty();
 		}
 	}
 
@@ -214,7 +133,7 @@ public class AlchemiterBlock extends MultiMachineBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
 		
-		public Pad(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Pad(AlchemiterMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, false, false, new BlockPos(0, 0, 0), properties);
 		}
