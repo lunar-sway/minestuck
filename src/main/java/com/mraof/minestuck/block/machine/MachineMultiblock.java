@@ -40,24 +40,54 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		return registryObject;
 	}
 	
-	@SuppressWarnings("SameParameterValue")
+	/**
+	 * Registers a placed block at the given coordinates.
+	 * This block will then be placed by {@link #placeWithRotation(LevelAccessor, Placement)},
+	 * and can then be removed by {@link #removeAt(LevelAccessor, Placement)}.
+	 * Meant for undirectional blocks which lacks a FACING property.
+	 * {@link PlacementEntry#findPlacement(BlockPos, BlockState)} will not work for the returned entry.
+	 * @param mustExist if true, then {@link #isInvalidFromPlacement(BlockGetter, BlockPos, PlacementEntry)} will return true if this block is missing.
+	 */
+	@SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
 	protected PlacementEntry addPlacement(int x, int y, int z, Supplier<BlockState> stateSupplier, boolean mustExist)
 	{
-		return addPlacement(new BlockPos(x, y, z), stateSupplier, mustExist, false, BASE_PREDICATE);
+		return addPlacement(new BlockPos(x, y, z), stateSupplier, mustExist, false, true, BASE_PREDICATE);
 	}
 	
+	/**
+	 * Registers a placed block with the given direction at the given coordinates.
+	 * This block will then be placed by {@link #placeWithRotation(LevelAccessor, Placement)},
+	 * and can then be removed by {@link #removeAt(LevelAccessor, Placement)}.
+	 * Should only be used for blocks which has a FACING property.
+	 * Assumes that the block must exist for a valid machine,
+	 * so {@link #isInvalidFromPlacement(BlockGetter, BlockPos, PlacementEntry)} will return true if this block is missing.
+	 */
 	protected PlacementEntry addDirectionPlacement(int x, int y, int z, RegistryObject<Block> regBlock, Direction direction)
 	{
-		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), true, true, ROTATION_PREDICATE);
+		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), true, true, true, ROTATION_PREDICATE);
 	}
 	
-	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, boolean isDirectional, BiPredicate<BlockState, BlockState> stateValidator)
+	/**
+	 * Registers a placed block with the given direction at the given coordinates.
+	 * This block will NOT be placed by {@link #placeWithRotation(LevelAccessor, Placement)},
+	 * however it can be removed by {@link #removeAt(LevelAccessor, Placement)}.
+	 * Should only be used for blocks which has a FACING property.
+	 * Assumes that the block is not needed for a valid machine,
+	 * so {@link #isInvalidFromPlacement(BlockGetter, BlockPos, PlacementEntry)} will ignore this block.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	protected PlacementEntry addDirectionOptional(int x, int y, int z, RegistryObject<Block> regBlock, Direction direction)
+	{
+		return addPlacement(new BlockPos(x, y, z), applyDirection(regBlock, direction), false, true, false, ROTATION_PREDICATE);
+	}
+	
+	protected PlacementEntry addPlacement(BlockPos pos, Supplier<BlockState> stateSupplier, boolean mustExist, boolean isDirectional, boolean isPlaced, BiPredicate<BlockState, BlockState> stateValidator)
 	{
 		for(PlacementEntry entry : blockEntries)
 			if(entry.pos.equals(pos))
 				throw new IllegalArgumentException("Can't add placement for the same position " + pos + " twice.");
 		
-		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, mustExist, isDirectional, pos);
+		PlacementEntry entry = new PlacementEntry(stateSupplier, stateValidator, mustExist, isDirectional, isPlaced, pos);
 		blockEntries.add(entry);
 		return entry;
 	}
@@ -130,15 +160,16 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		@Nonnull
 		private final Supplier<BlockState> stateSupplier;
 		private final BiPredicate<BlockState, BlockState> stateValidator;
-		private final boolean mustExist, isDirectional;
+		private final boolean mustExist, isDirectional, isPlaced;
 		private final BlockPos pos;
 		
-		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, boolean mustExist, boolean isDirectional, BlockPos pos)
+		private PlacementEntry(Supplier<BlockState> stateSupplier, BiPredicate<BlockState, BlockState> stateValidator, boolean mustExist, boolean isDirectional, boolean isPlaced, BlockPos pos)
 		{
 			this.stateSupplier = Objects.requireNonNull(stateSupplier);
 			this.stateValidator = Objects.requireNonNull(stateValidator);
 			this.mustExist = mustExist;
 			this.isDirectional = isDirectional;
+			this.isPlaced = isPlaced;
 			this.pos = pos;
 		}
 		
@@ -149,8 +180,11 @@ public abstract class MachineMultiblock implements ItemLike    //An abstraction 
 		
 		private void placeWithRotation(LevelAccessor level, Placement placement)
 		{
-			BlockState state = this.getRotatedState(placement.rotation);
-			level.setBlock(this.getPos(placement), state, Block.UPDATE_ALL);
+			if(this.isPlaced)
+			{
+				BlockState state = this.getRotatedState(placement.rotation);
+				level.setBlock(this.getPos(placement), state, Block.UPDATE_ALL);
+			}
 		}
 		
 		private boolean matchesWithRotation(BlockGetter level, BlockPos pos, Rotation rotation)

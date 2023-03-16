@@ -43,7 +43,7 @@ public class TotemLatheMultiblock extends MachineMultiblock
 		addDirectionPlacement(0, 0, 0, BOTTOM_CORNER, Direction.NORTH);
 		addDirectionPlacement(3, 1, 0, MIDDLE, Direction.NORTH);
 		rodPlacement = addDirectionPlacement(2, 1, 0, ROD, Direction.NORTH);
-		dowelPlacement = addPlacement(1, 1, 0, Blocks.AIR::defaultBlockState, false);
+		dowelPlacement = addDirectionOptional(1, 1, 0, DOWEL_ROD, Direction.NORTH);
 		wheelPlacement = addDirectionPlacement(0, 1, 0, WHEEL, Direction.NORTH);
 		addDirectionPlacement(3, 2, 0, TOP_CORNER, Direction.NORTH);
 		addDirectionPlacement(2, 2, 0, TOP, Direction.NORTH);
