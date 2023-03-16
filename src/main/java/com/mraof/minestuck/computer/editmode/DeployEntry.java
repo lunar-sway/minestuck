@@ -18,16 +18,16 @@ public class DeployEntry
 	private DeployList.IAvailabilityCondition condition;
 	private BiFunction<SburbConnection, Level, ItemStack> item;
 	private BiFunction<Boolean, SburbConnection, GristSet> grist;
-	private boolean atheneum;
+	private DeployList.EntryLists category;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, boolean atheneum)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
 	{
 		this.name = name;
 		this.tier = tier;
 		this.condition = condition;
 		this.item = item;
 		this.grist = grist;
-		this.atheneum = atheneum;
+		this.category = entryList;
 	}
 	
 	public String getName()
@@ -39,13 +39,13 @@ public class DeployEntry
 	{
 		return tier;
 	}
+
+	public DeployList.EntryLists getCategory() { return category; }
 	
 	public boolean isAvailable(SburbConnection c, int tier)
 	{
 		return (condition == null || condition.test(c)) && this.tier <= tier && getCurrentCost(c) != null;
 	}
-	
-	public boolean inAtheneum() { return atheneum; }
 	
 	public ItemStack getItemStack(SburbConnection c, Level level)
 	{
@@ -73,12 +73,11 @@ public class DeployEntry
 		{
 			ItemStack stack = getItemStack(c, level);
 			GristSet cost = getCurrentCost(c);
-			boolean athe = inAtheneum();
 			CompoundTag tag = new CompoundTag();
 			stack.save(tag);
 			tag.putInt("i", i);
 			tag.put("cost", cost.write(new ListTag()));
-			tag.putBoolean("athe", athe);
+			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}
 	}

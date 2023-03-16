@@ -318,7 +318,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		{
 			EditData data = getData(event.getPlayer());
 			ItemStack stack = event.getEntity().getItem();
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level, DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
@@ -332,7 +332,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				}
 				else event.setCanceled(true);
 			}
-			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.getEntryForItem(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level) != null)
+			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level, DeployList.EntryLists.ATHENEUM))
 			{
 				event.setCanceled(false);
 			}
@@ -382,7 +382,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost) && !entry.inAtheneum())
+				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost))
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(cost.createMissingMessage());
@@ -408,7 +408,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && !entry.inAtheneum())))
+					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && entry.getCategory() != DeployList.EntryLists.ATHENEUM)))
 				event.setCanceled(true);
 			
 			if(block.getBlock() instanceof MultiMachineBlock)
@@ -433,17 +433,17 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel(), DeployList.EntryLists.ATHENEUM);
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				if(entry != null && entry.inAtheneum())
+				if(entry != null)
 					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
 				else
 					GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
-				GristSet set = entry != null && entry.inAtheneum() ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
+				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
 				if(set != null && !set.isEmpty())
 				{
 					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
@@ -472,14 +472,17 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(entry != null)
 				{
 					GristSet cost = entry.getCurrentCost(c);
-					c.setHasGivenItem(entry);
-					if(!c.isMain())
-						SburbHandler.giveItems(player.server, c.getClientIdentifier());
+					if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
+					{
+						c.setHasGivenItem(entry);
+						if(!c.isMain())
+							SburbHandler.giveItems(player.server, c.getClientIdentifier());
+					}
 					if(!cost.isEmpty())
 					{
 						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
 					}
-					if(!entry.inAtheneum())
+					if(entry.getCategory() != DeployList.EntryLists.ATHENEUM)
 						player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				
 				} else
@@ -569,7 +572,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))))
+						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack)) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), connection, player.getLevel(), DeployList.EntryLists.ATHENEUM)))
 							break listSearch;
 					player.getInventory().items.set(i, ItemStack.EMPTY);
 					inventoryChanged = true;
@@ -579,7 +582,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				listSearch :
 				{
 					for(ItemStack deployStack : itemList)
-						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack))))
+						if(ItemStack.matches(deployStack, stack) || (AlchemyHelper.isPunchedCard(stack) && ItemStack.matches(deployStack, AlchemyHelper.getDecodedItem(stack)) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), connection, player.getLevel(), DeployList.EntryLists.ATHENEUM)))
 							break listSearch;
 					stack.setTag(null);
 					inventoryChanged = true;
@@ -680,7 +683,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	public static void cleanStackNBT(ItemStack stack, SburbConnection c, Level level)
 	{
-		if(!DeployList.containsItemStack(stack, c, level) || !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), c, level)))
+		if(!DeployList.containsItemStack(stack, c, level, DeployList.EntryLists.DEPLOY) || !(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), c, level, DeployList.EntryLists.ATHENEUM)))
 			stack.setTag(null);
 	}
 	

@@ -99,8 +99,8 @@ public class AtheneumMenu extends AbstractContainerMenu
 		List<ItemStack> itemList = new ArrayList<>();
 		SburbConnection c = editData.getConnection();
 		
-		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c);
-		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null || !deployEntry.inAtheneum());
+		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.ATHENEUM);
+		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
 		
 		for(DeployEntry atheneumItem : atheneumItems)
 		{

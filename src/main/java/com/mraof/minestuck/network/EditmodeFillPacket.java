@@ -158,16 +158,9 @@ public class EditmodeFillPacket implements PlayToServerPacket
 				GristSet cost = entry.getCurrentCost(connection);
 				if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
 				{
-					StringBuilder str = new StringBuilder();
 					if(cost != null)
 					{
-						for(GristAmount grist : cost.getAmounts())
-						{
-							if(cost.getAmounts().indexOf(grist) != 0)
-								str.append(", ");
-							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
-						}
-						player.sendSystemMessage(Component.translatable("grist.missing", str.toString()));
+						player.sendSystemMessage(cost.createMissingMessage());
 					}
 					return false;
 				}

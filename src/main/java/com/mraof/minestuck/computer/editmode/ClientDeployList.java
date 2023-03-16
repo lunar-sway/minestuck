@@ -25,7 +25,7 @@ public final class ClientDeployList
 			entry.index = tag.getInt("i");
 			
 			entry.cost = GristSet.read(tag.getList("cost", Tag.TAG_COMPOUND));
-			entry.atheneum = tag.getBoolean("athe");
+			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);
 		}
@@ -47,18 +47,19 @@ public final class ClientDeployList
 		private ItemStack item;
 		private GristSet cost;
 		private int index;
-		private boolean atheneum;
+		private DeployList.EntryLists category;
 		
 		public GristSet getCost()
 		{
 			return cost;
 		}
 		
+		public DeployList.EntryLists getCategory() { return category; }
+		
 		public int getIndex()
 		{
 			return index;
 		}
 		
-		public boolean inAtheneum() { return atheneum; }
 	}
 }

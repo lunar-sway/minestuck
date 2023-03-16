@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.block.machine.MultiMachineBlock;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -33,14 +34,31 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class EditToolDrag
 {
+	
+	@SubscribeEvent
+	public static void onClientTick(TickEvent.ClientTickEvent event)
+	{
+		EditToolDrag.doRecycleCode(event);
+		EditToolDrag.doReviseCode(event);
+	}
+	
+	@SubscribeEvent
+	public static void renderWorld(RenderLevelStageEvent event)
+	{
+		EditToolDrag.renderOutlines(event);
+	}
 	
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{

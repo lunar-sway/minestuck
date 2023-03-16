@@ -130,19 +130,6 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
-	{
-		EditToolDrag.doRecycleCode(event);
-		EditToolDrag.doReviseCode(event);
-	}
-	
-	@SubscribeEvent
-	public static void renderWorld(RenderLevelStageEvent event)
-	{
-		EditToolDrag.renderOutlines(event);
-	}
-	
-	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event)
 	{
 		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
@@ -189,7 +176,10 @@ public final class ClientEditHandler
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
 		if(EditToolDrag.canEditRevise(event.getEntity()))
+		{
 			event.setCanceled(true);
+			return;
+		}
 		
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
@@ -222,8 +212,10 @@ public final class ClientEditHandler
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
 		if(EditToolDrag.canEditRecycle(event.getEntity()))
+		{
 			event.setCanceled(true);
-		
+			return;
+		}
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
 			BlockState block = event.getLevel().getBlockState(event.getPos());
