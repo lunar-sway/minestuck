@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "minestuck:block/scarred_shadewood" },
+        "axis=z": { "model": "minestuck:block/scarred_shadewood", "x": 90 },
+        "axis=x": { "model": "minestuck:block/scarred_shadewood", "x": 90, "y": 90 }
+    }
+}
