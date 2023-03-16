@@ -644,6 +644,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
+		addItem(MSItems.HALLOWED_SKEWER, "Hallowed Skewer");
+		addItemTooltip(MSItems.HALLOWED_SKEWER, "This knife is sure to be a lifesaver!");
+		addItem(MSItems.GENESIS_GODSTABBER, "Genesis Godstabber");
 		addItem(MSItems.NIFE, "nife.");
 		addItemExtra(MSItems.NIFE, OnHitEffect.SORD_DROP_MESSAGE, "Whoopsies doopsies you dwopped the nife!!");
 		addItem(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
@@ -653,6 +656,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.TOOTHRIPPER, "Toothripper");
 		addItem(MSItems.SHADOWRAZOR, "Shadowrazor");
 		addItem(MSItems.PRINCESS_PERIL, "Princess Peril");
+		addItemTooltip(MSItems.PRINCESS_PERIL, "Truly a dagger fit for a princess.");
+		addItem(MSItems.HOUSE_KEY, "House Key");
+		addItemTooltip(MSItems.HOUSE_KEY, "This incredible item has the ability to open any wooden door! Wow.");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -782,6 +788,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
+		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
+		addItemTooltip(MSItems.GREEN_SUN_RAYREAPER, "Decimate enemies with the power of a star the mass of two universes");
 		addItem(MSItems.SKAITHE, "Skaithe");
 		addItem(MSItems.HELLBRINGERS_HOE_INACTIVE, "Hellbringer's Hoe");
 		addItem(MSItems.HELLBRINGERS_HOE_ACTIVE, "Hellbringer's Hoe");
@@ -912,6 +920,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
 		addItem(MSItems.BIDENT, "Bident");
 		addItemTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
+		addItem(MSItems.DOUBLE_ENDED_TRIDENT, "Double-Ended Trident");
 		addItem(MSItems.EDISONS_FURY, "Edison's Fury");
 		addItem(MSItems.EDISONS_SERENITY, "Edison's Serenity");
 		addItem(MSItems.POINTY_STICK, "Pointy Stick");
