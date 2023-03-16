@@ -8,7 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Shadewood blocks
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 - Combination recipes and grist costs for items introduced in minecraft 1.19
