@@ -2,8 +2,8 @@
     "variants":
     {
         "facing=north": { "model": "minestuck:block/mirror"},
-        "facing=east": { "model": "minestuck:block/mirror", "Y" : 90 },
-        "facing=south": { "model": "minestuck:block/mirror", "Y": 180 },
-        "facing=west": { "model": "minestuck:block/mirror", "Y" : 270 }
+        "facing=east": { "model": "minestuck:block/mirror", "y" : 90 },
+        "facing=south": { "model": "minestuck:block/mirror", "y": 180 },
+        "facing=west": { "model": "minestuck:block/mirror", "y" : 270 }
     }
 }

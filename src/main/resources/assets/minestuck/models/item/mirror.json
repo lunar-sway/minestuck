@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/mirror"
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "minestuck:item/mirror"
+	}
 }
