@@ -9,9 +9,9 @@
     }
   },
   "pattern": [
-    " nn",
     " in",
-    "i n"
+    " in",
+    " i "
   ],
   "result": {
     "item": "minestuck:house_key"
