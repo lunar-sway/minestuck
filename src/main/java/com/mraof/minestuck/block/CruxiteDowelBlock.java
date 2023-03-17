@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -11,7 +12,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,8 +30,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CruxiteDowelBlock extends Block implements EntityBlock
 {
 	public static final VoxelShape CRUXTRUDER_SHAPE = Block.box(5, 0, 5, 11, 5, 11);
@@ -83,6 +90,25 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		return context.getClickedFace() == Direction.UP ? defaultBlockState() : null;
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+	{
+		return direction == Direction.DOWN && !this.canSurvive(state, level, currentPos)
+				? Blocks.AIR.defaultBlockState()
+				: super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	{
+		if(state.getValue(DOWEL_TYPE) == Type.CRUXTRUDER)
+			return level.getBlockState(pos.below()).is(MSBlocks.CRUXTRUDER.TUBE.get());
+		else
+			return true;
 	}
 	
 	@Override
