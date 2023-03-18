@@ -413,6 +413,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(URANIUM_COOKER.get());
 		
 		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
+		add(EMERGING_CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
 		
 		dropSelf(GOLD_SEEDS.get());
 		dropSelf(WOODEN_CACTUS.get());
