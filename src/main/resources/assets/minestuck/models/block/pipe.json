@@ -1,6 +1,7 @@
 {
     "credit": "Made with Blockbench by Dweblenod",
     "parent": "minecraft:block/block",
+    "render_type": "cutout",
     "textures": {
         "0": "minestuck:block/pipe",
         "particle": "minestuck:block/pipe"

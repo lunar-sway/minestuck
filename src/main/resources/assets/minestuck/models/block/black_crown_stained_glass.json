@@ -1,5 +1,6 @@
 {
   "parent": "block/cube_all",
+  "render_type": "translucent",
   "textures": {
     "all": "minestuck:block/black_crown_stained_glass"
   }
