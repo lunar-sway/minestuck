@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Update to minecraft 1.19.2
 - Minestuck now uses a biome modifier to add ores to the overworld (minestuck:overworld_ores)
+- The cruxite dowel emerging from a cruxtruder is now a separate block from the regular placed dowel (minestuck:emerging_cruxite_dowel)
 - Cruxite dowel emerging from a cruxtruder now breaks if the pipe below breaks
 - The cruxtruder now drops any held raw cruxite when destroyed
 - The totem lathe card slot block will now drop held cards when destroyed

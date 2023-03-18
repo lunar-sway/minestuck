@@ -105,7 +105,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 				}
 			} else if(!top)
 			{
-				if(state.getBlock() == MSBlocks.CRUXITE_DOWEL.get())
+				if(state.is(MSBlocks.EMERGING_CRUXITE_DOWEL.get()))
 				{
 					CruxiteDowelBlock.dropDowel(level, pos);
 				} else if(state.isAir())
@@ -116,9 +116,11 @@ public class CruxtruderBlockEntity extends BlockEntity
 						player.sendSystemMessage(Component.translatable(EMPTY));
 					} else
 					{
-						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.get().defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
+						level.setBlockAndUpdate(pos, MSBlocks.EMERGING_CRUXITE_DOWEL.get().defaultBlockState());
 						if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 							ColorHandler.setColor(blockEntity.getStack(), color);
+						else
+							LOGGER.warn("Did not find block entity for setting cruxite color after placing cruxtruder dowel at {}", pos);
 						if(0 < material)
 							this.setMaterial(this.material - 1);
 					}

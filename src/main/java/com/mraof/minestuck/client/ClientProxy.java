@@ -102,6 +102,7 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TOTEM_LATHE.CARD_SLOT.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.HOLOPAD.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CRUXITE_DOWEL.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.EMERGING_CRUXITE_DOWEL.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLENDER.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.CHESSBOARD.get(), RenderType.cutout());
