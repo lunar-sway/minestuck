@@ -16,17 +16,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 @ParametersAreNonnullByDefault
-public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is broken
+public class CruxtruderBlockEntity extends BlockEntity
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
 	private int color = -1;
-	private boolean broken = false;
+	private boolean isBroken = false;
 	private int material = 0;
 	
 	public CruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -44,13 +47,19 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 		color = Color;
 	}
 	
-	public boolean isBroken()
-	{
-		return broken;
-	}
 	public void destroy()
 	{
-		broken = true;
+		this.isBroken = true;
+	}
+	
+	private void checkIfValid()
+	{
+		if(this.isBroken || this.level == null)
+			return;
+		
+		this.isBroken = MSBlocks.CRUXTRUDER.isInvalidFromTube(this.level, this.getBlockPos());
+		if(isBroken)
+			LOGGER.warn("Failed to notice a block being changed until afterwards at the cruxtruder at {}", getBlockPos());
 	}
 	
 	public void dropItems()
@@ -66,7 +75,8 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 
 	public void onRightClick(Player player, boolean top)
 	{
-		if(!isBroken() && level != null)
+		this.checkIfValid();
+		if(!this.isBroken && level != null)
 		{
 			BlockPos pos = getBlockPos().above();
 			BlockState state = level.getBlockState(pos);
@@ -114,8 +124,7 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 		
 		if(nbt.contains("color"))
 			color = nbt.getInt("color");
-		if(nbt.contains("broken"))
-			broken = nbt.getBoolean("broken");
+		this.isBroken = nbt.getBoolean("broken");
 		material = nbt.getInt("material");
 	}
 	
@@ -124,7 +133,7 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 	{
 		super.saveAdditional(compound);
 		compound.putInt("color", color);
-		compound.putBoolean("broken", broken);
+		compound.putBoolean("broken", this.isBroken);
 		compound.putInt("material", material);
 	}
 }
