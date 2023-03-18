@@ -47,9 +47,10 @@ public class CruxtruderBlockEntity extends BlockEntity
 		color = Color;
 	}
 	
-	public void destroy()
+	public void setBroken()
 	{
 		this.isBroken = true;
+		this.setChanged();
 	}
 	
 	private void checkIfValid()
@@ -57,9 +58,17 @@ public class CruxtruderBlockEntity extends BlockEntity
 		if(this.isBroken || this.level == null)
 			return;
 		
-		this.isBroken = MSBlocks.CRUXTRUDER.isInvalidFromTube(this.level, this.getBlockPos());
-		if(isBroken)
+		if(MSBlocks.CRUXTRUDER.isInvalidFromTube(this.level, this.getBlockPos()))
+		{
+			this.setBroken();
 			LOGGER.warn("Failed to notice a block being changed until afterwards at the cruxtruder at {}", getBlockPos());
+		}
+	}
+	
+	private void setMaterial(int material)
+	{
+		this.material = material;
+		this.setChanged();
 	}
 	
 	public void dropItems()
@@ -69,7 +78,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 			BlockPos pos = this.getBlockPos();
 			Containers.dropItemStack(Objects.requireNonNull(this.level), pos.getX(), pos.getY(), pos.getZ(),
 					new ItemStack(MSItems.RAW_CRUXITE.get(), this.material));
-			this.material = 0;
+			this.setMaterial(0);
 		}
 	}
 
@@ -80,18 +89,19 @@ public class CruxtruderBlockEntity extends BlockEntity
 		{
 			BlockPos pos = getBlockPos().above();
 			BlockState state = level.getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && material < 64 && material > -1)
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && -1 < material && material < 64)
 			{
 				ItemStack stack = player.getMainHandItem();
-				if(stack.getItem() != MSItems.RAW_CRUXITE.get())
+				if(!stack.is(MSItems.RAW_CRUXITE.get()))
 					stack = player.getOffhandItem();
-				if(stack.getItem() == MSItems.RAW_CRUXITE.get())
+				
+				if(stack.is(MSItems.RAW_CRUXITE.get()))
 				{
 					int count = 1;
 					if(player.isShiftKeyDown())	//Doesn't actually work just yet
 						count = Math.min(64 - material, stack.getCount());
 					stack.shrink(count);
-					material += count;
+					this.setMaterial(this.material + count);
 				}
 			} else if(!top)
 			{
@@ -109,8 +119,8 @@ public class CruxtruderBlockEntity extends BlockEntity
 						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.get().defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
 						if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 							ColorHandler.setColor(blockEntity.getStack(), color);
-						if(material > 0)
-							material--;
+						if(0 < material)
+							this.setMaterial(this.material - 1);
 					}
 				}
 			}

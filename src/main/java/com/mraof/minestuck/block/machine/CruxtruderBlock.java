@@ -78,7 +78,7 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 		BlockPos mainPos = getMainPos(state, pos);
 		if(level.getBlockEntity(mainPos) instanceof CruxtruderBlockEntity cruxtruder)
 		{
-			cruxtruder.destroy();
+			cruxtruder.setBroken();
 			if(pos.equals(mainPos))
 				cruxtruder.dropItems();
 		}
