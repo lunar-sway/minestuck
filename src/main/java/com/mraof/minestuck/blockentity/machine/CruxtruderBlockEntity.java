@@ -28,6 +28,8 @@ public class CruxtruderBlockEntity extends BlockEntity
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
+	private static final int CRUXITE_CAPACITY = 64;
+	
 	private int color = -1;
 	private boolean isBroken = false;
 	private int material = 0;
@@ -89,7 +91,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 		{
 			BlockPos pos = getBlockPos().above();
 			BlockState state = level.getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && -1 < material && material < 64)
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && -1 < material && material < CRUXITE_CAPACITY)
 			{
 				ItemStack stack = player.getMainHandItem();
 				if(!stack.is(MSItems.RAW_CRUXITE.get()))
@@ -99,7 +101,7 @@ public class CruxtruderBlockEntity extends BlockEntity
 				{
 					int count = 1;
 					if(player.isShiftKeyDown())	//Doesn't actually work just yet
-						count = Math.min(64 - material, stack.getCount());
+						count = Math.min(CRUXITE_CAPACITY - material, stack.getCount());
 					stack.shrink(count);
 					this.setMaterial(this.material + count);
 				}
