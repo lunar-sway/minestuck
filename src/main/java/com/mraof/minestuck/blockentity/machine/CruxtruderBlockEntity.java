@@ -10,12 +10,17 @@ import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
+
+@ParametersAreNonnullByDefault
 public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is broken
 {
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
@@ -46,6 +51,17 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 	public void destroy()
 	{
 		broken = true;
+	}
+	
+	public void dropItems()
+	{
+		if(this.material > 0)
+		{
+			BlockPos pos = this.getBlockPos();
+			Containers.dropItemStack(Objects.requireNonNull(this.level), pos.getX(), pos.getY(), pos.getZ(),
+					new ItemStack(MSItems.RAW_CRUXITE.get(), this.material));
+			this.material = 0;
+		}
 	}
 
 	public void onRightClick(Player player, boolean top)

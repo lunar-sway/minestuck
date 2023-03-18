@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Update to minecraft 1.19.2
 - Minestuck now uses a biome modifier to add ores to the overworld (minestuck:overworld_ores)
 - Cruxite dowel emerging from a cruxtruder now breaks if the pipe below breaks
+- The cruxtruder now drops any held raw cruxite when destroyed
 
 ### Fixed
 
