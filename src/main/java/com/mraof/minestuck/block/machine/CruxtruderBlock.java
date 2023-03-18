@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.blockentity.machine.CruxtruderBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,8 +20,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
@@ -71,10 +75,12 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		BlockPos MainPos = getMainPos(state, pos);
-		if(level.getBlockEntity(MainPos) instanceof CruxtruderBlockEntity cruxtruder)
+		BlockPos mainPos = getMainPos(state, pos);
+		if(level.getBlockEntity(mainPos) instanceof CruxtruderBlockEntity cruxtruder)
 		{
 			cruxtruder.destroy();
+			if(pos.equals(mainPos))
+				cruxtruder.dropItems();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
