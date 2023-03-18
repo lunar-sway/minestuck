@@ -264,6 +264,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, "Shroomy Shadewood Leaves");
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
+		addBlock(MSBlocks.SHADEWOOD_SAPLING, "Shadewood Sapling");
 		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
 		addBlock(MSBlocks.BREATH_ASPECT_LOG, "Breath Log");
 		addBlock(MSBlocks.DOOM_ASPECT_LOG, "Doom Log");

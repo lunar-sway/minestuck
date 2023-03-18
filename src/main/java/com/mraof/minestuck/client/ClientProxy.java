@@ -114,6 +114,7 @@ public class ClientProxy
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GOLD_SEEDS.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.RAINBOW_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.END_SAPLING.get(), RenderType.cutout());
+		ItemBlockRenderTypes.setRenderLayer(MSBlocks.SHADEWOOD_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BREATH_ASPECT_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.LIFE_ASPECT_SAPLING.get(), RenderType.cutout());
 		ItemBlockRenderTypes.setRenderLayer(MSBlocks.LIGHT_ASPECT_SAPLING.get(), RenderType.cutout());
