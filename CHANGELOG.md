@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fix metal boats not using the correct texture
 - More gui text has translation keys now, making them translatable by a resource pack
+- Fixed some cases of cruxtruder data changes not being saved
 
 ## [1.18.2-1.9.2.0] - 2023-03-13
 
