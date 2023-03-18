@@ -1,4 +1,5 @@
 {
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/machine/totem_lathe/bottom_left_front",
         "front":    "minestuck:block/machine/totem_lathe/bottom_left_front",

@@ -1,4 +1,5 @@
 {
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/machine/totem",
         "totem": "minestuck:block/machine/totem",

@@ -31,6 +31,7 @@
         }
     },
 	"credit": "Made with Blockbench",
+	"render_type": "cutout",
 	"textures": {
 		"0": "minestuck:block/mini_frog_statue",
 		"1": "minestuck:block/mini_frog_statue_back",

@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench by Cibernet",
+	"render_type": "cutout",
 	"textures": {
 		"0": "minestuck:block/wizard_statue",
 		"1": "minestuck:block/wizard_statue_back",
