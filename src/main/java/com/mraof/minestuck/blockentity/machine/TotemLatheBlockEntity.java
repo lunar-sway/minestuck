@@ -27,8 +27,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class TotemLatheBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -114,6 +116,23 @@ public class TotemLatheBlockEntity extends BlockEntity
 	public void setBroken()
 	{
 		broken = true;
+	}
+	
+	public void dropItems()
+	{
+		Objects.requireNonNull(this.level);
+		BlockPos pos = this.getBlockPos();
+		
+		if(!this.card1.isEmpty())
+		{
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), this.card1);
+			this.card1 = ItemStack.EMPTY;
+		}
+		if(!this.card2.isEmpty())
+		{
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), this.card2);
+			this.card2 = ItemStack.EMPTY;
+		}
 	}
 	
 	public void removeDowel()
