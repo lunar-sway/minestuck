@@ -77,6 +77,15 @@ public class EditToolDrag
 		
 		if (isDown)
 		{
+			player.sendSystemMessage(Component.literal("Client toolmode: " + cap.getToolMode()));
+			player.sendSystemMessage(Component.literal("Client pos1: " + cap.getEditPos1()));
+			player.sendSystemMessage(Component.literal("Client pos2: " + cap.getEditPos2()));
+			player.sendSystemMessage(Component.literal("Client ray-pos: " + cap.getEditTraceHit()));
+			player.sendSystemMessage(Component.literal("Client ray-direction: " + cap.getEditTraceDirection()));
+			player.sendSystemMessage(Component.literal("Client initial distance: " + cap.getToolMode()));
+			player.sendSystemMessage(Component.literal("Client is dragging: " + cap.isEditDragging()));
+			player.sendSystemMessage(Component.literal("Client cursor uuid: " + cap.getEditCursorID()));
+			
 			if(!canEditRevise(player))
 			{
 				cap.setToolMode(null);
@@ -161,6 +170,15 @@ public class EditToolDrag
 		
 		if (isDown)
 		{
+			player.sendSystemMessage(Component.literal("Client toolmode: " + cap.getToolMode()));
+			player.sendSystemMessage(Component.literal("Client pos1: " + cap.getEditPos1()));
+			player.sendSystemMessage(Component.literal("Client pos2: " + cap.getEditPos2()));
+			player.sendSystemMessage(Component.literal("Client ray-pos: " + cap.getEditTraceHit()));
+			player.sendSystemMessage(Component.literal("Client ray-direction: " + cap.getEditTraceDirection()));
+			player.sendSystemMessage(Component.literal("Client initial distance: " + cap.getToolMode()));
+			player.sendSystemMessage(Component.literal("Client is dragging: " + cap.isEditDragging()));
+			player.sendSystemMessage(Component.literal("Client cursor uuid: " + cap.getEditCursorID()));
+			
 			if(!canEditRecycle(player))
 			{
 				cap.setToolMode(null);
@@ -266,10 +284,21 @@ public class EditToolDrag
 		}
 		
 		
+		
+		
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
 		cap.setEditDragging(isDragging);
 		cap.setEditPos1(pos1);
 		cap.setEditPos2(pos2);
+		
+		player.sendSystemMessage(Component.literal("Server toolmode: " + cap.getToolMode()));
+		player.sendSystemMessage(Component.literal("Server pos1: " + cap.getEditPos1()));
+		player.sendSystemMessage(Component.literal("Server pos2: " + cap.getEditPos2()));
+		player.sendSystemMessage(Component.literal("Server ray-pos: " + cap.getEditTraceHit()));
+		player.sendSystemMessage(Component.literal("Server ray-direction: " + cap.getEditTraceDirection()));
+		player.sendSystemMessage(Component.literal("Server initial distance: " + cap.getToolMode()));
+		player.sendSystemMessage(Component.literal("Server is dragging: " + cap.isEditDragging()));
+		player.sendSystemMessage(Component.literal("Server cursor uuid: " + cap.getEditCursorID()));
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
