@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.grower.MangroveTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
@@ -290,7 +291,7 @@ public class MSBlocks
 	
 	public static final RegistryObject<BushBlock> RAINBOW_SAPLING = REGISTER.register("rainbow_sapling", () -> new RainbowSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
 	public static final RegistryObject<BushBlock> END_SAPLING = REGISTER.register("end_sapling", () -> new EndSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS)));
-	public static final RegistryObject<BushBlock> SHADEWOOD_SAPLING = REGISTER.register("shadewood_sapling", () -> new EndSaplingBlock(Block.Properties.of(Material.PLANT).noCollission().randomTicks().lightLevel(state -> 8).strength(0).sound(SoundType.GRASS)));
+	public static final RegistryObject<BushBlock> SHADEWOOD_SAPLING = REGISTER.register("shadewood_sapling", () -> new SaplingBlock(new MangroveTreeGrower(0.85F), Block.Properties.of(Material.PLANT).noCollission().randomTicks().lightLevel(state -> 8).strength(0).sound(SoundType.GRASS)));
 	
 	public static final RegistryObject<Block> BLOOD_ASPECT_LOG = REGISTER.register("blood_aspect_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> BREATH_ASPECT_LOG = REGISTER.register("breath_aspect_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).sound(SoundType.WOOD)));
