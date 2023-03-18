@@ -175,12 +175,22 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
-
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
+		
+		@Override
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
+			{
+				ItemStack stack = blockEntity.getStack();
+				if(!stack.isEmpty())
+				{
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+					blockEntity.setStack(ItemStack.EMPTY);
+				}
+			}
+			
+			super.onRemove(state, level, pos, newState, isMoving);
+		}
 	}
 	
 	public static class Slot extends TotemLatheBlock implements EntityBlock
