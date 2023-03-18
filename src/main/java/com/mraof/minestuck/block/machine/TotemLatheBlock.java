@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -105,11 +107,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		protected final Map<Direction, VoxelShape> activeShape;
+		private final Direction dowelDirection;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
+		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Direction dowelDirection, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
+			this.dowelDirection = dowelDirection;
 			this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, false));
 		}
 		
@@ -124,6 +128,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			return state.getValue(ACTIVE) ? activeShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
+		}
+		
+		@SuppressWarnings("deprecation")
+		@Override
+		public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+		{
+			Direction rodDirection = state.getValue(FACING);
+			Rotation rotation = MSRotationUtil.rotationBetween(Direction.NORTH, rodDirection);
+			if(rotation.rotate(this.dowelDirection) == direction)
+			{
+				boolean isActive = neighborState.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()) && neighborState.getValue(FACING) == rodDirection;
+				return state.setValue(ACTIVE, isActive);
+			} else
+				return state;
 		}
 	}
 	
