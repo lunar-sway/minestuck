@@ -2,7 +2,6 @@ package com.mraof.minestuck.client;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.model.*;
@@ -27,8 +26,6 @@ import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -96,25 +93,6 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.MIDNIGHT_CREW_POSTER.get(), manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:midnight_poster")));
 		EntityRenderers.register(MSEntityTypes.SBAHJ_POSTER.get(), manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:sbahj_poster")));
 		EntityRenderers.register(MSEntityTypes.SHOP_POSTER.get(), manager -> new RenderHangingArt<>(manager, new ResourceLocation("minestuck:shop_poster")));
-		
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BREATH_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.LIFE_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.LIGHT_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TIME_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.HEART_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.RAGE_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.BLOOD_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.DOOM_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.VOID_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.SPACE_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.MIND_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.HOPE_ASPECT_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.GLOWING_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.FROST_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.RAINBOW_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.END_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.DEAD_LADDER.get(), RenderType.cutout());
-		ItemBlockRenderTypes.setRenderLayer(MSBlocks.TREATED_LADDER.get(), RenderType.cutout());
 		
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
