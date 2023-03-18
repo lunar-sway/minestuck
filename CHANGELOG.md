@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Fix metal boats not using the correct texture
 - More gui text has translation keys now, making them translatable by a resource pack
 
 ## [1.18.2-1.9.2.0] - 2023-03-13
