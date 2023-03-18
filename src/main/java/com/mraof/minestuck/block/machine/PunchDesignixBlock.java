@@ -1,10 +1,10 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,14 +25,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class PunchDesignixBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public PunchDesignixBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos pos, Properties properties)
+	public PunchDesignixBlock(PunchDesignixMultiblock machine, CustomVoxelShape shape, BlockPos pos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -76,57 +79,17 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		}
 	}
 	
-	/**
-	 * Destroys and then checks which blocks are connected to the given block in the multiblock structure, then repeats the process for those blocks, until the entire structure is destroyed.
-	 * @param state The blockstate of the block being currently destroyed.
-	 * @param level The server level/world
-	 * @param pos The position of the block currently being destroyed.
-	 */
 	@Override
-	public void findAndDestroyConnected(BlockState state, Level level, BlockPos pos)
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
 	{
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
 		
-		if(state.isAir() || !(state.getBlock() instanceof PunchDesignixBlock))
-			return;
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
 		else
-			level.destroyBlock(pos, false);
-		
-		BlockPos offsetPos;
-		if(state.is(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG.get()))
 		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, 1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.SLOT.get()))
-		{
-			offsetPos = new BlockPos(-1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-		}
-		else if(state.is(MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get()))
-		{
-			offsetPos = new BlockPos(1, 0, 0).rotate(MSRotationUtil.fromDirection(state.getValue(FACING)));
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
-			offsetPos = new BlockPos(0, -1, 0);
-			findAndDestroyConnected(level.getBlockState(pos.offset(offsetPos)), level, pos.offset(offsetPos));
-			
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
 		}
 	}
 	
@@ -148,7 +111,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	{
 		public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(PunchDesignixMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 			registerDefaultState(this.stateDefinition.any().setValue(HAS_CARD, false));
