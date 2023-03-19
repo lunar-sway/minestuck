@@ -507,6 +507,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
+		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
 		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		addBlock(MSBlocks.GOLD_SEEDS, "Golden Seeds");
 		addBlockTooltip(MSBlocks.GOLD_SEEDS, "These seeds are made out of 24-karat gold!");

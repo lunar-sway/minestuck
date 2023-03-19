@@ -1,18 +1,23 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.EnumDowelType;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -27,8 +32,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TotemLatheBlock extends MultiMachineBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
@@ -99,11 +107,13 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		public static final BooleanProperty ACTIVE = MSProperties.ACTIVE;
 		protected final Map<Direction, VoxelShape> activeShape;
+		private final Direction dowelDirection;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Properties properties)
+		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Direction dowelDirection, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
+			this.dowelDirection = dowelDirection;
 			this.registerDefaultState(this.getStateDefinition().any().setValue(ACTIVE, false));
 		}
 		
@@ -118,6 +128,20 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
 		{
 			return state.getValue(ACTIVE) ? activeShape.get(state.getValue(FACING)) : super.getShape(state, worldIn, pos, context);
+		}
+		
+		@SuppressWarnings("deprecation")
+		@Override
+		public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
+		{
+			Direction rodDirection = state.getValue(FACING);
+			Rotation rotation = MSRotationUtil.rotationBetween(Direction.NORTH, rodDirection);
+			if(rotation.rotate(this.dowelDirection) == direction)
+			{
+				boolean isActive = neighborState.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()) && neighborState.getValue(FACING) == rodDirection;
+				return state.setValue(ACTIVE, isActive);
+			} else
+				return state;
 		}
 	}
 	
@@ -151,12 +175,22 @@ public class TotemLatheBlock extends MultiMachineBlock
 			super.createBlockStateDefinition(builder);
 			builder.add(DOWEL);
 		}
-
-//		@Override
-//		public BlockRenderLayer getRenderLayer()
-//		{
-//			return BlockRenderLayer.CUTOUT;
-//		}
+		
+		@Override
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
+			{
+				ItemStack stack = blockEntity.getStack();
+				if(!stack.isEmpty())
+				{
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+					blockEntity.setStack(ItemStack.EMPTY);
+				}
+			}
+			
+			super.onRemove(state, level, pos, newState, isMoving);
+		}
 	}
 	
 	public static class Slot extends TotemLatheBlock implements EntityBlock
@@ -180,6 +214,16 @@ public class TotemLatheBlock extends MultiMachineBlock
 		{
 			super.createBlockStateDefinition(builder);
 			builder.add(COUNT);
+		}
+		
+		@Override
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+		{
+			if(!newState.is(state.getBlock()) &&
+					level.getBlockEntity(pos) instanceof TotemLatheBlockEntity blockEntity)
+				blockEntity.dropItems();
+			
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 }
