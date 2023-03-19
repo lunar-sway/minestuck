@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 17,
+    "minestuck:gold": 17,
+    "minestuck:tar": 30
+  },
+  "ingredient": {
+    "item": "minestuck:regikey"
+  }
+}

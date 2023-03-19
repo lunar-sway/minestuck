@@ -659,6 +659,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.PRINCESS_PERIL, "Truly a dagger fit for a princess.");
 		addItem(MSItems.HOUSE_KEY, "House Key");
 		addItemTooltip(MSItems.HOUSE_KEY, "This incredible item has the ability to open any wooden door! Wow.");
+		addItem(MSItems.KEYBLADE, "Keyblade");
+		addItem(MSItems.LOCKSOFTENER, "Locksoftener");
+		addItem(MSItems.INKSPLOCKER_UNLOCKER, "Inksplocker Unlocker");
+		addItem(MSItems.INKSQUIDDER_DEPTHKEY, "Inksquidder Depthkey");
+		addItemTooltip(MSItems.INKSQUIDDER_DEPTHKEY, "Kraken open locks with ease!");
+		addItem(MSItems.REGIKEY, "Regikey");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -789,7 +795,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
-		addItemTooltip(MSItems.GREEN_SUN_RAYREAPER, "Decimate enemies with the power of a star the mass of two universes");
+		addItemTooltip(MSItems.GREEN_SUN_RAYREAPER, "Decimate enemies with the power of a star the mass of two universes.");
 		addItem(MSItems.SKAITHE, "Skaithe");
 		addItem(MSItems.HELLBRINGERS_HOE_INACTIVE, "Hellbringer's Hoe");
 		addItem(MSItems.HELLBRINGERS_HOE_ACTIVE, "Hellbringer's Hoe");
@@ -857,7 +863,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.IRON_CANE, "A regular cane, except that it is tipped with the power of metal!");
 		addItemStoreTooltip(MSItems.IRON_CANE, "This metal rod is perfect for attracting thunder!");
 		addItem(MSItems.KISSY_CUTIE_HEART_HITTER, "Kissy Cutie Heart Hitter");
-		addItemTooltip(MSItems.KISSY_CUTIE_HEART_HITTER, "Furiosity wills The cat.");
+		addItemTooltip(MSItems.KISSY_CUTIE_HEART_HITTER, "Furiosity wills the cat.");
 		addItem(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Kissy Cutie Heart Splitter");
 		addItemTooltip(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Meowing into primetime!");
 		addItem(MSItems.ZEPHYR_CANE, "Zephyr Cane");

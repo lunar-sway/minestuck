@@ -429,7 +429,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SHADOWRAZOR.get()).input(MSItems.TOOTHRIPPER.get()).and().namedInput(MSItems.SORROW_GUSHERS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PRINCESS_PERIL.get()).input(MSItems.SHADOWRAZOR.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
 		
-		
+		CombinationRecipeBuilder.of(MSItems.KEYBLADE.get()).input(MSItems.HOUSE_KEY.get()).or().input(Items.IRON_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.CLOTHES_IRON.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.INKSPLOCKER_UNLOCKER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.INK_SQUID_PRO_QUO.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.INKSQUIDDER_DEPTHKEY.get()).input(MSItems.INKSPLOCKER_UNLOCKER.get()).and().input(Items.HEART_OF_THE_SEA).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.REGIKEY.get()).input(MSItems.KEYBLADE.get()).or().input(MSBlocks.CHESSBOARD.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(MSItems.BATTLEAXE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);

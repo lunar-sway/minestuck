@@ -121,6 +121,12 @@ public class MSItems
 	
 	//Keys
 	public static final RegistryObject<Item> HOUSE_KEY = REGISTER.register("house_key", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> KEYBLADE = REGISTER.register("keyblade", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> LOCKSOFTENER = REGISTER.register("locksoftener", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(500).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> INKSPLOCKER_UNLOCKER = REGISTER.register("inksplocker_unlocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> INKSQUIDDER_DEPTHKEY = REGISTER.register("inksquidder_depthkey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> REGIKEY = REGISTER.register("regikey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	
 	
 	
 	//Axes

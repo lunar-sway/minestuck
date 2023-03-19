@@ -2,5 +2,30 @@
     "parent": "item/handheld",
     "textures": {
         "layer0": "minestuck:item/double_ended_trident"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [-44, -90, 0],
+            "translation": [0, -2, 0.55],
+            "scale": [1.25, 1.25, 1]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [0, 90, -55],
+            "translation": [0, 5.5, 0.3],
+            "scale": [1.25, 1.25, 1.25]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, -90, 25],
+            "translation": [1.13, 3.2, 1.13],
+            "scale": [1.25, 1.25, 1]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 90, -25],
+            "translation": [1.13, 3.2, 1.13],
+            "scale": [1.25, 1.25, 1]
+        },
+        "fixed": {
+            "rotation": [0, 180, 0]
+        }
     }
 }
