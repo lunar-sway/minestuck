@@ -69,11 +69,15 @@ public class ShadeLandType extends TerrainLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_MUSHROOM_PATCH, LandBiomeType.NORMAL);
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.SHADE_STONE_BLOCK_BLOB, LandBiomeType.any());
+		
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_GLOWING_MUSHROOM_PATCH, LandBiomeType.NORMAL);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_TREE, LandBiomeType.NORMAL);
 		
-		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SPARSE_GLOWING_MUSHROOM_PATCH, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_MUSHROOM_PATCH, LandBiomeType.ROUGH);
 		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.GLOWING_TREE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.SHADEWOOD_TREE, LandBiomeType.ROUGH);
+		builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, MSPlacedFeatures.OIL_POOL, LandBiomeType.ROUGH);
 		
 		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
 						new OreConfiguration(blocks.getGroundType(), MSBlocks.BLUE_DIRT.get().defaultBlockState(), 25),
