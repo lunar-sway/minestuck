@@ -59,7 +59,7 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> BLOOD_POOL = REGISTER.register("blood_pool", () -> placed(MSCFeatures.BLOOD_POOL,
 			worldGenModifiers(CountPlacement.of(5), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OIL_POOL = REGISTER.register("oil_pool", () -> placed(MSCFeatures.OIL_POOL,
-			worldGenModifiers(CountPlacement.of(6), PlacementUtils.HEIGHTMAP)));
+			worldGenModifiers(CountPlacement.of(4), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OASIS = REGISTER.register("oasis", () -> placed(MSCFeatures.OASIS,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> placed(MSCFeatures.OCEAN_RUNDOWN,
@@ -161,7 +161,7 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> GLOWING_TREE = REGISTER.register("glowing_tree", () -> placed(MSCFeatures.GLOWING_TREE,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
 	public static final RegistryObject<PlacedFeature> SHADEWOOD_TREE = REGISTER.register("shadewood_tree", () -> placed(MSCFeatures.SHADEWOOD_TREE,
-			worldGenModifiers(PlacementUtils.countExtra(3, 0.1F, 1), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
+			worldGenModifiers(PlacementUtils.countExtra(3, 0.1F, 2), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> placed(MSCFeatures.PETRIFIED_TREE,
 			worldGenModifiers(PlacementUtils.countExtra(2, 0.5F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> SPARSE_PETRIFIED_TREE = REGISTER.register("sparse_petrified_tree", () -> placed(MSCFeatures.PETRIFIED_TREE,
