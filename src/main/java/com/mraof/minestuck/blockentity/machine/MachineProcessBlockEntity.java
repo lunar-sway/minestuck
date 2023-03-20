@@ -78,33 +78,39 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 		return super.getCapability(cap, side);
 	}
 	
-	public static void serverTick(Level level, BlockPos pos, BlockState state, MachineProcessBlockEntity blockEntity)
+	public static void serverTick(Level ignoredLevel, BlockPos ignoredPos, BlockState ignoredState, MachineProcessBlockEntity blockEntity)
 	{
-		if ((!blockEntity.ready && blockEntity.getRunType() != RunType.AUTOMATIC) || !blockEntity.contentsValid())
-		{
-			boolean b = blockEntity.progress == 0;
-			blockEntity.progress = 0;
-			blockEntity.ready = blockEntity.getOverrideStop();
-			if (!b)
-				level.sendBlockUpdated(pos, state, state, 3);
-			return;
-		}
-		
-		blockEntity.progress++;
-
-		if (blockEntity.progress >= blockEntity.maxProgress)
-		{
-			blockEntity.progress = 0;
-			blockEntity.ready = blockEntity.getOverrideStop();
-			blockEntity.processContents();
-		}
-		
 		blockEntity.tick();
 	}
 	
 	protected void tick()
-	{}
-
+	{
+		if (!this.shouldRun())
+		{
+			this.resetProgress();
+			return;
+		}
+		
+		this.progress++;
+		
+		if (this.progress >= this.maxProgress)
+		{
+			this.resetProgress();
+			this.processContents();
+		}
+	}
+	
+	private boolean shouldRun()
+	{
+		return (this.ready || this.getRunType() == RunType.AUTOMATIC) && this.contentsValid();
+	}
+	
+	private void resetProgress()
+	{
+		this.progress = 0;
+		this.ready = this.getOverrideStop();
+	}
+	
 	public abstract boolean contentsValid();
 
 	public abstract void processContents();
