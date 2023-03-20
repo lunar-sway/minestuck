@@ -4,33 +4,28 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.inventory.MiniCruxtruderMenu;
 import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class MiniCruxtruderScreen extends MachineScreen<MiniCruxtruderMenu>
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+public class MiniCruxtruderScreen extends AbstractContainerScreen<MiniCruxtruderMenu>
 {
+	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cruxtruder.png");
+	private static final ResourceLocation PROGRESS_BAR = new ResourceLocation("minestuck:textures/gui/progress/cruxtruder.png");
 	
-	private final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/cruxtruder.png");
-	private final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/cruxtruder.png");
-	//private EntityPlayer player;
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
+	public static final int PROGRESS_BAR_X = 82;
+	public static final int PROGRESS_BAR_Y = 42;
+	public static final int PROGRESS_BAR_WIDTH = 10;
+	public static final int PROGRESS_BAR_HEIGHT = 13;
 	
 	public MiniCruxtruderScreen(MiniCruxtruderMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniCruxtruderBlockEntity.TYPE, screenContainer, inv, titleIn);
-		
-		//sets progress bar information
-		progressX = 82;
-		progressY = 42;
-		progressWidth = 10;
-		progressHeight = 13;
+		super(screenContainer, inv, titleIn);
 	}
 	
 	@Override
@@ -42,21 +37,20 @@ public class MiniCruxtruderScreen extends MachineScreen<MiniCruxtruderMenu>
 	}
 	
 	@Override
-	protected void renderBg(PoseStack matrixStack, float par1, int par2, int par3)
+	protected void renderBg(PoseStack poseStack, float partialTick, int mouseX, int mouseY)
 	{
 		int x = (width - imageWidth) / 2;
 		int y = (height - imageHeight) / 2;
-
-		//draw background
+		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
+		//draw background
 		RenderSystem.setShaderTexture(0, BACKGROUND);
-		this.blit(matrixStack, x, y, 0, 0, imageWidth, imageHeight);
-
+		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
+		
 		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = progressWidth;
-		int height = getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.DEFAULT_MAX_PROGRESS, progressHeight);
-		blit(matrixStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
+		RenderSystem.setShaderTexture(0, PROGRESS_BAR);
+		int height = MachineScreen.getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.DEFAULT_MAX_PROGRESS, PROGRESS_BAR_HEIGHT);
+		blit(poseStack, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height, 0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 }
