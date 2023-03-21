@@ -37,7 +37,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
-	public static final int DEFAULT_MAX_PROGRESS = 0;
 	
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
@@ -62,7 +61,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.URANIUM_COOKER.get(), pos, state);
-		maxProgress = DEFAULT_MAX_PROGRESS;
+	}
+	
+	@Override
+	protected int getMaxProgress()
+	{
+		return 0;
 	}
 	
 	@Override

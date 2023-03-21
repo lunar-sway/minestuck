@@ -27,7 +27,6 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	public static final int DEFAULT_MAX_PROGRESS = 100;
 
 	public int progress = 0;
-	public int maxProgress = DEFAULT_MAX_PROGRESS;
 	public boolean ready = false;
 	public boolean overrideStop = false;
 	
@@ -41,6 +40,11 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	protected abstract ItemStackHandler createItemHandler();
 	
 	public abstract RunType getRunType();
+	
+	protected int getMaxProgress()
+	{
+		return DEFAULT_MAX_PROGRESS;
+	}
 	
 	public boolean getOverrideStop()
 	{
@@ -93,7 +97,7 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 		
 		this.progress++;
 		
-		if (this.progress >= this.maxProgress)
+		if (this.progress >= this.getMaxProgress())
 		{
 			this.resetProgress();
 			this.processContents();

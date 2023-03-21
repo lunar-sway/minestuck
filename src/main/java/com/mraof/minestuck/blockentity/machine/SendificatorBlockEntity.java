@@ -34,7 +34,6 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 {
 	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
-	public static final int DEFAULT_MAX_PROGRESS = 0;
 	public static final short MAX_FUEL = 128;
 	private short fuel = 0;
 	
@@ -60,7 +59,12 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public SendificatorBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.SENDIFICATOR.get(), pos, state);
-		maxProgress = DEFAULT_MAX_PROGRESS;
+	}
+	
+	@Override
+	protected int getMaxProgress()
+	{
+		return 0;
 	}
 	
 	@Nullable
