@@ -77,7 +77,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorBlockEntity
-		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, Component.literal(menu.isLooping() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12);
 		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();

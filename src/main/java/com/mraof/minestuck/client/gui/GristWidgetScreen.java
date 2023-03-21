@@ -103,7 +103,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.isLooping() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12);
 		addRenderableWidget(goButton);
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;

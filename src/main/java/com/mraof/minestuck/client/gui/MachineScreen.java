@@ -36,15 +36,12 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int i)
 	{
-		if((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && goButton != null)
+		if(keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)
 		{
 			this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
 			boolean mode = runType == ProgressTracker.RunType.ONCE_OR_LOOPING && hasShiftDown();
-			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.isLooping());
-			MSPacketHandler.sendToServer(packet);
-			
-			goButton.setMessage(Component.translatable(mode && !menu.isLooping() ? STOP : GO));
+			MSPacketHandler.sendToServer(new GoButtonPacket(true, mode && !menu.isLooping()));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -52,9 +49,18 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 	
 	protected class GoButton extends ExtendedButton
 	{
-		public GoButton(int x, int y, int widthIn, int heightIn, Component buttonText)
+		private static final Component GO_COMPONENT = Component.translatable(GO);
+		private static final Component STOP_COMPONENT = Component.translatable(STOP);
+		
+		public GoButton(int x, int y, int widthIn, int heightIn)
 		{
-			super(x, y, widthIn, heightIn, buttonText, null);
+			super(x, y, widthIn, heightIn, null, null);
+		}
+		
+		@Override
+		public Component getMessage()
+		{
+			return menu.isLooping() ? STOP_COMPONENT : GO_COMPONENT;
 		}
 		
 		@Override
@@ -94,18 +100,12 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 				if(!menu.isLooping())
 				{
 					//Tell the machine to go once
-					GoButtonPacket packet = new GoButtonPacket(true, false);
-					MSPacketHandler.sendToServer(packet);
-					
-					setMessage(Component.translatable(GO));
+					MSPacketHandler.sendToServer(new GoButtonPacket(true, false));
 				}
 			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == ProgressTracker.RunType.ONCE_OR_LOOPING)
 			{
 				//Tell the machine to go until stopped
-				GoButtonPacket packet = new GoButtonPacket(true, !menu.isLooping());
-				MSPacketHandler.sendToServer(packet);
-				
-				setMessage(Component.translatable(menu.isLooping() ? STOP : GO));
+				MSPacketHandler.sendToServer(new GoButtonPacket(true, !menu.isLooping()));
 			}
 		}
 	}
