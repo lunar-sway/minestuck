@@ -42,7 +42,10 @@ public class EditToolDrag
 			return;
 		
 		Player player = ClientProxy.getClientPlayer();
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
+		if(cap == null)
+			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
+		
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
@@ -126,7 +129,9 @@ public class EditToolDrag
 			return;
 		
 		Player player = ClientProxy.getClientPlayer();
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
+		if(cap == null)
+			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
