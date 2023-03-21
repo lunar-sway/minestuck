@@ -6,6 +6,7 @@ import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,7 +31,9 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
@@ -45,13 +48,20 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public ProgressTracker.RunType getRunType()
+	public void load(CompoundTag nbt)
 	{
-		return TYPE;
+		super.load(nbt);
+		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	public boolean contentsValid()
+	protected void saveAdditional(CompoundTag compound)
+	{
+		super.saveAdditional(compound);
+		this.progressTracker.save(compound);
+	}
+	
+	private boolean contentsValid()
 	{
 		if (!itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty())
 		{
@@ -69,7 +79,12 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public void processContents()
+	protected void tick()
+	{
+		this.progressTracker.tick(this::contentsValid, this::processContents);
+	}
+	
+	private void processContents()
 	{
 		if(!itemHandler.getStackInSlot(2).isEmpty())
 		{

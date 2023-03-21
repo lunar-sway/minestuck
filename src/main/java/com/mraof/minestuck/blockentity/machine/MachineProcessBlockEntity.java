@@ -22,8 +22,6 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 {
 	protected final ItemStackHandler itemHandler = createItemHandler();
 	private final LazyOptional<IItemHandler> itemOptional = LazyOptional.of(() -> itemHandler);
-	public static final int DEFAULT_MAX_PROGRESS = 100;
-	protected final ProgressTracker progressTracker = new ProgressTracker(this.getRunType(), this.getMaxProgress());
 	
 	public static final int FUEL_INCREASE = 32; //how many units of fuel a chunk of uranium adds to a machine powered by it, used by Sendificator and UraniumCooker
 	
@@ -34,19 +32,11 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	
 	protected abstract ItemStackHandler createItemHandler();
 	
-	public abstract ProgressTracker.RunType getRunType();
-	
-	protected int getMaxProgress()
-	{
-		return DEFAULT_MAX_PROGRESS;
-	}
-	
 	@Override
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
 		
-		this.progressTracker.load(nbt);
 		itemHandler.deserializeNBT(nbt.getCompound("inventory"));
 	}
 	
@@ -55,7 +45,6 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound);
 		
-		this.progressTracker.save(compound);
 		compound.put("inventory", itemHandler.serializeNBT());
 	}
 	
@@ -73,14 +62,7 @@ public abstract class MachineProcessBlockEntity extends BlockEntity
 		blockEntity.tick();
 	}
 	
-	protected void tick()
-	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
-	}
-	
-	public abstract boolean contentsValid();
-
-	public abstract void processContents();
+	protected abstract void tick();
 	
 	protected class CustomHandler extends ItemStackHandler
 	{

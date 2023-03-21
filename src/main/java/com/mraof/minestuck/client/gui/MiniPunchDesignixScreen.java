@@ -56,7 +56,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.MAX_PROGRESS, progressWidth);
 		int height = progressHeight;
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
 	}

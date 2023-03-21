@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -32,7 +33,9 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
 	
 	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
@@ -47,13 +50,26 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public ProgressTracker.RunType getRunType()
+	public void load(CompoundTag nbt)
 	{
-		return TYPE;
+		super.load(nbt);
+		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	public boolean contentsValid()
+	protected void saveAdditional(CompoundTag compound)
+	{
+		super.saveAdditional(compound);
+		this.progressTracker.save(compound);
+	}
+	
+	@Override
+	protected void tick()
+	{
+		this.progressTracker.tick(this::contentsValid, this::processContents);
+	}
+	
+	private boolean contentsValid()
 	{
 		ItemStack output = createResult();
 		
@@ -63,8 +79,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		else return false;
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if (!itemHandler.getStackInSlot(3).isEmpty())
 		{

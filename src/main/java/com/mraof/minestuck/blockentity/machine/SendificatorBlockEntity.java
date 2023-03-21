@@ -35,6 +35,8 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final short MAX_FUEL = 128;
+	
+	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, 0);
 	private short fuel = 0;
 	
 	@Nullable
@@ -61,12 +63,6 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		super(MSBlockEntityTypes.SENDIFICATOR.get(), pos, state);
 	}
 	
-	@Override
-	protected int getMaxProgress()
-	{
-		return 0;
-	}
-	
 	@Nullable
 	public BlockPos getDestinationBlockPos()
 	{
@@ -89,6 +85,8 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	{
 		super.load(compound);
 		
+		this.progressTracker.load(compound);
+		
 		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ"))
 		{
 			int destX = compound.getInt("destX");
@@ -104,6 +102,8 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
+		
+		this.progressTracker.save(compound);
 		
 		if(destBlockPos != null)
 		{
@@ -122,13 +122,12 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public ProgressTracker.RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::contentsValid, this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
@@ -143,8 +142,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	/**
 	 * With the given container possessing block entity system our mod uses, this is the function that connects to the GoButton found in it's screen({@link com.mraof.minestuck.client.gui.SendificatorScreen} in this example)
 	 */
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if(canBeRefueled())
 		{

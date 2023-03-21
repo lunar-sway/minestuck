@@ -36,7 +36,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
 	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);
 	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override
@@ -70,14 +72,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
-	@Override
-	public ProgressTracker.RunType getRunType()
-	{
-		return TYPE;
-	}
-	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
@@ -101,8 +96,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		}
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 		
@@ -127,7 +121,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected void tick()
 	{
-		super.tick();
+		this.progressTracker.tick(this::contentsValid, this::processContents);
+		
 		if (this.ticks_since_update == 20)
 		{
 			level.updateNeighbourForOutputSignal(this.getBlockPos(), this.getBlockState().getBlock());
@@ -144,6 +139,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		super.load(nbt);
 		
+		this.progressTracker.load(nbt);
+		
 		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
@@ -154,6 +151,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
+		
+		this.progressTracker.save(compound);
 		
 		compound.putString("gristType", String.valueOf(GristTypes.getRegistry().getKey(wildcardGrist)));
 		

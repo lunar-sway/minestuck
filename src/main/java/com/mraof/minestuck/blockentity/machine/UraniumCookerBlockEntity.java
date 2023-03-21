@@ -38,6 +38,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, 0);
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
@@ -64,12 +65,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	protected int getMaxProgress()
-	{
-		return 0;
-	}
-	
-	@Override
 	protected ItemStackHandler createItemHandler()
 	{
 		return new CustomHandler(3, (index, stack) -> index == 1 ? stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS) : index != 2);
@@ -90,13 +85,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	public ProgressTracker.RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::contentsValid, this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
@@ -124,8 +118,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 		{    //Refill fuel

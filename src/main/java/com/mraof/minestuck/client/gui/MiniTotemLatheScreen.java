@@ -48,7 +48,7 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniTotemLatheBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
+		int width = getScaledValue(menu.getProgress(), MiniTotemLatheBlockEntity.MAX_PROGRESS, progressWidth);
 		blit(poseStack, x + progressX, y + progressY, 0, 0, width, progressHeight, progressWidth, progressHeight);
 	}
 

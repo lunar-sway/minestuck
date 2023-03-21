@@ -50,7 +50,7 @@ public class MiniCruxtruderScreen extends AbstractContainerScreen<MiniCruxtruder
 		
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS_BAR);
-		int height = MachineScreen.getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.DEFAULT_MAX_PROGRESS, PROGRESS_BAR_HEIGHT);
+		int height = MachineScreen.getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.MAX_PROGRESS, PROGRESS_BAR_HEIGHT);
 		blit(poseStack, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height, 0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 }
