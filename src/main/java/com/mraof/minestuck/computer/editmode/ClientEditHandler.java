@@ -145,22 +145,6 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event)
-	{
-		if(event.side == LogicalSide.CLIENT)
-		{
-			EditToolDrag.doRecycleCode(event);
-			EditToolDrag.doReviseCode(event);
-		}
-	}
-	
-	@SubscribeEvent
-	public static void renderWorld(RenderLevelStageEvent event)
-	{
-		EditToolDrag.renderOutlines(event);
-	}
-	
-	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
 		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())

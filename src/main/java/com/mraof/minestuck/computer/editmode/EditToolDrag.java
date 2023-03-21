@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.client.ClientProxy;
@@ -28,20 +29,41 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.common.Mod;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class EditToolDrag
 {
+	
+	@SubscribeEvent
+	public static void onClientTick(TickEvent.ClientTickEvent event)
+	{
+		if(event.side == LogicalSide.CLIENT)
+		{
+			EditToolDrag.doRecycleCode(event);
+			EditToolDrag.doReviseCode(event);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void renderWorld(RenderLevelStageEvent event)
+	{
+		EditToolDrag.renderOutlines(event);
+	}
 	
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if (ClientProxy.getClientPlayer() == null || event.phase == TickEvent.Phase.END)
+		if (mc.player == null || event.phase == TickEvent.Phase.END)
 			return;
 		
-		Player player = ClientProxy.getClientPlayer();
+		Player player = mc.player;
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
 		if(cap == null)
 			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
@@ -125,10 +147,10 @@ public class EditToolDrag
 	public static void doRecycleCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if (ClientProxy.getClientPlayer() == null || event.phase == TickEvent.Phase.END)
+		if (mc.player == null || event.phase == TickEvent.Phase.END)
 			return;
 		
-		Player player = ClientProxy.getClientPlayer();
+		Player player = mc.player;
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
 		if(cap == null)
 			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
@@ -241,10 +263,10 @@ public class EditToolDrag
 		Minecraft mc = Minecraft.getInstance();
 		
 		//make sure the stage is after translucent blocks so that the outlines render over everything.
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && ClientProxy.getClientPlayer() != null && mc.getCameraEntity() == ClientProxy.getClientPlayer())
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
 		{
 			
-			Player player = ClientProxy.getClientPlayer();
+			Player player = mc.player;
 			Camera info = event.getCamera();
 			
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
