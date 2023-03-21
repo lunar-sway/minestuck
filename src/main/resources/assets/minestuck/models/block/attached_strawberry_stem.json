@@ -1,4 +1,4 @@
 {
-    "parent": "minestuck:block/attached_melon_stem",
+    "parent": "block/attached_melon_stem",
     "render_type": "cutout"
 }
