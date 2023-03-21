@@ -2,6 +2,6 @@
     "parent": "block/cross",
     "render_type": "cutout",
     "textures": {
-        "cross": "minestuck:block/glowing_mushroom_4"
+        "cross": "minestuck:block/glowing_mushroom_7"
     }
 }

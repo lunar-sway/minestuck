@@ -14,6 +14,6 @@ public class ShadewoodTree extends AbstractTreeGrower
 	@Override
 	protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource rand, boolean hasFlowers)
 	{
-		return MSCFeatures.SHADEWOOD_TREE.getHolder().orElseThrow();
+		return rand.nextInt(20) == 0 ? MSCFeatures.SCARRED_SHADEWOOD_TREE.getHolder().orElseThrow() : MSCFeatures.SHADEWOOD_TREE.getHolder().orElseThrow();
 	}
 }

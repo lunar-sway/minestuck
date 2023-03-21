@@ -1,11 +1,11 @@
 {
     "parent": "block/block",
     "textures": {
-        "side": "minestuck:block/shadewood_side",
+        "side": "minestuck:block/shadewood",
         "top": "minestuck:block/scarred_shadewood_top",
         "bottom": "minestuck:block/scarred_shadewood_bottom",
-        "front": "minestuck:block/scarred_shadewood_side",
-        "particle": "minestuck:block/shadewood_side"
+        "front": "minestuck:block/scarred_shadewood",
+        "particle": "minestuck:block/shadewood"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

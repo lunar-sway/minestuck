@@ -110,10 +110,17 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> GLOWING_TREE = REGISTER.register("glowing_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 			new BlockStateConfiguration(MSBlocks.GLOWING_LOG.get().defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SHADEWOOD_TREE = REGISTER.register("shadewood_tree", () -> new ConfiguredFeature<>(Feature.TREE, (new TreeConfiguration.TreeConfigurationBuilder(
-			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LOG.get().defaultBlockState(), 10).add(MSBlocks.SCARRED_SHADEWOOD_LOG.get().defaultBlockState(), 1).add(MSBlocks.ROTTED_SHADEWOOD_LOG.get().defaultBlockState(), 1)),
+			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LOG.get().defaultBlockState(), 10).add(MSBlocks.ROTTED_SHADEWOOD_LOG.get().defaultBlockState(), 1)),
 			new StraightTrunkPlacer(4, 1, 1),
 			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)),
 			new AcaciaFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 1)),
+			new TwoLayersFeatureSize(1, 0, 2))).ignoreVines()
+			.decorators(List.of(new AttachedToLeavesDecorator(0.25F, 1, 0, new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)), 2, List.of(Direction.DOWN)))).build()));
+	//scarred variant tends to be a little more scraggly
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SCARRED_SHADEWOOD_TREE = REGISTER.register("scarred_shadewood_tree", () -> new ConfiguredFeature<>(Feature.TREE, (new TreeConfiguration.TreeConfigurationBuilder(
+			BlockStateProvider.simple(MSBlocks.SCARRED_SHADEWOOD_LOG.get().defaultBlockState()), new StraightTrunkPlacer(3, 1, 1),
+			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)),
+			new AcaciaFoliagePlacer(UniformInt.of(1, 3), UniformInt.of(0, 1)),
 			new TwoLayersFeatureSize(1, 0, 2))).ignoreVines()
 			.decorators(List.of(new AttachedToLeavesDecorator(0.25F, 1, 0, new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)), 2, List.of(Direction.DOWN)))).build()));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
