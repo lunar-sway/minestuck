@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -17,7 +16,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/sendificator.png");
@@ -41,7 +42,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	
 	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(ProgressTracker.RunType.ONCE, screenContainer, inv, titleIn);
+		super(SendificatorBlockEntity.TYPE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67 - 15;
@@ -57,27 +58,25 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	{
 		super.init();
 		
-		int yOffset = (height - imageHeight) / 2;
+		updateButton = addRenderableWidget(new ExtendedButton((width - imageWidth) / 2 + 105, this.topPos + 40, 50, 12, Component.literal("Update"), button -> updateDestinationPos()));
 		
-		updateButton = addRenderableWidget(new ExtendedButton((width - imageWidth) / 2 + 105, yOffset + 40, 50, 12, Component.literal("Update"), button -> updateDestinationPos()));
-		
-		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 10, yOffset + 10, 35, 15, Component.literal("X value of destination block pos")); //TODO make these translatable
+		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 10, this.topPos + 10, 35, 15, Component.literal("X value of destination block pos")); //TODO make these translatable
 		destinationTextFieldX.setMaxLength(10);
 		addRenderableWidget(destinationTextFieldX);
 		destinationTextFieldX.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 + 25, yOffset + 10, 20, 15, Component.literal("Y value of destination block pos"));
+		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 + 25, this.topPos + 10, 20, 15, Component.literal("Y value of destination block pos"));
 		destinationTextFieldY.setMaxLength(3);
 		addRenderableWidget(destinationTextFieldY);
 		destinationTextFieldY.setResponder(s -> onTextFieldChange());
 		
-		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 45, yOffset + 10, 35, 15, Component.literal("Z value of destination block pos"));
+		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 45, this.topPos + 10, 35, 15, Component.literal("Z value of destination block pos"));
 		destinationTextFieldZ.setMaxLength(10);
 		addRenderableWidget(destinationTextFieldZ);
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorBlockEntity
-		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12);
+		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
 		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();
@@ -127,9 +126,8 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		
 		//draw progress bar
 		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = progressWidth;
 		int height = getScaledValue(menu.getFuel(), SendificatorBlockEntity.MAX_FUEL, progressHeight);
-		blit(poseStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, width, height, progressWidth, progressHeight);
+		blit(poseStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, progressWidth, height, progressWidth, progressHeight);
 	}
 	
 	@Override

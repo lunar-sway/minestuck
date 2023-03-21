@@ -66,7 +66,7 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12);
+		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
 		addRenderableWidget(goButton);
 	}
 }

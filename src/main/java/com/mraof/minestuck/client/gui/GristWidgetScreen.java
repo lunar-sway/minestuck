@@ -13,6 +13,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
@@ -103,7 +106,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12);
+		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
 		addRenderableWidget(goButton);
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;

@@ -17,8 +17,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@ParametersAreNonnullByDefault
 public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> implements Positioned
 {
 	
@@ -109,7 +111,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> impl
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12);
+		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
 		addRenderableWidget(goButton);
 	}
 	
