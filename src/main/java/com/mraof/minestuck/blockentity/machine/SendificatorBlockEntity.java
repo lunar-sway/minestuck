@@ -32,7 +32,7 @@ import java.util.Optional;
 
 public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final short MAX_FUEL = 128;
 	private short fuel = 0;
@@ -122,7 +122,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public MachineProcessBlockEntity.RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -225,7 +225,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		return new SendificatorMenu(windowId, playerInventory, itemHandler,
-				parameters, fuelHolder, destinationHolder,
+				this.progressTracker, fuelHolder, destinationHolder,
 				ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

@@ -2,11 +2,11 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SendificatorPacket;
-import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.renderer.GameRenderer;
@@ -41,7 +41,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	
 	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MachineProcessBlockEntity.RunType.BUTTON, screenContainer, inv, titleIn);
+		super(ProgressTracker.RunType.BUTTON, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67 - 15;

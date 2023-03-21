@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
-	public static final RunType TYPE = RunType.AUTOMATIC;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.AUTOMATIC;
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
 	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -44,7 +44,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -105,6 +105,6 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

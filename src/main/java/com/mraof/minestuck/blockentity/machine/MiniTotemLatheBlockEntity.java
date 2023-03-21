@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
-	public static final RunType TYPE = RunType.BUTTON;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON;
 	
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
 	
@@ -47,7 +47,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -111,8 +111,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public void setChanged()
 	{
-		this.progress = 0;
-		this.ready = false;
+		this.progressTracker.resetProgress();
 		super.setChanged();
 	}
 	
@@ -157,6 +156,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerIn)
 	{
-		return new MiniTotemLatheMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniTotemLatheMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

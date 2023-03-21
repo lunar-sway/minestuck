@@ -35,7 +35,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String TITLE = "container.minestuck.grist_widget";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	
 	private PlayerIdentifier owner;
 	private boolean hasItem;
@@ -111,7 +111,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -171,7 +171,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new GristWidgetMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new GristWidgetMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

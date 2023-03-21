@@ -1,9 +1,9 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import com.mraof.minestuck.inventory.MachineContainerMenu;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.blockentity.machine.MachineProcessBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -23,11 +23,11 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 	public static final String GO = "minestuck.button.go";
 	public static final String STOP = "minestuck.button.stop";
 	
-	protected final MachineProcessBlockEntity.RunType runType;
+	protected final ProgressTracker.RunType runType;
 	@Nullable
 	protected GoButton goButton;
 	
-	public MachineScreen(MachineProcessBlockEntity.RunType runType, T screenContainer, Inventory inv, Component titleIn)
+	public MachineScreen(ProgressTracker.RunType runType, T screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
 		this.runType = runType;
@@ -40,7 +40,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 		{
 			this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
-			boolean mode = runType == MachineProcessBlockEntity.RunType.BUTTON_OVERRIDE && hasShiftDown();
+			boolean mode = runType == ProgressTracker.RunType.BUTTON_OVERRIDE && hasShiftDown();
 			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
 			MSPacketHandler.sendToServer(packet);
 			
@@ -99,7 +99,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 					
 					setMessage(Component.translatable(GO));
 				}
-			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == MachineProcessBlockEntity.RunType.BUTTON_OVERRIDE)
+			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == ProgressTracker.RunType.BUTTON_OVERRIDE)
 			{
 				//Tell the machine to go until stopped
 				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());

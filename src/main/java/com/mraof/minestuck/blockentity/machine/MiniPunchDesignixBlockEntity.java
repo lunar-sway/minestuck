@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
-	public static final RunType TYPE = RunType.BUTTON;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON;
 	
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
@@ -45,7 +45,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -104,8 +104,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	public void setChanged()
 	{
-		this.progress = 0;
-		this.ready = false;
+		this.progressTracker.resetProgress();
 		super.setChanged();
 	}
 	
@@ -150,6 +149,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniPunchDesignixMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniPunchDesignixMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
@@ -90,7 +90,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -185,7 +185,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, this.progressTracker, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

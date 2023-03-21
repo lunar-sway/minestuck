@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
 	
 	private final DataSlot wildcardGristHolder = new DataSlot()
@@ -71,7 +71,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public RunType getRunType()
+	public ProgressTracker.RunType getRunType()
 	{
 		return TYPE;
 	}
@@ -227,7 +227,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, this.progressTracker, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()
