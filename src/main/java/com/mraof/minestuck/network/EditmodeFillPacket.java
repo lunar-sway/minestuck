@@ -5,11 +5,10 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -18,27 +17,25 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.EventBus;
 
 import static com.mraof.minestuck.computer.editmode.ServerEditHandler.isBlockItem;
 
 public class EditmodeFillPacket implements PlayToServerPacket
 {
 	final boolean fill;
-	final boolean isDragging;
+	final boolean isDown;
 	final BlockPos positionStart;
 	final BlockPos positionEnd;
 	final Vec3 hitVector;
 	final Direction side;
 	
-	public EditmodeFillPacket(boolean fill, boolean isDragging, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
+	public EditmodeFillPacket(boolean fill, boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
 	{
 		this.fill = fill;
-		this.isDragging = isDragging;
+		this.isDown = isDown;
 		this.positionStart = positionStart;
 		this.positionEnd = positionEnd;
 		this.hitVector = hitVector;
@@ -49,7 +46,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	public void encode(FriendlyByteBuf buffer)
 	{
 		buffer.writeBoolean(fill);
-		buffer.writeBoolean(isDragging);
+		buffer.writeBoolean(isDown);
 		buffer.writeInt(positionStart.getX());
 		buffer.writeInt(positionStart.getY());
 		buffer.writeInt(positionStart.getZ());
@@ -77,7 +74,14 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(!isDragging)
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+		cap.setEditDragging(isDown);
+		cap.setEditPos1(positionStart);
+		cap.setEditPos2(positionEnd);
+		cap.setEditTraceHit(hitVector);
+		cap.setEditTraceDirection(side);
+		
+		if(!isDown)
 		{
 			InteractionHand hand = player.getMainHandItem().getItem() instanceof BlockItem ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 			ItemStack stack = fill ? player.getItemInHand(hand) : ItemStack.EMPTY;
@@ -113,16 +117,14 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							}
 						} else
 						{
-							if(editModeDestroyCheck(player.getLevel(), player) && !player.getLevel().getBlockState(pos).isAir())
+							if(editModeDestroyCheck(player.getLevel(), player, pos) && !player.getLevel().getBlockState(pos).isAir())
 							{
-								PlayerInteractEvent.LeftClickBlock evt = new PlayerInteractEvent.LeftClickBlock(player, pos, side);
-								ServerEditHandler.onLeftClickBlockControl(evt);
-								if(!evt.isCanceled())
-								{
-									ServerEditHandler.onBlockBreak(evt);
-									player.swinging = false;
-									player.getLevel().destroyBlock(pos, false, player);
-								}
+								//PlayerInteractEvent.LeftClickBlock clickEvent = net.minecraftforge.common.ForgeHooks.onLeftClickBlock(player, pos, side);
+								//if(clickEvent.isCanceled())
+								//	continue;
+								//else
+									player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+								
 								//swingArm = true;
 							}
 						}
@@ -136,7 +138,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		}
 		else
 		{
-			EditToolDrag.updateEditToolsServer(player, isDragging, positionStart, positionEnd);
+			EditToolDrag.updateEditToolsServer(player, isDown, positionStart, positionEnd);
 		}
 	}
 	
@@ -171,29 +173,25 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		return true;
 	}
 	
-	private static boolean editModeDestroyCheck(Level level, Player player)
+	private static boolean editModeDestroyCheck(Level level, Player player, BlockPos pos)
 	{
 		if(!level.isClientSide() && ServerEditHandler.getData(player) != null)
 		{
 			EditData data = ServerEditHandler.getData(player);
 			SburbConnection connection = data.getConnection();
 			
-			if(!MinestuckConfig.SERVER.gristRefund.get())
+			BlockState block = level.getBlockState(pos);
+			ItemStack stack = block.getCloneItemStack(null, level, pos, player);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), level, DeployList.EntryLists.ATHENEUM);
+			if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 			{
 				
 				GristSet cost = new GristSet(GristTypes.BUILD,1);
 				if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
 				{
-					StringBuilder str = new StringBuilder();
 					if(cost != null)
 					{
-						for(GristAmount grist : cost.getAmounts())
-						{
-							if(cost.getAmounts().indexOf(grist) != 0)
-								str.append(", ");
-							str.append(grist.getAmount()+" "+grist.getType().getDisplayName());
-						}
-						player.sendSystemMessage(Component.translatable("grist.missing",str.toString()));
+						player.sendSystemMessage(cost.createMissingMessage());
 					}
 					return false;
 				}

@@ -3,12 +3,14 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.util.MSCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -143,6 +145,22 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
+	public static void onClientTick(TickEvent.ClientTickEvent event)
+	{
+		if(event.side == LogicalSide.CLIENT)
+		{
+			EditToolDrag.doRecycleCode(event);
+			EditToolDrag.doReviseCode(event);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void renderWorld(RenderLevelStageEvent event)
+	{
+		EditToolDrag.renderOutlines(event);
+	}
+	
+	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
 		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
@@ -175,14 +193,16 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(EditToolDrag.canEditRevise(event.getEntity()))
-		{
-			event.setCanceled(true);
-			return;
-		}
-		
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
+			//IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			if(EditToolDrag.canEditRevise(event.getEntity()))
+			{
+				event.setCanceled(true);
+				event.getEntity().sendSystemMessage(Component.literal("Client rightClickEvent cancelled. Reason: Using tool."));
+				return;
+			}
+			
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
@@ -211,18 +231,28 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(EditToolDrag.canEditRecycle(event.getEntity()))
-		{
-			event.setCanceled(true);
-			return;
-		}
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
+			//IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			if(EditToolDrag.canEditRecycle(event.getEntity()))
+			{
+				event.setCanceled(true);
+				event.getEntity().sendSystemMessage(Component.literal("Client leftClickEvent cancelled. Reason: Using tool."));
+				return;
+			}
+			
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
+			{
 				event.setCanceled(true);
+				event.getEntity().sendSystemMessage(Component.literal("Client leftClickEvent cancelled. Reason: Unbreakable or no grist."));
+			}
+			
+			//if(block.getBlock() instanceof EditmodeDestroyable destroyable)
+				//destroyable.destroyFull(block, event.getLevel(), event.getPos());
 		}
+		
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)

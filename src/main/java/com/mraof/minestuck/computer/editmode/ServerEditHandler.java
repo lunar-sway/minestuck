@@ -7,6 +7,7 @@ import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -14,6 +15,7 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -334,7 +336,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			}
 			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level, DeployList.EntryLists.ATHENEUM))
 			{
-				event.setCanceled(false);
+				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().getLevel());
+				if(cost != null && GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
+					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
+				else
+					event.setCanceled(true);
 			}
 			else
 			{
@@ -362,8 +368,16 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickBlockControl(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(!event.getLevel().isClientSide && getData(event.getEntity()) != null)
+		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
+			IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			if(cap.isEditDragging())
+			{
+				event.setCanceled(true);
+				event.getEntity().sendSystemMessage(Component.literal("Server rightClickBlockControl cancelled. Reason: isEditDragging."));
+				return;
+			}
+			
 			EditData data = getData(event.getEntity());
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
@@ -401,18 +415,30 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getLevel().isClientSide && getData(event.getEntity()) != null)
+		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			if(cap.isEditDragging())
+			{
+				event.setCanceled(true);
+				event.getEntity().sendSystemMessage(Component.literal("Server leftClickBlockControl cancelled. Reason: isEditDragging."));
+				return;
+			}
+			
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && entry != null && entry.getCategory() != DeployList.EntryLists.ATHENEUM)))
+					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && (entry != null && entry.getCategory() != DeployList.EntryLists.ATHENEUM))))
+			{
 				event.setCanceled(true);
+				event.getEntity().getServer().sendSystemMessage(Component.literal("Server leftClickBlockControl cancelled. Reason: Unbreakable or no grist."));
+			}
 			
 			if(block.getBlock() instanceof EditmodeDestroyable destroyable)
 				destroyable.destroyFull(block, event.getLevel(), event.getPos());
+			
 		}
 	}
 	
@@ -426,27 +452,36 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOWEST)
-	public static void onBlockBreak(PlayerInteractEvent.LeftClickBlock event)
+	public static void onBlockBreak(BlockEvent.BreakEvent event)
 	{
-		if(!event.getEntity().level.isClientSide && getData(event.getEntity()) != null)
+		//BlockEvent.BreakEvent for some reason still uses the old naming scheme of getPlayer(), instead of the new scheme of getEntity()
+		if(!event.getPlayer().level.isClientSide && getData(event.getPlayer()) != null)
 		{
-			EditData data = getData(event.getEntity());
+			/*IEditTools cap = event.getPlayer().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(null);
+			if(cap != null && cap.isEditDragging())
+			{
+				event.setCanceled(true);
+				event.getPlayer().getServer().sendSystemMessage(Component.literal("Server onBlockBreak cancelled. Reason: isEditDragging."));
+				return;
+			}*/
+			
+			EditData data = getData(event.getPlayer());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
-			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel(), DeployList.EntryLists.ATHENEUM);
+			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getPlayer().getLevel(), DeployList.EntryLists.ATHENEUM);
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				if(entry != null)
-					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
+					GristHelper.increaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
 				else
-					GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+					GristHelper.decreaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
-				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
+				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().getLevel());
 				if(set != null && !set.isEmpty())
 				{
-					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
+					GristHelper.increaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}
@@ -455,40 +490,47 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player)
+		//Probably only need the ServerPlayer instanceof check, but we want to be ABSOLUTELY SURE that this isn't run client-side, so we check the level too.
+		if(!event.getEntity().level.isClientSide() && event.getEntity() instanceof ServerPlayer player && getData(player) != null)
 		{
-			if(getData(player) != null)
+			
+			/*IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(null);
+			if(cap != null && cap.isEditDragging())
 			{
-				EditData data = getData(player);
-				if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
+				event.setCanceled(true);
+				player.getServer().sendSystemMessage(Component.literal("Server onBlockPlaced cancelled. Reason: isEditDragging."));
+				return;
+			}*/
+		
+			EditData data = getData(player);
+			if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
+			{
+				data.sendGivenItemsToEditor();
+				return;
+			}
+			
+			ItemStack stack = player.getMainHandItem();	//TODO Make sure offhand isn't used in editmode?
+			SburbConnection c = data.connection;
+			DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level);
+			if(entry != null)
+			{
+				GristSet cost = entry.getCurrentCost(c);
+				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
-					data.sendGivenItemsToEditor();
-					return;
+					c.setHasGivenItem(entry);
+					if(!c.isMain())
+						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 				}
-				
-				ItemStack stack = player.getMainHandItem();	//TODO Make sure offhand isn't used in editmode?
-				SburbConnection c = data.connection;
-				DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level);
-				if(entry != null)
+				if(!cost.isEmpty())
 				{
-					GristSet cost = entry.getCurrentCost(c);
-					if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
-					{
-						c.setHasGivenItem(entry);
-						if(!c.isMain())
-							SburbHandler.giveItems(player.server, c.getClientIdentifier());
-					}
-					if(!cost.isEmpty())
-					{
-						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-					}
-					if(entry.getCategory() != DeployList.EntryLists.ATHENEUM)
-						player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
-				
-				} else
-				{
-					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
+					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
 				}
+				if(entry.getCategory() != DeployList.EntryLists.ATHENEUM)
+					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
+			
+			} else
+			{
+				GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
 			}
 		}
 	}
