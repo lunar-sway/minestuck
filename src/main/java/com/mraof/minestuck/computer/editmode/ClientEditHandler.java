@@ -195,11 +195,9 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			//IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
 			if(EditToolDrag.canEditRevise(event.getEntity()))
 			{
 				event.setCanceled(true);
-				event.getEntity().sendSystemMessage(Component.literal("Client rightClickEvent cancelled. Reason: Using tool."));
 				return;
 			}
 			
@@ -233,26 +231,18 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			//IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
 			if(EditToolDrag.canEditRecycle(event.getEntity()))
 			{
 				event.setCanceled(true);
-				event.getEntity().sendSystemMessage(Component.literal("Client leftClickEvent cancelled. Reason: Using tool."));
 				return;
 			}
 			
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
-			{
 				event.setCanceled(true);
-				event.getEntity().sendSystemMessage(Component.literal("Client leftClickEvent cancelled. Reason: Unbreakable or no grist."));
-			}
 			
-			//if(block.getBlock() instanceof EditmodeDestroyable destroyable)
-				//destroyable.destroyFull(block, event.getLevel(), event.getPos());
 		}
-		
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)

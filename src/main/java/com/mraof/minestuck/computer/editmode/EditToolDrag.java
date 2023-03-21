@@ -6,11 +6,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
-import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.entity.ServerCursorEntity;
+import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.EditmodeFillPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -19,10 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -37,18 +32,16 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 
-import java.util.UUID;
-
 public class EditToolDrag
 {
 	
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player == null || event.phase == TickEvent.Phase.END)
+		if (ClientProxy.getClientPlayer() == null || event.phase == TickEvent.Phase.END)
 			return;
 		
-		Player player = mc.player;
+		Player player = ClientProxy.getClientPlayer();
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
@@ -126,21 +119,13 @@ public class EditToolDrag
 				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
 	}
 	
-	public static boolean canEditRevise(ServerPlayer player)
-	{
-		return (ServerEditHandler.getData(player) != null
-				&& !isBlockDeployable(player)
-				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
-	}
-	
-	
 	public static void doRecycleCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
-		if (mc.player == null || event.phase == TickEvent.Phase.END)
+		if (ClientProxy.getClientPlayer() == null || event.phase == TickEvent.Phase.END)
 			return;
 		
-		Player player = mc.player;
+		Player player = ClientProxy.getClientPlayer();
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
@@ -215,24 +200,11 @@ public class EditToolDrag
 		return (ClientEditHandler.isActive() && !isMultiblock(player));
 	}
 	
-	public static boolean canEditRecycle(ServerPlayer player)
-	{
-		return ServerEditHandler.getData(player) != null && !isMultiblock(player);
-	}
-	
 	private static boolean isBlockDeployable(Player player)
 	{
 			ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
 		
 			return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof MachineBlock;
-	}
-	
-	private static boolean isBlockDeployable(ServerPlayer player)
-	{
-		EditData data = ServerEditHandler.getData(player);
-		ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
-		
-		return data != null && DeployList.getEntryForItem(stack, data.connection, player.getLevel(), DeployList.EntryLists.DEPLOY) != null && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof MachineBlock;
 	}
 
 	private static boolean isMultiblock(Player player)
@@ -259,125 +231,15 @@ public class EditToolDrag
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
 	
-	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2)
-	{
-		if (player == null)
-			throw new NullPointerException("Server Player is NULL in updateEditToolsServer()!");
-		else if (player.getLevel().isClientSide())
-		{
-			player.sendSystemMessage(Component.literal("Server Player is clientside in updateEditToolsServer()!"), true);
-			return;
-		}
-		
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
-		if(cap == null)
-			player.sendSystemMessage(Component.literal("Capability is null in updateEditToolsServer()!"), true);
-		cap.setEditDragging(isDragging);
-		cap.setEditPos1(pos1);
-		cap.setEditPos2(pos2);
-		
-		/*
-		player.sendSystemMessage(Component.literal("Server toolmode: " + cap.getToolMode()));
-		player.sendSystemMessage(Component.literal("Server pos1: " + cap.getEditPos1()));
-		player.sendSystemMessage(Component.literal("Server pos2: " + cap.getEditPos2()));
-		player.sendSystemMessage(Component.literal("Server ray-pos: " + cap.getEditTraceHit()));
-		player.sendSystemMessage(Component.literal("Server ray-direction: " + cap.getEditTraceDirection()));
-		player.sendSystemMessage(Component.literal("Server initial distance: " + cap.getEditReachDistance()));
-		player.sendSystemMessage(Component.literal("Server is dragging: " + cap.isEditDragging()));
-		player.sendSystemMessage(Component.literal("Server cursor uuid: " + cap.getEditCursorID()));
-		*/
-		
-		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
-		boolean signX = pos1.getX() < pos2.getX();
-		boolean signY = pos1.getY() > pos2.getY();
-		boolean signZ = pos1.getZ() < pos2.getZ();
-		
-		//uses each sign to offset the cursor to the correct corner.
-		double posX = pos2.getX() + (signX ? 1 : 0);
-		double posY = pos2.getY() + (signY ? 0 : 1);
-		double posZ = pos2.getZ() + (signZ ? 1 : 0);
-		boolean flipCursor = signY; //uses the sign to determine whether the cursor should be upside down or not.
-		
-		//some math to find out which way the cursor should point relative to the selection-origin.
-		float cursorLean = 0f;
-		if (signX && !signZ)
-			cursorLean = 360.0f; //+X -Z = 0/360
-		if (signX && signZ)
-			cursorLean = 90.0f; //+X +Z = 90
-		if (!signX && signZ)
-			cursorLean = 180.0f; //-X +Z = 180
-		if (!signX && !signZ)
-			cursorLean = 270.0f; //-X -Z = 270
-		
-		if(cap.getEditCursorID() == null)
-		{
-			//creates the cursor and stores its UUID if one does not currently exist.
-			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor));
-		}
-		else
-		{
-			//if it does exist already, update its position, rotation, and animation
-			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
-		}
-	}
-	
-	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, float cursorLean, boolean flip)
-	{
-		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
-		if(cursor == null)
-			throw new NullPointerException("Server Cursor is null after creation! Something is wrong!");
-		cursor.noPhysics = true;
-		cursor.setNoGravity(true);
-		cursor.setInvulnerable(true);
-		
-		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
-		cursor.setYBodyRot(cursorLean - 45.0f);
-		cursor.setYHeadRot(cursorLean - 45.0f);
-		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
-		player.getLevel().addWithUUID(cursor);
-		if(player.getLevel().getEntity(cursor.getUUID()) == null)
-			throw new NullPointerException("Server Cursor is null after added to level! Something is wrong!");
-		player.sendSystemMessage(Component.literal("Cursor Position: " + cursor.getPosition(0.5f)), true);
-		return cursor.getUUID();
-	}
-	
-	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, float cursorLean, boolean flip, UUID uuid)
-	{
-		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
-		
-		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
-		cursor.setYBodyRot(cursorLean - 45.0f);
-		cursor.setYHeadRot(cursorLean - 45.0f);
-		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
-	}
-	
-	/**only called server-side, when an edit tool has finished being used (I.E when you release the right mouse button while using revise)
-	 *
-	 */
-	public static void removeCursorEntity(ServerPlayer player)
-	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
-		
-		if(cap.getEditCursorID() != null)
-		{
-			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
-			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
-			//todo: after the geckolib remodel update, make a system where the cursor entity only gets removed once its current animation is done.
-			cursor.remove(Entity.RemovalReason.DISCARDED);
-		}
-		
-		cap.setEditCursorID(null);
-	}
-	
 	public static void renderOutlines(RenderLevelStageEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		
 		//make sure the stage is after translucent blocks so that the outlines render over everything.
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
+		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && ClientProxy.getClientPlayer() != null && mc.getCameraEntity() == ClientProxy.getClientPlayer())
 		{
 			
-			Player player = mc.player;
+			Player player = ClientProxy.getClientPlayer();
 			Camera info = event.getCamera();
 			
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());

@@ -5,6 +5,8 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
+import com.mraof.minestuck.entity.MSEntityTypes;
+import com.mraof.minestuck.entity.ServerCursorEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
@@ -29,6 +31,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -370,11 +373,10 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = event.getEntity().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
 			if(cap.isEditDragging())
 			{
 				event.setCanceled(true);
-				event.getEntity().sendSystemMessage(Component.literal("Server rightClickBlockControl cancelled. Reason: isEditDragging."));
 				return;
 			}
 			
@@ -421,7 +423,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(cap.isEditDragging())
 			{
 				event.setCanceled(true);
-				event.getEntity().sendSystemMessage(Component.literal("Server leftClickBlockControl cancelled. Reason: isEditDragging."));
 				return;
 			}
 			
@@ -431,10 +432,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && (entry != null && entry.getCategory() != DeployList.EntryLists.ATHENEUM))))
-			{
 				event.setCanceled(true);
-				event.getEntity().getServer().sendSystemMessage(Component.literal("Server leftClickBlockControl cancelled. Reason: Unbreakable or no grist."));
-			}
 			
 			if(block.getBlock() instanceof EditmodeDestroyable destroyable)
 				destroyable.destroyFull(block, event.getLevel(), event.getPos());
@@ -457,13 +455,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		//BlockEvent.BreakEvent for some reason still uses the old naming scheme of getPlayer(), instead of the new scheme of getEntity()
 		if(!event.getPlayer().level.isClientSide && getData(event.getPlayer()) != null)
 		{
-			/*IEditTools cap = event.getPlayer().getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(null);
-			if(cap != null && cap.isEditDragging())
-			{
-				event.setCanceled(true);
-				event.getPlayer().getServer().sendSystemMessage(Component.literal("Server onBlockBreak cancelled. Reason: isEditDragging."));
-				return;
-			}*/
 			
 			EditData data = getData(event.getPlayer());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
@@ -493,14 +484,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		//Probably only need the ServerPlayer instanceof check, but we want to be ABSOLUTELY SURE that this isn't run client-side, so we check the level too.
 		if(!event.getEntity().level.isClientSide() && event.getEntity() instanceof ServerPlayer player && getData(player) != null)
 		{
-			
-			/*IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(null);
-			if(cap != null && cap.isEditDragging())
-			{
-				event.setCanceled(true);
-				player.getServer().sendSystemMessage(Component.literal("Server onBlockPlaced cancelled. Reason: isEditDragging."));
-				return;
-			}*/
 		
 			EditData data = getData(player);
 			if(event.isCanceled())    //If the event was cancelled server side and not client side, notify the client.
@@ -554,6 +537,104 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		if(!event.getEntity().level.isClientSide && getData(event.getEntity()) != null)
 			event.setCanceled(true);
+	}
+	
+	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2)
+	{
+		if (player == null)
+			throw new NullPointerException("Server Player is NULL in updateEditToolsServer()!");
+		else if (player.getLevel().isClientSide())
+		{
+			player.sendSystemMessage(Component.literal("Server Player is clientside in updateEditToolsServer()!"), true);
+			return;
+		}
+		
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
+		if(cap == null)
+			player.sendSystemMessage(Component.literal("Capability is null in updateEditToolsServer()!"), true);
+		cap.setEditDragging(isDragging);
+		cap.setEditPos1(pos1);
+		cap.setEditPos2(pos2);
+		
+		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
+		boolean signX = pos1.getX() < pos2.getX();
+		boolean signY = pos1.getY() > pos2.getY();
+		boolean signZ = pos1.getZ() < pos2.getZ();
+		
+		//uses each sign to offset the cursor to the correct corner.
+		double posX = pos2.getX() + (signX ? 1 : 0);
+		double posY = pos2.getY() + (signY ? 0 : 1);
+		double posZ = pos2.getZ() + (signZ ? 1 : 0);
+		boolean flipCursor = signY; //uses the sign to determine whether the cursor should be upside down or not.
+		
+		//some math to find out which way the cursor should point relative to the selection-origin.
+		float cursorLean = 0f;
+		if (signX && !signZ)
+			cursorLean = 360.0f; //+X -Z = 0/360
+		if (signX && signZ)
+			cursorLean = 90.0f; //+X +Z = 90
+		if (!signX && signZ)
+			cursorLean = 180.0f; //-X +Z = 180
+		if (!signX && !signZ)
+			cursorLean = 270.0f; //-X -Z = 270
+		
+		if(cap.getEditCursorID() == null)
+		{
+			//creates the cursor and stores its UUID if one does not currently exist.
+			cap.setEditCursorID(createCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor));
+		}
+		else
+		{
+			//if it does exist already, update its position, rotation, and animation
+			updateCursorEntity(player, new Vec3(posX,posY,posZ), cursorLean, flipCursor, cap.getEditCursorID());
+		}
+	}
+	
+	public static UUID createCursorEntity(ServerPlayer player, Vec3 startPosition, float cursorLean, boolean flip)
+	{
+		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
+		if(cursor == null)
+			throw new NullPointerException("Server Cursor is null after creation! Something is wrong!");
+		cursor.noPhysics = true;
+		cursor.setNoGravity(true);
+		cursor.setInvulnerable(true);
+		
+		cursor.moveTo(startPosition.x, startPosition.y, startPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setYBodyRot(cursorLean - 45.0f);
+		cursor.setYHeadRot(cursorLean - 45.0f);
+		cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+		player.getLevel().addWithUUID(cursor);
+		if(player.getLevel().getEntity(cursor.getUUID()) == null)
+			throw new NullPointerException("Server Cursor is null after added to level! Something is wrong!");
+		return cursor.getUUID();
+	}
+	
+	public static void updateCursorEntity(ServerPlayer player, Vec3 newPosition, float cursorLean, boolean flip, UUID uuid)
+	{
+		ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(uuid);
+		
+		cursor.moveTo(newPosition.x, newPosition.y, newPosition.z, cursorLean - 45.0f, flip ? 135f : 45f);
+		cursor.setYBodyRot(cursorLean - 45.0f);
+		cursor.setYHeadRot(cursorLean - 45.0f);
+		cursor.setAnimation(ServerCursorEntity.Animation.IDLE);
+	}
+	
+	/**
+	 * only called server-side, when an edit tool has finished being used (I.E when you release the right mouse button while using revise)
+	 */
+	public static void removeCursorEntity(ServerPlayer player)
+	{
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		
+		if(cap.getEditCursorID() != null)
+		{
+			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
+			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
+			//todo: after the geckolib remodel update, make a system where the cursor entity only gets removed once its current animation is done.
+			cursor.remove(Entity.RemovalReason.DISCARDED);
+		}
+		
+		cap.setEditCursorID(null);
 	}
 	
 	/**

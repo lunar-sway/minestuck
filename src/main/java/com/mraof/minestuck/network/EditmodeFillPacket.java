@@ -119,13 +119,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 						{
 							if(editModeDestroyCheck(player.getLevel(), player, pos) && !player.getLevel().getBlockState(pos).isAir())
 							{
-								//PlayerInteractEvent.LeftClickBlock clickEvent = net.minecraftforge.common.ForgeHooks.onLeftClickBlock(player, pos, side);
-								//if(clickEvent.isCanceled())
-								//	continue;
-								//else
-									player.gameMode.destroyAndAck(pos, 3, "creative destroy");
-								
-								//swingArm = true;
+								player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+								swingArm = true;
 							}
 						}
 					}
@@ -134,11 +129,11 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			if(swingArm)
 				player.swing(hand);
 			
-			EditToolDrag.removeCursorEntity(player);
+			ServerEditHandler.removeCursorEntity(player);
 		}
 		else
 		{
-			EditToolDrag.updateEditToolsServer(player, isDown, positionStart, positionEnd);
+			ServerEditHandler.updateEditToolsServer(player, isDown, positionStart, positionEnd);
 		}
 	}
 	
