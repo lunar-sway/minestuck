@@ -36,8 +36,8 @@ public class GoButtonPacket implements PlayToServerPacket
 	{
 		if(player.containerMenu instanceof MachineContainerMenu container)
 		{
-			container.setReady(newMode);
-			container.setOverrideStop(overrideStop);
+			container.setShouldRun(newMode);
+			container.setIsLooping(overrideStop);
 		}
 	}
 }

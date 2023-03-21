@@ -40,11 +40,11 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 		{
 			this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 
-			boolean mode = runType == ProgressTracker.RunType.BUTTON_OVERRIDE && hasShiftDown();
-			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.overrideStop());
+			boolean mode = runType == ProgressTracker.RunType.ONCE_OR_LOOPING && hasShiftDown();
+			GoButtonPacket packet = new GoButtonPacket(true, mode && !menu.isLooping());
 			MSPacketHandler.sendToServer(packet);
 			
-			goButton.setMessage(Component.translatable(mode && !menu.overrideStop() ? STOP : GO));
+			goButton.setMessage(Component.translatable(mode && !menu.isLooping() ? STOP : GO));
 			return true;
 		}
 		return super.keyPressed(keyCode, scanCode, i);
@@ -91,7 +91,7 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 		{
 			if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_1)
 			{
-				if(!menu.overrideStop())
+				if(!menu.isLooping())
 				{
 					//Tell the machine to go once
 					GoButtonPacket packet = new GoButtonPacket(true, false);
@@ -99,13 +99,13 @@ public abstract class MachineScreen<T extends MachineContainerMenu> extends Abst
 					
 					setMessage(Component.translatable(GO));
 				}
-			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == ProgressTracker.RunType.BUTTON_OVERRIDE)
+			} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && runType == ProgressTracker.RunType.ONCE_OR_LOOPING)
 			{
 				//Tell the machine to go until stopped
-				GoButtonPacket packet = new GoButtonPacket(true, !menu.overrideStop());
+				GoButtonPacket packet = new GoButtonPacket(true, !menu.isLooping());
 				MSPacketHandler.sendToServer(packet);
 				
-				setMessage(Component.translatable(menu.overrideStop() ? STOP : GO));
+				setMessage(Component.translatable(menu.isLooping() ? STOP : GO));
 			}
 		}
 	}

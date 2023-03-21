@@ -41,7 +41,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	
 	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(ProgressTracker.RunType.BUTTON, screenContainer, inv, titleIn);
+		super(ProgressTracker.RunType.ONCE, screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67 - 15;
@@ -77,7 +77,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorBlockEntity
-		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, yOffset + goY, 30, 12, Component.literal(menu.isLooping() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();

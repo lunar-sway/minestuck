@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE;
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);

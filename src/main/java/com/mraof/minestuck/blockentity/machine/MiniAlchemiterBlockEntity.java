@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE_OR_LOOPING;
 	public static final int INPUT = 0, OUTPUT = 1;
 	public static final int MAX_PROGRESS = 100;
 	

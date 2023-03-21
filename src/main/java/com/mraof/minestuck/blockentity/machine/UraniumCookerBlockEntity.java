@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.BUTTON_OVERRIDE;
+	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE_OR_LOOPING;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, 0);
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);

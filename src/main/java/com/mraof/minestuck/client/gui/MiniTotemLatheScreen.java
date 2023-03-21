@@ -57,7 +57,7 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
+		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.isLooping() ? "STOP" : "GO"));
 		addRenderableWidget(goButton);
 	}
 }
