@@ -24,6 +24,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -193,11 +195,14 @@ public class EditToolDrag
 	 * Determines whether the player can use the recycle tool when left-clicking,
 	 * based on the block that they are looking at.
 	 * @param player The client-side editmode player.
-	 * @return True if you are in editmode and NOT looking directly at a multiblock. Else false.
+	 * @return True if you are in editmode and NOT looking directly at a multiblock or unbreakable block. Else false.
 	 */
 	public static boolean canEditRecycle(Player player)
 	{
-		return (ClientEditHandler.isActive() && !isMultiblock(player));
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+		BlockState block = player.getLevel().getBlockState(blockHit.getBlockPos());
+		
+		return (ClientEditHandler.isActive() && !(block.getDestroySpeed(player.getLevel(), blockHit.getBlockPos()) < 0 || block.getMaterial() == Material.PORTAL) && !isMultiblock(player));
 	}
 	
 	/**
