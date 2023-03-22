@@ -557,6 +557,7 @@ public class MSBlocks
 	
 	//Misc Core Objects
 	public static final RegistryObject<Block> CRUXITE_DOWEL = REGISTER.register("cruxite_dowel", () -> new CruxiteDowelBlock(Block.Properties.of(Material.GLASS).strength(0.0F)));
+	public static final RegistryObject<Block> EMERGING_CRUXITE_DOWEL = REGISTER.register("emerging_cruxite_dowel", () -> new EmergingCruxiteDowelBlock(Block.Properties.of(Material.GLASS).strength(0.0F)));
 	public static final LotusTimeCapsuleMultiblock LOTUS_TIME_CAPSULE_BLOCK = new LotusTimeCapsuleMultiblock(REGISTER);
 	
 	

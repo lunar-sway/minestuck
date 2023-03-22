@@ -1,5 +1,6 @@
 {
     "ambientocclusion": false,
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/breath_aspect_ladder",
         "texture": "minestuck:block/breath_aspect_ladder"

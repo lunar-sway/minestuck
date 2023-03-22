@@ -1,6 +1,7 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -26,11 +27,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CruxiteDowelBlock extends Block implements EntityBlock
 {
-	public static final VoxelShape CRUXTRUDER_SHAPE = Block.box(5, 0, 5, 11, 5, 11);
 	public static final VoxelShape DOWEL_SHAPE = Block.box(5, 0, 5, 11, 8, 11);
 	
 	public static final EnumProperty<Type> DOWEL_TYPE = MSProperties.DOWEL_BLOCK;
@@ -45,7 +48,7 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		return state.getValue(DOWEL_TYPE) == Type.CRUXTRUDER ? CRUXTRUDER_SHAPE : DOWEL_SHAPE;
+		return DOWEL_SHAPE;
 	}
 	
 	@Nullable
@@ -61,10 +64,9 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		if (builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
-		{
-			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(stackEntity.getStack()));
-		}
+		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC,
+					(context, consumer) -> consumer.accept(stackEntity.getStack()));
 		
 		return super.getDrops(state, builder);
 	}
@@ -122,7 +124,6 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	
 	public enum Type implements StringRepresentable
 	{
-		CRUXTRUDER,
 		DOWEL,
 		TOTEM;
 		

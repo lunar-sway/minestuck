@@ -75,10 +75,12 @@ public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> imp
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		BlockPos MainPos = getMainPos(state, pos);
-		if(level.getBlockEntity(MainPos) instanceof CruxtruderBlockEntity cruxtruder)
+		BlockPos mainPos = getMainPos(state, pos);
+		if(level.getBlockEntity(mainPos) instanceof CruxtruderBlockEntity cruxtruder)
 		{
-			cruxtruder.destroy();
+			cruxtruder.setBroken();
+			if(pos.equals(mainPos))
+				cruxtruder.dropItems();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);

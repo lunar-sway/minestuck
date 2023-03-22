@@ -1,5 +1,6 @@
 {
     "ambientocclusion": false,
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/end_ladder",
         "texture": "minestuck:block/end_ladder"

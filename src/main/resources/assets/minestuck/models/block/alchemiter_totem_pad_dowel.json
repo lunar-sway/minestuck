@@ -1,4 +1,5 @@
 {
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/machine/alchemiter/corner_top",
         "pad": "minestuck:block/machine/alchemiter/totem_pad",

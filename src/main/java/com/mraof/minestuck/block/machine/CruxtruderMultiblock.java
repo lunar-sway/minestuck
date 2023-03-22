@@ -48,4 +48,9 @@ public class CruxtruderMultiblock extends MachineMultiblock
 	{
 		return tubePlacement.findPlacement(pos, level.getBlockState(pos));
 	}
+	
+	public boolean isInvalidFromTube(LevelAccessor level, BlockPos pos)
+	{
+		return this.isInvalidFromPlacement(level, pos, this.tubePlacement);
+	}
 }

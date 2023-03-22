@@ -1,4 +1,5 @@
 {
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/machine/totem_lathe/rod_right_1",
         "rod_1":    "minestuck:block/machine/totem_lathe/rod_right_1",

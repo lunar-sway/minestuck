@@ -3,7 +3,6 @@
     "minestuck:frost_leaves",
     "minestuck:rainbow_leaves",
     "minestuck:end_leaves",
-    "#minestuck:leaves/aspect",
-    "#minestuck:leaves/shadewood"
+    "#minestuck:leaves/aspect"
   ]
 }
