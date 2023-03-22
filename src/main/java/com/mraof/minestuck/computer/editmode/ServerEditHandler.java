@@ -544,17 +544,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if (player == null)
 			throw new NullPointerException("Server Player is NULL in updateEditToolsServer()!");
 		else if (player.getLevel().isClientSide())
-		{
-			player.sendSystemMessage(Component.literal("Server Player is clientside in updateEditToolsServer()!"), true);
-			return;
-		}
+			throw new IllegalStateException("Server Level is clientside in updateEditToolsServer()!");
 		
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
 		if(cap == null)
-			player.sendSystemMessage(Component.literal("Capability is null in updateEditToolsServer()!"), true);
-		cap.setEditDragging(isDragging);
-		cap.setEditPos1(pos1);
-		cap.setEditPos2(pos2);
+			throw new NullPointerException("EditTools Capability is NULL in updateEditToolsServer()!");
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();

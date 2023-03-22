@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class EditTools implements IEditTools
@@ -19,32 +21,36 @@ public class EditTools implements IEditTools
 	private boolean isEditDragging = false;
 	private UUID editCursorID = null;
 	
+	@Nullable
 	@Override
 	public ToolMode getToolMode() { return toolMode; }
 	
+	@Nullable
 	@Override
 	public BlockPos getEditPos1() {
 		return editPos1;
 	}
 	
+	@Nullable
 	@Override
 	public BlockPos getEditPos2() {
 		return editPos2;
 	}
 	
+	@Nonnull
 	@Override
 	public Vec3 getEditTraceHit() {
 		return editTraceHit;
 	}
 	
+	@Nonnull
 	@Override
-	public Direction getEditTraceDirection() {
-		return editTraceDirection;
-	}
+	public Direction getEditTraceDirection() { return editTraceDirection; }
 	
 	@Override
 	public double getEditReachDistance() { return editReachDistance; }
 	
+	@Nullable
 	@Override
 	public UUID getEditCursorID() { return editCursorID; }
 	
@@ -62,12 +68,17 @@ public class EditTools implements IEditTools
 	}
 	
 	@Override
-	public void setEditTraceHit(Vec3 hit) {
+	public void setEditTrace(Vec3 hit, Direction direction)
+	{
+		setEditTraceHit(hit);
+		setEditTraceDirection(direction);
+	}
+	
+	private void setEditTraceHit(Vec3 hit) {
 		editTraceHit = hit;
 	}
 	
-	@Override
-	public void setEditTraceDirection(Direction direction) {
+	private void setEditTraceDirection(Direction direction) {
 		editTraceDirection = direction;
 	}
 	
@@ -77,6 +88,7 @@ public class EditTools implements IEditTools
 	@Override
 	public void setEditCursorID(UUID uuid) { editCursorID = uuid; }
 	
+	
 	@Override
 	public boolean isEditDragging() {
 		return isEditDragging;
@@ -85,5 +97,18 @@ public class EditTools implements IEditTools
 	@Override
 	public void setEditDragging(boolean v) {
 		isEditDragging = v;
+	}
+	
+	
+	@Override
+	public void resetDragTools()
+	{
+		setToolMode(null);
+		setEditPos1(null);
+		setEditPos2(null);
+		setEditTrace(new Vec3(0,0,0), Direction.NORTH);
+		setEditReachDistance(0);
+		setEditDragging(false);
+		setEditCursorID(null);
 	}
 }

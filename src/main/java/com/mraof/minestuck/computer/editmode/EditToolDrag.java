@@ -81,13 +81,9 @@ public class EditToolDrag
 		
 		if (isDown)
 		{
-			
 			if(!canEditRevise(player))
 			{
-				cap.setToolMode(null);
-				cap.setEditDragging(false);
-				cap.setEditPos1(null);
-				cap.setEditPos2(null);
+				cap.resetDragTools();
 				return;
 			}
 		
@@ -99,13 +95,10 @@ public class EditToolDrag
 					cap.setToolMode(IEditTools.ToolMode.REVISE);
 					
 					cap.setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
-					cap.setEditTraceHit(blockHit.getLocation());
-					cap.setEditTraceDirection(blockHit.getDirection());
+					cap.setEditTrace(blockHit.getLocation(), blockHit.getDirection());
 					cap.setEditReachDistance(Math.sqrt(cap.getEditPos1().distToLowCornerSqr(player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z)));
-					
 				}
 			}
-			
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
@@ -119,9 +112,7 @@ public class EditToolDrag
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
 			
-			cap.setToolMode(null);
-			cap.setEditPos1(null);
-			cap.setEditPos2(null);
+			cap.resetDragTools();
 		}
 		
 		cap.setEditDragging(isDown);
@@ -161,13 +152,9 @@ public class EditToolDrag
 		
 		if (isDown)
 		{
-			
 			if(!canEditRecycle(player))
 			{
-				cap.setToolMode(null);
-				cap.setEditDragging(false);
-				cap.setEditPos1(null);
-				cap.setEditPos2(null);
+				cap.resetDragTools();
 				return;
 			}
 			
@@ -179,13 +166,10 @@ public class EditToolDrag
 					cap.setToolMode(IEditTools.ToolMode.RECYCLE);
 					
 					cap.setEditPos1(blockHit.getBlockPos());
-					cap.setEditTraceHit(blockHit.getLocation());
-					cap.setEditTraceDirection(blockHit.getDirection());
+					cap.setEditTrace(blockHit.getLocation(), blockHit.getDirection());
 					cap.setEditReachDistance(Math.sqrt(cap.getEditPos1().distToLowCornerSqr(player.getEyePosition().x, player.getEyePosition().y, player.getEyePosition().z)));
-					
 				}
 			}
-			
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
@@ -199,9 +183,7 @@ public class EditToolDrag
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
 			
-			cap.setToolMode(null);
-			cap.setEditPos1(null);
-			cap.setEditPos2(null);
+			cap.resetDragTools();
 		}
 		
 		cap.setEditDragging(isDown);

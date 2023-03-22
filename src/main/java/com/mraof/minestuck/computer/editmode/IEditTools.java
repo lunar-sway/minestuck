@@ -2,9 +2,10 @@ package com.mraof.minestuck.computer.editmode;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 /**
@@ -24,22 +25,29 @@ public interface IEditTools
 		RECYCLE
 	}
 	
+	@Nullable
 	ToolMode getToolMode();
+	@Nullable
 	BlockPos getEditPos1();
+	@Nullable
 	BlockPos getEditPos2();
+	@Nonnull
 	Vec3 getEditTraceHit();
+	@Nonnull
 	Direction getEditTraceDirection();
 	double getEditReachDistance();
+	@Nullable
 	UUID getEditCursorID();
 	
 	void setToolMode(ToolMode mode);
 	void setEditPos1(BlockPos pos);
 	void setEditPos2(BlockPos pos);
-	void setEditTraceHit(Vec3 hit);
-	void setEditTraceDirection(Direction direction);
+	void setEditTrace(Vec3 hit, Direction direction);
 	void setEditReachDistance(double reachDistance);
 	void setEditCursorID(UUID uuid);
 	
 	boolean isEditDragging();
 	void setEditDragging(boolean v);
+	
+	void resetDragTools();
 }

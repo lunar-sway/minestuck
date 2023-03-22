@@ -78,8 +78,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		cap.setEditDragging(isDown);
 		cap.setEditPos1(positionStart);
 		cap.setEditPos2(positionEnd);
-		cap.setEditTraceHit(hitVector);
-		cap.setEditTraceDirection(side);
+		cap.setEditTrace(hitVector, side);
 		
 		if(!isDown)
 		{
