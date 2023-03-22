@@ -31,8 +31,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.ToolAction;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.*;
 
@@ -125,7 +123,7 @@ public class MSItems
 	public static final RegistryObject<Item> LOCKSOFTENER = REGISTER.register("locksoftener", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(500).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> INKSPLOCKER_UNLOCKER = REGISTER.register("inksplocker_unlocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> INKSQUIDDER_DEPTHKEY = REGISTER.register("inksquidder_depthkey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().tab(MSItemGroup.WEAPONS)));
-	public static final RegistryObject<Item> REGIKEY = REGISTER.register("regikey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> REGIKEY = REGISTER.register("regikey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	
 	
 	
@@ -162,7 +160,7 @@ public class MSItems
 	
 	
 	//Claws
-	public static final RegistryObject<Item> MAKESHIFT_CLAWS_DRAWN = REGISTER.register("makeshift_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_SHEATHED)), new Item.Properties().defaultDurability(200).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> MAKESHIFT_CLAWS_DRAWN = REGISTER.register("makeshift_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, 1, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_SHEATHED)), new Item.Properties().defaultDurability(200).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> MAKESHIFT_CLAWS_SHEATHED = REGISTER.register("makeshift_claws_sheathed", () -> new WeaponItem(new WeaponItem.Builder(Tiers.STONE, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.MAKESHIFT_CLAWS_DRAWN)), new Item.Properties().defaultDurability(200)));
 	public static final RegistryObject<Item> CAT_CLAWS_DRAWN = REGISTER.register("cat_claws_drawn", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.5F).efficiency(10.0F).set(MSItemTypes.CLAWS_TOOL).set(ItemRightClickEffect.switchTo(MSItems.CAT_CLAWS_SHEATHED)), new Item.Properties().defaultDurability(500).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> CAT_CLAWS_SHEATHED = REGISTER.register("cat_claws_sheathed", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, -1, -1.0F).efficiency(10.0F).set(ItemRightClickEffect.switchTo(MSItems.CAT_CLAWS_DRAWN)), new Item.Properties().defaultDurability(500)));
@@ -237,11 +235,13 @@ public class MSItems
 	
 	//Scythes
 	public static final RegistryObject<Item> SCYTHE = REGISTER.register("scythe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> KISSY_CUTIE_HEART_SPLITTER = REGISTER.register("kissy_cutie_heart_splitter", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.6F).efficiency(10.0F).disableShield().set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.KISSY_CUTIE_HEART_HITTER)), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> EIGHTBALL_SCYTHE = REGISTER.register("eightball_scythe", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.RANDOM_DAMAGE).set(ItemRightClickEffect.EIGHTBALL), new Item.Properties().defaultDurability(600).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> TIME_FLAYER = REGISTER.register("time_flayer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 3, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.TIME_SLOWNESS_AOE).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SUNRAY_HARVESTER = REGISTER.register("sunray_harvester", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.setOnFire(35)), new Item.Properties().defaultDurability(1200).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> GREEN_SUN_RAYREAPER = REGISTER.register("green_sun_rayreaper", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 7, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL).add(OnHitEffect.setOnFire(10)), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> SKAITHE = REGISTER.register("skaithe", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.6F).efficiency(1.5F).disableShield().set(MSItemTypes.SICKLE_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
+	
 	public static final RegistryObject<Item> HELLBRINGERS_HOE_INACTIVE = REGISTER.register("hellbringers_hoe_inactive", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 3, -2.4F).efficiency(10.0F).set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.HELLBRINGERS_HOE_ACTIVE)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> HELLBRINGERS_HOE_ACTIVE = REGISTER.register("hellbringers_hoe_active", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 2, -2.4F).efficiency(10.0F).set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.HELLBRINGERS_HOE_INACTIVE)).add(OnHitEffect.setOnFire(10)), new Item.Properties()));
 	
@@ -288,7 +288,6 @@ public class MSItems
 	public static final RegistryObject<Item> UPPER_CRUST_CRUST_CANE = REGISTER.register("upper_crust_crust_cane", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SPAWN_BREADCRUMBS).setEating(FinishUseItemEffect.SPAWN_BREADCRUMBS, FinishUseItemEffect.foodEffect(4, 0.5F)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> IRON_CANE = REGISTER.register("iron_cane", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> KISSY_CUTIE_HEART_HITTER = REGISTER.register("kissy_cutie_heart_hitter", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.KISSY_CUTIE_HEART_SPLITTER)), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
-	public static final RegistryObject<Item> KISSY_CUTIE_HEART_SPLITTER = REGISTER.register("kissy_cutie_heart_splitter", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 4, -2.6F).efficiency(10.0F).disableShield().set(MSItemTypes.SICKLE_TOOL).set(ItemRightClickEffect.switchTo(MSItems.KISSY_CUTIE_HEART_HITTER)), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ZEPHYR_CANE = REGISTER.register("zephyr_cane", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(PropelEffect.BREATH_PROPEL), new Item.Properties().tab(MSItemGroup.WEAPONS).defaultDurability(2048).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> SPEAR_CANE = REGISTER.register("spear_cane", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> PARADISES_PORTABELLO = REGISTER.register("paradises_portabello", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().tab(MSItemGroup.WEAPONS)));

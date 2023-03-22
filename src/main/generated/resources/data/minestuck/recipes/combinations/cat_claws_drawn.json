@@ -4,7 +4,7 @@
     "item": "minestuck:makeshift_claws_drawn"
   },
   "input2": {
-    "item": "minecraft:string"
+    "tag": "forge:ingots/iron"
   },
   "mode": "or",
   "output": {
