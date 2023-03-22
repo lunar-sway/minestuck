@@ -37,6 +37,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
+
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class EditToolDrag
 {
@@ -57,6 +58,9 @@ public class EditToolDrag
 		EditToolDrag.renderOutlines(event);
 	}
 	
+	/**
+	 * Handles code for the revise tool on the client-side.
+	 */
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
@@ -104,21 +108,7 @@ public class EditToolDrag
 			
 			if (cap.getEditPos1() != null)
 			{
-				
-				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
-				BlockPos pos2;
-				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
-				if (blockHit.getType() == BlockHitResult.Type.MISS)
-				{
-					Vec3 eyePosition = player.getEyePosition();
-					Vec3 lookDirection = player.getLookAngle();
-					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
-					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
-				}
-				else
-					pos2 = player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
-				
-				cap.setEditPos2(pos2);
+				cap.setEditPos2(getSelectionEndPoint(player, cap));
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
 		}
@@ -137,6 +127,11 @@ public class EditToolDrag
 		cap.setEditDragging(isDown);
 	}
 	
+	/**
+	 * Determines whether the player can use the revise tool when right-clicking, based on the block that they are holding.
+	 * @param player The client-side player.
+	 * @return True if you are in editmode and holding a non-deployable block, else false.
+	 */
 	public static boolean canEditRevise(Player player)
 	{
 		return (ClientEditHandler.isActive()
@@ -144,6 +139,9 @@ public class EditToolDrag
 				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
 	}
 	
+	/**
+	 * Handles code for the recycle tool on the client-side.
+	 */
 	public static void doRecycleCode(TickEvent.ClientTickEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
@@ -188,22 +186,9 @@ public class EditToolDrag
 				}
 			}
 			
-			if (cap.getEditPos1() != null) {
-				
-				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
-				BlockPos pos2;
-				//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
-				if (blockHit.getType() == BlockHitResult.Type.MISS)
-				{
-					Vec3 eyePosition = player.getEyePosition();
-					Vec3 lookDirection = player.getLookAngle();
-					Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
-					pos2 = new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
-				}
-				else
-					pos2 = blockHit.getBlockPos();
-				
-				cap.setEditPos2(pos2);
+			if (cap.getEditPos1() != null)
+			{
+				cap.setEditPos2(getSelectionEndPoint(player, cap));
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			}
 		}
@@ -222,18 +207,66 @@ public class EditToolDrag
 		cap.setEditDragging(isDown);
 	}
 	
+	/**
+	 * Determines whether the player can use the recycle tool when left-clicking,
+	 * based on the block that they are looking at.
+	 * @param player The client-side editmode player.
+	 * @return True if you are in editmode and NOT looking directly at a multiblock. Else false.
+	 */
 	public static boolean canEditRecycle(Player player)
 	{
 		return (ClientEditHandler.isActive() && !isMultiblock(player));
 	}
 	
+	/**
+	 * Calculates the second corner of a revise/recycle selection,
+	 * based on whether the player is pointing at a block or not,
+	 * and the distance from the player to the block they first highlighted
+	 * at the start of the selection.
+	 * @param player The client-side editmode player.
+	 * @param cap The player's current EditTools capability.
+	 * @return The BlockPos of the second corner of the revise/recycle selection box.
+	 */
+	private static BlockPos getSelectionEndPoint(Player player, IEditTools cap)
+	{
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+
+		//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
+		if (blockHit.getType() == BlockHitResult.Type.MISS)
+		{
+			Vec3 eyePosition = player.getEyePosition();
+			Vec3 lookDirection = player.getLookAngle();
+			Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
+			return new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
+		}
+		else
+		{
+			if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
+				return player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
+			else if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
+				return blockHit.getBlockPos();
+			else
+				throw new IllegalStateException("Do not call getSelectionEndPoint() if your tool is not Revise or Recycle!");
+		}
+	}
+	
+	/**
+	 * Determines whether the block that the player is holding is deployable or not.
+	 * @param player The client-side editmode player.
+	 * @return True if item is in the deploy list, a block-item, and a machine.
+	 */
 	private static boolean isBlockDeployable(Player player)
 	{
 			ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
 		
 			return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof MachineBlock;
 	}
-
+	
+	/**
+	 * Determines whether the block that the player is highlighting is a destroyable multiblock or not.
+	 * @param player The client-side editmode player.
+	 * @return True if the player is looking at a block, and the block implements EditmodeDestroyable.
+	 */
 	private static boolean isMultiblock(Player player)
 	{
 			BlockPos blockLookingAt = getPlayerPOVHitResult(player.getLevel(), player).getBlockPos();
@@ -241,23 +274,35 @@ public class EditToolDrag
 			return (player.getLevel().getBlockState(blockLookingAt) != null && (player.getLevel().getBlockState(blockLookingAt).getBlock() instanceof EditmodeDestroyable));
 	}
 	
-	//based on the Item class function of the same name
-	private static BlockHitResult getPlayerPOVHitResult(Level level, Player playerEntity)
+	/**
+	 * Casts a ray from the player's camera, in the direction that they're looking, and returns the result.
+	 * The ray has the same length as the player's reach distance.
+	 * Based on the Item class function of the same name.
+	 * @param level The level the player is in.
+	 * @param player The current editmode player.
+	 * @return The raycast result of the block the player is highlighting, if there is one within reach.
+	 * getType() is BlockHitResult.Type.MISS if no highlighted block.
+	 */
+	private static BlockHitResult getPlayerPOVHitResult(Level level, Player player)
 	{
-		float xRot = playerEntity.getXRot();
-		float yRot = playerEntity.getYRot();
-		Vec3 eyeVec = playerEntity.getEyePosition(1.0F);
+		float xRot = player.getXRot();
+		float yRot = player.getYRot();
+		Vec3 eyeVec = player.getEyePosition(1.0F);
 		float f2 = Mth.cos(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
 		float f3 = Mth.sin(-yRot * ((float) Math.PI / 180F) - (float) Math.PI);
 		float f4 = -Mth.cos(-xRot * ((float) Math.PI / 180F));
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		double reachDistance = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
-		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
+		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
 	
+	
+	/**
+	 * Renders the outlines of the selection box. Green if revise, red if recycle.
+	 */
 	public static void renderOutlines(RenderLevelStageEvent event)
 	{
 		Minecraft mc = Minecraft.getInstance();
@@ -269,7 +314,9 @@ public class EditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
+			if(cap == null)
+				throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;
