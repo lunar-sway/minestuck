@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.blockentity.machine.UraniumCookerBlockEntity;
 import net.minecraft.client.renderer.GameRenderer;
@@ -9,29 +10,23 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+public final class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/uranium_cooker.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
-	
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/uranium_cooker.png");
+	private static final ResourceLocation FUEL_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
+	private static final int FUEL_BAR_X = 67;
+	private static final int FUEL_BAR_Y = 24;
+	private static final int FUEL_BAR_WIDTH = 35;
+	private static final int FUEL_BAR_HEIGHT = 39;
+	private static final int BUTTON_X = 69;
+	private static final int BUTTON_Y = 69;
 	
 	public UraniumCookerScreen(UraniumCookerMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(UraniumCookerBlockEntity.TYPE, screenContainer, inv, titleIn);
-		
-		//sets progress bar information
-		progressX = 67;
-		progressY = 24;
-		progressWidth = 35;
-		progressHeight = 39;
-		goX = 69;
-		goY = 69;
 	}
 	
 	@Override
@@ -45,20 +40,16 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	@Override
 	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
 	{
-		int x = (width - imageWidth) / 2;
-		int y = (height - imageHeight) / 2;
-		
-		//draw background
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, BACKGROUND);
-		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
 		
-		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = progressWidth;
-		int height = getScaledValue(menu.getFuel(), UraniumCookerBlockEntity.MAX_FUEL, progressHeight);
-		blit(poseStack, x+progressX, y+progressY+progressHeight-height, 0, progressHeight-height, width, height, progressWidth, progressHeight);
+		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		
+		RenderSystem.setShaderTexture(0, FUEL_BAR_TEXTURE);
+		int height = getScaledValue(menu.getFuel(), UraniumCookerBlockEntity.MAX_FUEL, FUEL_BAR_HEIGHT);
+		blit(poseStack, this.leftPos + FUEL_BAR_X, this.topPos + FUEL_BAR_Y + FUEL_BAR_HEIGHT - height,
+				0, FUEL_BAR_HEIGHT - height, FUEL_BAR_WIDTH, height, FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT);
 	}
 	
 	@Override
@@ -66,7 +57,6 @@ public class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
-		addRenderableWidget(goButton);
+		goButton = addRenderableWidget(new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true));
 	}
 }
