@@ -32,11 +32,10 @@ import java.util.Optional;
 
 public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE_OR_LOOPING;
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final short MAX_FUEL = 128;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, 0);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged);
 	private short fuel = 0;
 	
 	@Nullable

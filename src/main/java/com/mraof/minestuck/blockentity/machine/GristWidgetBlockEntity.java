@@ -35,10 +35,9 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String TITLE = "container.minestuck.grist_widget";
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE_OR_LOOPING;
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged);
 	private PlayerIdentifier owner;
 	
 	public GristWidgetBlockEntity(BlockPos pos, BlockState state)

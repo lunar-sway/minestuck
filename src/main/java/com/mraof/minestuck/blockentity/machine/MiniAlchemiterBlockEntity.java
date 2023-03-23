@@ -34,11 +34,10 @@ import javax.annotation.Nullable;
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
-	public static final ProgressTracker.RunType TYPE = ProgressTracker.RunType.ONCE_OR_LOOPING;
 	public static final int INPUT = 0, OUTPUT = 1;
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(TYPE, MAX_PROGRESS);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged);
 	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override

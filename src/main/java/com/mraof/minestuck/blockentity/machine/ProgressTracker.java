@@ -6,6 +6,9 @@ import net.minecraft.world.inventory.ContainerData;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BooleanSupplier;
 
+/**
+ * An object for tracking progress for a machine by being called each tick.
+ */
 @ParametersAreNonnullByDefault
 public final class ProgressTracker implements ContainerData
 {
@@ -13,22 +16,48 @@ public final class ProgressTracker implements ContainerData
 	
 	private final RunType type;
 	private final int maxProgress;
-	private int progress;
-	private boolean shouldRun;
-	private boolean isLooping;
+	private final Runnable onChanged;
+	private int progress = 0;
+	private boolean shouldRun = false;
+	private boolean isLooping = false;
 	
-	public ProgressTracker(RunType type, int maxProgress)
+	public ProgressTracker(RunType type, int maxProgress, Runnable onChanged)
 	{
 		this.type = type;
 		this.maxProgress = maxProgress;
-		resetProgress();
+		this.onChanged = onChanged;
+		
+		updateRunAndLooping();
 	}
 	
 	public void resetProgress()
 	{
-		this.progress = 0;
-		this.shouldRun = false;
+		if(this.shouldRun)
+		{
+			boolean changed = this.progress != 0;
+			this.progress = 0;
+			this.shouldRun = false;
+			updateRunAndLooping();
+			if(changed)
+				this.onChanged.run();
+		}
+	}
+	
+	public void setShouldRun(boolean shouldRun)
+	{
+		if(shouldRun)
+			this.shouldRun = true;
+		else
+			resetProgress();
+	}
+	
+	public void setIsLooping(boolean isLooping)
+	{
+		boolean wasLooping = this.isLooping;
+		this.isLooping = isLooping;
 		updateRunAndLooping();
+		if(wasLooping != this.isLooping)
+			this.onChanged.run();
 	}
 	
 	private void updateRunAndLooping()
@@ -47,6 +76,7 @@ public final class ProgressTracker implements ContainerData
 		}
 		
 		this.progress++;
+		this.onChanged.run();
 		
 		if(this.progress >= this.maxProgress)
 		{
@@ -60,6 +90,7 @@ public final class ProgressTracker implements ContainerData
 		this.progress = tag.getInt("progress");
 		if(this.type == ProgressTracker.RunType.ONCE_OR_LOOPING)
 			this.isLooping = tag.getBoolean("isLooping");
+		this.shouldRun = this.progress != 0 || this.isLooping;
 	}
 	
 	public void save(CompoundTag tag)
@@ -77,7 +108,7 @@ public final class ProgressTracker implements ContainerData
 					case PROGRESS_INDEX -> this.progress;
 					case RUN_INDEX -> this.shouldRun ? 1 : 0;
 					case LOOPING_INDEX -> this.isLooping ? 1 : 0;
-					default -> 0;
+					default -> throw new UnsupportedOperationException("Unknown data index was used: " + index);
 				};
 	}
 	
@@ -86,11 +117,11 @@ public final class ProgressTracker implements ContainerData
 	{
 		switch(index)
 		{
-			case PROGRESS_INDEX -> this.progress = value;
-			case RUN_INDEX -> this.shouldRun = value != 0;
-			case LOOPING_INDEX -> this.isLooping = value != 0;
+			case PROGRESS_INDEX -> throw new UnsupportedOperationException("Progress shouldn't be changed from outside");
+			case RUN_INDEX -> this.setShouldRun(value != 0);
+			case LOOPING_INDEX -> this.setIsLooping(value != 0);
+			default -> throw new UnsupportedOperationException("Unknown data index was used: " + index);
 		}
-		updateRunAndLooping();
 	}
 	
 	@Override
