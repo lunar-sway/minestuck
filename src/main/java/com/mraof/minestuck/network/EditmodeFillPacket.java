@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +18,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -112,6 +116,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							{
 								if(player.isCreative())
 									stack.setCount(c);
+								
+								
 								swingArm = true;
 							}
 						} else
@@ -119,6 +125,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							if(editModeDestroyCheck(player.getLevel(), player, pos) && !player.getLevel().getBlockState(pos).isAir())
 							{
 								player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+								player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
+								player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
 								swingArm = true;
 							}
 						}
@@ -126,7 +134,11 @@ public class EditmodeFillPacket implements PlayToServerPacket
 				}
 			}
 			if(swingArm)
+			{
+				SoundType soundType = fill ? ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType() : player.getLevel().getBlockState(positionEnd).getSoundType();
+				player.getLevel().playSound(player, positionEnd, fill ? soundType.getPlaceSound() : soundType.getBreakSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 				player.swing(hand);
+			}
 			
 			ServerEditHandler.removeCursorEntity(player);
 		}

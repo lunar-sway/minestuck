@@ -18,12 +18,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
@@ -112,6 +114,7 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				playSoundAndSetParticles(player, true, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
 			cap.resetDragTools();
@@ -183,6 +186,7 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				playSoundAndSetParticles(player, false, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
 			cap.resetDragTools();
@@ -203,6 +207,32 @@ public class EditToolDrag
 		BlockState block = player.getLevel().getBlockState(blockHit.getBlockPos());
 		
 		return (ClientEditHandler.isActive() && !(block.getDestroySpeed(player.getLevel(), blockHit.getBlockPos()) < 0 || block.getMaterial() == Material.PORTAL) && !isMultiblock(player));
+	}
+	
+	/**
+	 * Sets particles and sounds for local player, since level.playSound only broadcasts to other, non-local players.
+	 */
+	private static void playSoundAndSetParticles(Player player, boolean fill, BlockPos positionStart, BlockPos positionEnd)
+	{
+		ItemStack stack = player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
+		SoundType soundType = fill ? ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType() : player.getLevel().getBlockState(positionEnd).getSoundType();
+		player.getLevel().playSound(player, positionEnd, fill ? soundType.getPlaceSound() : soundType.getBreakSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+		
+		if(!fill)
+		{
+			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
+			{
+				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
+				{
+					for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
+					{
+						BlockPos pos = new BlockPos(x, y, z);
+						if(!player.getLevel().getBlockState(pos).isAir())
+							player.level.addDestroyBlockEffect(pos, player.getLevel().getBlockState(pos));
+					}
+				}
+			}
+		}
 	}
 	
 	/**
