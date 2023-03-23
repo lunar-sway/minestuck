@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
@@ -14,31 +15,23 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/widget.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/widget.png");
-	
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/widget.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/widget.png");
+	private static final int PROGRESS_BAR_X = 54;
+	private static final int PROGRESS_BAR_Y = 23;
+	private static final int PROGRESS_BAR_WIDTH = 71;
+	private static final int PROGRESS_BAR_HEIGHT = 10;
+	private static final int BUTTON_X = 72;
+	private static final int BUTTON_Y = 31;
 	
 	public GristWidgetScreen(GristWidgetMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
-		
-		//sets prgress bar information
-		progressX = 54;
-		progressY = 23;
-		progressWidth = 71;
-		progressHeight = 10;
-		goX = 72;
-		goY = 31;
 	}
 	
 	@Override
@@ -52,9 +45,9 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	@Override
 	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
 	{
-		font.draw(poseStack, this.title.getString(), 8, 6, 0xFFFFFF);
-		//draws "Inventory" or your regional equivalent
-		font.draw(poseStack, playerInventoryTitle.getString(), 8, imageHeight - 96 + 2, 0xFFFFFF);
+		Objects.requireNonNull(this.minecraft);
+		super.renderLabels(poseStack, mouseX, mouseY);
+		
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
@@ -64,7 +57,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 			
 			int cost = GristWidgetBlockEntity.getGristWidgetBoondollarValue(set);
 			long has = ClientPlayerData.getBoondollars();
-			String costText = GuiUtil.addSuffix(cost)+"\u00a3("+GuiUtil.addSuffix(has)+")";
+			String costText = GuiUtil.addSuffix(cost)+"£("+GuiUtil.addSuffix(has)+")";
 			font.draw(poseStack, costText, imageWidth - 9 - font.width(costText), imageHeight - 96 + 3, cost > has ? 0xFF0000 : 0x00FF00);
 			
 			Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.GRIST_WIDGET, mouseX - this.leftPos, mouseY - this.topPos, 9, 45, font);
@@ -85,20 +78,16 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	@Override
 	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
 	{
-		int x = (width - imageWidth) / 2;
-		int y = (height - imageHeight) / 2;
-
-		//draw background
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, BACKGROUND);
-		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
-
-		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), GristWidgetBlockEntity.MAX_PROGRESS, progressWidth);
-		int height = progressHeight;
-		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
+		
+		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		
+		RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
+		int width = getScaledValue(menu.getProgress(), GristWidgetBlockEntity.MAX_PROGRESS, PROGRESS_BAR_WIDTH);
+		blit(poseStack, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y,
+				0, 0, width, PROGRESS_BAR_HEIGHT, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 	
 	@Override
@@ -106,8 +95,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	{
 		super.init();
 		
-		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
-		addRenderableWidget(goButton);
+		goButton = addRenderableWidget(new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true));
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			goButton.active = false;
 	}
