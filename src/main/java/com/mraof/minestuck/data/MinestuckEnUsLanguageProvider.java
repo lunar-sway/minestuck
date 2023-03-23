@@ -18,6 +18,7 @@ import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.DiskBurner;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.computer.ColorPickerProgram;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -1655,6 +1656,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
+		add(ColorPickerProgram.NAME, "Color Picker");
+		add(ColorPickerProgram.CHOOSE, "Choose");
+		add(ColorPickerProgram.SELECTED, "Selected Color %s");
 		add(DiskBurner.NAME, "Disk Burner");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");

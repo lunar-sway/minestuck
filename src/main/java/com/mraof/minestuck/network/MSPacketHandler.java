@@ -38,6 +38,7 @@ public class MSPacketHandler
 		
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
+		registerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
 		registerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
 		registerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
