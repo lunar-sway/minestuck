@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +36,7 @@ public final class LandTypeGenerator
 	 */
 	public TerrainLandType getTerrainAspect(TitleLandType aspect2, List<TerrainLandType> usedAspects)
 	{
-		TerrainLandType aspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TERRAIN_REGISTRY.get()), aspect2::isAspectCompatible);
+		TerrainLandType aspect = selectRandomAspect(usedAspects, LandTypeSelection.terrainAlternatives(), aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
 		else
@@ -52,30 +51,30 @@ public final class LandTypeGenerator
 		TitleLandType landAspect;
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, titleAlternatives(), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
 		} else
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, titleAlternatives(), aspect -> aspect.getAspect() == titleAspect);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return LandTypes.TITLE_NULL.get();
 	}
 	
-	private <A extends ILandType> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)
+	private static Collection<List<TitleLandType>> titleAlternatives()
 	{
-		Map<ResourceLocation, List<A>> groupMap = Maps.newHashMap();
-		for(A landType : registry)
+		Map<ResourceLocation, List<TitleLandType>> groupMap = Maps.newHashMap();
+		for(TitleLandType landType : LandTypes.TITLE_REGISTRY.get())
 		{
 			if(landType.canBePickedAtRandom())
 				groupMap.computeIfAbsent(landType.getGroup(), _landType -> Lists.newArrayList()).add(landType);
 		}
-		return groupMap;
+		return groupMap.values();
 	}
 	
-	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Iterable<? extends Iterable<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
-		for(List<A> aspects : groupMap.values())
+		for(Iterable<A> aspects : groupMap)
 		{
 			List<A> variantList = Lists.newArrayList(aspects);
 			variantList.removeIf(condition.negate());

@@ -54,7 +54,9 @@ public abstract class TitleLandType implements ILandType
 		return true;
 	}
 	
-	@Override
+	/**
+	 * Returns true if the land type should be available when a land type is picked randomly.
+	 */
 	public final boolean canBePickedAtRandom()
 	{
 		return pickedAtRandom;

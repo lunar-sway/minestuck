@@ -28,7 +28,6 @@ public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
 	private final ResourceLocation groupName;
-	private final boolean pickedAtRandom;
 	private final String[] names;
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -41,7 +40,6 @@ public abstract class TerrainLandType implements ILandType
 	protected TerrainLandType(Builder builder)
 	{
 		this.groupName = builder.group;
-		this.pickedAtRandom = builder.pickedAtRandom;
 		this.names = Objects.requireNonNull(builder.names);
 		
 		this.consortType = builder.consortType;
@@ -65,12 +63,6 @@ public abstract class TerrainLandType implements ILandType
 	public final Vec3 getSkyColor()
 	{
 		return this.skyColor;
-	}
-	
-	@Override
-	public final boolean canBePickedAtRandom()
-	{
-		return pickedAtRandom;
 	}
 	
 	@Override
@@ -124,7 +116,6 @@ public abstract class TerrainLandType implements ILandType
 	
 	public static class Builder
 	{
-		private boolean pickedAtRandom = true;
 		private ResourceLocation group = null;
 		private String[] names;
 		
@@ -138,12 +129,6 @@ public abstract class TerrainLandType implements ILandType
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
 		{
 			this.consortType = consortType;
-		}
-		
-		public Builder unavailable()
-		{
-			this.pickedAtRandom = false;
-			return this;
 		}
 		
 		public Builder group(ResourceLocation group)
