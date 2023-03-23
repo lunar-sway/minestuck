@@ -1,8 +1,9 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mraof.minestuck.inventory.MachineContainerMenu;
-import com.mraof.minestuck.network.GoButtonPacket;
+import com.mraof.minestuck.network.SetMachineRunningPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.SetMachineLoopingPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -94,11 +95,11 @@ public class GoButton extends ExtendedButton
 	
 	private void onRegularClick()
 	{
-		MSPacketHandler.sendToServer(new GoButtonPacket(!this.menu.isRunning(), false));
+		MSPacketHandler.sendToServer(new SetMachineRunningPacket(!this.menu.isRunning()));
 	}
 	
 	private void onLoopClick()
 	{
-		MSPacketHandler.sendToServer(new GoButtonPacket(true, !menu.isLooping()));
+		MSPacketHandler.sendToServer(new SetMachineLoopingPacket(!this.menu.isLooping()));
 	}
 }
