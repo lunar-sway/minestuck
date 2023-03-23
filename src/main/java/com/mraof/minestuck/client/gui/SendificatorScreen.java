@@ -2,6 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -21,15 +22,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/sendificator.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/uranium_level.png");
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sendificator.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/progress/uranium_level.png");
 	
-	private final int progressX;
-	private final int progressY;
-	private final int progressWidth;
-	private final int progressHeight;
-	private final int goX;
-	private final int goY;
+	private static final int PROGRESS_BAR_X = 52;
+	private static final int PROGRESS_BAR_Y = 24;
+	private static final int PROGRESS_BAR_WIDTH = 35;
+	private static final int PROGRESS_BAR_HEIGHT = 39;
+	private static final int BUTTON_X = 115;
+	private static final int BUTTON_Y = 60;
 	
 	private EditBox destinationTextFieldX;
 	private EditBox destinationTextFieldY;
@@ -43,14 +44,6 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
-		
-		//sets progress bar information
-		progressX = 67 - 15;
-		progressY = 24;
-		progressWidth = 35;
-		progressHeight = 39;
-		goX = 115;
-		goY = 60;
 	}
 	
 	@Override
@@ -76,7 +69,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		destinationTextFieldZ.setResponder(s -> onTextFieldChange());
 		
 		//activates processContents() in SendificatorBlockEntity
-		goButton = new GoButton(this.leftPos + goX, this.topPos + goY, 30, 12, this.menu, true);
+		goButton = new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true);
 		addRenderableWidget(goButton);
 		
 		BlockPos destination = this.menu.getDestination();
@@ -119,15 +112,14 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		//draw background
-		RenderSystem.setShaderTexture(0, BACKGROUND);
-		int x = (width - imageWidth) / 2;
-		int y = (height - imageHeight) / 2;
-		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
+		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 		
 		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS);
-		int height = getScaledValue(menu.getFuel(), SendificatorBlockEntity.MAX_FUEL, progressHeight);
-		blit(poseStack, x + progressX, y + progressY + progressHeight - height, 0, progressHeight - height, progressWidth, height, progressWidth, progressHeight);
+		RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
+		int height = getScaledValue(menu.getFuel(), SendificatorBlockEntity.MAX_FUEL, PROGRESS_BAR_HEIGHT);
+		blit(poseStack, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height,
+				0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 	
 	@Override
