@@ -103,7 +103,7 @@ public final class ClientEditHandler
 		
 	}
 	
-	private static GristSet itemCost(ItemStack stack, Level level)
+	protected static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)

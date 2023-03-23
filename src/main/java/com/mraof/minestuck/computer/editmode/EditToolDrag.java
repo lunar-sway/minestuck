@@ -7,12 +7,18 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.client.ClientProxy;
 import com.mraof.minestuck.network.EditmodeFillPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -215,24 +221,32 @@ public class EditToolDrag
 	private static void playSoundAndSetParticles(Player player, boolean fill, BlockPos positionStart, BlockPos positionEnd)
 	{
 		ItemStack stack = player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
-		SoundType soundType = fill ? ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType() : player.getLevel().getBlockState(positionEnd).getSoundType();
-		player.getLevel().playSound(player, positionEnd, fill ? soundType.getPlaceSound() : soundType.getBreakSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 		
-		if(!fill)
+		boolean anyBlockEdited = false;
+		for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
 		{
-			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
+			for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
 			{
-				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
+				for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
 				{
-					for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
+					BlockPos pos = new BlockPos(x, y, z);
+					if(!fill && !player.getLevel().getBlockState(pos).isAir() && (ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) > 0 || ClientDeployList.getEntry(player.getLevel().getBlockState(pos).getCloneItemStack(null, player.getLevel(), pos, player)) != null))
 					{
-						BlockPos pos = new BlockPos(x, y, z);
-						if(!player.getLevel().getBlockState(pos).isAir())
-							player.level.addDestroyBlockEffect(pos, player.getLevel().getBlockState(pos));
+						anyBlockEdited = true;
+						
+						player.level.addDestroyBlockEffect(pos, player.getLevel().getBlockState(pos));
+					}
+					else if(fill && player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && GristHelper.canAfford(ClientPlayerData.getClientGrist(), ClientEditHandler.itemCost(stack, player.getLevel())))
+					{
+						anyBlockEdited = true;
 					}
 				}
 			}
 		}
+		
+		//Play edit sound locally, if a block is able to be placed/broken.
+		if(anyBlockEdited)
+			player.getLevel().playSound(player, positionEnd, fill ? MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get() : MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
 	}
 	
 	/**

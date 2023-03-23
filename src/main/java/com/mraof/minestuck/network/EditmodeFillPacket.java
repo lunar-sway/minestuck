@@ -6,6 +6,7 @@ import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -117,6 +118,9 @@ public class EditmodeFillPacket implements PlayToServerPacket
 								if(player.isCreative())
 									stack.setCount(c);
 								
+								//broadcasts block-place sounds to other players.
+								SoundType soundType = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType();
+								player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 								
 								swingArm = true;
 							}
@@ -125,6 +129,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							if(editModeDestroyCheck(player.getLevel(), player, pos) && !player.getLevel().getBlockState(pos).isAir())
 							{
 								player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+								
+								//broadcasts block-break particles and sounds to other players.
 								player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
 								player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
 								swingArm = true;
@@ -135,8 +141,9 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			}
 			if(swingArm)
 			{
-				SoundType soundType = fill ? ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType() : player.getLevel().getBlockState(positionEnd).getSoundType();
-				player.getLevel().playSound(player, positionEnd, fill ? soundType.getPlaceSound() : soundType.getBreakSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+				//broadcasts edit sound to other players.
+				player.getLevel().playSound(player, positionEnd, fill ? MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get() : MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+				
 				player.swing(hand);
 			}
 			
