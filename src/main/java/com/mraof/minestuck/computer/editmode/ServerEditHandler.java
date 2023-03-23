@@ -463,6 +463,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getPlayer().getLevel(), DeployList.EntryLists.ATHENEUM);
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL)
+			{
+				event.setCanceled(true);
+				return;
+			}
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				if(entry != null)
