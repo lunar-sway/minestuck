@@ -35,7 +35,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final short MAX_FUEL = 128;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	private short fuel = 0;
 	
 	@Nullable
@@ -123,7 +123,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private boolean contentsValid()

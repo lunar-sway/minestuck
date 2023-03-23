@@ -34,7 +34,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
 	
 	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
@@ -65,7 +65,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private boolean contentsValid()

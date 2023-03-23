@@ -32,7 +32,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
@@ -80,7 +80,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private void processContents()

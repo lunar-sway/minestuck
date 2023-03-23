@@ -17,15 +17,17 @@ public final class ProgressTracker implements ContainerData
 	private final RunType type;
 	private final int maxProgress;
 	private final Runnable onChanged;
+	private final BooleanSupplier isValid;
 	private int progress = 0;
 	private boolean shouldRun = false;
 	private boolean isLooping = false;
 	
-	public ProgressTracker(RunType type, int maxProgress, Runnable onChanged)
+	public ProgressTracker(RunType type, int maxProgress, Runnable onChanged, BooleanSupplier isValid)
 	{
 		this.type = type;
 		this.maxProgress = maxProgress;
 		this.onChanged = onChanged;
+		this.isValid = isValid;
 		
 		updateRunAndLooping();
 	}
@@ -46,7 +48,7 @@ public final class ProgressTracker implements ContainerData
 	public void setShouldRun(boolean shouldRun)
 	{
 		if(shouldRun)
-			this.shouldRun = true;
+			this.shouldRun |= this.isValid.getAsBoolean();
 		else
 			resetProgress();
 	}
@@ -67,9 +69,9 @@ public final class ProgressTracker implements ContainerData
 		this.shouldRun |= this.isLooping;
 	}
 	
-	public void tick(BooleanSupplier isValid, Runnable onComplete)
+	public void tick(Runnable onComplete)
 	{
-		if(!this.shouldRun || !isValid.getAsBoolean())
+		if(!this.shouldRun || !this.isValid.getAsBoolean())
 		{
 			this.resetProgress();
 			return;

@@ -31,7 +31,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.AUTOMATIC, MAX_PROGRESS, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.AUTOMATIC, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
 	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -48,7 +48,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private boolean contentsValid()

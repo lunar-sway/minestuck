@@ -37,7 +37,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	public static final String TITLE = "container.minestuck.grist_widget";
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private PlayerIdentifier owner;
 	
 	public GristWidgetBlockEntity(BlockPos pos, BlockState state)
@@ -113,7 +113,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private boolean contentsValid()

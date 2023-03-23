@@ -37,7 +37,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
@@ -86,7 +86,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 	}
 	
 	private boolean contentsValid()

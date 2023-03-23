@@ -37,7 +37,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	public static final int INPUT = 0, OUTPUT = 1;
 	public static final int MAX_PROGRESS = 100;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged);
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override
@@ -120,7 +120,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::contentsValid, this::processContents);
+		this.progressTracker.tick(this::processContents);
 		
 		if (this.ticks_since_update == 20)
 		{
