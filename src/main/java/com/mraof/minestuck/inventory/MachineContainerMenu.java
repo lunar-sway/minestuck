@@ -60,6 +60,11 @@ public abstract class MachineContainerMenu extends AbstractContainerMenu
 		return parameters.get(ProgressTracker.LOOPING_INDEX) != 0;
 	}
 	
+	public boolean isRunning()
+	{
+		return this.parameters.get(ProgressTracker.RUN_INDEX) != 0;
+	}
+	
 	public ContainerLevelAccess getPosition()
 	{
 		return access;

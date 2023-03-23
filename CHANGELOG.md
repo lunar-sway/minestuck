@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The totem lathe rod now also updates if the connected dowel is destroyed
 - Tweaked frequency of some land worldgen features and passive mobs
 - Flora lands now uses mud block instead of coarse dirt
+- The GO-button on machines behaves slightly differently now
 
 ### Fixed
 

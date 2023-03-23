@@ -1,15 +1,12 @@
 package com.mraof.minestuck.client.gui;
 
-import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import com.mraof.minestuck.inventory.MachineContainerMenu;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
@@ -34,7 +31,7 @@ public class GoButton extends ExtendedButton
 	@Override
 	public Component getMessage()
 	{
-		return menu.isLooping() ? STOP_COMPONENT : GO_COMPONENT;
+		return menu.isRunning() ? STOP_COMPONENT : GO_COMPONENT;
 	}
 	
 	@Override
@@ -97,8 +94,7 @@ public class GoButton extends ExtendedButton
 	
 	private void onRegularClick()
 	{
-		if(!menu.isLooping())
-			MSPacketHandler.sendToServer(new GoButtonPacket(true, false));
+		MSPacketHandler.sendToServer(new GoButtonPacket(!this.menu.isRunning(), false));
 	}
 	
 	private void onLoopClick()

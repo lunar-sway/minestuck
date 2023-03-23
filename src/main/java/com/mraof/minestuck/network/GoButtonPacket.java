@@ -6,29 +6,28 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class GoButtonPacket implements PlayToServerPacket
 {
+	private final boolean shouldRun;
+	private final boolean shouldLoop;
 	
-	private final boolean newMode;
-	private final boolean overrideStop;
-	
-	public GoButtonPacket(boolean newMode, boolean overrideStop)
+	public GoButtonPacket(boolean shouldRun, boolean shouldLoop)
 	{
-		this.newMode = newMode;
-		this.overrideStop = overrideStop;
+		this.shouldRun = shouldRun;
+		this.shouldLoop = shouldLoop;
 	}
 	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeBoolean(newMode);
-		buffer.writeBoolean(overrideStop);
+		buffer.writeBoolean(shouldRun);
+		buffer.writeBoolean(shouldLoop);
 	}
 	
 	public static GoButtonPacket decode(FriendlyByteBuf buffer)
 	{
-		boolean newMode = buffer.readBoolean();
-		boolean overrideStop = buffer.readBoolean();
+		boolean shouldRun = buffer.readBoolean();
+		boolean shouldLoop = buffer.readBoolean();
 		
-		return new GoButtonPacket(newMode, overrideStop);
+		return new GoButtonPacket(shouldRun, shouldLoop);
 	}
 	
 	@Override
@@ -36,8 +35,8 @@ public class GoButtonPacket implements PlayToServerPacket
 	{
 		if(player.containerMenu instanceof MachineContainerMenu container)
 		{
-			container.setShouldRun(newMode);
-			container.setIsLooping(overrideStop);
+			container.setIsLooping(shouldLoop);
+			container.setShouldRun(shouldRun);
 		}
 	}
 }
