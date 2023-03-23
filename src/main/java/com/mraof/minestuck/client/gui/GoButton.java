@@ -1,11 +1,15 @@
 package com.mraof.minestuck.client.gui;
 
+import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import com.mraof.minestuck.inventory.MachineContainerMenu;
 import com.mraof.minestuck.network.GoButtonPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import org.lwjgl.glfw.GLFW;
 
@@ -70,16 +74,35 @@ public class GoButton extends ExtendedButton
 	private void onClick(int mouseKey)
 	{
 		if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_1)
+			onRegularClick();
+		else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && allowsLooping)
+			onLoopClick();
+	}
+	
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+	{
+		if(this.active && this.visible && (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER))
 		{
-			if(!menu.isLooping())
-			{
-				//Tell the machine to go once
-				MSPacketHandler.sendToServer(new GoButtonPacket(true, false));
-			}
-		} else if(mouseKey == GLFW.GLFW_MOUSE_BUTTON_2 && allowsLooping)
-		{
-			//Tell the machine to go until stopped
-			MSPacketHandler.sendToServer(new GoButtonPacket(true, !menu.isLooping()));
+			this.playDownSound(Minecraft.getInstance().getSoundManager());
+			
+			if(allowsLooping && Screen.hasShiftDown())
+				onLoopClick();
+			else
+				onRegularClick();
+			return true;
 		}
+		return false;
+	}
+	
+	private void onRegularClick()
+	{
+		if(!menu.isLooping())
+			MSPacketHandler.sendToServer(new GoButtonPacket(true, false));
+	}
+	
+	private void onLoopClick()
+	{
+		MSPacketHandler.sendToServer(new GoButtonPacket(true, !menu.isLooping()));
 	}
 }

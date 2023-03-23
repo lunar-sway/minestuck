@@ -26,7 +26,7 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	
 	public MiniPunchDesignixScreen(MiniPunchDesignixMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniPunchDesignixBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 63;

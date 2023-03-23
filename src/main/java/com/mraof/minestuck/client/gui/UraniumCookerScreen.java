@@ -26,7 +26,7 @@ public final class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	
 	public UraniumCookerScreen(UraniumCookerMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(UraniumCookerBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 	}
 	
 	@Override

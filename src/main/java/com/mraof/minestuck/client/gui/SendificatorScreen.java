@@ -42,7 +42,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	
 	SendificatorScreen(SendificatorMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(SendificatorBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 67 - 15;

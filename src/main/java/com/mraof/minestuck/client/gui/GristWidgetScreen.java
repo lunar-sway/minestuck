@@ -30,7 +30,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 	
 	public GristWidgetScreen(GristWidgetMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(GristWidgetBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 		
 		//sets prgress bar information
 		progressX = 54;

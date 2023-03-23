@@ -26,7 +26,7 @@ public class MiniTotemLatheScreen extends MachineScreen<MiniTotemLatheMenu>
 	
 	public MiniTotemLatheScreen(MiniTotemLatheMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniTotemLatheBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 	}
 	
 	@Override

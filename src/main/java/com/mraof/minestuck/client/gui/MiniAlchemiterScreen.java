@@ -36,7 +36,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> impl
 	
 	public MiniAlchemiterScreen(MiniAlchemiterMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniAlchemiterBlockEntity.TYPE, screenContainer, inv, titleIn);
+		super(screenContainer, inv, titleIn);
 		
 		//sets progress bar information
 		progressX = 54;
