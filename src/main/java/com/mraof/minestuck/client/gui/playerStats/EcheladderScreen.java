@@ -233,7 +233,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 		 * this is seen on string.valueOf(GristHelper...
 		 */
 		mc.font.draw(poseStack, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040);
-		mc.font.draw(poseStack, String.valueOf(GristHelper.rungGrist[currentRung]), xOffset + 26,
+		mc.font.draw(poseStack, String.valueOf(Echeladder.getGristCapacity(currentRung)), xOffset + 26,
 				yOffset + 147, 0x0094FF);
 		
 		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))

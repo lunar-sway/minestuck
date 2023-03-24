@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristEntityPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
@@ -164,14 +165,13 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(entityIn != null && !entityIn.getLevel().isClientSide())
 		{
 			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
-			
+			PlayerData data = PlayerSavedData.getData((ServerPlayer) entityIn);
 			long playerGristAmount;
 			long rung;
 			
-			playerGristAmount = PlayerSavedData.getData((ServerPlayer) entityIn).getGristCache().getGrist(gristType);
-			rung = PlayerSavedData.getData((ServerPlayer) entityIn).getEcheladder().getRung();
+			playerGristAmount = data.getGristCache().getGrist(gristType);
 			
-			int gristCap = GristHelper.rungGrist[(int) rung];
+			int gristCap = data.getEcheladder().getGristCapacity();
 			int gutterCap = 0;
 			long gutterTotal = 0;
 			

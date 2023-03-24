@@ -41,6 +41,12 @@ public class Echeladder
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
+	private static final int[] GRIST_CAPACITY =
+			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
+					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
+					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
+					8000,9000,10000,20000,30000,40000,50000,90000000};
+	
 	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
 	{
 		PlayerSavedData.getData(player, level).getEcheladder().increaseProgress(progress);
@@ -228,6 +234,16 @@ public class Echeladder
 	public static double getUnderlingProtectionModifier(int rung)
 	{
 		return 1 / (rung * 0.06D + 1);
+	}
+	
+	public static int getGristCapacity(int rung)
+	{
+		return GRIST_CAPACITY[rung];
+	}
+	
+	public int getGristCapacity()
+	{
+		return getGristCapacity(this.rung);
 	}
 	
 	public void setByCommand(int rung, double progress)

@@ -27,8 +27,6 @@ import java.util.Map.Entry;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static com.mraof.minestuck.player.ClientPlayerData.rung;
-
 public class GristHelper
 {
 	
@@ -175,18 +173,12 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		
 		newCache.addGrist(set);
-		int capacity = rungGrist[data.getEcheladder().getRung()];
+		int capacity = data.getEcheladder().getGristCapacity();
 		GristSet excessGrist = newCache.removeOverCapacity(capacity);
 		
 		data.setGristCache(newCache);
 		return excessGrist;
 	}
-	
-	public static final int[] rungGrist =// will crash the game if set below 20
-			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
-					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
-					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
-					8000,9000,10000,20000,30000,40000,50000,90000000};// the function that controls how much grist is spliced from the gutter
 	
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
@@ -207,7 +199,7 @@ public class GristHelper
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			int cacheLimit = rungGrist[rung];
+			int cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
 			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cacheLimit, total);
 			
 			if(player.getPlayer(server) != null)
