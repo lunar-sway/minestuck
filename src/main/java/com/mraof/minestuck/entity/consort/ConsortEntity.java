@@ -465,23 +465,18 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			return PlayState.STOP;
 		}
 		
-		switch(action)
+		if(action == MobAnimation.Action.PANIC)
 		{
-			case PANIC ->
-			{
-				//TODO add a system for the panic animation intended to precede this
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
-				return PlayState.CONTINUE;
-			}
-			case IDLE ->
-			{
-				return PlayState.STOP;
-			}
-			default ->
-			{
-				event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
-				return PlayState.CONTINUE;
-			}
+			//TODO add a system for the panic animation intended to precede this
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
+			return PlayState.CONTINUE;
+		} else if(action != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		} else
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
 		}
 	}
 	
