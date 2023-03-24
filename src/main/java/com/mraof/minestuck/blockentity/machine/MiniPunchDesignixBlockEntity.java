@@ -43,7 +43,15 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD.get());
+		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.is(MSItems.CAPTCHA_CARD.get()))
+		{
+			@Override
+			protected void onContentsChanged(int slot)
+			{
+				MiniPunchDesignixBlockEntity.this.progressTracker.resetProgress();
+				super.onContentsChanged(slot);
+			}
+		};
 	}
 	
 	@Override
@@ -113,13 +121,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		if(!output.isEmpty())
 			return AlchemyHelper.createCard(output, true);
 		else return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public void setChanged()
-	{
-		this.progressTracker.resetProgress();
-		super.setChanged();
 	}
 	
 	@Override

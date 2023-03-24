@@ -45,7 +45,17 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD.get() || index == 2 && stack.getItem() == MSItems.CRUXITE_DOWEL.get());
+		return new CustomHandler(4, (index, stack) ->
+				(index == 0 || index == 1) && stack.is(MSItems.CAPTCHA_CARD.get())
+				|| index == 2 && stack.is(MSItems.CRUXITE_DOWEL.get()))
+		{
+			@Override
+			protected void onContentsChanged(int slot)
+			{
+				MiniTotemLatheBlockEntity.this.progressTracker.resetProgress();
+				super.onContentsChanged(slot);
+			}
+		};
 	}
 	
 	@Override
@@ -120,13 +130,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 				? new ItemStack(MSBlocks.CRUXITE_DOWEL.get()) : AlchemyHelper.createEncodedItem(output, false);
 		ColorHandler.setColor(outputDowel, ColorHandler.getColorFromStack(dowelInput));	//Setting color
 		return outputDowel;
-	}
-	
-	@Override
-	public void setChanged()
-	{
-		this.progressTracker.resetProgress();
-		super.setChanged();
 	}
 	
 	@Override
