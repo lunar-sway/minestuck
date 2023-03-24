@@ -1,17 +1,17 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.Set;
 
 /**
  * A class that handles Grist overflow whenever you aqcuire too much grist.
@@ -84,30 +84,36 @@ public class GristGutter
 	}
 	
 	@SubscribeEvent
-	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
 	{
-		if(event.player instanceof ServerPlayer player && player.level.getGameTime() % 200 == 0)
+		//noinspection resource
+		if(event.getServer().overworld().getGameTime() % 200 == 0)
 		{
-			PlayerIdentifier playerId = IdentifierHandler.encode(player);
-			if(playerId != null)
-				tickDistributionToPlayer(playerId, player.server);
+			for(Session session : SessionHandler.get(event.getServer()).getSessions())
+			{
+				session.getGristGutter().distributeToPlayers(session.getPlayerList(), event.getServer());
+			}
 		}
 	}
 	
-	private static void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server)
+	private void distributeToPlayers(Set<PlayerIdentifier> players, MinecraftServer server)
+	{
+		for(PlayerIdentifier player : players)
+		{
+			tickDistributionToPlayer(player, server);
+		}
+	}
+	
+	private void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server)
 	{
 		PlayerData data = PlayerSavedData.getData(player, server);
 		
-		Session session = SessionHandler.get(server).getPlayerSession(player);
-		if(session == null)
-			return;
-		GristGutter gutter = session.getGristGutter();
-		int gutterMultiplier = (int) gutter.getGutterMultiplier();
+		int gutterMultiplier = (int) this.getGutterMultiplier();
 		int capacity = data.getEcheladder().getGristCapacity();
 		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
 		
-		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, gutter.splice(spliceAmount));
-		gutter.addGristFrom(rungGrist);
+		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, this.splice(spliceAmount));
+		this.addGristFrom(rungGrist);
 		if(!rungGrist.isEmpty())
 			throw new IllegalStateException("Failed to add back grist that couldn't be given to a player");
 	}
