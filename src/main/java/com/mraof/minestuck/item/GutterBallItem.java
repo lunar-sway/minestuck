@@ -38,7 +38,7 @@ public class GutterBallItem extends Item
 			Session playerSession = SessionHandler.get(pPlayer.getServer()).getPlayerSession(IdentifierHandler.encode(pPlayer));
 			pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
 			
-			playerSession.increaseGutterMultiplier(0.2);
+			playerSession.getGristGutter().increaseGutterMultiplier(0.2);
 			itemStack.shrink(1);
 		}
 		

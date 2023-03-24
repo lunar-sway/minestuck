@@ -26,15 +26,26 @@ public class GristGutter
 	
 	private final GristSet gristSet = new GristSet();
 	private long gutterTotal = 0;
+	private double gutterMultiplier = 1;
 	
-	public static long getGutterCapacity(Session session)
+	public long getGutterCapacity()
 	{
-		return (long) (GUTTER_CAPACITY * session.getGutterMultiplier());
+		return (long) (GUTTER_CAPACITY * gutterMultiplier);
 	}
 	public long getGutterTotal()
 	{
 		return gutterTotal;
 	}
+	
+	public void increaseGutterMultiplier(double amount)
+	{
+		this.gutterMultiplier += amount;
+	}
+	public double getGutterMultiplier()
+	{
+		return gutterMultiplier;
+	}
+	
 	public GristSet gristToSpill = new GristSet();
 	public void spillGrist(Level level, Player player)
 	{
@@ -42,15 +53,15 @@ public class GristGutter
 		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
 	}
 	
-	public void addGrist(GristSet set, Session session)
+	public void addGrist(GristSet set)
 	{
 		for(GristAmount amount : set.getAmounts())
-			this.addGrist(amount.getType(), amount.getAmount(), session);
+			this.addGrist(amount.getType(), amount.getAmount());
 	}
 	
-	public void addGrist(GristType type, long amount, Session session)
+	public void addGrist(GristType type, long amount)
 	{
-		long maximumAllowed = gutterTotal - getGutterCapacity(session);
+		long maximumAllowed = gutterTotal - getGutterCapacity();
 		
 		this.addGristInternal(type, Math.min(maximumAllowed, amount));
 		
@@ -105,12 +116,12 @@ public class GristGutter
 		Session session = SessionHandler.get(server).getPlayerSession(player);
 		if(session == null)
 			return;
-		int gutterMultiplier = (int) session.getGutterMultiplier();
+		GristGutter gutter = session.getGristGutter();
+		int gutterMultiplier = (int) gutter.getGutterMultiplier();
 		int capacity = data.getEcheladder().getGristCapacity();
 		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
 		
-		GristGutter sessionGutter = session.getGristGutter();
-		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, sessionGutter.splice(spliceAmount));
-		sessionGutter.addGrist(rungGrist, session);
+		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, gutter.splice(spliceAmount));
+		gutter.addGrist(rungGrist);
 	}
 }

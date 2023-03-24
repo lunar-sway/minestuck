@@ -29,7 +29,6 @@ public final class Session
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
 	final GristGutter gutter;
-	private double gutterMultiplier;
 	String name;
 	
 	/**
@@ -113,7 +112,6 @@ public final class Session
 		gutter = new GristGutter();
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
-		gutterMultiplier = 1;
 	}
 	
 	/**
@@ -251,16 +249,6 @@ public final class Session
 	public GristGutter getGristGutter()
 	{
 		return gutter;
-	}
-	public double increaseGutterMultiplier(double amount)
-	{
-		this.gutterMultiplier += amount;
-		
-		return gutterMultiplier;
-	}
-	public double getGutterMultiplier()
-	{
-		return gutterMultiplier;
 	}
 	
 	/**

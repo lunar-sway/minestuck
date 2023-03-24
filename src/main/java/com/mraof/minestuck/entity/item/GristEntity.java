@@ -178,7 +178,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			if(playerSession != null)
 			{
 				gutterTotal = playerSession.getGristGutter().getGutterTotal();
-				gutterCap = (int) playerSession.getGristGutter().getGutterCapacity(playerSession);
+				gutterCap = (int) playerSession.getGristGutter().getGutterCapacity();
 			}
 			
 			long gutterRoom = gutterCap - gutterTotal;
