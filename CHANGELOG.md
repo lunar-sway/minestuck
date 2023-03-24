@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed GO-button in small machines showing the wrong text
 - Fixed some cases of cruxtruder data changes not being saved
 - Fixed mini alchemiter comparator value only getting updated when the machine is running
+- Fixed mini punch designix behaviour when punching an unpunched card
 
 ## [1.18.2-1.9.2.0] - 2023-03-13
 

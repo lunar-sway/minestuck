@@ -116,7 +116,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
 			output = CombinationRecipe.findResult(combinerInventory, level);
-		} else return output;
+		}
 		
 		if(!output.isEmpty())
 			return AlchemyHelper.createCard(output, true);
