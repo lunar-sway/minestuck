@@ -1549,8 +1549,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
-		add(MachineScreen.GO, "GO");
-		add(MachineScreen.STOP, "STOP");
+		add(GoButton.GO, "GO");
+		add(GoButton.STOP, "STOP");
 		add(GristSelectorScreen.TITLE, "Grist Selector");
 		add(GristSelectorScreen.SELECT_GRIST, "Select Grist Type");
 		add(ColorSelectorScreen.TITLE, "Color Selector");

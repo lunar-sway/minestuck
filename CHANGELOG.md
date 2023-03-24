@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The totem lathe rod now also updates if the connected dowel is destroyed
 - Tweaked frequency of some land worldgen features and passive mobs
 - Flora lands now uses mud block instead of coarse dirt
+- The GO-button on machines behaves slightly differently now
 
 ### Removed
 
@@ -32,7 +33,10 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 
 - Fix metal boats not using the correct texture
 - More gui text has translation keys now, making them translatable by a resource pack
+- Fixed GO-button in small machines showing the wrong text
 - Fixed some cases of cruxtruder data changes not being saved
+- Fixed mini alchemiter comparator value only getting updated when the machine is running
+- Fixed mini punch designix behaviour when punching an unpunched card
 
 ### Contributors for this release
 
