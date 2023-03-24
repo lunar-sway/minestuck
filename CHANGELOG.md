@@ -34,6 +34,10 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - More gui text has translation keys now, making them translatable by a resource pack
 - Fixed some cases of cruxtruder data changes not being saved
 
+### Contributors for this release
+
+- kirderf1, Dweblenod, LunaticCat
+
 ## [1.18.2-1.9.2.0] - 2023-03-13
 
 ### Added
@@ -50,3 +54,7 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - Reapply stone tablet crash fix that was mistakenly reverted during the mc1.16->mc1.18 move
 - Fix some player decoy behavior when entering editmode while flying
 - Machine guis with a GO-button can now be started with the keypad enter key
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Akisephila, rose_bushes_
