@@ -24,7 +24,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class GristHelper
 {
@@ -140,8 +139,7 @@ public class GristHelper
 	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
-		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
-		notify(level.getServer(), player, set, total, source, false);
+		notify(level.getServer(), player, set, source, false);
 	}
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
@@ -182,8 +180,7 @@ public class GristHelper
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
-		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
-		notify(level.getServer(), player, set, total, source, true);
+		notify(level.getServer(), player, set, source, true);
 	}
 	
 	/**
@@ -194,15 +191,14 @@ public class GristHelper
 	 * @param source Indicates where the notification is coming from. See EnumSource.
 	 * @param increase Indicates whether the grist is gained or lost.
 	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source, boolean increase)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
 			int cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
-			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cacheLimit, total);
 			
 			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, increase, cacheLimit, true), player.getPlayer(server));
 			
 			if (source == EnumSource.SERVER)
 			{
@@ -215,7 +211,7 @@ public class GristHelper
 					return;
 				
 				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(gristToastPacket, ed.getEditor());
+					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, increase, cacheLimit, false), ed.getEditor());
 
 			}
 		}
