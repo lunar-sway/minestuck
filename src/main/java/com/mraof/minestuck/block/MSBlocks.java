@@ -396,6 +396,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> PETRIFIED_GRASS = REGISTER.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XYZ)));
 	public static final RegistryObject<Block> PETRIFIED_POPPY = REGISTER.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of(Material.STONE, DyeColor.GRAY).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XZ)));
 	
+	public static final RegistryObject<Block> GLOWING_MUSHROOM_VINES = REGISTER.register("glowing_mushroom_vines", () -> new GlowingMushroomVinesBlock(Block.Properties.of(Material.PLANT, MaterialColor.DIAMOND).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
+	
 	public static final RegistryObject<StemGrownBlock> STRAWBERRY = REGISTER.register("strawberry", () -> new StrawberryBlock(Block.Properties.of(Material.VEGETABLE, MaterialColor.COLOR_RED).strength(1.0F).sound(SoundType.WOOD)));
 	public static final RegistryObject<AttachedStemBlock> ATTACHED_STRAWBERRY_STEM = REGISTER.register("attached_strawberry_stem", () -> new AttachedStemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));
 	public static final RegistryObject<StemBlock> STRAWBERRY_STEM = REGISTER.register("strawberry_stem", () -> new StemBlock(STRAWBERRY.get(), MSItems.STRAWBERRY_CHUNK, Block.Properties.of(Material.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.WOOD)));

@@ -684,6 +684,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.VINE_LOG.get()).input(Items.OAK_LOG).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG.get()).input(MSBlocks.VINE_LOG.get()).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM.get()).input(Items.BROWN_MUSHROOM).or().input(Items.GLOWSTONE_DUST).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM_VINES.get()).input(MSItems.GLOWING_MUSHROOM_VINES.get()).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_LOG.get()).input(ItemTags.LOGS).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_PLANKS.get()).input(ItemTags.PLANKS).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWY_GOOP.get()).input(Items.SLIME_BLOCK).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);

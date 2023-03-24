@@ -877,6 +877,7 @@ public class MSItems
 	
 	//Land Plant Blocks
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM = registerBlockItem(MSBlocks.GLOWING_MUSHROOM, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM_VINES = registerBlockItem(MSBlocks.GLOWING_MUSHROOM_VINES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> DESERT_BUSH = registerBlockItem(MSBlocks.DESERT_BUSH, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> BLOOMING_CACTUS = registerBlockItem(MSBlocks.BLOOMING_CACTUS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> PETRIFIED_GRASS = registerBlockItem(MSBlocks.PETRIFIED_GRASS, MSItemGroup.LANDS);

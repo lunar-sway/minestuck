@@ -367,6 +367,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		addBlock(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");

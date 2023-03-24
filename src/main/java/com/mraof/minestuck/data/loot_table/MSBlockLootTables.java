@@ -343,6 +343,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(BLOOMING_CACTUS.get());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
 		add(STRAWBERRY_STEM.get(), (stemBlock) -> createStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
