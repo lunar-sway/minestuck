@@ -9,8 +9,6 @@ import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -46,29 +44,20 @@ public class GristGutter
 		return gutterMultiplier;
 	}
 	
-	public GristSet gristToSpill = new GristSet();
-	public void spillGrist(Level level, Player player)
-	{
-	//isn't being used by anything, but when i delete it everything breaks
-		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
-	}
-	
-	public void addGrist(GristSet set)
+	public void addGristFrom(GristSet set)
 	{
 		for(GristAmount amount : set.getAmounts())
-			this.addGrist(amount.getType(), amount.getAmount());
-	}
-	
-	public void addGrist(GristType type, long amount)
-	{
-		long maximumAllowed = gutterTotal - getGutterCapacity();
-		
-		this.addGristInternal(type, Math.min(maximumAllowed, amount));
-		
-		long remaining = amount - maximumAllowed;
-		
-		if(remaining > 0)
-			gristToSpill.addGrist(type, remaining);
+		{
+			GristType type = amount.getType();
+			long maximumAllowed = getGutterCapacity() - gutterTotal;
+			
+			if(maximumAllowed <= 0)
+				return;
+			
+			long amountToAdd = Math.min(maximumAllowed, amount.getAmount());
+			set.addGrist(type, -amountToAdd);
+			this.addGristInternal(type, amountToAdd);
+		}
 	}
 	
 	/**
@@ -122,6 +111,8 @@ public class GristGutter
 		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
 		
 		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, gutter.splice(spliceAmount));
-		gutter.addGrist(rungGrist);
+		gutter.addGristFrom(rungGrist);
+		if(!rungGrist.isEmpty())
+			throw new IllegalStateException("Failed to add back grist that couldn't be given to a player");
 	}
 }

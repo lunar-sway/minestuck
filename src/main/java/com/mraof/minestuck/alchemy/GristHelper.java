@@ -11,7 +11,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
@@ -156,11 +155,12 @@ public class GristHelper
 		if(!overflowedGrist.isEmpty())
 		{
 			GristGutter gutter = SessionHandler.get(level).getPlayerSession(player).getGristGutter();
-			gutter.addGrist(overflowedGrist);
+			gutter.addGristFrom(overflowedGrist);
 			ServerPlayer playerEntity = player.getPlayer(level.getServer());
-			if(playerEntity != null)
+			if(playerEntity != null && !overflowedGrist.isEmpty())
 			{
-				gutter.spillGrist(level, playerEntity);//this isn't currently being used
+				overflowedGrist.spawnGristEntities(level, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), level.random,
+						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
 			}
 		}
 	}
