@@ -12,12 +12,15 @@ import java.util.Map;
  * A class that handles Grist overflow whenever you aqcuire too much grist.
  * @author Doro
  */
-public class GristGutter extends GristSet
+public class GristGutter
 {
-	private static Session session;
-	public int gutterTotal = -1;
-	public static final int GUTTER_CAPACITY = 10000;
 	private static final Logger LOGGER = LogManager.getLogger();
+	public static final int GUTTER_CAPACITY = 10000;
+	
+	private Session session;
+	private final GristSet gristSet = new GristSet();
+	public int gutterTotal = -1;
+	
 	public void setSession(Session session)
 	{
 		this.session = session;
@@ -34,7 +37,7 @@ public class GristGutter extends GristSet
 		if(gutterTotal < 0)
 		{
 			gutterTotal = 0;
-			for(Map.Entry<GristType, Long> pair : this.getMap().entrySet())
+			for(Map.Entry<GristType, Long> pair : gristSet.getMap().entrySet())
 			{
 				gutterTotal += pair.getValue();
 			}
@@ -47,24 +50,30 @@ public class GristGutter extends GristSet
 	//isn't being used by anything, but when i delete it everything breaks
 		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
 	}
-	@Override
-	public GristGutter addGrist(GristType type, long amount)
+	
+	public void addGrist(GristSet set)
+	{
+		for(GristAmount amount : set.getAmounts())
+			this.addGrist(amount.getType(), amount.getAmount());
+	}
+	
+	public void addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
 			GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
-			long originalAmount = this.getMap().getOrDefault(type, 0L);
+			long originalAmount = gristSet.getMap().getOrDefault(type, 0L);
 			long maximumAllowed = (long) (gutterTotal - getGutterCapacity(session) + originalAmount);
 			
-			this.getMap().compute(type, (key, value) -> value == null ? amount : value + amount);
+			gristSet.getMap().compute(type, (key, value) -> value == null ? amount : value + amount);
 			gutterTotal += amount;//adds grist to gutter
 			
 			//logger
 			LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
 			LOGGER.debug("Total: " + getGutterTotal());
-			for(GristType t : this.getMap().keySet())
+			for(GristType t : gristSet.getMap().keySet())
 			{
-				LOGGER.debug(t.getDisplayName().toString() + ": " + getMap().get(t));
+				LOGGER.debug(t.getDisplayName().toString() + ": " + gristSet.getMap().get(t));
 			}
 			logGutter(type, amount);
 			
@@ -73,22 +82,21 @@ public class GristGutter extends GristSet
 			{
 				System.out.println("gutter has capped out");
 				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity(session));
-				this.getMap().put(type, maximumAllowed);
+				gristSet.getMap().put(type, maximumAllowed);
 				sOverflowGrist.addGrist(type, sOverflowAmount);
 				gristToSpill.addGrist(sOverflowGrist);
 				gutterTotal -= sOverflowAmount;
 			}
 		}
-		return this;
 	}
 	public GristGutter logGutter(GristType type, long amount)
 	{
 		LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
 		LOGGER.debug("Total: " + getGutterTotal());
 		
-		for(GristType t : this.getMap().keySet())
+		for(GristType t : gristSet.getMap().keySet())
 		{
-			LOGGER.debug(t.getDisplayName().toString() + ": " + getMap().get(t));
+			LOGGER.debug(t.getDisplayName().toString() + ": " + gristSet.getMap().get(t));
 		}
 		
 		return this;
@@ -101,9 +109,9 @@ public class GristGutter extends GristSet
 	{
 		GristSet spliceSet = new GristSet();
 		
-		for(GristType t : this.getMap().keySet())
+		for(GristType t : gristSet.getMap().keySet())
 		{
-			long xMover = Math.max(Math.min(getMap().get(t), i), 0);
+			long xMover = Math.max(Math.min(gristSet.getMap().get(t), i), 0);
 			spliceSet.addGrist(t, xMover);//spliceSet calls addgrist with the amount and type specified
 			
 			gutterTotal -= xMover;//takes grist from the gutter
