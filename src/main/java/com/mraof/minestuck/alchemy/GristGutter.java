@@ -22,8 +22,7 @@ public class GristGutter
 	
 	public static double getGutterCapacity(Session session)
 	{
-		double gutMul = session.getGutterMultiplier();
-		return (GUTTER_CAPACITY * gutMul);
+		return (GUTTER_CAPACITY * session.getGutterMultiplier());
 	}
 	public long getGutterTotal()
 	{
@@ -52,34 +51,31 @@ public class GristGutter
 	
 	public void addGrist(GristType type, long amount, Session session)
 	{
-		if(type != null)
+		GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
+		long originalAmount = gristSet.getMap().getOrDefault(type, 0L);
+		long maximumAllowed = (long) (gutterTotal - getGutterCapacity(session) + originalAmount);
+		
+		gristSet.getMap().compute(type, (key, value) -> value == null ? amount : value + amount);
+		gutterTotal += amount;//adds grist to gutter
+		
+		//logger
+		LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
+		LOGGER.debug("Total: " + getGutterTotal());
+		for(GristType t : gristSet.getMap().keySet())
 		{
-			GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
-			long originalAmount = gristSet.getMap().getOrDefault(type, 0L);
-			long maximumAllowed = (long) (gutterTotal - getGutterCapacity(session) + originalAmount);
-			
-			gristSet.getMap().compute(type, (key, value) -> value == null ? amount : value + amount);
-			gutterTotal += amount;//adds grist to gutter
-			
-			//logger
-			LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
-			LOGGER.debug("Total: " + getGutterTotal());
-			for(GristType t : gristSet.getMap().keySet())
-			{
-				LOGGER.debug(t.getDisplayName().toString() + ": " + gristSet.getMap().get(t));
-			}
-			logGutter(type, amount);
-			
-			//not used by anything currently
-			if(gutterTotal > GUTTER_CAPACITY)
-			{
-				System.out.println("gutter has capped out");
-				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity(session));
-				gristSet.getMap().put(type, maximumAllowed);
-				sOverflowGrist.addGrist(type, sOverflowAmount);
-				gristToSpill.addGrist(sOverflowGrist);
-				gutterTotal -= sOverflowAmount;
-			}
+			LOGGER.debug(t.getDisplayName().toString() + ": " + gristSet.getMap().get(t));
+		}
+		logGutter(type, amount);
+		
+		//not used by anything currently
+		if(gutterTotal > GUTTER_CAPACITY)
+		{
+			System.out.println("gutter has capped out");
+			long sOverflowAmount = (long) (gutterTotal - getGutterCapacity(session));
+			gristSet.getMap().put(type, maximumAllowed);
+			sOverflowGrist.addGrist(type, sOverflowAmount);
+			gristToSpill.addGrist(sOverflowGrist);
+			gutterTotal -= sOverflowAmount;
 		}
 	}
 	public GristGutter logGutter(GristType type, long amount)
