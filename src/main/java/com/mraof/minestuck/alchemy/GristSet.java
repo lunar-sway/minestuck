@@ -258,7 +258,7 @@ public class GristSet
 	 */
 	public boolean isEmpty()
 	{
-		return this.gristTypes.isEmpty();
+		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
 
 	@Override
