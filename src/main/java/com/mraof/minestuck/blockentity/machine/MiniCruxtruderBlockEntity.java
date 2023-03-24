@@ -29,7 +29,9 @@ import javax.annotation.Nullable;
 public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
-	public static final RunType TYPE = RunType.AUTOMATIC;
+	public static final int MAX_PROGRESS = 100;
+	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.AUTOMATIC, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
 	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -44,20 +46,18 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		ItemStack stack1 = itemHandler.getStackInSlot(1);
 		return (!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorHandler.getColorFromStack(stack1) == this.color));
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		// Process the Raw Cruxite
 		
@@ -71,12 +71,14 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
+		this.progressTracker.load(nbt);
 		this.color = nbt.getInt("color");
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
+		this.progressTracker.save(compound);
 		compound.putInt("color", color);
 		super.saveAdditional(compound);
 	}
@@ -105,6 +107,6 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }
