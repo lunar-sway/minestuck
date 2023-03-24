@@ -1,8 +1,19 @@
 package com.mraof.minestuck.alchemy;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
+import com.mraof.minestuck.skaianet.SessionHandler;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +23,7 @@ import java.util.Map;
  * A class that handles Grist overflow whenever you aqcuire too much grist.
  * @author Doro
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class GristGutter
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -108,4 +120,30 @@ public class GristGutter
 		return spliceSet;//returns splice set to be used to distribute itself to the player's caches
 	}
 	
+	@SubscribeEvent
+	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
+	{
+		if(event.player instanceof ServerPlayer player && player.level.getGameTime() % 200 == 0)
+		{
+			PlayerIdentifier playerId = IdentifierHandler.encode(player);
+			if(playerId != null)
+				tickDistributionToPlayer(playerId, player.server);
+		}
+	}
+	
+	private static void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server)
+	{
+		PlayerData data = PlayerSavedData.getData(player, server);
+		
+		Session session = SessionHandler.get(server).getPlayerSession(player);
+		if(session == null)
+			return;
+		int gutterMultiplier = (int) session.getGutterMultiplier();
+		int capacity = data.getEcheladder().getGristCapacity();
+		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
+		
+		GristGutter sessionGutter = session.getGristGutter();
+		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, sessionGutter.splice(spliceAmount));
+		sessionGutter.addGrist(rungGrist, session);
+	}
 }

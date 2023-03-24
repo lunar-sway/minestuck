@@ -267,29 +267,9 @@ public class ServerEventHandler
 				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
 				IdentifierHandler.encode(player);
 			}
-			
-			Level level = player.level;
-			SessionHandler sessionHandler = SessionHandler.get(level);
-			Session session = sessionHandler.getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
-			long gameTime = level.getGameTime();
-			int inputTime = 200;
-			
-			if(session == null)
-			{
-				return;
-			}
-			if(gameTime % inputTime == 0)
-			{//every tick, the server will try to put some of the gutter's grist into each player's cache
-				int gutterMultiplier = (int) session.getGutterMultiplier();
-				int capacity = data.getEcheladder().getGristCapacity();
-				int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);//determines the appropriate splice amount
-				
-				GristGutter sessionGutter = session.getGristGutter();
-				GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, sessionGutter.splice(spliceAmount));
-				sessionGutter.addGrist(rungGrist, session);
-			}
 		}
 	}
+	
 	@SubscribeEvent
 	public static void onEffectRemove(MobEffectEvent.Remove event)
 	{
