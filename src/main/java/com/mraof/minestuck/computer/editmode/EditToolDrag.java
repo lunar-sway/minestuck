@@ -24,6 +24,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -78,10 +79,7 @@ public class EditToolDrag
 			return;
 		
 		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
-		if(cap == null)
-			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
-		
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
@@ -93,6 +91,8 @@ public class EditToolDrag
 		{
 			if(!canEditRevise(player))
 			{
+				if(cap.getToolMode() != null)
+					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -112,14 +112,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(true, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(EditmodeFillPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, true, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
@@ -151,9 +151,7 @@ public class EditToolDrag
 			return;
 		
 		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
-		if(cap == null)
-			throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
@@ -165,6 +163,8 @@ public class EditToolDrag
 		{
 			if(!canEditRecycle(player))
 			{
+				if(cap.getToolMode() != null)
+					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -184,14 +184,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(new EditmodeFillPacket(false, isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(EditmodeFillPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, false, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
