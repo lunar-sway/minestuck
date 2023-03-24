@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Set;
 
 /**
- * A class that handles Grist overflow whenever you aqcuire too much grist.
+ * A class that handles Grist overflow whenever you acquire too much grist.
  * @author Doro
  */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
@@ -24,7 +24,7 @@ public class GristGutter
 	
 	private final GristSet gristSet = new GristSet();
 	private long gristTotal = 0;
-	private double gutterMultiplier = 1;
+	private double gutterMultiplier = 1;	//TODO move to use multiplier defined in PlayerData
 	
 	public long getRemainingCapacity()
 	{
@@ -98,6 +98,7 @@ public class GristGutter
 	
 	private void distributeToPlayers(Set<PlayerIdentifier> players, MinecraftServer server)
 	{
+		// TODO iterate in a random order, so that no player gets priority
 		for(PlayerIdentifier player : players)
 		{
 			tickDistributionToPlayer(player, server);
@@ -112,6 +113,7 @@ public class GristGutter
 		int capacity = data.getEcheladder().getGristCapacity();
 		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
 		
+		//TODO Rework to give a certain amount of grist in total, rather than a certain amount of each type
 		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, this.splice(spliceAmount));
 		this.addGristFrom(rungGrist);
 		if(!rungGrist.isEmpty())

@@ -29,7 +29,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
-	final GristGutter gutter;
+	final GristGutter gutter;	//TODO serialization for the gutter
 	String name;
 	
 	/**
@@ -73,6 +73,7 @@ public final class Session
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
+		//TODO make sure that the gutter gets merged
 	}
 	
 	private boolean canAdd(PlayerIdentifier player, PredefineData data)

@@ -126,6 +126,7 @@ final class SessionMerger
 				newSession.predefinedPlayers.put(identifier, originalSession.predefinedPlayers.get(identifier));
 		}
 		predefinedPlayers.removeAll(players);
+		//TODO split off a portion of the grist gutter
 		
 		return newSession;
 	}
