@@ -34,6 +34,7 @@ public class NonNegativeGristSet extends GristSet
 		}
 		return super.addGrist(type, amount);
 	}
+	
 	@Override
 	public GristSet scale(float scale, boolean roundDown)
 	{

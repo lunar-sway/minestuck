@@ -45,9 +45,9 @@ public class GristHelper
 	public static GristType getPrimaryGrist(RandomSource random)
 	{
 		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
-				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).collect(Collectors.toList());
+				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
 		
-		return WeightedRandom.getRandomItem(random, typeList).orElseThrow(null).getData();
+		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();
 	}
 	
 	/**
@@ -70,7 +70,6 @@ public class GristHelper
 		RandomSource random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
-		double effectivePowerLevel = 1;
 		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));

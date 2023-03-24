@@ -11,16 +11,11 @@ import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.skaianet.*;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,7 +30,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -260,13 +254,8 @@ public class ServerEventHandler
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			Player player = event.player;
-			
 			if(data.getTitle() != null)
-			{
 				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
-				IdentifierHandler.encode(player);
-			}
 		}
 	}
 	

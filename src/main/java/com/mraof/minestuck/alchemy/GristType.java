@@ -38,6 +38,7 @@ public class GristType implements Comparable<GristType>
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
 	}
+	
 	public Component getNameWithSuffix()
 	{
 		return Component.translatable(FORMAT, getDisplayName());

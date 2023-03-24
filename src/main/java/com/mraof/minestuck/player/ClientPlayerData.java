@@ -28,7 +28,7 @@ public final class ClientPlayerData
 	
 	private static Modus modus;
 	private static Title title;
-	public static int rung;
+	private static int rung;
 	private static float rungProgress;
 	private static long boondollars;
 	private static int consortReputation;

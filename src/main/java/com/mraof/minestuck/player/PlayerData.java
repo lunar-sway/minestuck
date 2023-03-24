@@ -303,7 +303,6 @@ public final class PlayerData
 	
 	public void setGristCache(NonNegativeGristSet cache)
 	{
-		
 		gristCache = cache.asImmutable();
 		markDirty();
 		updateGristCache(getPlayer());
