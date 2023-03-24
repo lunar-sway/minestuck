@@ -289,7 +289,7 @@ public class ServerEventHandler
 				playerCache.addGrist(sessionGutter.splice(spliceAmount));//splices some grist from the splice set
 				GristSet rungGrist = GristHelper.limitGristByPlayerRung(level, IdentifierHandler.encode(player), playerCache);
 				
-				sessionGutter.addGrist(rungGrist);
+				sessionGutter.addGrist(rungGrist, session);
 				data.setGristCache(playerCache);
 			}
 		}

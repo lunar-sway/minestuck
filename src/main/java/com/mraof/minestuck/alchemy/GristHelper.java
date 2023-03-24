@@ -164,7 +164,7 @@ public class GristHelper
 		int gristCap = rungGrist[rung];
 		
 		GristSet overflowedGrist = limitGristByPlayerRung(level, player, newCache);
-		gutter.addGrist(overflowedGrist);//sends grist overflow to gutter
+		gutter.addGrist(overflowedGrist, session);//sends grist overflow to gutter
 		data.setGristCache(newCache);
 		ServerPlayer playerEntity = player.getPlayer(level.getServer());
 		if(playerEntity != null)

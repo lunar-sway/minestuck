@@ -17,20 +17,13 @@ public class GristGutter
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final int GUTTER_CAPACITY = 10000;
 	
-	private Session session;
 	private final GristSet gristSet = new GristSet();
 	public int gutterTotal = -1;
 	
-	public void setSession(Session session)
-	{
-		this.session = session;
-	}
-	
-	public double getGutterCapacity(Session session)
+	public static double getGutterCapacity(Session session)
 	{
 		double gutMul = session.getGutterMultiplier();
-		double gutcap = (GUTTER_CAPACITY * gutMul);
-		return gutcap;
+		return (GUTTER_CAPACITY * gutMul);
 	}
 	public long getGutterTotal()
 	{
@@ -51,13 +44,13 @@ public class GristGutter
 		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
 	}
 	
-	public void addGrist(GristSet set)
+	public void addGrist(GristSet set, Session session)
 	{
 		for(GristAmount amount : set.getAmounts())
-			this.addGrist(amount.getType(), amount.getAmount());
+			this.addGrist(amount.getType(), amount.getAmount(), session);
 	}
 	
-	public void addGrist(GristType type, long amount)
+	public void addGrist(GristType type, long amount, Session session)
 	{
 		if(type != null)
 		{
