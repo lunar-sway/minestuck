@@ -148,7 +148,10 @@ public class GristHelper
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
-		GristSet overflowedGrist = increaseAndReturnExcess(level, player, set);
+		Objects.requireNonNull(level);
+		Objects.requireNonNull(player);
+		
+		GristSet overflowedGrist = increaseAndReturnExcess(PlayerSavedData.getData(player, level), set);
 		
 		if(!overflowedGrist.isEmpty())
 		{
@@ -163,13 +166,11 @@ public class GristHelper
 		}
 	}
 	
-	public static GristSet increaseAndReturnExcess(Level level, PlayerIdentifier player, GristSet set)
+	public static GristSet increaseAndReturnExcess(PlayerData data, GristSet set)
 	{
-		Objects.requireNonNull(level);
-		Objects.requireNonNull(player);
+		Objects.requireNonNull(data);
 		Objects.requireNonNull(set);
 		
-		PlayerData data = PlayerSavedData.getData(player, level);
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		
 		newCache.addGrist(set);

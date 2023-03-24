@@ -285,7 +285,7 @@ public class ServerEventHandler
 				int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);//determines the appropriate splice amount
 				
 				GristGutter sessionGutter = session.getGristGutter();
-				GristSet rungGrist = GristHelper.increaseAndReturnExcess(level, IdentifierHandler.encode(player), sessionGutter.splice(spliceAmount));
+				GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, sessionGutter.splice(spliceAmount));
 				sessionGutter.addGrist(rungGrist, session);
 			}
 		}
