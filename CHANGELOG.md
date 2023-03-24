@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.9.3.0] - 2023-03-24
+
 ### Added
 
 - Combination recipes and grist costs for items introduced in minecraft 1.19
