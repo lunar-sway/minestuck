@@ -1,14 +1,14 @@
 {
   "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 2000000,
+    "minestuck:build": 2000000,
+    "minestuck:cobalt": 2000000,
+    "minestuck:diamond": 2000000,
+    "minestuck:marble": 2000000,
+    "minestuck:ruby": 2000000
+  },
   "ingredient": {
     "item": "minestuck:gutter_thumb_drive"
-  },
-  "grist_cost": {
-    "minestuck:build": 2000000,
-    "minestuck:amethyst": 2000000,
-    "minestuck:marble": 2000000,
-    "minestuck:ruby": 2000000,
-    "minestuck:cobalt": 2000000,
-    "minestuck:diamond": 2000000
   }
 }
