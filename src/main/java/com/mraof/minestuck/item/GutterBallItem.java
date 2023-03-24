@@ -24,35 +24,33 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class GutterBallItem extends Item
 {
-	public GutterBallItem(Properties pProperties)
+	public GutterBallItem(Properties properties)
 	{
-		super(pProperties);
+		super(properties);
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		if(!pPlayer.getLevel().isClientSide)
+		ItemStack itemStack = player.getItemInHand(usedHand);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
+		itemStack.shrink(1);
+		
+		if(!level.isClientSide)
 		{
-			ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-			Session playerSession = SessionHandler.get(pPlayer.getServer()).getPlayerSession(IdentifierHandler.encode(pPlayer));
-			pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
-			
+			Session playerSession = SessionHandler.get(player.getServer()).getPlayerSession(IdentifierHandler.encode(player));
 			playerSession.getGristGutter().increaseGutterMultiplier(0.2);
-			itemStack.shrink(1);
 		}
 		
-		return super.use(pLevel, pPlayer, pUsedHand);
+		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		if(Screen.hasShiftDown())
-		{
-			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.desc"));
-		} else {
-			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.press_shift"));
-		}
+			pTooltipComponents.add(Component.translatable(getDescriptionId() + ".desc"));
+		else
+			pTooltipComponents.add(Component.translatable(getDescriptionId() + ".press_shift"));
 	}
 }

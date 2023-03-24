@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -11,34 +12,34 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AncientThumbDrive extends Item
 {
-	public AncientThumbDrive(Properties pProperties)
+	public AncientThumbDrive(Properties properties)
 	{
-		super(pProperties);
+		super(properties);
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.GRAVEL_STEP, SoundSource.PLAYERS, 0.01F, 0.3F);
-		pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.02F, 0.6F);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GRAVEL_STEP, SoundSource.PLAYERS, 0.01F, 0.3F);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.02F, 0.6F);
 		
-		
-		return super.use(pLevel, pPlayer, pUsedHand);
+		return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced)
 	{
 		if(Screen.hasShiftDown())
-		{
-			pTooltipComponents.add(Component.translatable("item.minestuck.ancient_thumb_drive.desc"));
-		} else {
-			pTooltipComponents.add(Component.translatable("item.minestuck.ancient_thumb_drive.press_shift"));
-		}
+			tooltipComponents.add(Component.translatable(getDescriptionId() + ".desc"));
+		else
+			tooltipComponents.add(Component.translatable(getDescriptionId() + ".press_shift"));
 	}
 }
 
