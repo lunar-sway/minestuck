@@ -23,6 +23,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Tweaked frequency of some land worldgen features and passive mobs
 - Flora lands now uses mud block instead of coarse dirt
 
+### Removed
+
+- Removed config options "generateCruxiteOre" and "generateUraniumOre".
+For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
+
 ### Fixed
 
 - Fix metal boats not using the correct texture
