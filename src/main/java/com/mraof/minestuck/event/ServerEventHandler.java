@@ -285,12 +285,9 @@ public class ServerEventHandler
 				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
 				int spliceAmount = (int) (GristHelper.rungGrist[rung] * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);//determines the appropriate splice amount
 				
-				GristGutter sessionGutter = session.getGristGutter();//get's the grist gutter
-				playerCache.addGrist(sessionGutter.splice(spliceAmount));//splices some grist from the splice set
-				GristSet rungGrist = GristHelper.limitGristByPlayerRung(level, IdentifierHandler.encode(player), playerCache);
-				
+				GristGutter sessionGutter = session.getGristGutter();
+				GristSet rungGrist = GristHelper.increaseAndReturnExcess(level, IdentifierHandler.encode(player), sessionGutter.splice(spliceAmount));
 				sessionGutter.addGrist(rungGrist, session);
-				data.setGristCache(playerCache);
 			}
 		}
 	}

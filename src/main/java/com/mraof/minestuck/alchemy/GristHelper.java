@@ -7,7 +7,6 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -22,7 +21,6 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -152,39 +150,38 @@ public class GristHelper
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
-		Objects.requireNonNull(level);
-		Session session = SessionHandler.get(level).getPlayerSession(player);
-		GristGutter gutter = session.getGristGutter();
+		GristSet overflowedGrist = increaseAndReturnExcess(level, player, set);
 		
+		if(!overflowedGrist.isEmpty())
+		{
+			Session session = SessionHandler.get(level).getPlayerSession(player);
+			GristGutter gutter = session.getGristGutter();
+			gutter.addGrist(overflowedGrist, session);//sends grist overflow to gutter
+			ServerPlayer playerEntity = player.getPlayer(level.getServer());
+			if(playerEntity != null)
+			{
+				gutter.spillGrist(level, playerEntity);//this isn't currently being used
+			}
+		}
+	}
+	
+	public static GristSet increaseAndReturnExcess(Level level, PlayerIdentifier player, GristSet set)
+	{
+		Objects.requireNonNull(level);
 		Objects.requireNonNull(player);
 		Objects.requireNonNull(set);
+		
 		PlayerData data = PlayerSavedData.getData(player, level);
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
-		newCache.addGrist(set);
-		int gristCap = rungGrist[rung];
 		
-		GristSet overflowedGrist = limitGristByPlayerRung(level, player, newCache);
-		gutter.addGrist(overflowedGrist, session);//sends grist overflow to gutter
+		newCache.addGrist(set);
+		int capacity = rungGrist[data.getEcheladder().getRung()];
+		GristSet excessGrist = newCache.removeOverCapacity(capacity);
+		
 		data.setGristCache(newCache);
-		ServerPlayer playerEntity = player.getPlayer(level.getServer());
-		if(playerEntity != null)
-		{
-			gutter.spillGrist(level, playerEntity);//this isn't currently being used
-		}
+		return excessGrist;
 	}
-	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
-	{
-		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
-		int gristCap = rungGrist[rung];//uses the values in the rungGrist array to determine the current grist cap
-		if (gristCap < 0)
-		{
-			return null;
-		}
-		else
-		{
-			return set.capGrist(gristCap);//returns the result of capGrist
-		}
-	}
+	
 	public static final int[] rungGrist =// will crash the game if set below 20
 			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
 					180,190,200,240,250,260,265,270,275,280,285,290,295,300,

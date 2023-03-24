@@ -196,22 +196,25 @@ public class GristSet
 	}
 	
 	/**
-	 * caps an amount of grist by comparing the grist going in to the amount that should be in
-	 * and then returning the remainder as overflow
+	 * Removes grist of any type exceeding the capacity until all types are at or below the given capacity.
+	 * The grist amounts that were removed is returned.
 	 */
-	public GristSet capGrist(int cap)
+	public GristSet removeOverCapacity(int capacity)
 	{
-		GristSet overflowGrist = new GristSet();
+		if(capacity < 0)
+			throw new IllegalArgumentException("Capacity under 0 not allowed.");
+		
+		GristSet excess = new GristSet();
 		for(GristAmount amount : this.getAmounts())
 		{
-			if(amount.getAmount() > cap)
+			long excessAmount = amount.getAmount() - capacity;
+			if(0 < excessAmount)
 			{
-				long overflowAmount = amount.getAmount() - cap;//sets the overflow amount
-				this.gristTypes.put(amount.getType(), (long) cap);
-				overflowGrist.addGrist(amount.getType(), overflowAmount);//adds the overflow amount to the overflow set
+				this.addGrist(amount.getType(), -excessAmount);
+				excess.addGrist(amount.getType(), excessAmount);
 			}
 		}
-		return overflowGrist;
+		return excess;
 	}
 	
 	/**
