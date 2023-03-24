@@ -15,6 +15,9 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class TransportalizerScreen extends Screen
 {
+	public static final String TITLE = "minestuck.transportalizer";
+	public static final String DESTINATION_CODE_MESSAGE = "minestuck.transportalizer.destination_code";
+	public static final String DONE_MESSAGE = "minestuck.transportalizer.done";
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/generic_small.png");
 
 	private static final int guiWidth = 126;
@@ -27,7 +30,7 @@ public class TransportalizerScreen extends Screen
 	
 	TransportalizerScreen(TransportalizerBlockEntity be)
 	{
-		super(Component.literal("Transportalizer"));
+		super(Component.translatable(TITLE));
 
 		this.be = be;
 	}
@@ -36,7 +39,7 @@ public class TransportalizerScreen extends Screen
 	public void init()
 	{
 		int yOffset = (this.height / 2) - (guiHeight / 2);
-		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, Component.literal("Transportalizer destination code"));	//TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.destinationTextField = new EditBox(this.font, this.width / 2 - 20, yOffset + 25, 40, 20, Component.translatable(DESTINATION_CODE_MESSAGE));	//TODO Maybe look at other text fields for what the text should be
 		this.destinationTextField.setCanLoseFocus(false);
 		this.destinationTextField.setMaxLength(4);
 		this.destinationTextField.setValue(be.getDestId());
@@ -44,7 +47,7 @@ public class TransportalizerScreen extends Screen
 		addRenderableWidget(destinationTextField);
 		setInitialFocus(destinationTextField);
 		
-		addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable("gui.done"), button -> finish()));
+		addRenderableWidget(doneButton = new ExtendedButton(this.width / 2 - 20, yOffset + 50, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
 		doneButton.active = destinationTextField.getValue().length() == 4;
 	}
 	

@@ -1,4 +1,5 @@
 {
+	"render_type": "cutout",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"particle": "minestuck:block/machine/alchemiter/corner_top",

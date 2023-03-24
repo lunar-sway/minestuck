@@ -73,10 +73,6 @@ public class MinestuckConfig
 		public final BooleanValue naturalLichSpawn;
 		public final BooleanValue allowSecondaryConnections;
 		
-		//Ores
-		public final BooleanValue generateCruxiteOre;
-		public final BooleanValue generateUraniumOre;
-		
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
 		public final IntValue initialModusSize;
@@ -122,13 +118,6 @@ public class MinestuckConfig
 		
 		private Server(Builder builder)
 		{
-			builder.push("ores");
-			generateCruxiteOre = builder.comment("If cruxite ore should be generated in the overworld.")
-					.define("generateCruxiteOre",true);
-			generateUraniumOre = builder.comment("If uranium ore should be generated in the overworld.")
-					.define("generateUraniumOre",true);
-			builder.pop();
-			
 			builder.push("mechanics");
 			echeladderProgress = builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
 					.define("echeladderProgress", true);

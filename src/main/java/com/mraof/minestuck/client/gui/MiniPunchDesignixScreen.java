@@ -9,29 +9,23 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu>
 {
-	private static final ResourceLocation BACKGROUND = new ResourceLocation("minestuck:textures/gui/designix.png");
-	private static final ResourceLocation PROGRESS = new ResourceLocation("minestuck:textures/gui/progress/designix.png");
-	
-	private int progressX;
-	private int progressY;
-	private int progressWidth;
-	private int progressHeight;
-	private int goX;
-	private int goY;
+	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation("minestuck:textures/gui/designix.png");
+	private static final ResourceLocation PROGRESS_BAR_TEXTURE = new ResourceLocation("minestuck:textures/gui/progress/designix.png");
+	private static final int PROGRESS_BAR_X = 63;
+	private static final int PROGRESS_BAR_Y = 38;
+	private static final int PROGRESS_BAR_WIDTH = 43;
+	private static final int PROGRESS_BAR_HEIGHT = 17;
+	private static final int BUTTON_X = 66;
+	private static final int BUTTON_Y = 55;
 	
 	public MiniPunchDesignixScreen(MiniPunchDesignixMenu screenContainer, Inventory inv, Component titleIn)
 	{
-		super(MiniPunchDesignixBlockEntity.TYPE, screenContainer, inv, titleIn);
-		
-		//sets progress bar information
-		progressX = 63;
-		progressY = 38;
-		progressWidth = 43;
-		progressHeight = 17;
-		goX = 66;
-		goY = 55;
+		super(screenContainer, inv, titleIn);
 	}
 	
 	@Override
@@ -45,20 +39,16 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	@Override
 	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
 	{
-		int x = (width - imageWidth) / 2;
-		int y = (height - imageHeight) / 2;
-		
-		//draw background
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, BACKGROUND);
-		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
+		
+		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
+		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 
-		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS);
-		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.DEFAULT_MAX_PROGRESS, progressWidth);
-		int height = progressHeight;
-		blit(poseStack, x + progressX, y + progressY, 0, 0, width, height, progressWidth, progressHeight);
+		RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
+		int width = getScaledValue(menu.getProgress(), MiniPunchDesignixBlockEntity.MAX_PROGRESS, PROGRESS_BAR_WIDTH);
+		blit(poseStack, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y,
+				0, 0, width, PROGRESS_BAR_HEIGHT, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 
 	@Override
@@ -66,7 +56,6 @@ public class MiniPunchDesignixScreen extends MachineScreen<MiniPunchDesignixMenu
 	{
 		super.init();
 		
-		goButton = new GoButton((width - imageWidth) / 2 + goX, (height - imageHeight) / 2 + goY, 30, 12, Component.literal(menu.overrideStop() ? "STOP" : "GO"));
-		addRenderableWidget(goButton);
+		goButton = addRenderableWidget(new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, false));
 	}
 }

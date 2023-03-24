@@ -8,6 +8,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -31,8 +32,9 @@ import javax.annotation.Nullable;
 public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_totem_lathe";
-	public static final RunType TYPE = RunType.BUTTON;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
 	
 	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
@@ -43,17 +45,40 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(4, (index, stack) -> (index == 0 || index == 1) && stack.getItem() == MSItems.CAPTCHA_CARD.get() || index == 2 && stack.getItem() == MSItems.CRUXITE_DOWEL.get());
+		return new CustomHandler(4, (index, stack) ->
+				(index == 0 || index == 1) && stack.is(MSItems.CAPTCHA_CARD.get())
+				|| index == 2 && stack.is(MSItems.CRUXITE_DOWEL.get()))
+		{
+			@Override
+			protected void onContentsChanged(int slot)
+			{
+				MiniTotemLatheBlockEntity.this.progressTracker.resetProgress();
+				super.onContentsChanged(slot);
+			}
+		};
 	}
 	
 	@Override
-	public RunType getRunType()
+	public void load(CompoundTag nbt)
 	{
-		return TYPE;
+		super.load(nbt);
+		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	public boolean contentsValid()
+	protected void saveAdditional(CompoundTag compound)
+	{
+		super.saveAdditional(compound);
+		this.progressTracker.save(compound);
+	}
+	
+	@Override
+	protected void tick()
+	{
+		this.progressTracker.tick(this::processContents);
+	}
+	
+	private boolean contentsValid()
 	{
 		ItemStack output = createResult();
 		
@@ -63,8 +88,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		else return false;
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if (!itemHandler.getStackInSlot(3).isEmpty())
 		{
@@ -109,14 +133,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public void setChanged()
-	{
-		this.progress = 0;
-		this.ready = false;
-		super.setChanged();
-	}
-	
-	@Override
 	public Component getDisplayName()
 	{
 		return Component.translatable(TITLE);
@@ -157,6 +173,6 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerIn)
 	{
-		return new MiniTotemLatheMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniTotemLatheMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

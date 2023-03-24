@@ -92,9 +92,9 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> STONE_SURFACE_DISK = REGISTER.register("stone_surface_disk", () -> placed(MSCFeatures.STONE_SURFACE_DISK,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> END_GRASS_SURFACE_DISK = REGISTER.register("end_grass_surface_disk", () -> placed(MSCFeatures.END_GRASS_SURFACE_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(5), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> END_STONE_SURFACE_DISK = REGISTER.register("end_stone_surface_disk", () -> placed(MSCFeatures.END_STONE_SURFACE_DISK,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	
 	//these are similar to the ones in CavePlacements, but with edits to the height at which they generate and count
 	public static final RegistryObject<PlacedFeature> DRIPSTONE_CLUSTER = REGISTER.register("dripstone_cluster", () -> placed(CaveFeatures.DRIPSTONE_CLUSTER,
@@ -223,9 +223,9 @@ public final class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
-			singlePlacementModifiers(PlacementUtils.HEIGHTMAP)));
-	public static final RegistryObject<PlacedFeature> SMALL_RABBIT_PLACEMENT = REGISTER.register("small_rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> SMALL_RABBIT_PLACEMENT = REGISTER.register("small_rabbit_placement", () -> placed(MSCFeatures.RABBIT_PLACEMENT,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP)));
 	
 	public static final RegistryObject<PlacedFeature> CRUXITE_ORE = REGISTER.register("cruxite_ore", () -> placed(MSCFeatures.CRUXITE_ORE,
 			worldGenModifiers(CountPlacement.of(OreGeneration.cruxiteVeinsPerChunk), HeightRangePlacement.triangle(VerticalAnchor.absolute(OreGeneration.cruxiteStratumMin), VerticalAnchor.absolute(OreGeneration.cruxiteStratumMax)))));

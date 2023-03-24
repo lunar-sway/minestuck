@@ -14,9 +14,10 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 public class ColorSelectorScreen extends Screen
 {
 	public static final String TITLE = "minestuck.color_selector";
-	public static final String SELECT_COLOR = "minestuck.select_color";
-	public static final String COLOR_SELECTED = "minestuck.color_selected";
-	public static final String DEFAULT_COLOR_SELECTED = "minestuck.default_color_selected";
+	public static final String CHOOSE_MESSAGE = "minestuck.color_selector.choose";
+	public static final String SELECT_COLOR = "minestuck.color_selector.select_color";
+	public static final String COLOR_SELECTED = "minestuck.color_selector.color_selected";
+	public static final String DEFAULT_COLOR_SELECTED = "minestuck.color_selector.default_color_selected";
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
@@ -39,7 +40,7 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addRenderableWidget(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, Component.literal("Choose"), button -> selectColor()));	//TODO translation key
+		addRenderableWidget(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, Component.translatable(CHOOSE_MESSAGE), button -> selectColor()));
 	}
 	
 	@Override

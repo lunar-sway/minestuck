@@ -1,5 +1,6 @@
 {
     "ambientocclusion": false,
+    "render_type": "cutout",
     "textures": {
         "particle": "minestuck:block/hope_aspect_ladder",
         "texture": "minestuck:block/hope_aspect_ladder"
