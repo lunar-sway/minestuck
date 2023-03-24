@@ -166,27 +166,17 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		{
 			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) entityIn);
-			long playerGristAmount;
-			long rung;
 			
-			playerGristAmount = data.getGristCache().getGrist(gristType);
+			long playerGristAmount = data.getGristCache().getGrist(gristType);
+			long cacheCapacity = data.getEcheladder().getGristCapacity() - playerGristAmount;
 			
-			int gristCap = data.getEcheladder().getGristCapacity();
-			int gutterCap = 0;
-			long gutterTotal = 0;
-			
+			long gutterCapacity;
 			if(playerSession != null)
-			{
-				gutterTotal = playerSession.getGristGutter().getGutterTotal();
-				gutterCap = (int) playerSession.getGristGutter().getGutterCapacity();
-			}
+				gutterCapacity = playerSession.getGristGutter().getRemainingCapacity();
+			else
+				gutterCapacity = 0;
 			
-			long gutterRoom = gutterCap - gutterTotal;
-			long cacheRoom = gristCap - playerGristAmount;
-			
-			long hasRoom = gutterRoom + cacheRoom;
-			
-			return hasRoom;
+			return gutterCapacity + cacheCapacity;
 		}
 		return 0;
 	}

@@ -23,16 +23,12 @@ public class GristGutter
 	public static final int GUTTER_CAPACITY = 10000;
 	
 	private final GristSet gristSet = new GristSet();
-	private long gutterTotal = 0;
+	private long gristTotal = 0;
 	private double gutterMultiplier = 1;
 	
-	public long getGutterCapacity()
+	public long getRemainingCapacity()
 	{
-		return (long) (GUTTER_CAPACITY * gutterMultiplier);
-	}
-	public long getGutterTotal()
-	{
-		return gutterTotal;
+		return (long) (GUTTER_CAPACITY * gutterMultiplier) - gristTotal;
 	}
 	
 	public void increaseGutterMultiplier(double amount)
@@ -49,7 +45,7 @@ public class GristGutter
 		for(GristAmount amount : set.getAmounts())
 		{
 			GristType type = amount.getType();
-			long maximumAllowed = getGutterCapacity() - gutterTotal;
+			long maximumAllowed = getRemainingCapacity();
 			
 			if(maximumAllowed <= 0)
 				return;
@@ -67,7 +63,7 @@ public class GristGutter
 	private void addGristInternal(GristType type, long amount)
 	{
 		this.gristSet.addGrist(type, amount);
-		this.gutterTotal += amount;
+		this.gristTotal += amount;
 	}
 	
 	/**
