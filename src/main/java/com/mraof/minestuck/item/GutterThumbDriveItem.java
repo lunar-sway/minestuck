@@ -7,7 +7,6 @@ import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -20,8 +19,10 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class GutterThumbDriveItem extends Item
 {
 	public GutterThumbDriveItem(Properties pProperties)
@@ -57,9 +58,9 @@ public class GutterThumbDriveItem extends Item
 	{
 		if(Screen.hasShiftDown())
 		{
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_thumb_drive.desc"));
+			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_thumb_drive.desc"));
 		} else {
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.gutter_thumb_drive.press_shift"));
+			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_thumb_drive.press_shift"));
 		}
 	}
 }

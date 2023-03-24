@@ -2,7 +2,6 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -36,9 +35,9 @@ public class AncientThumbDrive extends Item
 	{
 		if(Screen.hasShiftDown())
 		{
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.ancient_thumb_drive.desc"));
+			pTooltipComponents.add(Component.translatable("item.minestuck.ancient_thumb_drive.desc"));
 		} else {
-			pTooltipComponents.add(new TranslatableComponent("item.minestuck.ancient_thumb_drive.press_shift"));
+			pTooltipComponents.add(Component.translatable("item.minestuck.ancient_thumb_drive.press_shift"));
 		}
 	}
 }

@@ -158,11 +158,11 @@ public class GristToast implements Toast
 		//pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(getGristString(pToastComponent)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(getGristString(pToastComponent)) / 2), 24.0F, 0x000000);
 		if(pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) <= GRIST_VIAL_INSIDE_WIDTH)
 		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(" / " + GuiUtil.addSuffix(this.cacheLimit)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2) + (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache))), 24.0F, 0x000000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(" / " + GuiUtil.addSuffix(this.cacheLimit)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2) + (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache))), 24.0F, 0x000000);
 		} else
 		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
 		}
 		
 		

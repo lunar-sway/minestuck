@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -304,7 +305,7 @@ public class GristSet
 	/**
 	 * this is a version of the spawn grist entities function with a delay.
 	 */
-	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
+	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
 	{
 		for(GristAmount amount : getAmounts())
 		{
@@ -323,7 +324,7 @@ public class GristSet
 		}
 	}
 	
-	public void spawnGristEntities(Level level, double x, double y, double z, Random rand, Consumer<GristEntity> postProcessor)
+	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
 	{
 		spawnGristEntities(level, x, y, z, rand, postProcessor, 0, 10);
 	}
