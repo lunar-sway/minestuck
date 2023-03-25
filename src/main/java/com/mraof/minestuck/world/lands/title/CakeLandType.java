@@ -48,7 +48,7 @@ public class CakeLandType extends TitleLandType
 		
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
 						new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
-						CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
+						CountPlacement.of(UniformInt.of(0, 2)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
 				LandBiomeType.any());
 	}
 	

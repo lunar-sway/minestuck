@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory;
 
+import com.mraof.minestuck.blockentity.machine.ProgressTracker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -39,24 +40,29 @@ public abstract class MachineContainerMenu extends AbstractContainerMenu
 		return stillValid(access, playerIn, getValidBlock());
 	}
 	
-	public void setOverrideStop(boolean value)
+	public void setIsLooping(boolean value)
 	{
-		parameters.set(1, value ? 1 : 0);
+		parameters.set(ProgressTracker.LOOPING_INDEX, value ? 1 : 0);
 	}
 	
-	public void setReady(boolean value)
+	public void setShouldRun(boolean value)
 	{
-		parameters.set(2, value ? 1 : 0);
+		parameters.set(ProgressTracker.RUN_INDEX, value ? 1 : 0);
 	}
 	
 	public int getProgress()
 	{
-		return parameters.get(0);
+		return parameters.get(ProgressTracker.PROGRESS_INDEX);
 	}
 	
-	public boolean overrideStop()
+	public boolean isLooping()
 	{
-		return parameters.get(1) != 0;
+		return parameters.get(ProgressTracker.LOOPING_INDEX) != 0;
+	}
+	
+	public boolean isRunning()
+	{
+		return this.parameters.get(ProgressTracker.RUN_INDEX) != 0;
 	}
 	
 	public ContainerLevelAccess getPosition()
