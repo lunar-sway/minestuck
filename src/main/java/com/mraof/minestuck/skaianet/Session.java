@@ -29,7 +29,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
-	private final GristGutter gutter = new GristGutter(this);	//TODO serialization for the gutter
+	private final GristGutter gutter;
 	String name;
 	
 	/**
@@ -116,6 +116,14 @@ public final class Session
 	{
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
+		this.gutter = new GristGutter(this);
+	}
+	
+	private Session(CompoundTag nbt)
+	{
+		connections = new HashSet<>();
+		predefinedPlayers = new HashMap<>();
+		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
 	/**
@@ -275,6 +283,7 @@ public final class Session
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
+		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
 	
@@ -286,7 +295,7 @@ public final class Session
 	 */
 	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
-		Session s = new Session();
+		Session s = new Session(nbt);
 		if(nbt.contains("name", Tag.TAG_STRING))
 			s.name = nbt.getString("name");
 		else s.name = null;

@@ -6,6 +6,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,13 +25,26 @@ public class GristGutter
 	public static final int GUTTER_CAPACITY = 10000;
 	
 	private final Session session;
-	private final NonNegativeGristSet gristSet = new NonNegativeGristSet();
+	private final NonNegativeGristSet gristSet;
 	private long gristTotal = 0;
 	
 	public GristGutter(Session session)
 	{
 		this.session = session;
+		this.gristSet = new NonNegativeGristSet();
 	}
+	
+	public GristGutter(Session session, ListTag listTag)
+	{
+		this.session = session;
+		this.gristSet = NonNegativeGristSet.read(listTag);
+	}
+	
+	public ListTag write()
+	{
+		return this.gristSet.write(new ListTag());
+	}
+	
 	
 	public ImmutableGristSet getCache()
 	{
