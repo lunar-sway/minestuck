@@ -193,7 +193,7 @@ public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> imp
 		@Override
 		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 		{
-			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
+			if(!newState.is(this) && level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 			{
 				ItemStack stack = blockEntity.getStack();
 				if(!stack.isEmpty())
