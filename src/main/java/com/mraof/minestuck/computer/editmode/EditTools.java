@@ -99,7 +99,14 @@ public class EditTools implements IEditTools
 		isEditDragging = v;
 	}
 	
-	
+	@Override
+	public void beginDragTools(ToolMode toolMode, BlockPos pos, Vec3 hit, Direction direction, double reachDistance)
+	{
+		setToolMode(toolMode);
+		setEditPos1(pos);
+		setEditTrace(hit, direction);
+		setEditReachDistance(reachDistance);
+	}
 	@Override
 	public void resetDragTools()
 	{

@@ -49,5 +49,6 @@ public interface IEditTools
 	boolean isEditDragging();
 	void setEditDragging(boolean v);
 	
+	void beginDragTools(ToolMode toolMode, BlockPos pos, Vec3 hit, Direction direction, double reachDistance);
 	void resetDragTools();
 }
