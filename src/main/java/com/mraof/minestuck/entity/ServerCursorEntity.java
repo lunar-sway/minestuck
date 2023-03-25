@@ -42,8 +42,6 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	@Nonnull
 	private Animation animation = Animation.CLICK;
 	
-	private boolean canSwitchAnimation = false;
-	
 	protected ServerCursorEntity(EntityType<? extends ServerCursorEntity> type, Level level)
 	{
 		super(type, level);
@@ -57,8 +55,6 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
 	{
-		canSwitchAnimation = !waitForFinish(event);
-		
 		if(!waitForFinish(event))
 			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, animation.looping ? ILoopType.EDefaultLoopTypes.LOOP : ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 		
