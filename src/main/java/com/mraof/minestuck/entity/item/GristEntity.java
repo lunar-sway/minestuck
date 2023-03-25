@@ -38,10 +38,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	//TODO Perhaps use a data manager for grist type in the same way as the underling entity?
 	public int cycle;
 	
-	private static Session session;
-	
 	public int consumeDelay;
-	
 	
 	public int gristAge = 0;
 	
@@ -172,7 +169,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			
 			long gutterCapacity;
 			if(playerSession != null)
-				gutterCapacity = playerSession.getGristGutter().getRemainingCapacity(PlayerSavedData.get(level));
+				gutterCapacity = playerSession.getGristGutter().getRemainingCapacity();
 			else
 				gutterCapacity = 0;
 			

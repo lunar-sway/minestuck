@@ -10,6 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.Set;
 
@@ -36,13 +37,14 @@ public class GristGutter
 		return gristSet.asImmutable();
 	}
 	
-	public long getRemainingCapacity(PlayerSavedData playerSavedData)
+	public long getRemainingCapacity()
 	{
-		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession(playerSavedData)) - gristTotal;
+		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession()) - gristTotal;
 	}
 	
-	public double gutterMultiplierForSession(PlayerSavedData playerSavedData)
+	public double gutterMultiplierForSession()
 	{
+		PlayerSavedData playerSavedData = PlayerSavedData.get(ServerLifecycleHooks.getCurrentServer());
 		double gutterMultiplier = 0;
 		for(PlayerIdentifier player : this.session.getPlayerList())
 		{
@@ -57,12 +59,12 @@ public class GristGutter
 	 * Any grist that was added to the gutter will be removed from the given grist set,
 	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
 	 */
-	public void addGristFrom(GristSet set, PlayerSavedData playerSavedData)
+	public void addGristFrom(GristSet set)
 	{
 		for(GristAmount amount : set.getAmounts())
 		{
 			GristType type = amount.getType();
-			long maximumAllowed = getRemainingCapacity(playerSavedData);
+			long maximumAllowed = getRemainingCapacity();
 			
 			if(maximumAllowed <= 0)
 				return;
@@ -75,7 +77,7 @@ public class GristGutter
 	
 	/**
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
-	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet, PlayerSavedData)}.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet)}.
 	 */
 	public void addGristUnchecked(GristSet set)
 	{

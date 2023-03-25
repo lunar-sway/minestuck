@@ -5,13 +5,12 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
@@ -22,8 +21,10 @@ import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class GristHelper
@@ -153,7 +154,7 @@ public class GristHelper
 		if(!overflowedGrist.isEmpty())
 		{
 			GristGutter gutter = SessionHandler.get(level).getPlayerSession(player).getGristGutter();
-			gutter.addGristFrom(overflowedGrist, PlayerSavedData.get(level));
+			gutter.addGristFrom(overflowedGrist);
 			ServerPlayer playerEntity = player.getPlayer(level.getServer());
 			if(playerEntity != null && !overflowedGrist.isEmpty())
 			{

@@ -7,14 +7,14 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
-import static net.minecraft.commands.Commands.*;
+import static net.minecraft.commands.Commands.LEVEL_GAMEMASTERS;
+import static net.minecraft.commands.Commands.literal;
 
 public class GutterCommand
 {
@@ -39,8 +39,8 @@ public class GutterCommand
 			throw NO_SESSION_EXCEPTION.create();
 		
 		GristGutter gutter = session.getGristGutter();
-		double multiplier = gutter.gutterMultiplierForSession(PlayerSavedData.get(player.server));
-		long capacity = gutter.getRemainingCapacity(PlayerSavedData.get(player.server));
+		double multiplier = gutter.gutterMultiplierForSession();
+		long capacity = gutter.getRemainingCapacity();
 		ImmutableGristSet gristSet = gutter.getCache();
 		source.sendSuccess(Component.translatable("Gutter modifier: %s, remaining capacity: %s, grist contained: %s", multiplier, capacity, gristSet.asTextComponent()), false);
 		
