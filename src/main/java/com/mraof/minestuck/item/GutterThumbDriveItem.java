@@ -1,13 +1,12 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -45,10 +44,9 @@ public class GutterThumbDriveItem extends Item
 			level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
 			itemStack.shrink(1);
 			
-			if(!level.isClientSide)
+			if(player instanceof ServerPlayer serverPlayer)
 			{
-				Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(player));
-				playerSession.getGristGutter().increaseGutterMultiplier(2.0);
+				PlayerSavedData.getData(serverPlayer).addGutterMultiplier(2.0);
 			}
 			
 			return InteractionResult.sidedSuccess(level.isClientSide());

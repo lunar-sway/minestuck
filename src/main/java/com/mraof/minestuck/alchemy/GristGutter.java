@@ -24,28 +24,29 @@ public class GristGutter
 	
 	private final NonNegativeGristSet gristSet = new NonNegativeGristSet();
 	private long gristTotal = 0;
-	private double gutterMultiplier = 1;	//TODO move to use multiplier defined in PlayerData
 	
-	public long getRemainingCapacity()
+	public long getRemainingCapacity(Session session, PlayerSavedData playerSavedData)
 	{
-		return (long) (GUTTER_CAPACITY * gutterMultiplier) - gristTotal;
+		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession(session, playerSavedData)) - gristTotal;
 	}
 	
-	public void increaseGutterMultiplier(double amount)
+	public static double gutterMultiplierForSession(Session session, PlayerSavedData playerSavedData)
 	{
-		this.gutterMultiplier += amount;
-	}
-	public double getGutterMultiplier()
-	{
+		double gutterMultiplier = 0;
+		for(PlayerIdentifier player : session.getPlayerList())
+		{
+			PlayerData data = playerSavedData.getData(player);
+			gutterMultiplier += data.getGutterMultipler();
+		}
 		return gutterMultiplier;
 	}
 	
-	public void addGristFrom(GristSet set)
+	public void addGristFrom(GristSet set, Session session, PlayerSavedData playerSavedData)
 	{
 		for(GristAmount amount : set.getAmounts())
 		{
 			GristType type = amount.getType();
-			long maximumAllowed = getRemainingCapacity();
+			long maximumAllowed = getRemainingCapacity(session, playerSavedData);
 			
 			if(maximumAllowed <= 0)
 				return;

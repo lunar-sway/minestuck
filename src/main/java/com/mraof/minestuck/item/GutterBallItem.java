@@ -1,11 +1,10 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -36,10 +35,9 @@ public class GutterBallItem extends Item
 		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
 		itemStack.shrink(1);
 		
-		if(!level.isClientSide)
+		if(player instanceof ServerPlayer serverPlayer)
 		{
-			Session playerSession = SessionHandler.get(player.getServer()).getPlayerSession(IdentifierHandler.encode(player));
-			playerSession.getGristGutter().increaseGutterMultiplier(0.2);
+			PlayerSavedData.getData(serverPlayer).addGutterMultiplier(0.2);
 		}
 		
 		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
