@@ -95,6 +95,26 @@ public class GristGutter
 		this.gristTotal += amount;
 	}
 	
+	public GristSet takeFraction(double fraction)
+	{
+		GristSet takenGrist = new GristSet();
+		double extraGrist = 0;
+		
+		for(GristAmount gristAmount : this.gristSet.getAmounts())
+		{
+			// add extraGrist to compensate for errors in the previous amounts
+			double takenAmount = extraGrist + fraction*gristAmount.getAmount();
+			long actualAmount = Math.round(takenAmount);
+			// update extraGrist with the new error
+			extraGrist = takenAmount - actualAmount;
+			
+			takenGrist.addGrist(gristAmount.getType(), actualAmount);
+			this.addGristInternal(gristAmount.getType(), -actualAmount);
+		}
+		
+		return takenGrist;
+	}
+	
 	@SubscribeEvent
 	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
 	{
