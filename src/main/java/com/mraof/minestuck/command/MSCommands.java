@@ -19,6 +19,7 @@ public class MSCommands
 		GristLayerCommand.register(dispatcher);
 		GristCommand.register(dispatcher);
 		SendGristCommand.register(dispatcher);
+		GutterCommand.register(dispatcher);
 		TransportalizerCommand.register(dispatcher);
 		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);

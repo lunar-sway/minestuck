@@ -25,6 +25,11 @@ public class GristGutter
 	private final NonNegativeGristSet gristSet = new NonNegativeGristSet();
 	private long gristTotal = 0;
 	
+	public ImmutableGristSet getCache()
+	{
+		return gristSet.asImmutable();
+	}
+	
 	public long getRemainingCapacity(Session session, PlayerSavedData playerSavedData)
 	{
 		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession(session, playerSavedData)) - gristTotal;
