@@ -66,23 +66,6 @@ public class GristGutter
 		this.gristTotal += amount;
 	}
 	
-	/**
-	 * this is how we take grist from the gutter and throw it into the player's cache
-	 */
-	public GristSet splice(long i)
-	{
-		GristSet spliceSet = new GristSet();
-		
-		for(GristAmount gristAmount : gristSet.getAmounts())
-		{
-			long xMover = Math.max(Math.min(gristAmount.getAmount(), i), 0);
-			spliceSet.addGrist(gristAmount.getType(), xMover);
-			
-			this.addGristInternal(gristAmount.getType(), -xMover);
-		}
-		return spliceSet;
-	}
-	
 	@SubscribeEvent
 	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
 	{
@@ -109,14 +92,39 @@ public class GristGutter
 	{
 		PlayerData data = PlayerSavedData.getData(player, server);
 		
-		int gutterMultiplier = (int) this.getGutterMultiplier();
-		long capacity = data.getEcheladder().getGristCapacity();
-		long spliceAmount = (long) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
+		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
-		//TODO Rework to give a certain amount of grist in total, rather than a certain amount of each type
-		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, this.splice(spliceAmount));
-		this.addGristFrom(rungGrist);
-		if(!rungGrist.isEmpty())
-			throw new IllegalStateException("Failed to add back grist that couldn't be given to a player");
+		GristSet capacity = GristHelper.getCapacitySet(data);
+		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity);
+		GristSet remainder = GristHelper.increaseAndReturnExcess(data, gristToTransfer);
+		if(!remainder.isEmpty())
+			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
+	}
+	
+	private double getDistributionRateModifier()
+	{
+		return 1D/20D;
+	}
+	
+	private GristSet takeWithinCapacity(long amount, GristSet capacity)
+	{
+		long remaining = amount;
+		GristSet takenGrist = new GristSet();
+		//TODO randomize iteration order
+		for(GristAmount capacityAmount : capacity.getAmounts())
+		{
+			GristType type = capacityAmount.getType();
+			long amountInGutter = this.gristSet.getGrist(type);
+			if(amountInGutter > 0)
+			{
+				long takenAmount = Math.min(remaining, Math.min(capacityAmount.getAmount(), amountInGutter));
+				this.addGristInternal(type, -takenAmount);
+				takenGrist.addGrist(type, takenAmount);
+				remaining -= takenAmount;
+				if(remaining <= 0)
+					break;
+			}
+		}
+		return takenGrist;
 	}
 }

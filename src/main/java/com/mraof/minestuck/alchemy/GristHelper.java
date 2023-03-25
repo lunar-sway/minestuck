@@ -177,6 +177,18 @@ public class GristHelper
 		return excessGrist;
 	}
 	
+	public static GristSet getCapacitySet(PlayerData data)
+	{
+		long capacity = data.getEcheladder().getGristCapacity();
+		GristSet capacitySet = new GristSet();
+		for(GristType type : GristTypes.values())
+		{
+			if(data.getGristCache().getGrist(type) < capacity)
+				capacitySet.addGrist(type, capacity - data.getGristCache().getGrist(type));
+		}
+		return capacitySet;
+	}
+	
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
