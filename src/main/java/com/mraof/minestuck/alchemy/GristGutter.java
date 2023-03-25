@@ -22,7 +22,7 @@ public class GristGutter
 {
 	public static final int GUTTER_CAPACITY = 10000;
 	
-	private final GristSet gristSet = new GristSet();
+	private final NonNegativeGristSet gristSet = new NonNegativeGristSet();
 	private long gristTotal = 0;
 	private double gutterMultiplier = 1;	//TODO move to use multiplier defined in PlayerData
 	
@@ -94,7 +94,7 @@ public class GristGutter
 		
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
-		GristSet capacity = GristHelper.getCapacitySet(data);
+		NonNegativeGristSet capacity = GristHelper.getCapacitySet(data);
 		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity);
 		GristSet remainder = GristHelper.increaseAndReturnExcess(data, gristToTransfer);
 		if(!remainder.isEmpty())
@@ -106,7 +106,7 @@ public class GristGutter
 		return 1D/20D;
 	}
 	
-	private GristSet takeWithinCapacity(long amount, GristSet capacity)
+	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity)
 	{
 		long remaining = amount;
 		GristSet takenGrist = new GristSet();

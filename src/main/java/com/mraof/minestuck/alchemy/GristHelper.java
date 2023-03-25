@@ -177,10 +177,10 @@ public class GristHelper
 		return excessGrist;
 	}
 	
-	public static GristSet getCapacitySet(PlayerData data)
+	public static NonNegativeGristSet getCapacitySet(PlayerData data)
 	{
 		long capacity = data.getEcheladder().getGristCapacity();
-		GristSet capacitySet = new GristSet();
+		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
 		for(GristType type : GristTypes.values())
 		{
 			if(data.getGristCache().getGrist(type) < capacity)
