@@ -69,7 +69,7 @@ public class GristGutter
 	/**
 	 * this is how we take grist from the gutter and throw it into the player's cache
 	 */
-	public GristSet splice(int i)
+	public GristSet splice(long i)
 	{
 		GristSet spliceSet = new GristSet();
 		
@@ -110,8 +110,8 @@ public class GristGutter
 		PlayerData data = PlayerSavedData.getData(player, server);
 		
 		int gutterMultiplier = (int) this.getGutterMultiplier();
-		int capacity = data.getEcheladder().getGristCapacity();
-		int spliceAmount = (int) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
+		long capacity = data.getEcheladder().getGristCapacity();
+		long spliceAmount = (long) (capacity * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);
 		
 		//TODO Rework to give a certain amount of grist in total, rather than a certain amount of each type
 		GristSet rungGrist = GristHelper.increaseAndReturnExcess(data, this.splice(spliceAmount));

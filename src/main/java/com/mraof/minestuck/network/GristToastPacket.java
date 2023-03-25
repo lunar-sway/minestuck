@@ -11,10 +11,10 @@ public class GristToastPacket implements PlayToClientPacket
 	private final GristSet gristValue;
 	private final GristHelper.EnumSource source;
 	private final boolean increase;
-	private final int cacheLimit;
+	private final long cacheLimit;
 	private final boolean isCacheOwner;
 	
-	public GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, boolean increase, int cacheLimit, boolean isCacheOwner)
+	public GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, boolean increase, long cacheLimit, boolean isCacheOwner)
 	{
 		this.gristValue = gristValue;
 		this.source = source;
@@ -29,7 +29,7 @@ public class GristToastPacket implements PlayToClientPacket
 		gristValue.write(buffer);
 		buffer.writeEnum(source);
 		buffer.writeBoolean(increase);
-		buffer.writeInt(cacheLimit);
+		buffer.writeLong(cacheLimit);
 		buffer.writeBoolean(isCacheOwner);
 	}
 	
@@ -38,7 +38,7 @@ public class GristToastPacket implements PlayToClientPacket
 		GristSet gristValue = GristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
 		boolean increase = buffer.readBoolean();
-		int cacheLimit = buffer.readInt();
+		long cacheLimit = buffer.readLong();
 		boolean isCacheOwner = buffer.readBoolean();
 		return new GristToastPacket(gristValue, source, increase, cacheLimit, isCacheOwner);
 	}
@@ -49,8 +49,7 @@ public class GristToastPacket implements PlayToClientPacket
 		GristSet gristValue = this.gristValue;
 		GristHelper.EnumSource source = this.source;
 		boolean increase = this.increase;
-		int cacheLimit = this.cacheLimit;
 		GristSet gristCache = ClientPlayerData.getGristCache(this.isCacheOwner);
-		GristToast.sendGristMessage(gristValue, source, increase, cacheLimit, gristCache);
+		GristToast.sendGristMessage(gristValue, source, increase, this.cacheLimit, gristCache);
 	}
 }

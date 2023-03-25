@@ -49,7 +49,7 @@ public abstract class MinestuckScreen extends Screen
 		GristType tooltipType = null;
 		GristSet clientGrist = ClientPlayerData.getClientGrist();
 		int clientRung = ClientPlayerData.getRung();
-		int cacheLimit = Echeladder.getGristCapacity(clientRung);
+		long cacheLimit = Echeladder.getGristCapacity(clientRung);
 
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);

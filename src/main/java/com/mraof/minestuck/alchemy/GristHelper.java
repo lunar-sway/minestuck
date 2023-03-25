@@ -170,7 +170,7 @@ public class GristHelper
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		
 		newCache.addGrist(set);
-		int capacity = data.getEcheladder().getGristCapacity();
+		long capacity = data.getEcheladder().getGristCapacity();
 		GristSet excessGrist = newCache.removeOverCapacity(capacity);
 		
 		data.setGristCache(newCache);
@@ -195,7 +195,7 @@ public class GristHelper
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			int cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
+			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
 			
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, increase, cacheLimit, true), player.getPlayer(server));

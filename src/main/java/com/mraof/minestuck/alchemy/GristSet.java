@@ -199,7 +199,7 @@ public class GristSet
 	 * Removes grist of any type exceeding the capacity until all types are at or below the given capacity.
 	 * The grist amounts that were removed is returned.
 	 */
-	public GristSet removeOverCapacity(int capacity)
+	public GristSet removeOverCapacity(long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
