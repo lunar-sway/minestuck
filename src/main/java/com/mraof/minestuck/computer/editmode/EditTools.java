@@ -2,6 +2,8 @@ package com.mraof.minestuck.computer.editmode;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
@@ -100,12 +102,15 @@ public class EditTools implements IEditTools
 	}
 	
 	@Override
-	public void beginDragTools(ToolMode toolMode, BlockPos pos, Vec3 hit, Direction direction, double reachDistance)
+	public void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player)
 	{
 		setToolMode(toolMode);
-		setEditPos1(pos);
-		setEditTrace(hit, direction);
-		setEditReachDistance(reachDistance);
+		if(toolMode == ToolMode.REVISE)
+			setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
+		else
+			setEditPos1(blockHit.getBlockPos());
+		setEditTrace(blockHit.getLocation(), blockHit.getDirection());
+		setEditReachDistance(blockHit.getLocation().distanceTo(player.getEyePosition()));
 	}
 	@Override
 	public void resetDragTools()

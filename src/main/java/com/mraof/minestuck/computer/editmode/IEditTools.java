@@ -2,6 +2,8 @@ package com.mraof.minestuck.computer.editmode;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
@@ -49,6 +51,6 @@ public interface IEditTools
 	boolean isEditDragging();
 	void setEditDragging(boolean v);
 	
-	void beginDragTools(ToolMode toolMode, BlockPos pos, Vec3 hit, Direction direction, double reachDistance);
+	void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player);
 	void resetDragTools();
 }

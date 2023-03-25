@@ -102,7 +102,7 @@ public class EditToolDrag
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 				{
-					cap.beginDragTools(IEditTools.ToolMode.REVISE, player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()), blockHit.getLocation(), blockHit.getDirection(), blockHit.getLocation().distanceTo(player.getEyePosition()));
+					cap.beginDragTools(IEditTools.ToolMode.REVISE, blockHit, player);
 				}
 			}
 			if (cap.getEditPos1() != null)
@@ -170,7 +170,7 @@ public class EditToolDrag
 				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 				{
-					cap.beginDragTools(IEditTools.ToolMode.RECYCLE, blockHit.getBlockPos(), blockHit.getLocation(), blockHit.getDirection(), blockHit.getLocation().distanceTo(player.getEyePosition()));
+					cap.beginDragTools(IEditTools.ToolMode.RECYCLE, blockHit, player);
 				}
 			}
 			if (cap.getEditPos1() != null)
