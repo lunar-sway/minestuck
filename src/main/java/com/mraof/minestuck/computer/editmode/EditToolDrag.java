@@ -345,9 +345,7 @@ public class EditToolDrag
 			Player player = mc.player;
 			Camera info = event.getCamera();
 			
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
-			if(cap == null)
-				throw new NullPointerException("EditTool Capability is null on player " + player.getDisplayName().toString() + " on client-side!");
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
 			
 			double d1 = info.getPosition().x;
 			double d2 = info.getPosition().y;

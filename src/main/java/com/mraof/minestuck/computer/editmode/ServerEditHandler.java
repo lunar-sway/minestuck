@@ -373,7 +373,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in RightClickBlock event on the server!"));
 			if(cap.isEditDragging())
 			{
 				event.setCanceled(true);
@@ -419,7 +419,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElse(new EditTools());
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in LeftClickBlock event on the server!"));
 			if(cap.isEditDragging())
 			{
 				event.setCanceled(true);
@@ -625,7 +625,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in removeCursorEntity()!"));
 		
 		if(cap.getEditCursorID() != null)
 		{
