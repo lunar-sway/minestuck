@@ -218,7 +218,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			if(anyBlockDestroyed)
 			{
 				//broadcasts edit sound to other players.
-				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
 				
 				player.swing(InteractionHand.MAIN_HAND);
 			}
