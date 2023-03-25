@@ -29,7 +29,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
-	final GristGutter gutter;	//TODO serialization for the gutter
+	private final GristGutter gutter = new GristGutter(this);	//TODO serialization for the gutter
 	String name;
 	
 	/**
@@ -114,7 +114,6 @@ public final class Session
 	
 	Session()
 	{
-		gutter = new GristGutter();
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
 	}

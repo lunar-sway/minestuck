@@ -38,9 +38,10 @@ public class GutterCommand
 		if(session == null)
 			throw NO_SESSION_EXCEPTION.create();
 		
-		double multiplier = GristGutter.gutterMultiplierForSession(session, PlayerSavedData.get(player.server));
-		long capacity = session.getGristGutter().getRemainingCapacity(session, PlayerSavedData.get(player.server));
-		ImmutableGristSet gristSet = session.getGristGutter().getCache();
+		GristGutter gutter = session.getGristGutter();
+		double multiplier = gutter.gutterMultiplierForSession(PlayerSavedData.get(player.server));
+		long capacity = gutter.getRemainingCapacity(PlayerSavedData.get(player.server));
+		ImmutableGristSet gristSet = gutter.getCache();
 		source.sendSuccess(Component.translatable("Gutter modifier: %s, remaining capacity: %s, grist contained: %s", multiplier, capacity, gristSet.asTextComponent()), false);
 		
 		return 1;

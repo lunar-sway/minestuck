@@ -22,23 +22,29 @@ public class GristGutter
 {
 	public static final int GUTTER_CAPACITY = 10000;
 	
+	private final Session session;
 	private final NonNegativeGristSet gristSet = new NonNegativeGristSet();
 	private long gristTotal = 0;
+	
+	public GristGutter(Session session)
+	{
+		this.session = session;
+	}
 	
 	public ImmutableGristSet getCache()
 	{
 		return gristSet.asImmutable();
 	}
 	
-	public long getRemainingCapacity(Session session, PlayerSavedData playerSavedData)
+	public long getRemainingCapacity(PlayerSavedData playerSavedData)
 	{
-		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession(session, playerSavedData)) - gristTotal;
+		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession(playerSavedData)) - gristTotal;
 	}
 	
-	public static double gutterMultiplierForSession(Session session, PlayerSavedData playerSavedData)
+	public double gutterMultiplierForSession(PlayerSavedData playerSavedData)
 	{
 		double gutterMultiplier = 0;
-		for(PlayerIdentifier player : session.getPlayerList())
+		for(PlayerIdentifier player : this.session.getPlayerList())
 		{
 			PlayerData data = playerSavedData.getData(player);
 			gutterMultiplier += data.getGutterMultipler();
@@ -51,12 +57,12 @@ public class GristGutter
 	 * Any grist that was added to the gutter will be removed from the given grist set,
 	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
 	 */
-	public void addGristFrom(GristSet set, Session session, PlayerSavedData playerSavedData)
+	public void addGristFrom(GristSet set, PlayerSavedData playerSavedData)
 	{
 		for(GristAmount amount : set.getAmounts())
 		{
 			GristType type = amount.getType();
-			long maximumAllowed = getRemainingCapacity(session, playerSavedData);
+			long maximumAllowed = getRemainingCapacity(playerSavedData);
 			
 			if(maximumAllowed <= 0)
 				return;
@@ -69,7 +75,7 @@ public class GristGutter
 	
 	/**
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
-	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet, Session, PlayerSavedData)}.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet, PlayerSavedData)}.
 	 */
 	public void addGristUnchecked(GristSet set)
 	{

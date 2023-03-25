@@ -152,9 +152,8 @@ public class GristHelper
 		
 		if(!overflowedGrist.isEmpty())
 		{
-			Session session = SessionHandler.get(level).getPlayerSession(player);
-			GristGutter gutter = session.getGristGutter();
-			gutter.addGristFrom(overflowedGrist, session, PlayerSavedData.get(level));
+			GristGutter gutter = SessionHandler.get(level).getPlayerSession(player).getGristGutter();
+			gutter.addGristFrom(overflowedGrist, PlayerSavedData.get(level));
 			ServerPlayer playerEntity = player.getPlayer(level.getServer());
 			if(playerEntity != null && !overflowedGrist.isEmpty())
 			{
