@@ -51,7 +51,10 @@ public class MSPacketHandler
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
-		registerMessage(EditmodeFillPacket.class, EditmodeFillPacket::decode);
+		registerMessage(EditmodeFillPacket.Fill.class, EditmodeFillPacket.Fill::decode);
+		registerMessage(EditmodeFillPacket.Destroy.class, EditmodeFillPacket.Destroy::decode);
+		registerMessage(EditmodeFillPacket.Cursor.class, EditmodeFillPacket.Cursor::decode);
+		registerMessage(EditmodeFillPacket.Reset.class, EditmodeFillPacket.Reset::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
 		registerMessage(GoButtonPacket.class, GoButtonPacket::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);

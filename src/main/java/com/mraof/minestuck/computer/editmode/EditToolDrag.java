@@ -92,7 +92,7 @@ public class EditToolDrag
 			if(!canEditRevise(player))
 			{
 				if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
-					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
+					MSPacketHandler.sendToServer(new EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -112,14 +112,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
-				MSPacketHandler.sendToServer(EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(EditmodeFillPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, true, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
@@ -164,7 +164,7 @@ public class EditToolDrag
 			if(!canEditRecycle(player))
 			{
 				if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
-					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
+					MSPacketHandler.sendToServer(new EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -184,14 +184,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap));
-				MSPacketHandler.sendToServer(EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(EditmodeFillPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeFillPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, false, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
