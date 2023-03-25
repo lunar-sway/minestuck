@@ -111,7 +111,7 @@ public class EditToolDrag
 			}
 			if (cap.getEditPos1() != null)
 			{
-				cap.setEditPos2(getSelectionEndPoint(player, cap));
+				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), true));
 				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
@@ -183,7 +183,7 @@ public class EditToolDrag
 			}
 			if (cap.getEditPos1() != null)
 			{
-				cap.setEditPos2(getSelectionEndPoint(player, cap));
+				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), false));
 				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
@@ -255,10 +255,11 @@ public class EditToolDrag
 	 * and the distance from the player to the block they first highlighted
 	 * at the start of the selection.
 	 * @param player The client-side editmode player.
-	 * @param cap The player's current EditTools capability.
+	 * @param reachDistance The editReachDistance of the EditTool capability
+	 * @param shouldBlockOffset Whether the endpoint should be inside the highlighted block, or off to the side.
 	 * @return The BlockPos of the second corner of the revise/recycle selection box.
 	 */
-	private static BlockPos getSelectionEndPoint(Player player, IEditTools cap)
+	private static BlockPos getSelectionEndPoint(Player player, double reachDistance, boolean shouldBlockOffset)
 	{
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 
@@ -267,17 +268,15 @@ public class EditToolDrag
 		{
 			Vec3 eyePosition = player.getEyePosition();
 			Vec3 lookDirection = player.getLookAngle();
-			Vec3 selectionPosition = eyePosition.add(lookDirection.x * cap.getEditReachDistance(), lookDirection.y * cap.getEditReachDistance(), lookDirection.z * cap.getEditReachDistance());
+			Vec3 selectionPosition = eyePosition.add(lookDirection.x * reachDistance, lookDirection.y * reachDistance, lookDirection.z * reachDistance);
 			return new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
 		}
 		else
 		{
-			if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
+			if(shouldBlockOffset)
 				return player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
-			else if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
-				return blockHit.getBlockPos();
 			else
-				throw new IllegalStateException("Do not call getSelectionEndPoint() if your tool is not Revise or Recycle!");
+				return blockHit.getBlockPos();
 		}
 	}
 	
