@@ -26,18 +26,22 @@ public class GristGutter
 	
 	private final Session session;
 	private final NonNegativeGristSet gristSet;
-	private long gristTotal = 0;
+	private long gristTotal;
 	
 	public GristGutter(Session session)
 	{
 		this.session = session;
 		this.gristSet = new NonNegativeGristSet();
+		this.gristTotal = 0;
 	}
 	
 	public GristGutter(Session session, ListTag listTag)
 	{
 		this.session = session;
 		this.gristSet = NonNegativeGristSet.read(listTag);
+		this.gristTotal = 0;
+		for(GristAmount amount : this.gristSet.getAmounts())
+			this.gristTotal += amount.getAmount();
 	}
 	
 	public ListTag write()
