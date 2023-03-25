@@ -46,6 +46,11 @@ public class GristGutter
 		return gutterMultiplier;
 	}
 	
+	/**
+	 * Adds the grist from the given set into this gutter.
+	 * Any grist that was added to the gutter will be removed from the given grist set,
+	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
+	 */
 	public void addGristFrom(GristSet set, Session session, PlayerSavedData playerSavedData)
 	{
 		for(GristAmount amount : set.getAmounts())
@@ -60,6 +65,16 @@ public class GristGutter
 			set.addGrist(type, -amountToAdd);
 			this.addGristInternal(type, amountToAdd);
 		}
+	}
+	
+	/**
+	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet, Session, PlayerSavedData)}.
+	 */
+	public void addGristUnchecked(GristSet set)
+	{
+		for(GristAmount amount : set.getAmounts())
+			this.addGristInternal(amount.getType(), amount.getAmount());
 	}
 	
 	/**

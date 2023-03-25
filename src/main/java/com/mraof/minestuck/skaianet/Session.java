@@ -73,7 +73,10 @@ public final class Session
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
-		//TODO make sure that the gutter gets merged
+		
+		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
+		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
+		this.gutter.addGristUnchecked(other.gutter.getCache());
 	}
 	
 	private boolean canAdd(PlayerIdentifier player, PredefineData data)
