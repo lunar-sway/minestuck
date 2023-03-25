@@ -1,11 +1,15 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.network.AtheneumPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -88,5 +92,28 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 			}
 		}
 		return super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	@Override
+	public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta)
+	{
+		if(pMouseX >= xOffset && pMouseX < xOffset + guiWidth)
+		{
+			if(pMouseY >= yOffset && pMouseY < yOffset + guiHeight)
+			{
+				AtheneumPacket packet = null;
+				if(less && pDelta > 0)
+					packet = AtheneumPacket.scroll(true);
+				else if(more && pDelta < 0)
+					packet = AtheneumPacket.scroll(false);
+				
+				if(packet != null)
+				{
+					MSPacketHandler.INSTANCE.sendToServer(packet);
+					return true;
+				}
+			}
+		}
+		return super.mouseScrolled(pMouseX,pMouseY,pDelta);
 	}
 }
