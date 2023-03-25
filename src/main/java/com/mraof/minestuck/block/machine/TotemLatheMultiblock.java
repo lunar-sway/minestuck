@@ -58,14 +58,6 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	{
 		return dowelPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
 	}
-	public BlockPos getWheelPos(BlockPos tilePos, BlockState slotState)
-	{
-		return wheelPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
-	}
-	public BlockPos getRodPos(BlockPos tilePos, BlockState slotState)
-	{
-		return rodPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
-	}
 	
 	public Optional<Placement> findPlacementFromSlot(LevelAccessor level, BlockPos pos)
 	{
