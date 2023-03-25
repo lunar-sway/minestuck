@@ -554,9 +554,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		else if (player.getLevel().isClientSide())
 			throw new IllegalStateException("Server Level is clientside in updateEditToolsServer()!");
 		
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(null);
-		if(cap == null)
-			throw new NullPointerException("EditTools Capability is NULL in updateEditToolsServer()!");
+		
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in updateEditToolsServer()!"));
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -624,16 +623,14 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	/**
 	 * only called server-side, when an edit tool has finished being used (I.E when you release the right mouse button while using revise)
 	 */
-	public static void removeCursorEntity(ServerPlayer player)
+	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElse(new EditTools());
 		
 		if(cap.getEditCursorID() != null)
 		{
 			ServerCursorEntity cursor = (ServerCursorEntity) player.getLevel().getEntity(cap.getEditCursorID());
-			cursor.setAnimation(ServerCursorEntity.Animation.CLICK);
-			//todo: after the geckolib remodel update, make a system where the cursor entity only gets removed once its current animation is done.
-			cursor.remove(Entity.RemovalReason.DISCARDED);
+			cursor.queueRemoval(rejected ? ServerCursorEntity.Animation.REJECTED : ServerCursorEntity.Animation.CLICK);
 		}
 		
 		cap.setEditCursorID(null);

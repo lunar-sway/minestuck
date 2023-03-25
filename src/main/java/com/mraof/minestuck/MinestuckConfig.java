@@ -118,6 +118,8 @@ public class MinestuckConfig
 		public final BooleanValue portableMachines;
 		public final IntValue overworldEditRange;
 		public final IntValue landEditRange;
+		public final IntValue cursorDespawnTime;
+		public final IntValue cursorRemovalPadding;
 		public final BooleanValue giveItems;
 		
 		private Server(Builder builder)
@@ -188,6 +190,10 @@ public class MinestuckConfig
 					.defineInRange("overworldEditRange", 15, 1, Integer.MAX_VALUE);
 			landEditRange = builder.comment("A number that determines how far away from the center of the brought land that an editmode player may be after entry.")
 					.defineInRange("landEditRange", 30, 1, Integer.MAX_VALUE);
+			cursorDespawnTime = builder.comment("The time, in ticks, that it takes for a Sburb editmode cursor to despawn after not receiving any updates.")
+					.defineInRange("cursorDespawnTime", 40, 1, Integer.MAX_VALUE);
+			cursorRemovalPadding = builder.comment("The time added, in ticks, after the removal animation has finished, but before the cursor is removed.")
+					.defineInRange("cursorRemovalPadding", 3, 0, Integer.MAX_VALUE);
 			builder.pop();
 			
 			builder.push("machines");

@@ -91,7 +91,7 @@ public class EditToolDrag
 		{
 			if(!canEditRevise(player))
 			{
-				if(cap.getToolMode() != null)
+				if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
 					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;
@@ -163,7 +163,7 @@ public class EditToolDrag
 		{
 			if(!canEditRecycle(player))
 			{
-				if(cap.getToolMode() != null)
+				if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
 					MSPacketHandler.sendToServer(EditmodeFillPacket.Reset());
 				cap.resetDragTools();
 				return;

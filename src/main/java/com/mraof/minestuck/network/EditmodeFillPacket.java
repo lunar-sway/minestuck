@@ -26,8 +26,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import static com.mraof.minestuck.computer.editmode.ServerEditHandler.isBlockItem;
-
 public class EditmodeFillPacket implements PlayToServerPacket
 {
 	public enum UpdateMode {
@@ -37,7 +35,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		RESET //3 Removes cursor without modifying blocks.
 	}
 	
-	final UpdateMode fill;
+	final UpdateMode updateMode;
 	final boolean isDown;
 	final BlockPos positionStart;
 	final BlockPos positionEnd;
@@ -52,9 +50,9 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	
 	public static EditmodeFillPacket Reset() { return new EditmodeFillPacket(UpdateMode.RESET, false, null, null, null, null);}
 	
-	public EditmodeFillPacket(UpdateMode fill, boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
+	public EditmodeFillPacket(UpdateMode updateMode, boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side)
 	{
-		this.fill = fill;
+		this.updateMode = updateMode;
 		this.isDown = isDown;
 		this.positionStart = positionStart;
 		this.positionEnd = positionEnd;
@@ -65,8 +63,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeEnum(fill);
-		if(fill == UpdateMode.FILL || fill == UpdateMode.DESTROY)
+		buffer.writeEnum(updateMode);
+		if(updateMode == UpdateMode.FILL || updateMode == UpdateMode.DESTROY)
 		{
 			buffer.writeBoolean(isDown);
 			buffer.writeInt(positionStart.getX());
@@ -80,7 +78,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			buffer.writeDouble(hitVector.z);
 			buffer.writeEnum(side);
 		}
-		else if(fill == UpdateMode.CURSOR)
+		else if(updateMode == UpdateMode.CURSOR)
 		{
 			buffer.writeBoolean(isDown);
 			buffer.writeInt(positionStart.getX());
@@ -90,20 +88,20 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			buffer.writeInt(positionEnd.getY());
 			buffer.writeInt(positionEnd.getZ());
 		}
-		else if(fill != UpdateMode.RESET)
+		else if(updateMode != UpdateMode.RESET)
 			throw new IllegalStateException("UpdateMode in EditmodeFillPacket during encode() isn't set correctly! Probably null.");
 			
 	}
 	
 	public static EditmodeFillPacket decode(FriendlyByteBuf buffer)
 	{
-		UpdateMode fill = buffer.readEnum(UpdateMode.class);
+		UpdateMode updateMode = buffer.readEnum(UpdateMode.class);
 		boolean isDragging = false;
 		BlockPos positionStart = null;
 		BlockPos positionEnd = null;
 		Vec3 hitVector = new Vec3(0,0,0);
 		Direction side = Direction.NORTH;
-		if(fill == UpdateMode.FILL || fill == UpdateMode.DESTROY)
+		if(updateMode == UpdateMode.FILL || updateMode == UpdateMode.DESTROY)
 		{
 			isDragging = buffer.readBoolean();
 			positionStart = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
@@ -111,16 +109,16 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			hitVector = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 			side = buffer.readEnum(Direction.class);
 		}
-		else if(fill == UpdateMode.CURSOR)
+		else if(updateMode == UpdateMode.CURSOR)
 		{
 			isDragging = buffer.readBoolean();
 			positionStart = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
 			positionEnd = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
 		}
-		else if(fill != UpdateMode.RESET)
+		else if(updateMode != UpdateMode.RESET)
 			throw new IllegalStateException("UpdateMode in EditmodeFillPacket during decode() isn't set correctly! Probably null.");
 		
-		return new EditmodeFillPacket(fill, isDragging, positionStart, positionEnd, hitVector, side);
+		return new EditmodeFillPacket(updateMode, isDragging, positionStart, positionEnd, hitVector, side);
 	}
 	
 	@Override
@@ -128,7 +126,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 	{
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on server-side (during packet execution)!"));
 		
-		if(fill == UpdateMode.FILL)
+		if(updateMode == UpdateMode.FILL)
 		{
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -145,8 +143,8 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			float interactionPositionY = (float) (hitVector.y - (double) positionStart.getY());
 			float interactionPositionZ = (float) (hitVector.z - (double) positionStart.getZ());
 			
-			
-			boolean anyBlockEdited = false;
+			GristSet missingCost = new GristSet();
+			boolean anyBlockPlaced = false;
 			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
 			{
 				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
@@ -156,7 +154,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 						
 						int c = stack.getCount();
 						BlockPos pos = new BlockPos(x, y, z);
-						if((player.getLevel().getBlockState(pos).getMaterial().isReplaceable() || player.getLevel().getBlockState(pos).isAir()) && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) == InteractionResult.SUCCESS)
+						if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
 						{
 							//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 							if(player.isCreative())
@@ -166,28 +164,33 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							SoundType soundType = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType();
 							player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 							
-							anyBlockEdited = true;
+							anyBlockPlaced = true;
 						}
+						else
+							missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
 					}
 				}
 			}
-			if(anyBlockEdited)
+			if(anyBlockPlaced)
 			{
 				//broadcasts edit sound to other players.
 				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
 				player.swing(hand);
 			}
+			if(!missingCost.isEmpty())
+				player.sendSystemMessage(missingCost.createMissingMessage(), true);
 			
-			ServerEditHandler.removeCursorEntity(player);
+			ServerEditHandler.removeCursorEntity(player, !anyBlockPlaced);
 		}
-		else if(fill == UpdateMode.DESTROY)
+		else if(updateMode == UpdateMode.DESTROY)
 		{
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
 			cap.setEditPos2(positionEnd);
 			cap.setEditTrace(hitVector, side);
 			
-			boolean anyBlockEdited = false;
+			GristSet missingCost = new GristSet();
+			boolean anyBlockDestroyed = false;
 			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
 			{
 				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
@@ -205,22 +208,26 @@ public class EditmodeFillPacket implements PlayToServerPacket
 							player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
 							player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
 							
-							anyBlockEdited = true;
+							anyBlockDestroyed = true;
 						}
+						else
+							missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
 					}
 				}
 			}
-			if(anyBlockEdited)
+			if(anyBlockDestroyed)
 			{
 				//broadcasts edit sound to other players.
 				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
 				
 				player.swing(InteractionHand.MAIN_HAND);
 			}
+			if(!missingCost.isEmpty())
+				player.sendSystemMessage(missingCost.createMissingMessage(), true);
 			
-			ServerEditHandler.removeCursorEntity(player);
+			ServerEditHandler.removeCursorEntity(player, !anyBlockDestroyed);
 		}
-		else if(fill == UpdateMode.CURSOR)
+		else if(updateMode == UpdateMode.CURSOR)
 		{
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -228,9 +235,9 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			
 			ServerEditHandler.updateEditToolsServer(player, isDown, positionStart, positionEnd);
 		}
-		else if(fill == UpdateMode.RESET)
+		else if(updateMode == UpdateMode.RESET)
 		{
-			ServerEditHandler.removeCursorEntity(player);
+			ServerEditHandler.removeCursorEntity(player, true);
 			cap.resetDragTools();
 		}
 		else
@@ -247,7 +254,7 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			
 			ItemStack stack = player.getMainHandItem();
 			
-			if(stack.isEmpty() || !isBlockItem(stack.getItem()) || hand.equals(InteractionHand.OFF_HAND))
+			if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND))
 				return false;
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, connection, level);
@@ -263,6 +270,30 @@ public class EditmodeFillPacket implements PlayToServerPacket
 		}
 		
 		return true;
+	}
+	
+	private static GristSet editModePlaceCost(Level level, Player player, InteractionHand hand, BlockPos pos)
+	{
+		EditData data = ServerEditHandler.getData(player);
+		SburbConnection connection = data.getConnection();
+		
+		ItemStack stack = player.getMainHandItem();
+		
+		if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND))
+			return new GristSet();
+		
+		DeployEntry entry = DeployList.getEntryForItem(stack, connection, level);
+		if(entry != null)
+		{
+			GristSet cost = entry.getCurrentCost(connection);
+			if(level.getBlockState(pos).getMaterial().isReplaceable() && !GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
+				return cost;
+			
+		}
+		else if(level.getBlockState(pos).getMaterial().isReplaceable() && !GristHelper.canAfford(level, connection.getClientIdentifier(), GristCost.findCostForItem(stack, null, false, level)))
+			return GristCost.findCostForItem(stack, null, false, level);
+		
+		return new GristSet();
 	}
 	
 	private static boolean editModeDestroyCheck(Level level, Player player, BlockPos pos)
@@ -285,5 +316,27 @@ public class EditmodeFillPacket implements PlayToServerPacket
 			}
 		}
 		return true;
+	}
+	
+	private static GristSet editModeDestroyCost(Level level, Player player, BlockPos pos)
+	{
+		EditData data = ServerEditHandler.getData(player);
+		SburbConnection connection = data.getConnection();
+		
+		BlockState block = level.getBlockState(pos);
+		ItemStack stack = block.getCloneItemStack(null, level, pos, player);
+		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), level, DeployList.EntryLists.ATHENEUM);
+		if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
+		{
+			
+			GristSet cost = new GristSet(GristTypes.BUILD,1);
+			if(!block.isAir() && !GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
+				return cost;
+			
+		}
+		else if (block.isAir() && (MinestuckConfig.SERVER.gristRefund.get() || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
+			return entry.getCurrentCost(connection).scale(-1);
+	
+		return new GristSet();
 	}
 }
