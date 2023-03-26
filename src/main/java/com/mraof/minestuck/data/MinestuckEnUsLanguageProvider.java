@@ -155,6 +155,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.MYCELIUM_BRICKS, "Mycelium Bricks");
 		addBlock(MSBlocks.MYCELIUM_COLUMN, "Mycelium Column");
 		addBlock(MSBlocks.CHISELED_MYCELIUM_BRICKS, "Chiseled Mycelium Bricks");
+		addBlock(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS, "Suspicious Chiseled Mycelium Bricks");
 		addBlock(MSBlocks.CRACKED_MYCELIUM_BRICKS, "Cracked Mycelium Bricks");
 		addBlock(MSBlocks.MOSSY_MYCELIUM_BRICKS, "Mossy Mycelium Bricks");
 		addBlock(MSBlocks.FLOWERY_MYCELIUM_BRICKS, "Flowery Mycelium Bricks");

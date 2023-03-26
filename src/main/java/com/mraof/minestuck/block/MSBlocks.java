@@ -166,6 +166,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> MYCELIUM_BRICKS = REGISTER.register("mycelium_bricks", () -> new Block(copy(MYCELIUM_STONE.get())));
 	public static final RegistryObject<Block> MYCELIUM_COLUMN = REGISTER.register("mycelium_column", () -> new MSDirectionalBlock(copy(MYCELIUM_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_MYCELIUM_BRICKS = REGISTER.register("chiseled_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
+	public static final RegistryObject<Block> SUSPICIOUS_CHISELED_MYCELIUM_BRICKS = REGISTER.register("suspicious_chiseled_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_MYCELIUM_BRICKS = REGISTER.register("cracked_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
