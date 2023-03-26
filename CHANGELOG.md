@@ -8,13 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Shadewood blocks
+- New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 
 ### Removed
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma, Carnie, Riotmode
 
 ## [Unreleased]
 
