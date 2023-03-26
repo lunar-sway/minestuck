@@ -11,9 +11,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class LandTypes
 {
@@ -61,9 +59,4 @@ public class LandTypes
 	public static final RegistryObject<TitleLandType> MONSTERS = TITLE_REGISTER.register("monsters", () -> new MonstersLandType(MonstersLandType.Variant.MONSTERS));
 	public static final RegistryObject<TitleLandType> UNDEAD = TITLE_REGISTER.register("undead", () -> new MonstersLandType(MonstersLandType.Variant.UNDEAD));
 	public static final RegistryObject<TitleLandType> TOWERS = TITLE_REGISTER.register("towers", TowersLandType::new);
-	
-	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)
-	{
-		return TITLE_REGISTRY.get().getValues().stream().filter(landType -> landType.isAspectCompatible(terrain) && landType.canBePickedAtRandom()).collect(Collectors.toSet());
-	}
 }

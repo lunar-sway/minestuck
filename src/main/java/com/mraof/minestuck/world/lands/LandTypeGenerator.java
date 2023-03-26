@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
@@ -49,26 +48,16 @@ public final class LandTypeGenerator
 	public TitleLandType getTitleAspect(TerrainLandType aspectTerrain, EnumAspect titleAspect, List<TitleLandType> usedAspects)
 	{
 		TitleLandType landAspect;
+		var alternatives = LandTypeSelection.titleAlternatives(titleAspect);
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, titleAlternatives(), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, alternatives, aspect -> aspect.isAspectCompatible(aspectTerrain));
 		} else
-			landAspect = selectRandomAspect(usedAspects, titleAlternatives(), aspect -> aspect.getAspect() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, alternatives, aspect -> true);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return LandTypes.TITLE_NULL.get();
-	}
-	
-	private static Collection<List<TitleLandType>> titleAlternatives()
-	{
-		Map<ResourceLocation, List<TitleLandType>> groupMap = Maps.newHashMap();
-		for(TitleLandType landType : LandTypes.TITLE_REGISTRY.get())
-		{
-			if(landType.canBePickedAtRandom())
-				groupMap.computeIfAbsent(landType.getGroup(), _landType -> Lists.newArrayList()).add(landType);
-		}
-		return groupMap.values();
 	}
 	
 	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Iterable<? extends Collection<A>> groups, Predicate<A> condition)

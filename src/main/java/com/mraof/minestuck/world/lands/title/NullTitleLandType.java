@@ -6,7 +6,6 @@ public class NullTitleLandType extends TitleLandType
 {
 	public NullTitleLandType()
 	{
-		super(null, false);
 	}
 	
 	@Override
