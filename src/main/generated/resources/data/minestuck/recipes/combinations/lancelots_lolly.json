@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:jousting_lance"
+  },
+  "input2": {
+    "item": "minestuck:candy_corn"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:lancelots_lolly"
+  }
+}

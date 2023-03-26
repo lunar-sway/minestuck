@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 16,
+    "minestuck:diamond": 36
+  },
+  "ingredient": {
+    "item": "minestuck:diamond_dagger"
+  }
+}
