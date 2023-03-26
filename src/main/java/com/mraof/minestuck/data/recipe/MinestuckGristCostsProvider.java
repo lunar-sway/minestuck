@@ -516,9 +516,10 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CLAW_SICKLE.get()).grist(BUILD, 264).grist(IODINE, 116).grist(CHALK, 66).grist(GARNET, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLAW_OF_NRUBYIGLITH.get()).grist(BUILD, 1056).grist(AMETHYST, 264).grist(CHALK, 44).grist(GARNET, 26).grist(SHALE, 44).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_SICKLE.get()).grist(IODINE, 45).grist(GOLD, 12).grist(CHALK, 45).grist(AMBER, 15).build(recipeSaver);
+		
 		GristCostRecipeBuilder.of(MSItems.SCYTHE.get()).grist(BUILD, 56).grist(RUST, 25).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.EIGHTBALL_SCYTHE.get()).grist(BUILD, 715).grist(TAR, 743).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.TIME_FLAYER.get()).grist(BUILD, 1890).grist(TAR, 3778).grist(COBALT, 6046).grist(QUARTZ, 1).grist(GARNET, 568).grist(RUBY, 568).grist(GOLD, 1512).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.TIME_FLAYER.get()).grist(BUILD, 1148).grist(TAR, 574).grist(COBALT, 459).grist(DIAMOND, 230).grist(GOLD, 230).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SUNRAY_HARVESTER.get()).grist(TAR, 271).grist(GOLD, 434).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GREEN_SUN_RAYREAPER.get()).grist(BUILD, 18533).grist(TAR, 9266).grist(URANIUM, 22240).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SKAITHE.get()).grist(BUILD, 2000).grist(QUARTZ, 2400).grist(AMETHYST, 512).grist(GOLD, 512).build(recipeSaver);
