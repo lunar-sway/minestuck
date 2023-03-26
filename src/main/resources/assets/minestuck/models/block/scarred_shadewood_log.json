@@ -2,8 +2,7 @@
     "parent": "block/block",
     "textures": {
         "side": "minestuck:block/shadewood",
-        "top": "minestuck:block/scarred_shadewood_top",
-        "bottom": "minestuck:block/scarred_shadewood_bottom",
+        "end": "minestuck:block/scarred_shadewood_top",
         "front": "minestuck:block/scarred_shadewood",
         "particle": "minestuck:block/shadewood"
     },
@@ -11,8 +10,8 @@
         {   "from": [ 0, 0, 0 ],
             "to": [ 16, 16, 16 ],
             "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "cullface": "down" },
-                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#top", "cullface": "up" },
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#end", "cullface": "down" },
+                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#end", "cullface": "up" },
                 "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "north" },
                 "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "south" },
                 "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "west" },

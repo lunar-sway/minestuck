@@ -12,13 +12,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 
+### Changed
+
+- Land vegetation now has a partial random XZ offset the same way vanilla grass does
+
 ### Removed
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
+### Fixed
+
+- Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
+
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma, Carnie, Riotmode
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
 
 ## [Unreleased]
 

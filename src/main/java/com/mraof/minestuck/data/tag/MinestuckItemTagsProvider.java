@@ -40,6 +40,7 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(BlockTags.SAPLINGS, SAPLINGS);
 		copy(BlockTags.STAIRS, STAIRS);
 		copy(BlockTags.SLABS, SLABS);
+		copy(BlockTags.LOGS, LOGS);
 		copy(BlockTags.LEAVES, LEAVES);
 		copy(Tags.Blocks.COBBLESTONE, COBBLESTONE);
 		copy(Tags.Blocks.ORES, ORES);
