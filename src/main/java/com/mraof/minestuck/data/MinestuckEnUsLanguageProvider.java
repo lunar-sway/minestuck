@@ -18,7 +18,6 @@ import com.mraof.minestuck.computer.ButtonListProgram;
 import com.mraof.minestuck.computer.DiskBurner;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
-import com.mraof.minestuck.computer.ColorPickerProgram;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -1555,6 +1554,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristSelectorScreen.TITLE, "Grist Selector");
 		add(GristSelectorScreen.SELECT_GRIST, "Select Grist Type");
 		add(ColorSelectorScreen.TITLE, "Color Selector");
+		add(ColorSelectorScreen.ADVANCED_TAB, "Advanced");
+		add(ColorSelectorScreen.BASIC_TAB, "Basic");
 		add(ColorSelectorScreen.CHOOSE_MESSAGE, "Choose");
 		add(ColorSelectorScreen.SELECT_COLOR, "Select Color");
 		add(ColorSelectorScreen.COLOR_SELECTED, "If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!");
@@ -1656,9 +1657,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
-		add(ColorPickerProgram.NAME, "Color Picker");
-		add(ColorPickerProgram.CHOOSE, "Choose");
-		add(ColorPickerProgram.SELECTED, "Selected Color %s");
 		add(DiskBurner.NAME, "Disk Burner");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");
