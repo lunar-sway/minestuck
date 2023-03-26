@@ -53,7 +53,8 @@ public class MSPacketHandler
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
-		registerMessage(GoButtonPacket.class, GoButtonPacket::decode);
+		registerMessage(SetMachineRunningPacket.class, SetMachineRunningPacket::decode);
+		registerMessage(SetMachineLoopingPacket.class, SetMachineLoopingPacket::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);

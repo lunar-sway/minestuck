@@ -44,9 +44,10 @@ public class FloraLandType extends TerrainLandType
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
 		registry.setBlock("surface", Blocks.GRASS_BLOCK);
-		registry.setBlock("surface_rough", Blocks.COARSE_DIRT);
+		registry.setBlock("surface_rough", Blocks.MUD);
 		registry.setBlock("upper", Blocks.DIRT);
 		registry.setBlock("ocean", MSBlocks.BLOOD);
+		registry.setBlock("ocean_surface", Blocks.MUD);
 		registry.setBlock("structure_primary", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.FLOWERY_MOSSY_STONE_BRICKS);
 		registry.setBlock("structure_primary_mossy", MSBlocks.MOSSY_DECREPIT_STONE_BRICKS);
