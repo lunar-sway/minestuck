@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.logging.LogUtils;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.ChatFormatting;
@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
-import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,20 +30,17 @@ public class ColorSelectorScreen extends Screen
 	public static final String COLOR_SELECTED = "minestuck.color_selector.color_selected";
 	public static final String DEFAULT_COLOR_SELECTED = "minestuck.color_selector.default_color_selected";
 	
-	public static final Logger LOGGER = LogUtils.getLogger();
-	
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
+	private static final ResourceLocation guiBackground = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
-	private ForgeSlider redSlider, greenSlider, blueSlider;
-	private EditBox hexBox;
-	private ExtendedButton tabButton;
-	private static int xOffset, yOffset;
-	private Tab tab;
-	private boolean useCanonColor;
-	private int redPrev = -1, greenPrev = -1, bluePrev = -1; // needed to track changes to sliders
 	private static final List<ColorSelector> canonColors;
-	private int selectedIndex = -1;
+	private static int xOffset, yOffset;
+	
 	private final boolean firstTime;
+	private boolean useCanonColor, onRGBTab;
+	private int redPrev = -1, greenPrev = -1, bluePrev = -1, selectedIndex = -1;
+	private ForgeSlider redSlider, greenSlider, blueSlider;
+	private ExtendedButton tabButton;
+	private EditBox hexBox;
 	
 	// initialize color selectors
 	static
@@ -64,15 +60,13 @@ public class ColorSelectorScreen extends Screen
 	public ColorSelectorScreen(boolean firstTime)
 	{
 		super(Component.translatable(TITLE));
+		
 		this.firstTime = firstTime;
-		this.tab = Tab.BASIC;
-		for(int i = 0; i < ColorHandler.getColorSize(); i++)
-		{
-			if(ColorHandler.getColor(i) == ClientPlayerData.getPlayerColor())
-			{
-				selectedIndex = i;
-			}
-		}
+		this.onRGBTab = false;
+		
+		for(ColorSelector colorSelector : canonColors)
+			if(ClientPlayerData.getPlayerColor() == colorSelector.getColor())
+				selectedIndex = colorSelector.id;
 	}
 	
 	@Override
@@ -98,7 +92,7 @@ public class ColorSelectorScreen extends Screen
 		int chooseWidth = firstTime? 76 : 65;
 		addRenderableWidget(new ExtendedButton(xOffset+choosePos, yOffset+130, chooseWidth, 20, Component.translatable(CHOOSE_MESSAGE), button -> selectColor()));
 		
-		setTab(tab);
+		setTab(false);
 	}
 	
 	@Override
@@ -121,14 +115,10 @@ public class ColorSelectorScreen extends Screen
 		return Integer.parseInt(String.format("%6s" , Integer.toHexString(ClientPlayerData.getPlayerColor())).replace(' ', '0').substring(comp*2,comp*2+2),16);
 	}
 	
-	private void setTab(Tab tab)
+	private void setTab(boolean tab)
 	{
-		var onRGBTab = tab == Tab.ADVANCED;
-		
-		redSlider.visible   = onRGBTab;
-		greenSlider.visible = onRGBTab;
-		blueSlider.visible  = onRGBTab;
-		hexBox.setVisible(onRGBTab);
+		onRGBTab = tab;
+		redSlider.visible = greenSlider.visible = blueSlider.visible = hexBox.visible = onRGBTab;
 		
 		if(onRGBTab && selectedIndex!=-1 && useCanonColor)
 		{
@@ -142,13 +132,13 @@ public class ColorSelectorScreen extends Screen
 			selectedIndex = -1;
 		
 		if(!firstTime)
-			tabButton.setMessage(onRGBTab?Component.translatable(BASIC_TAB):Component.translatable(ADVANCED_TAB));
+			tabButton.setMessage(onRGBTab ?Component.translatable(BASIC_TAB):Component.translatable(ADVANCED_TAB));
 	}
 	
 	private void swapTabs()
 	{
-		tab = Tab.other(tab);
-		setTab(tab);
+		onRGBTab = !onRGBTab;
+		setTab(onRGBTab);
 	}
 	
 	@Override
@@ -159,22 +149,37 @@ public class ColorSelectorScreen extends Screen
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.setShaderTexture(0, guiBackground);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage = I18n.get(SELECT_COLOR);
-		minecraft.font.draw(poseStack, cacheMessage, (this.width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		font.draw(poseStack, cacheMessage, (width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
 		
-		if ((redSlider.getValueInt() != redPrev || greenSlider.getValueInt() != greenPrev || blueSlider.getValueInt() != bluePrev) && !hexBox.getValue().equalsIgnoreCase(getSliderHex()))
+		if(redSlider.getValueInt() != redPrev || greenSlider.getValueInt() != greenPrev || blueSlider.getValueInt() != bluePrev)
 		{
-			hexBox.setValue(getSliderHex());
-			useCanonColor = false;
+			String hex = getSliderHex();
+			if(!hexBox.getValue().equalsIgnoreCase(hex))
+			{
+				hexBox.setValue(hex);
+				useCanonColor = false;
+			}
 		}
 		
 		redPrev = redSlider.getValueInt();
 		greenPrev = greenSlider.getValueInt();
 		bluePrev = blueSlider.getValueInt();
 		
-		if (tab==Tab.BASIC)
+		if(onRGBTab)
+		{
+			// hide the color boxes by putting this other box on top of them
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.setShaderTexture(0, guiBackground);
+			blit(poseStack, xOffset+20, yOffset+31, 0, guiHeight, 138, 98);
+			
+			// spirograph color preview
+			RenderSystem.setShaderColor((float)redSlider.getValue()/255F, (float)greenSlider.getValue()/255, (float)blueSlider.getValue()/255, 0.5F);
+			blit(poseStack, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
+		} else
 		{
 			for(ColorSelector canonColor : canonColors)
 			{
@@ -188,31 +193,19 @@ public class ColorSelectorScreen extends Screen
 					RenderSystem.setShaderTexture(0, guiBackground);
 					blit(poseStack, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
 				}
+				
+				if(canonColor.pointWithin(mouseX - xOffset, mouseY - yOffset))
+					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
 			}
-		} else {
-			// hide the color boxes by putting this other box on top of them
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-			RenderSystem.setShaderTexture(0, guiBackground);
-			blit(poseStack, xOffset+20, yOffset+31, 0, guiHeight, 138, 98);
-			
-			// spirograph color preview
-			RenderSystem.setShaderColor((float)redSlider.getValue()/255F, (float)greenSlider.getValue()/255, (float)blueSlider.getValue()/255, 0.5F);
-			blit(poseStack, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
 		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
-		
-		if (tab== Tab.BASIC)
-			for(ColorSelector canonColor : canonColors)
-				if(canonColor.pointWithin(mouseX-xOffset, mouseY-yOffset))
-					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
 	}
 	
 	@Override
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
-		if(mouseButton == 0 && tab == Tab.BASIC)
+		if(mouseButton == 0 && !onRGBTab)
 		{
 			int index = getColorIndexAtMouse(mouseX, mouseY);
 			if(index != -1)
@@ -253,13 +246,12 @@ public class ColorSelectorScreen extends Screen
 	
 	private void selectColor()
 	{
-		switch (tab)
-		{
-			case BASIC -> ClientPlayerData.selectColor(selectedIndex);
-			case ADVANCED -> ClientPlayerData.selectColorRGB(Integer.parseInt(hexBox.getValue(),16));
-		}
+		if(onRGBTab)
+			ClientPlayerData.selectColorRGB(Integer.parseInt(hexBox.getValue(), 16));
+		else
+			ClientPlayerData.selectColor(selectedIndex);
 		
-		this.minecraft.setScreen(null);
+		minecraft.setScreen(null);
 	}
 	
 	@Override
@@ -276,28 +268,18 @@ public class ColorSelectorScreen extends Screen
 		}
 	}
 	
-	private enum Tab
-	{
-		BASIC,
-		ADVANCED;
-		
-		static Tab other(Tab current)
-		{
-			return current == Tab.BASIC? Tab.ADVANCED : Tab.BASIC;
-		}
-	}
-	
 	private record ColorSelector (int x, int y, int id)
 	{
 		public static final int WIDTH = 32, HEIGHT = 16;
 		public Component getName() { return ColorHandler.getName(id); }
+		public int getColor() { return ColorHandler.getColor(id); }
 		public void draw(PoseStack poseStack)
 		{
 			fill(poseStack, xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT, ColorHandler.getColor(id)|0xFF000000);
 		}
 		public boolean pointWithin(double mouseX, double mouseY)
 		{
-			return mouseX >= x && mouseX < x+WIDTH && mouseY >= y && mouseY < y+HEIGHT;
+			return mouseX>=x && mouseX<x+WIDTH && mouseY>=y && mouseY<y+HEIGHT;
 		}
 	}
 }
