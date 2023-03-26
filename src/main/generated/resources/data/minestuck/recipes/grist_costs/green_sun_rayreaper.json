@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 18533,
+    "minestuck:tar": 9266,
+    "minestuck:uranium": 22240
+  },
+  "ingredient": {
+    "item": "minestuck:green_sun_rayreaper"
+  }
+}

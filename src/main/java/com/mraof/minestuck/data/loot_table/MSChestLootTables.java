@@ -150,6 +150,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER.get()).setWeight(2).setQuality(2))
 						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CUEBALL.get()).setWeight(1).setQuality(4))
+						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO.get()).setWeight(1).setQuality(4))
 						.add(LootItem.lootTableItem(MSBlocks.COMPUTER.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.LAPTOP.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.CHESSBOARD.get()).setWeight(2).setQuality(0))

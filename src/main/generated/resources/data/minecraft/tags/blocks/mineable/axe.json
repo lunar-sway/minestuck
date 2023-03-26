@@ -105,6 +105,7 @@
     "minestuck:end_planks_slab",
     "minestuck:dead_planks_slab",
     "minestuck:treated_planks_slab",
-    "minestuck:wooden_cactus"
+    "minestuck:wooden_cactus",
+    "minestuck:mirror"
   ]
 }

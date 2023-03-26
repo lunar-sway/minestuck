@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "tag": "minecraft:stone_tool_materials"
+    }
+  },
+  "pattern": [
+    "s s",
+    "sPs",
+    "P P"
+  ],
+  "result": {
+    "item": "minestuck:makeshift_claws_drawn"
+  }
+}
