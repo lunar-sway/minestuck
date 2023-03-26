@@ -62,8 +62,7 @@ public abstract class TitleLandType implements ILandType
 		return pickedAtRandom;
 	}
 	
-	@Override
-	public ResourceLocation getGroup()
+	public final ResourceLocation getGroup()
 	{
 		if(groupName == null)
 			return LandTypes.TITLE_REGISTRY.get().getKey(this);

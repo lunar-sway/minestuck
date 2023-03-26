@@ -3,6 +3,8 @@ package com.mraof.minestuck.world.lands;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -15,10 +17,11 @@ import java.util.stream.Collectors;
 
 public class LandTypes
 {
-	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"), Minestuck.MOD_ID);
+	public static final ResourceKey<Registry<TerrainLandType>> TERRAIN_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"));
+	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(TERRAIN_KEY.location(), Minestuck.MOD_ID);
 	public static final DeferredRegister<TitleLandType> TITLE_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"), Minestuck.MOD_ID);
 	
-	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(RegistryBuilder::new);
+	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(() -> new RegistryBuilder<TerrainLandType>().hasTags());
 	public static final Supplier<IForgeRegistry<TitleLandType>> TITLE_REGISTRY = TITLE_REGISTER.makeRegistry(RegistryBuilder::new);
 	
 	public static final RegistryObject<TerrainLandType> TERRAIN_NULL = TERRAIN_REGISTER.register("null", NullTerrainLandType::new);

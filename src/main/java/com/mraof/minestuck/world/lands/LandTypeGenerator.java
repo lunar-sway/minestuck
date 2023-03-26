@@ -71,22 +71,24 @@ public final class LandTypeGenerator
 		return groupMap.values();
 	}
 	
-	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Iterable<? extends Iterable<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Iterable<? extends Collection<A>> groups, Predicate<A> condition)
 	{
-		List<List<A>> list = Lists.newArrayList();
-		for(Iterable<A> aspects : groupMap)
+		List<ChoiceEntry<A>> list = Lists.newArrayList();
+		for(Collection<A> group : groups)
 		{
-			List<A> variantList = Lists.newArrayList(aspects);
+			List<A> variantList = Lists.newArrayList(group);
 			variantList.removeIf(condition.negate());
 			if(!variantList.isEmpty())
-				list.add(variantList);
+				list.add(new ChoiceEntry<>(variantList, group));
 		}
 		
-		List<A> groupList = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.get(0).getGroup().equals(used.getGroup()));
-		if(groupList == null)
+		ChoiceEntry<A> entry = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.all().contains(used));
+		if(entry == null)
 			return null;
-		return pickOneFromUsage(groupList, usedAspects, Object::equals);
+		return pickOneFromUsage(entry.allowed, usedAspects, Object::equals);
 	}
+	
+	private record ChoiceEntry<A>(List<A> allowed, Collection<A> all){}
 	
 	private <A extends ILandType, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{

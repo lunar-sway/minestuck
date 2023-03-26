@@ -11,8 +11,8 @@ import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
@@ -27,7 +27,6 @@ import java.util.function.Supplier;
 public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
-	private final ResourceLocation groupName;
 	private final String[] names;
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -39,7 +38,6 @@ public abstract class TerrainLandType implements ILandType
 	
 	protected TerrainLandType(Builder builder)
 	{
-		this.groupName = builder.group;
 		this.names = Objects.requireNonNull(builder.names);
 		
 		this.consortType = builder.consortType;
@@ -63,14 +61,6 @@ public abstract class TerrainLandType implements ILandType
 	public final Vec3 getSkyColor()
 	{
 		return this.skyColor;
-	}
-	
-	@Override
-	public final ResourceLocation getGroup()
-	{
-		if(groupName == null)
-			return LandTypes.TERRAIN_REGISTRY.get().getKey(this);
-		else return groupName;
 	}
 	
 	@Override
@@ -114,9 +104,13 @@ public abstract class TerrainLandType implements ILandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{}
 	
+	public final boolean is(TagKey<TerrainLandType> tag)
+	{
+		return Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().tags()).getTag(tag).contains(this);
+	}
+	
 	public static class Builder
 	{
-		private ResourceLocation group = null;
 		private String[] names;
 		
 		private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -129,12 +123,6 @@ public abstract class TerrainLandType implements ILandType
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
 		{
 			this.consortType = consortType;
-		}
-		
-		public Builder group(ResourceLocation group)
-		{
-			this.group = group;
-			return this;
 		}
 		
 		public Builder names(String... names)

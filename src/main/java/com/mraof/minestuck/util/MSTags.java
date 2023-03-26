@@ -1,6 +1,8 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -170,6 +172,19 @@ public class MSTags
 		private static TagKey<Structure> tag(String name)
 		{
 			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class TerrainLandTypes
+	{
+		public static final TagKey<TerrainLandType> FOREST = tag("forest");
+		public static final TagKey<TerrainLandType> ROCK = tag("rock");
+		public static final TagKey<TerrainLandType> SAND = tag("sand");
+		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		
+		private static TagKey<TerrainLandType> tag(String name)
+		{
+			return TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
