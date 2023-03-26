@@ -27,19 +27,19 @@ import java.util.function.Function;
 @MethodsReturnNonnullByDefault
 public class LandTypeLootCondition implements LootItemCondition
 {
-	
 	@Nullable
 	private final TagKey<TerrainLandType> terrainTag;
-	private final Set<ResourceLocation> titleGroups;
+	@Nullable
+	private final TagKey<TitleLandType> titleTag;
 	private final Set<TerrainLandType> terrainTypes;
 	private final Set<TitleLandType> titleTypes;
 	private final boolean inverted;
 	
-	private LandTypeLootCondition(@Nullable TagKey<TerrainLandType> terrainTag, Set<ResourceLocation> titleGroups,
+	private LandTypeLootCondition(@Nullable TagKey<TerrainLandType> terrainTag, @Nullable TagKey<TitleLandType> titleTag,
 								  Set<TerrainLandType> terrainTypes, Set<TitleLandType> titleTypes, boolean inverted)
 	{
 		this.terrainTag = terrainTag;
-		this.titleGroups = titleGroups;
+		this.titleTag = titleTag;
 		this.terrainTypes = terrainTypes;
 		this.titleTypes = titleTypes;
 		this.inverted = inverted;
@@ -59,7 +59,7 @@ public class LandTypeLootCondition implements LootItemCondition
 		LandTypePair aspects = LandTypePair.getTypes(level).orElse(null);
 		
 		if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
-				|| terrainTag != null && aspects.getTerrain().is(terrainTag) || titleGroups.contains(aspects.getTitle().getGroup())))
+				|| terrainTag != null && aspects.getTerrain().is(terrainTag) || titleTag != null && aspects.getTitle().is(titleTag)))
 				return !inverted;
 		
 		return inverted;
@@ -72,7 +72,8 @@ public class LandTypeLootCondition implements LootItemCondition
 		{
 			if(value.terrainTag != null)
 				json.addProperty("terrain_tag", value.terrainTag.location().toString());
-			serializeSet(json, "title_group", value.titleGroups, ResourceLocation::toString);
+			if(value.titleTag != null)
+				json.addProperty("title_tag", value.titleTag.location().toString());
 			serializeSet(json, "terrain_type", value.terrainTypes, type -> LandTypes.TERRAIN_REGISTRY.get().getKey(type).toString());
 			serializeSet(json, "title_type", value.titleTypes, type -> LandTypes.TITLE_REGISTRY.get().getKey(type).toString());
 			
@@ -83,11 +84,12 @@ public class LandTypeLootCondition implements LootItemCondition
 		{
 			TagKey<TerrainLandType> terrainTag = json.has("terrain_tag")
 					? TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(GsonHelper.getAsString(json, "terrain_tag"))) : null;
-			Set<ResourceLocation> titleGroups = deserializeSet(json, "title_group", ResourceLocation::new);
+			TagKey<TitleLandType> titleTag = json.has("title_tag")
+					? TagKey.create(LandTypes.TITLE_KEY, new ResourceLocation(GsonHelper.getAsString(json, "title_tag"))) : null;
 			Set<TerrainLandType> terrainTypes = deserializeSet(json, "terrain_type", s -> LandTypes.TERRAIN_REGISTRY.get().getValue(new ResourceLocation(s)));
 			Set<TitleLandType> titleTypes = deserializeSet(json, "title_type", s -> LandTypes.TITLE_REGISTRY.get().getValue(new ResourceLocation(s)));
 			boolean inverted = GsonHelper.getAsBoolean(json, "inverse", false);
-			return new LandTypeLootCondition(terrainTag, titleGroups, terrainTypes, titleTypes, inverted);
+			return new LandTypeLootCondition(terrainTag, titleTag, terrainTypes, titleTypes, inverted);
 		}
 	}
 	

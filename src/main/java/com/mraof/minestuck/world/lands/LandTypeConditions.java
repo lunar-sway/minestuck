@@ -2,12 +2,9 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -45,6 +42,21 @@ public final class LandTypeConditions
 		default Title negate()
 		{
 			return landType -> !test(landType);
+		}
+		
+		default Title or(Supplier<TitleLandType> landTypeSupplier)
+		{
+			return this.or(titleLand(landTypeSupplier));
+		}
+		
+		default Title or(TagKey<TitleLandType> tag)
+		{
+			return this.or(titleLand(tag));
+		}
+		
+		default Title or(Title otherCondition)
+		{
+			return landType -> this.test(landType) || otherCondition.test(landType);
 		}}
 	
 	public static Terrain terrainLand(Supplier<TerrainLandType> landTypeSupplier)
@@ -57,17 +69,13 @@ public final class LandTypeConditions
 		return landType -> landType.is(landTypeTag);
 	}
 	
-	@SafeVarargs
-	public static Title titleLand(Supplier<TitleLandType>... landTypes)
+	public static Title titleLand(Supplier<TitleLandType> landTypeSupplier)
 	{
-		List<TitleLandType> landTypeList = Arrays.stream(landTypes).map(Supplier::get).toList();
-		return landTypeList::contains;
+		return landType -> landType == landTypeSupplier.get();
 	}
 	
-	@SafeVarargs
-	public static Title titleLandByGroup(Supplier<TitleLandType>... landTypes)
+	public static Title titleLand(TagKey<TitleLandType> landTypeTag)
 	{
-		List<ResourceLocation> landTypeList = Arrays.stream(landTypes).map(Supplier::get).map(TitleLandType::getGroup).toList();
-		return landType -> landTypeList.contains(landType.getGroup());
+		return landType -> landType.is(landTypeTag);
 	}
 }

@@ -40,6 +40,7 @@ public class MinestuckData
 		gen.addProvider(event.includeServer(), new MSStructureTagsProvider(gen, fileHelper));
 		gen.addProvider(event.includeServer(), new MSGristTypeTagsProvider(gen, fileHelper));
 		gen.addProvider(event.includeServer(), new TerrainLandTypeTagsProvider(gen, fileHelper));
+		gen.addProvider(event.includeServer(), new TitleLandTypeTagsProvider(gen, fileHelper));
 		
 		gen.addProvider(event.includeServer(), new MinestuckRecipeProvider(gen));
 		gen.addProvider(event.includeServer(), new MinestuckGristCostsProvider(gen));

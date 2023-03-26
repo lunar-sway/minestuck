@@ -3,6 +3,7 @@ package com.mraof.minestuck.util;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -185,6 +186,17 @@ public class MSTags
 		private static TagKey<TerrainLandType> tag(String name)
 		{
 			return TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	
+	public static class TitleLandTypes
+	{
+		public static final TagKey<TitleLandType> MONSTERS = tag("monsters");
+		
+		private static TagKey<TitleLandType> tag(@SuppressWarnings("SameParameterValue") String name)
+		{
+			return TagKey.create(LandTypes.TITLE_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
