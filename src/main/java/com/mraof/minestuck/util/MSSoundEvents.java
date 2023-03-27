@@ -51,6 +51,7 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> MUSIC_UNIVERSAL = register("music.universal"); //play in all lands
 	public static final RegistryObject<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
 	
+	public static final RegistryObject<SoundEvent> ENTITY_SLAM = register("entity.slam");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_AMBIENT = register("entity.nakagator.ambient");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_HURT = register("entity.nakagator.hurt");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_DEATH = register("entity.nakagator.death");

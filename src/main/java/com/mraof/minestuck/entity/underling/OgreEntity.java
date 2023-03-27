@@ -4,6 +4,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.GroundSlamGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
@@ -26,7 +27,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 18, true, true), 8, 10, 13);
+	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 22, true, true), 8, 10, 13);
+	public static final PhasedMobAnimation SLAM_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 26, true, true), 12, 14, 17);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
@@ -46,6 +48,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION));
+		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -131,11 +134,18 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.getAnimatable().isActive())
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		
+		if(action == MobAnimation.Action.PUNCH)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;
+		} else if(action == MobAnimation.Action.SLAM)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.smash", false));
+			return PlayState.CONTINUE;
 		}
+		
 		event.getController().markNeedsReload();
 		return PlayState.STOP;
 	}
