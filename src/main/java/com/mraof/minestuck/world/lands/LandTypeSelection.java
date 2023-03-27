@@ -2,46 +2,56 @@ package com.mraof.minestuck.world.lands;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Mod.EventBusSubscriber
-public final class LandTypeSelection
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public final class LandTypeSelection extends SimplePreparableReloadListener<LandTypeSelection.RawData>
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String TERRAIN_PATH = "minestuck/terrain_land_types.json";
+	
 	private static List<LandsSupplier<TerrainLandType>> terrainList;
 	private static Map<EnumAspect, List<LandsSupplier<TitleLandType>>> titleByAspect;
 	
 	@SubscribeEvent
 	public static void onServerStart(ServerStartingEvent event)
 	{
-		{
-			ImmutableList.Builder<LandsSupplier<TerrainLandType>> builder = ImmutableList.builder();
-			builder.add(of(MSTags.TerrainLandTypes.FOREST));
-			builder.add(of(LandTypes.FROST));
-			builder.add(of(LandTypes.FUNGI));
-			builder.add(of(LandTypes.HEAT));
-			builder.add(of(MSTags.TerrainLandTypes.ROCK));
-			builder.add(of(MSTags.TerrainLandTypes.SAND));
-			builder.add(of(MSTags.TerrainLandTypes.SANDSTONE));
-			builder.add(of(LandTypes.SHADE));
-			builder.add(of(LandTypes.WOOD));
-			builder.add(of(LandTypes.RAINBOW));
-			builder.add(of(LandTypes.FLORA));
-			builder.add(of(LandTypes.END));
-			terrainList = builder.build();
-		}
 		{
 			ImmutableMap.Builder<EnumAspect, List<LandsSupplier<TitleLandType>>> builder = ImmutableMap.builder();
 			builder.put(EnumAspect.BLOOD, List.of(of(LandTypes.PULSE)));
@@ -102,7 +112,12 @@ public final class LandTypeSelection
 	
 	private static <A> LandsSupplier<A> of(Supplier<A> landType)
 	{
-		return new LandList<>(Collections.singletonList(landType.get()));
+		return of(landType.get());
+	}
+	
+	private static <A> LandsSupplier<A> of(A landType)
+	{
+		return new LandList<>(Collections.singletonList(landType));
 	}
 	
 	private static <A> LandsSupplier<A> of(TagKey<A> tag)
@@ -110,7 +125,7 @@ public final class LandTypeSelection
 		return new LandTag<>(tag);
 	}
 	
-	private interface LandsSupplier<A>
+	public interface LandsSupplier<A>
 	{
 		List<A> get();
 		
@@ -118,6 +133,7 @@ public final class LandTypeSelection
 		{
 			return this.get().contains(element);
 		}
+		
 	}
 	
 	private record LandList<A>(List<A> landTypes) implements LandsSupplier<A>
@@ -127,6 +143,7 @@ public final class LandTypeSelection
 		{
 			return this.landTypes;
 		}
+		
 	}
 	
 	private record LandTag<A>(TagKey<A> tag) implements LandsSupplier<A>
@@ -144,5 +161,83 @@ public final class LandTypeSelection
 			
 			return Objects.requireNonNull(registry.tags()).getTag(this.tag).stream().toList();
 		}
+	}
+	
+	public record RawData(List<GroupData> terrainTypeData)
+	{}
+	
+	private record GroupData(Either<List<ResourceLocation>, ExtraCodecs.TagOrElementLocation> value)
+	{
+		private <A> Optional<LandsSupplier<A>> lookup(IForgeRegistry<A> registry)
+		{
+			return this.value.map(list -> {
+				List<A> elements = new ArrayList<>();
+				for(ResourceLocation id : list)
+					getOrLog(registry, id).ifPresent(elements::add);
+				
+				if(elements.isEmpty())
+					return Optional.empty();
+				else
+					return Optional.of(new LandList<>(elements));
+			}, location -> {
+				if(location.tag())
+					return Optional.of(of(TagKey.create(registry.getRegistryKey(), location.id())));
+				else
+					return getOrLog(registry, location.id()).map(LandTypeSelection::of);
+			});
+		}
+		
+		private static <A> Optional<A> getOrLog(IForgeRegistry<A> registry, ResourceLocation id)
+		{
+			A element = registry.getValue(id);
+			if(element == null)
+				LOGGER.error("Could not find land type for id in registry {}: {}", registry.getRegistryKey(), id);
+			return Optional.ofNullable(element);
+		}
+	}
+	
+	private static final Codec<GroupData> GROUP_DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(new ExtraCodecs.EitherCodec<>(ResourceLocation.CODEC.listOf(), ExtraCodecs.TAG_OR_ELEMENT_ID).fieldOf("value").forGetter(GroupData::value)).apply(instance, GroupData::new));
+	
+	@SubscribeEvent
+	public static void onResourceReload(AddReloadListenerEvent event)
+	{
+		event.addListener(new LandTypeSelection());
+	}
+	
+	@Override
+	protected RawData prepare(ResourceManager resourceManager, ProfilerFiller profiler)
+	{
+		List<GroupData> terrainData = new ArrayList<>();
+		
+		for(String namespace : resourceManager.getNamespaces())
+		{
+			ResourceLocation location = new ResourceLocation(namespace, TERRAIN_PATH);
+			resourceManager.getResource(location).ifPresent(resource -> {
+				try(Reader reader = resource.openAsReader())
+				{
+					JsonElement json = JsonParser.parseReader(reader);
+					List<GroupData> parsedData = GROUP_DATA_CODEC.listOf().parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
+					terrainData.addAll(parsedData);
+				} catch(IOException ignored)
+				{
+				} catch(RuntimeException runtimeexception)
+				{
+					LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+				}
+			});
+		}
+		
+		return new RawData(terrainData);
+	}
+	
+	@Override
+	protected void apply(RawData data, ResourceManager resourceManager, ProfilerFiller profiler)
+	{
+		ImmutableList.Builder<LandsSupplier<TerrainLandType>> terrainSuppliers = ImmutableList.builder();
+		
+		for(GroupData terrainGroup : data.terrainTypeData())
+			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY.get()).ifPresent(terrainSuppliers::add);
+		
+		terrainList = terrainSuppliers.build();
 	}
 }
