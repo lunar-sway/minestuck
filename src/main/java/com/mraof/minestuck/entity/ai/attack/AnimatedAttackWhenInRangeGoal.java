@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.ai.attack;
 
-import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal;
+import com.mraof.minestuck.entity.animation.ActionCooldown;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -12,25 +12,37 @@ import javax.annotation.Nonnull;
  * A goal for performing a slow melee attack when within hitting range.
  * The attack will occur at the start of the Contact PhasedMobAnimation.Phases
  */
-public class AnimatedAttackWhenInRangeGoal<T extends AnimatedPathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
+public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
 {
 	public static final float STANDARD_MELEE_RANGE = -1;
+	public static final int NO_COOLDOWN = -1;
 	
-	private final float minRange;
-	private final float maxRange;
+	protected final float minRange;
+	protected final float maxRange;
+	protected final int actionCooldown;
 	
-	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange)
+	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange, int actionCooldown)
 	{
 		super(entity, animation);
 		this.minRange = minRange;
 		this.maxRange = maxRange;
+		this.actionCooldown = actionCooldown;
 	}
 	
+	/**
+	 * For typical melee attacks in entities with alternate attacks that shouldn't use said attack immediately after
+	 */
+	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, int actionCooldown)
+	{
+		this(entity, animation, 0, STANDARD_MELEE_RANGE, actionCooldown);
+	}
+	
+	/**
+	 * For typical melee attacks
+	 */
 	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation)
 	{
-		super(entity, animation);
-		this.minRange = 0;
-		this.maxRange = STANDARD_MELEE_RANGE;
+		this(entity, animation, 0, STANDARD_MELEE_RANGE, NO_COOLDOWN);
 	}
 	
 	@Override
@@ -38,6 +50,14 @@ public class AnimatedAttackWhenInRangeGoal<T extends AnimatedPathfinderMob & Pha
 	{
 		LivingEntity target = this.entity.getTarget();
 		return target != null && this.isValidTarget(target) && this.entity.getSensing().hasLineOfSight(target);
+	}
+	
+	@Override
+	public void stop()
+	{
+		super.stop();
+		if(actionCooldown != NO_COOLDOWN && entity instanceof ActionCooldown cooldownEntity)
+			cooldownEntity.setCooldown(actionCooldown);
 	}
 	
 	@Override
