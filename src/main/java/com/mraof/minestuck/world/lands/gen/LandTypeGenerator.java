@@ -1,9 +1,12 @@
-package com.mraof.minestuck.world.lands;
+package com.mraof.minestuck.world.lands.gen;
 
 import com.google.common.collect.Lists;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.ResourceLocationException;
