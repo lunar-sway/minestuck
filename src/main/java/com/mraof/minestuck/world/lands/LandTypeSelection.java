@@ -10,7 +10,6 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -21,7 +20,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistry;
@@ -33,7 +31,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,35 +42,14 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String TERRAIN_PATH = "minestuck/terrain_land_types.json";
+	public static final String TITLE_PATH = "minestuck/title_land_types.json";
 	
-	private static List<LandsSupplier<TerrainLandType>> terrainList;
+	private static List<LandsSupplier<TerrainLandType>> terrainGroups;
 	private static Map<EnumAspect, List<LandsSupplier<TitleLandType>>> titleByAspect;
-	
-	@SubscribeEvent
-	public static void onServerStart(ServerStartingEvent event)
-	{
-		{
-			ImmutableMap.Builder<EnumAspect, List<LandsSupplier<TitleLandType>>> builder = ImmutableMap.builder();
-			builder.put(EnumAspect.BLOOD, List.of(of(LandTypes.PULSE)));
-			builder.put(EnumAspect.BREATH, List.of(of(LandTypes.WIND)));
-			builder.put(EnumAspect.DOOM, List.of(of(LandTypes.THUNDER)));
-			builder.put(EnumAspect.HEART, List.of(of(LandTypes.CAKE)));
-			builder.put(EnumAspect.HOPE, List.of(of(LandTypes.TOWERS)));
-			builder.put(EnumAspect.LIFE, List.of(of(LandTypes.RABBITS)));
-			builder.put(EnumAspect.LIGHT, List.of(of(LandTypes.LIGHT)));
-			builder.put(EnumAspect.MIND, List.of(of(LandTypes.THOUGHT)));
-			builder.put(EnumAspect.RAGE, List.of(of(MSTags.TitleLandTypes.MONSTERS)));
-			builder.put(EnumAspect.SPACE, List.of(of(LandTypes.BUCKETS)));
-			builder.put(EnumAspect.TIME, List.of(of(LandTypes.CLOCKWORK)));
-			builder.put(EnumAspect.VOID, List.of(of(LandTypes.SILENCE)));
-			
-			titleByAspect = builder.build();
-		}
-	}
 	
 	public static Collection<List<TerrainLandType>> terrainAlternatives()
 	{
-		return terrainList.stream().map(LandsSupplier::get).toList();
+		return terrainGroups.stream().map(LandsSupplier::get).toList();
 	}
 	
 	public static Collection<List<TitleLandType>> titleAlternatives(EnumAspect aspect)
@@ -108,21 +84,6 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 								? Stream.of(entry.getKey())
 								: Stream.empty())
 				.collect(Collectors.toSet());
-	}
-	
-	private static <A> LandsSupplier<A> of(Supplier<A> landType)
-	{
-		return of(landType.get());
-	}
-	
-	private static <A> LandsSupplier<A> of(A landType)
-	{
-		return new LandList<>(Collections.singletonList(landType));
-	}
-	
-	private static <A> LandsSupplier<A> of(TagKey<A> tag)
-	{
-		return new LandTag<>(tag);
 	}
 	
 	public interface LandsSupplier<A>
@@ -163,7 +124,7 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 		}
 	}
 	
-	public record RawData(List<GroupData> terrainTypeData)
+	public record RawData(List<GroupData> terrainTypeData, Map<EnumAspect, List<GroupData>> titleTypeData)
 	{}
 	
 	private record GroupData(Either<List<ResourceLocation>, ExtraCodecs.TagOrElementLocation> value)
@@ -181,9 +142,12 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 					return Optional.of(new LandList<>(elements));
 			}, location -> {
 				if(location.tag())
-					return Optional.of(of(TagKey.create(registry.getRegistryKey(), location.id())));
+				{
+					TagKey<A> tag = TagKey.create(registry.getRegistryKey(), location.id());
+					return Optional.of(new LandTag<>(tag));
+				}
 				else
-					return getOrLog(registry, location.id()).map(LandTypeSelection::of);
+					return getOrLog(registry, location.id()).map(landType -> new LandList<>(Collections.singletonList(landType)));
 			});
 		}
 		
@@ -197,6 +161,8 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 	}
 	
 	private static final Codec<GroupData> GROUP_DATA_CODEC = RecordCodecBuilder.create(instance -> instance.group(new ExtraCodecs.EitherCodec<>(ResourceLocation.CODEC.listOf(), ExtraCodecs.TAG_OR_ELEMENT_ID).fieldOf("value").forGetter(GroupData::value)).apply(instance, GroupData::new));
+	private static final Codec<List<GroupData>> TERRAIN_DATA_CODEC = GROUP_DATA_CODEC.listOf();
+	private static final Codec<Map<EnumAspect, List<GroupData>>> TITLE_DATA_CODEC = Codec.unboundedMap(EnumAspect.CODEC, GROUP_DATA_CODEC.listOf());
 	
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
@@ -216,7 +182,7 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 				try(Reader reader = resource.openAsReader())
 				{
 					JsonElement json = JsonParser.parseReader(reader);
-					List<GroupData> parsedData = GROUP_DATA_CODEC.listOf().parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
+					List<GroupData> parsedData = TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
 					terrainData.addAll(parsedData);
 				} catch(IOException ignored)
 				{
@@ -227,17 +193,56 @@ public final class LandTypeSelection extends SimplePreparableReloadListener<Land
 			});
 		}
 		
-		return new RawData(terrainData);
+		Map<EnumAspect, List<GroupData>> titleData = new HashMap<>();
+		for(EnumAspect aspect : EnumAspect.values())
+			titleData.put(aspect, new ArrayList<>());
+		
+		for(String namespace : resourceManager.getNamespaces())
+		{
+			ResourceLocation location = new ResourceLocation(namespace, TITLE_PATH);
+			resourceManager.getResource(location).ifPresent(resource -> {
+				try(Reader reader = resource.openAsReader())
+				{
+					JsonElement json = JsonParser.parseReader(reader);
+					Map<EnumAspect, List<GroupData>> parsedData = TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
+					for(EnumAspect aspect : parsedData.keySet())
+						titleData.get(aspect).addAll(parsedData.get(aspect));
+					
+				} catch(IOException ignored)
+				{
+				} catch(RuntimeException runtimeexception)
+				{
+					LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+				}
+			});
+		}
+		
+		return new RawData(terrainData, titleData);
 	}
 	
 	@Override
 	protected void apply(RawData data, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableList.Builder<LandsSupplier<TerrainLandType>> terrainSuppliers = ImmutableList.builder();
+		ImmutableList.Builder<LandsSupplier<TerrainLandType>> terrainGroupsBuilder = ImmutableList.builder();
 		
 		for(GroupData terrainGroup : data.terrainTypeData())
-			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY.get()).ifPresent(terrainSuppliers::add);
+			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY.get()).ifPresent(terrainGroupsBuilder::add);
 		
-		terrainList = terrainSuppliers.build();
+		terrainGroups = terrainGroupsBuilder.build();
+		
+		
+		ImmutableMap.Builder<EnumAspect, List<LandsSupplier<TitleLandType>>> titleMapBuilder = ImmutableMap.builder();
+		
+		for(EnumAspect aspect : EnumAspect.values())
+		{
+			ImmutableList.Builder<LandsSupplier<TitleLandType>> titleGroupsBuilder = ImmutableList.builder();
+			
+			for(GroupData titleGroup : data.titleTypeData().get(aspect))
+				titleGroup.lookup(LandTypes.TITLE_REGISTRY.get()).ifPresent(titleGroupsBuilder::add);
+			
+			titleMapBuilder.put(aspect, titleGroupsBuilder.build());
+		}
+		
+		titleByAspect = titleMapBuilder.build();
 	}
 }
