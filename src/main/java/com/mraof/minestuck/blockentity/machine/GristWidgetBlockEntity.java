@@ -35,10 +35,10 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String TITLE = "container.minestuck.grist_widget";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private PlayerIdentifier owner;
-	private boolean hasItem;
 	
 	public GristWidgetBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -111,13 +111,12 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			return false;
@@ -126,9 +125,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		int i = getGristWidgetBoondollarValue();
 		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, level).getBoondollars();
 	}
-
-	@Override
-	public void processContents()
+	
+	private void processContents()
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
@@ -148,6 +146,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		super.load(nbt);
 		
+		this.progressTracker.load(nbt);
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
 			owner = IdentifierHandler.load(nbt, "owner");
 	}
@@ -157,6 +156,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		super.saveAdditional(compound);
 		
+		this.progressTracker.save(compound);
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 	}
@@ -171,7 +171,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new GristWidgetMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new GristWidgetMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

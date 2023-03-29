@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "n": {
+      "tag": "forge:nuggets/iron"
+    }
+  },
+  "pattern": [
+    " in",
+    " in",
+    " i "
+  ],
+  "result": {
+    "item": "minestuck:house_key"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 160,
+    "minestuck:cobalt": 20,
+    "minestuck:garnet": 20,
+    "minestuck:gold": 69,
+    "minestuck:marble": 64
+  },
+  "ingredient": {
+    "item": "minestuck:kissy_cutie_heart_splitter"
+  }
+}

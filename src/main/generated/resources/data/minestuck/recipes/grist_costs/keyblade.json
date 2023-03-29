@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 7,
+    "minestuck:rust": 10
+  },
+  "ingredient": {
+    "item": "minestuck:keyblade"
+  }
+}

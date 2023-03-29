@@ -6,6 +6,7 @@ import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,8 +30,9 @@ import javax.annotation.Nullable;
 public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_punch_designix";
-	public static final RunType TYPE = RunType.BUTTON;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
@@ -41,17 +43,32 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.getItem() == MSItems.CAPTCHA_CARD.get());
+		return new CustomHandler(3, (index, stack) -> index == 0 || index == 1 && stack.is(MSItems.CAPTCHA_CARD.get()))
+		{
+			@Override
+			protected void onContentsChanged(int slot)
+			{
+				MiniPunchDesignixBlockEntity.this.progressTracker.resetProgress();
+				super.onContentsChanged(slot);
+			}
+		};
 	}
 	
 	@Override
-	public RunType getRunType()
+	public void load(CompoundTag nbt)
 	{
-		return TYPE;
+		super.load(nbt);
+		this.progressTracker.load(nbt);
 	}
 	
 	@Override
-	public boolean contentsValid()
+	protected void saveAdditional(CompoundTag compound)
+	{
+		super.saveAdditional(compound);
+		this.progressTracker.save(compound);
+	}
+	
+	private boolean contentsValid()
 	{
 		if (!itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty())
 		{
@@ -69,7 +86,12 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	}
 	
 	@Override
-	public void processContents()
+	protected void tick()
+	{
+		this.progressTracker.tick(this::processContents);
+	}
+	
+	private void processContents()
 	{
 		if(!itemHandler.getStackInSlot(2).isEmpty())
 		{
@@ -94,19 +116,11 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 		if(!output.isEmpty() && AlchemyHelper.isPunchedCard(itemHandler.getStackInSlot(1)))
 		{
 			output = CombinationRecipe.findResult(combinerInventory, level);
-		} else return output;
+		}
 		
 		if(!output.isEmpty())
 			return AlchemyHelper.createCard(output, true);
 		else return ItemStack.EMPTY;
-	}
-	
-	@Override
-	public void setChanged()
-	{
-		this.progress = 0;
-		this.ready = false;
-		super.setChanged();
 	}
 	
 	@Override
@@ -150,6 +164,6 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniPunchDesignixMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniPunchDesignixMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

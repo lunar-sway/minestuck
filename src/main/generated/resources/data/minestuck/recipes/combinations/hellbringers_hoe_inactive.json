@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:netherite_hoe"
+  },
+  "input2": {
+    "item": "minestuck:cryptid_photo"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:hellbringers_hoe_inactive"
+  }
+}

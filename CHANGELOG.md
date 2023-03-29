@@ -11,12 +11,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Shadewood blocks
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
+- 33 new weapons(8 with alternate form)
+- Mirror block
+- Cryptid photo item (alchemy ingredient)
+
+### Changed
+
+- Changed Cat Claws recipe to Makeshift Claws || String
+- Updated Cat Claws texture
+- Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
+- Added Grist Cost to Eightball and Dice items
+- Fixed large item models' item frame displays
+- Updated item texture for Mini Wizard Statue
 
 ### Removed
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
+### Contributors for this release
+
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
+
 ## [Unreleased]
+
+## [1.19.2-1.9.3.0] - 2023-03-24
 
 ### Added
 
@@ -32,12 +50,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The totem lathe card slot block will now drop held cards when destroyed
 - The cruxite dowel block in the totem lathe now drops the dowel when destroyed
 - The totem lathe rod now also updates if the connected dowel is destroyed
+- Tweaked frequency of some land worldgen features and passive mobs
+- Flora lands now uses mud block instead of coarse dirt
+- The GO-button on machines behaves slightly differently now
+
+### Removed
+
+- Removed config options "generateCruxiteOre" and "generateUraniumOre".
+For the overworld, these ores can now instead be disabled by overriding the new biome modifier with a datapack.
 
 ### Fixed
 
 - Fix metal boats not using the correct texture
 - More gui text has translation keys now, making them translatable by a resource pack
+- Fixed GO-button in small machines showing the wrong text
 - Fixed some cases of cruxtruder data changes not being saved
+- Fixed mini alchemiter comparator value only getting updated when the machine is running
+- Fixed mini punch designix behaviour when punching an unpunched card
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, LunaticCat
 
 ## [1.18.2-1.9.2.0] - 2023-03-13
 
@@ -55,3 +88,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Reapply stone tablet crash fix that was mistakenly reverted during the mc1.16->mc1.18 move
 - Fix some player decoy behavior when entering editmode while flying
 - Machine guis with a GO-button can now be started with the keypad enter key
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Akisephila, rose_bushes_

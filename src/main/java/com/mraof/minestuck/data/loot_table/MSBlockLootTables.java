@@ -496,6 +496,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MINI_TYPHEUS_STATUE.get());
 		dropSelf(CASSETTE_PLAYER.get());
 		dropSelf(GLOWYSTONE_DUST.get());
+		dropSelf(MIRROR.get());
 	}
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 323,
+    "minestuck:cobalt": 129,
+    "minestuck:diamond": 65
+  },
+  "ingredient": {
+    "item": "minestuck:krakens_eye"
+  }
+}

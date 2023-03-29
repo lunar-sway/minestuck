@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:light_of_my_knife"
+  },
+  "input2": {
+    "item": "minecraft:lava_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:thousand_degree_knife"
+  }
+}

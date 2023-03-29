@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 547,
+    "minestuck:build": 1025,
+    "minestuck:diamond": 547,
+    "minestuck:ruby": 547,
+    "minestuck:uranium": 547
+  },
+  "ingredient": {
+    "item": "minestuck:genesis_godstabber"
+  }
+}
