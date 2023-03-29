@@ -1082,6 +1082,8 @@ public class MSItems
 	public static final RegistryObject<BlockItem> FUCHSIA_CAKE = registerBlockItem(MSBlocks.FUCHSIA_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1));
 	public static final RegistryObject<BlockItem> NEGATIVE_CAKE = registerBlockItem(MSBlocks.NEGATIVE_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1));
 	public static final RegistryObject<BlockItem> CARROT_CAKE = registerBlockItem(MSBlocks.CARROT_CAKE, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1));
+	public static final RegistryObject<BlockItem> LARGE_CAKE = registerBlockItem(MSBlocks.LARGE_CAKE, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> PINK_FROSTED_TOP_LARGE_CAKE = registerBlockItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, MSItemGroup.LANDS);
 	
 	
 	

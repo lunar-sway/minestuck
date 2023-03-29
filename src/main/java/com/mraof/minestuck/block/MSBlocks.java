@@ -585,6 +585,8 @@ public class MSBlocks
 		player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 250, 0));
 	}));
 	public static final RegistryObject<Block> CARROT_CAKE = REGISTER.register("carrot_cake", () -> new SimpleCakeBlock(copy(Blocks.CAKE), 2, 0.3F, player -> player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 200, 0))));
+	public static final RegistryObject<Block> LARGE_CAKE = REGISTER.register("large_cake", () -> new Block(Block.Properties.of(Material.CAKE, MaterialColor.COLOR_BROWN).strength(0.4F).sound(SoundType.WOOL)));
+	public static final RegistryObject<Block> PINK_FROSTED_TOP_LARGE_CAKE = REGISTER.register("pink_frosted_top_large_cake", () -> new Block(Block.Properties.of(Material.CAKE, MaterialColor.COLOR_BROWN).strength(0.5F).sound(SoundType.WOOL)));
 	
 	
 	
