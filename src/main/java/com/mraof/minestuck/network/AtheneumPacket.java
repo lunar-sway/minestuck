@@ -65,9 +65,8 @@ public class AtheneumPacket implements PlayToBothPacket
 	@Override
 	public void execute()
 	{
-		if(Minecraft.getInstance().screen instanceof AtheneumScreen)
+		if(Minecraft.getInstance().screen instanceof AtheneumScreen gui)
 		{
-			AtheneumScreen gui = (AtheneumScreen) Minecraft.getInstance().screen;
 			gui.less = scrollUp;
 			gui.more = scrollDown;
 			gui.getMenu().receiveUpdatePacket(this);
