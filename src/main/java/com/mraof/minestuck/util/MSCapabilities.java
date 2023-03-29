@@ -5,7 +5,6 @@ import com.mraof.minestuck.computer.editmode.EditToolsCapabilityProvider;
 import com.mraof.minestuck.computer.editmode.IEditTools;
 import com.mraof.minestuck.inventory.musicplayer.IMusicPlaying;
 import com.mraof.minestuck.inventory.musicplayer.MusicPlayingCapabilityProvider;
-import com.mraof.minestuck.network.MusicPlayerPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

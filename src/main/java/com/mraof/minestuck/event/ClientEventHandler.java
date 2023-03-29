@@ -15,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.material.FluidState;
@@ -46,9 +45,7 @@ public class ClientEventHandler
 				if(MinestuckConfig.CLIENT.loginColorSelector.get())
 					Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
 			}
-			
 		}
-		
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)

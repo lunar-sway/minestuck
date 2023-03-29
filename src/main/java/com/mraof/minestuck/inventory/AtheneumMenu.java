@@ -110,6 +110,8 @@ public class AtheneumMenu extends AbstractContainerMenu
 				itemList.add(atheneumItem.getItemStack(c, player.level));
 		}
 		
+		
+		//Check whether all items match itemList
 		boolean changed = false;
 		if(itemList.size() != this.items.size())
 			changed = true;
