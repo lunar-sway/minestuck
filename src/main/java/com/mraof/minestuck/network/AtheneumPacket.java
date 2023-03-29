@@ -77,8 +77,8 @@ public class AtheneumPacket implements PlayToBothPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof AtheneumMenu)
-			((AtheneumMenu)player.containerMenu).updateScroll(scrollUp);
+		if(player.containerMenu instanceof AtheneumMenu atheneumMenu)
+			atheneumMenu.updateScroll(scrollUp);
 	}
 	
 	public List<ItemStack> getInventory()
