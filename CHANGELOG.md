@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
-- Land vegetation now has a partial random XZ offset the same way
+- Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 
 ### Removed
 

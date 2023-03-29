@@ -9,10 +9,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.PlantType;
 
 public class GlowingMushroomBlock extends BushBlock
 {
+	protected static final VoxelShape SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 10.0D, 13.0D);
+	
 	public GlowingMushroomBlock(Properties properties)
 	{
 		super(properties);
@@ -64,5 +69,12 @@ public class GlowingMushroomBlock extends BushBlock
 	{
 		BlockState soil = level.getBlockState(pos.below());
 		return soil.is(MSBlocks.BLUE_DIRT.get());
+	}
+	
+	@Override
+	public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext)
+	{
+		Vec3 vec3 = pState.getOffset(pLevel, pPos);
+		return SHAPE.move(vec3.x, vec3.y, vec3.z);
 	}
 }
