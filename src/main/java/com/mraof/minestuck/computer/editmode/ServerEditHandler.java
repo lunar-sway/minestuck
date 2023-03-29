@@ -373,7 +373,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in RightClickBlock event on the server!"));
-			if(cap.isEditDragging())
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.isEditDragging())
 			{
 				event.setCanceled(true);
 				return;
@@ -419,7 +419,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in LeftClickBlock event on the server!"));
-			if(cap.isEditDragging())
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.isEditDragging())
 			{
 				event.setCanceled(true);
 				return;
@@ -563,7 +563,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		
 		//uses each sign to offset the cursor to the correct corner.
 		double posX = pos2.getX() + (signX ? 1 : 0);
-		double posY = pos2.getY() + (signY ? 0 : 1);
+		double posY = pos2.getY() + (signY ? -0.1 : 1); //When it is flipped, the cursor should be lowered a bit more, so that the hitbox does not intersect with the block.
 		double posZ = pos2.getZ() + (signZ ? 1 : 0);
 		boolean flipCursor = signY; //uses the sign to determine whether the cursor should be upside down or not.
 		

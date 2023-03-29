@@ -176,7 +176,7 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			if(EditToolDrag.canEditRevise(event.getEntity()))
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || EditToolDrag.canEditRevise(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;
@@ -212,7 +212,7 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			if(EditToolDrag.canEditRecycle(event.getEntity()))
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || EditToolDrag.canEditRecycle(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;
