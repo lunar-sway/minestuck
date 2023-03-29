@@ -1,12 +1,12 @@
 package com.mraof.minestuck.world.lands.gen;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.tags.TagKey;
-import net.minecraftforge.registries.ForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryManager;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
@@ -65,7 +65,7 @@ public final class LandTypeSelection
 				.collect(Collectors.toSet());
 	}
 	
-	interface LandsSupplier<A>
+	sealed interface LandsSupplier<A> permits LandList, LandTag
 	{
 		List<A> get();
 		
@@ -91,13 +91,7 @@ public final class LandTypeSelection
 		@Override
 		public List<A> get()
 		{
-			ForgeRegistry<A> registry;
-			if(tag.registry().equals(LandTypes.TERRAIN_KEY))
-				registry = (ForgeRegistry<A>) LandTypes.TERRAIN_REGISTRY.get();
-			else if(tag.registry().equals(LandTypes.TITLE_KEY))
-				registry = (ForgeRegistry<A>) LandTypes.TITLE_REGISTRY.get();
-			else
-				throw new RuntimeException("Has tag for unhandled registry: " + this.tag.registry());
+			IForgeRegistry<A> registry = RegistryManager.ACTIVE.getRegistry(this.tag.registry());
 			
 			return Objects.requireNonNull(registry.tags()).getTag(this.tag).stream().toList();
 		}
