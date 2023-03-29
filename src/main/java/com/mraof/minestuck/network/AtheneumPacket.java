@@ -65,9 +65,8 @@ public class AtheneumPacket implements PlayToBothPacket
 	@Override
 	public void execute()
 	{
-		if(Minecraft.getInstance().screen instanceof AtheneumScreen)
+		if(Minecraft.getInstance().screen instanceof AtheneumScreen gui)
 		{
-			AtheneumScreen gui = (AtheneumScreen) Minecraft.getInstance().screen;
 			gui.less = scrollUp;
 			gui.more = scrollDown;
 			gui.getMenu().receiveUpdatePacket(this);
@@ -77,8 +76,8 @@ public class AtheneumPacket implements PlayToBothPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.containerMenu instanceof AtheneumMenu)
-			((AtheneumMenu)player.containerMenu).updateScroll(scrollUp);
+		if(player.containerMenu instanceof AtheneumMenu atheneumMenu)
+			atheneumMenu.updateScroll(scrollUp);
 	}
 	
 	public List<ItemStack> getInventory()

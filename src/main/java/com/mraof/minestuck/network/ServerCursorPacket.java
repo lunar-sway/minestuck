@@ -40,9 +40,9 @@ public class ServerCursorPacket implements PlayToClientPacket
 	public void execute()
 	{
 		Entity entity = Minecraft.getInstance().level.getEntity(entityID);
-		if(entity instanceof ServerCursorEntity)
+		if(entity instanceof ServerCursorEntity cursorEntity)
 		{
-			((ServerCursorEntity) entity).setAnimationFromPacket(animation);
+			cursorEntity.setAnimationFromPacket(animation);
 		}
 	}
 }
