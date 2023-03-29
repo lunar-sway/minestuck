@@ -50,7 +50,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		setNoGravity(true);
 		setInvulnerable(true);
 		
-		setBoundingBox(new AABB(0,0,0,0,0,0));
+		setBoundingBox(new AABB(0, 0, 0, 0, 0, 0));
 	}
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -68,7 +68,10 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	}
 	
 	@Override
-	public AnimationFactory getFactory() { return this.factory; }
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
+	}
 	
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound)
@@ -107,7 +110,10 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket() { return NetworkHooks.getEntitySpawningPacket(this); }
+	public Packet<?> getAddEntityPacket()
+	{
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
 	
 	@Override
 	public void aiStep()
@@ -123,8 +129,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 			{
 				if(despawnTimer >= MinestuckConfig.SERVER.cursorDespawnTime.get())
 					this.remove(RemovalReason.DISCARDED); //After cursorDespawnTime ticks of the cursor not receiving updates, the cursor will be automatically removed.
-			}
-			else
+			} else
 			{
 				if(despawnTimer >= animation.length + MinestuckConfig.SERVER.cursorRemovalPadding.get() + 1)
 					this.remove(RemovalReason.DISCARDED); //cursorRemovalPadding ticks after the animation is done (+1 tick so the client can receive the animation), remove the cursor.
@@ -134,7 +139,8 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	
 	//Ensures that the head and body always face the same way as the root Y rotation.
 	@Override
-	protected float tickHeadTurn(float pYRot, float pAnimStep) {
+	protected float tickHeadTurn(float pYRot, float pAnimStep)
+	{
 		this.yBodyRot = this.getYRot();
 		this.yHeadRot = this.getYRot();
 		return pAnimStep;
@@ -157,10 +163,16 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	}
 	
 	@Override
-	public Iterable<ItemStack> getArmorSlots() { return Collections.emptyList(); }
+	public Iterable<ItemStack> getArmorSlots()
+	{
+		return Collections.emptyList();
+	}
 	
 	@Override
-	public ItemStack getItemBySlot(EquipmentSlot pSlot) { return ItemStack.EMPTY; }
+	public ItemStack getItemBySlot(EquipmentSlot pSlot)
+	{
+		return ItemStack.EMPTY;
+	}
 	
 	@Override
 	public void setItemSlot(EquipmentSlot pSlot, ItemStack pStack)
@@ -168,7 +180,10 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	}
 	
 	@Override
-	public HumanoidArm getMainArm() { return HumanoidArm.RIGHT; }
+	public HumanoidArm getMainArm()
+	{
+		return HumanoidArm.RIGHT;
+	}
 	
 	public void setAnimation(Animation animation)
 	{
@@ -179,8 +194,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 				this.despawnTimer = 0;
 			ServerCursorPacket packet = ServerCursorPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
 			MSPacketHandler.sendToTracking(packet, this);
-		}
-		else
+		} else
 			setAnimationFromPacket(animation);
 	}
 	
@@ -198,8 +212,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		{
 			setAnimation(removalAnimation);
 			this.removalFlag = true;
-		}
-		else
+		} else
 			throw new IllegalStateException("queueRemoval() was accessed from the client-side! It should only be accessed remotely.");
 	}
 	

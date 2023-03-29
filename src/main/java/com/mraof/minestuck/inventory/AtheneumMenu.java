@@ -28,7 +28,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 	private final int INVENTORY_COLUMNS = 7;
 	private final Player player;
 	private final Container inventory = new SimpleContainer(INVENTORY_SIZE);
-	private List<ItemStack> items  = new ArrayList<>();
+	private List<ItemStack> items = new ArrayList<>();
 	private int scroll;
 	
 	public AtheneumMenu(int windowId, Inventory playerInventory)
@@ -45,7 +45,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 	public void updateScroll(boolean scrollUp)
 	{
 		scroll += scrollUp ? -1 : 1;
-		scroll = Mth.clamp(scroll, 0, items.size()/INVENTORY_COLUMNS);
+		scroll = Mth.clamp(scroll, 0, items.size() / INVENTORY_COLUMNS);
 		
 		sendPacket();
 	}
@@ -85,10 +85,10 @@ public class AtheneumMenu extends AbstractContainerMenu
 	{
 		
 		for(int i = 0; i < INVENTORY_SIZE; i++)
-				addSlot(new InventorySlot(inventory, i, 26+(i%INVENTORY_COLUMNS)*18, 14+(i/INVENTORY_COLUMNS)*18));
+			addSlot(new InventorySlot(inventory, i, 26 + (i % INVENTORY_COLUMNS) * 18, 14 + (i / INVENTORY_COLUMNS) * 18));
 		
 		for(int i = 0; i < 9; i++)
-			addSlot(new ToolbarSlot(player.getInventory(), i, 8+i*18, 74));
+			addSlot(new ToolbarSlot(player.getInventory(), i, 8 + i * 18, 74));
 	}
 	
 	private void updateInventory()
@@ -99,9 +99,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 		List<ItemStack> itemList = new ArrayList<>();
 		SburbConnection c = editData.getConnection();
 		
+		//Gets items from the atheneum category of the DeployList
 		List<DeployEntry> atheneumItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.ATHENEUM);
 		atheneumItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
 		
+		//if each stack is not empty, put it in the item list.
 		for(DeployEntry atheneumItem : atheneumItems)
 		{
 			if(!atheneumItem.getItemStack(c, player.level).isEmpty())
@@ -118,6 +120,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 				break;
 			}
 		
+		//if the item list has changed, send the packet to update the container's inventory.
 		if(changed)
 		{
 			this.items = itemList;
@@ -128,16 +131,16 @@ public class AtheneumMenu extends AbstractContainerMenu
 	private void sendPacket()
 	{
 		if(!(player instanceof ServerPlayer serverPlayer))
-			throw new IllegalStateException("Can't send update packet to player! Found player object "+player+".");
+			throw new IllegalStateException("Can't send update packet to player! Found player object " + player + ".");
 		
 		ArrayList<ItemStack> itemList = new ArrayList<>();
 		for(int i = 0; i < INVENTORY_SIZE; i++)
 		{
-			itemList.add(this.items.size() <= i+(scroll*INVENTORY_COLUMNS)? ItemStack.EMPTY:this.items.get(i+(scroll*INVENTORY_COLUMNS)));
+			itemList.add(this.items.size() <= i + (scroll * INVENTORY_COLUMNS) ? ItemStack.EMPTY : this.items.get(i + (scroll * INVENTORY_COLUMNS)));
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0,  INVENTORY_SIZE+(scroll*INVENTORY_COLUMNS) < items.size());
+		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size());
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
@@ -201,7 +204,8 @@ public class AtheneumMenu extends AbstractContainerMenu
 		
 		@Override
 		public void set(ItemStack stack)
-		{}
+		{
+		}
 		
 	}
 }

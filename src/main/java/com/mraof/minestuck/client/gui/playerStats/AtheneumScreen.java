@@ -1,15 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.inventory.AtheneumMenu;
 import com.mraof.minestuck.network.AtheneumPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -51,14 +47,13 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
 		Month m = localdate.getMonth();
-		boolean b1 = MinestuckConfig.SERVER.hardMode.get();
-		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
+		boolean hardmode = MinestuckConfig.SERVER.hardMode.get();
+		boolean memeNumberDate = !hardmode && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
 		
-		this.blit(poseStack, xOffset+ ARROW_X, yOffset+ UP_ARROW_Y, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		this.blit(poseStack, xOffset+ ARROW_X, yOffset+ DOWN_ARROW_Y, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
-		
+		this.blit(poseStack, xOffset+ ARROW_X, yOffset+ UP_ARROW_Y, guiWidth + (memeNumberDate?36:0), (less?0:18) + (hardmode?36:0), 18, 18);
+		this.blit(poseStack, xOffset+ ARROW_X, yOffset+ DOWN_ARROW_Y, guiWidth+18 + (memeNumberDate?36:0), (more?0:18) + (hardmode?36:0), 18, 18);
 		drawActiveTabAndIcons(poseStack);
 		
 	}
