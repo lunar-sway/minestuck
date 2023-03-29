@@ -11,10 +11,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
+- 33 new weapons(8 with alternate form)
+- Mirror block
+- Cryptid photo item (alchemy ingredient)
 
 ### Changed
 
-- Land vegetation now has a partial random XZ offset the same way vanilla grass does
+- Changed Cat Claws recipe to Makeshift Claws || String
+- Updated Cat Claws texture
+- Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
+- Added Grist Cost to Eightball and Dice items
+- Fixed large item models' item frame displays
+- Updated item texture for Mini Wizard Statue
+- Land vegetation now has a partial random XZ offset the same way
 
 ### Removed
 
