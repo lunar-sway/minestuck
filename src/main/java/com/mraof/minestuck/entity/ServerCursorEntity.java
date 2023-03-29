@@ -30,7 +30,6 @@ import java.util.Collections;
 
 public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
-	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	
