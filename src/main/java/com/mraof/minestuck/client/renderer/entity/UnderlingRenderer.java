@@ -3,7 +3,6 @@ package com.mraof.minestuck.client.renderer.entity;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.model.entity.UnderlingModel;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
@@ -17,7 +16,6 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.slf4j.Logger;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -31,8 +29,6 @@ import java.io.IOException;
  */
 public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRenderer<T>
 {
-	private static final Logger LOGGER = LogUtils.getLogger();
-	
 	public UnderlingRenderer(EntityRendererProvider.Context context)
 	{
 		// this renderer does two simple things :
@@ -113,11 +109,11 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	private ResourceLocation getGristTexture(T entity)
 	{
 		String textureName = entity.getGristType().getRegistryName().getPath();
-		if(!textureName.equals("marble") && !textureName.equals("diamond"))
-		{
-			return this.modelProvider.getTextureLocation(entity); //default
+		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		if (!Minecraft.getInstance().getResourceManager().hasResource(textureLocation)) {
+			return this.modelProvider.getTextureLocation(entity);
 		}
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
+		return textureLocation;
 	}
 	
 	/**
