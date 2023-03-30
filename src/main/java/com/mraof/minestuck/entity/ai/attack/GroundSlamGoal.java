@@ -7,7 +7,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -44,15 +43,10 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		{
 			for(AttackingAnimatedEntity iteratedEntity : entityList)
 			{
-				if(iteratedEntity != this.entity && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
+				//TODO Figure out if it can be made so that any entities with the GroundSlamGoal recieve the cooldown, not just entities of the same type
+				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
 				{
-					//TODO slamGoal bool does not seem to trigger
-					for(Goal iteratedGoal : iteratedEntity.goalSelector.getAvailableGoals())
-					{
-						boolean slamGoal = iteratedGoal.equals(this);
-						if(slamGoal)
-							iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent overlapping
-					}
+					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent overlapping
 				}
 			}
 		}
