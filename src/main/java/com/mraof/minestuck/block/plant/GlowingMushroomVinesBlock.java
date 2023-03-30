@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block.plant;
 
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -28,7 +27,7 @@ public class GlowingMushroomVinesBlock extends Block
 		BlockPos belowPos = pos.below();
 		if(rand.nextInt(90) == 0 && level.getBlockState(belowPos).isAir())
 		{
-			level.setBlock(belowPos, MSBlocks.GLOWING_MUSHROOM_VINES.get().defaultBlockState(), Block.UPDATE_ALL);
+			level.setBlock(belowPos, this.defaultBlockState(), Block.UPDATE_ALL);
 		}
 	}
 	
