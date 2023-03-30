@@ -76,6 +76,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
 		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+				&& !otherState.isAir() && !state.isAir()
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.checkStates();
