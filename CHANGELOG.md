@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased 4/13]
+
+### Added
+
+- Shadewood blocks
+- Bookshelves for various minestuck wood types
+- Ladders for various minestuck wood types
+- 33 new weapons(8 with alternate form)
+- Mirror block
+- Cryptid photo item (alchemy ingredient)
+
+### Changed
+
+- Changed Cat Claws recipe to Makeshift Claws || String
+- Updated Cat Claws texture
+- Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
+- Added Grist Cost to Eightball and Dice items
+- Fixed large item models' item frame displays
+- Updated item texture for Mini Wizard Statue
+
+### Removed
+
+- Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
+
+### Contributors for this release
+
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
+
 ## [Unreleased]
 
 ## [1.19.2-1.9.3.0] - 2023-03-24

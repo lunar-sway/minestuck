@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:obsidiator"
+  },
+  "input2": {
+    "item": "minestuck:cryptid_photo"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:devils_delight"
+  }
+}

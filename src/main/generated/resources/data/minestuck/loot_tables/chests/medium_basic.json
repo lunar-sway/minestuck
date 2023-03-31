@@ -726,6 +726,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:cryptid_photo",
+          "quality": 4
+        },
+        {
+          "type": "minecraft:item",
           "name": "minestuck:computer"
         },
         {

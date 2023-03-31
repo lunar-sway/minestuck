@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 166,
+    "minestuck:gold": 166,
+    "minestuck:ruby": 250,
+    "minestuck:uranium": 166
+  },
+  "ingredient": {
+    "item": "minestuck:hallowed_skewer"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 1732,
+    "minestuck:cobalt": 2310,
+    "minestuck:diamond": 3465,
+    "minestuck:rust": 1732,
+    "minestuck:uranium": 2074
+  },
+  "ingredient": {
+    "item": "minestuck:lion_lacerators_drawn"
+  }
+}

@@ -1,3 +1,6 @@
 {
-    "parent": "minestuck:block/mini_wizard_statue"
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/mini_wizard_statue"
+    }
 }
