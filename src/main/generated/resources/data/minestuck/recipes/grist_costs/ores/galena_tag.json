@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/aluminium"
+    "tag": "forge:ores/galena"
   },
   "sources": [
-    "#forge:ingots/aluminum"
+    "#forge:ingots/lead"
   ]
 }

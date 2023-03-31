@@ -4,9 +4,9 @@
     "minestuck:build": 4
   },
   "ingredient": {
-    "tag": "forge:ores/aluminium"
+    "tag": "forge:ores/zinc"
   },
   "sources": [
-    "#forge:ingots/aluminum"
+    "#forge:ingots/zinc"
   ]
 }
