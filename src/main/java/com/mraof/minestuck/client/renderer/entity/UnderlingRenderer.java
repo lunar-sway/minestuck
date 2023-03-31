@@ -111,7 +111,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		String textureName = entity.getGristType().getRegistryName().getPath();
 		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
 		if (!Minecraft.getInstance().getResourceManager().hasResource(textureLocation)) {
-			return this.modelProvider.getTextureLocation(entity);
+			return this.modelProvider.getTextureResource(entity);
 		}
 		return textureLocation;
 	}
@@ -133,7 +133,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 			float color = getContrastModifier(entityLivingBaseIn);
 			matrixStackIn.pushPose();
 			
-			GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityLivingBaseIn));
+			GeoModel model = modelProvider.getModel(modelProvider.getModelResource(entityLivingBaseIn));
 			this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, color, color, color, 1);
 			
 			matrixStackIn.popPose();

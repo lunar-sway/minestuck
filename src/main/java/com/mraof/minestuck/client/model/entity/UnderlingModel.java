@@ -9,19 +9,19 @@ import java.util.Objects;
 public class UnderlingModel<T extends UnderlingEntity> extends RotatingHeadAnimatedModel<T>
 {
 	@Override
-	public ResourceLocation getModelLocation(T entity)
+	public ResourceLocation getModelResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "geo/entity/underlings/" + getName(entity) + ".geo.json");
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(T entity)
+	public ResourceLocation getTextureResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + getName(entity) + ".png");
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(T entity)
+	public ResourceLocation getAnimationResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "animations/entity/underlings/" + getName(entity) + ".animation.json");
 	}

@@ -20,8 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.EmptyModelData;
-import net.minecraftforge.client.model.data.IModelData;
+import net.minecraftforge.client.model.data.ModelData;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
@@ -80,7 +79,7 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			ClientLevel level = Minecraft.getInstance().level;
 			BlockRenderDispatcher blockRenderer = Minecraft.getInstance().getBlockRenderer();
 			BlockPos pos = lathe.getBlockPos();
-			IModelData modelData = EmptyModelData.INSTANCE;
+			ModelData modelData = ModelData.EMPTY;
 			//appears darker than intended, may be lighting issues
 			blockRenderer.renderBatched(cruxiteDowel, pos, level, stack, renderTypeBuffer.getBuffer(ItemBlockRenderTypes.getRenderType(cruxiteDowel, false)), false, level.random, modelData);
 			

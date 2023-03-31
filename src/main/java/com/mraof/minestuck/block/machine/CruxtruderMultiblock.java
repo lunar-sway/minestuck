@@ -14,13 +14,13 @@ import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class CruxtruderMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(1, 2, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> TOP_CORNER = register("cruxtruder_top_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> TOP_SIDE = register("cruxtruder_top_side", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> TOP_CENTER = register("cruxtruder_top_center", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CENTER, false, new BlockPos(0, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
-	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noDrops()));
+	public final RegistryObject<Block> CORNER = register("cruxtruder_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(1, 2, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> SIDE = register("cruxtruder_side", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> CENTER = register("cruxtruder_center", () -> new CruxtruderBlock(this, CRUXTRUDER_BASE, false, new BlockPos(0, 2, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> TOP_CORNER = register("cruxtruder_top_corner", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CORNER, false, new BlockPos(1, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> TOP_SIDE = register("cruxtruder_top_side", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_SIDE, false, new BlockPos(0, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> TOP_CENTER = register("cruxtruder_top_center", () -> new CruxtruderBlock(this, CRUXTRUDER_TOP_CENTER, false, new BlockPos(0, 1, 1), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> TUBE = register("cruxtruder_tube", () -> new CruxtruderBlock(this, CRUXTRUDER_TUBE, true, new BlockPos(0, 0, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
 	
 	private final PlacementEntry tubePlacement;
 	

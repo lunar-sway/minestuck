@@ -7,19 +7,19 @@ import net.minecraft.resources.ResourceLocation;
 public class ConsortModel<T extends ConsortEntity> extends RotatingHeadAnimatedModel<T>
 {
 	@Override
-	public ResourceLocation getModelLocation(T entity)
+	public ResourceLocation getModelResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "geo/entity/consort/" + getName(entity) + ".geo.json");
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(T entity)
+	public ResourceLocation getTextureResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/entity/consort/" + getName(entity) + ".png");
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(T entity)
+	public ResourceLocation getAnimationResource(T entity)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "animations/entity/consort/" + getName(entity) + ".animation.json");
 	}

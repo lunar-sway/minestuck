@@ -8,19 +8,19 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class AlchemiterModel extends AnimatedGeoModel<AlchemiterBlockEntity>
 {
 	@Override
-	public ResourceLocation getModelLocation(AlchemiterBlockEntity object)
+	public ResourceLocation getModelResource(AlchemiterBlockEntity object)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/alchemiter.geo.json");
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(AlchemiterBlockEntity object)
+	public ResourceLocation getTextureResource(AlchemiterBlockEntity object)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "textures/block/machine/alchemiter.png");
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(AlchemiterBlockEntity animatable)
+	public ResourceLocation getAnimationResource(AlchemiterBlockEntity animatable)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/alchemiter.animation.json");
 	}
