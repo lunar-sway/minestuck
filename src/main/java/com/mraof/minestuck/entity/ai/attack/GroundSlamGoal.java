@@ -7,14 +7,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
 /**
- * Alternative attack for when the target is out of standard range, results in players being flung into the air if they were on the ground and not crouching.
+ * Alternative attack for when the attack target is out of standard range, results in the target being flung into the air if they were on the ground and not crouching.
  */
 public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedAttackWhenInRangeGoal<T>
 {
@@ -75,14 +74,15 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		}
 		
 		//flinging the target mob
-		if(target != null && targetCanBeHit(target) && target instanceof Player playerTarget && playerTarget.isOnGround())
+		if(target != null && targetCanBeHit(target) && target.isOnGround())
 		{
+			//similar range check to indiscriminate mob fling check
 			boolean inMeleeRange = getStandardAttackReachSqr(target) >= entity.distanceToSqr(target);
 			
-			//slam will connect if the player is close or if the player is farther away but not crouching, always requires player be on the ground
-			if(inMeleeRange || !playerTarget.isCrouching())
+			//slam will connect if the target is close or if the target is farther away but not crouching, always requires target be on the ground
+			if(inMeleeRange || !target.isCrouching())
 			{
-				fling(attacker, playerTarget, true);
+				fling(attacker, target, true);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 			target.hurt(DamageSource.mobAttack(attacker), damage);
 		}
 		
-		//non-player characters don't need to be damaged
+		//non-target mobs don't need to be damaged, if they did then underlings would aggro on each other
 		target.push(target.getRandom().nextFloat() - 0.5, 0.75, target.getRandom().nextFloat() - 0.5);
 	}
 }
