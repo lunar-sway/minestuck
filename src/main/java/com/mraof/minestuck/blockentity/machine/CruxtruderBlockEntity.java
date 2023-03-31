@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is broken
+public class CruxtruderBlockEntity extends BlockEntity
 {
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
