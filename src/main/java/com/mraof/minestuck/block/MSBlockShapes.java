@@ -65,6 +65,7 @@ public class MSBlockShapes
 	public static final CustomVoxelShape ALCHEMITER_RIGHT_SIDE = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 16, 11, 16}, new double[]{0, 11, 9, 16, 16, 16}, new double[]{3, 8, 0.25, 7, 11, 4.25});
 	public static final CustomVoxelShape ALCHEMITER_TOTEM_CORNER = new CustomVoxelShape(new double[]{0, 0, 0, 16, 8, 16}, new double[]{0, 8, 5, 11, 11, 16}, new double[]{0, 11, 9, 7, 16, 16}, new double[]{9, 8, 12, 13, 16, 16});
 	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD = new CustomVoxelShape(new double[]{7, 0, 2, 13, 4, 8}, new double[]{9, 0, 12, 13, 16, 16}, new double[]{10, 16, 12.5, 12, 18, 15.5});
+	public static final CustomVoxelShape ALCHEMITER_TOTEM_PAD_DOWEL = new CustomVoxelShape(new double[]{7, 0, 2, 13, 4, 8}, new double[]{9, 0, 12, 13, 16, 16}, new double[]{10, 16, 12.5, 12, 18, 15.5}, new double[]{8, 4, 7, 12, 12, 8}, new double[]{8, 4, 2, 12, 12, 3}, new double[]{7, 4, 3, 13, 12, 7});
 	
 	public static final CustomVoxelShape CRUXTRUDER_BASE = new CustomVoxelShape(new double[]{0,0,0,16,16,16});
 	public static final CustomVoxelShape CRUXTRUDER_TOP_CORNER = new CustomVoxelShape(new double[]{10, 0, 10, 16, 10, 16}, new double[]{12, 10, 12, 16, 12, 16});
