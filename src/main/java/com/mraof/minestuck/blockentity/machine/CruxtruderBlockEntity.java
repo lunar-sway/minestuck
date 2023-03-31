@@ -7,10 +7,12 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
@@ -65,8 +67,13 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 					int count = 1;
 					if(player.isShiftKeyDown())	//Doesn't actually work just yet
 						count = Math.min(64 - material, stack.getCount());
-					stack.shrink(count);
+					
+					if(!player.isCreative())
+						stack.shrink(count);
+					
 					material += count;
+					
+					level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1F);
 				}
 			} else if(!top)
 			{
@@ -82,6 +89,8 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 					} else
 					{
 						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.get().defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
+						level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1.75F);
+						
 						if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 							ColorHandler.setColor(blockEntity.getStack(), color);
 						if(material > 0)

@@ -94,6 +94,7 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_LOOT_SPAWN = register("event.lotus_flower.loot_spawn"); //based on boat paddle land and item pop
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_OPEN = register("event.lotus_flower.open"); //identical to composter ready
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
+	public static final RegistryObject<SoundEvent> CRUXTRUDER_DOWEL = register("block.cruxtruder.dowel");
 	public static final RegistryObject<SoundEvent> BLOCK_HORSE_CLOCK_CHIME = register("block.horse_clock.chime");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TICK = register("block.clock.tick");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");
