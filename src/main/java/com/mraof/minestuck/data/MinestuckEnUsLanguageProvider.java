@@ -661,6 +661,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.HOUSE_KEY, "House Key");
 		addItemTooltip(MSItems.HOUSE_KEY, "This incredible item has the ability to open any wooden door! Wow.");
 		addItem(MSItems.KEYBLADE, "Keyblade");
+		addItem(MSItems.CANDY_KEY, "Candy Key");
 		addItem(MSItems.LOCKSOFTENER, "Locksoftener");
 		addItem(MSItems.INKSPLOCKER_UNLOCKER, "Inksplocker Unlocker");
 		addItem(MSItems.INKSQUIDDER_DEPTHKEY, "Inksquidder Depthkey");
@@ -739,6 +740,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		addItem(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		addItem(MSItems.LIPSTICK, "Jade Lipstick");
+		addItem(MSItems.CAKESAW, "Cakesaw");
+		addItem(MSItems.CAKESAW_LIPSTICK, "Cakepop Lipstick");
 		addItem(MSItems.MAGENTA_MAULER, "Magenta Mauler");
 		addItem(MSItems.MAGENTA_MAULER_LIPSTICK, "Lilac Lipstick");
 		addItem(MSItems.THISTLEBLOWER, "Thistleblower");
@@ -858,6 +861,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CROWBAR, "Crowbar");
 		addItem(MSItems.UMBRELLA, "Umbrella");
 		addItemTooltip(MSItems.UMBRELLA, "Shit, let's be Mary Poppins.");
+		addItem(MSItems.BARBERS_BEST_FRIEND, "Barber's Best Friend");
 		addItem(MSItems.UPPER_CRUST_CRUST_CANE, "Upper Crust Crust Cane");
 		addItemTooltip(MSItems.UPPER_CRUST_CRUST_CANE, "*Now* you're walking like an upper crust!");
 		addItem(MSItems.IRON_CANE, "Iron-Tipped Cane");

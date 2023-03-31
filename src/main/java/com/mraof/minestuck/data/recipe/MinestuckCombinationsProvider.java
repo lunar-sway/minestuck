@@ -429,6 +429,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PRINCESS_PERIL.get()).input(MSItems.SHADOWRAZOR.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.KEYBLADE.get()).input(MSItems.HOUSE_KEY.get()).and().input(Items.IRON_SWORD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CANDY_KEY.get()).input(MSItems.CANDY_KEY.get()).or().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.CLOTHES_IRON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.INKSPLOCKER_UNLOCKER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.INK_SQUID_PRO_QUO.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.INKSQUIDDER_DEPTHKEY.get()).input(MSItems.INKSPLOCKER_UNLOCKER.get()).or().input(Items.HEART_OF_THE_SEA).build(consumer);
@@ -535,6 +536,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA.get()).input(Items.STICK).and().namedInput(Items.SHIELD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA.get()).namedInput(MSItems.CANE.get()).and().namedInput(Items.BLACK_WOOL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UMBRELLA.get()).namedInput(MSItems.CANE.get()).and().namedInput(Items.SHIELD).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BARBERS_BEST_FRIEND.get()).input(MSItems.UMBRELLA.get()).and().input(MSItems.RAZOR_BLADE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UPPER_CRUST_CRUST_CANE.get()).input(MSItems.PRIM_AND_PROPER_WALKING_POLE.get()).or().namedInput(MSItems.STALE_BAGUETTE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UPPER_CRUST_CRUST_CANE.get()).input(MSItems.PRIM_AND_PROPER_WALKING_POLE.get()).or().namedInput(Items.BREAD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KISSY_CUTIE_HEART_HITTER.get()).input(MSItems.IRON_CANE.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
@@ -600,6 +602,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.ACTION_CLAWS_DRAWN.get()).input(MSItems.CAT_CLAWS_DRAWN.get()).and().input(MSItems.FLUORITE_OCTET.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.LIPSTICK.get()).input(MSItems.LIP_BALM.get()).and().input(Items.GREEN_DYE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CAKESAW.get()).input(MSItems.LIPSTICK_CHAINSAW.get()).or().input(Items.CAKE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MAGENTA_MAULER.get()).input(MSItems.LIPSTICK_CHAINSAW.get()).and().input(Items.LILAC).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.THISTLEBLOWER.get()).input(MSItems.LIPSTICK_CHAINSAW.get()).or().input(Items.ROSE_BUSH).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EMERALD_IMMOLATOR.get()).input(MSItems.LIPSTICK_CHAINSAW.get()).and().input(MSItems.EMERALD_SWORD.get()).build(consumer);
