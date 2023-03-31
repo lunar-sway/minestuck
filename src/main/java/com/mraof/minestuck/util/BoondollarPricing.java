@@ -4,13 +4,13 @@ import com.google.gson.*;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
-import java.util.Random;
 
 public class BoondollarPricing
 {
@@ -25,7 +25,7 @@ public class BoondollarPricing
 		this.priceRange = priceRange;
 	}
 	
-	public int generatePrice(Random random)
+	public int generatePrice(RandomSource random)
 	{
 		return priceRange.sample(random);
 	}

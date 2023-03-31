@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "rqr",
-    "scs",
-    "ici"
-  ],
   "key": {
     "c": {
       "item": "minecraft:comparator"
@@ -12,16 +7,21 @@
     "i": {
       "item": "minecraft:iron_ingot"
     },
-    "r": {
-      "item": "minecraft:redstone"
-    },
     "q": {
       "item": "minecraft:quartz"
+    },
+    "r": {
+      "item": "minecraft:redstone"
     },
     "s": {
       "tag": "forge:stone"
     }
   },
+  "pattern": [
+    "rqr",
+    "scs",
+    "ici"
+  ],
   "result": {
     "item": "minestuck:wireless_redstone_receiver"
   }

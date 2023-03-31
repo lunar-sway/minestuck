@@ -1,5 +1,6 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
+import com.mraof.minestuck.inventory.ContainerHelper;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
@@ -36,10 +37,7 @@ public class CaptchaDeckMenu extends AbstractContainerMenu
 	
 	private void addSlots(Inventory playerInventory)
 	{
-		for(int i = 9; i < 36; i++)
-			addSlot(new Slot(playerInventory, i, 9 + (i%9)*18, 63 + ((i - 9)/9)*18));
-		for(int i = 0; i < 9; i++)
-			addSlot(new Slot(playerInventory, i, 9 + i*18, 121));
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 9, 63, playerInventory);
 		addSlot(new Slot(this.inventory, 0, 81, 32)
 		{
 			@Override

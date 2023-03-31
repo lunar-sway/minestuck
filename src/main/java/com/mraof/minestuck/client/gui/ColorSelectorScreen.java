@@ -2,24 +2,22 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import net.minecraft.Util;
+import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class ColorSelectorScreen extends Screen
 {
 	public static final String TITLE = "minestuck.color_selector";
-	public static final String SELECT_COLOR = "minestuck.select_color";
-	public static final String COLOR_SELECTED = "minestuck.color_selected";
-	public static final String DEFAULT_COLOR_SELECTED = "minestuck.default_color_selected";
+	public static final String CHOOSE_MESSAGE = "minestuck.color_selector.choose";
+	public static final String SELECT_COLOR = "minestuck.color_selector.select_color";
+	public static final String COLOR_SELECTED = "minestuck.color_selector.color_selected";
+	public static final String DEFAULT_COLOR_SELECTED = "minestuck.color_selector.default_color_selected";
 	
 	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/color_selector.png");
 	private static final int guiWidth = 176, guiHeight = 157;
@@ -28,7 +26,7 @@ public class ColorSelectorScreen extends Screen
 	
 	public ColorSelectorScreen(boolean firstTime)
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		this.firstTime = firstTime;
 		for(int i = 0; i < ColorHandler.getColorSize(); i++)
 		{
@@ -42,7 +40,7 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void init()
 	{
-		addRenderableWidget(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, new TextComponent("Choose"), button -> selectColor()));	//TODO translation key
+		addRenderableWidget(new ExtendedButton((width - guiWidth)/2 + 50, (height - guiHeight)/2 + 132, 76, 20, Component.translatable(CHOOSE_MESSAGE), button -> selectColor()));
 	}
 	
 	@Override
@@ -174,9 +172,9 @@ public class ColorSelectorScreen extends Screen
 		{
 			Component message;
 			if(ClientPlayerData.getPlayerColor() == ColorHandler.DEFAULT_COLOR)
-				message = new TranslatableComponent(DEFAULT_COLOR_SELECTED);
-			else message = new TranslatableComponent(COLOR_SELECTED);
-			this.minecraft.player.sendMessage(new TextComponent("[Minestuck] ").append(message), Util.NIL_UUID);
+				message = Component.translatable(DEFAULT_COLOR_SELECTED);
+			else message = Component.translatable(COLOR_SELECTED);
+			this.minecraft.player.sendSystemMessage(Component.literal("[Minestuck] ").append(message));
 		}
 	}
 	

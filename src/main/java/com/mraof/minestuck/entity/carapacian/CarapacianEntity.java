@@ -58,10 +58,10 @@ public abstract class CarapacianEntity extends AnimatedPathfinderMob
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(ForgeRegistries.ENTITIES.tags().getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).stream().toList());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place, is this now resolved?
+				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).stream().toList());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
 				break;
 			case DERSITE:
-				enemyTypes.addAll(ForgeRegistries.ENTITIES.tags().getTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).stream().toList());
+				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).stream().toList());
 		}
 	}
 	

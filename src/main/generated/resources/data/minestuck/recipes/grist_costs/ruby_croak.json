@@ -1,12 +1,12 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:ruby_croak"
-  },
   "grist_cost": {
     "minestuck:build": 2800,
+    "minestuck:diamond": 140,
     "minestuck:garnet": 630,
-    "minestuck:ruby": 420,
-    "minestuck:diamond": 140
+    "minestuck:ruby": 420
+  },
+  "ingredient": {
+    "item": "minestuck:ruby_croak"
   }
 }

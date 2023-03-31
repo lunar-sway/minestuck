@@ -44,6 +44,8 @@ public class MSBlockShapes
 	
 	public static final CustomVoxelShape STONE_TABLET = new CustomVoxelShape(new double[]{3, 0, 3, 13, 1, 15}, new double[]{3, 0, 2, 12, 1, 3}, new double[]{3, 0, 1, 11, 1, 2});
 	
+	public static final CustomVoxelShape EMBEDDED_STAIRS = new CustomVoxelShape(new double[]{0, 0, 5, 16, 16, 16});
+	
 	public static final CustomVoxelShape BLENDER_BASE = new CustomVoxelShape(new double[]{3, 0, 3, 13, 3, 13}, new double[]{4, 3, 4, 12, 4, 12});
 	public static final CustomVoxelShape BLENDER_CONTAINER = new CustomVoxelShape(new double[]{5, 4, 5, 11, 7, 11}, new double[]{4, 7, 4, 12, 13, 12}, new double[]{3, 13, 3, 13, 14, 13});
 	public static final CustomVoxelShape BLENDER_HANDLE = new CustomVoxelShape(new double[]{3, 6, 7, 5, 7, 9}, new double[]{2, 7, 7, 3, 11, 9}, new double[]{3, 11, 7, 4, 12, 9});
@@ -101,9 +103,9 @@ public class MSBlockShapes
 	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
 	public static CustomVoxelShape SENDIFICATOR = new CustomVoxelShape(new double[]{0,0,0,16,1,16},new double[]{0,16,0,16,15,16},new double[]{0,1,0,1,15,16},new double[]{16,1,0,15,15,16},new double[]{1,1,15,15,15,16});
 	public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
-	public static CustomVoxelShape COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0.5,0,2.5,2.5,1,5}, /*keyboard*/new double[]{3.5,0,0.5,15.5,1,7}, /*base*/new double[]{0.5,0,8.5,15.5,3,15.5}, /*stand*/new double[]{3.5,3,11,12,4.5,13}, /*screen*/new double[]{1,4.5,11.5,15,15.5,12.5});
-	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{1,0,3,15,2,14}, new double[]{1,0.5,14,15,1.5,14.5});
-	public static CustomVoxelShape LAPTOP_OPEN = new CustomVoxelShape(new double[]{1,0,3,15,1,14}, new double[]{1,0.5,14,15,1,14.5}, new double[]{1,1,14,15,12,15});
+	public static CustomVoxelShape COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{1,0,1,3,1,4}, /*keyboard*/new double[]{4,0,0,15,1,5}, /*base*/new double[]{1,0,7,15,3,16}, /*stand*/new double[]{6,3,12,10,6,15}, /*screen*/new double[]{2,6,13,14,15,15});
+	public static CustomVoxelShape LAPTOP_CLOSED = new CustomVoxelShape(new double[]{2,0,1,14,2,11}, new double[]{2,0.5,11,14,1.5,11.5});
+	public static CustomVoxelShape LAPTOP_OPEN = new CustomVoxelShape(new double[]{2,0,1,14,1,11}, new double[]{2,0.5,11,14,1,11.5}, /*bottom of screen*/new double[]{2,1,10.75,14,2,11.75}, new double[]{2,2,11.75,14,4,12.75}, new double[]{2,4,12.75,14,6,13.75}, new double[]{2,6,13.75,14,8,14.75}, new double[]{2,8,14.75,14,10,15.75});
 	public static CustomVoxelShape OLD_COMPUTER = new CustomVoxelShape(/*mouse*/new double[]{0,0,0,3,1,4}, /*keyboard*/new double[]{4,0,0,16,1,5}, /*body*/new double[]{1,0,6,15,13,16});
 	public static CustomVoxelShape LUNCHTOP_OPEN = new CustomVoxelShape(/*base*/new double[]{4,0,1.5,12,3,15.5}, /*core*/new double[]{5,3,2.5,11,5,7.5});
 }

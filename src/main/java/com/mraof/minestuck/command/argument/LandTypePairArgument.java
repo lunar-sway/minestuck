@@ -7,16 +7,12 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 public class LandTypePairArgument implements ArgumentType<LandTypePair>
 {
-	public static final ArgumentSerializer<LandTypePairArgument> SERIALIZER = new EmptyArgumentSerializer<>(LandTypePairArgument::nullablePairs);
-	
 	public static final String INCOMPLETE = "argument.land_types.incomplete";
-	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslatableComponent(INCOMPLETE));
+	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(Component.translatable(INCOMPLETE));
 	
 	private static final TerrainLandTypeArgument TERRAIN_ARGUMENT = TerrainLandTypeArgument.terrainLandType();
 	private static final TitleLandTypeArgument TITLE_ARGUMENT = TitleLandTypeArgument.titleLandType();

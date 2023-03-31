@@ -20,9 +20,9 @@ public final class RegistryBackedBiomeSet implements LandBiomeAccess
 	
 	public RegistryBackedBiomeSet(LandBiomeSetType biomes, Registry<Biome> registry)
 	{
-		NORMAL = registry.getOrCreateHolder(biomes.NORMAL);
-		ROUGH = registry.getOrCreateHolder(biomes.ROUGH);
-		OCEAN = registry.getOrCreateHolder(biomes.OCEAN);
+		NORMAL = registry.getOrCreateHolderOrThrow(biomes.NORMAL);
+		ROUGH = registry.getOrCreateHolderOrThrow(biomes.ROUGH);
+		OCEAN = registry.getOrCreateHolderOrThrow(biomes.OCEAN);
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 {
     "parent": "block/cross",
+    "render_type": "cutout",
     "textures": {
         "cross": "minestuck:block/time_aspect_sapling"
     }

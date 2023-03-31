@@ -13,7 +13,6 @@ import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.GsonHelper;
@@ -30,11 +29,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -117,25 +113,23 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		List<SourceEntry> sources = new ArrayList<>();
 		for(String namespace : resourceManagerIn.getNamespaces())
 		{
-			try
-			{
-				if(resourceManagerIn.hasResource(new ResourceLocation(namespace, PATH)))
+			resourceManagerIn.getResource(new ResourceLocation(namespace, PATH)).ifPresent(resource -> {
+				try
 				{
-					Resource resource = resourceManagerIn.getResource(new ResourceLocation(namespace, PATH));
 					try(
-							InputStream stream = resource.getInputStream();
-							Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)
+							Reader reader = resource.openAsReader()
 					)
 					{
 						sources.addAll(readEntries(reader));
 						
 					} catch(RuntimeException runtimeexception)
 					{
-						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.getSourceName(), runtimeexception);
+						LOGGER.warn("Invalid grist_cost_generation.json in data pack: '{}'", resource.sourcePackId(), runtimeexception);
 					}
+				} catch(IOException ignored)
+				{
 				}
-			} catch(IOException ignored)
-			{}
+			});
 		}
 		
 		return sources;
@@ -341,7 +335,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		@Override
 		public String toString()
 		{
-			return "recipe_source[serializer="+serializer.getRegistryName()+"]";
+			return "recipe_source[serializer="+ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer)+"]";
 		}
 	}
 	

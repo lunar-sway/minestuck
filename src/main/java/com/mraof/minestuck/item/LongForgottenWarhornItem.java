@@ -11,8 +11,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.Random;
-
 public class LongForgottenWarhornItem extends Item
 {
 	static MobEffectInstance[] effect = new MobEffectInstance[] {
@@ -56,9 +54,8 @@ public class LongForgottenWarhornItem extends Item
 		ItemStack item = playerIn.getItemInHand(handIn);
 		if(!level.isClientSide)
 		{
-			Random rand = new Random();
-			int durability = rand.nextInt(14) + 1;
-			int raneffect = rand.nextInt(effect.length);
+			int durability = playerIn.getRandom().nextInt(14) + 1;
+			int raneffect = playerIn.getRandom().nextInt(effect.length);
 			playerIn.addEffect(new MobEffectInstance(effect[raneffect]));
 			if(raneffect != 0)
 			{

@@ -1,38 +1,45 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.level.levelgen.GenerationStep;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 /**
  * @author mraof
  *
  */
-public class CastleStructure extends StructureFeature<NoneFeatureConfiguration>
+public class CastleStructure extends Structure
 {
-	public CastleStructure(Codec<NoneFeatureConfiguration> configCodec)
+	public static final Codec<CastleStructure> CODEC = simpleCodec(CastleStructure::new);
+	
+	public CastleStructure(StructureSettings pSettings)
 	{
-		super(configCodec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), CastleStructure::generatePieces));
+		super(pSettings);
 	}
 	
 	@Override
-	public GenerationStep.Decoration step()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return GenerationStep.Decoration.SURFACE_STRUCTURES;
+		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, builder -> generatePieces(builder, context));
 	}
 	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	@Override
+	public StructureType<?> type()
 	{
-		Random random = context.random();
+		return MSStructures.SKAIA_CASTLE.get();
+	}
+	
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
+	{
+		RandomSource random = context.random();
 		boolean isBlack = random.nextBoolean();
 		
 		CastleStartPiece startPiece = new CastleStartPiece(context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ(), isBlack);
@@ -51,7 +58,7 @@ public class CastleStructure extends StructureFeature<NoneFeatureConfiguration>
 		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
 			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
 			{
-				int posHeight = context.chunkGenerator().getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor());
+				int posHeight = context.chunkGenerator().getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 				minY = Math.min(minY, posHeight);
 			}
 		

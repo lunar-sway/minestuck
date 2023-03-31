@@ -19,19 +19,17 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.ISkyRenderHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
-public class LandSkyRenderer implements ISkyRenderHandler
+public final class LandSkyRenderer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	@Override
-	public void render(int ticks, float partialTicks, PoseStack poseStack, ClientLevel level, Minecraft mc)
+	public static void render(int ticks, float partialTicks, PoseStack poseStack, ClientLevel level, Minecraft mc)
 	{
 		float heightModifier = (float) Mth.clamp((mc.player.position().y() - 144)/112, 0, 1);
 		float heightModifierDiminish = (1 - heightModifier/1.5F);
@@ -77,7 +75,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		
 		float skaiaSize = 20.0F;
 		TextureAtlasSprite skaiaSprite = LandSkySpriteUploader.getInstance().getSkaiaSprite();
-		drawSprite(mc, buffer, matrix, skaiaSize, skaiaSprite);
+		drawSprite(buffer, matrix, skaiaSize, skaiaSprite);
 		
 		if(starBrightness > 0)
 		{
@@ -121,7 +119,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		RenderSystem.depthMask(true);
 	}
 	
-	private Vec3 getSkyColor(Minecraft mc, ClientLevel level, float partialTicks)
+	private static Vec3 getSkyColor(Minecraft mc, ClientLevel level, float partialTicks)
 	{
 		LandProperties properties = ClientDimensionData.getProperties(level);
 		if (properties != null)
@@ -137,7 +135,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		return (float)(d0 * 2.0D + d1) / 3.0F;
 	}
 	
-	private void drawVeil(Matrix4f matrix, float partialTicks, ClientLevel level)
+	private static void drawVeil(Matrix4f matrix, float partialTicks, ClientLevel level)
 	{
 		Tesselator tesselator = Tesselator.getInstance();
 		BufferBuilder buffer = tesselator.getBuilder();
@@ -191,7 +189,7 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		tesselator.end();
 	}
 	
-	private void drawLands(Minecraft mc, PoseStack poseStack, ResourceKey<Level> dim)
+	private static void drawLands(Minecraft mc, PoseStack poseStack, ResourceKey<Level> dim)
 	{
 		List<ResourceKey<Level>> list = SkaiaClient.getLandChain(dim);
 		if(list == null)
@@ -207,13 +205,13 @@ public class LandSkyRenderer implements ISkyRenderHandler
 				LandTypePair landTypes = ClientDimensionData.getLandTypes(landName);
 				if(landTypes == null)
 					LOGGER.warn("Missing land types for dimension {}!", landName);
-				else drawLand(mc, poseStack, landTypes, (i / (float) list.size()), random);
+				else drawLand(poseStack, landTypes, (i / (float) list.size()), random);
 			}
 		}
 		RenderSystem.disableTexture();
 	}
 	
-	private void drawLand(Minecraft mc, PoseStack poseStack, LandTypePair aspects, float pos, Random random)
+	private static void drawLand(PoseStack poseStack, LandTypePair aspects, float pos, Random random)
 	{
 		if(pos == 0.5F || aspects == null)
 			return;
@@ -230,13 +228,13 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		Matrix4f matrix = poseStack.last().pose();
 		
 		float planetSize = 4.0F*scale;
-		drawSprite(mc, buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(aspects.getTerrain(), index));
-		drawSprite(mc, buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(aspects.getTitle(), index));
+		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getPlanetSprite(aspects.getTerrain(), index));
+		drawSprite(buffer, matrix, planetSize, LandSkySpriteUploader.getInstance().getOverlaySprite(aspects.getTitle(), index));
 		
 		poseStack.popPose();
 	}
 	
-	private void drawSprite(Minecraft mc, BufferBuilder buffer, Matrix4f matrix, float size, TextureAtlasSprite sprite)
+	private static void drawSprite(BufferBuilder buffer, Matrix4f matrix, float size, TextureAtlasSprite sprite)
 	{
 		RenderSystem.setShaderTexture(0, sprite.atlas().location());
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -245,7 +243,6 @@ public class LandSkyRenderer implements ISkyRenderHandler
 		buffer.vertex(matrix, size, 100, -size).uv(sprite.getU1(), sprite.getV0()).endVertex();
 		buffer.vertex(matrix, size, 100, size).uv(sprite.getU1(), sprite.getV1()).endVertex();
 		buffer.vertex(matrix, -size, 100, size).uv(sprite.getU0(), sprite.getV1()).endVertex();
-		buffer.end();
-		BufferUploader.end(buffer);
+		BufferUploader.drawWithShader(buffer.end());
 	}
 }

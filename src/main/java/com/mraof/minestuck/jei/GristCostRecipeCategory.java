@@ -19,7 +19,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -47,24 +46,10 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		return MinestuckJeiPlugin.GRIST_COST;
 	}
 	
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends JeiGristCost> getRecipeClass()
-	{
-		return getRecipeType().getRecipeClass();
-	}
-	
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid()
-	{
-		return getRecipeType().getUid();
-	}
-
 	@Override
 	public Component getTitle()
 	{
-		return new TranslatableComponent(JeiGristCost.GRIST_COSTS);
+		return Component.translatable(JeiGristCost.GRIST_COSTS);
 	}
 
 	@Override

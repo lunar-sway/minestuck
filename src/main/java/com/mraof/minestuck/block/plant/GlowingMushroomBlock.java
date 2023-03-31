@@ -3,14 +3,13 @@ package com.mraof.minestuck.block.plant;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.PlantType;
-
-import java.util.Random;
 
 public class GlowingMushroomBlock extends BushBlock
 {
@@ -27,7 +26,7 @@ public class GlowingMushroomBlock extends BushBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, level, pos, random);
 		if(canSpread(level, pos, state) && random.nextInt(25) == 0)

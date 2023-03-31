@@ -8,13 +8,13 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
 import com.mraof.minestuck.world.gen.structure.gate.LandGatePlacement;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -22,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Function;
 
 public class GateHandler
@@ -51,7 +50,7 @@ public class GateHandler
 				if(!block.is(MSBlocks.GATE_MAIN.get()))
 				{
 					LOGGER.debug("Can't find destination gate at {}. Probably broken.", destination);
-					player.sendMessage(new TranslatableComponent(DESTROYED), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable(DESTROYED));
 					return;
 				}
 			}
@@ -66,7 +65,7 @@ public class GateHandler
 		Optional<RegistryBackedBiomeSet> optional = LandBiomeSetType.getSet(level.getChunkSource().getGenerator());
 		if(pos != null && optional.isPresent())
 		{
-			Random rand = level.random;
+			RandomSource rand = level.random;
 			RegistryBackedBiomeSet biomes = optional.get();
 			while(true)    //TODO replace with a more friendly version without a chance of freezing the game
 			{

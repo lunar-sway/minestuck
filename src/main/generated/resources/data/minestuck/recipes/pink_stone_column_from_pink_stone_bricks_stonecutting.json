@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 1,
   "ingredient": {
     "item": "minestuck:pink_stone_bricks"
   },
-  "result": "minestuck:pink_stone_column",
-  "count": 1
+  "result": "minestuck:pink_stone_column"
 }

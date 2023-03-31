@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "minestuck:cassette_mellohi",
     "minestuck:cassette_13",
@@ -10,6 +9,12 @@
     "minestuck:cassette_mall",
     "minestuck:cassette_dance_stab",
     "minestuck:cassette_retro_battle",
-    "minestuck:cassette_emissary"
+    "minestuck:cassette_emissary",
+    "minestuck:cassette_11",
+    "minestuck:cassette_pigstep",
+    "minestuck:cassette_stal",
+    "minestuck:cassette_strad",
+    "minestuck:cassette_wait",
+    "minestuck:cassette_ward"
   ]
 }

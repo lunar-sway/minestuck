@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class UnavailableGristCostBuilder
 	
 	public static UnavailableGristCostBuilder of(ItemLike item)
 	{
-		return new UnavailableGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
+		return new UnavailableGristCostBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
 	public static UnavailableGristCostBuilder of(Ingredient ingredient)
@@ -55,13 +56,13 @@ public class UnavailableGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	

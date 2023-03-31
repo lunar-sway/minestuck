@@ -2,29 +2,29 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "weapons",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "supplies",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:crew_poster",
           "quality": 2,
-          "name": "minestuck:crew_poster"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

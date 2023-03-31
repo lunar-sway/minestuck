@@ -2,11 +2,12 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -19,12 +20,11 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class TowerFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -45,10 +45,10 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin().below(2);
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
 		ResourceLocation tower = rand.nextInt(50) == 0 ? STRUCTURE_TOWER_WITH_CHEST : STRUCTURE_TOWER;
-		StructureManager templates = level.getLevel().getStructureManager();
+		StructureTemplateManager templates = level.getLevel().getStructureManager();
 		StructureTemplate template = templates.getOrCreate(tower);
 		
 		ChunkPos chunkPos = new ChunkPos(pos);
@@ -73,7 +73,7 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 	
 	private static final BlockPos DOOR_CHECK_OFFSET = new BlockPos(0, 0, 4), DOOR_PLACE_OFFSET = new BlockPos(-1, 0, 3);
 	
-	private void placeDoor(WorldGenLevel level, Random rand, StructureManager templates, StructurePlaceSettings settings, BlockPos towerCenter, Rotation rotation)
+	private void placeDoor(WorldGenLevel level, RandomSource rand, StructureTemplateManager templates, StructurePlaceSettings settings, BlockPos towerCenter, Rotation rotation)
 	{
 		StructureTemplate door = templates.getOrCreate(getDoorTemplate(level, towerCenter, rotation));
 		
@@ -107,7 +107,7 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 		}
 	}
 	
-	private void handleDataMarkers(WorldGenLevel level, Random rand, StructureTemplate template, StructurePlaceSettings settings, BlockPos structurePos)
+	private void handleDataMarkers(WorldGenLevel level, RandomSource rand, StructureTemplate template, StructurePlaceSettings settings, BlockPos structurePos)
 	{
 		for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(structurePos, settings, Blocks.STRUCTURE_BLOCK))
 		{
@@ -123,7 +123,7 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 		}
 	}
 	
-	private void handleDataMarker(WorldGenLevel level, Random rand, BlockPos pos, String data)
+	private void handleDataMarker(WorldGenLevel level, RandomSource rand, BlockPos pos, String data)
 	{
 		if(data.equals("basic_chest"))
 		{

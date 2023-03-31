@@ -1,12 +1,12 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:the_last_straw"
-  },
   "grist_cost": {
+    "minestuck:amber": 45,
     "minestuck:build": 180,
     "minestuck:gold": 36,
-    "minestuck:iodine": 90,
-    "minestuck:amber": 45
+    "minestuck:iodine": 90
+  },
+  "ingredient": {
+    "item": "minestuck:the_last_straw"
   }
 }

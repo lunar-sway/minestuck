@@ -2,28 +2,28 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "weapons",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "supplies",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "quality": -2,
-          "name": "minecraft:beacon"
+          "name": "minecraft:beacon",
+          "quality": -2
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

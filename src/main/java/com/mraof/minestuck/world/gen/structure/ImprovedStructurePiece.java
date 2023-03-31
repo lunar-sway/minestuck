@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.ReturnNodeBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
@@ -18,8 +19,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.material.FluidState;
 
-import java.util.Random;
-
 public abstract class ImprovedStructurePiece extends StructurePiece
 {
 	protected ImprovedStructurePiece(StructurePieceType structurePieceTypeIn, int genDepth, BoundingBox boundingBox)
@@ -32,14 +31,14 @@ public abstract class ImprovedStructurePiece extends StructurePiece
 		super(structurePierceTypeIn, nbt);
 	}
 	
-	protected void generateDoor(WorldGenLevel level, BoundingBox sbb, Random rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
+	protected void generateDoor(WorldGenLevel level, BoundingBox sbb, RandomSource rand, int x, int y, int z, Direction direction, Block door, DoorHingeSide hinge)
 	{
 		BlockState state = door.defaultBlockState().setValue(DoorBlock.FACING, direction).setValue(DoorBlock.HINGE, hinge);
 		placeBlock(level, state, x, y, z, sbb);
 		placeBlock(level, state.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), x, y + 1, z, sbb);
 	}
 	
-	protected void generateBed(WorldGenLevel level, BoundingBox sbb, Random rand, int x, int y, int z, Direction direction, BlockState state)
+	protected void generateBed(WorldGenLevel level, BoundingBox sbb, RandomSource rand, int x, int y, int z, Direction direction, BlockState state)
 	{
 		state = state.setValue(BedBlock.FACING, direction);
 		placeBlock(level, state, x, y, z, sbb);

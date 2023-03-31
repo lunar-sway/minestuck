@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 19,
+    "minestuck:cobalt": 10
+  },
   "ingredient": {
     "item": "minecraft:ghast_tear"
-  },
-  "grist_cost": {
-    "minestuck:cobalt": 10,
-    "minestuck:chalk": 19
   }
 }

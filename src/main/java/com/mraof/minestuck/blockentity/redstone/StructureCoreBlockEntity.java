@@ -13,11 +13,11 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
@@ -33,7 +33,7 @@ public class StructureCoreBlockEntity extends BlockEntity
 	private ActionType actionType;
 	private int shutdownRange = 32;
 	private boolean hasWiped = false;
-	public final ConfiguredStructureFeature<?, ?>[] SOLVABLE_STRUCTURES = new ConfiguredStructureFeature<?, ?>[]{MSConfiguredStructures.FROG_TEMPLE.get()};
+	public final Structure[] SOLVABLE_STRUCTURES = new Structure[]{MSConfiguredStructures.FROG_TEMPLE.get()};
 	
 	/**
 	 * READ AND WIPE checks to see if the structure piece hasBeenCompleted variable is true, and then prevents puzzle blocks not meant to be utilized for survival players from working
@@ -81,7 +81,7 @@ public class StructureCoreBlockEntity extends BlockEntity
 	{
 		if(level != null && level.isAreaLoaded(getBlockPos(), 1) && getBlockState().getValue(StructureCoreBlock.ACTIVE))
 		{
-			StructureFeatureManager structureManager = ((ServerLevel) level).structureFeatureManager();
+			StructureManager structureManager = ((ServerLevel) level).structureManager();
 			List<StructureStart> structureStarts = getStructureStarts(structureManager);
 			
 			for(StructureStart structureStartIterate : structureStarts)
@@ -110,10 +110,10 @@ public class StructureCoreBlockEntity extends BlockEntity
 		}
 	}
 	
-	public List<StructureStart> getStructureStarts(StructureFeatureManager structureManager)
+	public List<StructureStart> getStructureStarts(StructureManager structureManager)
 	{
 		List<StructureStart> structureStartList = new ArrayList<>();
-		for(ConfiguredStructureFeature<?, ?> structureListIterate : SOLVABLE_STRUCTURES)
+		for(Structure structureListIterate : SOLVABLE_STRUCTURES)
 		{
 			StructureStart potentialStructureStart = structureManager.getStructureAt(getBlockPos(), structureListIterate);
 			

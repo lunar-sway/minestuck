@@ -2,23 +2,22 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.TitleSelectionHook;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,6 +35,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,7 +82,7 @@ public class EntryProcess
 				{
 					if(!canModifyEntryBlocks(player.level, player))
 					{
-						player.sendMessage(new TextComponent("You are not allowed to enter here."), Util.NIL_UUID);    //TODO translation key
+						player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
 						return;
 					}
 					
@@ -104,7 +104,7 @@ public class EntryProcess
 					ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
 					if(landDimension == null)
 					{
-						player.sendMessage(new TextComponent("Something went wrong while creating your Land. More details in the server console."), Util.NIL_UUID);
+						player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
 					} else
 					{
 						ServerLevel oldLevel = (ServerLevel) player.level;
@@ -123,7 +123,7 @@ public class EntryProcess
 								SkaianetHandler.get(player.level).onEntry(identifier);
 							} else
 							{
-								player.sendMessage(new TextComponent("Entry failed. Unable to teleport you!"), Util.NIL_UUID);
+								player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
 							}
 						}
 					}
@@ -132,7 +132,7 @@ public class EntryProcess
 		} catch(Exception e)
 		{
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendMessage(new TextComponent("[Minestuck] Something went wrong during entry. " + (player.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED), Util.NIL_UUID);
+			player.sendSystemMessage(Component.literal("[Minestuck] Something went wrong during entry. " + (player.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
 		}
 	}
 	
@@ -183,13 +183,13 @@ public class EntryProcess
 						continue;
 					} else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 					{
-						player.displayClientMessage(new TextComponent("You are not allowed to move command blocks."), false);
+						player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
 						return false;
 					} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
 					{
 						if(!((ComputerBlockEntity) be).owner.equals(IdentifierHandler.encode(player)))    //You can't Enter with someone else's computer
 						{
-							player.displayClientMessage(new TextComponent("You are not allowed to move other players' computers."), false);
+							player.displayClientMessage(Component.literal("You are not allowed to move other players' computers."), false);
 							return false;
 						}
 						
@@ -211,7 +211,7 @@ public class EntryProcess
 		
 		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
 		{
-			player.displayClientMessage(new TextComponent("There is no computer in range."), false);
+			player.displayClientMessage(Component.literal("There is no computer in range."), false);
 			return false;
 		}
 		
@@ -355,14 +355,14 @@ public class EntryProcess
 		{
 			if(MinestuckConfig.SERVER.entryCrater.get() || !creative)
 			{
-				String name = level.getBlockState(pos).getBlock().getRegistryName().toString();
+				Block block = level.getBlockState(pos).getBlock();
 				try
 				{
 					level.removeBlockEntity(pos);
 					level.removeBlock(pos, true);
 				} catch(Exception e)
 				{
-					LOGGER.warn("Exception encountered when removing block entity " + name + " during entry:", e);
+					LOGGER.warn("Exception encountered when removing block entity {} during entry:", block, e);
 				}
 			} else
 			{
@@ -496,7 +496,7 @@ public class EntryProcess
 				if(newBE != null)
 					level.setBlockEntity(newBE);
 				else
-					LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", blockEntity.getType().getRegistryName());
+					LOGGER.warn("Unable to create a new block entity {} when teleporting blocks to the medium!", ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(blockEntity.getType()));
 				
 			}
 			

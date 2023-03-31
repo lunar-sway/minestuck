@@ -1,9 +1,7 @@
 package com.mraof.minestuck.item;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -35,8 +33,7 @@ public class RazorBladeItem extends Item
 					razor.setPickUpDelay(40);
 					attacker.level.addFreshEntity(razor);
 					stack.shrink(1);
-					Component message = new TranslatableComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					attacker.sendMessage(message, Util.NIL_UUID);
+					attacker.sendSystemMessage(Component.translatable("While you handle the razor blade, you accidentally cut yourself and drop it."));
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
 				return true;
@@ -59,8 +56,7 @@ public class RazorBladeItem extends Item
 					razor.setPickUpDelay(40);
 					entityLiving.level.addFreshEntity(razor);
 					stack.shrink(1);
-					Component message = new TranslatableComponent("While you handle the razor blade, you accidentally cut yourself and drop it.");
-					entityLiving.sendMessage(message, Util.NIL_UUID);
+					entityLiving.sendSystemMessage(Component.translatable("While you handle the razor blade, you accidentally cut yourself and drop it."));
 				}
 				entityLiving.hurt(DamageSource.GENERIC, 1);
 			}

@@ -4,13 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Random;
 
 public class SpecialButtonBlock extends ButtonBlock
 {
@@ -26,7 +25,7 @@ public class SpecialButtonBlock extends ButtonBlock
 	}
 	
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		boolean b = state.getValue(POWERED);
 		super.tick(state, level, pos, random);

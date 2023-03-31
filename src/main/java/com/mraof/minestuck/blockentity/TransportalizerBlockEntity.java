@@ -3,14 +3,11 @@ package com.mraof.minestuck.blockentity;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -113,7 +110,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		{
 			entity.setPortalCooldown();
 			if(entity instanceof ServerPlayer)
-				entity.sendMessage(new TranslatableComponent(DISABLED), Util.NIL_UUID);
+				entity.sendSystemMessage(Component.translatable(DISABLED));
 			return;
 		}
 		if(location != null && location.pos().getY() != -1)
@@ -134,14 +131,14 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(FORBIDDEN), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(FORBIDDEN));
 				return;
 			}
 			if(isDimensionForbidden(level))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(FORBIDDEN_DESTINATION), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(FORBIDDEN_DESTINATION));
 				return;
 			}
 			
@@ -149,7 +146,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(BLOCKED), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(BLOCKED));
 				return;
 			}
 			
@@ -157,7 +154,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(BLOCKED_DESTINATION), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(BLOCKED_DESTINATION));
 				return;
 			}
 			
@@ -239,7 +236,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	public Component getName()
 	{
-		return new TextComponent("Transportalizer");
+		return Component.literal("Transportalizer");
 	}
 	
 	@Override
@@ -252,7 +249,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	public Component getCustomName()
 	{
-		return id.isEmpty() ? null : new TextComponent(id);
+		return id.isEmpty() ? null : Component.literal(id);
 	}
 	
 	@Override

@@ -9,15 +9,25 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MSTags
 {
 	public static class Blocks
 	{
+		// If other colored hieroglyph sets are added, switch to creating a tag for each analogous block instead of the whole set
+		// I.e. a tag for lotus, a tag for frogs, a tag for skaia etc. instead of a tag for all hieroglyphs
+		public static final TagKey<Block> GREEN_HIEROGLYPHS = tag("green_hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Block> RAINBOW_LOGS = tag("logs/rainbow");
@@ -151,11 +161,21 @@ public class MSTags
 	
 	public static class Structures
 	{
-		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");
+		public static final TagKey<Structure> SCANNER_LOCATED = tag("scanner_located");
 		
-		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
+		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
+	}
+	
+	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
+	{
+		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
+	}
+	
+	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
+	{
+		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
 	}
 }

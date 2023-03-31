@@ -4,7 +4,7 @@ import com.mraof.minestuck.block.redstone.RedstoneClockBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -64,7 +64,7 @@ public class RedstoneClockBlockEntity extends BlockEntity
 			clockSpeed = 20;
 			level.playSound(null, getBlockPos(), SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.6F);
 		}
-		playerEntity.displayClientMessage(new TranslatableComponent(TIME_CHANGE, (double) clockSpeed / 20), true);
+		playerEntity.displayClientMessage(Component.translatable(TIME_CHANGE, (double) clockSpeed / 20), true);
 	}
 	
 	public void decrementClockSpeed(Player playerEntity)
@@ -78,7 +78,7 @@ public class RedstoneClockBlockEntity extends BlockEntity
 			clockSpeed = 1200;
 			level.playSound(null, getBlockPos(), SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.6F);
 		}
-		playerEntity.displayClientMessage(new TranslatableComponent(TIME_CHANGE, (double) clockSpeed / 20), true);
+		playerEntity.displayClientMessage(Component.translatable(TIME_CHANGE, (double) clockSpeed / 20), true);
 	}
 	
 	public void setClockSpeed(int clockSpeed)

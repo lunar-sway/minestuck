@@ -2,6 +2,7 @@
     "credit": "Crafted with love by the grease artisan mysterymeat in Blockbench",
     "parent": "minecraft:block/block",
     "texture_size": [64, 64],
+    "render_type": "translucent",
     "textures": {
         "magnet": "minestuck:block/item_magnet",
         "particle": "minestuck:block/item_magnet"

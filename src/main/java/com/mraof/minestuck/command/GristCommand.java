@@ -2,6 +2,7 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -11,7 +12,7 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -47,7 +48,7 @@ public class GristCommand
 		for(ServerPlayer player : players)
 		{
 			GristSet grist = PlayerSavedData.getData(player).getGristCache();
-			source.sendSuccess(new TranslatableComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), grist.asTextComponent()), false);
 		}
 		return players.size();
 	}
@@ -59,16 +60,16 @@ public class GristCommand
 		{
 			try
 			{
-				GristHelper.increase(player.level, IdentifierHandler.encode(player), grist);
+				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.CONSOLE);
 				i++;
-				source.sendSuccess(new TranslatableComponent(SUCCESS, player.getDisplayName()), true);
+				source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				source.sendFailure(new TranslatableComponent(FAILURE, player.getDisplayName()));
+				source.sendFailure(Component.translatable(FAILURE, player.getDisplayName()));
 			}
 		}
-		source.sendSuccess(new TranslatableComponent(ADD, i), true);
+		source.sendSuccess(Component.translatable(ADD, i), true);
 		return i;
 	}
 	
@@ -78,7 +79,7 @@ public class GristCommand
 		{
 			PlayerSavedData.getData(player).setGristCache(grist);
 		}
-		source.sendSuccess(new TranslatableComponent(SET, players.size(), grist.asTextComponent()), true);
+		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();
 	}
 }

@@ -2,70 +2,70 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:spear_cane"
+          "name": "minestuck:spear_cane",
+          "quality": 1
         }
-      ]
+      ],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:brain_juice_bucket",
+          "quality": -1,
+          "weight": 8
+        }
+      ],
       "name": "supplies",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "weight": 8,
-          "quality": -1,
-          "name": "minestuck:brain_juice_bucket"
-        }
-      ]
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": -1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:thought_dirt"
+          "name": "minestuck:thought_dirt",
+          "quality": -1,
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:sbahj_poster",
           "quality": 2,
-          "name": "minestuck:sbahj_poster"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

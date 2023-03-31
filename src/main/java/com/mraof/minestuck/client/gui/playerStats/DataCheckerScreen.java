@@ -21,8 +21,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -52,7 +50,7 @@ public class DataCheckerScreen extends Screen
 	
 	public DataCheckerScreen()
 	{
-		super(new TextComponent("Data Checker"));
+		super(Component.literal("Data Checker"));
 	}
 	
 	@Override
@@ -69,10 +67,10 @@ public class DataCheckerScreen extends Screen
 		for(int i = 0; i < 5; i++)
 		{
 			final int id = i;
-			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, TextComponent.EMPTY, button -> contentButton(id)));
+			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, Component.empty(), button -> contentButton(id)));
 		}
-		returnButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, TextComponent.EMPTY, button -> goBack()));
-		refreshButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, TextComponent.EMPTY, button -> refresh()));
+		returnButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, Component.empty(), button -> goBack()));
+		refreshButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, Component.empty(), button -> refresh()));
 		
 		if(activeComponent == null)
 			MSPacketHandler.sendToServer(DataCheckerPacket.request());
@@ -254,7 +252,7 @@ public class DataCheckerScreen extends Screen
 				if(component != null && component.isButton())
 				{
 					button.visible = true;
-					button.setMessage(new TextComponent(component.getName()));
+					button.setMessage(Component.literal(component.getName()));
 					
 				} else button.visible = false;
 			}
@@ -330,7 +328,7 @@ public class DataCheckerScreen extends Screen
 	{
 		public LocalizedTextField(String message, Object... params)
 		{
-			this(new TranslatableComponent(message, params));
+			this(Component.translatable(message, params));
 		}
 		
 		@Override

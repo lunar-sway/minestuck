@@ -24,7 +24,7 @@ public final class LandTypeGenerator
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private Random random;
+	private final Random random;
 	
 	
 	public LandTypeGenerator(long seed)
@@ -42,7 +42,7 @@ public final class LandTypeGenerator
 			return aspect;
 		else
 		{
-			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", aspect2.getRegistryName());
+			LOGGER.error("No land aspect is compatible with the title aspect {}! Defaulting to null land aspect.", LandTypes.TITLE_REGISTRY.get().getKey(aspect2));
 			return LandTypes.TERRAIN_NULL.get();
 		}
 	}
@@ -61,7 +61,7 @@ public final class LandTypeGenerator
 		else return LandTypes.TITLE_NULL.get();
 	}
 	
-	private <A extends ILandType<A>> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)
+	private <A extends ILandType> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)
 	{
 		Map<ResourceLocation, List<A>> groupMap = Maps.newHashMap();
 		for(A landType : registry)
@@ -72,7 +72,7 @@ public final class LandTypeGenerator
 		return groupMap;
 	}
 	
-	private <A extends ILandType<A>> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
+	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
 	{
 		List<List<A>> list = Lists.newArrayList();
 		for(List<A> aspects : groupMap.values())
@@ -89,7 +89,7 @@ public final class LandTypeGenerator
 		return pickOneFromUsage(groupList, usedAspects, Object::equals);
 	}
 	
-	private <A extends ILandType<A>, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
+	private <A extends ILandType, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
 		if(list.isEmpty())
 			return null;

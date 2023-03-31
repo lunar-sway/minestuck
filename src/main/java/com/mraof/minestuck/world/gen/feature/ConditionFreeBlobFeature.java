@@ -2,13 +2,13 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * A version of the {@link net.minecraft.world.level.levelgen.feature.BlockBlobFeature}, but without the need to be placed on dirt or stone.
@@ -25,7 +25,7 @@ public class ConditionFreeBlobFeature extends Feature<BlockStateConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		BlockStateConfiguration config = context.config();
 		
 		final int startRadius = 0;

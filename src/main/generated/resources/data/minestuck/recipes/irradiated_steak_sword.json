@@ -1,9 +1,9 @@
 {
   "type": "minestuck:irradiating",
+  "cookingtime": 20,
+  "experience": 0.35,
   "ingredient": {
     "item": "minestuck:beef_sword"
   },
-  "result": "minestuck:irradiated_steak_sword",
-  "experience": 0.35,
-  "cookingtime": 20
+  "result": "minestuck:irradiated_steak_sword"
 }

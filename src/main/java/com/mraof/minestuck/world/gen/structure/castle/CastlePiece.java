@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.structure.castle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -11,8 +12,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-
-import java.util.Random;
 
 public abstract class CastlePiece extends StructurePiece
 {
@@ -40,19 +39,19 @@ public abstract class CastlePiece extends StructurePiece
 	}
 	
 	protected StructurePiece getNextComponentNormal(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int zShift, StructureCastlePieces.Type type)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, RandomSource random, int xShift, int zShift, StructureCastlePieces.Type type)
 	{
 		return getNextComponentNormal(castleStartPiece, accessor, random, xShift, 0, zShift, type);
 	}
 
 	protected StructurePiece getNextComponentNormal(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random random, int xShift, int yShift, int zShift, StructureCastlePieces.Type type)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, RandomSource random, int xShift, int yShift, int zShift, StructureCastlePieces.Type type)
 	{
 			return this.getNextComponent(castleStartPiece, accessor, random, this.boundingBox.minX() + xShift, this.boundingBox.minY() + yShift, this.boundingBox.minZ() + zShift, this.direction, type);
 	}
 
 	protected StructurePiece getNextComponent(
-			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, Random par3Random, int i, int j, int k, int coordBaseMode, StructureCastlePieces.Type type)
+			CastleStartPiece castleStartPiece, StructurePieceAccessor accessor, RandomSource par3Random, int i, int j, int k, int coordBaseMode, StructureCastlePieces.Type type)
 	{
 		return StructureCastlePieces.getNextValidComponent(castleStartPiece, accessor, par3Random, i, j, k, coordBaseMode, type);
 	}

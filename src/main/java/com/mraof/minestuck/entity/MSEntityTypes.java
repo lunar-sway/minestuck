@@ -19,7 +19,7 @@ import net.minecraftforge.registries.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
-	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITIES, Minestuck.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Minestuck.MOD_ID);
 	
 	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 35, false, false, 128);
 	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 10, true, false, 128);

@@ -12,7 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -55,13 +55,13 @@ public abstract class SylladexScreen extends Screen
 	
 	public SylladexScreen()
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 	}
 	
 	@Override
 	public void init()
 	{
-		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, new TranslatableComponent(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
+		emptySylladex = new ExtendedButton((width - GUI_WIDTH)/2 + 140, (height - GUI_HEIGHT)/2 + 175, 100, 20, Component.translatable(EMPTY_SYLLADEX_BUTTON), button -> emptySylladex());
 		addRenderableWidget(emptySylladex);
 		updateContent();
 	}
@@ -209,7 +209,7 @@ public abstract class SylladexScreen extends Screen
 	
 	private void emptySylladex()
 	{
-		minecraft.screen = new ConfirmScreen(this::onEmptyConfirm, new TranslatableComponent(EMPTY_SYLLADEX_1), new TranslatableComponent(EMPTY_SYLLADEX_2));
+		minecraft.screen = new ConfirmScreen(this::onEmptyConfirm, Component.translatable(EMPTY_SYLLADEX_1), Component.translatable(EMPTY_SYLLADEX_2));
 		minecraft.screen.init(minecraft, width, height);
 	}
 	

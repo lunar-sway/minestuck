@@ -1,6 +1,7 @@
 {
 	"credit": "crafted with love by the grease artisan mysterymeat",
-	"texture_size": [128, 128],
+    "render_type": "cutout",
+    "texture_size": [128, 128],
 	"textures": {
 		"0": "minestuck:block/machine/totemlathe",
 		"particle": "minestuck:block/machine/particle"

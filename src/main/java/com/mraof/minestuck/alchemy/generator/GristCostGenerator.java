@@ -11,6 +11,7 @@ import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,7 +100,7 @@ public final class GristCostGenerator
 		}
 		
 		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
-			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", item.getRegistryName());
+			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", ForgeRegistries.ITEMS.getKey(item));
 		
 		return cost != null ? cost.getCost() : null;
 	}

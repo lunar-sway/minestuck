@@ -2,9 +2,8 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -41,8 +40,7 @@ public interface ItemRightClickEffect
 		if(world.isClientSide)
 		{
 			int key = player.getRandom().nextInt(20);
-			TranslatableComponent message = new TranslatableComponent("message.eightball." + key);
-			player.sendMessage(message.withStyle(ChatFormatting.BLUE), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable("message.eightball." + key).withStyle(ChatFormatting.BLUE));
 		}
 		return InteractionResultHolder.success(player.getItemInHand(hand));
 	};

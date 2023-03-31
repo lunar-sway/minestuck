@@ -1,29 +1,36 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
-public class ImpDungeonStructure extends StructureFeature<NoneFeatureConfiguration>
+import java.util.Optional;
+
+public class ImpDungeonStructure extends Structure
 {
-	public ImpDungeonStructure(Codec<NoneFeatureConfiguration> codec)
+	public static final Codec<ImpDungeonStructure> CODEC = simpleCodec(ImpDungeonStructure::new);
+	
+	public ImpDungeonStructure(StructureSettings settings)
 	{
-		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), ImpDungeonStructure::generatePieces));
+		super(settings);
 	}
 	
 	@Override
-	public GenerationStep.Decoration step()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return GenerationStep.Decoration.SURFACE_STRUCTURES;	//Could probably also count as an underground structure, but I'm guessing the surface component takes importance
+		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, builder -> generatePieces(builder, context));
 	}
 	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	@Override
+	public StructureType<?> type()
+	{
+		return MSStructures.IMP_DUNGEON.get();
+	}
+	
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
 	{
 		StructurePiece piece = ImpDungeonEntryPiece.create(context.chunkPos(), context.random());
 		builder.addPiece(piece);

@@ -5,6 +5,7 @@ Minestuck
 * Curseforge Page + Download: https://minecraft.curseforge.com/projects/minestuck
 * Twitter: https://twitter.com/MinestuckMod
 * Wikia/Fandom: http://minestuck.wikia.com/wiki/Minestuck_Wiki
+* Miraheze wiki: https://minestuck.miraheze.org/wiki/Main_Page
 * Tumblr Development Blog: http://minestuckmod.tumblr.com/
 
 

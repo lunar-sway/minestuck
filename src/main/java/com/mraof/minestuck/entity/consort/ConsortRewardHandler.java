@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.consort;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -17,7 +18,7 @@ public class ConsortRewardHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, Random rand)
+	public static List<Pair<ItemStack, Integer>> generateStock(ResourceLocation lootTable, ConsortEntity consort, RandomSource rand)
 	{
 		LootContext.Builder contextBuilder = new LootContext.Builder((ServerLevel) consort.level)
 				.withParameter(LootContextParams.THIS_ENTITY, consort).withParameter(LootContextParams.ORIGIN, consort.position());

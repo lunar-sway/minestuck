@@ -1,19 +1,19 @@
 {
   "type": "minestuck:non_mirrored",
-  "pattern": [
-    "caC"
-  ],
   "key": {
+    "C": {
+      "item": "minestuck:cruxite_block"
+    },
     "a": {
       "item": "minestuck:captcha_card"
     },
     "c": {
       "item": "minestuck:raw_cruxite"
-    },
-    "C": {
-      "item": "minestuck:cruxite_block"
     }
   },
+  "pattern": [
+    "caC"
+  ],
   "result": {
     "item": "minestuck:queue_modus_card"
   }

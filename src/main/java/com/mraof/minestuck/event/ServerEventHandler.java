@@ -42,7 +42,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
@@ -149,15 +149,15 @@ public class ServerEventHandler
 			if (event.getSource().getEntity() instanceof ServerPlayer)
 			{
 				ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
-				if (event.getEntityLiving() instanceof UnderlingEntity)
+				if (event.getEntity() instanceof UnderlingEntity)
 				{    //Increase damage to underling
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}
-			else if (event.getEntityLiving() instanceof ServerPlayer && event.getSource().getEntity() instanceof UnderlingEntity)
+			else if (event.getEntity() instanceof ServerPlayer && event.getSource().getEntity() instanceof UnderlingEntity)
 			{    //Decrease damage to player
-				ServerPlayer player = (ServerPlayer) event.getEntityLiving();
+				ServerPlayer player = (ServerPlayer) event.getEntity();
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 			}
@@ -167,18 +167,17 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDamage(LivingHurtEvent event)
 	{
-		if(event.getEntityLiving() instanceof UnderlingEntity)
+		if(event.getEntity() instanceof UnderlingEntity underling)
 		{
-			((UnderlingEntity) event.getEntityLiving()).onEntityDamaged(event.getSource(), event.getAmount());
+			underling.onEntityDamaged(event.getSource(), event.getAmount());
 		}
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingHurtEvent event)
 	{
-		if(event.getEntityLiving() instanceof Player)
+		if(event.getEntity() instanceof Player injuredPlayer)
 		{
-			Player injuredPlayer = ((Player) event.getEntity());
 			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
 			ItemStack handItem = injuredPlayer.getMainHandItem();
@@ -236,7 +235,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void playerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		TitleSelectionHook.cancelSelection((ServerPlayer) event.getPlayer());
+		TitleSelectionHook.cancelSelection((ServerPlayer) event.getEntity());
 	}
 	
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
@@ -244,7 +243,7 @@ public class ServerEventHandler
 	{
 		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
 		if(modus instanceof HashMapModus)
-			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage());
+			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
 	}
 	
 	@SubscribeEvent
@@ -266,15 +265,15 @@ public class ServerEventHandler
 	}
 	
 	@SubscribeEvent
-	public static void onEffectRemove(PotionEvent.PotionRemoveEvent event)
+	public static void onEffectRemove(MobEffectEvent.Remove event)
 	{
-		onEffectEnd(event.getEntityLiving(), event.getPotion());
+		onEffectEnd(event.getEntity(), event.getEffect());
 	}
 	
 	@SubscribeEvent
-	public static void onEffectExpire(PotionEvent.PotionExpiryEvent expiryEvent)
+	public static void onEffectExpire(MobEffectEvent.Expired expiryEvent)
 	{
-		onEffectEnd(expiryEvent.getEntityLiving(), expiryEvent.getPotionEffect().getEffect());
+		onEffectEnd(expiryEvent.getEntity(), expiryEvent.getEffectInstance().getEffect());
 	}
 	
 	private static void onEffectEnd(LivingEntity entityLiving, MobEffect effect)
@@ -289,7 +288,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void breadStaling(ItemExpireEvent event)
 	{
-		ItemEntity e = event.getEntityItem();
+		ItemEntity e = event.getEntity();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
 			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
 			e.level.addFreshEntity(stalebread);

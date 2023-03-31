@@ -15,6 +15,7 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.ButtonListProgram;
+import com.mraof.minestuck.computer.DiskBurner;
 import com.mraof.minestuck.computer.SburbClient;
 import com.mraof.minestuck.computer.SburbServer;
 import com.mraof.minestuck.effects.MSEffects;
@@ -29,6 +30,8 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.item.loot.MSLootEvents;
+import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
 import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
@@ -90,6 +93,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -99,6 +103,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.END_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
@@ -193,6 +198,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_GREEN_STONE_BRICKS, "Chiseled Green Stone Bricks");
 		addBlock(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS, "Horizontal Green Stone Bricks");
 		addBlock(MSBlocks.VERTICAL_GREEN_STONE_BRICKS, "Vertical Green Stone Bricks");
+		addBlock(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER, "Green Stone Brick Embedded Ladder");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_TRIM, "Green Stone Brick Trim");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_FROG, "Green Stone Brick Frog Hieroglyph");
 		addBlock(MSBlocks.GREEN_STONE_BRICK_IGUANA_LEFT, "Green Stone Brick Iguana Left Hieroglyph");
@@ -449,6 +455,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
+		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
 		MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.forEachBlock(block -> add(block, "Lotus Time Capsule"));
 		addBlock(MSBlocks.GOLD_SEEDS, "Golden Seeds");
 		addBlockTooltip(MSBlocks.GOLD_SEEDS, "These seeds are made out of 24-karat gold!");
@@ -582,6 +589,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SHATTER_BACON, "ShatterBacon");
 		addItemTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addItemExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
+		addItem(MSItems.MUSIC_SWORD, "Music Sword");
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.NIFE, "nife.");
@@ -589,6 +597,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LIGHT_OF_MY_KNIFE, "Light Of My Knife");
 		addItem(MSItems.STARSHARD_TRI_BLADE, "Starshard Tri-Blade");
 		addItem(MSItems.TOOTHRIPPER, "Toothripper");
+		addItem(MSItems.SHADOWRAZOR, "Shadowrazor");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -675,6 +684,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SICKLE, "Sickle");
 		addItem(MSItems.BISICKLE, "Bisickle");
 		addItem(MSItems.OW_THE_EDGE, "oW THE EDGE");
+		addItemExtra(MSItems.OW_THE_EDGE, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of oW THE EDGE made it phase through your hand");
 		addItem(MSItems.THORNY_SUBJECT, "A Thorny Subject");
 		addItem(MSItems.HEMEOREAPER, "Hemeoreaper");
 		addItemTooltip(MSItems.HEMEOREAPER, "You get the feeling you should hide this away, or maybe paint it a nice gray.");
@@ -863,6 +873,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DERSE_SHIRT, "Derse Shirt");
 		addItem(MSItems.DERSE_PANTS, "Derse Pants");
 		addItem(MSItems.DERSE_SHOES, "Derse Shoes");
+		addItem(MSItems.AMPHIBEANIE, "Amphibeanie");
+		addItem(MSItems.NOSTRILDAMUS, "Nostrildamus");
+		addItem(MSItems.PONYTAIL, "Ponytail");
 		addItem(MSItems.BOONDOLLARS, "Boondollars");
 		addItemExtra(MSItems.BOONDOLLARS, "amount", "Amount: %s");
 		addItem(MSItems.RAW_CRUXITE, "Raw Cruxite");
@@ -879,11 +892,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRUXITE_APPLE, "Cruxite Artifact");
 		addItem(MSItems.CRUXITE_POTION, "Cruxite Artifact");
 		addItem(MSItems.SBURB_CODE, "SBURB Code");
-		addItemTooltip(MSItems.SBURB_CODE, "It seems temple hieroglyphs can be translated into computer game code using a Book and Quill.");
+		addItemTooltip(MSItems.SBURB_CODE, "It seems hieroglyphs can be translated into genetic code. Perhaps this genetic code could in turn be made into computer code?");
+		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
+		addItemExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
+		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");
+		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
+		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
+		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
+		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");
-		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer once there is a program on it to run.");
+		addItemTooltip(MSItems.BLANK_DISK, "Can be put into a computer, has space to write a program on to it.");
 		addItem(MSItems.CLIENT_DISK, "SBURB Client Disk");
 		addItem(MSItems.SERVER_DISK, "SBURB Server Disk");
 		addItem(MSItems.CAPTCHA_CARD, "Captchalogue Card");
@@ -1133,12 +1154,24 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CASSETTE_FAR, "desc", "C418 - far");
 		addItem(MSItems.CASSETTE_MALL, "Cassette");
 		addItemExtra(MSItems.CASSETTE_MALL, "desc", "C418 - mall");
+		addItem(MSItems.CASSETTE_11, "Cassette");
+		addItemExtra(MSItems.CASSETTE_11, "desc", "C418 - 11");
+		addItem(MSItems.CASSETTE_STAL, "Cassette");
+		addItemExtra(MSItems.CASSETTE_STAL, "desc", "C418 - Stal");
+		addItem(MSItems.CASSETTE_STRAD, "Cassette");
+		addItemExtra(MSItems.CASSETTE_STRAD, "desc", "C418 - Strad");
+		addItem(MSItems.CASSETTE_WAIT, "Cassette");
+		addItemExtra(MSItems.CASSETTE_WAIT, "desc", "C418 - Wait");
+		addItem(MSItems.CASSETTE_WARD, "Cassette");
+		addItemExtra(MSItems.CASSETTE_WARD, "desc", "C418 - Ward");
 		addItem(MSItems.CASSETTE_EMISSARY, "Cassette");
 		addItemExtra(MSItems.CASSETTE_EMISSARY, "desc", "Catboss - Emissary of Dance");
 		addItem(MSItems.CASSETTE_DANCE_STAB, "Cassette");
 		addItemExtra(MSItems.CASSETTE_DANCE_STAB, "desc", "Catboss - Dance-Stab-Dance");
 		addItem(MSItems.CASSETTE_RETRO_BATTLE, "Cassette");
 		addItemExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
+		addItem(MSItems.CASSETTE_PIGSTEP, "Cassette");
+		addItemExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Lena Raine - Pigstep");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");
@@ -1392,7 +1425,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addAdvancement(MSAdvancementProvider.ROOT, "Minestuck", "The Beginning of Something Really Excellent");
 		addAdvancement(MSAdvancementProvider.SEARCHING, "Searching For Purpose", "Build a Temple Scanner to find special ruins scattered around the land");
-		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code from a Frog Temple! You get the sense that you need to find a disk to write it onto");
+		addAdvancement(MSAdvancementProvider.LONG_TIME_COMING, "Long Time Coming", "Collect SBURB code! You get the sense that you need to find a computer to record its information to");
 		addAdvancement(MSAdvancementProvider.CONNECT, "Connect", "Create a connection with someone");
 		addAdvancement(MSAdvancementProvider.ENTRY, "A New World", "Create, and use the Cruxite Artifact");
 		addAdvancement(MSAdvancementProvider.ALCHEMY, "Step Towards Alchemy", "Getting a punch designix is the first step to alchemizing something else!");
@@ -1487,6 +1520,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStrife(KindAbstratusList.SICKLE, "Sicklekind");
 		addStrife(KindAbstratusList.SPORK, "Sporkkind");
 		
+		add(MusicPlayerWeapon.TITLE, "Music Player");
 		add(GristCacheScreen.TITLE, "Grist Cache");
 		add(StrifeSpecibusScreen.TITLE, "Strife Specibus");
 		add(StrifeSpecibusScreen.KIND_ABSTRATUS, "Kind Abstratus");
@@ -1517,14 +1551,40 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
-		add(MachineScreen.GO, "GO");
-		add(MachineScreen.STOP, "STOP");
+		add(GoButton.GO, "GO");
+		add(GoButton.STOP, "STOP");
 		add(GristSelectorScreen.TITLE, "Grist Selector");
 		add(GristSelectorScreen.SELECT_GRIST, "Select Grist Type");
 		add(ColorSelectorScreen.TITLE, "Color Selector");
+		add(ColorSelectorScreen.CHOOSE_MESSAGE, "Choose");
 		add(ColorSelectorScreen.SELECT_COLOR, "Select Color");
 		add(ColorSelectorScreen.COLOR_SELECTED, "If you want to change the color, you can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!");
 		add(ColorSelectorScreen.DEFAULT_COLOR_SELECTED, "Default color selected. You can bring up the color selection gui again through the sburb client program, but only until you connect to a server player!");
+		add(StructureCoreScreen.TITLE, "Structure Core");
+		add(StatStorerScreen.TITLE, "Stat Storer");
+		add(StatStorerScreen.DIVIDE_VALUE_MESSAGE, "Divide power output by:");
+		add(StatStorerScreen.DIVIDE_COMPARATOR_MESSAGE, "Divide comparator output strength");
+		add(StatStorerScreen.DONE_MESSAGE, "DONE");
+		add(RemoteObserverScreen.TITLE, "Remote Observer");
+		add(RemoteObserverScreen.CURRENT_ENTITY_TYPE_MESSAGE, "Current Entity Type");
+		add(ComputerScreen.TITLE, "Computer");
+		add(TransportalizerScreen.TITLE, "Transportalizer");
+		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
+		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
+		add(AreaEffectScreen.TITLE, "Area Effect Block");
+		add(AreaEffectScreen.MIN_POS_MESSAGE, "Min Pos Facing Offset");
+		add(AreaEffectScreen.MAX_POS_MESSAGE, "Max Pos Facing Offset");
+		add(AreaEffectScreen.X_MIN_MESSAGE, "X value of min effect pos");
+		add(AreaEffectScreen.Y_MIN_MESSAGE, "Y value of min effect pos");
+		add(AreaEffectScreen.Z_MIN_MESSAGE, "Z value of min effect pos");
+		add(AreaEffectScreen.X_MAX_MESSAGE, "X value of max effect pos");
+		add(AreaEffectScreen.Y_MAX_MESSAGE, "Y value of max effect pos");
+		add(AreaEffectScreen.Z_MAX_MESSAGE, "Z value of max effect pos");
+		add(AreaEffectScreen.CURRENT_EFFECT_MESSAGE, "Current Effect");
+		add(AreaEffectScreen.CURRENT_EFFECT_AMPLIFIER_MESSAGE, "Current Effect Amplifier");
+		add(AreaEffectScreen.DONE_MESSAGE, "DONE");
+		add(AreaEffectScreen.ALL_MOBS_MESSAGE, "ALL MOBS");
+		add(AreaEffectScreen.JUST_PLAYERS_MESSAGE, "JUST PLAYERS");
 		addColor("blue", "Blue");
 		addColor("orchid", "Orchid");
 		addColor("red", "Red");
@@ -1564,8 +1624,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerBlockEntity.FORBIDDEN_DESTINATION, "Transportalizers have been disabled for the destination dimension.");
 		add(GateHandler.DESTROYED, "The destination gate seems to have been destroyed.");
 		add(GateHandler.MISSING_LAND, "The land this gate leads to does not exist yet!");
+		add(WirelessRedstoneTransmitterScreen.TITLE, "Wireless Redstone");
 		add(WirelessRedstoneReceiverBlock.NOW_AUTO, "Receiver will now unpower itself automatically.");
 		add(WirelessRedstoneReceiverBlock.NOW_NOT_AUTO, "Receiver will now store the highest input power indefinitely.");
+		add(SummonerScreen.TITLE, "Summoner");
+		add(SummonerScreen.CURRENT_ENTITY_TYPE_MESSAGE, "Current Entity Type");
+		add(SummonerScreen.DONE_MESSAGE, "DONE");
+		add(SummonerScreen.UNTRIGGERABLE_MESSAGE, "UNTRIGGERABLE");
+		add(SummonerScreen.TRIGGERABLE_MESSAGE, "TRIGGERABLE");
 		add(SummonerBlock.SUMMON_TYPE_CHANGE, "Summoned entity type changed to %s.");
 		add(HashMapModus.MESSAGE, "[HASHMAP] %s %% %s -> %s");
 		add(ButtonListProgram.CLEAR_BUTTON, "Clear message");
@@ -1585,9 +1651,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
 		add(SburbClient.RESUME_CLIENT, "Waiting for server...");
 		add(SburbServer.RESUME_SERVER, "Waiting for client...");
+		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
+		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
+		add(DiskBurner.CHOOSE, "Choose disk type to write");
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
 		add(SburbClient.NAME, "Client");
 		add(SburbServer.NAME, "Server");
+		add(DiskBurner.NAME, "Disk Burner");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");
 		add(MergeResult.GLOBAL_SESSION_FULL, "Game session is full");
@@ -1654,6 +1724,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MSKeyHandler.SYLLADEX, "Open Sylladex");
 		
 		add(LotusFlowerEntity.REGROW, "There are no petals on this plant, maybe it will regrow?");
+		
+		add(MSLootEvents.FROG_TEMPLE_MAP, "Frog Temple");
 		
 		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
 		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");

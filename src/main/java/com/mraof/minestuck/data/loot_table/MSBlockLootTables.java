@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
@@ -73,6 +73,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
+		add(MYCELIUM_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
@@ -82,6 +83,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(SHADE_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(MYCELIUM_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
@@ -180,6 +182,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(CHISELED_GREEN_STONE_BRICKS.get());
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICKS.get());
 		dropSelf(VERTICAL_GREEN_STONE_BRICKS.get());
+		dropSelf(GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
 		dropSelf(GREEN_STONE_BRICK_TRIM.get());
 		dropSelf(GREEN_STONE_BRICK_FROG.get());
 		dropSelf(GREEN_STONE_BRICK_IGUANA_LEFT.get());
@@ -410,6 +413,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(URANIUM_COOKER.get());
 		
 		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
+		add(EMERGING_CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
 		
 		dropSelf(GOLD_SEEDS.get());
 		dropSelf(WOODEN_CACTUS.get());
@@ -560,6 +564,8 @@ public class MSBlockLootTables extends BlockLoot
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName().getNamespace().equals(Minestuck.MOD_ID)).collect(Collectors.toList());
+		return ForgeRegistries.BLOCKS.getEntries().stream()
+				.filter(entry -> entry.getKey().location().getNamespace().equals(Minestuck.MOD_ID))
+				.map(Map.Entry::getValue).toList();
 	}
 }

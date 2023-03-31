@@ -16,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -27,10 +26,10 @@ import java.util.function.BiConsumer;
 
 public abstract class GristCostRecipe implements Recipe<Container>
 {
-	
-	public static GristSet findCostForItem(ItemStack input, GristType type, boolean shouldRoundDown, Level level)
+	@Nullable
+	public static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
-		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, type, shouldRoundDown, level)).orElse(null);
+		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
 	}
 	
 	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level)
@@ -164,7 +163,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	//Helper class for implementing serializer classes
-	public abstract static class AbstractSerializer<T extends GristCostRecipe> extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<T>
+	public abstract static class AbstractSerializer<T extends GristCostRecipe> implements RecipeSerializer<T>
 	{
 		@Override
 		public T fromJson(ResourceLocation recipeId, JsonObject json)

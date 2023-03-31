@@ -3,15 +3,15 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.blockentity.redstone.WirelessRedstoneReceiverBlockEntity;
-import net.minecraft.Util;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +32,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * Receives redstone inputs from wireless redstone transmitters. Has a blockstate that allows the receiver to retain the strongest redstone signal it has received
@@ -76,12 +75,12 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 			if(state.getValue(AUTO_RESET))
 			{
 				if(!level.isClientSide)
-					player.sendMessage(new TranslatableComponent(NOW_NOT_AUTO), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable(NOW_NOT_AUTO));
 				level.playSound(null, pos, SoundEvents.PISTON_EXTEND, SoundSource.BLOCKS, 0.5F, 1.2F);
 			} else
 			{
 				if(!level.isClientSide)
-					player.sendMessage(new TranslatableComponent(NOW_AUTO), Util.NIL_UUID);
+					player.sendSystemMessage(Component.translatable(NOW_AUTO));
 				level.playSound(null, pos, SoundEvents.PISTON_CONTRACT, SoundSource.BLOCKS, 0.5F, 1.2F);
 			}
 			
@@ -138,7 +137,7 @@ public class WirelessRedstoneReceiverBlock extends HorizontalDirectionalBlock im
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{

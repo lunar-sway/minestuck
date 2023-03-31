@@ -46,12 +46,14 @@ public class MSPacketHandler
 		registerMessage(CloseRemoteSburbConnectionPacket.class, CloseRemoteSburbConnectionPacket::decode);
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
+		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
-		registerMessage(GoButtonPacket.class, GoButtonPacket::decode);
+		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
+		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);
@@ -66,7 +68,9 @@ public class MSPacketHandler
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
+		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 	}
 	
 	private static int nextIndex;
@@ -103,5 +107,10 @@ public class MSPacketHandler
 	public static <MSG> void sendToTracking(MSG message, Entity entity)
 	{
 		INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), message);
+	}
+	
+	public static <MSG> void sendToTrackingAndSelf(MSG message, Entity entity)
+	{
+		INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), message);
 	}
 }

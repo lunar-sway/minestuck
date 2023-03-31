@@ -6,14 +6,13 @@ import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
-import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
+import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.AnimationControllerUtil;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.Util;
+import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -26,6 +25,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -53,7 +53,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 
 public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, IAnimatable
@@ -143,7 +142,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				{
 					Component text = message.getMessage(this, serverPlayer);
 					if(text != null)
-						player.sendMessage(text, Util.NIL_UUID);
+						player.sendSystemMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
 					setCurrentAnimation(TALK_ANIMATION);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
@@ -373,7 +372,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		{
 			Component text = message.getFromChain(this, player, chain);
 			if(text != null)
-				player.sendMessage(text, Util.NIL_UUID);
+				player.sendSystemMessage(text);
 		}
 	}
 	
@@ -429,7 +428,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		return homeDimension;
 	}
 	
-	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
+	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
 	}

@@ -8,7 +8,7 @@ import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -31,7 +31,7 @@ public class SetRungCommand
 			PlayerSavedData.getData(player).getEcheladder().setByCommand(rung, progress);
 		}
 		
-		source.sendSuccess(new TranslatableComponent(SUCCESS, players.size(), rung, progress), true);
+		source.sendSuccess(Component.translatable(SUCCESS, players.size(), rung, progress), true);
 		return players.size();
 	}
 }
