@@ -1,6 +1,9 @@
 package com.mraof.minestuck.client.model;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.client.model.entity.BishopModel;
+import com.mraof.minestuck.client.model.entity.FrogModel;
+import com.mraof.minestuck.client.model.entity.RookModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;

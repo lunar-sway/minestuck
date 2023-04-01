@@ -515,6 +515,7 @@ public class MSItems
 	public static final RegistryObject<Item> IRON_BOAT = REGISTER.register("iron_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.IRON), new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<Item> GOLD_BOAT = REGISTER.register("gold_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.GOLD), new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties().tab(MSItemGroup.MAIN)));
 	
 	
 	

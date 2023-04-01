@@ -5,10 +5,11 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
-import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,6 +28,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
+	public static final PhasedMobAnimation BITE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.BITE, 14, true, false), 2, 4, 5);
+	
 	private final BasiliskPartEntity[] parts;
 	private final BasiliskPartEntity head;
 	private final BasiliskPartEntity body;
@@ -56,8 +59,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 4, 10));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, BITE_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -181,9 +183,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 1, BasiliskEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 1, BasiliskEntity::swingAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<BasiliskEntity> event)
@@ -216,7 +218,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState swingAnimation(AnimationEvent<BasiliskEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", false));
 			return PlayState.CONTINUE;

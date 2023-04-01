@@ -4,9 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.model.BishopModel;
+import com.mraof.minestuck.client.model.entity.BishopModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
-import com.mraof.minestuck.client.model.RookModel;
+import com.mraof.minestuck.client.model.entity.RookModel;
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import com.mraof.minestuck.client.model.armor.CrumplyHatModel;
 import com.mraof.minestuck.client.model.armor.DreamerPajamasModel;
@@ -47,6 +47,7 @@ public class ClientProxy
 		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	

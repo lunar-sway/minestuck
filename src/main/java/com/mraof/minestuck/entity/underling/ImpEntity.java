@@ -3,11 +3,12 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
-import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +29,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, true, false), 2, 4, 5);
+	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
 		super(type, level, 1);
@@ -44,8 +47,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 4, 10));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -111,11 +113,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ImpEntity> event)
@@ -148,7 +150,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState walkArmsAnimation(AnimationEvent<ImpEntity> event)
 	{
-		if(!event.isMoving() || event.getAnimatable().isAttacking())
+		if(!event.isMoving() || event.getAnimatable().isActive())
 		{
 			return PlayState.STOP;
 		}
@@ -176,7 +178,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState swingAnimation(AnimationEvent<ImpEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", false));
 			return PlayState.CONTINUE;

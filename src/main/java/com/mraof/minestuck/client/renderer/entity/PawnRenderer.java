@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.renderer.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.mraof.minestuck.client.model.PawnModel;
+import com.mraof.minestuck.client.model.entity.PawnModel;
 import com.mraof.minestuck.entity.carapacian.PawnEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

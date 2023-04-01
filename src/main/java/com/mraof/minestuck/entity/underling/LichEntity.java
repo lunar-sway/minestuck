@@ -3,10 +3,12 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
-import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -29,6 +31,7 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 12, false, false), 4, 8, 10);
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{
@@ -47,7 +50,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 14, 16));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -105,9 +108,9 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)
@@ -132,7 +135,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState swingAnimation(AnimationEvent<LichEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
 			return PlayState.CONTINUE;
@@ -149,7 +152,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		@Override
 		public boolean canUse()
 		{
-			return LichEntity.this.isPreparingToAttack();
+			return LichEntity.this.isBeforeContact();
 		}
 		
 		@Override

@@ -3,11 +3,12 @@ package com.mraof.minestuck.entity.underling;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
-import com.mraof.minestuck.entity.ai.attack.SlowAttackWhenInRangeGoal;
-import com.mraof.minestuck.entity.ai.attack.ZeroMovementDuringAttack;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.util.AnimationUtil;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,6 +26,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
+	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 18, true, true), 8, 10, 13);
+	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
 		super(type, level, 3);
@@ -42,8 +45,7 @@ public class OgreEntity extends UnderlingEntity
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new SlowAttackWhenInRangeGoal<>(this, 18, 20));
-		this.goalSelector.addGoal(2, new ZeroMovementDuringAttack<>(this));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -101,10 +103,10 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void registerControllers(AnimationData data)
 	{
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
-		data.addAnimationController(AnimationUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<OgreEntity> event)
@@ -119,7 +121,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState walkArmsAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.isMoving() && !event.getAnimatable().isAttacking())
+		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
 			return PlayState.CONTINUE;
@@ -129,7 +131,7 @@ public class OgreEntity extends UnderlingEntity
 	
 	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
 	{
-		if(event.getAnimatable().isAttacking())
+		if(event.getAnimatable().isActive())
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
 			return PlayState.CONTINUE;

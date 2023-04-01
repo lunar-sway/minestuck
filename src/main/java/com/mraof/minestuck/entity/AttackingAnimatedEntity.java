@@ -1,17 +1,18 @@
 package com.mraof.minestuck.entity;
 
-import com.mraof.minestuck.entity.ai.attack.AttackState;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
 
 /**
  * A base class for animated entities with a potentially delayed attack.
+ * Through the use of PhasedMobAnimation, additional code can be deployed at the changing point of each animation phase of specific animations.
  */
-public abstract class AttackingAnimatedEntity extends PathfinderMob implements AttackState.Holder
+public abstract class AttackingAnimatedEntity extends AnimatedPathfinderMob implements PhasedMobAnimation.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(AttackingAnimatedEntity.class, EntityDataSerializers.INT);
 	
@@ -24,18 +25,49 @@ public abstract class AttackingAnimatedEntity extends PathfinderMob implements A
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(CURRENT_ACTION, AnimatedCreatureEntity.Actions.NONE.ordinal());
+		entityData.define(CURRENT_ACTION, MobAnimation.IDLE_ACTION.ordinal());
 	}
 	
 	@Override
-	public AttackState getAttackState()
+	public PhasedMobAnimation.Phases getPhase()
 	{
-		return AttackState.values()[this.entityData.get(CURRENT_ACTION)];
+		return PhasedMobAnimation.Phases.values()[this.entityData.get(CURRENT_ACTION)];
 	}
 	
 	@Override
-	public void setAttackState(AttackState state)
+	public void setAnimationPhase(PhasedMobAnimation.Phases phase, MobAnimation.Action animation)
 	{
-		this.entityData.set(CURRENT_ACTION, state.ordinal());
+		this.entityData.set(CURRENT_ACTION, phase.ordinal());
+		
+		if(phase == PhasedMobAnimation.Phases.ANTICIPATION) //first tick of animation
+			anticipationPhaseStart(animation);
+		else if(phase == PhasedMobAnimation.Phases.INITIATION)
+			initiationPhaseStart(animation);
+		else if(phase == PhasedMobAnimation.Phases.CONTACT)
+			contactPhaseStart(animation);
+		else if(phase == PhasedMobAnimation.Phases.RECOVERY)
+			recoveryPhaseStart(animation);
+		else if(phase == PhasedMobAnimation.Phases.NEUTRAL) //last tick of animation
+			neutralPhaseStart(animation);
+	}
+	
+	public void anticipationPhaseStart(MobAnimation.Action animation)
+	{
+	}
+	
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+	}
+	
+	public void contactPhaseStart(MobAnimation.Action animation)
+	{
+	}
+	
+	public void recoveryPhaseStart(MobAnimation.Action animation)
+	{
+	}
+	
+	public void neutralPhaseStart(MobAnimation.Action animation)
+	{
 	}
 }
