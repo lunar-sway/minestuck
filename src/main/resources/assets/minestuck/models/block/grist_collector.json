@@ -1,6 +1,23 @@
 {
-    "parent": "block/cube_all",
+    "parent": "block/block",
     "textures": {
-        "all": "minestuck:block/grist_collector"
-    }
+        "side": "minestuck:block/grist_collector_side",
+        "left_side": "minestuck:block/grist_collector_left_side",
+        "end": "minestuck:block/grist_collector_top",
+        "front": "minestuck:block/grist_collector_front",
+        "particle": "minestuck:block/grist_collector_side"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#end", "cullface": "down" },
+                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#end", "cullface": "up" },
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "north" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "south" },
+                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#left_side", "cullface": "west" },
+                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "east" }
+            }
+        }
+    ]
 }

@@ -505,6 +505,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
 		addBlock(MSBlocks.GRIST_COLLECTOR, "Grist Collector");
+		addBlockTooltip(MSBlocks.GRIST_COLLECTOR, "Collects grist in a one block radius and releases it when right clicked.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");

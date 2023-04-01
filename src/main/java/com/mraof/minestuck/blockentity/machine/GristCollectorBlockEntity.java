@@ -1,228 +1,88 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.inventory.OptionalPosHolder;
-import com.mraof.minestuck.inventory.SendificatorMenu;
-import com.mraof.minestuck.util.ExtraForgeTags;
+import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.network.NetworkHooks;
+import net.minecraft.world.phys.AABB;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.Optional;
+import java.util.List;
 
-public class GristCollectorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
+public class GristCollectorBlockEntity extends BlockEntity
 {
-	public static final String TITLE = "container.minestuck.sendificator";
-	public static final short MAX_FUEL = 128;
-	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
-	private short fuel = 0;
-	
-	@Nullable
-	private BlockPos destBlockPos;
-	
-	private final DataSlot fuelHolder = new DataSlot()
-	{
-		@Override
-		public int get()
-		{
-			return fuel;
-		}
-		
-		@Override
-		public void set(int value)
-		{
-			fuel = (short) value;
-		}
-	};
-	private final OptionalPosHolder destinationHolder = OptionalPosHolder.forPos(() -> Optional.ofNullable(this.getDestinationBlockPos()));
+	private GristSet storedGrist = new GristSet();
 	
 	public GristCollectorBlockEntity(BlockPos pos, BlockState state)
 	{
-		super(MSBlockEntityTypes.SENDIFICATOR.get(), pos, state);
+		super(MSBlockEntityTypes.GRIST_COLLECTOR.get(), pos, state);
 	}
 	
-	@Nullable
-	public BlockPos getDestinationBlockPos()
+	public GristSet getStoredGrist()
 	{
-		return destBlockPos;
+		return storedGrist;
 	}
 	
-	public void setDestinationBlockPos(BlockPos destinationPosIn)
+	public void addGristAmount(GristAmount gristAmount)
 	{
-		this.destBlockPos = destinationPosIn;
+		storedGrist.addGrist(gristAmount);
 	}
 	
-	@Override
-	public Component getDisplayName()
+	/**
+	 * Removes all collected grist
+	 */
+	public void clearStoredGrist()
 	{
-		return Component.translatable(TITLE);
+		storedGrist = new GristSet();
 	}
 	
 	@Override
 	public void load(CompoundTag compound)
 	{
 		super.load(compound);
-		
-		this.progressTracker.load(compound);
-		
-		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ"))
-		{
-			int destX = compound.getInt("destX");
-			int destY = compound.getInt("destY");
-			int destZ = compound.getInt("destZ");
-			this.destBlockPos = new BlockPos(destX, destY, destZ);
-		}
-		
-		fuel = compound.getShort("fuel");
+		storedGrist = GristSet.read(compound.getList("storedGrist", Tag.TAG_COMPOUND));
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
+		compound.put("storedGrist", storedGrist.write(new ListTag()));
+	}
+	
+	public static void serverTick(Level level, BlockPos pos, BlockState state, GristCollectorBlockEntity blockEntity)
+	{
+		if(!level.isAreaLoaded(pos, 1))
+			return;
 		
-		this.progressTracker.save(compound);
-		
-		if(destBlockPos != null)
+		//runs once per second, and only if the block is not powered
+		if(level.getGameTime() % 20 == 0 && blockEntity != null && !state.getValue(GristCollectorBlock.POWERED))
 		{
-			compound.putInt("destX", destBlockPos.getX());
-			compound.putInt("destY", destBlockPos.getY());
-			compound.putInt("destZ", destBlockPos.getZ());
-		}
-		
-		compound.putShort("fuel", fuel);
-	}
-	
-	@Override
-	protected ItemStackHandler createItemHandler()
-	{
-		return new CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
-	}
-	
-	@Override
-	protected void tick()
-	{
-		this.progressTracker.tick(this::processContents);
-	}
-	
-	private boolean contentsValid()
-	{
-		if(level.hasNeighborSignal(this.getBlockPos()))
-		{
-			return false;
-		}
-		
-		ItemStack fuel = itemHandler.getStackInSlot(1);
-		ItemStack input = itemHandler.getStackInSlot(0);
-		return canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || !input.isEmpty();
-	}
-	
-	/**
-	 * With the given container possessing block entity system our mod uses, this is the function that connects to the GoButton found in it's screen({@link com.mraof.minestuck.client.gui.SendificatorScreen} in this example)
-	 */
-	private void processContents()
-	{
-		if(canBeRefueled())
-		{
-			//checks for a uranium itemstack in the lower(fuel) item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+			AABB aabb = new AABB(pos).inflate(1);
+			List<GristEntity> gristList = level.getEntitiesOfClass(GristEntity.class, aabb);
+			if(!gristList.isEmpty())
 			{
-				//Refill fuel
-				fuel += FUEL_INCREASE;
-				itemHandler.extractItem(1, 1, false);
-			}
-		}
-		
-		if(canSend())
-		{
-			if(itemHandler.getStackInSlot(0).hasCraftingRemainingItem())
-			{
-				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getCraftingRemainingItem());
-			} else
-			{
-				if(level != null)
+				for(GristEntity iteratedGrist : gristList)
 				{
-					BlockPos destinationPos = getDestinationBlockPos();
-					if(destinationPos != null)
+					GristAmount gristAmount = iteratedGrist.getAmount();
+					
+					if(gristAmount != null && gristAmount.getValue() >= 0)
 					{
-						ItemStack sentStack = itemHandler.extractItem(0, 64, false);
-						ItemEntity itemEntity = new ItemEntity(level, destinationPos.getX(), destinationPos.getY(), destinationPos.getZ(), sentStack);
-						level.addFreshEntity(itemEntity);
-						
-						fuel = (short) (fuel - 8);
+						blockEntity.addGristAmount(gristAmount);
+						iteratedGrist.discard();
 					}
 				}
+				
+				level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.8F));
 			}
 		}
-	}
-	
-	/**
-	 * Checks that there is enough fuel energy for the machine to work and that there is something to sendificate
-	 */
-	private boolean canSend()
-	{
-		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty();
-	}
-	
-	/**
-	 * Checks that fuel can be added without any excess/wasted points being attributed
-	 */
-	public boolean canBeRefueled()
-	{
-		return fuel <= MAX_FUEL - FUEL_INCREASE;
-	}
-	
-	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
-	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
-	{
-		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
-		{
-			if(side == Direction.UP)
-				return inputHandler.cast();
-			else if(side == Direction.DOWN)
-				return LazyOptional.empty();
-			else
-				return fuelHandler.cast(); //will fill the sendificator with fuel if fed from the sides
-		}
-		return super.getCapability(cap, side);
-	}
-	
-	public void openMenu(ServerPlayer player)
-	{
-		NetworkHooks.openScreen(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
-	}
-	
-	@Nullable
-	@Override
-	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
-	{
-		return new SendificatorMenu(windowId, playerInventory, itemHandler,
-				this.progressTracker, fuelHolder, destinationHolder,
-				ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

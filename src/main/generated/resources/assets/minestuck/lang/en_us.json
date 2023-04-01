@@ -259,6 +259,8 @@
   "block.minestuck.green_stone_column": "Green Stone Column",
   "block.minestuck.green_stone_slab": "Green Stone Slab",
   "block.minestuck.green_stone_stairs": "Green Stone Stairs",
+  "block.minestuck.grist_collector": "Grist Collector",
+  "block.minestuck.grist_collector.tooltip": "Collects grist in a one block radius and releases it when right clicked.",
   "block.minestuck.grist_widget": "GristWidget 12000",
   "block.minestuck.heart_aspect_bookshelf": "Heart Bookshelf",
   "block.minestuck.heart_aspect_ladder": "Heart Ladder",
