@@ -124,7 +124,7 @@ public abstract class ReadableSburbCodeItem extends Item
 			if(Screen.hasShiftDown())
 				tooltip.add(Component.translatable("item.minestuck.completed_sburb_code.additional_info"));
 			else
-				tooltip.add(Component.translatable("item.minestuck.completed_sburb_code.shift_for_more_info"));
+				tooltip.add(Component.translatable("message.shift_for_more_info"));
 		}
 		
 	}

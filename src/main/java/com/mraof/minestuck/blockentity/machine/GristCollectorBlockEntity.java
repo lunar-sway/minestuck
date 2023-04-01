@@ -63,8 +63,8 @@ public class GristCollectorBlockEntity extends BlockEntity
 		if(!level.isAreaLoaded(pos, 1))
 			return;
 		
-		//runs once per second, and only if the block is not powered
-		if(level.getGameTime() % 20 == 0 && blockEntity != null && !state.getValue(GristCollectorBlock.POWERED))
+		//runs once every half second, and only if the block is not powered
+		if(level.getGameTime() % 10 == 0 && blockEntity != null && !state.getValue(GristCollectorBlock.POWERED))
 		{
 			AABB aabb = new AABB(pos).inflate(1);
 			List<GristEntity> gristList = level.getEntitiesOfClass(GristEntity.class, aabb);
