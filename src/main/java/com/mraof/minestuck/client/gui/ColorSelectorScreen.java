@@ -3,6 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.ChatFormatting;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 import net.minecraftforge.client.gui.widget.ForgeSlider;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -36,11 +38,13 @@ public class ColorSelectorScreen extends Screen
 	private static int xOffset, yOffset;
 	
 	private final boolean firstTime;
-	private boolean useCanonColor, onRGBTab;
+	private boolean useCanonColor = true, onRGBTab = false;
 	private int redPrev = -1, greenPrev = -1, bluePrev = -1, selectedIndex = -1;
 	private ForgeSlider redSlider, greenSlider, blueSlider;
 	private ExtendedButton tabButton;
 	private EditBox hexBox;
+	
+	private @Nullable ComputerBlockEntity be;
 	
 	// initialize color selectors
 	static
@@ -62,7 +66,17 @@ public class ColorSelectorScreen extends Screen
 		super(Component.translatable(TITLE));
 		
 		this.firstTime = firstTime;
-		this.onRGBTab = false;
+		
+		for(ColorSelector colorSelector : canonColors)
+			if(ClientPlayerData.getPlayerColor() == colorSelector.getColor())
+				selectedIndex = colorSelector.id;
+	}
+	
+	public ColorSelectorScreen(ComputerBlockEntity blockEntity)
+	{
+		super(Component.translatable(TITLE));
+		this.firstTime = false;
+		this.be = blockEntity;
 		
 		for(ColorSelector colorSelector : canonColors)
 			if(ClientPlayerData.getPlayerColor() == colorSelector.getColor())
@@ -193,13 +207,15 @@ public class ColorSelectorScreen extends Screen
 					RenderSystem.setShaderTexture(0, guiBackground);
 					blit(poseStack, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
 				}
-				
-				if(canonColor.pointWithin(mouseX - xOffset, mouseY - yOffset))
-					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
 			}
 		}
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
+		
+		if(!onRGBTab)
+			for(ColorSelector canonColor : canonColors)
+				if(canonColor.pointWithin(mouseX - xOffset, mouseY - yOffset))
+					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
 	}
 	
 	@Override
@@ -251,7 +267,10 @@ public class ColorSelectorScreen extends Screen
 		else
 			ClientPlayerData.selectColor(selectedIndex);
 		
-		minecraft.setScreen(null);
+		if(be != null)
+			minecraft.setScreen(new ComputerScreen(minecraft, be));
+		else
+			minecraft.setScreen(null);
 	}
 	
 	@Override

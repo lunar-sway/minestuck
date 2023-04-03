@@ -1,8 +1,9 @@
 package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.gui.ComputerScreen;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -16,7 +17,7 @@ import java.util.Map.Entry;
 public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
-	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<Integer, Class<? extends ComputerProgram>>();
+	private static final HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<>();
 	
 	/**
 	 * Should only be used client-side
@@ -36,7 +37,7 @@ public abstract class ComputerProgram
 	{
 		try
 		{
-			return programs.get(id).newInstance();
+			return programs.get(id).getDeclaredConstructor().newInstance();
 		} catch(Exception e)
 		{
 			e.printStackTrace();
@@ -74,9 +75,7 @@ public abstract class ComputerProgram
 	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be);
 	
 	/**
-	 * Returns an unlocalized string of the name of the program. Used for the
-	 * program button.
+	 * @return desktop icon for this program.
 	 */
-	public abstract String getName();
-	
+	public abstract ResourceLocation getIcon();
 }

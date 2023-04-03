@@ -1,18 +1,20 @@
 package com.mraof.minestuck.computer;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.computer.*;
-import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.network.computer.BurnDiskPacket;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 
 public class DiskBurner extends ButtonListProgram
 {
-	public static final String NAME = "minestuck.program.disk_burner.name";
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
 	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
+	
+	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/disk_burner.png");
 	
 	@Override
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
@@ -42,8 +44,8 @@ public class DiskBurner extends ButtonListProgram
 	}
 	
 	@Override
-	public String getName()
+	public ResourceLocation getIcon()
 	{
-		return NAME;
+		return ICON;
 	}
 }

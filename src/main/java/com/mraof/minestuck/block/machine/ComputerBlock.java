@@ -10,7 +10,6 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -140,7 +139,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return true;
 		} else if(id != -2)
 		{
-			if(!level.isClientSide && !blockEntity.hasProgram(id) && blockEntity.installedPrograms.size() < 3)
+			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
 				stackInHand.shrink(1);
 				blockEntity.installedPrograms.put(id, true);

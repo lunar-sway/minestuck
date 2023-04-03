@@ -2,10 +2,10 @@ package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
@@ -47,16 +47,20 @@ public abstract class ButtonListProgram extends ComputerProgram
 	public final void onButtonPressed(ComputerScreen screen, Button button)
 	{
 		UnlocalizedString data = buttonMap.get(button);
-		if(button == upButton)
-			index--;
-		else if(button == downButton)
-			index++;
-		else if(data != null)
+		
+		if(data != null)
 		{
 			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
 				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
 		}
+		screen.updateGui();
+	}
+	
+	public final void onArrowPressed(ComputerScreen screen, boolean reverse)
+	{
+		if(reverse) index--; else index++;
+		
 		screen.updateGui();
 	}
 	
@@ -71,10 +75,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 			gui.addRenderableWidget(button);
 		}
 		
-		upButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 60, 20, 20, Component.literal("^"), button1 -> onButtonPressed(gui, button1));
-		gui.addRenderableWidget(upButton);
-		downButton = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 140, (gui.height - ComputerScreen.ySize) / 2 + 132, 20, 20, Component.literal("v"), button1 -> onButtonPressed(gui, button1));
-		gui.addRenderableWidget(downButton);
+		upButton = gui.addRenderableWidget(new ArrowButton(true, gui));
+		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
 	}
 	
 	@Override
@@ -125,18 +127,11 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be)
 	{
-		int yOffset = (gui.height / 2) - (ComputerScreen.ySize / 2);
-		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, ComputerScreen.guiBackground);
-		gui.blit(poseStack, (gui.width / 2) - (ComputerScreen.xSize / 2), yOffset, 0, 0, ComputerScreen.xSize, ComputerScreen.ySize);
-		
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2 + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.theme.getTextColor());
 		else
-			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2  + 15, (gui.height - ComputerScreen.ySize) / 2 + 45, 4210752);
+			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, 4210752);
 	}
 	
 	/**
@@ -166,4 +161,24 @@ public abstract class ButtonListProgram extends ComputerProgram
 		}
 	}
 	
+	protected class ArrowButton extends ExtendedButton
+	{
+		boolean reverse;
+		ComputerScreen gui;
+		public ArrowButton(boolean reverse, ComputerScreen gui)
+		{
+			super((gui.width-ComputerScreen.xSize)/2 + 140, (gui.height-ComputerScreen.ySize)/2 + (reverse?60:132), 20, 20, Component.empty(), b->onArrowPressed(gui, reverse));
+			this.reverse = reverse;
+			this.gui = gui;
+		}
+		
+		@Override
+		public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
+		{
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.setShaderTexture(0, gui.be.theme.getTexture());
+			blit(poseStack, x, y, 158+(active?0:20), reverse?0:20, 20, 20);
+		}
+	}
 }
