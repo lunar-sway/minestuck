@@ -13,7 +13,8 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 /**
- * Alternative attack for when the attack target is out of standard range, results in the target being flung into the air if they were on the ground and not crouching.
+ * Cooldown sensitive animated attack which flings the target and nearby entities into the air when they meet certain criteria.
+ * The criteria is if they were on the ground and not crouching, unless the entity is within a few blocks in which the crouching doesn't matter.
  */
 public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedAttackWhenInRangeGoal<T>
 {
@@ -27,7 +28,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	@Override
 	public boolean canUse()
 	{
-		return super.canUse() && entity.hasFinishedCooldown();
+		return super.canUse() && entity.hasFinishedCooldown(); //cooldown sensitive
 	}
 	
 	@Override
@@ -45,7 +46,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 				//TODO Figure out if it can be made so that any entities with the GroundSlamGoal recieve the cooldown, not just entities of the same type
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent overlapping
+					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent simultaneous use by other mobs of the same type
 				}
 			}
 		}

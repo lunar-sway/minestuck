@@ -55,6 +55,12 @@ public abstract class MobAnimationPhaseGoal<T extends PathfinderMob & PhasedMobA
 	}
 	
 	@Override
+	public boolean isInterruptable()
+	{
+		return false; //by default, it should not be possible to interrupt an animated goal
+	}
+	
+	@Override
 	public void start()
 	{
 		MobAnimation animation = phasedAnimation.getAnimation();
