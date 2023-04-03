@@ -55,7 +55,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	public void attemptToLandAttack(PathfinderMob attacker, LivingEntity target)
 	{
 		Level level = entity.getLevel();
-		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 1, 1);
+		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 2.5F, 1);
 		
 		//flinging any nearby smaller mobs on the ground indiscriminately
 		AABB aabb = new AABB(attacker.blockPosition()).inflate(4);
