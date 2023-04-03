@@ -6,6 +6,7 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -30,8 +31,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
@@ -40,24 +44,28 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public ComputerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
-		this.installedPrograms.put(2, true); //the program disk burner has no associated item and should always exist on the computer
+		
+		// always should exist on computers
+		this.installedPrograms.put(2, true);
+		this.installedPrograms.put(3, true);
 	}
 	
 	/**
-	 * 0 = client, 1 = server, 2 = disk burner
+	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
 	 */
-	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<Integer, Boolean>();
+	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<>();
 	public ComputerScreen gui;
 	public PlayerIdentifier owner;
 	//client side only
 	public int ownerId;
-	public Hashtable<Integer, String> latestmessage = new Hashtable<Integer, String>();
+	public Hashtable<Integer, String> latestmessage = new Hashtable<>();
 	public CompoundTag programData = new CompoundTag();
 	public int programSelected = -1;
 	@Nonnull
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
+	public Theme theme = Theme.DEFAULT;
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -66,10 +74,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		if(nbt.contains("programs"))
 		{
 			CompoundTag programs = nbt.getCompound("programs");
-			for(Object name : programs.getAllKeys())
-			{
-				installedPrograms.put(programs.getInt((String) name), true);
-			}
+			for(String name : programs.getAllKeys())
+				installedPrograms.put(programs.getInt(name), true);
 		}
 		
 		latestmessage.clear();
@@ -99,19 +105,19 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	{
 		super.saveAdditional(compound);
 		CompoundTag programs = new CompoundTag();
-		Iterator<Entry<Integer, Boolean>> it = this.installedPrograms.entrySet().iterator();
-		//int place = 0;
-		while(it.hasNext())
+		
+		for(Entry<Integer,Boolean> program : installedPrograms.entrySet())
 		{
-			Map.Entry<Integer, Boolean> pairs = it.next();
-			int program = pairs.getKey();
-			programs.putInt("program" + program, program);
-			//place++;
+			int id = program.getKey();
+			programs.putInt("program"+id, id);
 		}
+		
 		for(Entry<Integer, String> e : latestmessage.entrySet())
 			compound.putString("text" + e.getKey(), e.getValue());
+		
 		compound.put("programs", programs);
 		compound.put("programData", programData.copy());
+		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 		
