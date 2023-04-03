@@ -36,9 +36,8 @@ import java.util.stream.Stream;
 public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
-	public static final int DEFAULT_MAX_PROGRESS = 0;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
@@ -62,7 +61,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.URANIUM_COOKER.get(), pos, state);
-		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
 	@Override
@@ -86,13 +84,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
@@ -120,8 +117,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 		{    //Refill fuel
@@ -181,7 +177,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, this.progressTracker, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

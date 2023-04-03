@@ -8,6 +8,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
@@ -48,7 +49,7 @@ public abstract class MinestuckScreen extends Screen
 		GristType tooltipType = null;
 		GristSet clientGrist = ClientPlayerData.getClientGrist();
 		int clientRung = ClientPlayerData.getRung();
-		int cacheLimit = GristHelper.rungGrist[clientRung];
+		long cacheLimit = Echeladder.getGristCapacity(clientRung);
 
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);
@@ -62,8 +63,7 @@ public abstract class MinestuckScreen extends Screen
 			int gristXOffset = xOffset + (gristDisplayXOffset * column - column);
 			int gristYOffset = yOffset + (gristDisplayYOffset * row - row);
 			String amount = GuiUtil.addSuffix(clientGrist.getGrist(type));
-			String cap = GuiUtil.addSuffix(GristHelper.rungGrist[clientRung]);
-
+			
 			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
 				this.fillGradient(poseStack, gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);

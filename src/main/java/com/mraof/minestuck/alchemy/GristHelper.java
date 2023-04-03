@@ -5,14 +5,12 @@ import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
@@ -22,14 +20,12 @@ import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.limit.Min;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import static com.mraof.minestuck.player.ClientPlayerData.rung;
 
 public class GristHelper
 {
@@ -50,9 +46,9 @@ public class GristHelper
 	public static GristType getPrimaryGrist(RandomSource random)
 	{
 		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
-				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).collect(Collectors.toList());
+				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
 		
-		return WeightedRandom.getRandomItem(random, typeList).orElseThrow(null).getData();
+		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();
 	}
 	
 	/**
@@ -75,7 +71,6 @@ public class GristHelper
 		RandomSource random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
-		double effectivePowerLevel = 1;
 		
 		GristSet set = new GristSet();
 		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
@@ -146,56 +141,60 @@ public class GristHelper
 	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
-		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
-		notify(level.getServer(), player, set, total, source, false);
+		notify(level.getServer(), player, set, source, false);
 	}
 	
 	public static void increase(Level level, PlayerIdentifier player, GristSet set)
 	{
 		Objects.requireNonNull(level);
-		Session session = SessionHandler.get(level).getPlayerSession(player);
-		GristGutter gutter = session.getGristGutter();
-		
 		Objects.requireNonNull(player);
-		Objects.requireNonNull(set);
-		PlayerData data = PlayerSavedData.getData(player, level);
-		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
-		newCache.addGrist(set);
-		int gristCap = rungGrist[rung];
 		
-		GristSet overflowedGrist = limitGristByPlayerRung(level, player, newCache);
-		gutter.addGrist(overflowedGrist);//sends grist overflow to gutter
-		data.setGristCache(newCache);
-		ServerPlayer playerEntity = player.getPlayer(level.getServer());
-		if(playerEntity != null)
+		GristSet overflowedGrist = increaseAndReturnExcess(PlayerSavedData.getData(player, level), set);
+		
+		if(!overflowedGrist.isEmpty())
 		{
-			gutter.spillGrist(level, playerEntity);//this isn't currently being used
+			GristGutter gutter = SessionHandler.get(level).getPlayerSession(player).getGristGutter();
+			gutter.addGristFrom(overflowedGrist);
+			ServerPlayer playerEntity = player.getPlayer(level.getServer());
+			if(playerEntity != null && !overflowedGrist.isEmpty())
+			{
+				overflowedGrist.spawnGristEntities(level, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), level.random,
+						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
+			}
 		}
 	}
-	public static GristSet limitGristByPlayerRung(Level level, PlayerIdentifier player, GristSet set)
+	
+	public static GristSet increaseAndReturnExcess(PlayerData data, GristSet set)
 	{
-		int rung = PlayerSavedData.getData(player, level).getEcheladder().getRung();
-		int gristCap = rungGrist[rung];//uses the values in the rungGrist array to determine the current grist cap
-		if (gristCap < 0)
-		{
-			return null;
-		}
-		else
-		{
-			return set.capGrist(gristCap);//returns the result of capGrist
-		}
+		Objects.requireNonNull(data);
+		Objects.requireNonNull(set);
+		
+		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
+		
+		newCache.addGrist(set);
+		long capacity = data.getEcheladder().getGristCapacity();
+		GristSet excessGrist = newCache.removeOverCapacity(capacity);
+		
+		data.setGristCache(newCache);
+		return excessGrist;
 	}
-	public static final int[] rungGrist =// will crash the game if set below 20
-			{20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,
-					180,190,200,240,250,260,265,270,275,280,285,290,295,300,
-					350,400,450,455,500,1000,2000,3000,4000,5000,6000,7000,
-					8000,9000,10000,20000,30000,40000,50000,90000000};// the function that controls how much grist is spliced from the gutter
+	
+	public static NonNegativeGristSet getCapacitySet(PlayerData data)
+	{
+		long capacity = data.getEcheladder().getGristCapacity();
+		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
+		for(GristType type : GristTypes.values())
+		{
+			if(data.getGristCache().getGrist(type) < capacity)
+				capacitySet.addGrist(type, capacity - data.getGristCache().getGrist(type));
+		}
+		return capacitySet;
+	}
 	
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		increase(level, player, set);
-		GristSet total = PlayerSavedData.getData(player, level).getGristCache();
-		notify(level.getServer(), player, set, total, source, true);
+		notify(level.getServer(), player, set, source, true);
 	}
 	
 	/**
@@ -206,15 +205,14 @@ public class GristHelper
 	 * @param source Indicates where the notification is coming from. See EnumSource.
 	 * @param increase Indicates whether the grist is gained or lost.
 	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristSet total, GristHelper.EnumSource source, boolean increase)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			int cacheLimit = rungGrist[rung];
-			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase, cacheLimit, total);
+			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
 			
 			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
+				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, increase, cacheLimit, true), player.getPlayer(server));
 			
 			if (source == EnumSource.SERVER)
 			{
@@ -227,7 +225,7 @@ public class GristHelper
 					return;
 				
 				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(gristToastPacket, ed.getEditor());
+					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, increase, cacheLimit, false), ed.getEditor());
 
 			}
 		}

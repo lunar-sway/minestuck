@@ -15,6 +15,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class WirelessRedstoneTransmitterScreen extends Screen
 {
+	public static final String TITLE = "minestuck.wireless_redstone";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -28,7 +29,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity be)
 	{
-		super(Component.literal("Wireless Redstone"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 	}

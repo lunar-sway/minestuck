@@ -81,7 +81,7 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		return context.getClickedFace() == Direction.UP ? super.getStateForPlacement(context) : Blocks.AIR.defaultBlockState();
+		return context.getClickedFace() == Direction.UP ? super.getStateForPlacement(context) : null;
 	}
 	
 	@Override

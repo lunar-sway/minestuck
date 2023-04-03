@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=west":  { "model": "block/attached_melon_stem" },
-        "facing=east":  { "model": "block/attached_melon_stem", "y": 180 },
-        "facing=north": { "model": "block/attached_melon_stem", "y": 90 },
-        "facing=south": { "model": "block/attached_melon_stem", "y": 270 }
+        "facing=west":  { "model": "minestuck:block/attached_strawberry_stem" },
+        "facing=east":  { "model": "minestuck:block/attached_strawberry_stem", "y": 180 },
+        "facing=north": { "model": "minestuck:block/attached_strawberry_stem", "y": 90 },
+        "facing=south": { "model": "minestuck:block/attached_strawberry_stem", "y": 270 }
     }
 }

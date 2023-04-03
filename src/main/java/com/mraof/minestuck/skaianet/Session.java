@@ -2,7 +2,9 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristGutter;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -10,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +29,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
-	final GristGutter gutter;
-	private double gutterMultiplier;
+	private final GristGutter gutter;
 	String name;
 	
 	/**
@@ -73,6 +73,10 @@ public final class Session
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
+		
+		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
+		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
+		this.gutter.addGristUnchecked(other.gutter.getCache());
 	}
 	
 	private boolean canAdd(PlayerIdentifier player, PredefineData data)
@@ -110,11 +114,16 @@ public final class Session
 	
 	Session()
 	{
-		gutter = new GristGutter();
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
-		gutter.setSession(this);
-		gutterMultiplier = 1;
+		this.gutter = new GristGutter(this);
+	}
+	
+	private Session(CompoundTag nbt)
+	{
+		connections = new HashSet<>();
+		predefinedPlayers = new HashMap<>();
+		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
 	/**
@@ -253,16 +262,6 @@ public final class Session
 	{
 		return gutter;
 	}
-	public double increaseGutterMultiplier(double amount)
-	{
-		this.gutterMultiplier += amount;
-		
-		return gutterMultiplier;
-	}
-	public double getGutterMultiplier()
-	{
-		return gutterMultiplier;
-	}
 	
 	/**
 	 * Writes this session to an nbt tag.
@@ -280,9 +279,11 @@ public final class Session
 		for(SburbConnection c : connections) list.add(c.write());
 		nbt.put("connections", list);
 		ListTag predefineList = new ListTag();
-		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet()) predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
+		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
+			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
+		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
 	
@@ -294,7 +295,7 @@ public final class Session
 	 */
 	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
-		Session s = new Session();
+		Session s = new Session(nbt);
 		if(nbt.contains("name", Tag.TAG_STRING))
 			s.name = nbt.getString("name");
 		else s.name = null;
@@ -309,7 +310,7 @@ public final class Session
 					s.connections.add(c);
 			} catch(Exception e)
 			{
-				LOGGER.error("Unable to read sburb connection from tag " + list.getCompound(i) + ". Forced to skip connection. Caused by:", e);
+				LOGGER.error("Unable to read sburb connection from tag {}. Forced to skip connection. Caused by:", list.getCompound(i), e);
 
 			}
 		}

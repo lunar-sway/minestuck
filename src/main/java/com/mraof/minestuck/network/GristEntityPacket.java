@@ -5,10 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 
-public class
-GristEntityPacket implements PlayToClientPacket
+import java.util.Objects;
+
+public class GristEntityPacket implements PlayToClientPacket
 {
-	
 	private final int entityID;
 	private final GristEntity.Animation animation;
 	
@@ -42,6 +42,7 @@ GristEntityPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
+		Entity entity = Objects.requireNonNull(Minecraft.getInstance().level).getEntity(entityID);
 		if(entity instanceof GristEntity gristEntity)
 		{
 			gristEntity.setAnimationFromPacket(animation);

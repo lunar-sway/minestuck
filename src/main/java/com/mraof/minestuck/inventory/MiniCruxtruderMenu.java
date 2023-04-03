@@ -74,7 +74,7 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 			} else
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE.get())
+				if(itemstackOrig.is(MSItems.RAW_CRUXITE.get()))
 				{
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 				}
@@ -83,8 +83,8 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

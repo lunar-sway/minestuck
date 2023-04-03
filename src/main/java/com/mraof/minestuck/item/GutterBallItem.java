@@ -1,13 +1,10 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -19,39 +16,39 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GutterBallItem extends Item
 {
-	public GutterBallItem(Properties pProperties)
+	public GutterBallItem(Properties properties)
 	{
-		super(pProperties);
+		super(properties);
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		if(!pPlayer.getLevel().isClientSide)
+		ItemStack itemStack = player.getItemInHand(usedHand);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
+		itemStack.shrink(1);
+		
+		if(player instanceof ServerPlayer serverPlayer)
 		{
-			ItemStack itemStack = pPlayer.getItemInHand(pUsedHand);
-			Session playerSession = SessionHandler.get(pPlayer.getServer()).getPlayerSession(IdentifierHandler.encode(pPlayer));
-			pLevel.playSound(null, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
-			
-			playerSession.increaseGutterMultiplier(0.2);
-			itemStack.shrink(1);
+			PlayerSavedData.getData(serverPlayer).addGutterMultiplier(0.2);
 		}
 		
-		return super.use(pLevel, pPlayer, pUsedHand);
+		return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
 	}
 	
 	@Override
 	public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced)
 	{
 		if(Screen.hasShiftDown())
-		{
-			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.desc"));
-		} else {
-			pTooltipComponents.add(Component.translatable("item.minestuck.gutter_ball.press_shift"));
-		}
+			pTooltipComponents.add(Component.translatable(getDescriptionId() + ".desc"));
+		else
+			pTooltipComponents.add(Component.translatable(getDescriptionId() + ".press_shift"));
 	}
 }

@@ -17,7 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class CruxtruderItem extends MultiblockItem
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -33,7 +35,7 @@ public class CruxtruderItem extends MultiblockItem
 	@Override
 	protected boolean updateCustomBlockEntityTag(BlockPos pos, Level level, @Nullable Player player, ItemStack stack, BlockState state)
 	{
-		if(player == null)
+		if(player == null || level.isClientSide)
 			return false;
 		BlockEntity be = level.getBlockEntity(multiblock.getBEPos(pos, MSRotationUtil.fromDirection(player.getDirection().getOpposite())));
 		if(be instanceof CruxtruderBlockEntity)

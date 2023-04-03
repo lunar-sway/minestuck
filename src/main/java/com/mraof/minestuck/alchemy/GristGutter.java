@@ -1,114 +1,197 @@
 package com.mraof.minestuck.alchemy;
 
+import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.player.PlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.mraof.minestuck.skaianet.SessionHandler;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.Map;
+import java.util.Set;
 
 /**
- * A class that handles Grist overflow whenever you aqcuire too much grist.
+ * A class that handles Grist overflow whenever you acquire too much grist.
  * @author Doro
  */
-public class GristGutter extends GristSet
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+public class GristGutter
 {
-	private static Session session;
-	public int gutterTotal = -1;
 	public static final int GUTTER_CAPACITY = 10000;
-	private static final Logger LOGGER = LogManager.getLogger();
-	public void setSession(Session session)
+	
+	private final Session session;
+	private final NonNegativeGristSet gristSet;
+	private long gristTotal;
+	
+	public GristGutter(Session session)
 	{
 		this.session = session;
+		this.gristSet = new NonNegativeGristSet();
+		this.gristTotal = 0;
 	}
 	
-	public double getGutterCapacity(Session session)
+	public GristGutter(Session session, ListTag listTag)
 	{
-		double gutMul = session.getGutterMultiplier();
-		double gutcap = (GUTTER_CAPACITY * gutMul);
-		return gutcap;
+		this.session = session;
+		this.gristSet = NonNegativeGristSet.read(listTag);
+		this.gristTotal = 0;
+		for(GristAmount amount : this.gristSet.getAmounts())
+			this.gristTotal += amount.getAmount();
 	}
-	public long getGutterTotal()
+	
+	public ListTag write()
 	{
-		if(gutterTotal < 0)
+		return this.gristSet.write(new ListTag());
+	}
+	
+	
+	public ImmutableGristSet getCache()
+	{
+		return gristSet.asImmutable();
+	}
+	
+	public long getRemainingCapacity()
+	{
+		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession()) - gristTotal;
+	}
+	
+	public double gutterMultiplierForSession()
+	{
+		PlayerSavedData playerSavedData = PlayerSavedData.get(ServerLifecycleHooks.getCurrentServer());
+		double gutterMultiplier = 0;
+		for(PlayerIdentifier player : this.session.getPlayerList())
 		{
-			gutterTotal = 0;
-			for(Map.Entry<GristType, Long> pair : gristTypes.entrySet())
-			{
-				gutterTotal += pair.getValue();
-			}
+			PlayerData data = playerSavedData.getData(player);
+			gutterMultiplier += data.getGutterMultipler();
 		}
-		return gutterTotal;
-	}
-	public GristSet gristToSpill = new GristSet();
-	public void spillGrist(Level level, Player player)
-	{
-	//isn't being used by anything, but when i delete it everything breaks
-		gristToSpill.spawnGristEntities(level, player.getX(), player.getY(), player.getZ(), level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
-	}
-	@Override
-	public GristGutter addGrist(GristType type, long amount)
-	{
-		if(type != null)
-		{
-			GristSet sOverflowGrist = new GristSet();//creates a new gristset called Super overflow
-			long originalAmount = this.gristTypes.getOrDefault(type, 0L);
-			long maximumAllowed = (long) (gutterTotal - getGutterCapacity(session) + originalAmount);
-			
-			this.gristTypes.compute(type, (key, value) -> value == null ? amount : value + amount);
-			gutterTotal += amount;//adds grist to gutter
-			
-			//logger
-			LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
-			LOGGER.debug("Total: " + getGutterTotal());
-			for(GristType t : this.gristTypes.keySet())
-			{
-				LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
-			}
-			logGutter(type, amount);
-			
-			//not used by anything currently
-			if(gutterTotal > GUTTER_CAPACITY)
-			{
-				System.out.println("gutter has capped out");
-				long sOverflowAmount = (long) (gutterTotal - getGutterCapacity(session));
-				this.gristTypes.put(type, maximumAllowed);
-				sOverflowGrist.addGrist(type, sOverflowAmount);
-				gristToSpill.addGrist(sOverflowGrist);
-				gutterTotal -= sOverflowAmount;
-			}
-		}
-		return this;
-	}
-	public GristGutter logGutter(GristType type, long amount)
-	{
-		LOGGER.debug("Gutter after adding " + amount + " " + type.getDisplayName().toString() + " grist:");
-		LOGGER.debug("Total: " + getGutterTotal());
-		
-		for(GristType t : this.gristTypes.keySet())
-		{
-			LOGGER.debug(t.getDisplayName().toString() + ": " + gristTypes.get(t));
-		}
-		
-		return this;
+		return gutterMultiplier;
 	}
 	
 	/**
-	 * this is how we take grist from the gutter and throw it into the player's cache
+	 * Adds the grist from the given set into this gutter.
+	 * Any grist that was added to the gutter will be removed from the given grist set,
+	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
 	 */
-	public GristSet splice(int i)
+	public void addGristFrom(GristSet set)
 	{
-		GristSet spliceSet = new GristSet();
-		
-		for(GristType t : this.gristTypes.keySet())
+		for(GristAmount amount : set.getAmounts())
 		{
-			long xMover = Math.max(Math.min(gristTypes.get(t), i), 0);
-			spliceSet.addGrist(t, xMover);//spliceSet calls addgrist with the amount and type specified
+			GristType type = amount.getType();
+			long maximumAllowed = getRemainingCapacity();
 			
-			gutterTotal -= xMover;//takes grist from the gutter
+			if(maximumAllowed <= 0)
+				return;
+			
+			long amountToAdd = Math.min(maximumAllowed, amount.getAmount());
+			set.addGrist(type, -amountToAdd);
+			this.addGristInternal(type, amountToAdd);
 		}
-		return spliceSet;//returns splice set to be used to distribute itself to the player's caches
 	}
 	
+	/**
+	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet)}.
+	 */
+	public void addGristUnchecked(GristSet set)
+	{
+		for(GristAmount amount : set.getAmounts())
+			this.addGristInternal(amount.getType(), amount.getAmount());
+	}
+	
+	/**
+	 * The grist set is currently only modified here,
+	 * which lets us be certain that gutterTotal is accurate.
+	 */
+	private void addGristInternal(GristType type, long amount)
+	{
+		this.gristSet.addGrist(type, amount);
+		this.gristTotal += amount;
+	}
+	
+	public GristSet takeFraction(double fraction)
+	{
+		GristSet takenGrist = new GristSet();
+		double extraGrist = 0;
+		
+		for(GristAmount gristAmount : this.gristSet.getAmounts())
+		{
+			// add extraGrist to compensate for errors in the previous amounts
+			double takenAmount = extraGrist + fraction*gristAmount.getAmount();
+			long actualAmount = Math.round(takenAmount);
+			// update extraGrist with the new error
+			extraGrist = takenAmount - actualAmount;
+			
+			takenGrist.addGrist(gristAmount.getType(), actualAmount);
+			this.addGristInternal(gristAmount.getType(), -actualAmount);
+		}
+		
+		return takenGrist;
+	}
+	
+	@SubscribeEvent
+	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
+	{
+		//noinspection resource
+		if(event.getServer().overworld().getGameTime() % 200 == 0)
+		{
+			for(Session session : SessionHandler.get(event.getServer()).getSessions())
+			{
+				session.getGristGutter().distributeToPlayers(session.getPlayerList(), event.getServer());
+			}
+		}
+	}
+	
+	private void distributeToPlayers(Set<PlayerIdentifier> players, MinecraftServer server)
+	{
+		// TODO iterate in a random order, so that no player gets priority
+		for(PlayerIdentifier player : players)
+		{
+			tickDistributionToPlayer(player, server);
+		}
+	}
+	
+	private void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server)
+	{
+		PlayerData data = PlayerSavedData.getData(player, server);
+		
+		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
+		
+		NonNegativeGristSet capacity = GristHelper.getCapacitySet(data);
+		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity);
+		GristSet remainder = GristHelper.increaseAndReturnExcess(data, gristToTransfer);
+		if(!remainder.isEmpty())
+			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
+	}
+	
+	private double getDistributionRateModifier()
+	{
+		return 1D/20D;
+	}
+	
+	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity)
+	{
+		long remaining = amount;
+		GristSet takenGrist = new GristSet();
+		//TODO randomize iteration order
+		for(GristAmount capacityAmount : capacity.getAmounts())
+		{
+			GristType type = capacityAmount.getType();
+			long amountInGutter = this.gristSet.getGrist(type);
+			if(amountInGutter > 0)
+			{
+				long takenAmount = Math.min(remaining, Math.min(capacityAmount.getAmount(), amountInGutter));
+				this.addGristInternal(type, -takenAmount);
+				takenGrist.addGrist(type, takenAmount);
+				remaining -= takenAmount;
+				if(remaining <= 0)
+					break;
+			}
+		}
+		return takenGrist;
+	}
 }

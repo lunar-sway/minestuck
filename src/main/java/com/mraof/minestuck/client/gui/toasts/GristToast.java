@@ -47,7 +47,7 @@ public class GristToast implements Toast
 	
 	private GristType type;
 	private long difference;
-	private int cacheLimit;
+	private long cacheLimit;
 	private long gristCache;
 	private GristHelper.EnumSource source;
 	private boolean increase;
@@ -56,7 +56,7 @@ public class GristToast implements Toast
 	private boolean changed;
 	private int animationTimer;
 	
-	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, int pCacheLimit, long pGristCache)
+	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, long pCacheLimit, long pGristCache)
 	{
 		this.type = pType;
 		this.difference = pDifference;
@@ -158,11 +158,11 @@ public class GristToast implements Toast
 		//pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(getGristString(pToastComponent)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(getGristString(pToastComponent)) / 2), 24.0F, 0x000000);
 		if(pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) <= GRIST_VIAL_INSIDE_WIDTH)
 		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(" / " + GuiUtil.addSuffix(this.cacheLimit)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2) + (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache))), 24.0F, 0x000000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(" / " + GuiUtil.addSuffix(this.cacheLimit)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2) + (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache))), 24.0F, 0x000000);
 		} else
 		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
+			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
 		}
 		
 		
@@ -208,7 +208,7 @@ public class GristToast implements Toast
 	}
 	
 	//adds pDifference to the toast's current grist value.
-	private void addGrist(long pDifference, int pCacheLimit)
+	private void addGrist(long pDifference, long pCacheLimit)
 	{
 		if(pCacheLimit >= this.gristCache + pDifference)
 			this.gristCache += pDifference;
@@ -220,7 +220,7 @@ public class GristToast implements Toast
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, int pCacheLimit, long pGristCache)
+	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, long pCacheLimit, long pGristCache)
 	{
 		
 		//try to find an existing toast with the same properties as the one being added.
@@ -233,7 +233,7 @@ public class GristToast implements Toast
 			gristToast.addGrist(pDifference, pCacheLimit);
 	}
 	
-	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase, int cacheLimit, GristSet gristCache)
+	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase, long cacheLimit, GristSet gristCache)
 	{
 		
 		List<GristAmount> reqs = set.getAmounts();

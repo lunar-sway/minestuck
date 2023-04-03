@@ -1,6 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
+	"render_type": "translucent",
 	"textures": {
 		"0": "minestuck:block/lunchtop_on",
 		"particle": "minestuck:block/lunchtop_on"

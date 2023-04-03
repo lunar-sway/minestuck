@@ -2,6 +2,7 @@
     "credit": "Made with Blockbench by Cibernet",
     "parent": "minecraft:block/block",
     "texture_size": [32, 32],
+    "render_type": "cutout",
     "textures": {
         "0": "minestuck:block/parcel_pyxis_side",
         "1": "minestuck:block/parcel_pyxis_top",

@@ -11,16 +11,11 @@ import com.mraof.minestuck.entry.EntryEvent;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.skaianet.*;
-import com.mraof.minestuck.skaianet.Session;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.skaianet.TitleSelectionHook;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -35,7 +30,6 @@ import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -260,40 +254,11 @@ public class ServerEventHandler
 		if(!event.player.level.isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
-			Player player = event.player;
-			
 			if(data.getTitle() != null)
-			{
 				data.getTitle().handleAspectEffects((ServerPlayer) event.player);
-				IdentifierHandler.encode(player);
-			}
-			
-			Level level = player.level;
-			SessionHandler sessionHandler = SessionHandler.get(level);
-			Session session = sessionHandler.getPlayerSession(IdentifierHandler.encode(player));//finds the session they're in
-			long gameTime = level.getGameTime();
-			int inputTime = 200;
-			
-			NonNegativeGristSet playerCache = new NonNegativeGristSet(PlayerSavedData.getData((ServerPlayer) player).getGristCache());
-			if(session == null)
-			{
-				return;
-			}
-			if(gameTime % inputTime == 0)
-			{//every tick, the server will try to put some of the gutter's grist into each player's cache
-				int gutterMultiplier = (int) session.getGutterMultiplier();
-				int rung = PlayerSavedData.getData((ServerPlayer) player).getEcheladder().getRung();//finds the target's rung
-				int spliceAmount = (int) (GristHelper.rungGrist[rung] * Math.min((gutterMultiplier + 1.0), 1.0) / 20.0);//determines the appropriate splice amount
-				
-				GristGutter sessionGutter = session.getGristGutter();//get's the grist gutter
-				playerCache.addGrist(sessionGutter.splice(spliceAmount));//splices some grist from the splice set
-				GristSet rungGrist = GristHelper.limitGristByPlayerRung(level, IdentifierHandler.encode(player), playerCache);
-				
-				sessionGutter.addGrist(rungGrist);
-				data.setGristCache(playerCache);
-			}
 		}
 	}
+	
 	@SubscribeEvent
 	public static void onEffectRemove(MobEffectEvent.Remove event)
 	{

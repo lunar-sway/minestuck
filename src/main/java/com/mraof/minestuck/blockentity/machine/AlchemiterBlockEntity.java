@@ -12,7 +12,6 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.IColored;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
