@@ -49,13 +49,15 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	public boolean canUse()
 	{
 		LivingEntity target = this.entity.getTarget();
-		return target != null && this.isValidTarget(target) && this.entity.getSensing().hasLineOfSight(target);
+		return target != null && this.isValidTarget(target) && this.entity.getSensing().hasLineOfSight(target); //this goal is not sensitive to cooldowns. Cooldown sensitivity is determined in goals extending this
 	}
 	
 	@Override
 	public void stop()
 	{
 		super.stop();
+		
+		//at the end of the attack a cooldown may be applied to cooldown compatible entities to prevent an animated goal from being spammed
 		if(actionCooldown != NO_COOLDOWN && entity instanceof ActionCooldown cooldownEntity)
 			cooldownEntity.setCooldown(actionCooldown);
 	}
@@ -77,6 +79,9 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 		return target.isAlive() && withinRange(target);
 	}
 	
+	/**
+	 * For use once the attack has started, even if the target is now closer than the minimum range would allow
+	 */
 	protected boolean targetCanBeHit(@Nonnull LivingEntity target)
 	{
 		return target.isAlive() && belowMaximumRange(target);

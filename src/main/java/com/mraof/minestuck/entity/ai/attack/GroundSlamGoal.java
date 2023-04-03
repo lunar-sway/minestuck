@@ -13,7 +13,8 @@ import net.minecraft.world.phys.AABB;
 import java.util.List;
 
 /**
- * Alternative attack for when the attack target is out of standard range, results in the target being flung into the air if they were on the ground and not crouching.
+ * Cooldown sensitive animated attack which flings the target and nearby entities into the air when they meet certain criteria.
+ * The criteria is if they were on the ground and not crouching, unless the entity is within a few blocks in which the crouching doesn't matter.
  */
 public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedAttackWhenInRangeGoal<T>
 {
@@ -27,7 +28,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	@Override
 	public boolean canUse()
 	{
-		return super.canUse() && entity.hasFinishedCooldown();
+		return super.canUse() && entity.hasFinishedCooldown(); //cooldown sensitive
 	}
 	
 	@Override
@@ -42,10 +43,9 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		{
 			for(AttackingAnimatedEntity iteratedEntity : entityList)
 			{
-				//TODO Figure out if it can be made so that any entities with the GroundSlamGoal recieve the cooldown, not just entities of the same type
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent overlapping
+					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent simultaneous goal use by other mobs of the same type
 				}
 			}
 		}
@@ -55,10 +55,10 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	public void attemptToLandAttack(PathfinderMob attacker, LivingEntity target)
 	{
 		Level level = entity.getLevel();
-		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 1, 1);
+		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 2.5F, 1);
 		
 		//flinging any nearby smaller mobs on the ground indiscriminately
-		AABB aabb = new AABB(attacker.blockPosition()).inflate(4);
+		AABB aabb = new AABB(attacker.blockPosition()).inflate(4); //TODO make the size of this bounding box better match that determined by the inMeleeRange boolean
 		List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, aabb);
 		if(!entityList.isEmpty())
 		{

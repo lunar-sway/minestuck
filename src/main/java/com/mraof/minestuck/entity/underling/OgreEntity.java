@@ -27,8 +27,8 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 //Makes non-stop ogre puns
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 22, true, true), 8, 10, 13);
-	public static final PhasedMobAnimation SLAM_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 26, true, true), 12, 14, 17);
+	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 22, true, true), 7, 10, 13);
+	public static final PhasedMobAnimation SLAM_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
@@ -40,13 +40,14 @@ public class OgreEntity extends UnderlingEntity
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 50)
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.4).add(Attributes.MOVEMENT_SPEED, 0.22)
-				.add(Attributes.ATTACK_DAMAGE, 6);
+				.add(Attributes.ATTACK_DAMAGE, 6).add(Attributes.ATTACK_KNOCKBACK, 12);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
+		//no overlap in attack goal ranges
 		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, 40));
 		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15, 160));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
@@ -104,11 +105,18 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.PUNCH || animation == MobAnimation.Action.SLAM)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.5F, 0);
+	}
+	
+	@Override
 	public void registerControllers(AnimationData data)
 	{
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 0.5, OgreEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 0.5, OgreEntity::attackAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
@@ -132,7 +140,7 @@ public class OgreEntity extends UnderlingEntity
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationEvent<OgreEntity> event)
+	private static PlayState attackAnimation(AnimationEvent<OgreEntity> event)
 	{
 		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
 		

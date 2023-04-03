@@ -418,6 +418,13 @@
       }
     ]
   },
+  "entity.swoosh": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.swoosh",
+    "sounds": [
+      "minestuck:mob/swoosh"
+    ]
+  },
   "entity.slam": {
     "category": "hostile",
     "subtitle": "subtitles.minestuck.slam",
