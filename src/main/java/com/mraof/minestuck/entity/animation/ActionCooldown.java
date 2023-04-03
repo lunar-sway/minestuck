@@ -5,6 +5,8 @@ package com.mraof.minestuck.entity.animation;
  */
 public interface ActionCooldown
 {
+	//TODO Figure out if it can be made so that group cooldowns can be applied to any animated entities with the same Goal, as opposed to giving a cooldown to just entities of the same type
+	
 	int getCooldown();
 	
 	void setCooldown(int amountTicks);

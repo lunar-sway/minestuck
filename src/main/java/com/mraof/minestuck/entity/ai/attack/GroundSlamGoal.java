@@ -43,10 +43,9 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		{
 			for(AttackingAnimatedEntity iteratedEntity : entityList)
 			{
-				//TODO Figure out if it can be made so that any entities with the GroundSlamGoal recieve the cooldown, not just entities of the same type
 				if(iteratedEntity != this.entity && iteratedEntity.getType() == this.entity.getType() && !iteratedEntity.existingCooldownIsLonger(GROUP_SLAM_COOLDOWN))
 				{
-					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent simultaneous use by other mobs of the same type
+					iteratedEntity.setCooldown(GROUP_SLAM_COOLDOWN + phasedAnimation.getTotalAnimationLength()); //plays at beginning to prevent simultaneous goal use by other mobs of the same type
 				}
 			}
 		}
@@ -59,7 +58,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 2.5F, 1);
 		
 		//flinging any nearby smaller mobs on the ground indiscriminately
-		AABB aabb = new AABB(attacker.blockPosition()).inflate(4);
+		AABB aabb = new AABB(attacker.blockPosition()).inflate(4); //TODO make the size of this bounding box better match that determined by the inMeleeRange boolean
 		List<LivingEntity> entityList = level.getEntitiesOfClass(LivingEntity.class, aabb);
 		if(!entityList.isEmpty())
 		{
