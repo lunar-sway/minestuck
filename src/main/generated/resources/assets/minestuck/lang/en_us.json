@@ -447,6 +447,8 @@
   "block.minestuck.shadewood_planks": "Shadewood Planks",
   "block.minestuck.shroomy_shadewood_leaves": "Shroomy Shadewood Leaves",
   "block.minestuck.skaia_portal": "Skaia Portal",
+  "block.minestuck.skaianet_denier": "Skaianet Denier",
+  "block.minestuck.skaianet_denier.tooltip": "Constantly sends out signals preventing Entry from occurring while it is inside the radius.",
   "block.minestuck.smooth_shade_stone": "Smooth Shade Stone",
   "block.minestuck.solid_switch": "Solid Switch",
   "block.minestuck.solid_switch.tooltip": "KACHUNK",
