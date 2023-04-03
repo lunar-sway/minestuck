@@ -2066,6 +2066,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");
+		addSubtitles("bite", "Teeth bite down");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "death", "Nakagator dies");

@@ -53,6 +53,7 @@ public class MSSoundEvents
 	
 	public static final RegistryObject<SoundEvent> ENTITY_SWOOSH = register("entity.swoosh");
 	public static final RegistryObject<SoundEvent> ENTITY_SLAM = register("entity.slam");
+	public static final RegistryObject<SoundEvent> ENTITY_BITE = register("entity.bite");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_AMBIENT = register("entity.nakagator.ambient");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_HURT = register("entity.nakagator.hurt");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_DEATH = register("entity.nakagator.death");

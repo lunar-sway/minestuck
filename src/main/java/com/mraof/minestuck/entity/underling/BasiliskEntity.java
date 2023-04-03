@@ -186,6 +186,20 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.SWING)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 1, 2);
+	}
+	
+	@Override
+	public void contactPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.BITE)
+			this.playSound(MSSoundEvents.ENTITY_BITE.get(), 1, 1);
+	}
+	
+	@Override
 	public void registerControllers(AnimationData data)
 	{
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));

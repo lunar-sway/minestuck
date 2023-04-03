@@ -432,6 +432,13 @@
       "minestuck:mob/slam"
     ]
   },
+  "entity.bite": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.bite",
+    "sounds": [
+      "minestuck:mob/bite"
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
