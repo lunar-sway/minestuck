@@ -418,6 +418,20 @@
       }
     ]
   },
+  "entity.swoosh": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.swoosh",
+    "sounds": [
+      "minestuck:mob/swoosh"
+    ]
+  },
+  "entity.slam": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.slam",
+    "sounds": [
+      "minestuck:mob/slam"
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
