@@ -43,6 +43,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	public void clearStoredGrist()
 	{
 		storedGrist = new GristSet();
+		this.setChanged();
 	}
 	
 	@Override
