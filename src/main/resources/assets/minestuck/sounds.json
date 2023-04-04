@@ -781,6 +781,13 @@
       "minecraft:block/beehive/exit"
     ]
   },
+  "block.cruxtruder.dowel": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.cruxtruder_dowel",
+    "sounds": [
+      "minestuck:random/cruxtruder_dowel"
+    ]
+  },
   "block.horse_clock.chime": {
     "category": "block",
     "subtitle": "subtitles.minestuck.horse_clock_chime",
