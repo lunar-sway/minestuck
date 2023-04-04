@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:unbreakable_katana"
+  },
+  "input2": {
+    "item": "minecraft:bamboo"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:pillow_talk"
+  }
+}

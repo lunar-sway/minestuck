@@ -1,0 +1,14 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 113,
+    "minestuck:marble": 180,
+    "minestuck:shale": 113,
+    "minestuck:sulfur": 180,
+    "minestuck:tar": 225,
+    "minestuck:uranium": 1
+  },
+  "ingredient": {
+    "item": "minestuck:princess_peril"
+  }
+}

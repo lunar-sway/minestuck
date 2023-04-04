@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:fan"
+  },
+  "input2": {
+    "item": "minestuck:razor_blade"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:razor_fan"
+  }
+}

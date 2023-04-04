@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:sunray_harvester"
+  },
+  "input2": {
+    "item": "minestuck:raw_uranium"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:green_sun_rayreaper"
+  }
+}

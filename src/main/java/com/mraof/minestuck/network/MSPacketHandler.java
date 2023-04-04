@@ -56,8 +56,8 @@ public class MSPacketHandler
 		registerMessage(EditmodeFillPacket.Cursor.class, EditmodeFillPacket.Cursor::decode);
 		registerMessage(EditmodeFillPacket.Reset.class, EditmodeFillPacket.Reset::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
-		registerMessage(SetMachineRunningPacket.class, SetMachineRunningPacket::decode);
-		registerMessage(SetMachineLoopingPacket.class, SetMachineLoopingPacket::decode);
+		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
+		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);
