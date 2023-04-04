@@ -90,7 +90,9 @@ public final class EditmodeFillPacket
 			BlockState block = level.getBlockState(pos);
 			ItemStack stack = block.getCloneItemStack(null, level, pos, player);
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), level, DeployList.EntryLists.ATHENEUM);
-			if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
+			if(block.isAir())
+				return false;
+			else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 			{
 				
 				GristSet cost = new GristSet(GristTypes.BUILD,1);
@@ -118,7 +120,7 @@ public final class EditmodeFillPacket
 				return cost;
 			
 		}
-		else if (block.isAir() && (MinestuckConfig.SERVER.gristRefund.get() || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
+		else if (!block.isAir() && (MinestuckConfig.SERVER.gristRefund.get() || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			return entry.getCurrentCost(connection).scale(-1);
 	
 		return new GristSet();
@@ -264,7 +266,7 @@ public final class EditmodeFillPacket
 						
 						BlockPos pos = new BlockPos(x, y, z);
 						
-						if(editModeDestroyCheck(player.getLevel(), player, pos) && !player.getLevel().getBlockState(pos).isAir())
+						if(editModeDestroyCheck(player.getLevel(), player, pos))
 						{
 							player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 							
