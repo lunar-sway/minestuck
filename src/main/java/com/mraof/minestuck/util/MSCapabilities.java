@@ -46,7 +46,7 @@ public class MSCapabilities
 		{
 			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "musicplaying"),
 					new MusicPlayingCapabilityProvider());
-			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "edittools"),
+			attachCapabilitiesEvent.addCapability(new ResourceLocation(Minestuck.MOD_ID, "edit_tools"),
 					new EditToolsCapabilityProvider());
 		}
 	}

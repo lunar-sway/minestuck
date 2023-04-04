@@ -74,7 +74,7 @@ public class EditToolDrag
 			return;
 		
 		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
@@ -142,7 +142,7 @@ public class EditToolDrag
 			return;
 		
 		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on client-side!"));
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
 		
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
@@ -276,7 +276,7 @@ public class EditToolDrag
 	{
 			ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
 		
-			return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock() instanceof MachineBlock;
+			return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof MachineBlock;
 	}
 	
 	/**
