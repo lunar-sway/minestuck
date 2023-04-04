@@ -132,12 +132,8 @@ public final class EditmodeFillPacket
 		public void encode(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
-			buffer.writeInt(positionStart.getX());
-			buffer.writeInt(positionStart.getY());
-			buffer.writeInt(positionStart.getZ());
-			buffer.writeInt(positionEnd.getX());
-			buffer.writeInt(positionEnd.getY());
-			buffer.writeInt(positionEnd.getZ());
+			buffer.writeBlockPos(positionStart);
+			buffer.writeBlockPos(positionEnd);
 			buffer.writeDouble(hitVector.x);
 			buffer.writeDouble(hitVector.y);
 			buffer.writeDouble(hitVector.z);
@@ -147,8 +143,8 @@ public final class EditmodeFillPacket
 		public static Fill decode(FriendlyByteBuf buffer)
 		{
 			boolean isDragging = buffer.readBoolean();
-			BlockPos positionStart = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-			BlockPos positionEnd = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
+			BlockPos positionStart = buffer.readBlockPos();
+			BlockPos positionEnd = buffer.readBlockPos();
 			Vec3 hitVector = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 			Direction side = buffer.readEnum(Direction.class);
 			
