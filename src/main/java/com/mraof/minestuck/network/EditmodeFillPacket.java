@@ -177,31 +177,23 @@ public final class EditmodeFillPacket
 			
 			GristSet missingCost = new GristSet();
 			boolean anyBlockPlaced = false;
-			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
+			for(BlockPos pos : BlockPos.betweenClosed(positionStart,positionEnd))
 			{
-				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
+				int c = stack.getCount();
+				//BlockPos pos = new BlockPos(x, y, z);
+				if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
 				{
-					for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
-					{
-						
-						int c = stack.getCount();
-						BlockPos pos = new BlockPos(x, y, z);
-						if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
-						{
-							//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
-							if(player.isCreative())
-								stack.setCount(c);
-							
-							//broadcasts the block-place sounds to other players.
-							SoundType soundType = ((BlockItem)stack.getItem()).getBlock().defaultBlockState().getSoundType();
-							player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
-							
-							anyBlockPlaced = true;
-						}
-						else
-							missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
-					}
-				}
+					//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
+					if(player.isCreative())
+						stack.setCount(c);
+					
+					//broadcasts the block-place sounds to other players.
+					SoundType soundType = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType();
+					player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+					
+					anyBlockPlaced = true;
+				} else
+					missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
 			}
 			if(anyBlockPlaced)
 			{
@@ -257,29 +249,20 @@ public final class EditmodeFillPacket
 			
 			GristSet missingCost = new GristSet();
 			boolean anyBlockDestroyed = false;
-			for(int x = Math.min(positionStart.getX(), positionEnd.getX()); x <= Math.max(positionStart.getX(), positionEnd.getX()); x++)
+			for(BlockPos pos : BlockPos.betweenClosed(positionStart,positionEnd))
 			{
-				for(int y = Math.min(positionStart.getY(), positionEnd.getY()); y <= Math.max(positionStart.getY(), positionEnd.getY()); y++)
+				
+				if(editModeDestroyCheck(player.getLevel(), player, pos))
 				{
-					for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
-					{
-						
-						BlockPos pos = new BlockPos(x, y, z);
-						
-						if(editModeDestroyCheck(player.getLevel(), player, pos))
-						{
-							player.gameMode.destroyAndAck(pos, 3, "creative destroy");
-							
-							//broadcasts block-break particles and sounds to other players.
-							player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
-							player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
-							
-							anyBlockDestroyed = true;
-						}
-						else
-							missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
-					}
-				}
+					player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+					
+					//broadcasts block-break particles and sounds to other players.
+					player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
+					player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
+					
+					anyBlockDestroyed = true;
+				} else
+					missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
 			}
 			if(anyBlockDestroyed)
 			{
