@@ -21,11 +21,9 @@ public class ExtraInfoBlockItem extends BlockItem
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
-		String itemString = stack.getItem().toString();
 		if(Screen.hasShiftDown())
-		{
-			tooltip.add(Component.translatable("block.minestuck." + itemString + ".additional_info"));
-		} else
+			tooltip.add(Component.translatable(this.getDescriptionId() + ".additional_info"));
+		else
 			tooltip.add(Component.translatable("message.shift_for_more_info"));
 	}
 }
