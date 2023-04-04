@@ -14,6 +14,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Keeps track of which land types are available for random choice and under which circumstances they are available.
+ * Loaded from json by {@link LandTypeSelectionLoader}.
+ * See "data/minestuck/minestuck/terrain_land_types.json" and "data/minestuck/minestuck/title_land_types.json".
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public final class LandTypeSelection
@@ -66,6 +71,10 @@ public final class LandTypeSelection
 				.collect(Collectors.toSet());
 	}
 	
+	/**
+	 * A group of land types. Land types in the same group will be considered equal when randomly selecting land types,
+	 * i.e. when prioritizing unused or less used land types.
+	 */
 	record Group<A>(Either<List<A>, TagKey<A>> entries)
 	{
 		public static <A> Group<A> of(List<A> list)

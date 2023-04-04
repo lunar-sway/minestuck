@@ -32,6 +32,13 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
+/**
+ * Loads data for {@link LandTypeSelection} from datapack jsons. Jsons are loaded in a way to support both extending and replacing.
+ * For example, to extend the terrain land type list, declare the json under your namespace:
+ *     "data/<your-namespace>/minestuck/terrain_land_types.json".
+ * To replace a list, declare it under the same namespace as the replaced list. To replace minestuck:
+ *     "data/minestuck/minestuck/terrain_land_types.json".
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
