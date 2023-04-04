@@ -100,7 +100,7 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 			BlockState state = level.getBlockState(pos);
 			boolean hasPower = level.hasNeighborSignal(pos);
 			
-			if(state.getValue(POWERED) != level.hasNeighborSignal(pos))
+			if(state.getValue(POWERED) != hasPower)
 				level.setBlockAndUpdate(pos, state.setValue(POWERED, hasPower));
 		}
 	}
