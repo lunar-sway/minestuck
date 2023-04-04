@@ -1,5 +1,6 @@
 package com.mraof.minestuck.world.lands.gen;
 
+import com.mojang.datafixers.util.Either;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -17,10 +18,10 @@ import java.util.stream.Stream;
 @MethodsReturnNonnullByDefault
 public final class LandTypeSelection
 {
-	private static List<LandsSupplier<TerrainLandType>> terrainGroups;
-	private static Map<EnumAspect, List<LandsSupplier<TitleLandType>>> titleByAspect;
+	private static List<Group<TerrainLandType>> terrainGroups;
+	private static Map<EnumAspect, List<Group<TitleLandType>>> titleByAspect;
 	
-	static void setData(List<LandsSupplier<TerrainLandType>> terrainGroups, Map<EnumAspect, List<LandsSupplier<TitleLandType>>> titleByAspect)
+	static void setData(List<Group<TerrainLandType>> terrainGroups, Map<EnumAspect, List<Group<TitleLandType>>> titleByAspect)
 	{
 		LandTypeSelection.terrainGroups = terrainGroups;
 		LandTypeSelection.titleByAspect = titleByAspect;
@@ -28,20 +29,20 @@ public final class LandTypeSelection
 	
 	public static Collection<List<TerrainLandType>> terrainAlternatives()
 	{
-		return terrainGroups.stream().map(LandsSupplier::get).toList();
+		return terrainGroups.stream().map(Group::getEntries).toList();
 	}
 	
 	public static Collection<List<TitleLandType>> titleAlternatives(EnumAspect aspect)
 	{
-		return titleByAspect.get(aspect).stream().map(LandsSupplier::get).toList();
+		return titleByAspect.get(aspect).stream().map(Group::getEntries).toList();
 	}
 	
 	public static Set<TitleLandType> compatibleTitleTypes(TerrainLandType terrainType)
 	{
 		return titleByAspect.values().stream()
 				.flatMap(list ->
-						list.stream().flatMap(supplier ->
-								supplier.get().stream().filter(titleType ->
+						list.stream().flatMap(group ->
+								group.getEntries().stream().filter(titleType ->
 										titleType.isAspectCompatible(terrainType))))
 				.collect(Collectors.toSet());
 	}
@@ -49,8 +50,8 @@ public final class LandTypeSelection
 	public static Set<TitleLandType> compatibleTitleTypes(TerrainLandType terrainType, EnumAspect aspect)
 	{
 		return titleByAspect.get(aspect).stream()
-				.flatMap(supplier ->
-						supplier.get().stream().filter(titleType ->
+				.flatMap(group ->
+						group.getEntries().stream().filter(titleType ->
 								titleType.isAspectCompatible(terrainType)))
 				.collect(Collectors.toSet());
 	}
@@ -65,35 +66,30 @@ public final class LandTypeSelection
 				.collect(Collectors.toSet());
 	}
 	
-	sealed interface LandsSupplier<A> permits LandList, LandTag
+	record Group<A>(Either<List<A>, TagKey<A>> entries)
 	{
-		List<A> get();
-		
-		default boolean contains(A element)
+		public static <A> Group<A> of(List<A> list)
 		{
-			return this.get().contains(element);
+			return new Group<>(Either.left(list));
 		}
 		
-	}
-	
-	record LandList<A>(List<A> landTypes) implements LandsSupplier<A>
-	{
-		@Override
-		public List<A> get()
+		public static <A> Group<A> of(TagKey<A> tag)
 		{
-			return this.landTypes;
+			return new Group<>(Either.right(tag));
 		}
 		
-	}
-	
-	record LandTag<A>(TagKey<A> tag) implements LandsSupplier<A>
-	{
-		@Override
-		public List<A> get()
+		public List<A> getEntries()
 		{
-			IForgeRegistry<A> registry = RegistryManager.ACTIVE.getRegistry(this.tag.registry());
-			
-			return Objects.requireNonNull(registry.tags()).getTag(this.tag).stream().toList();
+			return this.entries.map(list -> list,
+					tag -> {
+						IForgeRegistry<A> registry = RegistryManager.ACTIVE.getRegistry(tag.registry());
+						return Objects.requireNonNull(registry.tags()).getTag(tag).stream().toList();
+					});
+		}
+		
+		public boolean contains(A landType)
+		{
+			return this.getEntries().contains(landType);
 		}
 	}
 }

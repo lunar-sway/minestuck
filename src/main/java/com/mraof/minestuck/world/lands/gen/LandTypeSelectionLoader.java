@@ -47,7 +47,7 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 	
 	private record GroupData(Either<List<ResourceLocation>, ExtraCodecs.TagOrElementLocation> value)
 	{
-		private <A> Optional<LandTypeSelection.LandsSupplier<A>> lookup(IForgeRegistry<A> registry)
+		private <A> Optional<LandTypeSelection.Group<A>> lookup(IForgeRegistry<A> registry)
 		{
 			return this.value.map(list -> {
 				List<A> elements = new ArrayList<>();
@@ -57,15 +57,15 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 				if(elements.isEmpty())
 					return Optional.empty();
 				else
-					return Optional.of(new LandTypeSelection.LandList<>(elements));
+					return Optional.of(LandTypeSelection.Group.of(elements));
 			}, location -> {
 				if(location.tag())
 				{
 					TagKey<A> tag = TagKey.create(registry.getRegistryKey(), location.id());
-					return Optional.of(new LandTypeSelection.LandTag<>(tag));
+					return Optional.of(LandTypeSelection.Group.of(tag));
 				}
 				else
-					return getOrLog(registry, location.id()).map(landType -> new LandTypeSelection.LandList<>(Collections.singletonList(landType)));
+					return getOrLog(registry, location.id()).map(landType -> LandTypeSelection.Group.of(Collections.singletonList(landType)));
 			});
 		}
 		
@@ -141,17 +141,17 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 	@Override
 	protected void apply(RawData data, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableList.Builder<LandTypeSelection.LandsSupplier<TerrainLandType>> terrainGroupsBuilder = ImmutableList.builder();
+		ImmutableList.Builder<LandTypeSelection.Group<TerrainLandType>> terrainGroupsBuilder = ImmutableList.builder();
 		
 		for(GroupData terrainGroup : data.terrainTypeData())
 			terrainGroup.lookup(LandTypes.TERRAIN_REGISTRY.get()).ifPresent(terrainGroupsBuilder::add);
 		
 		
-		ImmutableMap.Builder<EnumAspect, List<LandTypeSelection.LandsSupplier<TitleLandType>>> titleMapBuilder = ImmutableMap.builder();
+		ImmutableMap.Builder<EnumAspect, List<LandTypeSelection.Group<TitleLandType>>> titleMapBuilder = ImmutableMap.builder();
 		
 		for(EnumAspect aspect : EnumAspect.values())
 		{
-			ImmutableList.Builder<LandTypeSelection.LandsSupplier<TitleLandType>> titleGroupsBuilder = ImmutableList.builder();
+			ImmutableList.Builder<LandTypeSelection.Group<TitleLandType>> titleGroupsBuilder = ImmutableList.builder();
 			
 			for(GroupData titleGroup : data.titleTypeData().get(aspect))
 				titleGroup.lookup(LandTypes.TITLE_REGISTRY.get()).ifPresent(titleGroupsBuilder::add);
