@@ -22,6 +22,9 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 {
 	public static final int GROUP_SHOOT_COOLDOWN = 20; //how long it should take before another nearby mob can shoot fireballs
 	
+	/**
+	 * Block position that the target was standing at when start() was ran
+	 */
 	private BlockPos initialTargetPos;
 	
 	public FireballShootGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange, int actionCooldown)
@@ -32,7 +35,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 	@Override
 	public boolean canUse()
 	{
-		return super.canUse() && entity.hasFinishedCooldown() && noAlliesObstructing(this.entity.getTarget()); //the super implies the target is not null
+		return super.canUse() && entity.hasFinishedCooldown() && noEntitiesObstructing(this.entity.getTarget()); //the super implies the target is not null
 	}
 	
 	@Override
@@ -42,6 +45,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 		
 		initialTargetPos = Objects.requireNonNull(this.entity.getTarget()).blockPosition();
 		
+		//code block handles group cooldown
 		Level level = this.entity.getLevel();
 		AABB aabb = new AABB(this.entity.blockPosition()).inflate(8);
 		List<AttackingAnimatedEntity> entityList = level.getEntitiesOfClass(AttackingAnimatedEntity.class, aabb);
@@ -63,6 +67,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 		Level level = entity.getLevel();
 		level.playSound(null, this.entity.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 1, 1);
 		
+		//fireball is shot towards the initial target position
 		if(initialTargetPos != null)
 		{
 			double distanceX = target.getX() - attacker.getX();
@@ -80,8 +85,9 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 		}
 	}
 	
-	private boolean noAlliesObstructing(LivingEntity target)
+	private boolean noEntitiesObstructing(LivingEntity target)
 	{
+		//simulates the basilisk looking at the target, before setting its head rotation back to the way it was
 		float initialYHeadRotO = this.entity.yHeadRotO;
 		float initialYBodyRot = this.entity.yBodyRot;
 		float initialYBodyRotO = this.entity.yBodyRotO;

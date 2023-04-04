@@ -36,6 +36,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	{
 		super.start();
 		
+		//code block handles group cooldown
 		Level level = this.entity.getLevel();
 		AABB aabb = new AABB(this.entity.blockPosition()).inflate(4);
 		List<AttackingAnimatedEntity> entityList = level.getEntitiesOfClass(AttackingAnimatedEntity.class, aabb);
