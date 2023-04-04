@@ -34,6 +34,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	public void addGristAmount(GristAmount gristAmount)
 	{
 		storedGrist.addGrist(gristAmount);
+		this.setChanged();
 	}
 	
 	/**
