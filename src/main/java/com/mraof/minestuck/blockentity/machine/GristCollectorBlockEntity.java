@@ -28,7 +28,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	
 	public GristSet getStoredGrist()
 	{
-		return storedGrist;
+		return storedGrist.asImmutable();
 	}
 	
 	public void addGristAmount(GristAmount gristAmount)
