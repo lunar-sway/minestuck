@@ -154,7 +154,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -232,7 +232,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -296,7 +296,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is empty on player " + player.getDisplayName().toString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
