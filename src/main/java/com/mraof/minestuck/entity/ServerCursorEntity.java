@@ -33,9 +33,11 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	
 	private final AnimationFactory factory = new AnimationFactory(this);
 	
-	//These two are only used server-side to make sure cursors are removed properly.
+	//These are only used server-side to make sure cursors are removed properly.
 	private int despawnTimer = 0;
 	private boolean removalFlag = false;
+	private final int CURSOR_DESPAWN_TICKS = 40; //The time, in ticks, that it takes for a Sburb editmode cursor to despawn after not receiving any updates.
+	private final int CURSOR_REMOVAL_PADDING = 3; //The time added, in ticks, after the removal animation has finished, but before the cursor is removed.
 	
 	// Specifies the current animation phase
 	@Nonnull
@@ -126,11 +128,11 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 			
 			if(!removalFlag)
 			{
-				if(despawnTimer >= MinestuckConfig.SERVER.cursorDespawnTime.get())
+				if(despawnTimer >= CURSOR_DESPAWN_TICKS)
 					this.remove(RemovalReason.DISCARDED); //After cursorDespawnTime ticks of the cursor not receiving updates, the cursor will be automatically removed.
 			} else
 			{
-				if(despawnTimer >= animation.length + MinestuckConfig.SERVER.cursorRemovalPadding.get() + 1)
+				if(despawnTimer >= animation.length + CURSOR_REMOVAL_PADDING + 1)
 					this.remove(RemovalReason.DISCARDED); //cursorRemovalPadding ticks after the animation is done (+1 tick so the client can receive the animation), remove the cursor.
 			}
 		}
