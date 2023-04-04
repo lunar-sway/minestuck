@@ -222,12 +222,8 @@ public final class EditmodeFillPacket
 		public void encode(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
-			buffer.writeInt(positionStart.getX());
-			buffer.writeInt(positionStart.getY());
-			buffer.writeInt(positionStart.getZ());
-			buffer.writeInt(positionEnd.getX());
-			buffer.writeInt(positionEnd.getY());
-			buffer.writeInt(positionEnd.getZ());
+			buffer.writeBlockPos(positionStart);
+			buffer.writeBlockPos(positionEnd);
 			buffer.writeDouble(hitVector.x);
 			buffer.writeDouble(hitVector.y);
 			buffer.writeDouble(hitVector.z);
