@@ -55,6 +55,7 @@ public class GlowingMushroomVinesBlock extends Block
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos)
 	{
+		//will be updated to only survive if the block above is another mushroom vine or shadewood leaf block
 		return direction == Direction.UP && !this.canSurvive(state, level, currentPos)
 				? Blocks.AIR.defaultBlockState()
 				: super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
