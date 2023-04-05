@@ -104,13 +104,17 @@ public class ComputerScreen extends Screen
 		var xOffset = (width-xSize)/2;
 		var yOffset = (height-ySize)/2;
 		
-		// TODO WRAP ONCE LONG ENOUGH
-		for(Entry<Integer, Boolean> entry : be.installedPrograms.entrySet())
-			if(entry.getValue())
-				icons.add( addRenderableWidget(new ComputerIcon(
-						xOffset+15 + Math.floorDiv(entry.getKey(), 5)*20,
-						yOffset+44 + entry.getKey()%5 *20,
-						entry.getKey())));
+		int programCount = be.installedPrograms.size();
+		for(Entry<Integer, Boolean> currentProgram : be.installedPrograms.entrySet())
+		{
+			if(currentProgram.getValue())
+			{
+				icons.add(addRenderableWidget(
+						new ComputerIcon(xOffset + 15 + Math.floorDiv(programCount, 5) * 20, yOffset + 24 + programCount % 5 * 20, currentProgram.getKey())
+				));
+				programCount--;
+			}
+		}
 	}
 	
 	protected void setProgram(int id)
