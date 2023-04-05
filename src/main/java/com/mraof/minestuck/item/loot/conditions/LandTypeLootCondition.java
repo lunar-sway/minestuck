@@ -58,9 +58,12 @@ public class LandTypeLootCondition implements LootItemCondition
 		
 		LandTypePair aspects = LandTypePair.getTypes(level).orElse(null);
 		
-		if(aspects != null && (terrainTypes.contains(aspects.getTerrain()) || titleTypes.contains(aspects.getTitle())
-				|| terrainTag != null && aspects.getTerrain().is(terrainTag) || titleTag != null && aspects.getTitle().is(titleTag)))
-				return !inverted;
+		if(aspects != null &&
+				(terrainTypes.contains(aspects.getTerrain())
+						|| titleTypes.contains(aspects.getTitle())
+						|| terrainTag != null && aspects.getTerrain().is(terrainTag)
+						|| titleTag != null && aspects.getTitle().is(titleTag)))
+			return !inverted;
 		
 		return inverted;
 	}
