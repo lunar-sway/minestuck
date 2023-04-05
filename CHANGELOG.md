@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Large cake blocks that are used to make large cake Features in Cake lands
 - Grist costs for additional common Forge metal ingot/ore item tags
 - Grist Collector block
+- New expandable tooltips for puzzle related blocks
 
 ### Changed
 
@@ -28,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
+- Minor tweaks to tooltips of some existing puzzle related blocks
 
 ### Removed
 
@@ -35,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil
 
 ## [Unreleased]
 
