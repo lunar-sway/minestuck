@@ -129,7 +129,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.theme.getTextColor());
+			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor());
 		else
 			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, 4210752);
 	}
@@ -177,7 +177,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		{
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
-			RenderSystem.setShaderTexture(0, gui.be.theme.getTexture());
+			RenderSystem.setShaderTexture(0, gui.be.getTheme().getTexture());
 			blit(poseStack, x, y, 158+(active?0:20), reverse?0:20, 20, 20);
 		}
 	}

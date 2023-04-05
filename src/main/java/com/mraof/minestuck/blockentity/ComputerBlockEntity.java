@@ -67,7 +67,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
-	public Theme theme = Theme.DEFAULT;
+	private Theme theme = Theme.DEFAULT;
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -254,6 +254,18 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		latestmessage.put(1, message);
 		setChanged();
 		markBlockForUpdate();
+	}
+	
+	@Override
+	public Theme getTheme()
+	{
+		return theme;
+	}
+	
+	@Override
+	public void setTheme(Theme theme)
+	{
+		this.theme = theme;
 	}
 	
 	public void burnDisk(int programId)

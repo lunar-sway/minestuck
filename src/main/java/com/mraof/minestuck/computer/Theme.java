@@ -38,7 +38,7 @@ public enum Theme
 	}
 	public String getName()
 	{
-		return "themes."+this.name().toLowerCase()+".name";
+		return "theme."+this.name().toLowerCase()+".name";
 	}
 	
 	private static ResourceLocation locationForName(String name)

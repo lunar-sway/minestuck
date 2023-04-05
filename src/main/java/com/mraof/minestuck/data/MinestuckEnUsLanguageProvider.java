@@ -1663,14 +1663,14 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		
-		add("themes.default.name", "Default");
-		add("themes.pesterchum.name", "Pesterhchum");
-		add("themes.trollian.name", "Trollian");
-		add("themes.crocker.name", "Crocker");
-		add("themes.typheus.name", "Typheus");
-		add("themes.cetus.name", "Cetus");
-		add("themes.hephaestus.name", "Hephaestus");
-		add("themes.echidna.name", "Echidna");
+		add(Theme.DEFAULT.getName(), "Default");
+		add(Theme.PESTERCHUM.getName(), "Pesterhchum");
+		add(Theme.TROLLIAN.getName(), "Trollian");
+		add(Theme.CROCKER.getName(), "Crocker");
+		add(Theme.TYPHEUS.getName(), "Typheus");
+		add(Theme.CETUS.getName(), "Cetus");
+		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
+		add(Theme.ECHIDNA.getName(), "Echidna");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");

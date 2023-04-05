@@ -20,7 +20,7 @@ public class SettingsApp extends ButtonListProgram
 		var list = new ArrayList<UnlocalizedString>();
 		
 		list.add(new UnlocalizedString(TITLE));
-		list.add(new UnlocalizedString(THEME, I18n.get(be.theme.getName())));
+		list.add(new UnlocalizedString(THEME, I18n.get(be.getTheme().getName())));
 		
 		return list;
 	}
@@ -28,9 +28,10 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
 	{
+		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> be.theme = be.theme.next();
+			case THEME -> be.setTheme(be.getTheme().next());
 		}
 	}
 	

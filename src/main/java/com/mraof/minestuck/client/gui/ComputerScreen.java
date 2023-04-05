@@ -33,7 +33,7 @@ public class ComputerScreen extends Screen
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
 	public final ComputerBlockEntity be;
-	public ComputerProgram program;
+	private ComputerProgram program;
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
@@ -72,7 +72,7 @@ public class ComputerScreen extends Screen
 		if(!bsod)
 		{
 			//desktop background
-			RenderSystem.setShaderTexture(0, this.be.theme.getTexture());
+			RenderSystem.setShaderTexture(0, this.be.getTheme().getTexture());
 			blit(poseStack, xOffset+9, yOffset+38, 0, 0, 158, 120);
 			
 			if(program != null) program.paintGui(poseStack, this, be);
