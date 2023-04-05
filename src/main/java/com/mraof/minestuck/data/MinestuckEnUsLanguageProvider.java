@@ -504,6 +504,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
+		addBlock(MSBlocks.SKAIANET_DENIER, "Skaianet Denier");
+		addBlockTooltip(MSBlocks.SKAIANET_DENIER, "Constantly sends out signals preventing Entry from occurring while it is inside the radius.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
@@ -531,6 +533,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addBlockStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		addBlock(MSBlocks.CARROT_CAKE, "Carrot Cake");
+		addBlock(MSBlocks.LARGE_CAKE, "Large Cake");
+		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");

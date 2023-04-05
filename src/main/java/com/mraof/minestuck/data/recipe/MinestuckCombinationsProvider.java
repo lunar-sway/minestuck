@@ -919,6 +919,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.REVERSE_CAKE.get()).input(Items.CAKE).or().namedInput(Items.GLASS_PANE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.NEGATIVE_CAKE.get()).input(MSBlocks.REVERSE_CAKE.get()).and().input(MSBlocks.FUCHSIA_CAKE.get()).build(consumer);	//Had a drop in creativity, but I guess its fine
 		CombinationRecipeBuilder.of(MSBlocks.CARROT_CAKE.get()).input(Items.CAKE).or().input(Items.CARROT).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.LARGE_CAKE.get()).input(Items.CAKE).or().input(Items.BONE_MEAL).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE.get()).input(MSItems.LARGE_CAKE.get()).and().input(Items.PINK_DYE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.ROCK_COOKIE.get()).input(Items.COOKIE).and().namedInput(Items.STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ROCK_COOKIE.get()).input(Items.COOKIE).and().namedInput(Items.COBBLESTONE).build(consumer);

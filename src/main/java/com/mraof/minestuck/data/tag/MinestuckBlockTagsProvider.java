@@ -171,6 +171,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(SENDIFICATOR.get());
 		needsWoodPickaxe(GRIST_WIDGET.get());
 		needsWoodPickaxe(URANIUM_COOKER.get());
+		needsWoodPickaxe(SKAIANET_DENIER.get());
 		
 		tag(MINEABLE_WITH_AXE).add(WOODEN_CACTUS.get(), MIRROR.get());
 		needsWoodPickaxe(BLENDER.get());

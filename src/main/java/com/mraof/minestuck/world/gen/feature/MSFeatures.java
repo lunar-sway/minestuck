@@ -50,6 +50,7 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<BlockStateConfiguration>> LEAFLESS_TREE = REGISTER.register("leafless_tree", () -> new LeaflessTreeFeature(BlockStateConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<ProbabilityFeatureConfiguration>> CAKE = REGISTER.register("cake", () -> new CakeFeature(ProbabilityFeatureConfiguration.CODEC));
+	public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_CAKE = REGISTER.register("large_cake", () -> new LargeCakeFeature(NoneFeatureConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> RABBIT_PLACEMENT = REGISTER.register("rabbit_placement", () -> new RabbitPlacementFeature(NoneFeatureConfiguration.CODEC));
 	
