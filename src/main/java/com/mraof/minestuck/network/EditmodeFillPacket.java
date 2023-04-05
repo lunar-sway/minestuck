@@ -25,9 +25,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class EditmodeFillPacket
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static boolean editModePlaceCheck(Level level, Player player, InteractionHand hand)
 	{
@@ -154,7 +157,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -232,7 +235,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -296,7 +299,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 			
 			cap.setEditDragging(isDown);
 			cap.setEditPos1(positionStart);
@@ -321,7 +324,7 @@ public final class EditmodeFillPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!"));
+			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 			
 			ServerEditHandler.removeCursorEntity(player, true);
 			cap.resetDragTools();
