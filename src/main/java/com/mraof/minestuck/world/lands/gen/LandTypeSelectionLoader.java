@@ -123,29 +123,21 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 	
 	private static Optional<List<GroupData>> parseTerrainGroupsFromNamespace(ResourceManager resourceManager, String namespace)
 	{
-		ResourceLocation location = new ResourceLocation(namespace, TERRAIN_PATH);
-		return resourceManager.getResource(location).flatMap(resource -> {
-			try(Reader reader = resource.openAsReader())
-			{
-				JsonElement json = JsonParser.parseReader(reader);
-				return TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json)
-						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", location, message));
-				
-			} catch(IOException ignored)
-			{
-				return Optional.empty();
-			}
-		});
+		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, TERRAIN_PATH), TERRAIN_DATA_CODEC);
 	}
 	
 	private static Optional<Map<EnumAspect, List<GroupData>>> parseTitleGroupsFromNamespace(ResourceManager resourceManager, String namespace)
 	{
-		ResourceLocation location = new ResourceLocation(namespace, TITLE_PATH);
+		return parseCodecDataFromLocation(resourceManager, new ResourceLocation(namespace, TITLE_PATH), TITLE_DATA_CODEC);
+	}
+	
+	private static <T> Optional<T> parseCodecDataFromLocation(ResourceManager resourceManager, ResourceLocation location, Codec<T> codec)
+	{
 		return resourceManager.getResource(location).flatMap(resource -> {
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				return TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json)
+				return codec.parse(JsonOps.INSTANCE, json)
 						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", location, message));
 				
 			} catch(IOException ignored)
