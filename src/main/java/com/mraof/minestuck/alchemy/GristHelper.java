@@ -171,9 +171,7 @@ public class GristHelper
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
 		
-		newCache.addGrist(set);
-		long capacity = data.getEcheladder().getGristCapacity();
-		GristSet excessGrist = newCache.removeOverCapacity(capacity);
+		GristSet excessGrist = newCache.addWithinCapacity(set, data.getEcheladder().getGristCapacity());
 		
 		data.setGristCache(newCache);
 		return excessGrist;

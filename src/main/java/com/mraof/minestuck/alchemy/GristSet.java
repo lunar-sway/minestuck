@@ -10,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
@@ -196,25 +197,39 @@ public class GristSet
 	}
 	
 	/**
-	 * Removes grist of any type exceeding the capacity until all types are at or below the given capacity.
-	 * The grist amounts that were removed is returned.
+	 * Adds or removes grist such that the grist does not exceed the given capacity or falls below 0.
+	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
+	 * Returns any excess grist.
 	 */
-	public GristSet removeOverCapacity(long capacity)
+	public GristSet addWithinCapacity(GristSet grist, long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
-		GristSet excess = new GristSet();
-		for(GristAmount amount : this.getAmounts())
+		GristSet remainder = new GristSet();
+		
+		for(GristAmount amount : grist.getAmounts())
 		{
-			long excessAmount = amount.getAmount() - capacity;
-			if(0 < excessAmount)
+			if(amount.getAmount() > 0)
 			{
-				this.addGrist(amount.getType(), -excessAmount);
-				excess.addGrist(amount.getType(), excessAmount);
+				long toAdd = Mth.clamp(capacity - this.getGrist(amount.getType()), 0, amount.getAmount());
+				long remainingAmount = amount.getAmount() - toAdd;
+				if(toAdd != 0)
+					this.addGrist(amount.getType(), toAdd);
+				if(remainingAmount != 0)
+					remainder.addGrist(amount.getType(), remainingAmount);
+			} else if(amount.getAmount() < 0)
+			{
+				long toAdd = Mth.clamp(-this.getGrist(amount.getType()), amount.getAmount(), 0);
+				long remainingAmount = amount.getAmount() - toAdd;
+				if(toAdd != 0)
+					this.addGrist(amount.getType(), toAdd);
+				if(remainingAmount != 0)
+					remainder.addGrist(amount.getType(), remainingAmount);
 			}
 		}
-		return excess;
+		
+		return remainder;
 	}
 	
 	/**
