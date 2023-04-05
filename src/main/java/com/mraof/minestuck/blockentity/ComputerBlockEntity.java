@@ -16,6 +16,8 @@ import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -73,9 +75,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		super.load(nbt);
 		if(nbt.contains("programs"))
 		{
-			CompoundTag programs = nbt.getCompound("programs");
-			for(String name : programs.getAllKeys())
-				installedPrograms.put(programs.getInt(name), true);
+			for(int id : nbt.getIntArray("programs"))
+				installedPrograms.put(id, true);
 		}
 		
 		latestmessage.clear();
@@ -104,12 +105,12 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		CompoundTag programs = new CompoundTag();
+		IntArrayTag programs = new IntArrayTag(new int[]{});
 		
 		for(Entry<Integer,Boolean> program : installedPrograms.entrySet())
 		{
 			int id = program.getKey();
-			programs.putInt("program"+id, id);
+			programs.add(IntTag.valueOf(id));
 		}
 		
 		for(Entry<Integer, String> e : latestmessage.entrySet())
