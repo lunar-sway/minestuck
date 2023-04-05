@@ -7,11 +7,11 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.IColored;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -267,7 +267,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(player, cost);
+		boolean canAfford = PlayerSavedData.getData(player).getGristCache().canAfford(cost);
 		
 		if(canAfford)
 		{

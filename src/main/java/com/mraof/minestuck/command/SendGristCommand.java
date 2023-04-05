@@ -8,6 +8,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -39,7 +40,7 @@ public class SendGristCommand
 		ServerPlayer player = source.getPlayerOrException();
 		if(isPermittedFor(player, target))
 		{
-			if(GristHelper.canAfford(player, grist))
+			if(PlayerSavedData.getData(player).getGristCache().canAfford(grist))
 			{
 				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.SENDGRIST);
 				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(target), grist, GristHelper.EnumSource.SENDGRIST);

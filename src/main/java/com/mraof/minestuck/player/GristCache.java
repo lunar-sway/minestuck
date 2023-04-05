@@ -1,9 +1,6 @@
 package com.mraof.minestuck.player;
 
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -16,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 
 import java.util.Objects;
 
@@ -32,6 +30,19 @@ public final class GristCache
 		this.gristSet = new ImmutableGristSet(GristTypes.BUILD, 20);
 	}
 	
+	public NonNegativeGristSet getCapacitySet()
+	{
+		long capacity = data.getEcheladder().getGristCapacity();
+		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
+		for(GristType type : GristTypes.values())
+		{
+			long amountInCache = this.getGristSet().getGrist(type);
+			if(amountInCache < capacity)
+				capacitySet.addGrist(type, capacity - amountInCache);
+		}
+		return capacitySet;
+	}
+	
 	void read(CompoundTag nbt)
 	{
 		gristSet = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
@@ -45,6 +56,17 @@ public final class GristCache
 	public ImmutableGristSet getGristSet()
 	{
 		return this.gristSet;
+	}
+	
+	public long getRemainingCapacity(GristType type)
+	{
+		return Math.max(0, data.getEcheladder().getGristCapacity() - gristSet.getGrist(type));
+	}
+	
+	public boolean canAfford(GristSet cost)
+	{
+		//TODO must also check the capacity for negative costs
+		return GristHelper.canAfford(this.gristSet, cost);
 	}
 	
 	public void addWithGutter(GristSet set)
@@ -72,7 +94,7 @@ public final class GristCache
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = newCache.addWithinCapacity(set, data.getEcheladder().getGristCapacity());
+		GristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
 		
 		this.set(newCache);
 		return excessGrist;
@@ -106,5 +128,41 @@ public final class GristCache
 				data.sendGristCacheToEditor();
 			}
 		}
+	}
+	
+	/**
+	 * Adds or removes grist such that the grist does not exceed the given capacity or falls below 0.
+	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
+	 * Returns any excess grist.
+	 */
+	private static GristSet addWithinCapacity(GristSet target, GristSet source, long capacity)
+	{
+		if(capacity < 0)
+			throw new IllegalArgumentException("Capacity under 0 not allowed.");
+		
+		GristSet remainder = new GristSet();
+		
+		for(GristAmount amount : source.getAmounts())
+		{
+			if(amount.getAmount() > 0)
+			{
+				long toAdd = Mth.clamp(capacity - target.getGrist(amount.getType()), 0, amount.getAmount());
+				long remainingAmount = amount.getAmount() - toAdd;
+				if(toAdd != 0)
+					target.addGrist(amount.getType(), toAdd);
+				if(remainingAmount != 0)
+					remainder.addGrist(amount.getType(), remainingAmount);
+			} else if(amount.getAmount() < 0)
+			{
+				long toAdd = Mth.clamp(-target.getGrist(amount.getType()), amount.getAmount(), 0);
+				long remainingAmount = amount.getAmount() - toAdd;
+				if(toAdd != 0)
+					target.addGrist(amount.getType(), toAdd);
+				if(remainingAmount != 0)
+					remainder.addGrist(amount.getType(), remainingAmount);
+			}
+		}
+		
+		return remainder;
 	}
 }

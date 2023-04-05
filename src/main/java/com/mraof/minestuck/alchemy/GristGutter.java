@@ -161,7 +161,7 @@ public class GristGutter
 		
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
-		NonNegativeGristSet capacity = GristHelper.getCapacitySet(data);
+		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
 		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity);
 		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer);
 		if(!remainder.isEmpty())

@@ -7,13 +7,11 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -96,16 +94,6 @@ public class GristHelper
 		return getGrist(level, player, type.get());
 	}
 	
-	public static boolean canAfford(ServerPlayer player, GristSet cost)
-	{
-		return canAfford(PlayerSavedData.getData(player).getGristCache().getGristSet(), cost);
-	}
-	
-	public static boolean canAfford(Level level, PlayerIdentifier player, GristSet cost)
-	{
-		return canAfford(PlayerSavedData.getData(player, level).getGristCache().getGristSet(), cost);
-	}
-	
 	public static boolean canAfford(GristSet base, GristSet cost)
 	{
 		if(base == null || cost == null)
@@ -140,18 +128,6 @@ public class GristHelper
 	{
 		decrease(level, player, set);
 		notify(level.getServer(), player, set, source, false);
-	}
-	
-	public static NonNegativeGristSet getCapacitySet(PlayerData data)
-	{
-		long capacity = data.getEcheladder().getGristCapacity();
-		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
-		for(GristType type : GristTypes.values())
-		{
-			if(data.getGristCache().getGristSet().getGrist(type) < capacity)
-				capacitySet.addGrist(type, capacity - data.getGristCache().getGristSet().getGrist(type));
-		}
-		return capacitySet;
 	}
 	
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)

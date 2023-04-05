@@ -11,6 +11,8 @@ import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.player.GristCache;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -324,7 +326,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache().getGristSet(), cost))
+				if(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache().canAfford(cost))
 				{
 					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
 					
@@ -377,17 +379,19 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			cleanStackNBT(stack, data.connection, event.getLevel());
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
+			GristCache gristCache = PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getLevel()).getGristCache();
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost))
+				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(cost.createMissingMessage());
 					event.setCanceled(true);
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
+			else if(!isBlockItem(stack.getItem()) ||
+					!gristCache.canAfford(GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
 			{
 				event.setCanceled(true);
 			}

@@ -7,6 +7,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -87,7 +88,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			}
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
-			return GristHelper.canAfford(level, owner, cost);
+			return PlayerSavedData.getData(owner, level).getGristCache().canAfford(cost);
 		}
 		else
 		{
@@ -211,7 +212,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scale(lvl);
-					if (!GristHelper.canAfford(level, owner, scale_cost))
+					if (!PlayerSavedData.getData(owner, level).getGristCache().canAfford(scale_cost))
 					{
 						return lvl - 1;
 					}
