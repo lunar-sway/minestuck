@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "e": {
+      "item": "minestuck:energy_core"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "p": {
+      "item": "minestuck:computer_parts"
+    },
+    "r": {
+      "item": "minecraft:lightning_rod"
+    }
+  },
+  "pattern": [
+    "iri",
+    "ipi",
+    "iei"
+  ],
+  "result": {
+    "item": "minestuck:skaianet_denier"
+  }
+}

@@ -56,6 +56,9 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> placed(MSCFeatures.PARCEL_PYXIS,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
 	
+	public static final RegistryObject<PlacedFeature> LARGE_CAKE = REGISTER.register("large_cake", () -> placed(MSCFeatures.LARGE_CAKE,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
+	
 	public static final RegistryObject<PlacedFeature> BLOOD_POOL = REGISTER.register("blood_pool", () -> placed(MSCFeatures.BLOOD_POOL,
 			worldGenModifiers(CountPlacement.of(5), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OIL_POOL = REGISTER.register("oil_pool", () -> placed(MSCFeatures.OIL_POOL,

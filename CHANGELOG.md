@@ -14,6 +14,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 33 new weapons(8 with alternate form)
 - Mirror block
 - Cryptid photo item (alchemy ingredient)
+- Skaianet Denier block that prevents Entry
+- Large cake blocks that are used to make large cake Features in Cake lands
+- Grist costs for additional common Forge metal ingot/ore item tags
+- Grist Collector block
+- New expandable tooltips for puzzle related blocks
 
 ### Changed
 
@@ -23,19 +28,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
+- Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
+- Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
+- Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 
 ### Removed
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
-### Fixed
-
-- Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
-
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil
 
 ## [Unreleased]
 
