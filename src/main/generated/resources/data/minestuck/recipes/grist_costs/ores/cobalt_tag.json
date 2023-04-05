@@ -7,6 +7,6 @@
     "tag": "forge:ores/cobalt"
   },
   "sources": [
-    "#forge:ingots/cobalt"
+    "#forge:raw_materials/cobalt"
   ]
 }
