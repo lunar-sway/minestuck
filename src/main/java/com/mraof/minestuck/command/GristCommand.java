@@ -2,11 +2,10 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
-import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.CommandSourceStack;
@@ -47,7 +46,7 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristSet grist = PlayerSavedData.getData(player).getGristCache();
+			GristSet grist = PlayerSavedData.getData(player).getGristCache().getGristSet();
 			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), grist.asTextComponent()), false);
 		}
 		return players.size();
@@ -77,7 +76,7 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			PlayerSavedData.getData(player).setGristCache(grist);
+			PlayerSavedData.getData(player).getGristCache().setGristSet(grist);
 		}
 		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();

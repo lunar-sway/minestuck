@@ -90,7 +90,7 @@ public class GristHelper
 	 */
 	public static long getGrist(Level level, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.getData(player, level).getGristCache().getGrist(type);
+		return PlayerSavedData.getData(player, level).getGristCache().getGristSet().getGrist(type);
 	}
 	
 	public static long getGrist(Level level, PlayerIdentifier player, Supplier<GristType> type)
@@ -100,12 +100,12 @@ public class GristHelper
 	
 	public static boolean canAfford(ServerPlayer player, GristSet cost)
 	{
-		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
+		return canAfford(PlayerSavedData.getData(player).getGristCache().getGristSet(), cost);
 	}
 	
 	public static boolean canAfford(Level level, PlayerIdentifier player, GristSet cost)
 	{
-		return canAfford(PlayerSavedData.getData(player, level).getGristCache(), cost);
+		return canAfford(PlayerSavedData.getData(player, level).getGristCache().getGristSet(), cost);
 	}
 	
 	public static boolean canAfford(GristSet base, GristSet cost)
@@ -169,11 +169,11 @@ public class GristHelper
 		Objects.requireNonNull(data);
 		Objects.requireNonNull(set);
 		
-		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
+		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache().getGristSet());
 		
 		GristSet excessGrist = newCache.addWithinCapacity(set, data.getEcheladder().getGristCapacity());
 		
-		data.setGristCache(newCache);
+		data.getGristCache().setGristSet(newCache);
 		return excessGrist;
 	}
 	
@@ -183,8 +183,8 @@ public class GristHelper
 		NonNegativeGristSet capacitySet = new NonNegativeGristSet();
 		for(GristType type : GristTypes.values())
 		{
-			if(data.getGristCache().getGrist(type) < capacity)
-				capacitySet.addGrist(type, capacity - data.getGristCache().getGrist(type));
+			if(data.getGristCache().getGristSet().getGrist(type) < capacity)
+				capacitySet.addGrist(type, capacity - data.getGristCache().getGristSet().getGrist(type));
 		}
 		return capacitySet;
 	}
