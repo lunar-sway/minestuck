@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
 - Large cake blocks that are used to make large cake Features in Cake lands
+- Grist costs for additional common Forge metal ingot/ore item tags
 
 ### Changed
 
@@ -25,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
+- Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 
 ### Removed
 

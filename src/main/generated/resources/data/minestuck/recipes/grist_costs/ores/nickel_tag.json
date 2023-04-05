@@ -7,6 +7,6 @@
     "tag": "forge:ores/nickel"
   },
   "sources": [
-    "#forge:ingots/nickel"
+    "#forge:raw_materials/nickel"
   ]
 }

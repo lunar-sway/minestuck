@@ -2,9 +2,9 @@
   "type": "minestuck:source_grist_cost",
   "grist_cost": {},
   "ingredient": {
-    "tag": "forge:ingots/ardite"
+    "tag": "forge:raw_materials/aluminium"
   },
   "sources": [
-    "#forge:raw_materials/ardite"
+    "#forge:raw_materials/aluminum"
   ]
 }

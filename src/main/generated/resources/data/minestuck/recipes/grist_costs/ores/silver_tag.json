@@ -7,6 +7,6 @@
     "tag": "forge:ores/silver"
   },
   "sources": [
-    "#forge:ingots/silver"
+    "#forge:raw_materials/silver"
   ]
 }

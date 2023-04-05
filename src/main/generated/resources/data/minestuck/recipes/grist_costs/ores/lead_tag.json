@@ -7,6 +7,6 @@
     "tag": "forge:ores/lead"
   },
   "sources": [
-    "#forge:ingots/lead"
+    "#forge:raw_materials/lead"
   ]
 }
