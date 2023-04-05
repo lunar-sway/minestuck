@@ -11,7 +11,6 @@ import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class GristHelper
@@ -135,46 +133,13 @@ public class GristHelper
 	 */
 	public static void decrease(Level level, PlayerIdentifier player, GristSet set)
 	{
-		increase(level, player, set.copy().scale(-1));
+		PlayerSavedData.getData(player, level).getGristCache().addWithGutter(set.copy().scale(-1));
 	}
 	
 	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		decrease(level, player, set);
 		notify(level.getServer(), player, set, source, false);
-	}
-	
-	public static void increase(Level level, PlayerIdentifier player, GristSet set)
-	{
-		Objects.requireNonNull(level);
-		Objects.requireNonNull(player);
-		
-		GristSet overflowedGrist = increaseAndReturnExcess(PlayerSavedData.getData(player, level), set);
-		
-		if(!overflowedGrist.isEmpty())
-		{
-			GristGutter gutter = SessionHandler.get(level).getPlayerSession(player).getGristGutter();
-			gutter.addGristFrom(overflowedGrist);
-			ServerPlayer playerEntity = player.getPlayer(level.getServer());
-			if(playerEntity != null && !overflowedGrist.isEmpty())
-			{
-				overflowedGrist.spawnGristEntities(level, playerEntity.getX(), playerEntity.getY(), playerEntity.getZ(), level.random,
-						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, level.random.nextInt(6) > 0 ? 1 : 2);
-			}
-		}
-	}
-	
-	public static GristSet increaseAndReturnExcess(PlayerData data, GristSet set)
-	{
-		Objects.requireNonNull(data);
-		Objects.requireNonNull(set);
-		
-		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache().getGristSet());
-		
-		GristSet excessGrist = newCache.addWithinCapacity(set, data.getEcheladder().getGristCapacity());
-		
-		data.getGristCache().setGristSet(newCache);
-		return excessGrist;
 	}
 	
 	public static NonNegativeGristSet getCapacitySet(PlayerData data)
@@ -191,7 +156,7 @@ public class GristHelper
 	
 	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
-		increase(level, player, set);
+		PlayerSavedData.getData(player, level).getGristCache().addWithGutter(set);
 		notify(level.getServer(), player, set, source, true);
 	}
 	

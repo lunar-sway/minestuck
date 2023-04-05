@@ -76,7 +76,7 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			PlayerSavedData.getData(player).getGristCache().setGristSet(grist);
+			PlayerSavedData.getData(player).getGristCache().set(grist);
 		}
 		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();

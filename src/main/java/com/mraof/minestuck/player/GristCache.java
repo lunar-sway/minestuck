@@ -9,12 +9,15 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+
+import java.util.Objects;
 
 public final class GristCache
 {
@@ -44,7 +47,38 @@ public final class GristCache
 		return this.gristSet;
 	}
 	
-	public void setGristSet(NonNegativeGristSet cache)
+	public void addWithGutter(GristSet set)
+	{
+		GristSet overflowedGrist = this.addWithinCapacity(set);
+		
+		if(!overflowedGrist.isEmpty())
+		{
+			SessionHandler.get(mcServer).getPlayerSession(data.identifier)
+					.getGristGutter().addGristFrom(overflowedGrist);
+			
+			ServerPlayer player = data.getPlayer();
+			if(player != null && !overflowedGrist.isEmpty())
+			{
+				int gusherCount = player.getRandom().nextInt(6) > 0 ? 1 : 2;
+				overflowedGrist.spawnGristEntities(player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
+						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
+			}
+		}
+	}
+	
+	public GristSet addWithinCapacity(GristSet set)
+	{
+		Objects.requireNonNull(set);
+		
+		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
+		
+		GristSet excessGrist = newCache.addWithinCapacity(set, data.getEcheladder().getGristCapacity());
+		
+		this.set(newCache);
+		return excessGrist;
+	}
+	
+	public void set(NonNegativeGristSet cache)
 	{
 		gristSet = cache.asImmutable();
 		data.markDirty();
