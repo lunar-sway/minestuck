@@ -76,7 +76,8 @@ public class MSPacketHandler
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
-		registerMessage(AtheneumPacket.class, AtheneumPacket::decode);
+		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
+		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
 	}
 	
 	private static int nextIndex;

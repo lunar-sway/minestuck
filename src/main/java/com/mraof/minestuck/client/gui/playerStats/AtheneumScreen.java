@@ -69,16 +69,16 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 	{
 		if(xcor >= xOffset + ARROW_X && xcor < xOffset + ARROW_X + 18)
 		{
-			AtheneumPacket packet = null;
+			AtheneumPacket.Scroll packet = null;
 			if(less && ycor >= yOffset + UP_ARROW_Y && ycor < yOffset + UP_ARROW_Y + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = AtheneumPacket.scroll(true);
+				packet = new AtheneumPacket.Scroll(true);
 			}
 			else if(more && ycor >= yOffset + DOWN_ARROW_Y && ycor < yOffset + DOWN_ARROW_Y + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-				packet = AtheneumPacket.scroll(false);
+				packet = new AtheneumPacket.Scroll(false);
 			}
 			if(packet != null)
 			{
@@ -96,11 +96,11 @@ public class AtheneumScreen extends PlayerStatsContainerScreen<AtheneumMenu>
 		{
 			if(pMouseY >= yOffset && pMouseY < yOffset + guiHeight)
 			{
-				AtheneumPacket packet = null;
+				AtheneumPacket.Scroll packet = null;
 				if(less && pDelta > 0)
-					packet = AtheneumPacket.scroll(true);
+					packet = new AtheneumPacket.Scroll(true);
 				else if(more && pDelta < 0)
-					packet = AtheneumPacket.scroll(false);
+					packet = new AtheneumPacket.Scroll(false);
 				
 				if(packet != null)
 				{

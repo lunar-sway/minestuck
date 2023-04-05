@@ -142,11 +142,11 @@ public class AtheneumMenu extends AbstractContainerMenu
 			this.inventory.setItem(i, itemList.get(i));
 		}
 		
-		AtheneumPacket packet = AtheneumPacket.update(itemList, scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size());
+		AtheneumPacket.Update packet = new AtheneumPacket.Update(scroll > 0, INVENTORY_SIZE + (scroll * INVENTORY_COLUMNS) < items.size(), itemList);
 		MSPacketHandler.sendToPlayer(packet, serverPlayer);
 	}
 	
-	public void receiveUpdatePacket(AtheneumPacket packet)
+	public void receiveUpdatePacket(AtheneumPacket.Update packet)
 	{
 		if(!player.level.isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
