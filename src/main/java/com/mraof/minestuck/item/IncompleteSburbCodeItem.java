@@ -185,6 +185,6 @@ public class IncompleteSburbCodeItem extends ReadableSburbCodeItem
 		{
 			tooltip.add(Component.translatable("item.minestuck.sburb_code.additional_info"));
 		} else
-			tooltip.add(Component.translatable("item.minestuck.sburb_code.shift_for_more_info"));
+			tooltip.add(Component.translatable("message.shift_for_more_info"));
 	}
 }

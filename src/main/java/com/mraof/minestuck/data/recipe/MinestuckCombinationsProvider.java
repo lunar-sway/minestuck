@@ -645,6 +645,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		CombinationRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).namedInput(MSItems.CROCKER_SPOON.get()).or().input(MSItems.CAPTCHA_CARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).namedInput(MSItems.CROCKER_FORK.get()).or().input(MSItems.CAPTCHA_CARD.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GRIST_COLLECTOR.get()).input(MSItems.ITEM_MAGNET.get()).or().input(Items.CHEST).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.TRANSPORTALIZER.get()).input(Items.ENDER_PEARL).and().input(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).input(MSItems.CAPTCHA_CARD.get()).and().namedInput(MSBlocks.COMPUTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).input(MSItems.CAPTCHA_CARD.get()).or().namedInput(Items.ENDER_EYE).build(consumer);

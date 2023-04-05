@@ -465,6 +465,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SENDIFICATOR.get());
 		dropSelf(GRIST_WIDGET.get());
 		dropSelf(URANIUM_COOKER.get());
+		dropSelf(GRIST_COLLECTOR.get());
 		dropSelf(SKAIANET_DENIER.get());
 		
 		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);

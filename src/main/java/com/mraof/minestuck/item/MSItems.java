@@ -1026,20 +1026,20 @@ public class MSItems
 	public static final RegistryObject<BlockItem> VARIABLE_SOLID_SWITCH = registerBlockItem(MSBlocks.VARIABLE_SOLID_SWITCH, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH = registerBlockItem(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH = registerBlockItem(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, MSItemGroup.MAIN);
-	public static final RegistryObject<BlockItem> SUMMONER = registerBlockItem(MSBlocks.SUMMONER, MSItemGroup.LANDS);
-	public static final RegistryObject<BlockItem> AREA_EFFECT_BLOCK = registerBlockItem(MSBlocks.AREA_EFFECT_BLOCK, MSItemGroup.LANDS);
-	public static final RegistryObject<BlockItem> PLATFORM_GENERATOR = registerBlockItem(MSBlocks.PLATFORM_GENERATOR, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SUMMONER = registerBlockItem(MSBlocks.SUMMONER, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.LANDS)));
+	public static final RegistryObject<BlockItem> AREA_EFFECT_BLOCK = registerBlockItem(MSBlocks.AREA_EFFECT_BLOCK, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.LANDS)));
+	public static final RegistryObject<BlockItem> PLATFORM_GENERATOR = registerBlockItem(MSBlocks.PLATFORM_GENERATOR, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<BlockItem> PLATFORM_RECEPTACLE = registerBlockItem(MSBlocks.PLATFORM_RECEPTACLE, MSItemGroup.LANDS);
-	public static final RegistryObject<BlockItem> ITEM_MAGNET = registerBlockItem(MSBlocks.ITEM_MAGNET, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> ITEM_MAGNET = registerBlockItem(MSBlocks.ITEM_MAGNET, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<BlockItem> REDSTONE_CLOCK = registerBlockItem(MSBlocks.REDSTONE_CLOCK, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> ROTATOR = registerBlockItem(MSBlocks.ROTATOR, MSItemGroup.MAIN);
-	public static final RegistryObject<BlockItem> TOGGLER = registerBlockItem(MSBlocks.TOGGLER, MSItemGroup.MAIN);
-	public static final RegistryObject<BlockItem> REMOTE_COMPARATOR = registerBlockItem(MSBlocks.REMOTE_COMPARATOR, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> TOGGLER = registerBlockItem(MSBlocks.TOGGLER, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<BlockItem> REMOTE_COMPARATOR = registerBlockItem(MSBlocks.REMOTE_COMPARATOR, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<BlockItem> STRUCTURE_CORE = registerBlockItem(MSBlocks.STRUCTURE_CORE, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FALL_PAD = registerBlockItem(MSBlocks.FALL_PAD, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> FRAGILE_STONE = registerBlockItem(MSBlocks.FRAGILE_STONE, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> SPIKES = registerBlockItem(MSBlocks.SPIKES, MSItemGroup.MAIN);
-	public static final RegistryObject<BlockItem> RETRACTABLE_SPIKES = registerBlockItem(MSBlocks.RETRACTABLE_SPIKES, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> RETRACTABLE_SPIKES = registerBlockItem(MSBlocks.RETRACTABLE_SPIKES, block -> new ExtraInfoBlockItem(block, new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<BlockItem> BLOCK_PRESSURE_PLATE = registerBlockItem(MSBlocks.BLOCK_PRESSURE_PLATE, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> PUSHABLE_BLOCK = registerBlockItem(MSBlocks.PUSHABLE_BLOCK, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> AND_GATE_BLOCK = registerBlockItem(MSBlocks.AND_GATE_BLOCK, MSItemGroup.LANDS);
@@ -1063,6 +1063,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SENDIFICATOR = registerBlockItem(MSBlocks.SENDIFICATOR, block -> new SendificatorBlockItem(block, new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<BlockItem> GRIST_WIDGET = registerBlockItem(MSBlocks.GRIST_WIDGET, new Item.Properties().tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> URANIUM_COOKER = registerBlockItem(MSBlocks.URANIUM_COOKER, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> GRIST_COLLECTOR = registerBlockItem(MSBlocks.GRIST_COLLECTOR, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> SKAIANET_DENIER = registerBlockItem(MSBlocks.SKAIANET_DENIER, MSItemGroup.MAIN);
 	
 	
