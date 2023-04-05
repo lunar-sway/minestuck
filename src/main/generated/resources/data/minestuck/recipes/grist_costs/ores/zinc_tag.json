@@ -7,6 +7,6 @@
     "tag": "forge:ores/zinc"
   },
   "sources": [
-    "#forge:ingots/zinc"
+    "#forge:raw_materials/zinc"
   ]
 }

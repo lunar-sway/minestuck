@@ -38,6 +38,17 @@ public class ExtraForgeTags
 		public static final TagKey<Item> COBALT_ORES = tag("ores/cobalt");
 		public static final TagKey<Item> ARDITE_ORES = tag("ores/ardite");
 		
+		public static final TagKey<Item> TIN_RAW_MATERIALS = tag("raw_materials/tin");
+		public static final TagKey<Item> SILVER_RAW_MATERIALS = tag("raw_materials/silver");
+		public static final TagKey<Item> LEAD_RAW_MATERIALS = tag("raw_materials/lead");
+		public static final TagKey<Item> GALENA_RAW_MATERIALS = tag("raw_materials/galena");
+		public static final TagKey<Item> NICKEL_RAW_MATERIALS = tag("raw_materials/nickel");
+		public static final TagKey<Item> ZINC_RAW_MATERIALS = tag("raw_materials/zinc");
+		public static final TagKey<Item> ALUMINIUM_RAW_MATERIALS = tag("raw_materials/aluminium");
+		public static final TagKey<Item> ALUMINUM_RAW_MATERIALS = tag("raw_materials/aluminum");
+		public static final TagKey<Item> COBALT_RAW_MATERIALS = tag("raw_materials/cobalt");
+		public static final TagKey<Item> ARDITE_RAW_MATERIALS = tag("raw_materials/ardite");
+		
 		public static final TagKey<Item> URANIUM_STORAGE_BLOCKS = tag("storage_blocks/uranium");
 		public static final TagKey<Item> URANIUM_CHUNKS = tag("chunks/uranium");
 		public static final TagKey<Item> TERRACOTTA = tag("terracotta");

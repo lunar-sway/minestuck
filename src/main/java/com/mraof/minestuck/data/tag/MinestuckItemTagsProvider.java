@@ -92,6 +92,16 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		tag(ExtraForgeTags.Items.ALUMINUM_ORES);
 		tag(ExtraForgeTags.Items.COBALT_ORES);
 		tag(ExtraForgeTags.Items.ARDITE_ORES);
+		tag(ExtraForgeTags.Items.TIN_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.SILVER_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.LEAD_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.GALENA_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.ZINC_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.NICKEL_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.ALUMINIUM_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.ALUMINUM_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.COBALT_RAW_MATERIALS);
+		tag(ExtraForgeTags.Items.ARDITE_RAW_MATERIALS);
 		tag(ExtraForgeTags.Items.URANIUM_INGOTS);
 		tag(ExtraForgeTags.Items.TIN_INGOTS);
 		tag(ExtraForgeTags.Items.BRASS_INGOTS);

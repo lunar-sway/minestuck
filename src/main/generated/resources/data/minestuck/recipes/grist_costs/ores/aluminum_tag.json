@@ -7,6 +7,6 @@
     "tag": "forge:ores/aluminum"
   },
   "sources": [
-    "#forge:ingots/aluminum"
+    "#forge:raw_materials/aluminum"
   ]
 }

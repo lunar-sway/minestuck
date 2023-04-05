@@ -7,6 +7,6 @@
     "tag": "forge:ores/ardite"
   },
   "sources": [
-    "#forge:ingots/ardite"
+    "#forge:raw_materials/ardite"
   ]
 }
