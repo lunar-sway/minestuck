@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:thorny_subject"
+  },
+  "input2": {
+    "item": "minecraft:apple"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:snow_white_dream"
+  }
+}

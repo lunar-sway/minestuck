@@ -787,6 +787,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.FUDGESICKLE, "Whose idea was this?");
 		addItem(MSItems.REGISICKLE, "Regisickle");
 		addItemTooltip(MSItems.REGISICKLE, "A black sickle wielded by Dersites and Agents!");
+		addItem(MSItems.SNOW_WHITE_DREAM, "Snow White Dream");
 		addItem(MSItems.HERETICUS_AURURM, "Hereticus Aururm");
 		addItemTooltip(MSItems.HERETICUS_AURURM, "Did the Dersites get their Latin correct? I dunno, probably not. Go ask a Roman.");
 		addItem(MSItems.CLAW_SICKLE, "Clawsickle");
@@ -827,6 +828,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CRICKET_BAT, "Cricket Bat");
 		addItem(MSItems.CLOWN_CLUB, "Clown Club");
 		addItemTooltip(MSItems.CLOWN_CLUB, "Rage inducing. Why would you make this");
+		addItem(MSItems.DOCTOR_DETERRENT, "Doctor Deterrent");
 		addItem(MSItems.SPIKED_CLUB, "Spiked Club");
 		addItemTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		addItem(MSItems.MACE, "Mace");
