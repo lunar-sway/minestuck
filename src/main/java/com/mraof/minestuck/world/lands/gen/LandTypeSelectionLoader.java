@@ -102,20 +102,8 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
-			ResourceLocation location = new ResourceLocation(namespace, TERRAIN_PATH);
-			resourceManager.getResource(location).ifPresent(resource -> {
-				try(Reader reader = resource.openAsReader())
-				{
-					JsonElement json = JsonParser.parseReader(reader);
-					List<GroupData> parsedData = TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
-					terrainData.addAll(parsedData);
-				} catch(IOException ignored)
-				{
-				} catch(RuntimeException runtimeexception)
-				{
-					LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
-				}
-			});
+			parseTerrainGroupsFromNamespace(resourceManager, namespace)
+					.ifPresent(terrainData::addAll);
 		}
 		
 		Map<EnumAspect, List<GroupData>> titleData = new HashMap<>();
@@ -124,25 +112,55 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 		
 		for(String namespace : resourceManager.getNamespaces())
 		{
-			ResourceLocation location = new ResourceLocation(namespace, TITLE_PATH);
-			resourceManager.getResource(location).ifPresent(resource -> {
-				try(Reader reader = resource.openAsReader())
-				{
-					JsonElement json = JsonParser.parseReader(reader);
-					Map<EnumAspect, List<GroupData>> parsedData = TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
-					for(EnumAspect aspect : parsedData.keySet())
-						titleData.get(aspect).addAll(parsedData.get(aspect));
-					
-				} catch(IOException ignored)
-				{
-				} catch(RuntimeException runtimeexception)
-				{
-					LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
-				}
+			parseTitleGroupsFromNamespace(resourceManager, namespace).ifPresent(parsedData -> {
+				for(EnumAspect aspect : parsedData.keySet())
+					titleData.get(aspect).addAll(parsedData.get(aspect));
 			});
 		}
 		
 		return new RawData(terrainData, titleData);
+	}
+	
+	private static Optional<List<GroupData>> parseTerrainGroupsFromNamespace(ResourceManager resourceManager, String namespace)
+	{
+		ResourceLocation location = new ResourceLocation(namespace, TERRAIN_PATH);
+		return resourceManager.getResource(location).flatMap(resource -> {
+			try(Reader reader = resource.openAsReader())
+			{
+				JsonElement json = JsonParser.parseReader(reader);
+				List<GroupData> parsedData = TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json)
+						.getOrThrow(false, LOGGER::error);
+				return Optional.of(parsedData);
+				
+			} catch(IOException ignored)
+			{
+			} catch(RuntimeException runtimeexception)
+			{
+				LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+			}
+			return Optional.empty();
+		});
+	}
+	
+	private static Optional<Map<EnumAspect, List<GroupData>>> parseTitleGroupsFromNamespace(ResourceManager resourceManager, String namespace)
+	{
+		ResourceLocation location = new ResourceLocation(namespace, TITLE_PATH);
+		return resourceManager.getResource(location).flatMap(resource -> {
+			try(Reader reader = resource.openAsReader())
+			{
+				JsonElement json = JsonParser.parseReader(reader);
+				Map<EnumAspect, List<GroupData>> parsedData = TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json)
+						.getOrThrow(false, LOGGER::error);
+				return Optional.of(parsedData);
+				
+			} catch(IOException ignored)
+			{
+			} catch(RuntimeException runtimeexception)
+			{
+				LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+			}
+			return Optional.empty();
+		});
 	}
 	
 	@Override
