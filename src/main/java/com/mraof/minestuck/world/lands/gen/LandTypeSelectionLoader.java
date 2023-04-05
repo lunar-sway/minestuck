@@ -128,17 +128,13 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				List<GroupData> parsedData = TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json)
-						.getOrThrow(false, LOGGER::error);
-				return Optional.of(parsedData);
+				return TERRAIN_DATA_CODEC.parse(JsonOps.INSTANCE, json)
+						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", location, message));
 				
 			} catch(IOException ignored)
 			{
-			} catch(RuntimeException runtimeexception)
-			{
-				LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+				return Optional.empty();
 			}
-			return Optional.empty();
 		});
 	}
 	
@@ -149,17 +145,13 @@ public final class LandTypeSelectionLoader extends SimplePreparableReloadListene
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				Map<EnumAspect, List<GroupData>> parsedData = TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json)
-						.getOrThrow(false, LOGGER::error);
-				return Optional.of(parsedData);
+				return TITLE_DATA_CODEC.parse(JsonOps.INSTANCE, json)
+						.resultOrPartial(message -> LOGGER.error("Problem parsing json: {}, reason: {}", location, message));
 				
 			} catch(IOException ignored)
 			{
-			} catch(RuntimeException runtimeexception)
-			{
-				LOGGER.warn("Invalid json in data pack: '{}'", location.toString(), runtimeexception);
+				return Optional.empty();
 			}
-			return Optional.empty();
 		});
 	}
 	
