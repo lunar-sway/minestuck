@@ -418,6 +418,20 @@
       }
     ]
   },
+  "entity.swoosh": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.swoosh",
+    "sounds": [
+      "minestuck:mob/swoosh"
+    ]
+  },
+  "entity.slam": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.slam",
+    "sounds": [
+      "minestuck:mob/slam"
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
@@ -765,6 +779,13 @@
     "subtitle": "subtitles.minestuck.lotus_flower_restore",
     "sounds": [
       "minecraft:block/beehive/exit"
+    ]
+  },
+  "block.cruxtruder.dowel": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.cruxtruder_dowel",
+    "sounds": [
+      "minestuck:random/cruxtruder_dowel"
     ]
   },
   "block.horse_clock.chime": {

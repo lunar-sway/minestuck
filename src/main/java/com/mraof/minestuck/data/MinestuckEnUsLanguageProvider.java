@@ -2060,10 +2060,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");
 		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("cruxtruder_dowel", "Cruxite moves in Cruxtruder");
 		addSubtitles("horse_clock_chime", "Clock chimes... and whinnies");
 		addSubtitles("projectile_throw", "Projectile is thrown");
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		
+		addSubtitles("swoosh", "Air swooshes from attack");
+		addSubtitles("slam", "Something big hits the ground");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "death", "Nakagator dies");
