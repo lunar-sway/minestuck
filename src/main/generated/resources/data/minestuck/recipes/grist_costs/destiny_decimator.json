@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:tar": 270,
+    "minestuck:uranium": 108
+  },
+  "ingredient": {
+    "item": "minestuck:destiny_decimator"
+  }
+}

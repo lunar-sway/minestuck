@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 165,
+    "minestuck:gold": 33
+  },
+  "ingredient": {
+    "item": "minestuck:prospecting_pickscythe"
+  }
+}

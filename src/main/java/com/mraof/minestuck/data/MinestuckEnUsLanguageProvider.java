@@ -794,8 +794,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
 		addItem(MSItems.CANDY_SICKLE, "Candy Sickle");
 		addItem(MSItems.SCYTHE, "Scythe");
+		addItem(MSItems.CANDY_SCYTHE, "Candy Scythe");
+		addItem(MSItems.PROSPECTING_PICKSCYTHE, "Prospecting Pickscythe");
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
+		addItem(MSItems.DESTINY_DECIMATOR, "Destiny Decimator");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
