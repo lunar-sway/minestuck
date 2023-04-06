@@ -2060,6 +2060,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");
 		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("cruxtruder_dowel", "Cruxite moves in Cruxtruder");
 		addSubtitles("horse_clock_chime", "Clock chimes... and whinnies");
 		addSubtitles("projectile_throw", "Projectile is thrown");
 		addSubtitles("projectile_bounce", "Projectile bounces");
