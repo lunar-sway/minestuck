@@ -1,15 +1,14 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.entity.DecoyEntity;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -54,6 +53,11 @@ public class EditData
 		return connection;
 	}
 	
+	public GristCache getGristCache()
+	{
+		return GristCache.get(player.server, connection.getClientIdentifier());
+	}
+	
 	/**
 	 * @return the player that activated and is in editmode (not necessarily the server player of the connection)
 	 */
@@ -72,10 +76,8 @@ public class EditData
 	
 	public void sendGristCacheToEditor()
 	{
-		GristSet cache = PlayerSavedData.getData(connection.getClientIdentifier(), getEditor().server).getGristCache().getGristSet();
-		ServerPlayer editor = getEditor();
-		GristCachePacket packet = new GristCachePacket(cache, true);
-		MSPacketHandler.sendToPlayer(packet, editor);
+		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
+		MSPacketHandler.sendToPlayer(packet, this.getEditor());
 	}
 	
 	public void sendGivenItemsToEditor()

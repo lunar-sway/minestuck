@@ -5,9 +5,9 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -88,7 +88,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			}
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
-			return PlayerSavedData.getData(owner, level).getGristCache().canAfford(cost);
+			return GristCache.get(level, owner).canAfford(cost);
 		}
 		else
 		{
@@ -105,7 +105,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		
-		PlayerSavedData.getData(owner, level).getGristCache().takeWithGutter(cost, GristHelper.EnumSource.CLIENT);
+		GristCache.get(level, owner).takeWithGutter(cost, GristHelper.EnumSource.CLIENT);
 		
 		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
 		MinecraftForge.EVENT_BUS.post(event);
@@ -212,7 +212,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scale(lvl);
-					if (!PlayerSavedData.getData(owner, level).getGristCache().canAfford(scale_cost))
+					if (!GristCache.get(level, owner).canAfford(scale_cost))
 					{
 						return lvl - 1;
 					}

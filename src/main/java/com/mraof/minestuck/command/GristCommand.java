@@ -6,9 +6,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.GristCache;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -47,7 +45,7 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristSet grist = PlayerSavedData.getData(player).getGristCache().getGristSet();
+			GristSet grist = GristCache.get(player).getGristSet();
 			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), grist.asTextComponent()), false);
 		}
 		return players.size();
@@ -60,9 +58,7 @@ public class GristCommand
 		{
 			try
 			{
-				PlayerIdentifier player1 = IdentifierHandler.encode(player);
-				PlayerSavedData.getData(player1, player.level).getGristCache()
-						.addWithGutter(grist, GristHelper.EnumSource.CONSOLE);
+				GristCache.get(player).addWithGutter(grist, GristHelper.EnumSource.CONSOLE);
 				i++;
 				source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
@@ -79,7 +75,7 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			PlayerSavedData.getData(player).getGristCache().set(grist);
+			GristCache.get(player).set(grist);
 		}
 		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();

@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -78,7 +78,7 @@ public class GristHelper
 	 */
 	public static long getGrist(Level level, PlayerIdentifier player, GristType type)
 	{
-		return PlayerSavedData.getData(player, level).getGristCache().getGristSet().getGrist(type);
+		return GristCache.get(level, player).getGristSet().getGrist(type);
 	}
 	
 	public static long getGrist(Level level, PlayerIdentifier player, Supplier<GristType> type)

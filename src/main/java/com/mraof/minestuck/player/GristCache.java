@@ -15,6 +15,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -30,6 +31,21 @@ public final class GristCache
 		this.data = data;
 		this.mcServer = mcServer;
 		this.gristSet = new ImmutableGristSet(GristTypes.BUILD, 20);
+	}
+	
+	public static GristCache get(ServerPlayer player)
+	{
+		return PlayerSavedData.getData(player).getGristCache();
+	}
+	
+	public static GristCache get(Level level, PlayerIdentifier player)
+	{
+		return PlayerSavedData.getData(player, level).getGristCache();
+	}
+	
+	public static GristCache get(MinecraftServer mcServer, PlayerIdentifier player)
+	{
+		return PlayerSavedData.getData(player, mcServer).getGristCache();
 	}
 	
 	public NonNegativeGristSet getCapacitySet()

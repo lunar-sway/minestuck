@@ -7,10 +7,7 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristEntityPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.core.BlockPos;
@@ -159,12 +156,11 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public long getPlayerCacheRoom(Player entityIn)
 	{
-		if(entityIn != null && !entityIn.getLevel().isClientSide())
+		if(entityIn instanceof ServerPlayer player)
 		{
 			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
-			PlayerData data = PlayerSavedData.getData((ServerPlayer) entityIn);
 			
-			long cacheCapacity = data.getGristCache().getRemainingCapacity(gristType);
+			long cacheCapacity = GristCache.get(player).getRemainingCapacity(gristType);
 			
 			long gutterCapacity;
 			if(playerSession != null)
@@ -329,8 +325,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		GristSet set = new GristSet(gristType, gristValue);
-		PlayerSavedData.getData(identifier, level).getGristCache()
-				.addWithGutter(set, GristHelper.EnumSource.CLIENT);
+		GristCache.get(level, identifier).addWithGutter(set, GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
