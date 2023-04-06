@@ -7,6 +7,7 @@ import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,13 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+/**
+ * An object specific to a player that stores all grist held by that player,
+ * as well as providing the API to interact with this grist,
+ * while making sure to sync the cache to client-side or mark it to be saved when relevant.
+ *
+ * @author kirderf1
+ */
 public final class GristCache
 {
 	private final PlayerData data;
@@ -48,6 +56,9 @@ public final class GristCache
 		return PlayerSavedData.getData(player, mcServer).getGristCache();
 	}
 	
+	/**
+	 * Returns a grist set of how much space for each type that this grist cache has.
+	 */
 	public NonNegativeGristSet getCapacitySet()
 	{
 		long capacity = data.getEcheladder().getGristCapacity();
@@ -91,6 +102,13 @@ public final class GristCache
 		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
+	/**
+	 * Tries to take a specified amount of grist from this cache.
+	 * If it fails (due to insufficient grist or capacity), the cache will remain unchanged.
+	 * @param cost The amount of grist that it will try to take. Can be negative.
+	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source if successful.
+	 * @return true if it succeeded. false otherwise.
+	 */
 	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
 	{
 		GristSet change = cost.copy().scale(-1);
@@ -111,14 +129,23 @@ public final class GristCache
 			return false;
 	}
 	
+	/**
+	 * Adds as much grist as can fit to this cache.
+	 * Any excess grist will be sent to the gutter, if one exists.
+	 * If there are still grist left over, it will spawn as entities at the player if they are online. Otherwise, the excess grist will be discarded.
+	 *
+	 * @param set The grist to add to this cache.
+	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
+	 */
 	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		GristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
 		if(!overflowedGrist.isEmpty())
 		{
-			SessionHandler.get(mcServer).getPlayerSession(data.identifier)
-					.getGristGutter().addGristFrom(overflowedGrist);
+			Session session = SessionHandler.get(mcServer).getPlayerSession(data.identifier);
+			if(session != null)
+				session.getGristGutter().addGristFrom(overflowedGrist);
 			
 			ServerPlayer player = data.getPlayer();
 			if(player != null && !overflowedGrist.isEmpty())
@@ -130,6 +157,13 @@ public final class GristCache
 		}
 	}
 	
+	/**
+	 * Adds as much grist as can fit into this cache, and returns any remaining grist.
+	 *
+	 * @param set The grist to add to this cache.
+	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
+	 * @return any grist that did not fit in the cache.
+	 */
 	public GristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
@@ -148,6 +182,10 @@ public final class GristCache
 		return excessGrist;
 	}
 	
+	/**
+	 * Sets the grist of this cache to the given set,
+	 * ignoring capacity limitations on this cache.
+	 */
 	public void set(NonNegativeGristSet cache)
 	{
 		gristSet = cache.asImmutable();
