@@ -4,22 +4,19 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import java.util.List;
-
-import static net.minecraft.client.gui.GuiComponent.fill;
 
 /**
  * A class that handles Grist Notification popups whenever you gain or lose grist.
@@ -111,19 +108,6 @@ public class GristToast implements Toast
 			case CONSOLE -> pToastComponent.blit(pPoseStack, 133, 7, 216, 20, 20, 20);
 		}
 		
-		//Changes the colors depending on whether the grist amount is gained or lost.
-		if(this.increase)
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("+" + this.difference), 30.0F, 18.0F, 0x000000);
-		} else
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("-" + this.difference), 30.0F, 18.0F, 0x000000);
-		}
-		
 		posestack = RenderSystem.getModelViewStack();
 		posestack.pushPose();
 		posestack.scale(0.8f, 0.8f, 1.0f); //scale for the grist-icon since it doesn't inherit the background's scale for some reason.
@@ -152,18 +136,7 @@ public class GristToast implements Toast
 		pToastComponent.blit(pPoseStack, GRIST_VIAL_OUTLINE_OFFSETX, GRIST_VIAL_OUTLINE_OFFSETY, 0, 128, GRIST_VIAL_OUTLINE_WIDTH, GRIST_VIAL_OUTLINE_HEIGHT); //Bar outline
 		
 		
-		
-		//text has to be drawn after all blits, as subsequent blits after a text draw call will not render.
-		pToastComponent.getMinecraft().font.draw(pPoseStack, "(" + (this.increase ? "+" : "-") + GuiUtil.addSuffix(this.difference) + ")", 30.0F, 5.0F, this.increase ? 0x06c31c : 0xff0000);
-		//pToastComponent.getMinecraft().font.draw(pPoseStack, new TextComponent(getGristString(pToastComponent)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(getGristString(pToastComponent)) / 2), 24.0F, 0x000000);
-		if(pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) <= GRIST_VIAL_INSIDE_WIDTH)
-		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(" / " + GuiUtil.addSuffix(this.cacheLimit)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) / 2) + (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache))), 24.0F, 0x000000);
-		} else
-		{
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal(GuiUtil.addSuffix(this.gristCache)), 31.0F + (GRIST_VIAL_INSIDE_WIDTH / 2) - (pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache)) / 2), 24.0F, this.increase ? 0x06c31c : 0xff0000);
-		}
+		drawText(pPoseStack, pToastComponent.getMinecraft().font);
 		
 		
 		if(this.animationTimer > 0)
@@ -172,6 +145,26 @@ public class GristToast implements Toast
 		return pTimeSinceLastVisible - this.lastChanged >= DISPLAY_TIME ? Toast.Visibility.HIDE : Toast.Visibility.SHOW;
 		
 		
+	}
+	
+	private void drawText(PoseStack poseStack, Font font)
+	{
+		int textColor = this.increase ? 0x06c31c : 0xff0000;
+		
+		font.draw(poseStack, "(%s%s)".formatted(this.increase ? "+" : "-", GuiUtil.addSuffix(this.difference)), 30.0F, 5.0F, textColor);
+		
+		String cacheText = GuiUtil.addSuffix(this.gristCache);
+		String limitText = " / " + GuiUtil.addSuffix(this.cacheLimit);
+		int fullBottomTextWidth = font.width(cacheText) + font.width(limitText);
+		if(fullBottomTextWidth <= GRIST_VIAL_INSIDE_WIDTH)
+		{
+			float xLeft = 31.0F + (GRIST_VIAL_INSIDE_WIDTH - fullBottomTextWidth)/2F;
+			font.draw(poseStack, cacheText, xLeft, 24.0F, textColor);
+			font.draw(poseStack, limitText, xLeft + font.width(cacheText), 24.0F, 0x000000);
+		} else
+		{
+			font.draw(poseStack, cacheText, 31.0F + (GRIST_VIAL_INSIDE_WIDTH - font.width(cacheText))/2F, 24.0F, textColor);
+		}
 	}
 	
 	//modified version of drawIcon() from MinestuckScreen.java
@@ -197,14 +190,6 @@ public class GristToast implements Toast
 		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
 		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
 		Tesselator.getInstance().end();
-	}
-	
-	private String getGristString(ToastComponent pToastComponent)
-	{
-		if(pToastComponent.getMinecraft().font.width(GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit)) <= GRIST_VIAL_INSIDE_WIDTH)
-			return GuiUtil.addSuffix(this.gristCache) + " / " + GuiUtil.addSuffix(this.cacheLimit);
-		else
-			return GuiUtil.addSuffix(this.gristCache);
 	}
 	
 	//adds pDifference to the toast's current grist value.
