@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
 - Large cake blocks that are used to make large cake Features in Cake lands
+- Tag support for terrain land types and title land types
 
 ### Changed
 
@@ -25,6 +26,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
+- The "minestuck:land_type" loot condition now uses tags instead of land type groups
+- Some consort dialogue conditions now uses tags instead of land type groups
+- New way to determine which land types that can get picked at random,
+defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" and "data/\<namespace\>/minestuck/title_land_types.json"
 
 ### Removed
 
