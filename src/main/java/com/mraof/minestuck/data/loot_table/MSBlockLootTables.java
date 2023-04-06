@@ -248,6 +248,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_LEAVES.get(), MSBlockLootTables::endLeavesDrop);
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
+		dropSelf(SHADEWOOD_SAPLING.get());
 		
 		dropSelf(BLOOD_ASPECT_LOG.get());
 		dropSelf(BREATH_ASPECT_LOG.get());
@@ -342,6 +343,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(BLOOMING_CACTUS.get());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
 		add(STRAWBERRY_STEM.get(), (stemBlock) -> createStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
@@ -556,7 +558,7 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	private static LootTable.Builder shadewoodLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, SHADEWOOD_SAPLING.get(), SAPLING_CHANCES);
 	}
 	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{

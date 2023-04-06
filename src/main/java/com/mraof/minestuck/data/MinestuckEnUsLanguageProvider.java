@@ -266,6 +266,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, "Shroomy Shadewood Leaves");
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
+		addBlock(MSBlocks.SHADEWOOD_SAPLING, "Shadewood Sapling");
 		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
 		addBlock(MSBlocks.BREATH_ASPECT_LOG, "Breath Log");
 		addBlock(MSBlocks.DOOM_ASPECT_LOG, "Doom Log");
@@ -368,6 +369,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		addBlock(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");

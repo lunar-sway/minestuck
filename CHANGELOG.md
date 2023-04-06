@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Shadewood blocks
+- New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 - 33 new weapons(8 with alternate form)
@@ -30,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated item texture for Mini Wizard Statue
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
+- Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
+- Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 
 ### Removed
 

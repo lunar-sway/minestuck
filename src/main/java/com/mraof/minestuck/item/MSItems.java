@@ -842,6 +842,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHROOMY_SHADEWOOD_LEAVES = registerBlockItem(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_SAPLING = registerBlockItem(MSBlocks.RAINBOW_SAPLING, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> END_SAPLING = registerBlockItem(MSBlocks.END_SAPLING, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SHADEWOOD_SAPLING = registerBlockItem(MSBlocks.SHADEWOOD_SAPLING, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> GLOWING_BOOKSHELF = registerBlockItem(MSBlocks.GLOWING_BOOKSHELF, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FROST_BOOKSHELF = registerBlockItem(MSBlocks.FROST_BOOKSHELF, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> RAINBOW_BOOKSHELF = registerBlockItem(MSBlocks.RAINBOW_BOOKSHELF, MSItemGroup.LANDS);
@@ -932,6 +933,7 @@ public class MSItems
 	
 	//Land Plant Blocks
 	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM = registerBlockItem(MSBlocks.GLOWING_MUSHROOM, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> GLOWING_MUSHROOM_VINES = registerBlockItem(MSBlocks.GLOWING_MUSHROOM_VINES, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> DESERT_BUSH = registerBlockItem(MSBlocks.DESERT_BUSH, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> BLOOMING_CACTUS = registerBlockItem(MSBlocks.BLOOMING_CACTUS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> PETRIFIED_GRASS = registerBlockItem(MSBlocks.PETRIFIED_GRASS, MSItemGroup.LANDS);

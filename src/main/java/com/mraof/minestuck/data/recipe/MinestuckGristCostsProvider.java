@@ -613,6 +613,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CASSETTE_RETRO_BATTLE.get()).grist(BUILD, 15).grist(CAULK, 8).grist(QUARTZ, 5).grist(RUST, 5).buildFor(recipeSaver, Minestuck.MOD_ID);
 		
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM.get()).grist(BUILD, 5).grist(SHALE, 3).grist(MERCURY, 2).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM_VINES.get()).grist(BUILD, 8).grist(SHALE, 4).grist(MERCURY, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_LOG.get()).grist(BUILD, 8).grist(AMBER, 4).grist(MERCURY, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWING_PLANKS.get()).grist(BUILD, 2).grist(AMBER, 1).grist(MERCURY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GLOWY_GOOP.get()).grist(BUILD, 8).grist(CAULK, 8).grist(MERCURY, 4).build(recipeSaver);
