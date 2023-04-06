@@ -3,9 +3,10 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.command.argument.GristSetArgument;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -39,10 +40,9 @@ public class SendGristCommand
 		ServerPlayer player = source.getPlayerOrException();
 		if(isPermittedFor(player, target))
 		{
-			if(GristHelper.canAfford(player, grist))
+			if(GristCache.get(player).tryTake(grist, GristHelper.EnumSource.SENDGRIST))
 			{
-				GristHelper.decreaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.SENDGRIST);
-				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(target), grist, GristHelper.EnumSource.SENDGRIST);
+				GristCache.get(target).addWithGutter(grist, GristHelper.EnumSource.SENDGRIST);
 				source.sendSuccess(Component.translatable(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendSystemMessage(Component.translatable(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
 				return 1;

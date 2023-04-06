@@ -7,10 +7,9 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
@@ -267,16 +266,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(player, cost);
-		
-		if(canAfford)
+		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
-			
-			
-			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decreaseAndNotify(level, pid, cost, GristHelper.EnumSource.CLIENT);
-			
-			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			AlchemyEvent event = new AlchemyEvent(IdentifierHandler.encode(player), this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();
 			

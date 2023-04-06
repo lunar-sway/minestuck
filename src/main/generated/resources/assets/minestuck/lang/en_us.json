@@ -551,6 +551,8 @@
   "commands.minestuck.debuglands.must_enter": "You must have entered before you can create debug lands",
   "commands.minestuck.grist.add": "Successfully modified the grist cache for %s players.",
   "commands.minestuck.grist.add.failure": "Failed to modify the grist cache for %s.",
+  "commands.minestuck.grist.add.no_capacity": "Failed to add to the grist cache for %s due to lacking capacity.",
+  "commands.minestuck.grist.add.partial": "Partially added grist to the grist cache for %s, but failed to add %s.",
   "commands.minestuck.grist.add.success": "Successfully modified the grist cache for %s.",
   "commands.minestuck.grist.get": "%s has: %s",
   "commands.minestuck.grist.set": "Set the grist cache for %s players to %s.",

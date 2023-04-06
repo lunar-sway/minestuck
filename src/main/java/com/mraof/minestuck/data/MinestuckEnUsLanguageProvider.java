@@ -1738,6 +1738,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.GET, "%s has: %s");
 		add(GristCommand.ADD, "Successfully modified the grist cache for %s players.");
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
+		add(GristCommand.PARTIAL_SUCCESS, "Partially added grist to the grist cache for %s, but failed to add %s.");
+		add(GristCommand.NO_CAPACITY, "Failed to add to the grist cache for %s due to lacking capacity.");
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");

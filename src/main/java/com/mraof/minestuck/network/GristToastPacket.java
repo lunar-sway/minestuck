@@ -1,26 +1,54 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
-import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 
-public class GristToastPacket implements PlayToClientPacket
+public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, long cacheLimit,
+							   boolean isCacheOwner) implements PlayToClientPacket
 {
-	private final GristSet gristValue;
-	private final GristHelper.EnumSource source;
-	private final boolean increase;
-	private final long cacheLimit;
-	private final boolean isCacheOwner;
 	
-	public GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, boolean increase, long cacheLimit, boolean isCacheOwner)
+	/**
+	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
+	 *
+	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
+	 * @param player The Player that the notification should appear for.
+	 * @param set    The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
+	 * @param source Indicates where the notification is coming from. See EnumSource.
+	 */
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
-		this.gristValue = gristValue;
-		this.source = source;
-		this.increase = increase;
-		this.cacheLimit = cacheLimit;
-		this.isCacheOwner = isCacheOwner;
+		if(MinestuckConfig.SERVER.showGristChanges.get())
+		{
+			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
+			
+			if(player.getPlayer(server) != null)
+				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, true), player.getPlayer(server));
+			
+			if(source == GristHelper.EnumSource.SERVER)
+			{
+				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
+				if(sc == null)
+					return;
+				
+				EditData ed = ServerEditHandler.getData(server, sc);
+				if(ed == null)
+					return;
+				
+				if(!player.appliesTo(ed.getEditor()))
+					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, false), ed.getEditor());
+				
+			}
+		}
 	}
 	
 	@Override
@@ -28,7 +56,6 @@ public class GristToastPacket implements PlayToClientPacket
 	{
 		gristValue.write(buffer);
 		buffer.writeEnum(source);
-		buffer.writeBoolean(increase);
 		buffer.writeLong(cacheLimit);
 		buffer.writeBoolean(isCacheOwner);
 	}
@@ -37,19 +64,14 @@ public class GristToastPacket implements PlayToClientPacket
 	{
 		GristSet gristValue = GristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
-		boolean increase = buffer.readBoolean();
 		long cacheLimit = buffer.readLong();
 		boolean isCacheOwner = buffer.readBoolean();
-		return new GristToastPacket(gristValue, source, increase, cacheLimit, isCacheOwner);
+		return new GristToastPacket(gristValue, source, cacheLimit, isCacheOwner);
 	}
 	
 	@Override
 	public void execute()
 	{
-		GristSet gristValue = this.gristValue;
-		GristHelper.EnumSource source = this.source;
-		boolean increase = this.increase;
-		GristSet gristCache = ClientPlayerData.getGristCache(this.isCacheOwner);
-		GristToast.sendGristMessage(gristValue, source, increase, this.cacheLimit, gristCache);
+		GristToast.handlePacket(this);
 	}
 }

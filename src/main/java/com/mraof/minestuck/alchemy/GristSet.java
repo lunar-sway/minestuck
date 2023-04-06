@@ -15,7 +15,10 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -196,28 +199,6 @@ public class GristSet
 	}
 	
 	/**
-	 * Removes grist of any type exceeding the capacity until all types are at or below the given capacity.
-	 * The grist amounts that were removed is returned.
-	 */
-	public GristSet removeOverCapacity(long capacity)
-	{
-		if(capacity < 0)
-			throw new IllegalArgumentException("Capacity under 0 not allowed.");
-		
-		GristSet excess = new GristSet();
-		for(GristAmount amount : this.getAmounts())
-		{
-			long excessAmount = amount.getAmount() - capacity;
-			if(0 < excessAmount)
-			{
-				this.addGrist(amount.getType(), -excessAmount);
-				excess.addGrist(amount.getType(), excessAmount);
-			}
-		}
-		return excess;
-	}
-	
-	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
 	public GristSet addGrist(GristAmount grist)
@@ -260,7 +241,15 @@ public class GristSet
 	{
 		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
-
+	
+	public boolean equalContent(GristSet other)
+	{
+		for(GristType type : GristTypes.values())
+			if(this.getGrist(type) != other.getGrist(type))
+				return false;
+		return true;
+	}
+	
 	@Override
 	public String toString()
 	{

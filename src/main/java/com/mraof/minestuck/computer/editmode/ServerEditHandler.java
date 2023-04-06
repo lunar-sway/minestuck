@@ -2,16 +2,13 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
@@ -19,7 +16,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -325,10 +321,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
+				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
-					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-					
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
@@ -378,23 +372,30 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			cleanStackNBT(stack, data.connection, event.getLevel());
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
+			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost))
+				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(cost.createMissingMessage());
 					event.setCanceled(true);
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
+			else if(!isBlockItem(stack.getItem()) ||
+					!gristCache.canAfford(GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
 			{
 				event.setCanceled(true);
 			}
 			if(event.getUseItem() == Event.Result.DEFAULT)
 				event.setUseItem(Event.Result.ALLOW);
 		}
+	}
+	
+	private static GristSet blockBreakCost()
+	{
+		return new GristSet(GristTypes.BUILD, 1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -405,7 +406,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
+					|| (data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -427,7 +428,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+				//Assumes that this will succeed because of the check in onLeftClickBlockControl()
+				data.getGristCache().tryTake(blockBreakCost(), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
@@ -436,7 +438,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
 				if(set != null && !set.isEmpty())
 				{
-					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
+					data.getGristCache().addWithGutter(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}
@@ -467,12 +469,15 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
+						//Assumes that this will succeed because of the check in onRightClickBlockControl()
+						data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER);
 					}
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
+					GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
+					//Assumes that this will succeed because of the check in onRightClickBlockControl()
+					data.getGristCache().tryTake(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}

@@ -8,12 +8,13 @@ import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * A class that handles Grist overflow whenever you acquire too much grist.
@@ -137,7 +138,7 @@ public class GristGutter
 	public static void onServerTickEvent(TickEvent.ServerTickEvent event)
 	{
 		//noinspection resource
-		if(event.getServer().overworld().getGameTime() % 200 == 0)
+		if(event.phase == TickEvent.Phase.START && event.getServer().overworld().getGameTime() % 200 == 0)
 		{
 			for(Session session : SessionHandler.get(event.getServer()).getSessions())
 			{
@@ -148,22 +149,25 @@ public class GristGutter
 	
 	private void distributeToPlayers(Set<PlayerIdentifier> players, MinecraftServer server)
 	{
-		// TODO iterate in a random order, so that no player gets priority
-		for(PlayerIdentifier player : players)
+		RandomSource rand = server.overworld().random;
+		List<PlayerIdentifier> playerList = new ArrayList<>(players);
+		Collections.shuffle(playerList, new Random(rand.nextLong()));
+		
+		for(PlayerIdentifier player : playerList)
 		{
-			tickDistributionToPlayer(player, server);
+			tickDistributionToPlayer(player, server, rand);
 		}
 	}
 	
-	private void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server)
+	private void tickDistributionToPlayer(PlayerIdentifier player, MinecraftServer server, RandomSource rand)
 	{
 		PlayerData data = PlayerSavedData.getData(player, server);
 		
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
-		NonNegativeGristSet capacity = GristHelper.getCapacitySet(data);
-		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity);
-		GristSet remainder = GristHelper.increaseAndReturnExcess(data, gristToTransfer);
+		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
+		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
+		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}
@@ -173,12 +177,14 @@ public class GristGutter
 		return 1D/20D;
 	}
 	
-	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity)
+	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
 		long remaining = amount;
 		GristSet takenGrist = new GristSet();
-		//TODO randomize iteration order
-		for(GristAmount capacityAmount : capacity.getAmounts())
+		List<GristAmount> amounts = new ArrayList<>(capacity.getAmounts());
+		Collections.shuffle(amounts, new Random(rand.nextLong()));
+		
+		for(GristAmount capacityAmount : amounts)
 		{
 			GristType type = capacityAmount.getType();
 			long amountInGutter = this.gristSet.getGrist(type);
