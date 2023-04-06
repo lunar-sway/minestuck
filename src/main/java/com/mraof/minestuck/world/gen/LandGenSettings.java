@@ -37,7 +37,7 @@ public final class LandGenSettings
 	 * Thus, a higher threshold will result in more rough terrain.
 	 * At 0, there should be a rough split between normal and rough terrain occurring.
 	 */
-	public float roughThreshold = 0.0F;
+	public float roughThreshold = 0.1F;
 	
 	public float oceanOffset = -0.12F;
 	public float inlandOffset = 0.1F;
