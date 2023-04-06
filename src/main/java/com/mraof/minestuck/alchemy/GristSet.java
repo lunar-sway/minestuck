@@ -241,7 +241,15 @@ public class GristSet
 	{
 		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
-
+	
+	public boolean equalContent(GristSet other)
+	{
+		for(GristType type : GristTypes.values())
+			if(this.getGrist(type) != other.getGrist(type))
+				return false;
+		return true;
+	}
+	
 	@Override
 	public String toString()
 	{

@@ -138,9 +138,12 @@ public final class GristCache
 		
 		GristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
 		
-		this.set(newCache);
-		if(source != null)
-			GristToastPacket.notify(mcServer, data.identifier, set, source);
+		if(!excessGrist.equalContent(set))
+		{
+			this.set(newCache);
+			if(source != null)
+				GristToastPacket.notify(mcServer, data.identifier, set, source);
+		}
 		
 		return excessGrist;
 	}

@@ -20,6 +20,8 @@ public class GristCommand
 	public static final String GET = "commands.minestuck.grist.get";
 	public static final String ADD = "commands.minestuck.grist.add";
 	public static final String SUCCESS = "commands.minestuck.grist.add.success";
+	public static final String PARTIAL_SUCCESS = "commands.minestuck.grist.add.partial";
+	public static final String NO_CAPACITY = "commands.minestuck.grist.add.no_capacity";
 	public static final String FAILURE = "commands.minestuck.grist.add.failure";
 	public static final String SET = "commands.minestuck.grist.set";
 	
@@ -59,16 +61,25 @@ public class GristCommand
 			try
 			{
 				GristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
-				i++;
-				//TODO change message to take into account the grist that didn't fit in the cache
-				source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
+				if(remainingGrist.equalContent(grist))
+				{
+					source.sendFailure(Component.translatable(NO_CAPACITY, player.getDisplayName()));
+				} else
+				{
+					i++;
+					if(remainingGrist.isEmpty())
+						source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
+					else
+						source.sendSuccess(Component.translatable(PARTIAL_SUCCESS, player.getDisplayName(), remainingGrist.asTextComponent()), true);
+				}
 			} catch(IllegalArgumentException e)
 			{
 				e.printStackTrace();
 				source.sendFailure(Component.translatable(FAILURE, player.getDisplayName()));
 			}
 		}
-		source.sendSuccess(Component.translatable(ADD, i), true);
+		if(players.size() > 1)
+			source.sendSuccess(Component.translatable(ADD, i), true);
 		return i;
 	}
 	
