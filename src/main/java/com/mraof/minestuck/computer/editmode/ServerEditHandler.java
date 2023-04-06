@@ -12,7 +12,6 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.player.GristCache;
-import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -328,7 +327,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				GristSet cost = entry.getCurrentCost(data.connection);
 				if(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache().canAfford(cost))
 				{
-					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
+					PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache().takeWithGutter(cost, GristHelper.EnumSource.SERVER);
 					
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
@@ -430,7 +429,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				GristHelper.decreaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+				Level level = event.getLevel();
+				GristSet set = new GristSet(GristTypes.BUILD,1);
+				PlayerSavedData.getData(data.connection.getClientIdentifier(), level).getGristCache().takeWithGutter(set, GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
@@ -439,7 +440,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, event.getLevel());
 				if(set != null && !set.isEmpty())
 				{
-					GristHelper.increaseAndNotify(event.getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
+					Level level = event.getLevel();
+					PlayerSavedData.getData(data.connection.getClientIdentifier(), level).getGristCache()
+							.addWithGutter(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}
@@ -470,12 +473,13 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
+						PlayerSavedData.getData(c.getClientIdentifier(), player.level).getGristCache().takeWithGutter(cost, GristHelper.EnumSource.SERVER);
 					}
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
-					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
+					GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
+					PlayerSavedData.getData(c.getClientIdentifier(), player.level).getGristCache().takeWithGutter(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}

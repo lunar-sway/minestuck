@@ -3,6 +3,7 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -15,6 +16,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 public final class GristCache
@@ -69,7 +71,12 @@ public final class GristCache
 		return GristHelper.canAfford(this.gristSet, cost);
 	}
 	
-	public void addWithGutter(GristSet set)
+	public void takeWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
+	{
+		addWithGutter(set.copy().scale(-1), source);
+	}
+	
+	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		GristSet overflowedGrist = this.addWithinCapacity(set);
 		
@@ -86,6 +93,9 @@ public final class GristCache
 						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
 			}
 		}
+		
+		if(source != null)
+			GristToastPacket.notify(mcServer, data.identifier, set, source);
 	}
 	
 	public GristSet addWithinCapacity(GristSet set)

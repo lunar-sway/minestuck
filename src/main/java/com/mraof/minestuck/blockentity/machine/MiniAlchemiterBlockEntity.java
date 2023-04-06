@@ -105,7 +105,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		
-		GristHelper.decreaseAndNotify(level, owner, cost, GristHelper.EnumSource.CLIENT);
+		PlayerSavedData.getData(owner, level).getGristCache().takeWithGutter(cost, GristHelper.EnumSource.CLIENT);
 		
 		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
 		MinecraftForge.EVENT_BUS.post(event);

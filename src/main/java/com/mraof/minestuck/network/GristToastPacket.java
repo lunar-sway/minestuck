@@ -1,10 +1,18 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 
 public class GristToastPacket implements PlayToClientPacket
 {
@@ -19,6 +27,40 @@ public class GristToastPacket implements PlayToClientPacket
 		this.source = source;
 		this.cacheLimit = cacheLimit;
 		this.isCacheOwner = isCacheOwner;
+	}
+	
+	/**
+	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
+	 *
+	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
+	 * @param player The Player that the notification should appear for.
+	 * @param set    The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
+	 * @param source Indicates where the notification is coming from. See EnumSource.
+	 */
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
+	{
+		if(MinestuckConfig.SERVER.showGristChanges.get())
+		{
+			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
+			
+			if(player.getPlayer(server) != null)
+				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, true), player.getPlayer(server));
+			
+			if (source == GristHelper.EnumSource.SERVER)
+			{
+				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
+				if(sc == null)
+					return;
+				
+				EditData ed = ServerEditHandler.getData(server, sc);
+				if(ed == null)
+					return;
+				
+				if(!player.appliesTo(ed.getEditor()))
+					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, false), ed.getEditor());
+
+			}
+		}
 	}
 	
 	@Override

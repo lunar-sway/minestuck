@@ -1,17 +1,9 @@
 package com.mraof.minestuck.alchemy;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
@@ -116,57 +108,4 @@ public class GristHelper
 		return false;
 	}
 	
-	/**
-	 * Uses the encoded version of the username!
-	 */
-	public static void decrease(Level level, PlayerIdentifier player, GristSet set)
-	{
-		PlayerSavedData.getData(player, level).getGristCache().addWithGutter(set.copy().scale(-1));
-	}
-	
-	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
-	{
-		decrease(level, player, set);
-		notify(level.getServer(), player, set.copy().scale(-1), source);
-	}
-	
-	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
-	{
-		PlayerSavedData.getData(player, level).getGristCache().addWithGutter(set);
-		notify(level.getServer(), player, set, source);
-	}
-	
-	/**
-	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
-	 *
-	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
-	 * @param player The Player that the notification should appear for.
-	 * @param set    The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
-	 * @param source Indicates where the notification is coming from. See EnumSource.
-	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, EnumSource source)
-	{
-		if(MinestuckConfig.SERVER.showGristChanges.get())
-		{
-			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
-			
-			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, true), player.getPlayer(server));
-			
-			if (source == EnumSource.SERVER)
-			{
-				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				EditData ed = ServerEditHandler.getData(server, sc);
-				if(ed == null)
-					return;
-				
-				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, false), ed.getEditor());
-
-			}
-		}
-	}
 }

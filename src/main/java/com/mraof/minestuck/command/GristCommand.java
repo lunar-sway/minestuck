@@ -7,6 +7,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -59,7 +60,9 @@ public class GristCommand
 		{
 			try
 			{
-				GristHelper.increaseAndNotify(player.level, IdentifierHandler.encode(player), grist, GristHelper.EnumSource.CONSOLE);
+				PlayerIdentifier player1 = IdentifierHandler.encode(player);
+				PlayerSavedData.getData(player1, player.level).getGristCache()
+						.addWithGutter(grist, GristHelper.EnumSource.CONSOLE);
 				i++;
 				source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
