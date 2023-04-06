@@ -37,6 +37,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
+### Fixed
+
+- Restore land sky rendering
+
 ### Contributors for this release
 
 - kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil
