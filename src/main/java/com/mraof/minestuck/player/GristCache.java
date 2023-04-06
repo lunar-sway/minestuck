@@ -113,7 +113,7 @@ public final class GristCache
 	
 	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet overflowedGrist = this.addWithinCapacity(set);
+		GristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
 		if(!overflowedGrist.isEmpty())
 		{
@@ -128,12 +128,9 @@ public final class GristCache
 						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
 			}
 		}
-		
-		if(source != null)
-			GristToastPacket.notify(mcServer, data.identifier, set, source);
 	}
 	
-	public GristSet addWithinCapacity(GristSet set)
+	public GristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
 		
@@ -142,6 +139,9 @@ public final class GristCache
 		GristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
 		
 		this.set(newCache);
+		if(source != null)
+			GristToastPacket.notify(mcServer, data.identifier, set, source);
+		
 		return excessGrist;
 	}
 	

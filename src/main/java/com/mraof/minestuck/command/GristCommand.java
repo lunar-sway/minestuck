@@ -58,8 +58,9 @@ public class GristCommand
 		{
 			try
 			{
-				GristCache.get(player).addWithGutter(grist, GristHelper.EnumSource.CONSOLE);
+				GristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
 				i++;
+				//TODO change message to take into account the grist that didn't fit in the cache
 				source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
 			} catch(IllegalArgumentException e)
 			{

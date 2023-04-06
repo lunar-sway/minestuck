@@ -16,6 +16,8 @@ import net.minecraft.server.level.ServerPlayer;
 import static net.minecraft.commands.Commands.LEVEL_GAMEMASTERS;
 import static net.minecraft.commands.Commands.literal;
 
+//TODO add/remove/clear subcommands
+//TODO how about a player argument to be able to pick which session to target
 public class GutterCommand
 {
 	public static final SimpleCommandExceptionType NO_SESSION_EXCEPTION = new SimpleCommandExceptionType(Component.literal("Cannot find gutter because you are not in a session."));
