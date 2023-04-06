@@ -2,10 +2,7 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
 import com.mraof.minestuck.event.SburbEvent;
@@ -324,10 +321,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(data.getGristCache().canAfford(cost))
+				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
-					data.getGristCache().takeWithGutter(cost, GristHelper.EnumSource.SERVER);
-					
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
@@ -398,6 +393,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
+	private static GristSet blockBreakCost()
+	{
+		return new GristSet(GristTypes.BUILD, 1);
+	}
+	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
@@ -406,7 +406,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()))
+					|| (data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()))
 				event.setCanceled(true);
 		}
 	}
@@ -428,7 +428,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			EditData data = getData(event.getEntity());
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
-				data.getGristCache().takeWithGutter(new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+				//Assumes that this will succeed because of the check in onLeftClickBlockControl()
+				data.getGristCache().tryTake(blockBreakCost(), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
@@ -468,13 +469,15 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 						SburbHandler.giveItems(player.server, c.getClientIdentifier());
 					if(!cost.isEmpty())
 					{
-						data.getGristCache().takeWithGutter(cost, GristHelper.EnumSource.SERVER);
+						//Assumes that this will succeed because of the check in onRightClickBlockControl()
+						data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER);
 					}
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 				} else
 				{
 					GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
-					data.getGristCache().takeWithGutter(set, GristHelper.EnumSource.SERVER);
+					//Assumes that this will succeed because of the check in onRightClickBlockControl()
+					data.getGristCache().tryTake(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}

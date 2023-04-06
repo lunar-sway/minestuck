@@ -40,9 +40,8 @@ public class SendGristCommand
 		ServerPlayer player = source.getPlayerOrException();
 		if(isPermittedFor(player, target))
 		{
-			if(GristCache.get(player).canAfford(grist))
+			if(GristCache.get(player).tryTake(grist, GristHelper.EnumSource.SENDGRIST))
 			{
-				GristCache.get(player).takeWithGutter(grist, GristHelper.EnumSource.SENDGRIST);
 				GristCache.get(target).addWithGutter(grist, GristHelper.EnumSource.SENDGRIST);
 				source.sendSuccess(Component.translatable(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendSystemMessage(Component.translatable(RECEIVE, player.getDisplayName(), grist.asTextComponent()));

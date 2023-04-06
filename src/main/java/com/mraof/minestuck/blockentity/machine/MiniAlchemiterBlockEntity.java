@@ -31,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
@@ -104,17 +105,19 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+		Objects.requireNonNull(cost);
 		
-		GristCache.get(level, owner).takeWithGutter(cost, GristHelper.EnumSource.CLIENT);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
-		newItem = event.getItemResult();
-		ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
-		if(!existing.isEmpty())
-			newItem.grow(existing.getCount());
-		
-		itemHandler.setStackInSlot(OUTPUT, newItem);
+		if(GristCache.get(level, owner).tryTake(cost, GristHelper.EnumSource.CLIENT))
+		{
+			AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
+			newItem = event.getItemResult();
+			ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
+			if(!existing.isEmpty())
+				newItem.grow(existing.getCount());
+			
+			itemHandler.setStackInSlot(OUTPUT, newItem);
+		}
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.

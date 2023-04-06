@@ -266,10 +266,8 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		if(GristCache.get(player).canAfford(cost))
+		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
-			GristCache.get(player).takeWithGutter(cost, GristHelper.EnumSource.CLIENT);
-			
 			AlchemyEvent event = new AlchemyEvent(IdentifierHandler.encode(player), this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();

@@ -83,13 +83,32 @@ public final class GristCache
 	
 	public boolean canAfford(GristSet cost)
 	{
-		//TODO must also check the capacity for negative costs
-		return GristHelper.canAfford(this.gristSet, cost);
+		return canAdd(cost.copy().scale(-1));
 	}
 	
-	public void takeWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
+	public boolean canAdd(GristSet addition)
 	{
-		addWithGutter(set.copy().scale(-1), source);
+		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
+	}
+	
+	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
+	{
+		GristSet change = cost.copy().scale(-1);
+		
+		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
+		
+		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		
+		if(excessGrist.isEmpty())
+		{
+			this.set(newCache);
+			
+			if(source != null)
+				GristToastPacket.notify(mcServer, data.identifier, change, source);
+			
+			return true;
+		} else
+			return false;
 	}
 	
 	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
