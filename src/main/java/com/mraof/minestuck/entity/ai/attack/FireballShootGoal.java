@@ -70,9 +70,9 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 		//fireball is shot towards the initial target position
 		if(initialTargetPos != null)
 		{
-			double distanceX = target.getX() - attacker.getX();
-			double distanceY = target.getBoundingBox().minY + (double) (target.getBbHeight() / 2.0F) - (attacker.getY() + (double) (attacker.getBbHeight() / 2.0F));
-			double distanceZ = target.getZ() - attacker.getZ();
+			double distanceX = initialTargetPos.getX() - attacker.getX();
+			double distanceY = initialTargetPos.getY() - (attacker.getY() + (double) (attacker.getBbHeight() / 2.0F));
+			double distanceZ = initialTargetPos.getZ() - attacker.getZ();
 			
 			SmallFireball fireball = new SmallFireball(level, attacker, distanceX, distanceY, distanceZ);
 			double bbHeight = attacker.getBbHeight();
