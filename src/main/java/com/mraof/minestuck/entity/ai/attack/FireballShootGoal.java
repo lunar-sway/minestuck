@@ -45,7 +45,11 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 		
 		initialTargetPos = Objects.requireNonNull(this.entity.getTarget()).blockPosition();
 		
-		//code block handles group cooldown
+		applyGroupCooldown();
+	}
+	
+	private void applyGroupCooldown()
+	{
 		Level level = this.entity.getLevel();
 		AABB aabb = new AABB(this.entity.blockPosition()).inflate(8);
 		List<AttackingAnimatedEntity> entityList = level.getEntitiesOfClass(AttackingAnimatedEntity.class, aabb);
