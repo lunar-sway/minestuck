@@ -11,7 +11,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
-import com.mraof.minestuck.network.EditmodeFillPacket;
+import com.mraof.minestuck.network.EditmodeDragPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -87,7 +87,7 @@ public class EditToolDrag
 			if(!canEditRevise(player))
 			{
 				if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
-					MSPacketHandler.sendToServer(new EditmodeFillPacket.Reset());
+					MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -103,14 +103,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), true));
-				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(new EditmodeFillPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, true, cap.getEditPos1(), cap.getEditPos2());
 			}
 			
@@ -155,7 +155,7 @@ public class EditToolDrag
 			if(!canEditRecycle(player))
 			{
 				if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
-					MSPacketHandler.sendToServer(new EditmodeFillPacket.Reset());
+					MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
 				cap.resetDragTools();
 				return;
 			}
@@ -171,14 +171,14 @@ public class EditToolDrag
 			if (cap.getEditPos1() != null)
 			{
 				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), false));
-				MSPacketHandler.sendToServer(new EditmodeFillPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
 			}
 		}
 		else if (isDragging)
 		{
 			if (cap.getEditPos1() != null)
 			{
-				MSPacketHandler.sendToServer(new EditmodeFillPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 				playSoundAndSetParticles(player, false, cap.getEditPos1(), cap.getEditPos2());
 			}
 			

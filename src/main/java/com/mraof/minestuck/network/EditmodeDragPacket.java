@@ -28,7 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public final class EditmodeFillPacket
+public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	

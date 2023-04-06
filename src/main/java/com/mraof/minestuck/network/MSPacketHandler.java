@@ -51,10 +51,10 @@ public class MSPacketHandler
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
-		registerMessage(EditmodeFillPacket.Fill.class, EditmodeFillPacket.Fill::decode);
-		registerMessage(EditmodeFillPacket.Destroy.class, EditmodeFillPacket.Destroy::decode);
-		registerMessage(EditmodeFillPacket.Cursor.class, EditmodeFillPacket.Cursor::decode);
-		registerMessage(EditmodeFillPacket.Reset.class, EditmodeFillPacket.Reset::decode);
+		registerMessage(EditmodeDragPacket.Fill.class, EditmodeDragPacket.Fill::decode);
+		registerMessage(EditmodeDragPacket.Destroy.class, EditmodeDragPacket.Destroy::decode);
+		registerMessage(EditmodeDragPacket.Cursor.class, EditmodeDragPacket.Cursor::decode);
+		registerMessage(EditmodeDragPacket.Reset.class, EditmodeDragPacket.Reset::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
 		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
 		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
