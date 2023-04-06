@@ -128,6 +128,7 @@ public class EditToolDrag
 	public static boolean canEditRevise(Player player)
 	{
 		return (ClientEditHandler.isActive()
+				&& !Minecraft.getInstance().isPaused()
 				&& !isBlockDeployable(player)
 				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
 	}
@@ -199,7 +200,10 @@ public class EditToolDrag
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 		BlockState block = player.getLevel().getBlockState(blockHit.getBlockPos());
 		
-		return (ClientEditHandler.isActive() && !(block.getDestroySpeed(player.getLevel(), blockHit.getBlockPos()) < 0 || block.getMaterial() == Material.PORTAL) && !isMultiblock(player));
+		return (ClientEditHandler.isActive()
+				&& !Minecraft.getInstance().isPaused()
+				&& !(block.getDestroySpeed(player.getLevel(), blockHit.getBlockPos()) < 0 || block.getMaterial() == Material.PORTAL)
+				&& !isMultiblock(player));
 	}
 	
 	/**

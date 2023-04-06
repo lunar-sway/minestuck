@@ -144,6 +144,8 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	{
 		this.yBodyRot = this.getYRot();
 		this.yHeadRot = this.getYRot();
+		this.yBodyRotO = this.getYRot();
+		this.yHeadRotO = this.getYRot();
 		return pAnimStep;
 	}
 	
