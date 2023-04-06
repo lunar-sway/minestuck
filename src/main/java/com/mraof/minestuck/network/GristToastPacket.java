@@ -6,7 +6,6 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -14,20 +13,9 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 
-public class GristToastPacket implements PlayToClientPacket
+public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, long cacheLimit,
+							   boolean isCacheOwner) implements PlayToClientPacket
 {
-	private final GristSet gristValue;
-	private final GristHelper.EnumSource source;
-	private final long cacheLimit;
-	private final boolean isCacheOwner;
-	
-	public GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, long cacheLimit, boolean isCacheOwner)
-	{
-		this.gristValue = gristValue;
-		this.source = source;
-		this.cacheLimit = cacheLimit;
-		this.isCacheOwner = isCacheOwner;
-	}
 	
 	/**
 	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
@@ -46,7 +34,7 @@ public class GristToastPacket implements PlayToClientPacket
 			if(player.getPlayer(server) != null)
 				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, true), player.getPlayer(server));
 			
-			if (source == GristHelper.EnumSource.SERVER)
+			if(source == GristHelper.EnumSource.SERVER)
 			{
 				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
 				if(sc == null)
@@ -58,7 +46,7 @@ public class GristToastPacket implements PlayToClientPacket
 				
 				if(!player.appliesTo(ed.getEditor()))
 					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, false), ed.getEditor());
-
+				
 			}
 		}
 	}
@@ -84,9 +72,6 @@ public class GristToastPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		GristSet gristValue = this.gristValue;
-		GristHelper.EnumSource source = this.source;
-		GristSet gristCache = ClientPlayerData.getGristCache(this.isCacheOwner);
-		GristToast.sendGristMessage(gristValue, source, this.cacheLimit, gristCache);
+		GristToast.handlePacket(this);
 	}
 }

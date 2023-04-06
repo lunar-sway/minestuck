@@ -7,6 +7,8 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.network.GristToastPacket;
+import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -18,7 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 /**
  * A class that handles Grist Notification popups whenever you gain or lose grist.
@@ -193,62 +194,59 @@ public class GristToast implements Toast
 		Tesselator.getInstance().end();
 	}
 	
-	//adds pDifference to the toast's current grist value.
-	private void addGrist(long pDifference, long pCacheLimit)
+	/**
+	 * adds difference to the toast's current grist value.
+	 */
+	private void addGrist(long difference, long newLimit, long newCacheAmount)
 	{
-		if(pCacheLimit >= this.gristCache + pDifference)
-			this.gristCache += pDifference;
-		
-		this.difference += pDifference;
-		this.cacheLimit = pCacheLimit;
+		this.difference += difference;
+		this.cacheLimit = newLimit;
+		this.gristCache = newCacheAmount;
 		this.changed = true;
-		
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, long pCacheLimit, long pGristCache)
+	public static void addOrUpdate(ToastComponent toastGui, GristType type, long difference, GristHelper.EnumSource source, boolean isIncrease, long cacheLimit, long cacheAmount)
 	{
-		
 		//try to find an existing toast with the same properties as the one being added.
-		GristToast gristToast = pToastGui.getToast(GristToast.class, pType.getTranslationKey() + pSource + String.valueOf(pIncrease));
+		GristToast gristToast = toastGui.getToast(GristToast.class, new Token(type, source, isIncrease));
 		
-		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using pDifference.
+		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using difference.
 		if (gristToast == null)
-			pToastGui.addToast(new GristToast(pType, pDifference, pSource, pIncrease, pCacheLimit, pGristCache));
+			toastGui.addToast(new GristToast(type, difference, source, isIncrease, cacheLimit, cacheAmount));
 		else
-			gristToast.addGrist(pDifference, pCacheLimit);
+			gristToast.addGrist(difference, cacheLimit, cacheAmount);
 	}
 	
-	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, long cacheLimit, GristSet gristCache)
+	private record Token(GristType type, GristHelper.EnumSource source, boolean isIncrease)
+	{}
+	
+	public static void handlePacket(GristToastPacket packet)
 	{
+		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner());
+		GristHelper.EnumSource source = packet.source();
+		long cacheLimit = packet.cacheLimit();
+		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
-		List<GristAmount> reqs = set.getAmounts();
-		for(GristAmount pairs : reqs)
+		for(GristAmount pairs : packet.gristValue().getAmounts())
 		{
 			//the pair has to be split into two new variables because Map.Entry is immutable.
 			GristType type = pairs.getType();
 			long difference = pairs.getAmount();
-			long total = gristCache.getGrist(type);
-			
-			/*List<GristAmount> totalReqs = gristCache.getAmounts();
-			for(GristAmount totalPairs : totalReqs)
-			{
-				if(totalPairs.getType() == type)
-					total = totalPairs.getAmount();
-			}*/
-			
+			long total = cache.getGrist(type);
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, true, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, difference, source, true, cacheLimit, total);
 			else
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, false, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cacheLimit, total);
 		}
 	}
 	
 	//returns a single token that contains the grist type, the source, and whether its positive or negative. Used with getToast() to retrieve toasts that can be merged.
-	public String getToken()
+	@Override
+	public Token getToken()
 	{
-		return this.type.getTranslationKey() + this.source + String.valueOf(this.increase);
+		return new Token(this.type, this.source, this.increase);
 	}
 }
