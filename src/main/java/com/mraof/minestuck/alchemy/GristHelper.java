@@ -2,18 +2,15 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
 
 public class GristHelper
 {
@@ -73,19 +70,7 @@ public class GristHelper
 		
 	}
 	
-	/**
-	 * A shortened statement to obtain a certain grist count.
-	 */
-	public static long getGrist(Level level, PlayerIdentifier player, GristType type)
-	{
-		return GristCache.get(level, player).getGristSet().getGrist(type);
-	}
-	
-	public static long getGrist(Level level, PlayerIdentifier player, Supplier<GristType> type)
-	{
-		return getGrist(level, player, type.get());
-	}
-	
+	//TODO figure out how best to check cache capacity client-side
 	public static boolean canAfford(GristSet base, GristSet cost)
 	{
 		if(base == null || cost == null)
