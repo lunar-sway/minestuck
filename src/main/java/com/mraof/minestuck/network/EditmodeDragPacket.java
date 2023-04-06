@@ -181,7 +181,6 @@ public final class EditmodeDragPacket
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
 					int c = stack.getCount();
-					//BlockPos pos = new BlockPos(x, y, z);
 					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
 					{
 						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
