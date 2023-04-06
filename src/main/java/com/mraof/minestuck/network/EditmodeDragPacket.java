@@ -157,53 +157,56 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
-			
-			cap.setEditDragging(isDown);
-			cap.setEditPos1(positionStart);
-			cap.setEditPos2(positionEnd);
-			cap.setEditTrace(hitVector, side);
-			
-			InteractionHand hand = player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-			ItemStack stack = player.getItemInHand(hand);
-			
-			if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
-				return;
-			
-			float interactionPositionX = (float) (hitVector.x - (double) positionStart.getX());
-			float interactionPositionY = (float) (hitVector.y - (double) positionStart.getY());
-			float interactionPositionZ = (float) (hitVector.z - (double) positionStart.getZ());
-			
-			GristSet missingCost = new GristSet();
-			boolean anyBlockPlaced = false;
-			for(BlockPos pos : BlockPos.betweenClosed(positionStart,positionEnd))
+			if(ServerEditHandler.getData(player) != null)
 			{
-				int c = stack.getCount();
-				//BlockPos pos = new BlockPos(x, y, z);
-				if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
+				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+				
+				cap.setEditDragging(isDown);
+				cap.setEditPos1(positionStart);
+				cap.setEditPos2(positionEnd);
+				cap.setEditTrace(hitVector, side);
+				
+				InteractionHand hand = player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+				ItemStack stack = player.getItemInHand(hand);
+				
+				if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
+					return;
+				
+				float interactionPositionX = (float) (hitVector.x - (double) positionStart.getX());
+				float interactionPositionY = (float) (hitVector.y - (double) positionStart.getY());
+				float interactionPositionZ = (float) (hitVector.z - (double) positionStart.getZ());
+				
+				GristSet missingCost = new GristSet();
+				boolean anyBlockPlaced = false;
+				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
-					//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
-					if(player.isCreative())
-						stack.setCount(c);
-					
-					//broadcasts the block-place sounds to other players.
-					SoundType soundType = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType();
-					player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
-					
-					anyBlockPlaced = true;
-				} else
-					missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
+					int c = stack.getCount();
+					//BlockPos pos = new BlockPos(x, y, z);
+					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
+					{
+						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
+						if(player.isCreative())
+							stack.setCount(c);
+						
+						//broadcasts the block-place sounds to other players.
+						SoundType soundType = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType();
+						player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+						
+						anyBlockPlaced = true;
+					} else
+						missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
+				}
+				if(anyBlockPlaced)
+				{
+					//broadcasts edit sound to other players.
+					player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+					player.swing(hand);
+				}
+				if(!missingCost.isEmpty())
+					player.sendSystemMessage(missingCost.createMissingMessage(), true);
+				
+				ServerEditHandler.removeCursorEntity(player, !anyBlockPlaced);
 			}
-			if(anyBlockPlaced)
-			{
-				//broadcasts edit sound to other players.
-				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
-				player.swing(hand);
-			}
-			if(!missingCost.isEmpty())
-				player.sendSystemMessage(missingCost.createMissingMessage(), true);
-			
-			ServerEditHandler.removeCursorEntity(player, !anyBlockPlaced);
 		}
 	}
 	
@@ -235,41 +238,44 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
-			
-			cap.setEditDragging(isDown);
-			cap.setEditPos1(positionStart);
-			cap.setEditPos2(positionEnd);
-			cap.setEditTrace(hitVector, side);
-			
-			GristSet missingCost = new GristSet();
-			boolean anyBlockDestroyed = false;
-			for(BlockPos pos : BlockPos.betweenClosed(positionStart,positionEnd))
+			if(ServerEditHandler.getData(player) != null)
 			{
+				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
-				if(editModeDestroyCheck(player.getLevel(), player, pos))
+				cap.setEditDragging(isDown);
+				cap.setEditPos1(positionStart);
+				cap.setEditPos2(positionEnd);
+				cap.setEditTrace(hitVector, side);
+				
+				GristSet missingCost = new GristSet();
+				boolean anyBlockDestroyed = false;
+				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
-					player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 					
-					//broadcasts block-break particles and sounds to other players.
-					player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
-					player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
+					if(editModeDestroyCheck(player.getLevel(), player, pos))
+					{
+						player.gameMode.destroyAndAck(pos, 3, "creative destroy");
+						
+						//broadcasts block-break particles and sounds to other players.
+						player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
+						player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
+						
+						anyBlockDestroyed = true;
+					} else
+						missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
+				}
+				if(anyBlockDestroyed)
+				{
+					//broadcasts edit sound to other players.
+					player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
 					
-					anyBlockDestroyed = true;
-				} else
-					missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
-			}
-			if(anyBlockDestroyed)
-			{
-				//broadcasts edit sound to other players.
-				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
+					player.swing(InteractionHand.MAIN_HAND);
+				}
+				if(!missingCost.isEmpty())
+					player.sendSystemMessage(missingCost.createMissingMessage(), true);
 				
-				player.swing(InteractionHand.MAIN_HAND);
+				ServerEditHandler.removeCursorEntity(player, !anyBlockDestroyed);
 			}
-			if(!missingCost.isEmpty())
-				player.sendSystemMessage(missingCost.createMissingMessage(), true);
-			
-			ServerEditHandler.removeCursorEntity(player, !anyBlockDestroyed);
 		}
 	}
 	
@@ -299,13 +305,16 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
-			
-			cap.setEditDragging(isDown);
-			cap.setEditPos1(positionStart);
-			cap.setEditPos2(positionEnd);
-			
-			ServerEditHandler.updateEditToolsServer(player, isDown, positionStart, positionEnd);
+			if(ServerEditHandler.getData(player) != null)
+			{
+				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+				
+				cap.setEditDragging(isDown);
+				cap.setEditPos1(positionStart);
+				cap.setEditPos2(positionEnd);
+				
+				ServerEditHandler.updateEditToolsServer(player, isDown, positionStart, positionEnd);
+			}
 		}
 	}
 	
