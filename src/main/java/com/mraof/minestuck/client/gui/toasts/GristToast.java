@@ -7,6 +7,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ import java.util.List;
  * Utilizes vanilla Minecraft's Toasts system, which is what the advancement and recipe popups use.
  * @author Caldw3ll
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GristToast implements Toast
 {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
@@ -42,12 +46,12 @@ public class GristToast implements Toast
 	private static final float SCALE_X = 0.6F;
 	private static final float SCALE_Y = 0.6F;
 	
-	private GristType type;
+	private final GristType type;
 	private long difference;
 	private long cacheLimit;
 	private long gristCache;
-	private GristHelper.EnumSource source;
-	private boolean increase;
+	private final GristHelper.EnumSource source;
+	private final boolean increase;
 	
 	private long lastChanged;
 	private boolean changed;
@@ -170,9 +174,6 @@ public class GristToast implements Toast
 	//modified version of drawIcon() from MinestuckScreen.java
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		if(icon == null || Minecraft.getInstance() == null)
-			return;
-		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
 		
@@ -218,7 +219,7 @@ public class GristToast implements Toast
 			gristToast.addGrist(pDifference, pCacheLimit);
 	}
 	
-	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase, long cacheLimit, GristSet gristCache)
+	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, long cacheLimit, GristSet gristCache)
 	{
 		
 		List<GristAmount> reqs = set.getAmounts();
@@ -239,9 +240,9 @@ public class GristToast implements Toast
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase, cacheLimit, total);
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, true, cacheLimit, total);
 			else
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase), cacheLimit, total);
+				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, false, cacheLimit, total);
 		}
 	}
 	
