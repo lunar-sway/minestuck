@@ -145,6 +145,13 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapedRecipeBuilder.shaped(MSBlocks.GLOWING_WOOD.get(), 3).define('#', MSBlocks.GLOWING_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.GLOWING_PLANKS.get(), 4).requires(MSTags.Items.GLOWING_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.SHADEWOOD.get(), 3).define('#', MSBlocks.SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.SCARRED_SHADEWOOD.get(), 3).define('#', MSBlocks.SCARRED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.ROTTED_SHADEWOOD.get(), 3).define('#', MSBlocks.ROTTED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_SCARRED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_ROTTED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapelessRecipeBuilder.shapeless(MSBlocks.SHADEWOOD_PLANKS.get(), 4).requires(MSTags.Items.SHADEWOOD_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.FROST_WOOD.get(), 3).define('#', MSBlocks.FROST_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.FROST_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.FROST_PLANKS.get(), 4).requires(MSTags.Items.FROST_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.FROST_LOGS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.RAINBOW_WOOD.get(), 3).define('#', MSBlocks.RAINBOW_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.RAINBOW_LOGS)).save(recipeBuilder);

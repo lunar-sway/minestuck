@@ -1,0 +1,14 @@
+{
+    "blood":  [{ "value": "minestuck:pulse" }],
+    "breath": [{ "value": "minestuck:wind" }],
+    "doom":   [{ "value": "minestuck:thunder" }],
+    "heart":  [{ "value": "minestuck:cake" }],
+    "hope":   [{ "value": "minestuck:towers" }],
+    "life":   [{ "value": "minestuck:rabbits" }],
+    "light":  [{ "value": "minestuck:light" }],
+    "mind":   [{ "value": "minestuck:thought" }],
+    "rage":   [{ "value": "#minestuck:monsters" }],
+    "space":  [{ "value": "minestuck:buckets" }],
+    "time":   [{ "value": "minestuck:clockwork" }],
+    "void":   [{ "value": "minestuck:silence" }]
+}
