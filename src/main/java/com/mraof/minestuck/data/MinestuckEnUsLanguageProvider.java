@@ -663,6 +663,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.KEYBLADE, "Keyblade");
 		addItem(MSItems.CANDY_KEY, "Candy Key");
 		addItem(MSItems.LOCKSOFTENER, "Locksoftener");
+		addItem(MSItems.BISEKEYAL, "Bisekeyal");
 		addItem(MSItems.INKSPLOCKER_UNLOCKER, "Inksplocker Unlocker");
 		addItem(MSItems.INKSQUIDDER_DEPTHKEY, "Inksquidder Depthkey");
 		addItemTooltip(MSItems.INKSQUIDDER_DEPTHKEY, "Kraken open locks with ease!");

@@ -4,7 +4,7 @@
     "item": "minestuck:dice"
   },
   "input2": {
-    "item": "minecraft:bucket"
+    "item": "minecraft:water_bucket"
   },
   "mode": "or",
   "output": {

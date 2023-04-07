@@ -4,10 +4,10 @@
     "item": "minestuck:keyblade"
   },
   "input2": {
-    "item": "minestuck:candy_corn"
+    "item": "minestuck:bi_dye"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
-    "item": "minestuck:candy_key"
+    "item": "minestuck:bisekeyal"
   }
 }

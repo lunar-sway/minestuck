@@ -460,6 +460,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.KEYBLADE.get()).grist(BUILD, 7).grist(RUST, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_KEY.get()).grist(BUILD, 7).grist(CHALK, 1).grist(IODINE, 4).grist(RUBY, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).grist(BUILD, 13).grist(COBALT, 5).grist(RUST, 20).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BISEKEYAL.get()).grist(BUILD, 30).grist(GARNET, 18).grist(AMETHYST, 18).grist(QUARTZ, 12).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.INKSPLOCKER_UNLOCKER.get()).grist(BUILD, 15).grist(TAR, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.INKSQUIDDER_DEPTHKEY.get()).grist(TAR, 13).grist(COBALT, 43).grist(DIAMOND, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.REGIKEY.get()).grist(TAR, 66).grist(AMETHYST, 26).grist(GOLD, 26).build(recipeSaver);

@@ -429,8 +429,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PRINCESS_PERIL.get()).input(MSItems.SHADOWRAZOR.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.KEYBLADE.get()).input(MSItems.HOUSE_KEY.get()).and().input(Items.IRON_SWORD).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CANDY_KEY.get()).input(MSItems.CANDY_KEY.get()).or().input(MSItems.CANDY_CORN.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CANDY_KEY.get()).input(MSItems.KEYBLADE.get()).or().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.CLOTHES_IRON.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BISEKEYAL.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.BI_DYE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.INKSPLOCKER_UNLOCKER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.INK_SQUID_PRO_QUO.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.INKSQUIDDER_DEPTHKEY.get()).input(MSItems.INKSPLOCKER_UNLOCKER.get()).or().input(Items.HEART_OF_THE_SEA).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGIKEY.get()).input(MSItems.KEYBLADE.get()).or().input(MSBlocks.CHESSBOARD.get()).build(consumer);
@@ -939,7 +940,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.FOOD_CAN.get()).input(Items.COOKED_BEEF).and().input(Items.IRON_INGOT).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.INK_SQUID_PRO_QUO.get()).input(MSItems.PAPER_SWORD.get()).or().namedInput(Items.INK_SAC).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.EIGHTBALL.get()).input(MSItems.DICE.get()).or().namedInput(Items.BUCKET).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.EIGHTBALL.get()).input(MSItems.DICE.get()).or().namedInput(Items.WATER_BUCKET).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.PHLEGM_GUSHERS.get()).input(MSItems.BUILD_GUSHERS.get()).and().namedInput(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SORROW_GUSHERS.get()).input(MSItems.PHLEGM_GUSHERS.get()).and().namedInput(MSItems.INK_SQUID_PRO_QUO.get()).build(consumer);
