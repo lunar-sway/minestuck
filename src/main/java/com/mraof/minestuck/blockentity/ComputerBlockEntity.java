@@ -85,6 +85,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 				latestmessage.put(e.getKey(), nbt.getString("text" + e.getKey()));
 		
 		programData = nbt.getCompound("programData");
+		if(nbt.contains("theme")) setTheme(Theme.values()[nbt.getInt("theme")]);
 		
 		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
@@ -126,6 +127,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		compound.putBoolean("hasParadoxInfoStored", hasParadoxInfoStored);
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
+		
+		compound.putInt("theme", theme.ordinal());
 	}
 	
 	@Override
