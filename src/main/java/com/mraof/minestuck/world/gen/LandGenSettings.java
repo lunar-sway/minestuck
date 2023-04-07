@@ -39,9 +39,9 @@ public final class LandGenSettings
 	 */
 	public float roughThreshold = 0.0F;
 	
-	public float oceanOffset = -0.22F;
-	public float inlandOffset = 0.05F;
-	public float inlandAngle = 0.3F;
+	public float oceanOffset = -0.27F;
+	public float inlandOffset = 0.00F;
+	public float inlandAngle = 0.35F;
 	
 	public float oceanFactor = 6;
 	public float normalFactor = 5;
