@@ -72,30 +72,6 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	}
 	
 	@Override
-	public void addAdditionalSaveData(CompoundTag compound)
-	{
-		super.addAdditionalSaveData(compound);
-		
-		compound.putInt("DespawnTimer", despawnTimer);
-		compound.putInt("Animation", animation.ordinal());
-		if(removalFlag)
-			compound.putBoolean("RemovalFlag", true);
-	}
-	
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound)
-	{
-		super.readAdditionalSaveData(compound);
-		
-		if(compound.contains("DespawnTimer", Tag.TAG_ANY_NUMERIC))
-			despawnTimer = compound.getInt("DespawnTimer");
-		if(compound.contains("Animation", Tag.TAG_ANY_NUMERIC))
-			animation = Animation.values()[compound.getInt("Animation")];
-		if(compound.contains("RemovalFlag"))
-			removalFlag = compound.getBoolean("RemovalFlag");
-	}
-	
-	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(animation.ordinal());
