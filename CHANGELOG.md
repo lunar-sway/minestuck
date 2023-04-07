@@ -45,6 +45,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 ### Fixed
 
 - Restore land sky rendering
+- Removed sunset fog coloration in lands
 
 ### Contributors for this release
 
