@@ -43,9 +43,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
-
+/** Class for handling the click-and-drag editmode tools on the client-side.
+ * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
+ * @see EditmodeDragPacket for the tool's server-sided block-placing code.
+ * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
+ * @author Caldw3ll, Cibernet
+ */
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-public class EditToolDrag
+public class ClientEditToolDrag
 {
 	
 	@SubscribeEvent
@@ -53,15 +58,15 @@ public class EditToolDrag
 	{
 		if(event.side == LogicalSide.CLIENT)
 		{
-			EditToolDrag.doRecycleCode(event);
-			EditToolDrag.doReviseCode(event);
+			ClientEditToolDrag.doRecycleCode(event);
+			ClientEditToolDrag.doReviseCode(event);
 		}
 	}
 	
 	@SubscribeEvent
 	public static void renderWorld(RenderLevelStageEvent event)
 	{
-		EditToolDrag.renderOutlines(event);
+		ClientEditToolDrag.renderOutlines(event);
 	}
 	
 	/**
