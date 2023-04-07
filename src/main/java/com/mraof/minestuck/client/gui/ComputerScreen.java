@@ -30,9 +30,9 @@ public class ComputerScreen extends Screen
 	public static final int xSize = 176;
 	public static final int ySize = 166;
 	
+	public final ComputerBlockEntity be;
 	private final List<ComputerIcon> icons;
 	private PowerButton powerButton;
-	public final ComputerBlockEntity be;
 	private ComputerProgram program;
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
@@ -66,32 +66,27 @@ public class ComputerScreen extends Screen
 		//outside gui bits
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, bsod ? guiBsod : guiBackground);
+		RenderSystem.setShaderTexture(0, guiBackground);
 		blit(poseStack, xOffset, yOffset, 0, 0, xSize, ySize);
 		
 		if(!bsod)
 		{
 			//desktop background
 			RenderSystem.setShaderTexture(0, this.be.getTheme().getTexture());
-			blit(poseStack, xOffset+9, yOffset+38, 0, 0, 158, 120);
+			blit(poseStack, xOffset + 9, yOffset + 38, 0, 0, 158, 120);
 			
+			//program and widgets
 			if(program != null) program.paintGui(poseStack, this, be);
-			
 			super.render(poseStack, mouseX, mouseY, partialTicks);
 			
 			//corner bits (goes on top of computer screen slightly)
 			RenderSystem.setShaderTexture(0, guiBackground);
-			blit(poseStack, xOffset+9, yOffset+38, xSize, 0, 3, 3);
-			blit(poseStack, xOffset+164, yOffset+38, xSize+3, 0, 3, 3);
+			blit(poseStack, xOffset + 9, yOffset + 38, xSize, 0, 3, 3);
+			blit(poseStack, xOffset + 164, yOffset + 38, xSize + 3, 0, 3, 3);
+		} else {
+			RenderSystem.setShaderTexture(0, guiBsod);
+			blit(poseStack, xOffset+9, yOffset+38, 0, 0, 158, 120);
 		}
-	}
-	
-	private void exit(Button b)
-	{
-		if(program == null)
-			minecraft.setScreen(null);
-		else
-			exitProgram();
 	}
 	
 	public void updateGui()
@@ -106,15 +101,15 @@ public class ComputerScreen extends Screen
 		
 		int programCount = be.installedPrograms.size();
 		for(Entry<Integer, Boolean> currentProgram : be.installedPrograms.entrySet())
-		{
 			if(currentProgram.getValue())
 			{
-				icons.add(addRenderableWidget(
-						new ComputerIcon(xOffset + 15 + Math.floorDiv(programCount, 5) * 20, yOffset + 24 + programCount % 5 * 20, currentProgram.getKey())
+				icons.add(addRenderableWidget(new ComputerIcon(
+						xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
+						yOffset + 24 + programCount % 5 * 20,
+						currentProgram.getKey())
 				));
 				programCount--;
 			}
-		}
 	}
 	
 	protected void setProgram(int id)
@@ -205,7 +200,7 @@ public class ComputerScreen extends Screen
 		public PowerButton()
 		{
 			super((ComputerScreen.this.width-xSize)/2 +143, (ComputerScreen.this.height-ySize)/2 +3,
-					29, 29, Component.empty(), ComputerScreen.this::exit);
+					29, 29, Component.empty(), b->minecraft.setScreen(null));
 		}
 		
 		@Override

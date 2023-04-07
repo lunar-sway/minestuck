@@ -1,6 +1,7 @@
 package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
 	private static final HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<>();
+	public static final ResourceLocation INVALID_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side
@@ -77,5 +79,8 @@ public abstract class ComputerProgram
 	/**
 	 * @return desktop icon for this program.
 	 */
-	public abstract ResourceLocation getIcon();
+	public ResourceLocation getIcon()
+	{
+		return INVALID_ICON;
+	}
 }

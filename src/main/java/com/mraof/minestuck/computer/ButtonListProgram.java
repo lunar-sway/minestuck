@@ -67,10 +67,12 @@ public abstract class ButtonListProgram extends ComputerProgram
 	@Override
 	public final void onInitGui(ComputerScreen gui)
 	{
+		var xOffset = (gui.width-ComputerScreen.xSize)/2;
+		var yOffset = (gui.height-ComputerScreen.ySize)/2;
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
 		{
-			Button button = new ExtendedButton((gui.width - ComputerScreen.xSize) / 2 + 14, (gui.height - ComputerScreen.ySize) / 2 + 60 + i * 24, 120, 20, Component.empty(), button1 -> onButtonPressed(gui, button1));
+			Button button = new ExtendedButton(xOffset+14, yOffset+60 + i*24, 120, 20, Component.empty(), button1 -> onButtonPressed(gui, button1));
 			buttonMap.put(button, new UnlocalizedString(""));
 			gui.addRenderableWidget(button);
 		}
