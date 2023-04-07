@@ -29,7 +29,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, true, false), 2, 4, 5);
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
 	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
@@ -39,7 +39,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
-				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1.5);
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2);
 	}
 	
 	@Override
@@ -102,12 +102,19 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
+		//imps will not attack players above rung 15 unless an underling is attacked in their presence
 		if(entity instanceof ServerPlayer)
 		{
-			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 19;
+			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 16;
 		}
 		return super.isAppropriateTarget(entity);
+	}
+	
+	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.CLAW)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.2F, 1.75F);
 	}
 	
 	@Override
