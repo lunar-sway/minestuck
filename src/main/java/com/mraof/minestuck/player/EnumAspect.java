@@ -1,9 +1,13 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
 
 import java.util.EnumSet;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -15,6 +19,10 @@ import java.util.Set;
 public enum EnumAspect	//TODO This could potentially be changed to a registry. However note difficulties with the title land aspect registry
 {
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
+	
+	public static final Codec<EnumAspect> CODEC = Codec.STRING.comapFlatMap(
+			str -> Optional.ofNullable(fromString(str)).map(DataResult::success).orElseGet(() -> DataResult.error("Couldn't parse aspect: " + str)),
+			EnumAspect::toString);
 	
 	/**
 	 * This method generates one of the 12 aspects that is not specified in the
@@ -75,7 +83,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	@Override
 	public String toString()
 	{
-		return this.name().toLowerCase();
+		return this.name().toLowerCase(Locale.ROOT);
 	}
 	
 	public static EnumAspect fromString(String string)
