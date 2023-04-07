@@ -7,6 +7,7 @@ import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
+import com.mraof.minestuck.entity.consort.ConsortEntity;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -27,6 +28,7 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import java.util.Random;
 import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
@@ -108,9 +110,21 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
+	}
+	
+	private static PlayState idleAnimation(AnimationEvent<LichEntity> event)
+	{
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)

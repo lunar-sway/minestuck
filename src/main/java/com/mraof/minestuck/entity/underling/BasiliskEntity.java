@@ -183,9 +183,15 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	@Override
 	public void registerControllers(AnimationData data)
 	{
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, BasiliskEntity::idleAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 1, BasiliskEntity::swingAnimation));
+	}
+	
+	private static PlayState idleAnimation(AnimationEvent<BasiliskEntity> event)
+	{
+		return PlayState.CONTINUE; //TODO make tounge & tail flick
 	}
 	
 	private static PlayState walkAnimation(AnimationEvent<BasiliskEntity> event)
