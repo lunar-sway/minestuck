@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class DiskBurner extends ButtonListProgram
 {
+	public static final String NEED_CODE = "minestuck.program.disk_burner.needs_code";
+	public static final String NO_DISKS = "minestuck.program.disk_burner.needs_disks";
 	public static final String BURN_SERVER_DISK = "minestuck.program.disk_burner.burn_server_disk";
 	public static final String BURN_CLIENT_DISK = "minestuck.program.disk_burner.burn_client_disk";
 	public static final String CHOOSE = "minestuck.program.disk_burner.choose";
@@ -22,7 +24,13 @@ public class DiskBurner extends ButtonListProgram
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
 		list.add(new UnlocalizedString(CHOOSE));
 		
-		if(be != null && be.hasAllCode() && be.blankDisksStored > 0)
+		if(!be.hasAllCode())
+		{
+			list.add(new UnlocalizedString(NEED_CODE));
+		} else if (be.blankDisksStored == 0)
+		{
+			list.add(new UnlocalizedString(NO_DISKS));
+		} else
 		{
 			list.add(new UnlocalizedString(BURN_SERVER_DISK));
 			list.add(new UnlocalizedString(BURN_CLIENT_DISK));

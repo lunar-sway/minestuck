@@ -71,11 +71,8 @@ public abstract class ButtonListProgram extends ComputerProgram
 		var yOffset = (gui.height-ComputerScreen.ySize)/2;
 		buttonMap.clear();
 		for(int i = 0; i < 4; i++)
-		{
-			Button button = new ExtendedButton(xOffset+14, yOffset+60 + i*24, 120, 20, Component.empty(), button1 -> onButtonPressed(gui, button1));
-			buttonMap.put(button, new UnlocalizedString(""));
-			gui.addRenderableWidget(button);
-		}
+			buttonMap.put(gui.addRenderableWidget(
+					new ExtendedButton(xOffset + 14, yOffset + 60 + i * 24, 120, 20, Component.empty(), button -> onButtonPressed(gui, button))), new UnlocalizedString(""));
 		
 		upButton = gui.addRenderableWidget(new ArrowButton(true, gui));
 		downButton = gui.addRenderableWidget(new ArrowButton(false, gui));
@@ -89,6 +86,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		ArrayList<UnlocalizedString> list = getStringList(gui.be);
 		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
+		
 		int pos = -1;
 		for(UnlocalizedString s : list)
 		{
@@ -111,6 +109,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			}
 			pos++;
 		}
+		
 		if(index == 0 && pos != 4)
 			for(; pos < 4; pos++)
 			{
@@ -123,6 +122,10 @@ public abstract class ButtonListProgram extends ComputerProgram
 			UnlocalizedString data = entry.getValue();
 			entry.getKey().active = !data.string.isEmpty();
 			entry.getKey().setMessage(data.asTextComponent());
+			
+			// TODO VERY TEMPORARY FIX UNTIL BUTTON LIST GETS DIFFERENT BUTTON TYPES
+			if(gui.be.programSelected == 2 && (!gui.be.hasAllCode() || gui.be.blankDisksStored == 0))
+				entry.getKey().active = false;
 		}
 	}
 	
