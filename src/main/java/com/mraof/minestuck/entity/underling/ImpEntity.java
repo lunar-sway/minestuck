@@ -39,7 +39,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
-				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1.5);
 	}
 	
 	@Override
@@ -117,7 +117,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2, ImpEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ImpEntity> event)
@@ -176,7 +176,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState attackAnimation(AnimationEvent<ImpEntity> event)
 	{
 		if(event.getAnimatable().isActive())
 		{
