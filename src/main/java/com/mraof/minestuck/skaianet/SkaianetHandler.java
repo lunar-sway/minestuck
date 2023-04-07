@@ -2,6 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
@@ -9,7 +10,6 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -133,7 +133,7 @@ public final class SkaianetHandler extends SavedData
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putClientMessage(e.getResult().translationKey());
+						computer.putProgramMessage(0, e.getResult().translationKey());
 					}
 				} else
 				{
@@ -145,7 +145,7 @@ public final class SkaianetHandler extends SavedData
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putClientMessage(e.getResult().translationKey());
+						computer.putProgramMessage(0, e.getResult().translationKey());
 					}
 				}
 			} else
@@ -158,7 +158,7 @@ public final class SkaianetHandler extends SavedData
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-					computer.putClientMessage(e.getResult().translationKey());
+					computer.putProgramMessage(0, e.getResult().translationKey());
 				}
 			}
 		}
@@ -263,8 +263,8 @@ public final class SkaianetHandler extends SavedData
 			resumingClients.remove(player);
 			if(computer != null)
 			{
-				computer.putClientBoolean("isResuming", false);
-				computer.putClientMessage(STOP_RESUME);
+				computer.putProgramBoolean(0, "isResuming", false);
+				computer.putProgramMessage(0, STOP_RESUME);
 			}
 		} else
 		{
@@ -282,8 +282,8 @@ public final class SkaianetHandler extends SavedData
 		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			computer.putClientBoolean("isResuming", false);
-			computer.putClientMessage(STOP_RESUME);
+			computer.putProgramBoolean(0, "isResuming", false);
+			computer.putProgramMessage(0, STOP_RESUME);
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(owner);
@@ -313,8 +313,8 @@ public final class SkaianetHandler extends SavedData
 		if(map.contains(computer))
 		{
 			map.remove(owner);
-			computer.putServerBoolean("isOpen", false);
-			computer.putServerMessage(STOP_RESUME);
+			computer.putProgramBoolean(1, "isOpen", false);
+			computer.putProgramMessage(1, STOP_RESUME);
 		}
 	}
 	
@@ -332,13 +332,13 @@ public final class SkaianetHandler extends SavedData
 		
 		if(clientComputer != null)
 		{
-			clientComputer.putClientBoolean("connectedToServer", false);
-			clientComputer.putClientMessage(CLOSED);
+			clientComputer.putProgramBoolean(0, "connectedToServer", false);
+			clientComputer.putProgramMessage(0, CLOSED);
 		}
 		if(serverComputer != null)
 		{
 			serverComputer.clearConnectedClient();
-			serverComputer.putServerMessage(CLOSED);
+			serverComputer.putProgramMessage(1, CLOSED);
 		}
 		//Is secondary connection if primary is present, and does not equal this connection.
 		// TODO it being primary/secondary should be present as a final field in connections
@@ -381,7 +381,7 @@ public final class SkaianetHandler extends SavedData
 			{
 				ISburbComputer cc = c.getClientComputer().getComputer(mcServer), sc = c.getServerComputer().getComputer(mcServer);
 				if(cc == null || sc == null || c.getClientComputer().isInNether() || c.getServerComputer().isInNether() || !c.getClientIdentifier().equals(cc.getOwner())
-						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
+						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getProgramBoolean(0, "connectedToServer"))
 				{
 					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
 					closeConnection(c, cc, sc);

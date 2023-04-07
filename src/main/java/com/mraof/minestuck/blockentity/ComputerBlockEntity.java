@@ -205,29 +205,15 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public boolean getClientBoolean(String name)
+	public boolean getProgramBoolean(int id, String name)
 	{
-		return getData(0).getBoolean(name);
+		return getData(id).getBoolean(name);
 	}
 	
 	@Override
-	public boolean getServerBoolean(String name)
+	public void putProgramBoolean(int id, String name, boolean value)
 	{
-		return getData(1).getBoolean(name);
-	}
-	
-	@Override
-	public void putClientBoolean(String name, boolean value)
-	{
-		getData(0).putBoolean(name, value);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putServerBoolean(String name, boolean value)
-	{
-		getData(1).putBoolean(name, value);
+		getData(id).putBoolean(name, value);
 		setChanged();
 		markBlockForUpdate();
 	}
@@ -241,17 +227,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public void putClientMessage(String message)
+	public void putProgramMessage(int id, String message)
 	{
-		latestmessage.put(0, message);
-		setChanged();
-		markBlockForUpdate();
-	}
-	
-	@Override
-	public void putServerMessage(String message)
-	{
-		latestmessage.put(1, message);
+		latestmessage.put(id, message);
 		setChanged();
 		markBlockForUpdate();
 	}
