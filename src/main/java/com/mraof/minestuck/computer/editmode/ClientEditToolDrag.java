@@ -104,21 +104,14 @@ public class ClientEditToolDrag
 	}
 	
 	/**
-	 * Determines whether or not the game should try to begin a drag tool.
-	 * @param toolKey The given tool's key.
-	 * @param isEditDragging Whether the game has started dragging already.
-	 * @return True if you're holding the key, but the game hasn't started a selection yet.
-	 */
-	private static boolean shouldBeginDrag(KeyMapping toolKey, boolean isEditDragging) { return toolKey.isDown() && !isEditDragging; }
-	
-	/**
 	 * Attempts to get the currently highlighted block.
 	 * If the player is highlighting a block, initialize the target edit-tool's parameters.
 	 * @param targetTool The tool to begin using. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
+	 * @return True if the ray hits a block. False if it doesn't
 	 */
-	private static void tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
+	private static boolean tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
 		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in tryBeginDrag() must be a drag tool (Revise or Recycle)!");
@@ -127,15 +120,11 @@ public class ClientEditToolDrag
 		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 		{
 			cap.beginDragTools(targetTool, blockHit, player);
+			return true;
 		}
+		else
+			return false;
 	}
-	
-	/**
-	 * Determines whether the game should update the selection and cursor.
-	 * @param cap The current edit-tools capability.
-	 * @return True if the game has successfully begun dragging.
-	 */
-	private static boolean shouldUpdateDrag(IEditTools cap) { return cap.getEditPos1() != null; }
 	
 	/**
 	 * Sets/updates the second selection point according to the given tool,
@@ -153,14 +142,6 @@ public class ClientEditToolDrag
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
 		MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
-	
-	/**
-	 * Determines whether the game should attempt to fill/destroy selected blocks.
-	 * @param toolKey The given tool's key.
-	 * @param isEditDragging Whether the game has started dragging already.
-	 * @return True if the key isn't being held, and a selection is still active.
-	 */
-	private static boolean shouldFinishDrag(KeyMapping toolKey, boolean isEditDragging) { return !toolKey.isDown() && isEditDragging; }
 	
 	/**
 	 * When the player releases the given tool's key, if a selection is active, a packet for filling/destroying the selected blocks and removing the cursor will be sent.
@@ -215,13 +196,17 @@ public class ClientEditToolDrag
 			return;
 		}
 		
-		if(shouldBeginDrag(toolKey, isDragging))
-			tryBeginDrag(IEditTools.ToolMode.REVISE, cap, player);
+		//If key has just been pressed, begin drag.
+		if(toolKey.isDown() && !isDragging)
+			if(!tryBeginDrag(IEditTools.ToolMode.REVISE, cap, player))
+				return; //Returns if the player is not highlighting a block.
 		
-		if(shouldUpdateDrag(cap))
+		//If the selection has already successfully found a starting point, find the end-point.
+		if(cap.getEditPos1() != null)
 			updateDragPosition(IEditTools.ToolMode.REVISE, cap, player, toolKey);
 		
-		if(shouldFinishDrag(toolKey, isDragging))
+		//If key has just been released, finish drag.
+		if(!toolKey.isDown() && isDragging)
 			finishDragging(IEditTools.ToolMode.REVISE, cap, player);
 		
 		cap.setEditDragging(toolKey.isDown());
@@ -265,13 +250,17 @@ public class ClientEditToolDrag
 			return;
 		}
 		
-		if(shouldBeginDrag(toolKey, isDragging))
-			tryBeginDrag(IEditTools.ToolMode.RECYCLE, cap, player);
+		//If key has just been pressed, begin drag.
+		if(toolKey.isDown() && !isDragging)
+			if(!tryBeginDrag(IEditTools.ToolMode.RECYCLE, cap, player))
+				return; //Returns if the player is not highlighting a block.
 		
-		if(shouldUpdateDrag(cap))
+		//If the selection has already successfully found a starting point, find the end-point.
+		if(cap.getEditPos1() != null)
 			updateDragPosition(IEditTools.ToolMode.RECYCLE, cap, player, toolKey);
 		
-		if(shouldFinishDrag(toolKey, isDragging))
+		//If key has just been released, finish drag.
+		if(!toolKey.isDown() && isDragging)
 			finishDragging(IEditTools.ToolMode.RECYCLE, cap, player);
 		
 		cap.setEditDragging(toolKey.isDown());
