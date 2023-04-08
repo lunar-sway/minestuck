@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 
 import java.util.List;
-import java.util.Random;
 
 public class SalamanderVillagePieces
 {
@@ -35,7 +35,7 @@ public class SalamanderVillagePieces
 	/**
 	 * Helper function for adding village pieces associated with salamanders.
 	 */
-	public static void addPieces(ILandType.PieceRegister register, Random random)
+	public static void addPieces(ILandType.PieceRegister register, RandomSource random)
 	{
 		register.add(PipeHouse1::createPiece, 3, Mth.nextInt(random, 5, 8));
 		register.add(HighPipeHouse1::createPiece, 6, Mth.nextInt(random, 2, 4));
@@ -44,7 +44,7 @@ public class SalamanderVillagePieces
 	
 	public static class RuinedTowerMushroomCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public RuinedTowerMushroomCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public RuinedTowerMushroomCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			super(MSStructurePieces.MUSHROOM_TOWER_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 9 - 1, 80, z + 9 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
@@ -56,7 +56,7 @@ public class SalamanderVillagePieces
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 4, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 4, Direction.WEST);
@@ -65,7 +65,7 @@ public class SalamanderVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -201,7 +201,7 @@ public class SalamanderVillagePieces
 	
 	public static class PipeHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public PipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public PipeHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.PIPE_HOUSE_1.get(), 0, boundingBox, 2);
 			this.setOrientation(facing);
@@ -212,14 +212,14 @@ public class SalamanderVillagePieces
 			super(MSStructurePieces.PIPE_HOUSE_1.get(), nbt, 2);
 		}
 		
-		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static PipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 6, 5, 7, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new PipeHouse1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel worldIn, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -266,7 +266,7 @@ public class SalamanderVillagePieces
 	
 	public static class HighPipeHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public HighPipeHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.HIGH_PIPE_HOUSE_1.get(), 0, boundingBox, 3);
 			this.setOrientation(facing);
@@ -277,14 +277,14 @@ public class SalamanderVillagePieces
 			super(MSStructurePieces.HIGH_PIPE_HOUSE_1.get(), nbt, 3);
 		}
 		
-		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static HighPipeHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 7, 13, 8, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new HighPipeHouse1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel worldIn, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -365,7 +365,7 @@ public class SalamanderVillagePieces
 	
 	public static class SmallTowerStore extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public SmallTowerStore(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.SMALL_TOWER_STORE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
@@ -376,14 +376,14 @@ public class SalamanderVillagePieces
 			super(MSStructurePieces.SMALL_TOWER_STORE.get(), nbt, 1);
 		}
 		
-		public static SmallTowerStore createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static SmallTowerStore createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 7, 10, 8, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new SmallTowerStore(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel worldIn, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{

@@ -10,6 +10,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,7 +37,7 @@ public class ContainerGristCost extends GeneratedGristCost
 	@Override
 	protected GristSet generateCost(GenerationContext context)
 	{
-		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getContainerItem() : ItemStack.EMPTY;
+		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
 			GristSet cost = context.lookupCostFor(container);
@@ -46,7 +47,7 @@ public class ContainerGristCost extends GeneratedGristCost
 			} else
 			{
 				if(context.isPrimary())
-					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", container.getItem().getRegistryName(), id);
+					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", ForgeRegistries.ITEMS.getKey(container.getItem()), id);
 			}
 		} else
 		{

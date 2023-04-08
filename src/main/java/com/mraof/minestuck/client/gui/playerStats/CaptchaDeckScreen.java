@@ -15,7 +15,7 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,7 +34,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	
 	public CaptchaDeckScreen(int windowId, Inventory playerInventory)
 	{
-		super(new CaptchaDeckMenu(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
+		super(new CaptchaDeckMenu(windowId, playerInventory), playerInventory, Component.translatable(TITLE));
 		guiWidth = 178;
 		guiHeight= 145;
 	}
@@ -43,8 +43,8 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	public void init()
 	{
 		super.init();
-		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, new TranslatableComponent(USE_ITEM), button -> use()));
-		sylladexMap = addRenderableWidget(new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, new TranslatableComponent(SYLLADEX), button -> sylladex()));
+		modusButton = addRenderableWidget(new ExtendedButton(xOffset + 102, yOffset + 31, 50, 18, Component.translatable(USE_ITEM), button -> use()));
+		sylladexMap = addRenderableWidget(new ExtendedButton(xOffset + 6, yOffset + 31, 60, 18, Component.translatable(SYLLADEX), button -> sylladex()));
 		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !menu.getMenuItem().isEmpty();
 	}
@@ -85,7 +85,7 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 				Modus modus = ClientPlayerData.getModus();
 				if(newModus != null && modus != null && newModus.getClass() != modus.getClass() && !newModus.canSwitchFrom(modus))
 				{
-					minecraft.screen = new ConfirmScreen(this::onConfirm, new TranslatableComponent(SylladexScreen.EMPTY_SYLLADEX_1), new TranslatableComponent(SylladexScreen.EMPTY_SYLLADEX_2))
+					minecraft.screen = new ConfirmScreen(this::onConfirm, Component.translatable(SylladexScreen.EMPTY_SYLLADEX_1), Component.translatable(SylladexScreen.EMPTY_SYLLADEX_2))
 					{
 						@Override
 						public void removed()

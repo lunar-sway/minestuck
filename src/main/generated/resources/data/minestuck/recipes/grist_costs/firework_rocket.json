@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:chalk": 5,
+    "minestuck:sulfur": 4
+  },
   "ingredient": {
     "item": "minecraft:firework_rocket"
-  },
-  "grist_cost": {
-    "minestuck:sulfur": 4,
-    "minestuck:chalk": 5
   }
 }

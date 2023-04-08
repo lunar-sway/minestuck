@@ -7,7 +7,7 @@ import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -95,7 +95,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
-			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
+			firstKillBonus(entity, EcheladderBonusType.IMP);
 		}
 	}
 	

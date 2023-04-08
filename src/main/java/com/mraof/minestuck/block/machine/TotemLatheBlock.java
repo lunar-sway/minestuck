@@ -2,6 +2,7 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.EnumDowelType;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -9,14 +10,17 @@ import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -32,11 +36,14 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
 /**
  * Carves a cruxite dowel into a totem based on the card(s) put into the machines card slots. It has two block entities. One for the slot and one for dowel area which is rendered in a distinct way
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TotemLatheBlock extends MultiMachineBlock
 {
 	protected final Map<Direction, VoxelShape> shape;
@@ -75,7 +82,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
-		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+		if(!mainPos.equals(pos) && level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
 				&& !otherState.isAir() && !state.isAir()
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
@@ -150,17 +157,19 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 		{
-			if(state.getBlock() != newState.getBlock())
+			if(!newState.is(this) && level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 			{
-				BlockEntity totemLathe = worldIn.getBlockEntity(pos);
-				if(totemLathe instanceof ItemStackBlockEntity)
+				ItemStack stack = blockEntity.getStack();
+				if(!stack.isEmpty())
 				{
-					Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackBlockEntity) totemLathe).getStack());
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+					blockEntity.setStack(ItemStack.EMPTY);
 				}
 			}
-			super.onRemove(state, worldIn, pos, newState, isMoving);
+			
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 	
@@ -197,26 +206,14 @@ public class TotemLatheBlock extends MultiMachineBlock
 			builder.add(COUNT);
 		}
 		
-		//TODO blockentity is not deleted on destruction of slot component, even if every block in the machine is destroyed. Once the world is quit and reloaded, it is fixed
 		@Override
-		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 		{
-			if(state.getBlock() != newState.getBlock())
-			{
-				BlockEntity be = worldIn.getBlockEntity(pos);
-				if(be instanceof TotemLatheBlockEntity totemLathe)
-				{
-					if(!totemLathe.getCard1().isEmpty())
-					{
-						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
-					}
-					if(!totemLathe.getCard2().isEmpty())
-					{
-						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
-					}
-				}
-			}
-			super.onRemove(state, worldIn, pos, newState, isMoving);
+			if(!newState.is(state.getBlock()) &&
+					level.getBlockEntity(pos) instanceof TotemLatheBlockEntity blockEntity)
+				blockEntity.dropItems();
+			
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 }

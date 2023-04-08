@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:claymore"
-  },
   "grist_cost": {
     "minestuck:build": 210,
     "minestuck:rust": 45
+  },
+  "ingredient": {
+    "item": "minestuck:claymore"
   }
 }

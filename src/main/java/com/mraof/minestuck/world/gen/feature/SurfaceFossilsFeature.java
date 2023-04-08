@@ -4,11 +4,10 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 /**
  * A version of the {@link net.minecraft.world.level.levelgen.feature.FossilFeature}, but it can be spawned on the terrain surface reliably.
@@ -31,13 +30,13 @@ public class SurfaceFossilsFeature extends AbstractTemplateFeature<NoneFeatureCo
 	}
 	
 	@Override
-	protected ResourceLocation pickTemplate(Random random)
+	protected ResourceLocation pickTemplate(RandomSource random)
 	{
 		return FOSSILS[random.nextInt(FOSSILS.length)];
 	}
 	
 	@Override
-	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, Random random)
+	protected int pickY(WorldGenLevel level, BlockPos pos, Vec3i templateSize, RandomSource random)
 	{
 		int yMin = level.getMaxBuildHeight(), yMax = level.getMinBuildHeight();
 		for(BlockPos floorPos : BlockPos.betweenClosed(0, 0, 0, templateSize.getX(), 0, templateSize.getZ()))

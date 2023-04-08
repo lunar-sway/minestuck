@@ -42,7 +42,7 @@ public class LandBiomeGenVerifier
 				landType.addBiomeGeneration(builder, StructureBlockRegistry.getOrDefault(null));
 			} catch(RuntimeException e)
 			{
-				LOGGER.error("Detected issue with terrain land type {}:", landType.getRegistryName(), e);
+				LOGGER.error("Detected issue with terrain land type {}:", landType, e);
 			}
 		}
 		for(TitleLandType landType : LandTypes.TITLE_REGISTRY.get())
@@ -52,7 +52,7 @@ public class LandBiomeGenVerifier
 				landType.addBiomeGeneration(builder, StructureBlockRegistry.getOrDefault(null), MSBiomes.DEFAULT_LAND);
 			} catch(RuntimeException e)
 			{
-				LOGGER.error("Detected issue with title land type {}:", landType.getRegistryName(), e);
+				LOGGER.error("Detected issue with title land type {}:", landType, e);
 			}
 		}
 		

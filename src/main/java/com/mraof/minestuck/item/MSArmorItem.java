@@ -2,13 +2,16 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -29,15 +32,14 @@ public class MSArmorItem extends ArmorItem
     }
 	
 	@Override
-	public void initializeClient(Consumer<IItemRenderProperties> consumer)
+	public void initializeClient(Consumer<IClientItemExtensions> consumer)
 	{
-		consumer.accept(new IItemRenderProperties()
+		consumer.accept(new IClientItemExtensions()
 		{
-			@Nullable
 			@Override
-			public HumanoidModel<?> getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default)
+			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
-				if(armorSlot == slot)
+				if(equipmentSlot == slot)
 				{
 					HumanoidModel<?> model = ArmorModels.get(MSArmorItem.this);
 					if (model != null)
@@ -53,18 +55,18 @@ public class MSArmorItem extends ArmorItem
 						model.hat.visible = slot == EquipmentSlot.HEAD;
 						
 						
-						model.crouching = _default.crouching;
-						model.riding = _default.riding;
-						model.young = _default.young;
+						model.crouching = original.crouching;
+						model.riding = original.riding;
+						model.young = original.young;
 						
-						model.rightArmPose = _default.rightArmPose;
-						model.leftArmPose = _default.leftArmPose;
+						model.rightArmPose = original.rightArmPose;
+						model.leftArmPose = original.leftArmPose;
 						
 						return model;
 					}
 				}
 				
-				return null;
+				return original;
 			}
 		});
 	}
@@ -73,6 +75,7 @@ public class MSArmorItem extends ArmorItem
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type)
 	{
-        return getRegistryName().getNamespace() + ":textures/models/armor/" + (texture.isEmpty() ? getRegistryName().getPath() : texture) + ".png";
+		ResourceLocation name = ForgeRegistries.ITEMS.getKey(this);
+        return name.getNamespace() + ":textures/models/armor/" + (texture.isEmpty() ? name.getPath() : texture) + ".png";
     }
 }

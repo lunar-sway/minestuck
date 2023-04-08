@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 48,
+    "minestuck:gold": 98,
+    "minestuck:ruby": 58,
+    "minestuck:sulfur": 38,
+    "minestuck:tar": 48
+  },
+  "ingredient": {
+    "item": "minestuck:star_ray"
+  }
+}

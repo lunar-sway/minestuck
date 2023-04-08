@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,8 +17,8 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -30,7 +29,9 @@ import javax.annotation.Nullable;
 public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.mini_cruxtruder";
-	public static final RunType TYPE = RunType.AUTOMATIC;
+	public static final int MAX_PROGRESS = 100;
+	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.AUTOMATIC, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	public int color = ColorHandler.DEFAULT_COLOR;
 	
 	public MiniCruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -45,20 +46,18 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		ItemStack stack1 = itemHandler.getStackInSlot(1);
 		return (!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(0).isEmpty() && (stack1.isEmpty() || stack1.getCount() < stack1.getMaxStackSize() && ColorHandler.getColorFromStack(stack1) == this.color));
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		// Process the Raw Cruxite
 		
@@ -72,12 +71,14 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
+		this.progressTracker.load(nbt);
 		this.color = nbt.getInt("color");
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
+		this.progressTracker.save(compound);
 		compound.putInt("color", color);
 		super.saveAdditional(compound);
 	}
@@ -85,7 +86,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1));
@@ -95,7 +96,7 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
 		}
@@ -106,6 +107,6 @@ public class MiniCruxtruderBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniCruxtruderMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

@@ -1,12 +1,12 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:bident"
-  },
   "grist_cost": {
+    "minestuck:amethyst": 11,
     "minestuck:build": 239,
     "minestuck:garnet": 11,
-    "minestuck:amethyst": 11,
     "minestuck:quartz": 8
+  },
+  "ingredient": {
+    "item": "minestuck:bident"
   }
 }

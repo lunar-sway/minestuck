@@ -1,9 +1,8 @@
 package com.mraof.minestuck.computer;
 
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -48,15 +47,13 @@ public class ProgramData
 	
 	/**
 	 * Returns the id of the program. Note that it returns -2 if the item does
-	 * not correspond to any program, as -1 is used for an easter egg.
+	 * not correspond to any program.
 	 */
 	public static int getProgramID(ItemStack item)
 	{
 		if(item.isEmpty())
 			return -2;
 		item = item.copy();
-		if(item.getItem().equals(Items.MUSIC_DISC_11))
-			return -1;
 		item.setCount(1);
 		for(int id : disks.keySet())
 			if(disks.get(id).sameItem(item))
@@ -67,8 +64,8 @@ public class ProgramData
 	@Nonnull
 	public static ItemStack getItem(int id)
 	{
-		if(id == -1)
-			return new ItemStack(Items.MUSIC_DISC_11);
+		if(id == 2)
+			return ItemStack.EMPTY;
 		return disks.get(id).copy();
 	}
 	

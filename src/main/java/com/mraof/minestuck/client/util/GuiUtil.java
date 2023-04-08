@@ -12,7 +12,6 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -151,7 +150,7 @@ public class GuiUtil
 					String needStr = addSuffix(need);
 					
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2F*col && mouseX < GRIST_BOARD_WIDTH/2F*col + font.width(needStr))
-						return new TextComponent(String.valueOf(need));
+						return Component.literal(String.valueOf(need));
 					
 					if(mode == GristboardMode.JEI_WILDCARD)
 						continue;
@@ -161,7 +160,7 @@ public class GuiUtil
 					String haveStr = addSuffix(have);
 					
 					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2F*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2F*col + width + font.width(haveStr))
-						return new TextComponent(String.valueOf(have));
+						return Component.literal(String.valueOf(have));
 				}
 				
 				place++;
@@ -197,11 +196,11 @@ public class GuiUtil
 				if(mouseY >= 8*row && mouseY < 8*row + 8)
 				{
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= index%GRIST_BOARD_WIDTH && mouseX < index%GRIST_BOARD_WIDTH + needStrWidth)
-						return new TextComponent(String.valueOf(need));
+						return Component.literal(String.valueOf(need));
 					else if(mouseX >= index%158 + needStrWidth + needOffset && mouseX < index%158+ needStrWidth + needOffset + iconSize)
 						return type.getDisplayName();
 					else if(!haveStr.isEmpty() && !haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + needOffset + iconSize + haveOffset + font.width("(") && mouseX < index%158 + needStrWidth + needOffset + iconSize + haveOffset + font.width("("+haveStr))
-						return new TextComponent(String.valueOf(have));
+						return Component.literal(String.valueOf(have));
 				}
 				
 				index += needStrWidth + 10 + haveStrWidth;

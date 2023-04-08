@@ -7,8 +7,6 @@ import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +29,7 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 	}
 	
 	@Override
-	public int getItemStackLimit(ItemStack stack)
+	public int getMaxStackSize(ItemStack stack)
 	{
 		if(stack.hasTag())
 			return 16;
@@ -47,11 +45,11 @@ public class DowelItem extends BlockItem implements AlchemizedColored
 			
 			if(!containedStack.isEmpty())
 			{
-				tooltip.add(new TextComponent("(").append(containedStack.getHoverName()).append(")").withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.literal("(").append(containedStack.getHoverName()).append(")").withStyle(ChatFormatting.GRAY));
 			}
 			else
 			{
-				tooltip.add(new TextComponent("(").append(new TranslatableComponent(getDescriptionId() + ".invalid")).append(")").withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.literal("(").append(Component.translatable(getDescriptionId() + ".invalid")).append(")").withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}

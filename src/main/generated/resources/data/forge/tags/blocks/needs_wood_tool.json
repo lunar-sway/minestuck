@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "minestuck:black_chess_bricks",
     "minestuck:dark_gray_chess_bricks",
@@ -21,6 +20,7 @@
     "minestuck:end_stone_cruxite_ore",
     "minestuck:shade_stone_cruxite_ore",
     "minestuck:pink_stone_cruxite_ore",
+    "minestuck:mycelium_stone_cruxite_ore",
     "minestuck:netherrack_coal_ore",
     "minestuck:shade_stone_coal_ore",
     "minestuck:pink_stone_coal_ore",
@@ -184,6 +184,8 @@
     "minestuck:sendificator",
     "minestuck:grist_widget",
     "minestuck:uranium_cooker",
+    "minestuck:grist_collector",
+    "minestuck:skaianet_denier",
     "minestuck:blender",
     "minestuck:chessboard",
     "minestuck:mini_frog_statue",

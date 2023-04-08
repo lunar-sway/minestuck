@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "##",
-    "##"
-  ],
   "key": {
     "#": {
       "item": "minestuck:frost_tile"
     }
   },
+  "pattern": [
+    "##",
+    "##"
+  ],
   "result": {
-    "item": "minestuck:frost_bricks",
-    "count": 4
+    "count": 4,
+    "item": "minestuck:frost_bricks"
   }
 }

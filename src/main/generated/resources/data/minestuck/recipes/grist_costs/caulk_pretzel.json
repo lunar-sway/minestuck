@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:caulk_pretzel"
-  },
   "grist_cost": {
     "minestuck:caulk": 3
+  },
+  "ingredient": {
+    "item": "minestuck:caulk_pretzel"
   }
 }

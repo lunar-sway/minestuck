@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 1,
   "ingredient": {
     "item": "minecraft:stone"
   },
-  "result": "minestuck:fragile_stone",
-  "count": 1
+  "result": "minestuck:fragile_stone"
 }

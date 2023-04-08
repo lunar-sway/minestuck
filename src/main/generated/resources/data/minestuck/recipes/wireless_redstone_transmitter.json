@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "cqc",
-    "iei",
-    "iii"
-  ],
   "key": {
+    "c": {
+      "item": "minecraft:comparator"
+    },
     "e": {
       "item": "minestuck:plutonium_core"
     },
     "i": {
       "item": "minecraft:iron_ingot"
     },
-    "c": {
-      "item": "minecraft:comparator"
-    },
     "q": {
       "item": "minestuck:computer_parts"
     }
   },
+  "pattern": [
+    "cqc",
+    "iei",
+    "iii"
+  ],
   "result": {
     "item": "minestuck:wireless_redstone_transmitter"
   }

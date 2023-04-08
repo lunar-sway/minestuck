@@ -2,11 +2,10 @@ package com.mraof.minestuck.block.plant;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import java.util.Random;
 
 public class EndGrassBlock extends Block
 {
@@ -16,7 +15,7 @@ public class EndGrassBlock extends Block
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		super.animateTick(stateIn, level, pos, rand);
 		

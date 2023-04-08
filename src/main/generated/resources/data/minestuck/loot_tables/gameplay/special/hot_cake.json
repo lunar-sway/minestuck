@@ -2,48 +2,48 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "red_cake",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minestuck:red_cake"
         }
-      ]
+      ],
+      "name": "red_cake",
+      "rolls": 1.0
     },
     {
-      "name": "hot_cake",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minestuck:hot_cake"
         }
-      ]
+      ],
+      "name": "hot_cake",
+      "rolls": 1.0
     }
   ]
 }

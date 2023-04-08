@@ -11,7 +11,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -21,6 +20,11 @@ import java.util.Optional;
 
 public class SummonerScreen extends Screen
 {
+	public static final String TITLE = "minestuck.summoner";
+	public static final String CURRENT_ENTITY_TYPE_MESSAGE = "minestuck.current_entity_type";
+	public static final String DONE_MESSAGE = "minestuck.summoner.done";
+	public static final String UNTRIGGERABLE_MESSAGE = "minestuck.summoner.untriggerable";
+	public static final String TRIGGERABLE_MESSAGE = "minestuck.summoner.triggerable";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -40,7 +44,7 @@ public class SummonerScreen extends Screen
 	
 	SummonerScreen(SummonerBlockEntity be)
 	{
-		super(new TextComponent("Summoner")); //TODO convert to translatable text string
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 		this.summonRange = be.getSummonRange();
@@ -52,17 +56,17 @@ public class SummonerScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("+"), button -> changeRange(1)));
-		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("-"), button -> changeRange(-1)));
-		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("++"), button -> changeRange(10)));
-		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, new TextComponent("--"), button -> changeRange(-10)));
+		addRenderableWidget(incrementButton = new ExtendedButton(this.width / 2 + 20, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("+"), button -> changeRange(1)));
+		addRenderableWidget(decrementButton = new ExtendedButton(this.width / 2 - 40, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("-"), button -> changeRange(-1)));
+		addRenderableWidget(largeIncrementButton = new ExtendedButton(this.width / 2 + 45, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("++"), button -> changeRange(10)));
+		addRenderableWidget(largeDecrementButton = new ExtendedButton(this.width / 2 - 65, (height - GUI_HEIGHT) / 2 + 12, 20, 20, Component.literal("--"), button -> changeRange(-10)));
 		
-		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, new TextComponent("Current Entity Type"));    //TODO Use translation instead, and maybe look at other text fields for what the text should be
+		this.entityTypeTextField = new EditBox(this.font, this.width / 2 - 60, yOffset + 40, 120, 18, Component.translatable(CURRENT_ENTITY_TYPE_MESSAGE));    //TODO Maybe look at other text fields for what the text should be
 		this.entityTypeTextField.setValue(EntityType.getKey(be.getSummonedEntity()).toString());
 		addRenderableWidget(entityTypeTextField);
 		
 		addRenderableWidget(unTriggerableButton = new ExtendedButton(this.width / 2 - 65, yOffset + 70, 85, 20, getTriggerableButtonMessage(), button -> cycleUntriggerable()));
-		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 + 25, yOffset + 70, 40, 20, Component.translatable(DONE_MESSAGE), button -> finish()));
 	}
 	
 	/**
@@ -88,7 +92,7 @@ public class SummonerScreen extends Screen
 	
 	private Component getTriggerableButtonMessage()
 	{
-		return this.isUntriggerable ? new TextComponent("UNTRIGGERABLE") : new TextComponent("TRIGGERABLE");
+		return this.isUntriggerable ? Component.translatable(UNTRIGGERABLE_MESSAGE) : Component.translatable(TRIGGERABLE_MESSAGE);
 	}
 	
 	@Override

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -25,7 +24,6 @@ public class CakeLandType extends TitleLandType
 	
 	public CakeLandType()
 	{
-		super(EnumAspect.HEART);
 	}
 	
 	@Override
@@ -44,12 +42,14 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
+				new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
+				CountPlacement.of(UniformInt.of(0, 1)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
+				LandBiomeType.any());
+		
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.CAKE_PEDESTAL, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
-						new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
-						CountPlacement.of(UniformInt.of(0, 5)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
-				LandBiomeType.any());
+		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.LARGE_CAKE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -27,7 +28,6 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Acts similar to spike blocks, except the damage is dependent on whether the spikes are extended or not. Spikes will extend if the block is powered or if the block is in Pressure Sensitive mode and a mob has stepped on it.
@@ -73,7 +73,7 @@ public class RetractableSpikesBlock extends Block
 	}
 	
 	@Override
-	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, worldIn, pos, random);
 		
@@ -166,7 +166,7 @@ public class RetractableSpikesBlock extends Block
 	 */
 	@Nullable
 	@Override
-	public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
+	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
 	{
 		if(state.getValue(POWERED))
 			return BlockPathTypes.DAMAGE_OTHER;

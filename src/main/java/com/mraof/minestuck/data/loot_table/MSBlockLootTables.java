@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
@@ -73,6 +73,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
+		add(MYCELIUM_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
@@ -82,6 +83,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(SHADE_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(MYCELIUM_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
@@ -180,6 +182,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(CHISELED_GREEN_STONE_BRICKS.get());
 		dropSelf(HORIZONTAL_GREEN_STONE_BRICKS.get());
 		dropSelf(VERTICAL_GREEN_STONE_BRICKS.get());
+		dropSelf(GREEN_STONE_BRICK_EMBEDDED_LADDER.get());
 		dropSelf(GREEN_STONE_BRICK_TRIM.get());
 		dropSelf(GREEN_STONE_BRICK_FROG.get());
 		dropSelf(GREEN_STONE_BRICK_IGUANA_LEFT.get());
@@ -212,6 +215,18 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(DEAD_LOG.get());
 		dropSelf(PETRIFIED_LOG.get());
 		dropSelf(GLOWING_WOOD.get());
+		dropSelf(SHADEWOOD_LOG.get());
+		dropSelf(SCARRED_SHADEWOOD_LOG.get());
+		dropSelf(ROTTED_SHADEWOOD_LOG.get());
+		dropSelf(STRIPPED_SHADEWOOD_LOG.get());
+		dropSelf(STRIPPED_SCARRED_SHADEWOOD_LOG.get());
+		dropSelf(STRIPPED_ROTTED_SHADEWOOD_LOG.get());
+		dropSelf(SHADEWOOD.get());
+		dropSelf(SCARRED_SHADEWOOD.get());
+		dropSelf(ROTTED_SHADEWOOD.get());
+		dropSelf(STRIPPED_SHADEWOOD.get());
+		dropSelf(STRIPPED_SCARRED_SHADEWOOD.get());
+		dropSelf(STRIPPED_ROTTED_SHADEWOOD.get());
 		dropSelf(FROST_WOOD.get());
 		dropSelf(RAINBOW_WOOD.get());
 		dropSelf(END_WOOD.get());
@@ -220,6 +235,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(DEAD_WOOD.get());
 		dropSelf(PETRIFIED_WOOD.get());
 		dropSelf(GLOWING_PLANKS.get());
+		dropSelf(SHADEWOOD_PLANKS.get());
 		dropSelf(FROST_PLANKS.get());
 		dropSelf(RAINBOW_PLANKS.get());
 		dropSelf(END_PLANKS.get());
@@ -227,9 +243,12 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TREATED_PLANKS.get());
 		add(FROST_LEAVES.get(), MSBlockLootTables::frostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), MSBlockLootTables::rainbowLeavesDrop);
+		add(SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
+		add(SHROOMY_SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
 		add(END_LEAVES.get(), MSBlockLootTables::endLeavesDrop);
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
+		dropSelf(SHADEWOOD_SAPLING.get());
 		
 		dropSelf(BLOOD_ASPECT_LOG.get());
 		dropSelf(BREATH_ASPECT_LOG.get());
@@ -280,11 +299,51 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TIME_ASPECT_SAPLING.get());
 		dropSelf(VOID_ASPECT_SAPLING.get());
 		
+		add(BLOOD_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(BREATH_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DOOM_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HEART_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(HOPE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIFE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(LIGHT_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(MIND_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAGE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(SPACE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TIME_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(VOID_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		add(GLOWING_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(FROST_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(RAINBOW_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(END_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(DEAD_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(TREATED_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		
+		dropSelf(BLOOD_ASPECT_LADDER.get());
+		dropSelf(BREATH_ASPECT_LADDER.get());
+		dropSelf(DOOM_ASPECT_LADDER.get());
+		dropSelf(HEART_ASPECT_LADDER.get());
+		dropSelf(HOPE_ASPECT_LADDER.get());
+		dropSelf(LIFE_ASPECT_LADDER.get());
+		dropSelf(LIGHT_ASPECT_LADDER.get());
+		dropSelf(MIND_ASPECT_LADDER.get());
+		dropSelf(RAGE_ASPECT_LADDER.get());
+		dropSelf(SPACE_ASPECT_LADDER.get());
+		dropSelf(TIME_ASPECT_LADDER.get());
+		dropSelf(VOID_ASPECT_LADDER.get());
+		dropSelf(GLOWING_LADDER.get());
+		dropSelf(FROST_LADDER.get());
+		dropSelf(RAINBOW_LADDER.get());
+		dropSelf(END_LADDER.get());
+		dropSelf(DEAD_LADDER.get());
+		dropSelf(TREATED_LADDER.get());
+		
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), MSBlockLootTables::desertBushDrop);
 		dropSelf(BLOOMING_CACTUS.get());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
 		add(STRAWBERRY_STEM.get(), (stemBlock) -> createStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
@@ -408,8 +467,11 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SENDIFICATOR.get());
 		dropSelf(GRIST_WIDGET.get());
 		dropSelf(URANIUM_COOKER.get());
+		dropSelf(GRIST_COLLECTOR.get());
+		dropSelf(SKAIANET_DENIER.get());
 		
 		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
+		add(EMERGING_CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
 		
 		dropSelf(GOLD_SEEDS.get());
 		dropSelf(WOODEN_CACTUS.get());
@@ -423,6 +485,8 @@ public class MSBlockLootTables extends BlockLoot
 		add(FUCHSIA_CAKE.get(), noDrop());
 		add(NEGATIVE_CAKE.get(), noDrop());
 		add(CARROT_CAKE.get(), noDrop());
+		dropSelf(LARGE_CAKE.get());
+		dropSelf(PINK_FROSTED_TOP_LARGE_CAKE.get());
 		
 		dropSelf(PRIMED_TNT.get());
 		dropSelf(UNSTABLE_TNT.get());
@@ -438,6 +502,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(CASSETTE_PLAYER.get());
 		dropSelf(HORSE_CLOCK.BOTTOM.get());
 		dropSelf(GLOWYSTONE_DUST.get());
+		dropSelf(MIRROR.get());
 	}
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)
@@ -492,6 +557,10 @@ public class MSBlockLootTables extends BlockLoot
 	{
 		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
 	}
+	private static LootTable.Builder shadewoodLeavesDrop(Block block)
+	{
+		return createLeavesDrops(block, SHADEWOOD_SAPLING.get(), SAPLING_CHANCES);
+	}
 	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), SAPLING_CHANCES);
@@ -540,6 +609,10 @@ public class MSBlockLootTables extends BlockLoot
 	{
 		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
+	private static LootTable.Builder bookshelfDrop(Block block)
+	{
+		return createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F));
+	}
 	private static LootTable.Builder desertBushDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
@@ -560,6 +633,8 @@ public class MSBlockLootTables extends BlockLoot
 	@Override
 	protected Iterable<Block> getKnownBlocks()
 	{
-		return ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block.getRegistryName().getNamespace().equals(Minestuck.MOD_ID)).collect(Collectors.toList());
+		return ForgeRegistries.BLOCKS.getEntries().stream()
+				.filter(entry -> entry.getKey().location().getNamespace().equals(Minestuck.MOD_ID))
+				.map(Map.Entry::getValue).toList();
 	}
 }

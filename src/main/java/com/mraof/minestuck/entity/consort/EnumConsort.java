@@ -4,11 +4,11 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 public enum EnumConsort	//TODO Could ideally be changed into a registry.
@@ -74,7 +74,7 @@ public enum EnumConsort	//TODO Could ideally be changed into a registry.
 		return new ConsortEntity(this, type, level);
 	}
 	
-	public static MerchantType getRandomMerchant(Random rand)
+	public static MerchantType getRandomMerchant(RandomSource rand)
 	{
 		float f = rand.nextFloat();
 		if(f < 0.4f)

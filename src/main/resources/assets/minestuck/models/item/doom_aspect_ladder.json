@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minestuck:block/doom_aspect_ladder"
+  }
+}

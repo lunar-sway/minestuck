@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Collections;
 import java.util.List;
@@ -89,7 +88,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 		return true;
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RecipeGeneratedGristCost>
+	public static class Serializer implements RecipeSerializer<RecipeGeneratedGristCost>
 	{
 		@Override
 		public RecipeGeneratedGristCost fromJson(ResourceLocation recipeId, JsonObject json)

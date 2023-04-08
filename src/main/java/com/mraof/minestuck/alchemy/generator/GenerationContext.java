@@ -123,7 +123,7 @@ public class GenerationContext
 		
 		if(cost != null)
 		{
-			ItemStack container = stack.getContainerItem();
+			ItemStack container = stack.getCraftingRemainingItem();
 			if(!container.isEmpty())
 			{
 				GristSet containerCost = lookupCostFor(container);

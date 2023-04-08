@@ -1,22 +1,24 @@
 package com.mraof.minestuck.client.gui;
 
 import com.google.common.collect.Maps;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
-import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
-import com.mraof.minestuck.blockentity.redstone.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -38,6 +40,7 @@ public class MSScreenFactories
 		MenuScreens.register(MSMenuTypes.GRIST_WIDGET.get(), GristWidgetScreen::new);
 		MenuScreens.register(MSMenuTypes.URANIUM_COOKER.get(), UraniumCookerScreen::new);
 		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
+		MenuScreens.register(MSMenuTypes.CASSETTE_CONTAINER.get(), CassetteContainerScreen::new);
 		
 		registerSylladexFactory(ModusTypes.STACK, StackSylladexScreen::new);
 		registerSylladexFactory(ModusTypes.QUEUE, QueueSylladexScreen::new);
@@ -105,6 +108,11 @@ public class MSScreenFactories
 	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)
 	{
 		Minecraft.getInstance().setScreen(new StoneTabletScreen(playerIn, handIn, text, canEdit));
+	}
+	
+	public static void displayReadableSburbCodeScreen(Set<Block> blockList, boolean paradoxCode)
+	{
+		Minecraft.getInstance().setScreen(new ReadableSburbCodeScreen(blockList, paradoxCode));
 	}
 	
 	public static void displayTitleSelectScreen(Title title)

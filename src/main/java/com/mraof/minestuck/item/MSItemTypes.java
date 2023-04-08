@@ -14,12 +14,15 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
 import java.util.function.Supplier;
 
 public class MSItemTypes
 {
+	public static final ToolAction GRIST_HARVEST = ToolAction.get("grist_harvest");
+	
 	public static final Tier SBAHJ_TIER = new ModItemTier(0, 59, 0.0F, -1.0F, 0, () -> Ingredient.EMPTY);
 	public static final Tier PAPER_TIER = new ModItemTier(0, 65, 0.0F, 0.0F, 20, () -> Ingredient.of(Items.PAPER));
 	public static final Tier ORGANIC_TIER = new ModItemTier(0, 450, 2.5F, 0.0F, 10, () -> Ingredient.EMPTY);

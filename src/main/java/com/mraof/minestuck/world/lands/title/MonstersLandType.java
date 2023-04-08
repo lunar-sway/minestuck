@@ -1,29 +1,28 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.phys.Vec3;
 
 public class MonstersLandType extends TitleLandType
 {
 	public static final String MONSTERS = "minestuck.monsters";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
 	
 	public MonstersLandType(Variant type)
 	{
-		super(EnumAspect.RAGE, GROUP_NAME);
 		this.type = type;
 	}
 	
@@ -65,6 +64,12 @@ public class MonstersLandType extends TitleLandType
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.ZOMBIE, 2, 1, 3));
 			builder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(EntityType.SKELETON, 1, 1, 2));
 		}
+	}
+	
+	@Override
+	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
+	{
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_STRUCTURES, CavePlacements.MONSTER_ROOM, LandBiomeType.any());
 	}
 	
 	@Override

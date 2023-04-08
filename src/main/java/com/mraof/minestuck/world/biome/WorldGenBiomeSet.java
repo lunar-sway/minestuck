@@ -42,19 +42,15 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
-		Biome.BiomeCategory category = landTypes.getTerrain().getBiomeCategory();
 		
 		baseBiomes = biomes;
 		
 		GenerationBuilder generationBuilder = new GenerationBuilder();
 		addBiomeGeneration(generationBuilder, blocks, landTypes);
 		
-		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).biomeCategory(category).build()
-				.setRegistryName(biomes.NORMAL.value().getRegistryName()));
-		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).biomeCategory(category).build()
-				.setRegistryName(biomes.ROUGH.value().getRegistryName()));
-		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).biomeCategory(Biome.BiomeCategory.OCEAN).build()
-				.setRegistryName(biomes.OCEAN.value().getRegistryName()));
+		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).build());
+		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).build());
+		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).build());
 	}
 	
 	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)
@@ -106,21 +102,15 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	{
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		//TODO change these if land world heights are modified
-		if(MinestuckConfig.SERVER.generateCruxiteOre.get())
-		{
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-							new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
-							CountPlacement.of(cruxiteVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.absolute(cruxiteStratumMin), VerticalAnchor.absolute(cruxiteStratumMax)), BiomeFilter.biome()),
-					LandBiomeType.any());
-		}
-		if(MinestuckConfig.SERVER.generateUraniumOre.get())
-		{
-			builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
-							new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
-							CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(uraniumStratumMinAboveBottom), VerticalAnchor.aboveBottom(uraniumStratumMaxAboveBottom)), BiomeFilter.biome()),
-					LandBiomeType.any());
-		}
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("cruxite_ore"), baseCruxiteVeinSize),
+						CountPlacement.of(cruxiteVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.absolute(cruxiteStratumMin), VerticalAnchor.absolute(cruxiteStratumMax)), BiomeFilter.biome()),
+				LandBiomeType.any());
+		
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, PlacementUtils.inlinePlaced(Feature.ORE,
+						new OreConfiguration(blocks.getGroundType(), blocks.getBlockState("uranium_ore"), baseUraniumVeinSize),
+						CountPlacement.of(uraniumVeinsPerChunk), InSquarePlacement.spread(), HeightRangePlacement.triangle(VerticalAnchor.aboveBottom(uraniumStratumMinAboveBottom), VerticalAnchor.aboveBottom(uraniumStratumMaxAboveBottom)), BiomeFilter.biome()),
+				LandBiomeType.any());
 		
 		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());

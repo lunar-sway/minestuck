@@ -100,8 +100,8 @@ class RecipeGeneratedCostProcess
 			if(generatedCost != null)
 			{
 				if(generatedCost.getValue() < cost.getValue())
-					LOGGER.warn("Found item {} with grist cost recipe greater than a potential generated grist cost. Recipe cost: {}, generated cost: {}", item.getRegistryName(), cost, generatedCost);
-				else LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item.getRegistryName(), cost, generatedCost);
+					LOGGER.warn("Found item {} with grist cost recipe greater than a potential generated grist cost. Recipe cost: {}, generated cost: {}", item, cost, generatedCost);
+				else LOGGER.info("Found item {} with grist cost recipe that is also valid for grist cost generation. Recipe cost: {}, generated cost: {}", item, cost, generatedCost);
 			}
 		}
 	}

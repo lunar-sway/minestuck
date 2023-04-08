@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "minestuck:block/grist_collector" },
+        "facing=east":  { "model": "minestuck:block/grist_collector", "y": 90 },
+        "facing=south": { "model": "minestuck:block/grist_collector", "y": 180 },
+        "facing=west":  { "model": "minestuck:block/grist_collector", "y": 270 }
+    }
+}

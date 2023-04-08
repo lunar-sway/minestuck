@@ -3,23 +3,23 @@ package com.mraof.minestuck.world.gen.structure.gate;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.HugeMushroomBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-
-import java.util.Random;
 
 public class GateMushroomPiece extends GatePiece
 {
-	public GateMushroomPiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int minX, int minZ)
+	public GateMushroomPiece(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_MUSHROOM.get(), level, generator, random, minX, minZ, 11, 25, 11, 0);
+		super(MSStructurePieces.GATE_MUSHROOM.get(), level, randomState, generator, random, minX, minZ, 11, 25, 11, 0);
 	}
 	
 	public GateMushroomPiece(CompoundTag nbt)
@@ -34,7 +34,7 @@ public class GateMushroomPiece extends GatePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox boundingBoxIn, ChunkPos chunkPos, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox boundingBoxIn, ChunkPos chunkPos, BlockPos pos)
 	{
 		
 		BlockState stem = Blocks.MUSHROOM_STEM.defaultBlockState().setValue(HugeMushroomBlock.DOWN, false);

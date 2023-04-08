@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:melonsbane"
-  },
   "grist_cost": {
     "minestuck:build": 216,
-    "minestuck:iodine": 24,
-    "minestuck:caulk": 24
+    "minestuck:caulk": 24,
+    "minestuck:iodine": 24
+  },
+  "ingredient": {
+    "item": "minestuck:melonsbane"
   }
 }

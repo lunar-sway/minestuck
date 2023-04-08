@@ -12,19 +12,21 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Used to track mixed client sided events.
@@ -53,33 +55,37 @@ public class ClientEventHandler
 		//Add config check
 		{
 			ItemStack stack = event.getItemStack();
-			if(event.getPlayer() != null && event.getPlayer().containerMenu instanceof ConsortMerchantMenu
-					&& event.getPlayer().containerMenu.getItems().contains(stack))
+			if(event.getEntity() != null && event.getEntity().containerMenu instanceof ConsortMerchantMenu
+					&& event.getEntity().containerMenu.getItems().contains(stack))
 			{
 				String unlocalized = stack.getDescriptionId();
 				
-				EnumConsort type = ((ConsortMerchantMenu)event.getPlayer().containerMenu).getConsortType();
+				EnumConsort type = ((ConsortMerchantMenu)event.getEntity().containerMenu).getConsortType();
 				String arg1 = I18n.get(type.getConsortType().getDescriptionId());
 				
 				String name = "store."+unlocalized;
 				String tooltip = "store."+unlocalized+".tooltip";
 				event.getToolTip().clear();
 				if(I18n.exists(name))
-					event.getToolTip().add(new TranslatableComponent(name, arg1));
+					event.getToolTip().add(Component.translatable(name, arg1));
 				else event.getToolTip().add(stack.getHoverName());
 				if(I18n.exists(tooltip))
-					event.getToolTip().add(new TranslatableComponent(tooltip, arg1).withStyle(ChatFormatting.GRAY));
-			} else if(stack.getItem().getRegistryName().getNamespace().equals(Minestuck.MOD_ID))
-			{
-				String name = stack.getDescriptionId() + ".tooltip";
-				if(I18n.exists(name))
-					event.getToolTip().add(1, new TranslatableComponent(name).withStyle(ChatFormatting.GRAY));
+					event.getToolTip().add(Component.translatable(tooltip, arg1).withStyle(ChatFormatting.GRAY));
+			} else {
+				final ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(stack.getItem());
+				if(itemId != null && itemId.getNamespace().equals(Minestuck.MOD_ID))
+				{
+					String name = stack.getDescriptionId() + ".tooltip";
+					if(I18n.exists(name))
+						event.getToolTip().add(1, Component.translatable(name).withStyle(ChatFormatting.GRAY));
+				}
 			}
 		}
 	}
 	
+	//TODO these two events can now be replaced using IClientFluidTypeExtensions
 	@SubscribeEvent
-	public static void onFogRender(EntityViewRenderEvent.RenderFogEvent event)
+	public static void onFogRender(ViewportEvent.RenderFog event)
 	{
 		// Don't change fog distance for spectators
 		if(event.getCamera().getEntity().isSpectator())
@@ -109,7 +115,7 @@ public class ClientEventHandler
 	 * used to changes colors of the fog overlay
 	 */
 	@SubscribeEvent
-	public static void addFogColor(EntityViewRenderEvent.FogColors event)
+	public static void addFogColor(ViewportEvent.ComputeFogColor event)
 	{
 		LevelReader level = event.getCamera().getEntity().level;
 		BlockPos blockPos = event.getCamera().getBlockPosition();
@@ -123,7 +129,7 @@ public class ClientEventHandler
 		{
 			Entity entity = event.getCamera().getEntity();
 			Vec3 originalColor = new Vec3(event.getRed(), event.getGreen(), event.getBlue());
-			float partialTick = (float) event.getPartialTicks();
+			float partialTick = (float) event.getPartialTick();
 			
 			Vec3 fogColor = fog.getMSFogColor(level, blockPos, entity, originalColor, partialTick);
 			

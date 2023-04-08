@@ -2,158 +2,158 @@
   "type": "minecraft:chest",
   "pools": [
     {
+      "bonus_rolls": 0.0,
+      "entries": [],
       "name": "weapons",
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": []
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minecraft:stone_pickaxe"
+          "name": "minecraft:stone_pickaxe",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minecraft:iron_pickaxe",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:iron_pickaxe"
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minecraft:diamond_pickaxe"
+          "name": "minecraft:diamond_pickaxe",
+          "quality": 2
         }
-      ]
+      ],
+      "name": "supplies",
+      "rolls": 1.0
     },
     {
-      "name": "misc",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "quality": -2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 7.0
+                "max": 7.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:stone"
+          "name": "minecraft:stone",
+          "quality": -2,
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": -2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2.0,
-                "max": 16.0
+                "max": 16.0,
+                "min": 2.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:cobblestone"
+          "name": "minecraft:cobblestone",
+          "quality": -2,
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "quality": -2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 7.0
+                "max": 7.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gravel"
+          "name": "minecraft:gravel",
+          "quality": -2,
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 6.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:brick",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 6.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:brick"
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "quality": -1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:bricks"
+          "name": "minecraft:bricks",
+          "quality": -1,
+          "weight": 5
         }
-      ]
+      ],
+      "name": "misc",
+      "rolls": 1.0
     }
   ]
 }

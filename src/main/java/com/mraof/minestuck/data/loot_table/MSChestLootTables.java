@@ -2,6 +2,7 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
@@ -36,9 +37,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	@Override
 	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
-		lootProcessor.accept(MSLootTables.DUNGEON_LOOT_INJECT, LootTable.lootTable()
+		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
 						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2))))));
+		
+		lootProcessor.accept(MSLootTables.SBURB_CODE_LIBRARY_LOOT_INJECT, LootTable.lootTable()
+				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
+						.add(LootItem.lootTableItem(MSItems.SBURB_CODE.get()).setWeight(1).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))).apply(SetSburbCodeFragments.builder()))));
 		
 		lootProcessor.accept(MSLootTables.FROG_TEMPLE_CHEST, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(UniformGenerator.between(0, 2))
@@ -64,7 +69,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.DIAMOND).setWeight(1).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.PUMPKIN).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(Items.WRITABLE_BOOK).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
-						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(5).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
+						.add(LootItem.lootTableItem(MSItems.BLANK_DISK.get()).setWeight(2).setQuality(3).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
 						.add(LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).setWeight(4).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 7))))
 						.add(LootItem.lootTableItem(MSItems.RAW_URANIUM.get()).setWeight(2).setQuality(1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
 						.add(LootItem.lootTableItem(MSItems.BUG_ON_A_STICK.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
@@ -145,6 +150,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER.get()).setWeight(2).setQuality(2))
 						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CUEBALL.get()).setWeight(1).setQuality(4))
+						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO.get()).setWeight(1).setQuality(4))
 						.add(LootItem.lootTableItem(MSBlocks.COMPUTER.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.LAPTOP.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.CHESSBOARD.get()).setWeight(2).setQuality(0))
@@ -363,7 +369,8 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.BLUE_DIRT.get()).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM_VINES.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))
@@ -601,13 +608,13 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 	
 	public static ResourceLocation locationForTerrain(Supplier<TerrainLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/terrain/" + landName.toString().replace(':', '/'));
 	}
 	
 	public static ResourceLocation locationForTitle(Supplier<TitleLandType> landType, ResourceLocation baseLoot)
 	{
-		ResourceLocation landName = Objects.requireNonNull(landType.get().getRegistryName());
+		ResourceLocation landName = Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(landType.get()));
 		return new ResourceLocation(baseLoot.getNamespace(), baseLoot.getPath() + "/title/" + landName.toString().replace(':', '/'));
 	}
 }

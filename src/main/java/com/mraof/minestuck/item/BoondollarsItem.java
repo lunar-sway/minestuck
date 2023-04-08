@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -39,7 +38,7 @@ public class BoondollarsItem extends Item
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
-		if(allowdedIn(tab))
+		if(allowedIn(tab))
 		{
 			items.add(new ItemStack(this));
 			items.add(setCount(new ItemStack(this), 10));
@@ -53,7 +52,7 @@ public class BoondollarsItem extends Item
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
 		long amount = getCount(stack);
-		tooltip.add(new TranslatableComponent("item.minestuck.boondollars.amount", amount));
+		tooltip.add(Component.translatable("item.minestuck.boondollars.amount", amount));
 	}
 	
 	public static long getCount(ItemStack stack)

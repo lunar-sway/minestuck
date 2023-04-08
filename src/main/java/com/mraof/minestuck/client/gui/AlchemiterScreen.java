@@ -15,8 +15,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -32,7 +30,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	AlchemiterScreen(AlchemiterBlockEntity be)
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		alchemiter = be;
 		itemQuantity = 1;
 	}
@@ -50,19 +48,19 @@ public class AlchemiterScreen extends Screen implements Positioned
 	@Override
 	protected void init()
 	{
-		Button alchemize = new ExtendedButton((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, new TextComponent("ALCHEMIZE"), button -> alchemize());
+		Button alchemize = new ExtendedButton((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, Component.literal("ALCHEMIZE"), button -> alchemize());
 		addRenderableWidget(alchemize);
 		
 		GristSet cost = alchemiter.getGristCost(1);
 		//don't add the buttons if the item is free or unalchemizeable
 		if(cost != null && !cost.isEmpty())
 		{
-			Button hundredsUp = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, new TextComponent("^"), button -> changeAmount(100));
-			Button tensUp = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, new TextComponent("^"), button -> changeAmount(10));
-			Button onesUp = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, new TextComponent("^"), button -> changeAmount(1));
-			Button hundredsDown = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, new TextComponent("v"), button -> changeAmount(-100));
-			Button tensDown = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, new TextComponent("v"), button -> changeAmount(-10));
-			Button onesDown = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, new TextComponent("v"), button -> changeAmount(-1));
+			Button hundredsUp = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(100));
+			Button tensUp = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(10));
+			Button onesUp = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 10, 18, 18, Component.literal("^"), button -> changeAmount(1));
+			Button hundredsDown = new ExtendedButton((width - guiWidth) / 2 + 10, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-100));
+			Button tensDown = new ExtendedButton((width - guiWidth) / 2 + 31, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-10));
+			Button onesDown = new ExtendedButton((width - guiWidth) / 2 + 52, (height - guiHeight) / 2 + 74, 18, 18, Component.literal("v"), button -> changeAmount(-1));
 			
 			addRenderableWidget(onesUp);
 			addRenderableWidget(tensUp);

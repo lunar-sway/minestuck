@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:magma_cream"
+  },
+  "input2": {
+    "item": "minecraft:grass_block"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minecraft:ochre_froglight"
+  }
+}

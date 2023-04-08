@@ -1,26 +1,26 @@
 {
   "parent": "minestuck:minestuck/commune",
+  "criteria": {
+    "buy_item": {
+      "conditions": {
+        "type": "shady"
+      },
+      "trigger": "minestuck:consort_item"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minestuck:rock_cookie"
-    },
-    "title": {
-      "translate": "advancements.minestuck.shady_buyer.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.shady_buyer.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:rock_cookie"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "buy_item": {
-      "trigger": "minestuck:consort_item",
-      "conditions": {
-        "type": "shady"
-      }
+    "title": {
+      "translate": "advancements.minestuck.shady_buyer.title"
     }
   },
   "requirements": [

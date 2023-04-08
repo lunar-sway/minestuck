@@ -2,16 +2,16 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "main",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "main",
+      "rolls": 1.0
     },
     {
-      "name": "special",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
-      "entries": []
+      "entries": [],
+      "name": "special",
+      "rolls": 1.0
     }
   ]
 }

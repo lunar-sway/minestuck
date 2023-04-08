@@ -8,6 +8,9 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -21,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.EnumSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,14 +36,9 @@ public class Echeladder
 	public static final String NEW_RUNG = "echeladder.new_rung";
 	
 	public static final int RUNG_COUNT = 50;
-	public static final byte UNDERLING_BONUS_OFFSET = 0;
-	public static final byte ALCHEMY_BONUS_OFFSET = 15;
 	
 	private static final UUID echeladderHealthBoostModifierUUID = UUID.fromString("5b49a45b-ff22-4720-8f10-dfd745c3abb8");    //TODO Might be so that only one is needed, as we only add one modifier for each attribute.
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
-	private static final int[] UNDERLING_BONUSES = new int[]{10, 120, 450, 1200, 2500};    //Bonuses for first time killing an underling
-	private static final int[] ALCHEMY_BONUSES = new int[]{30, 400, 3000};
-													// 0				4						9							14							  19								24									29										34
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
 	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
@@ -55,19 +54,17 @@ public class Echeladder
 	@SubscribeEvent
 	public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getPlayer()).getEcheladder();
-		echeladder.updateEcheladderBonuses((ServerPlayer) event.getPlayer());
+		Echeladder echeladder = PlayerSavedData.getData((ServerPlayer) event.getEntity()).getEcheladder();
+		echeladder.updateEcheladderBonuses((ServerPlayer) event.getEntity());
 		if(MinestuckConfig.SERVER.rungHealthOnRespawn.get())
-			event.getPlayer().heal(event.getPlayer().getMaxHealth());
+			event.getEntity().heal(event.getEntity().getMaxHealth());
 	}
 	
 	private final PlayerSavedData savedData;
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
-	
-	private boolean[] underlingBonuses = new boolean[UNDERLING_BONUSES.length];
-	private boolean[] alchemyBonuses = new boolean[ALCHEMY_BONUSES.length];
+	private final EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
 	public Echeladder(PlayerSavedData savedData, PlayerIdentifier identifier)
 	{
@@ -136,18 +133,18 @@ public class Echeladder
 		}
 	}
 	
-	public void checkBonus(byte type)
+	/**
+	 * Check if the bonus has already been given to the player, give it if it hasn't.
+	 * @param type
+	 */
+	
+	public void checkBonus(EcheladderBonusType type)
 	{
-		if(type >= UNDERLING_BONUS_OFFSET && type < UNDERLING_BONUS_OFFSET + underlingBonuses.length && !underlingBonuses[type - UNDERLING_BONUS_OFFSET])
+		if(!usedBonuses.contains(type))
 		{
-			underlingBonuses[type - UNDERLING_BONUS_OFFSET] = true;
+			usedBonuses.add(type);
 			savedData.setDirty();
-			increaseProgress(UNDERLING_BONUSES[type - UNDERLING_BONUS_OFFSET]);
-		} else if(type >= ALCHEMY_BONUS_OFFSET && type < ALCHEMY_BONUS_OFFSET + alchemyBonuses.length && !alchemyBonuses[type - ALCHEMY_BONUS_OFFSET])
-		{
-			alchemyBonuses[type - ALCHEMY_BONUS_OFFSET] = true;
-			savedData.setDirty();
-			increaseProgress(ALCHEMY_BONUSES[type - ALCHEMY_BONUS_OFFSET]);
+			increaseProgress(type.getBonus());
 		}
 	}
 	
@@ -192,12 +189,14 @@ public class Echeladder
 		nbt.putInt("rung", rung);
 		nbt.putInt("rungProgress", progress);
 		
-		byte[] bonuses = new byte[ALCHEMY_BONUS_OFFSET + alchemyBonuses.length];    //Booleans would be stored as bytes anyways
-		for(int i = 0; i < underlingBonuses.length; i++)
-			bonuses[i + UNDERLING_BONUS_OFFSET] = (byte) (underlingBonuses[i] ? 1 : 0);
-		for(int i = 0; i < alchemyBonuses.length; i++)
-			bonuses[i + ALCHEMY_BONUS_OFFSET] = (byte) (alchemyBonuses[i] ? 1 : 0);
-		nbt.putByteArray("rungBonuses", bonuses);
+		ListTag bonuses = new ListTag();
+		
+		for(EcheladderBonusType bonus : usedBonuses)
+		{
+			bonuses.add(StringTag.valueOf(bonus.toString()));
+		}
+		
+		nbt.put("rungBonuses", bonuses);
 	}
 	
 	public void loadEcheladder(CompoundTag nbt)
@@ -205,11 +204,10 @@ public class Echeladder
 		rung = nbt.getInt("rung");
 		progress = nbt.getInt("rungProgress");
 		
-		byte[] bonuses = nbt.getByteArray("rungBonuses");
-		for(int i = 0; i < underlingBonuses.length && i + UNDERLING_BONUS_OFFSET < bonuses.length; i++)
-			underlingBonuses[i] = bonuses[i + UNDERLING_BONUS_OFFSET] != 0;
-		for(int i = 0; i < alchemyBonuses.length && i + ALCHEMY_BONUS_OFFSET < bonuses.length; i++)
-			alchemyBonuses[i] = bonuses[i + ALCHEMY_BONUS_OFFSET] != 0;
+		for(Tag tag : nbt.getList("rungBonuses", Tag.TAG_STRING))
+		{
+			usedBonuses.add(EcheladderBonusType.fromString(tag.getAsString()));
+		}
 	}
 	
 	public static double attackBonus(int rung)

@@ -3,23 +3,26 @@ package com.mraof.minestuck.world.lands;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class LandTypes
 {
-	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"), Minestuck.MOD_ID);
-	public static final DeferredRegister<TitleLandType> TITLE_REGISTER = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"), Minestuck.MOD_ID);
+	public static final ResourceKey<Registry<TerrainLandType>> TERRAIN_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "terrain_land_type"));
+	public static final ResourceKey<Registry<TitleLandType>> TITLE_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "title_land_type"));
 	
-	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(TerrainLandType.class, RegistryBuilder::new);
-	public static final Supplier<IForgeRegistry<TitleLandType>> TITLE_REGISTRY = TITLE_REGISTER.makeRegistry(TitleLandType.class, RegistryBuilder::new);
+	public static final DeferredRegister<TerrainLandType> TERRAIN_REGISTER = DeferredRegister.create(TERRAIN_KEY.location(), Minestuck.MOD_ID);
+	public static final DeferredRegister<TitleLandType> TITLE_REGISTER = DeferredRegister.create(TITLE_KEY.location(), Minestuck.MOD_ID);
+	
+	public static final Supplier<IForgeRegistry<TerrainLandType>> TERRAIN_REGISTRY = TERRAIN_REGISTER.makeRegistry(() -> new RegistryBuilder<TerrainLandType>().hasTags());
+	public static final Supplier<IForgeRegistry<TitleLandType>> TITLE_REGISTRY = TITLE_REGISTER.makeRegistry(() -> new RegistryBuilder<TitleLandType>().hasTags());
 	
 	public static final RegistryObject<TerrainLandType> TERRAIN_NULL = TERRAIN_REGISTER.register("null", NullTerrainLandType::new);
 	public static final RegistryObject<TerrainLandType> FOREST = TERRAIN_REGISTER.register("forest", ForestLandType::createForest);
@@ -56,9 +59,4 @@ public class LandTypes
 	public static final RegistryObject<TitleLandType> MONSTERS = TITLE_REGISTER.register("monsters", () -> new MonstersLandType(MonstersLandType.Variant.MONSTERS));
 	public static final RegistryObject<TitleLandType> UNDEAD = TITLE_REGISTER.register("undead", () -> new MonstersLandType(MonstersLandType.Variant.UNDEAD));
 	public static final RegistryObject<TitleLandType> TOWERS = TITLE_REGISTER.register("towers", TowersLandType::new);
-	
-	public static Set<TitleLandType> getCompatibleTitleTypes(TerrainLandType terrain)
-	{
-		return TITLE_REGISTRY.get().getValues().stream().filter(landType -> landType.isAspectCompatible(terrain) && landType.canBePickedAtRandom()).collect(Collectors.toSet());
-	}
 }

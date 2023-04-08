@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
@@ -48,8 +49,10 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 		LandTypePair aspects = LandTypePair.getTypes(context.getLevel()).orElse(null);
 		if(canRun(context) && aspects != null)
 		{
-			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/" + Objects.requireNonNull(aspects.getTerrain().getRegistryName()).toString().replace(':', '/'));
-			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/" + Objects.requireNonNull(aspects.getTitle().getRegistryName()).toString().replace(':', '/'));
+			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/"
+					+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(aspects.getTerrain())).toString().replace(':', '/'));
+			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/"
+					+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(aspects.getTitle())).toString().replace(':', '/'));
 			
 			expandFrom(terrainTableName, context, lootGenCollector);
 			expandFrom(titleTableName, context, lootGenCollector);

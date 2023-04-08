@@ -4,19 +4,19 @@ import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.world.GateHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.ScatteredFeaturePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
-import java.util.Random;
-
 public abstract class GatePiece extends ScatteredFeaturePiece
 {
-	public GatePiece(StructurePieceType type, LevelHeightAccessor level, ChunkGenerator generator, Random random, int x, int z, int width, int height, int depth, int heightOffset)
+	public GatePiece(StructurePieceType type, LevelHeightAccessor level, RandomState randomState, ChunkGenerator generator, RandomSource random, int x, int z, int width, int height, int depth, int heightOffset)
 	{
 		super(type, x, 64, z, width, height, depth, getRandomHorizontalDirection(random));
 		
@@ -25,7 +25,7 @@ public abstract class GatePiece extends ScatteredFeaturePiece
 		for(int xPos = boundingBox.minX(); xPos <= boundingBox.maxX(); xPos++)
 			for(int zPos = boundingBox.minZ(); zPos <= boundingBox.maxZ(); zPos++)
 			{
-				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level);
+				int posHeight = generator.getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, level, randomState);
 				heightSum += posHeight;
 				count++;
 			}
@@ -55,7 +55,7 @@ public abstract class GatePiece extends ScatteredFeaturePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
 	{
 		placeGate(level, box);
 	}

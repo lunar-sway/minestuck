@@ -7,18 +7,17 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 
 public final class LandTypePair
 {
@@ -53,8 +52,8 @@ public final class LandTypePair
 	
 	public CompoundTag write(CompoundTag nbt)
 	{
-		nbt.putString("terrain_aspect", terrain.getRegistryName().toString());
-		nbt.putString("title_aspect", title.getRegistryName().toString());
+		nbt.putString("terrain_aspect", LandTypes.TERRAIN_REGISTRY.get().getKey(terrain).toString());
+		nbt.putString("title_aspect", LandTypes.TITLE_REGISTRY.get().getKey(title).toString());
 		return nbt;
 	}
 	
@@ -116,13 +115,13 @@ public final class LandTypePair
 		private Component landName(boolean first)
 		{
 			if(first != useReverseOrder)
-				return new TranslatableComponent("land." + loopingGet(landTypes.getTerrain().getNames(), terrainNameIndex));
-			else return new TranslatableComponent("land." +  loopingGet(landTypes.getTitle().getNames(), titleNameIndex));
+				return Component.translatable("land." + loopingGet(landTypes.getTerrain().getNames(), terrainNameIndex));
+			else return Component.translatable("land." +  loopingGet(landTypes.getTitle().getNames(), titleNameIndex));
 		}
 		
 		public Component asComponent()
 		{
-			return new TranslatableComponent(LandTypePair.FORMAT, landName(true), landName(false));
+			return Component.translatable(LandTypePair.FORMAT, landName(true), landName(false));
 		}
 		
 		private static String loopingGet(String[] names, int index)
@@ -131,7 +130,7 @@ public final class LandTypePair
 		}
 	}
 	
-	public Named createNamedRandomly(Random random)
+	public Named createNamedRandomly(RandomSource random)
 	{
 		return new Named(this, random.nextBoolean(),
 				random.nextInt(this.terrain.getNames().length), random.nextInt(this.title.getNames().length));

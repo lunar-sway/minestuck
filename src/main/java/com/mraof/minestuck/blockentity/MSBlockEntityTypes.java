@@ -11,7 +11,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MSBlockEntityTypes
 {
-	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, Minestuck.MOD_ID);
+	public static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<BlockEntityType<ComputerBlockEntity>> COMPUTER = REGISTER.register("computer", () -> BlockEntityType.Builder.of(ComputerBlockEntity::new, MSBlocks.COMPUTER.get(), MSBlocks.CROCKERTOP.get(), MSBlocks.HUBTOP.get(), MSBlocks.LAPTOP.get(), MSBlocks.LUNCHTOP.get()).build(null));
 	public static final RegistryObject<BlockEntityType<MiniCruxtruderBlockEntity>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> BlockEntityType.Builder.of(MiniCruxtruderBlockEntity::new, MSBlocks.MINI_CRUXTRUDER.get()).build(null));
@@ -26,8 +26,9 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<SendificatorBlockEntity>> SENDIFICATOR = REGISTER.register("sendificator", () -> BlockEntityType.Builder.of(SendificatorBlockEntity::new, MSBlocks.SENDIFICATOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GristWidgetBlockEntity>> GRIST_WIDGET = REGISTER.register("grist_widget", () -> BlockEntityType.Builder.of(GristWidgetBlockEntity::new, MSBlocks.GRIST_WIDGET.get()).build(null));
 	public static final RegistryObject<BlockEntityType<TransportalizerBlockEntity>> TRANSPORTALIZER = REGISTER.register("transportalizer", () -> BlockEntityType.Builder.of(TransportalizerBlockEntity::new, MSBlocks.TRANSPORTALIZER.get(), MSBlocks.TRANS_PORTALIZER.get()).build(null));
-	public static final RegistryObject<BlockEntityType<ItemStackBlockEntity>> ITEM_STACK = REGISTER.register("item_stack", () -> BlockEntityType.Builder.of(ItemStackBlockEntity::new, MSBlocks.CRUXITE_DOWEL.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
+	public static final RegistryObject<BlockEntityType<ItemStackBlockEntity>> ITEM_STACK = REGISTER.register("item_stack", () -> BlockEntityType.Builder.of(ItemStackBlockEntity::new, MSBlocks.CRUXITE_DOWEL.get(), MSBlocks.EMERGING_CRUXITE_DOWEL.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
 	public static final RegistryObject<BlockEntityType<UraniumCookerBlockEntity>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> BlockEntityType.Builder.of(UraniumCookerBlockEntity::new, MSBlocks.URANIUM_COOKER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<GristCollectorBlockEntity>> GRIST_COLLECTOR = REGISTER.register("grist_collector", () -> BlockEntityType.Builder.of(GristCollectorBlockEntity::new, MSBlocks.GRIST_COLLECTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<HolopadBlockEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadBlockEntity::new, MSBlocks.HOLOPAD.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, MSBlocks.SKAIA_PORTAL.get()).build(null));

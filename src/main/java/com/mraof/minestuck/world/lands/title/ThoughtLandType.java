@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -23,7 +22,6 @@ public class ThoughtLandType extends TitleLandType
 	
 	public ThoughtLandType()
 	{
-		super(EnumAspect.MIND);
 	}
 	
 	@Override

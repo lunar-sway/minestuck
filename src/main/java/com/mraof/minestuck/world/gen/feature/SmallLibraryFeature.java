@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -19,8 +20,6 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
-
-import java.util.Random;
 
 public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -36,9 +35,9 @@ public class SmallLibraryFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		Rotation rotation = Rotation.getRandom(rand);
-		StructureManager templates = level.getLevel().getStructureManager();
+		StructureTemplateManager templates = level.getLevel().getStructureManager();
 		StructureTemplate template = templates.getOrCreate(STRUCTURE_SMALL_LIBRARY);
 		
 		ChunkPos chunkPos = new ChunkPos(pos);

@@ -11,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -22,8 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -35,9 +34,10 @@ import javax.annotation.Nullable;
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override
@@ -71,14 +71,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
-	@Override
-	public RunType getRunType()
-	{
-		return TYPE;
-	}
-	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
@@ -102,8 +95,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		}
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 		
@@ -128,7 +120,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	protected void tick()
 	{
-		super.tick();
+		this.progressTracker.tick(this::processContents);
+		
 		if (this.ticks_since_update == 20)
 		{
 			level.updateNeighbourForOutputSignal(this.getBlockPos(), this.getBlockState().getBlock());
@@ -145,6 +138,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		super.load(nbt);
 		
+		this.progressTracker.load(nbt);
+		
 		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
@@ -156,7 +151,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		super.saveAdditional(compound);
 		
-		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		this.progressTracker.save(compound);
+		
+		compound.putString("gristType", String.valueOf(GristTypes.getRegistry().getKey(wildcardGrist)));
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -165,7 +162,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
@@ -175,7 +172,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
 		}
@@ -228,7 +225,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, this.progressTracker, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()
