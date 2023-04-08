@@ -284,20 +284,15 @@ public final class EditmodeDragPacket
 		public void encode(FriendlyByteBuf buffer)
 		{
 			buffer.writeBoolean(isDown);
-			buffer.writeInt(positionStart.getX());
-			buffer.writeInt(positionStart.getY());
-			buffer.writeInt(positionStart.getZ());
-			buffer.writeInt(positionEnd.getX());
-			buffer.writeInt(positionEnd.getY());
-			buffer.writeInt(positionEnd.getZ());
+			buffer.writeBlockPos(positionStart);
+			buffer.writeBlockPos(positionEnd);
 		}
 		
 		public static Cursor decode(FriendlyByteBuf buffer)
 		{
 			boolean isDragging = buffer.readBoolean();
-			BlockPos positionStart = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-			BlockPos positionEnd = new BlockPos(buffer.readInt(), buffer.readInt(), buffer.readInt());
-			
+			BlockPos positionStart = buffer.readBlockPos();
+			BlockPos positionEnd = buffer.readBlockPos();
 			return new Cursor(isDragging, positionStart, positionEnd);
 		}
 		
@@ -337,6 +332,5 @@ public final class EditmodeDragPacket
 			ServerEditHandler.removeCursorEntity(player, true);
 			cap.resetDragTools();
 		}
-		
 	}
 }
