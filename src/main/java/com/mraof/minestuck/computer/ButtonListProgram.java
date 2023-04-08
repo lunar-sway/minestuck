@@ -50,7 +50,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		
 		if(data != null)
 		{
-			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
+			if(!screen.be.getProgramMessage(this.getId()).isEmpty())
 				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
 		}
@@ -84,7 +84,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		downButton.active = false;
 		upButton.active = index > 0;
 		ArrayList<UnlocalizedString> list = getStringList(gui.be);
-		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
+		if(!gui.be.getProgramMessage(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		
 		int pos = -1;

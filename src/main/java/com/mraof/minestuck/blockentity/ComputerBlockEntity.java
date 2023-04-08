@@ -17,7 +17,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
-import net.minecraft.nbt.IntTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -33,11 +32,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
 public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
@@ -48,14 +44,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		super(MSBlockEntityTypes.COMPUTER.get(), pos, state);
 		
 		// always should exist on computers
-		this.installedPrograms.put(2, true);
-		this.installedPrograms.put(3, true);
+		this.installedPrograms.add(2);
+		this.installedPrograms.add(3);
 	}
 	
 	/**
 	 * 0 = client, 1 = server, 2 = disk burner, 3 = settings
 	 */
-	public Hashtable<Integer, Boolean> installedPrograms = new Hashtable<>();
+	public List<Integer> installedPrograms = new ArrayList<>();
 	public ComputerScreen gui;
 	public PlayerIdentifier owner;
 	//client side only
@@ -73,16 +69,26 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
+		
+		installedPrograms.clear();
 		if(nbt.contains("programs"))
 		{
-			for(int id : nbt.getIntArray("programs"))
-				installedPrograms.put(id, true);
+			if (nbt.get("programs").getType() == IntArrayTag.TYPE)
+			{
+				for(int id : nbt.getIntArray("programs"))
+					installedPrograms.add(id);
+			}
+			else //compatibilitizificate
+			{
+				CompoundTag programs = nbt.getCompound("programs");
+				for(String name : programs.getAllKeys())
+					installedPrograms.add(programs.getInt(name));
+			}
 		}
 		
 		latestmessage.clear();
-		for(Entry<Integer, Boolean> e : installedPrograms.entrySet())
-			if(e.getValue())
-				latestmessage.put(e.getKey(), nbt.getString("text" + e.getKey()));
+		for(int id : installedPrograms)
+			latestmessage.put(id, nbt.getString("text" + id));
 		
 		programData = nbt.getCompound("programData");
 		if(nbt.contains("theme")) setTheme(Theme.values()[nbt.getInt("theme")]);
@@ -106,18 +112,11 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		IntArrayTag programs = new IntArrayTag(new int[]{});
-		
-		for(Entry<Integer,Boolean> program : installedPrograms.entrySet())
-		{
-			int id = program.getKey();
-			programs.add(IntTag.valueOf(id));
-		}
 		
 		for(Entry<Integer, String> e : latestmessage.entrySet())
 			compound.putString("text" + e.getKey(), e.getValue());
 		
-		compound.put("programs", programs);
+		compound.put("programs", new IntArrayTag(installedPrograms));
 		compound.put("programData", programData.copy());
 		
 		if(owner != null)
@@ -163,7 +162,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public boolean hasProgram(int id)
 	{
-		return installedPrograms.get(id) != null && installedPrograms.get(id);
+		return installedPrograms.contains(id);
 	}
 	
 	public CompoundTag getData(int id)
@@ -175,9 +174,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void closeAll()
 	{
-		for(Entry<Integer, Boolean> entry : installedPrograms.entrySet())
-			if(entry.getValue() && entry.getKey() != -1)
-				ProgramData.closeProgram(entry.getKey(), this);
+		for(int id : installedPrograms)
+			if(id != -1)
+				ProgramData.closeProgram(id, this);
 	}
 	
 	@Override
@@ -230,6 +229,13 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
+	public String getProgramMessage(int id)
+	{
+		var message = latestmessage.get(id);
+		return message!=null?message:"";
+	}
+	
+	@Override
 	public void putProgramMessage(int id, String message)
 	{
 		latestmessage.put(id, message);
@@ -247,6 +253,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void setTheme(Theme theme)
 	{
 		this.theme = theme;
+		setChanged();
+		markBlockForUpdate();
 	}
 	
 	public void burnDisk(int programId)
@@ -286,6 +294,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void markBlockForUpdate()
 	{
+		if(level==null) return;
 		BlockState state = level.getBlockState(worldPosition);
 		this.level.sendBlockUpdated(worldPosition, state, state, 3);
 	}

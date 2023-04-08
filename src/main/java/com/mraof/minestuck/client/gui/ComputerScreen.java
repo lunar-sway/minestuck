@@ -18,7 +18,6 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ComputerScreen extends Screen
 {
@@ -100,16 +99,14 @@ public class ComputerScreen extends Screen
 		var yOffset = (height-ySize)/2;
 		
 		int programCount = be.installedPrograms.size();
-		for(Entry<Integer, Boolean> currentProgram : be.installedPrograms.entrySet())
-			if(currentProgram.getValue())
-			{
-				icons.add(addRenderableWidget(new ComputerIcon(
-						xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
-						yOffset + 24 + programCount % 5 * 20,
-						currentProgram.getKey())
-				));
-				programCount--;
-			}
+		for(int id : be.installedPrograms.stream().sorted().toList())
+		{
+			icons.add(addRenderableWidget(new ComputerIcon(
+					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
+					yOffset + 24 + programCount % 5 * 20, id)
+			));
+			programCount--;
+		}
 	}
 	
 	protected void setProgram(int id)
