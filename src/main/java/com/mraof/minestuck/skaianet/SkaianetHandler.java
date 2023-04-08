@@ -263,7 +263,7 @@ public final class SkaianetHandler extends SavedData
 			resumingClients.remove(player);
 			if(computer != null)
 			{
-				computer.putProgramBoolean(0, "isResuming", false);
+				computer.putClientBoolean("isResuming", false);
 				computer.putProgramMessage(0, STOP_RESUME);
 			}
 		} else
@@ -282,7 +282,7 @@ public final class SkaianetHandler extends SavedData
 		if(resumingClients.contains(computer))
 		{
 			resumingClients.remove(owner);
-			computer.putProgramBoolean(0, "isResuming", false);
+			computer.putClientBoolean("isResuming", false);
 			computer.putProgramMessage(0, STOP_RESUME);
 		} else
 		{
@@ -313,7 +313,7 @@ public final class SkaianetHandler extends SavedData
 		if(map.contains(computer))
 		{
 			map.remove(owner);
-			computer.putProgramBoolean(1, "isOpen", false);
+			computer.putServerBoolean("isOpen", false);
 			computer.putProgramMessage(1, STOP_RESUME);
 		}
 	}
@@ -332,7 +332,7 @@ public final class SkaianetHandler extends SavedData
 		
 		if(clientComputer != null)
 		{
-			clientComputer.putProgramBoolean(0, "connectedToServer", false);
+			clientComputer.putClientBoolean("connectedToServer", false);
 			clientComputer.putProgramMessage(0, CLOSED);
 		}
 		if(serverComputer != null)
@@ -381,7 +381,7 @@ public final class SkaianetHandler extends SavedData
 			{
 				ISburbComputer cc = c.getClientComputer().getComputer(mcServer), sc = c.getServerComputer().getComputer(mcServer);
 				if(cc == null || sc == null || c.getClientComputer().isInNether() || c.getServerComputer().isInNether() || !c.getClientIdentifier().equals(cc.getOwner())
-						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getProgramBoolean(0, "connectedToServer"))
+						|| !c.getServerIdentifier().equals(sc.getOwner()) || !cc.getClientBoolean("connectedToServer"))
 				{
 					LOGGER.warn("[SKAIANET] Invalid computer in connection between {} and {}.", c.getClientIdentifier(), c.getServerIdentifier());
 					closeConnection(c, cc, sc);

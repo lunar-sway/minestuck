@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Combination recipes and grist costs for items introduced in minecraft 1.19
+- New interface for the computers with a desktop home screen
+- Advanced color selector with support for colors other than the original sixteen
+- Settings program and a simple theming system to change the color of the desktop
 
 ### Changed
 

@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +100,7 @@ public class ComputerScreen extends Screen
 		var yOffset = (height-ySize)/2;
 		
 		int programCount = be.installedPrograms.size();
-		for(int id : be.installedPrograms.stream().sorted().toList())
+		for(int id : be.installedPrograms.keySet().stream().sorted().toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
@@ -147,7 +148,7 @@ public class ComputerScreen extends Screen
 	@Override
 	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
 	{
-		if(pKeyCode == 256) // close programs on esc
+		if(pKeyCode == GLFW.GLFW_KEY_ESCAPE) // close programs on esc
 		{
 			if(program != null) exitProgram();
 			else onClose();

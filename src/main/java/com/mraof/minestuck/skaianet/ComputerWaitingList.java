@@ -115,8 +115,8 @@ public class ComputerWaitingList
 			Map.Entry<PlayerIdentifier, ComputerReference> data = i.next();
 			ISburbComputer computer = data.getValue().getComputer(mcServer);
 			if(computer == null || data.getValue().isInNether() || !computer.getOwner().equals(data.getKey())
-					|| !(forClients && computer.getProgramBoolean(0, "isResuming")
-					|| !forClients && computer.getProgramBoolean(1, "isOpen")))
+					|| !(forClients && computer.getClientBoolean("isResuming")
+					|| !forClients && computer.getServerBoolean("isOpen")))
 			{
 				LOGGER.warn("[SKAIANET] Invalid computer in waiting list!");
 				i.remove();

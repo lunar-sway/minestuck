@@ -7,12 +7,15 @@ public interface ISburbComputer
 	default void setIsResuming(boolean isClient)
 	{
 		if(isClient)
-			putProgramBoolean(0, "isResuming", true);
-		else putProgramBoolean(1, "isOpen", true);
+			putClientBoolean("isResuming", true);
+		else putServerBoolean("isOpen", true);
 	}
 	
-	boolean getProgramBoolean(int id, String name);
-	void putProgramBoolean(int id, String name, boolean value);
+	boolean getClientBoolean(String name);
+	boolean getServerBoolean(String name);
+	void putClientBoolean(String name, boolean value);
+	void putServerBoolean(String name, boolean value);
+	
 	String getProgramMessage(int id);
 	void putProgramMessage(int id, String message);
 	

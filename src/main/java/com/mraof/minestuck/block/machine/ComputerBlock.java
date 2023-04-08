@@ -142,7 +142,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
 				stackInHand.shrink(1);
-				blockEntity.installedPrograms.add(id);
+				blockEntity.installedPrograms.put(id, true);
 				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				blockEntity.setChanged();
 				level.sendBlockUpdated(pos, state, state, 3);
@@ -179,7 +179,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		be.closeAll();
 		
 		//program disks
-		for(int id : be.installedPrograms)
+		for(int id : be.installedPrograms.keySet())
 			Containers.dropItemStack(level, x, y, z, ProgramData.getItem(id));
 		
 		//blank disks
