@@ -12,13 +12,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,102 +32,43 @@ public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static boolean editModePlaceCheck(Level level, Player player, InteractionHand hand)
+	private static Tuple<Boolean, GristSet> editModePlaceCheck(EditData data, Player player, InteractionHand hand, BlockPos pos)
 	{
-		if(!level.isClientSide() && ServerEditHandler.getData(player) != null)
-		{
-			EditData data = ServerEditHandler.getData(player);
-			SburbConnection connection = data.getConnection();
-			
-			ItemStack stack = player.getMainHandItem();
-			
-			if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND))
-				return false;
-			
-			DeployEntry entry = DeployList.getEntryForItem(stack, connection, level);
-			if(entry != null)
-			{
-				GristSet cost = entry.getCurrentCost(connection);
-				if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
-					return false;
-				
-			}
-			else if(!(stack.getItem() instanceof BlockItem) || !GristHelper.canAfford(level, connection.getClientIdentifier(), GristCost.findCostForItem(stack, null, false, level)))
-				return false;
-		}
-		
-		return true;
-	}
-	
-	private static GristSet editModePlaceCost(Level level, Player player, InteractionHand hand, BlockPos pos)
-	{
-		EditData data = ServerEditHandler.getData(player);
 		SburbConnection connection = data.getConnection();
-		
 		ItemStack stack = player.getMainHandItem();
 		
-		if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND))
-			return new GristSet();
+		if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND) || !player.level.getBlockState(pos).getMaterial().isReplaceable())
+			return new Tuple<>(false, new GristSet());
+
+		DeployEntry entry = DeployList.getEntryForItem(stack, connection, player.level);
+		GristSet cost = entry != null ? entry.getCurrentCost(connection) : GristCost.findCostForItem(stack, null, false, player.level);
+		if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
+			return new Tuple<>(false, cost);
 		
-		DeployEntry entry = DeployList.getEntryForItem(stack, connection, level);
-		if(entry != null)
-		{
-			GristSet cost = entry.getCurrentCost(connection);
-			if(level.getBlockState(pos).getMaterial().isReplaceable() && !GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
-				return cost;
-			
-		}
-		else if(level.getBlockState(pos).getMaterial().isReplaceable() && !GristHelper.canAfford(level, connection.getClientIdentifier(), GristCost.findCostForItem(stack, null, false, level)))
-			return GristCost.findCostForItem(stack, null, false, level);
+		if(entry == null && !(stack.getItem() instanceof BlockItem))
+			return new Tuple<>(false, new GristSet());
 		
-		return new GristSet();
+		return new Tuple<>(true, new GristSet());
 	}
 	
-	private static boolean editModeDestroyCheck(Level level, Player player, BlockPos pos)
+	private static Tuple<Boolean, GristSet> editModeDestroyCheck(EditData data, Player player, BlockPos pos)
 	{
-		if(!level.isClientSide() && ServerEditHandler.getData(player) != null)
-		{
-			EditData data = ServerEditHandler.getData(player);
-			SburbConnection connection = data.getConnection();
-			
-			BlockState block = level.getBlockState(pos);
-			ItemStack stack = block.getCloneItemStack(null, level, pos, player);
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), level, DeployList.EntryLists.ATHENEUM);
-			if(block.isAir())
-				return false;
-			else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
-			{
-				
-				GristSet cost = new GristSet(GristTypes.BUILD,1);
-				if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
-					return false;
-				
-			}
-		}
-		return true;
-	}
-	
-	private static GristSet editModeDestroyCost(Level level, Player player, BlockPos pos)
-	{
-		EditData data = ServerEditHandler.getData(player);
 		SburbConnection connection = data.getConnection();
+		BlockState block = player.level.getBlockState(pos);
+		ItemStack stack = block.getCloneItemStack(null, player.level, pos, player);
+		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level, DeployList.EntryLists.ATHENEUM);
 		
-		BlockState block = level.getBlockState(pos);
-		ItemStack stack = block.getCloneItemStack(null, level, pos, player);
-		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), level, DeployList.EntryLists.ATHENEUM);
-		if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
+		if(block.isAir())
+			return new Tuple<>(false, new GristSet());
+		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
-			
 			GristSet cost = new GristSet(GristTypes.BUILD,1);
-			if(!block.isAir() && !GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), level).getGristCache(), cost))
-				return cost;
-			
+			if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
+				return new Tuple<>(false, cost);
 		}
-		else if (!block.isAir() && (MinestuckConfig.SERVER.gristRefund.get() || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
-			return entry.getCurrentCost(connection).scale(-1);
-	
-		return new GristSet();
+		return new Tuple<>(true, new GristSet());
 	}
+	
 	
 	public record Fill(boolean isDown, BlockPos positionStart, BlockPos positionEnd, Vec3 hitVector, Direction side) implements PlayToServerPacket
 	{
@@ -157,7 +98,8 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			EditData data = ServerEditHandler.getData(player);
+			if(!player.getLevel().isClientSide() && data != null)
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
@@ -181,7 +123,8 @@ public final class EditmodeDragPacket
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
 					int c = stack.getCount();
-					if(player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && editModePlaceCheck(player.getLevel(), player, hand) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
+					Tuple<Boolean, GristSet> conditionAndCostPair = editModePlaceCheck(data, player, hand, pos);
+					if(conditionAndCostPair.getA() && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
 					{
 						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 						if(player.isCreative())
@@ -192,8 +135,9 @@ public final class EditmodeDragPacket
 						player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 						
 						anyBlockPlaced = true;
-					} else
-						missingCost.addGrist(editModePlaceCost(player.getLevel(), player, hand, pos));
+					}
+					else if (!conditionAndCostPair.getB().isEmpty())
+						missingCost.addGrist(conditionAndCostPair.getB());
 				}
 				if(anyBlockPlaced)
 				{
@@ -237,7 +181,8 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			EditData data = ServerEditHandler.getData(player);
+			if(!player.getLevel().isClientSide() && data != null)
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
@@ -250,8 +195,8 @@ public final class EditmodeDragPacket
 				boolean anyBlockDestroyed = false;
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
-					
-					if(editModeDestroyCheck(player.getLevel(), player, pos))
+					Tuple<Boolean, GristSet> conditionAndCostPair = editModeDestroyCheck(data, player, pos);
+					if(conditionAndCostPair.getA())
 					{
 						player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 						
@@ -260,14 +205,14 @@ public final class EditmodeDragPacket
 						player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
 						
 						anyBlockDestroyed = true;
-					} else
-						missingCost.addGrist(editModeDestroyCost(player.getLevel(), player, pos));
+					}
+					else if (!conditionAndCostPair.getB().isEmpty())
+						missingCost.addGrist(conditionAndCostPair.getB());
 				}
 				if(anyBlockDestroyed)
 				{
 					//broadcasts edit sound to other players.
 					player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
-					
 					player.swing(InteractionHand.MAIN_HAND);
 				}
 				if(!missingCost.isEmpty())
