@@ -155,15 +155,12 @@ public class ClientEditToolDrag
 		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in finishDragging() must be a drag tool (Revise or Recycle)!");
 		
-		if (cap.getEditPos1() != null)
-		{
-			if(targetTool == IEditTools.ToolMode.REVISE)
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-			else
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-			playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
-		}
-		
+		if(targetTool == IEditTools.ToolMode.REVISE)
+			MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+		else
+			MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+		playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
+	
 		cap.resetDragTools();
 	}
 	
@@ -202,7 +199,7 @@ public class ClientEditToolDrag
 				return; //Returns if the player is not highlighting a block.
 		
 		//If the selection has already successfully found a starting point, find the end-point.
-		if(cap.getEditPos1() != null)
+		if(cap.isEditDragging())
 			updateDragPosition(IEditTools.ToolMode.REVISE, cap, player, toolKey);
 		
 		//If key has just been released, finish drag.

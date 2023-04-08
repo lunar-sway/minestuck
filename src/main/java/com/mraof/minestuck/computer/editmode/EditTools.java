@@ -105,6 +105,7 @@ public class EditTools implements IEditTools
 	public void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player)
 	{
 		setToolMode(toolMode);
+		setEditDragging(true);
 		if(toolMode == ToolMode.REVISE)
 			setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 		else

@@ -135,12 +135,14 @@ public final class EditmodeDragPacket
 					else if (!conditionAndCostPair.getB().isEmpty())
 						missingCost.addGrist(conditionAndCostPair.getB());
 				}
+				
 				if(anyBlockPlaced)
 				{
 					//broadcasts edit sound to other players.
 					player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
 					player.swing(hand);
 				}
+				
 				if(!missingCost.isEmpty())
 					player.sendSystemMessage(missingCost.createMissingMessage(), true);
 				
@@ -205,12 +207,14 @@ public final class EditmodeDragPacket
 					else if (!conditionAndCostPair.getB().isEmpty())
 						missingCost.addGrist(conditionAndCostPair.getB());
 				}
+				
 				if(anyBlockDestroyed)
 				{
 					//broadcasts edit sound to other players.
 					player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
 					player.swing(InteractionHand.MAIN_HAND);
 				}
+				
 				if(!missingCost.isEmpty())
 					player.sendSystemMessage(missingCost.createMissingMessage(), true);
 				
@@ -240,7 +244,7 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(ServerEditHandler.getData(player) != null)
+			if(!player.getLevel().isClientSide() && ServerEditHandler.getData(player) != null)
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
@@ -268,10 +272,13 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
-			
-			ServerEditHandler.removeCursorEntity(player, true);
-			cap.resetDragTools();
+			if(!player.getLevel().isClientSide())
+			{
+				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
+				
+				ServerEditHandler.removeCursorEntity(player, true);
+				cap.resetDragTools();
+			}
 		}
 	}
 }
