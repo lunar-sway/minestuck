@@ -430,7 +430,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-				|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && (!MinestuckConfig.SERVER.gristRefund.get() && (entry != null && entry.getCategory() != DeployList.EntryLists.ATHENEUM))))
+				|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()
+				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM)))
 			{
 				event.setCanceled(true);
 				return;
