@@ -103,7 +103,6 @@ public final class EditmodeDragPacket
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
-				cap.setEditDragging(isDown);
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
 				cap.setEditTrace(hitVector, side);
@@ -184,7 +183,6 @@ public final class EditmodeDragPacket
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
-				cap.setEditDragging(isDown);
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
 				cap.setEditTrace(hitVector, side);
@@ -248,7 +246,6 @@ public final class EditmodeDragPacket
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
-				cap.setEditDragging(isDown);
 				cap.setEditPos1(positionStart);
 				cap.setEditPos2(positionEnd);
 				

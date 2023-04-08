@@ -373,7 +373,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in RightClickBlock event on the server!"));
-			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.isEditDragging())
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
@@ -419,7 +419,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in LeftClickBlock event on the server!"));
-			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.isEditDragging())
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.getEditPos1() != null)
 			{
 				event.setCanceled(true);
 				return;
@@ -431,7 +431,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
 				|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()
-				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM)))
+				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			{
 				event.setCanceled(true);
 				return;

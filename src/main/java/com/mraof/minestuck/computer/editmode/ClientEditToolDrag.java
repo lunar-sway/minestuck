@@ -166,7 +166,6 @@ public class ClientEditToolDrag
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
 		
-		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyUse;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
@@ -177,19 +176,18 @@ public class ClientEditToolDrag
 		}
 		
 		//If key has just been pressed, begin drag.
-		if(toolKey.isDown() && !isDragging)
+		if(toolKey.isDown() && cap.getEditPos1() == null)
 			if(!tryBeginDrag(IEditTools.ToolMode.REVISE, cap, player))
 				return; //Returns if the player is not highlighting a block.
 		
 		//If the selection has already successfully found a starting point, find the end-point.
-		if(cap.isEditDragging())
+		if(cap.getEditPos1() != null)
 			updateDragPosition(IEditTools.ToolMode.REVISE, cap, player, toolKey);
 		
 		//If key has just been released, finish drag.
-		if(!toolKey.isDown() && isDragging)
+		if(!toolKey.isDown() && cap.getEditPos1() != null)
 			finishDragging(IEditTools.ToolMode.REVISE, cap, player);
 		
-		cap.setEditDragging(toolKey.isDown());
 	}
 	
 	/**
@@ -221,7 +219,6 @@ public class ClientEditToolDrag
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
 		
-		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyAttack;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
@@ -232,7 +229,7 @@ public class ClientEditToolDrag
 		}
 		
 		//If key has just been pressed, begin drag.
-		if(toolKey.isDown() && !isDragging)
+		if(toolKey.isDown() && cap.getEditPos1() == null)
 			if(!tryBeginDrag(IEditTools.ToolMode.RECYCLE, cap, player))
 				return; //Returns if the player is not highlighting a block.
 		
@@ -241,10 +238,9 @@ public class ClientEditToolDrag
 			updateDragPosition(IEditTools.ToolMode.RECYCLE, cap, player, toolKey);
 		
 		//If key has just been released, finish drag.
-		if(!toolKey.isDown() && isDragging)
+		if(!toolKey.isDown() && cap.getEditPos1() != null)
 			finishDragging(IEditTools.ToolMode.RECYCLE, cap, player);
-		
-		cap.setEditDragging(toolKey.isDown());
+
 	}
 	
 	/**
@@ -399,7 +395,7 @@ public class ClientEditToolDrag
 			double d2 = info.getPosition().y;
 			double d3 = info.getPosition().z;
 			
-			if (cap.isEditDragging() && cap.getEditPos1() != null)
+			if (isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null)
 			{
 				BlockPos posA = cap.getEditPos1();
 				BlockPos posB = cap.getEditPos2();

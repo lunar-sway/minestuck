@@ -92,20 +92,9 @@ public class EditTools implements IEditTools
 	
 	
 	@Override
-	public boolean isEditDragging() {
-		return isEditDragging;
-	}
-	
-	@Override
-	public void setEditDragging(boolean v) {
-		isEditDragging = v;
-	}
-	
-	@Override
 	public void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player)
 	{
 		setToolMode(toolMode);
-		setEditDragging(true);
 		if(toolMode == ToolMode.REVISE)
 			setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 		else
@@ -121,7 +110,6 @@ public class EditTools implements IEditTools
 		setEditPos2(null);
 		setEditTrace(new Vec3(0,0,0), Direction.NORTH);
 		setEditReachDistance(0);
-		setEditDragging(false);
 		setEditCursorID(null);
 	}
 }

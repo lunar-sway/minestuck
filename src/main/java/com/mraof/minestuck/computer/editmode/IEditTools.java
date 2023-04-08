@@ -48,9 +48,6 @@ public interface IEditTools
 	void setEditReachDistance(double reachDistance);
 	void setEditCursorID(UUID uuid);
 	
-	boolean isEditDragging();
-	void setEditDragging(boolean v);
-	
 	void beginDragTools(ToolMode toolMode, BlockHitResult blockHit, Player player);
 	void resetDragTools();
 }
