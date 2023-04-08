@@ -2,11 +2,9 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -20,6 +18,21 @@ public final class LandTypeConditions
 		{
 			return landType -> !test(landType);
 		}
+		
+		default Terrain or(Supplier<TerrainLandType> landTypeSupplier)
+		{
+			return this.or(terrainLand(landTypeSupplier));
+		}
+		
+		default Terrain or(TagKey<TerrainLandType> tag)
+		{
+			return this.or(terrainLand(tag));
+		}
+		
+		default Terrain or(Terrain otherCondition)
+		{
+			return landType -> this.test(landType) || otherCondition.test(landType);
+		}
 	}
 	
 	public interface Title extends Predicate<TitleLandType>
@@ -29,33 +42,40 @@ public final class LandTypeConditions
 		default Title negate()
 		{
 			return landType -> !test(landType);
+		}
+		
+		default Title or(Supplier<TitleLandType> landTypeSupplier)
+		{
+			return this.or(titleLand(landTypeSupplier));
+		}
+		
+		default Title or(TagKey<TitleLandType> tag)
+		{
+			return this.or(titleLand(tag));
+		}
+		
+		default Title or(Title otherCondition)
+		{
+			return landType -> this.test(landType) || otherCondition.test(landType);
 		}}
 	
-	@SafeVarargs
-	public static Terrain terrainLand(Supplier<TerrainLandType>... landTypes)
+	public static Terrain terrainLand(Supplier<TerrainLandType> landTypeSupplier)
 	{
-		List<TerrainLandType> landTypeList = Arrays.stream(landTypes).map(Supplier::get).toList();
-		return landTypeList::contains;
+		return landType -> landType == landTypeSupplier.get();
 	}
 	
-	@SafeVarargs
-	public static Terrain terrainLandByGroup(Supplier<TerrainLandType>... landTypes)
+	public static Terrain terrainLand(TagKey<TerrainLandType> landTypeTag)
 	{
-		List<ResourceLocation> landTypeList = Arrays.stream(landTypes).map(Supplier::get).map(ILandType::getGroup).toList();
-		return landType -> landTypeList.contains(landType.getGroup());
+		return landType -> landType.is(landTypeTag);
 	}
 	
-	@SafeVarargs
-	public static Title titleLand(Supplier<TitleLandType>... landTypes)
+	public static Title titleLand(Supplier<TitleLandType> landTypeSupplier)
 	{
-		List<TitleLandType> landTypeList = Arrays.stream(landTypes).map(Supplier::get).toList();
-		return landTypeList::contains;
+		return landType -> landType == landTypeSupplier.get();
 	}
 	
-	@SafeVarargs
-	public static Title titleLandByGroup(Supplier<TitleLandType>... landTypes)
+	public static Title titleLand(TagKey<TitleLandType> landTypeTag)
 	{
-		List<ResourceLocation> landTypeList = Arrays.stream(landTypes).map(Supplier::get).map(ILandType::getGroup).toList();
-		return landType -> landTypeList.contains(landType.getGroup());
+		return landType -> landType.is(landTypeTag);
 	}
 }

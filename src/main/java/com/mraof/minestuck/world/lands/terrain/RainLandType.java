@@ -39,7 +39,7 @@ public class RainLandType extends TerrainLandType
 	
 	public RainLandType()
 	{
-		super(new Builder(MSEntityTypes.TURTLE).unavailable().names(RAIN, ISLANDS, SKY)
+		super(new Builder(MSEntityTypes.TURTLE).names(RAIN, ISLANDS, SKY)
 				.fogColor(0.9, 0.8, 0.6).skyColor(0.3, 0.5, 0.98)
 				.biomeSet(MSBiomes.HIGH_HUMID_LAND).music(MSSoundEvents.MUSIC_RAIN));
 	}

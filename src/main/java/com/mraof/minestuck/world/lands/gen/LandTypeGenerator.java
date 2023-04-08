@@ -1,10 +1,12 @@
-package com.mraof.minestuck.world.lands;
+package com.mraof.minestuck.world.lands.gen;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.world.DynamicDimensions;
+import com.mraof.minestuck.world.lands.ILandType;
+import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.ResourceLocationException;
@@ -12,7 +14,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +38,7 @@ public final class LandTypeGenerator
 	 */
 	public TerrainLandType getTerrainAspect(TitleLandType aspect2, List<TerrainLandType> usedAspects)
 	{
-		TerrainLandType aspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TERRAIN_REGISTRY.get()), aspect2::isAspectCompatible);
+		TerrainLandType aspect = selectRandomAspect(usedAspects, LandTypeSelection.terrainAlternatives(), aspect2::isAspectCompatible);
 		if(aspect != null)
 			return aspect;
 		else
@@ -50,44 +51,36 @@ public final class LandTypeGenerator
 	public TitleLandType getTitleAspect(TerrainLandType aspectTerrain, EnumAspect titleAspect, List<TitleLandType> usedAspects)
 	{
 		TitleLandType landAspect;
+		var alternatives = LandTypeSelection.titleAlternatives(titleAspect);
 		if(aspectTerrain != null)
 		{
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect && aspect.isAspectCompatible(aspectTerrain));
+			landAspect = selectRandomAspect(usedAspects, alternatives, aspect -> aspect.isAspectCompatible(aspectTerrain));
 		} else
-			landAspect = selectRandomAspect(usedAspects, createByGroupMap(LandTypes.TITLE_REGISTRY.get()), aspect -> aspect.getAspect() == titleAspect);
+			landAspect = selectRandomAspect(usedAspects, alternatives, aspect -> true);
 		
 		if(landAspect != null)
 			return landAspect;
 		else return LandTypes.TITLE_NULL.get();
 	}
 	
-	private <A extends ILandType> Map<ResourceLocation, List<A>> createByGroupMap(IForgeRegistry<A> registry)
+	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Iterable<? extends Collection<A>> groups, Predicate<A> condition)
 	{
-		Map<ResourceLocation, List<A>> groupMap = Maps.newHashMap();
-		for(A landType : registry)
+		List<ChoiceEntry<A>> list = Lists.newArrayList();
+		for(Collection<A> group : groups)
 		{
-			if(landType.canBePickedAtRandom())
-				groupMap.computeIfAbsent(landType.getGroup(), _landType -> Lists.newArrayList()).add(landType);
-		}
-		return groupMap;
-	}
-	
-	private <A extends ILandType> A selectRandomAspect(List<A> usedAspects, Map<ResourceLocation, List<A>> groupMap, Predicate<A> condition)
-	{
-		List<List<A>> list = Lists.newArrayList();
-		for(List<A> aspects : groupMap.values())
-		{
-			List<A> variantList = Lists.newArrayList(aspects);
+			List<A> variantList = Lists.newArrayList(group);
 			variantList.removeIf(condition.negate());
 			if(!variantList.isEmpty())
-				list.add(variantList);
+				list.add(new ChoiceEntry<>(variantList, group));
 		}
 		
-		List<A> groupList = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.get(0).getGroup().equals(used.getGroup()));
-		if(groupList == null)
+		ChoiceEntry<A> entry = pickOneFromUsage(list, usedAspects, (variants, used) -> variants.all().contains(used));
+		if(entry == null)
 			return null;
-		return pickOneFromUsage(groupList, usedAspects, Object::equals);
+		return pickOneFromUsage(entry.allowed, usedAspects, Object::equals);
 	}
+	
+	private record ChoiceEntry<A>(List<A> allowed, Collection<A> all){}
 	
 	private <A extends ILandType, B> B pickOneFromUsage(List<B> list, List<A> usedAspects, BiPredicate<B, A> matchPredicate)
 	{
