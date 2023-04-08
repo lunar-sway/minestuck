@@ -17,6 +17,7 @@ import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.Camera;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -43,7 +44,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
-/** Class for handling the click-and-drag editmode tools on the client-side.
+/** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
  * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
  * @see EditmodeDragPacket for the tool's server-sided block-placing code.
  * @see ServerEditHandler for server-sided code that handles the sburb-cursor.
@@ -70,6 +71,107 @@ public class ClientEditToolDrag
 	}
 	
 	/**
+	 * Checks the conditions to see if the recycle/revise tool should be ended early.
+	 * @param isRevise If true, checks conditions for Revise, otherwise checks Recycle.
+	 * @param player Current client-side player.
+	 * @param toolKey Mouse key used to activate the given tool.
+	 * @return True if the tool should be canceled, false if it shouldn't.
+	 */
+	public static boolean shouldCancelDrag(boolean isRevise, Player player, KeyMapping toolKey)
+	{
+		if(toolKey.isDown())
+			if(isRevise ? !canEditRevise(player) : !canEditRecycle(player))
+				return true;
+		return false;
+	}
+	
+	/**
+	 * Resets the drag tool, and removes the server-cursor if the given edit tool is active.
+	 * @param isRevise If true, checks conditions for Revise, otherwise checks Recycle.
+	 * @param cap The current edit-tools capability.
+	 */
+	public static void cancelDrag(boolean isRevise, IEditTools cap)
+	{
+		if(cap.getToolMode() == (isRevise ? IEditTools.ToolMode.REVISE : IEditTools.ToolMode.RECYCLE))
+			MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
+		cap.resetDragTools();
+	}
+	
+	/**
+	 * Determines whether or not the game should try to begin a drag tool.
+	 * @param toolKey The given tool's key.
+	 * @param isEditDragging Whether the game has started dragging already.
+	 * @return True if you're holding the key, but the game hasn't started a selection yet.
+	 */
+	public static boolean shouldBeginDrag(KeyMapping toolKey, boolean isEditDragging) { return toolKey.isDown() && !isEditDragging; }
+	
+	/**
+	 * Attempts to get the currently highlighted block.
+	 * If the player is highlighting a block, initialize the target edit-tool's parameters.
+	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param cap The current edit-tools capability.
+	 * @param player Current client-side player.
+	 */
+	public static void tryBeginDrag(boolean isRevise, IEditTools cap, Player player)
+	{
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
+		{
+			cap.beginDragTools(isRevise ? IEditTools.ToolMode.REVISE : IEditTools.ToolMode.RECYCLE, blockHit, player);
+		}
+	}
+	
+	/**
+	 * Determines whether the game should update the selection and cursor.
+	 * @param cap The current edit-tools capability.
+	 * @return True if the game has successfully begun dragging.
+	 */
+	public static boolean shouldUpdateDrag(IEditTools cap) { return cap.getEditPos1() != null; }
+	
+	/**
+	 * Sets/updates the second selection point according to the given tool,
+	 * and sends a packet to create/update the sburb cursor.
+	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param cap The current edit-tools capability.
+	 * @param player Current client-side player.
+	 * @param toolKey The given tool's key.
+	 */
+	public static void updateDragPosition(boolean isRevise, IEditTools cap, Player player, KeyMapping toolKey)
+	{
+		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), isRevise));
+		MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
+	}
+	
+	/**
+	 * Determines whether the game should attempt to fill/destroy selected blocks.
+	 * @param toolKey The given tool's key.
+	 * @param isEditDragging Whether the game has started dragging already.
+	 * @return True if the key isn't being held, and a selection is still active.
+	 */
+	public static boolean shouldFinishDrag(KeyMapping toolKey, boolean isEditDragging) { return !toolKey.isDown() && isEditDragging; }
+	
+	/**
+	 * When the player releases the given tool's key, if a selection is active, a packet for filling/destroying the selected blocks and removing the cursor will be sent.
+	 * Also creates the particles and block sounds on the client-side, whereas the packet handles broadcasting those to other players.
+	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param cap The current edit-tools capability.
+	 * @param player Current client-side player.
+	 */
+	public static void finishDragging(boolean isRevise, IEditTools cap, Player player)
+	{
+		if (cap.getEditPos1() != null)
+		{
+			if(isRevise)
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			else
+				MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
+			playSoundAndSetParticles(player, isRevise, cap.getEditPos1(), cap.getEditPos2());
+		}
+		
+		cap.resetDragTools();
+	}
+	
+	/**
 	 * Handles code for the revise tool on the client-side.
 	 */
 	public static void doReviseCode(TickEvent.ClientTickEvent event)
@@ -81,48 +183,29 @@ public class ClientEditToolDrag
 		Player player = mc.player;
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
 		
+		//Return early if there IS a tool active and it ISN'T revise.
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
 		
 		boolean isDragging = cap.isEditDragging();
-		boolean isDown = mc.options.keyUse.isDown();
+		KeyMapping toolKey = mc.options.keyUse;
 		
-		if (isDown)
+		if(shouldCancelDrag(true, player, toolKey))
 		{
-			if(!canEditRevise(player))
-			{
-				if(cap.getToolMode() == IEditTools.ToolMode.REVISE)
-					MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
-				cap.resetDragTools();
-				return;
-			}
-		
-			if (!isDragging)
-			{
-				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
-				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
-				{
-					cap.beginDragTools(IEditTools.ToolMode.REVISE, blockHit, player);
-				}
-			}
-			if (cap.getEditPos1() != null)
-			{
-				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), true));
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
-			}
-		}
-		else if (isDragging)
-		{
-			if (cap.getEditPos1() != null)
-			{
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-				playSoundAndSetParticles(player, true, cap.getEditPos1(), cap.getEditPos2());
-			}
-			
-			cap.resetDragTools();
+			cancelDrag(true, cap);
+			return;
 		}
 		
-		cap.setEditDragging(isDown);
+		if(shouldBeginDrag(toolKey, isDragging))
+			tryBeginDrag(true, cap, player);
+		
+		if(shouldUpdateDrag(cap))
+			updateDragPosition(true, cap, player, toolKey);
+		
+		if(shouldFinishDrag(toolKey, isDragging))
+			finishDragging(true, cap, player);
+		
+		cap.setEditDragging(toolKey.isDown());
 	}
 	
 	/**
@@ -150,48 +233,29 @@ public class ClientEditToolDrag
 		Player player = mc.player;
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
 		
+		//Return early if there IS a tool active and it ISN'T recycle.
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
 		
 		boolean isDragging = cap.isEditDragging();
-		boolean isDown = mc.options.keyAttack.isDown();
+		KeyMapping toolKey = mc.options.keyAttack;
 		
-		if (isDown)
+		if(shouldCancelDrag(false, player, toolKey))
 		{
-			if(!canEditRecycle(player))
-			{
-				if(cap.getToolMode() == IEditTools.ToolMode.RECYCLE)
-					MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
-				cap.resetDragTools();
-				return;
-			}
-			
-			if (!isDragging)
-			{
-				BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
-				if (blockHit.getType() == BlockHitResult.Type.BLOCK)
-				{
-					cap.beginDragTools(IEditTools.ToolMode.RECYCLE, blockHit, player);
-				}
-			}
-			if (cap.getEditPos1() != null)
-			{
-				cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), false));
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(isDown, cap.getEditPos1(), cap.getEditPos2()));
-			}
-		}
-		else if (isDragging)
-		{
-			if (cap.getEditPos1() != null)
-			{
-				MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(isDown, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-				playSoundAndSetParticles(player, false, cap.getEditPos1(), cap.getEditPos2());
-			}
-			
-			cap.resetDragTools();
+			cancelDrag(false, cap);
+			return;
 		}
 		
-		cap.setEditDragging(isDown);
+		if(shouldBeginDrag(toolKey, isDragging))
+			tryBeginDrag(false, cap, player);
+		
+		if(shouldUpdateDrag(cap))
+			updateDragPosition(false, cap, player, toolKey);
+		
+		if(shouldFinishDrag(toolKey, isDragging))
+			finishDragging(false, cap, player);
+		
+		cap.setEditDragging(toolKey.isDown());
 	}
 	
 	/**
