@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Changed Cat Claws recipe to Makeshift Claws || String
+- Changed Cat Claws recipe to Makeshift Claws || Iron Ingot
 - Updated Cat Claws texture
 - Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
 - Added Grist Cost to Eightball and Dice items
