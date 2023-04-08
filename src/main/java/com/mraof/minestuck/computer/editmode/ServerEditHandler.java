@@ -416,7 +416,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickBlockControl(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(!event.getLevel().isClientSide && event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
+		if(event.getEntity() instanceof ServerPlayer player && getData(event.getEntity()) != null)
 		{
 			IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in LeftClickBlock event on the server!"));
 			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || cap.isEditDragging())
