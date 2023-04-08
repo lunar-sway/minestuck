@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class TotemLatheModel extends AnimatedGeoModel<TotemLatheDowelBlockEntity> {
     @Override
-    public ResourceLocation getModelLocation(TotemLatheDowelBlockEntity object) {
+    public ResourceLocation getModelResource(TotemLatheDowelBlockEntity object) {
         return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/totemlathe.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TotemLatheDowelBlockEntity object) {
+    public ResourceLocation getTextureResource(TotemLatheDowelBlockEntity object) {
         return new ResourceLocation(Minestuck.MOD_ID, "textures/block/machine/totemlathe.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(TotemLatheDowelBlockEntity animatable) {
+    public ResourceLocation getAnimationResource(TotemLatheDowelBlockEntity animatable) {
         return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/totemlathe.animation.json");
     }
 }

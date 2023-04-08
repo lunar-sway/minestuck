@@ -8,12 +8,12 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class HorseClockModel extends AnimatedGeoModel<HorseClockBlockEntity> {
     @Override
-    public ResourceLocation getModelLocation(HorseClockBlockEntity object) {
+    public ResourceLocation getModelResource(HorseClockBlockEntity object) {
         return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/horseclock.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(HorseClockBlockEntity object) {
+    public ResourceLocation getTextureResource(HorseClockBlockEntity object) {
         //there are 8 textures for the model. They are identical to one another except for the clock texture, which changes depending on the time of day
         Level level = object.getLevel();
         if(level != null)
@@ -41,7 +41,7 @@ public class HorseClockModel extends AnimatedGeoModel<HorseClockBlockEntity> {
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(HorseClockBlockEntity animatable) {
+    public ResourceLocation getAnimationResource(HorseClockBlockEntity animatable) {
         return new ResourceLocation(Minestuck.MOD_ID, "animations/blockentity/horseclock.animation.json");
     }
 }
