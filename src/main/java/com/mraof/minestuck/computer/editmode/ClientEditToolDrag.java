@@ -77,9 +77,9 @@ public class ClientEditToolDrag
 	 * @param toolKey Mouse key used to activate the given tool.
 	 * @return True if the tool should be canceled, false if it shouldn't.
 	 */
-	public static boolean shouldCancelDrag(IEditTools.ToolMode targetTool, Player player, KeyMapping toolKey)
+	private static boolean shouldCancelDrag(IEditTools.ToolMode targetTool, Player player, KeyMapping toolKey)
 	{
-		if(!validDragTool(targetTool))
+		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in shouldCancelDrag() must be either Revise or Recycle!");
 		
 		if(toolKey.isDown())
@@ -93,9 +93,9 @@ public class ClientEditToolDrag
 	 * @param targetTool The tool you want to check. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 */
-	public static void cancelDrag(IEditTools.ToolMode targetTool, IEditTools cap)
+	private static void cancelDrag(IEditTools.ToolMode targetTool, IEditTools cap)
 	{
-		if(!validDragTool(targetTool))
+		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in cancelDrag() must be a drag tool (Revise or Recycle)!");
 		
 		if(cap.getToolMode() == targetTool)
@@ -109,7 +109,7 @@ public class ClientEditToolDrag
 	 * @param isEditDragging Whether the game has started dragging already.
 	 * @return True if you're holding the key, but the game hasn't started a selection yet.
 	 */
-	public static boolean shouldBeginDrag(KeyMapping toolKey, boolean isEditDragging) { return toolKey.isDown() && !isEditDragging; }
+	private static boolean shouldBeginDrag(KeyMapping toolKey, boolean isEditDragging) { return toolKey.isDown() && !isEditDragging; }
 	
 	/**
 	 * Attempts to get the currently highlighted block.
@@ -118,9 +118,9 @@ public class ClientEditToolDrag
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 */
-	public static void tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
+	private static void tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
-		if(!validDragTool(targetTool))
+		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in tryBeginDrag() must be a drag tool (Revise or Recycle)!");
 		
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
@@ -135,7 +135,7 @@ public class ClientEditToolDrag
 	 * @param cap The current edit-tools capability.
 	 * @return True if the game has successfully begun dragging.
 	 */
-	public static boolean shouldUpdateDrag(IEditTools cap) { return cap.getEditPos1() != null; }
+	private static boolean shouldUpdateDrag(IEditTools cap) { return cap.getEditPos1() != null; }
 	
 	/**
 	 * Sets/updates the second selection point according to the given tool,
@@ -145,9 +145,9 @@ public class ClientEditToolDrag
 	 * @param player Current client-side player.
 	 * @param toolKey The given tool's key.
 	 */
-	public static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
+	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
-		if(!validDragTool(targetTool))
+		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in updateDragPosition() must be a drag tool (Revise or Recycle)!");
 		
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
@@ -160,7 +160,7 @@ public class ClientEditToolDrag
 	 * @param isEditDragging Whether the game has started dragging already.
 	 * @return True if the key isn't being held, and a selection is still active.
 	 */
-	public static boolean shouldFinishDrag(KeyMapping toolKey, boolean isEditDragging) { return !toolKey.isDown() && isEditDragging; }
+	private static boolean shouldFinishDrag(KeyMapping toolKey, boolean isEditDragging) { return !toolKey.isDown() && isEditDragging; }
 	
 	/**
 	 * When the player releases the given tool's key, if a selection is active, a packet for filling/destroying the selected blocks and removing the cursor will be sent.
@@ -169,9 +169,9 @@ public class ClientEditToolDrag
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 */
-	public static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
+	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
-		if(!validDragTool(targetTool))
+		if(!isValidDragTool(targetTool))
 			throw new IllegalArgumentException("targetTool in finishDragging() must be a drag tool (Revise or Recycle)!");
 		
 		if (cap.getEditPos1() != null)
@@ -186,9 +186,9 @@ public class ClientEditToolDrag
 		cap.resetDragTools();
 	}
 	
-	private static boolean validDragToolOrNull(IEditTools.ToolMode toolMode) { return toolMode == null || validDragTool(toolMode); }
+	public static boolean isValidDragToolOrNull(IEditTools.ToolMode toolMode) { return toolMode == null || isValidDragTool(toolMode); }
 	
-	private static boolean validDragTool(IEditTools.ToolMode toolMode) { return toolMode == IEditTools.ToolMode.REVISE || toolMode == IEditTools.ToolMode.RECYCLE; }
+	public static boolean isValidDragTool(IEditTools.ToolMode toolMode) { return toolMode == IEditTools.ToolMode.REVISE || toolMode == IEditTools.ToolMode.RECYCLE; }
 	
 	/**
 	 * Handles code for the revise tool on the client-side.
