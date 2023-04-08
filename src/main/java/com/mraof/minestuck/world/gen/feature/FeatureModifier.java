@@ -5,9 +5,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -28,7 +30,7 @@ public interface FeatureModifier
 			{
 				if(config instanceof DiskConfiguration diskConfig)
 					return Optional.of((T) new DiskConfiguration(diskConfig.stateProvider(), targets, diskConfig.radius(), diskConfig.halfHeight()));
-				return Optional.empty();
+				return maybeMapBase(config);
 			}
 		};
 	}
@@ -46,7 +48,7 @@ public interface FeatureModifier
 				if(config instanceof DiskConfiguration diskConfig)
 					return Optional.of((T) new DiskConfiguration(RuleBasedBlockStateProvider.simple(BlockStateProvider.simple(state)),
 							diskConfig.target(), diskConfig.radius(), diskConfig.halfHeight()));
-				return Optional.empty();
+				return maybeMapBase(config);
 			}
 		};
 	}
@@ -54,6 +56,16 @@ public interface FeatureModifier
 	interface ConfigMapper extends FeatureModifier
 	{
 		<T extends FeatureConfiguration> Optional<T> maybeMap(T config);
+		
+		@SuppressWarnings("unchecked")
+		default <T extends FeatureConfiguration> Optional<T> maybeMapBase(T config)
+		{
+			if(config instanceof RandomFeatureConfiguration featureConfig)
+				return Optional.of((T) new RandomFeatureConfiguration(
+						featureConfig.features.stream().map(weighted -> new WeightedPlacedFeature(map(weighted.feature), weighted.chance)).toList(),
+						map(featureConfig.defaultFeature)));
+			return Optional.empty();
+		}
 		
 		default Optional<PlacedFeature> maybeMap(PlacedFeature placed)
 		{

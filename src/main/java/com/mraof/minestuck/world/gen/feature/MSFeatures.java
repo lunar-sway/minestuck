@@ -43,8 +43,8 @@ public final class MSFeatures
 	public static final RegistryObject<Feature<BlockStateConfiguration>> STONE_MOUND = REGISTER.register("stone_mound", () -> new StoneMoundFeature(BlockStateConfiguration.CODEC));
 	public static final RegistryObject<Feature<BlockStateConfiguration>> BLOCK_BLOB = REGISTER.register("block_blob", () -> new ConditionFreeBlobFeature(BlockStateConfiguration.CODEC));
 	public static final RegistryObject<Feature<RandomRockBlockBlobConfig>> RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("random_rock_block_blob", () -> new RandomRockConditionFreeBlobFeature(RandomRockBlockBlobConfig.CODEC));
-	public static final RegistryObject<Feature<BlockStateConfiguration>> PILLAR = REGISTER.register("pillar", () -> new PillarFeature(BlockStateConfiguration.CODEC, false));
-	public static final RegistryObject<Feature<BlockStateConfiguration>> LARGE_PILLAR = REGISTER.register("large_pillar", () -> new PillarFeature(BlockStateConfiguration.CODEC, true));
+	public static final RegistryObject<Feature<BlockStateConfiguration>> SMALL_PILLAR = REGISTER.register("small_pillar", () -> new SmallPillarFeature(BlockStateConfiguration.CODEC));
+	public static final RegistryObject<Feature<BlockStateConfiguration>> PILLAR = REGISTER.register("pillar", () -> new PillarFeature(BlockStateConfiguration.CODEC));
 	
 	public static final RegistryObject<Feature<NoneFeatureConfiguration>> END_TREE = REGISTER.register("end_tree", () -> new EndTreeFeature(NoneFeatureConfiguration.CODEC));
 	public static final RegistryObject<Feature<BlockStateConfiguration>> LEAFLESS_TREE = REGISTER.register("leafless_tree", () -> new LeaflessTreeFeature(BlockStateConfiguration.CODEC));

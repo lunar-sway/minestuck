@@ -6,7 +6,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.Vec3i;
 import net.minecraft.data.worldgen.features.*;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -144,11 +143,11 @@ public final class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR)));
 	public static final RegistryObject<PlacedFeature> FOREST_ROCK = REGISTER.register("forest_rock", () -> placed(MiscOverworldFeatures.FOREST_ROCK,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> PILLAR = REGISTER.register("pillar", () -> placed(MSCFeatures.PILLAR,
+	public static final RegistryObject<PlacedFeature> SMALL_PILLAR = REGISTER.register("small_pillar", () -> placed(MSCFeatures.SMALL_PILLAR,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> LARGE_PILLAR = REGISTER.register("large_pillar", () -> placed(MSCFeatures.LARGE_PILLAR,
+	public static final RegistryObject<PlacedFeature> MIXED_PILLARS = REGISTER.register("mixed_pillars", () -> placed(MSCFeatures.MIXED_PILLARS,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> LARGE_PILLAR_EXTRA = REGISTER.register("large_pillar_extra", () -> placed(MSCFeatures.LARGE_PILLAR,
+	public static final RegistryObject<PlacedFeature> MIXED_PILLARS_EXTRA = REGISTER.register("mixed_pillars_extra", () -> placed(MSCFeatures.MIXED_PILLARS,
 			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> ICE_SPIKE = REGISTER.register("ice_spike", () -> placed(MiscOverworldFeatures.ICE_SPIKE,
 			worldGenModifiers(CountPlacement.of(16), PlacementUtils.HEIGHTMAP)));
