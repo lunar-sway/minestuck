@@ -71,24 +71,6 @@ public class ClientEditToolDrag
 	}
 	
 	/**
-	 * Checks the conditions to see if the recycle/revise tool should be ended early.
-	 * @param targetTool The tool to check the conditions for. Must be a drag tool (Revise or Recycle).
-	 * @param player Current client-side player.
-	 * @param toolKey Mouse key used to activate the given tool.
-	 * @return True if the tool should be canceled, false if it shouldn't.
-	 */
-	private static boolean shouldCancelDrag(IEditTools.ToolMode targetTool, Player player, KeyMapping toolKey)
-	{
-		if(!isValidDragTool(targetTool))
-			throw new IllegalArgumentException("targetTool in shouldCancelDrag() must be either Revise or Recycle!");
-		
-		if(toolKey.isDown())
-			if(targetTool == IEditTools.ToolMode.REVISE ? !canEditRevise(player) : !canEditRecycle(player))
-				return true;
-		return false;
-	}
-	
-	/**
 	 * Resets the drag tool, and removes the server-cursor if the given edit tool is active.
 	 * @param targetTool The tool you want to check. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
@@ -187,7 +169,8 @@ public class ClientEditToolDrag
 		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyUse;
 		
-		if(shouldCancelDrag(IEditTools.ToolMode.REVISE, player, toolKey))
+		//If key is pressed, and not allowed to recycle, cancel the tool.
+		if(toolKey.isDown() && !canEditRevise(player))
 		{
 			cancelDrag(IEditTools.ToolMode.REVISE, cap);
 			return;
@@ -241,7 +224,8 @@ public class ClientEditToolDrag
 		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyAttack;
 		
-		if(shouldCancelDrag(IEditTools.ToolMode.RECYCLE, player, toolKey))
+		//If key is pressed, and not allowed to recycle, cancel the tool.
+		if(toolKey.isDown() && !canEditRecycle(player))
 		{
 			cancelDrag(IEditTools.ToolMode.RECYCLE, cap);
 			return;
