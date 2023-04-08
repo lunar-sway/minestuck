@@ -114,17 +114,13 @@ public final class EditmodeDragPacket
 				if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
 					return;
 				
-				float interactionPositionX = (float) (hitVector.x - (double) positionStart.getX());
-				float interactionPositionY = (float) (hitVector.y - (double) positionStart.getY());
-				float interactionPositionZ = (float) (hitVector.z - (double) positionStart.getZ());
-				
 				GristSet missingCost = new GristSet();
 				boolean anyBlockPlaced = false;
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
 					int c = stack.getCount();
 					Tuple<Boolean, GristSet> conditionAndCostPair = editModePlaceCheck(data, player, hand, pos);
-					if(conditionAndCostPair.getA() && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(new Vec3(interactionPositionX, interactionPositionY, interactionPositionZ), side, pos, false))) != InteractionResult.FAIL)
+					if(conditionAndCostPair.getA() && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
 					{
 						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 						if(player.isCreative())
