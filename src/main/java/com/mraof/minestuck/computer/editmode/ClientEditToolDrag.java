@@ -72,27 +72,33 @@ public class ClientEditToolDrag
 	
 	/**
 	 * Checks the conditions to see if the recycle/revise tool should be ended early.
-	 * @param isRevise If true, checks conditions for Revise, otherwise checks Recycle.
+	 * @param targetTool The tool to check the conditions for. Must be a drag tool (Revise or Recycle).
 	 * @param player Current client-side player.
 	 * @param toolKey Mouse key used to activate the given tool.
 	 * @return True if the tool should be canceled, false if it shouldn't.
 	 */
-	public static boolean shouldCancelDrag(boolean isRevise, Player player, KeyMapping toolKey)
+	public static boolean shouldCancelDrag(IEditTools.ToolMode targetTool, Player player, KeyMapping toolKey)
 	{
+		if(!validDragTool(targetTool))
+			throw new IllegalArgumentException("targetTool in shouldCancelDrag() must be either Revise or Recycle!");
+		
 		if(toolKey.isDown())
-			if(isRevise ? !canEditRevise(player) : !canEditRecycle(player))
+			if(targetTool == IEditTools.ToolMode.REVISE ? !canEditRevise(player) : !canEditRecycle(player))
 				return true;
 		return false;
 	}
 	
 	/**
 	 * Resets the drag tool, and removes the server-cursor if the given edit tool is active.
-	 * @param isRevise If true, checks conditions for Revise, otherwise checks Recycle.
+	 * @param targetTool The tool you want to check. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 */
-	public static void cancelDrag(boolean isRevise, IEditTools cap)
+	public static void cancelDrag(IEditTools.ToolMode targetTool, IEditTools cap)
 	{
-		if(cap.getToolMode() == (isRevise ? IEditTools.ToolMode.REVISE : IEditTools.ToolMode.RECYCLE))
+		if(!validDragTool(targetTool))
+			throw new IllegalArgumentException("targetTool in cancelDrag() must be a drag tool (Revise or Recycle)!");
+		
+		if(cap.getToolMode() == targetTool)
 			MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
 		cap.resetDragTools();
 	}
@@ -108,16 +114,19 @@ public class ClientEditToolDrag
 	/**
 	 * Attempts to get the currently highlighted block.
 	 * If the player is highlighting a block, initialize the target edit-tool's parameters.
-	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param targetTool The tool to begin using. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 */
-	public static void tryBeginDrag(boolean isRevise, IEditTools cap, Player player)
+	public static void tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
+		if(!validDragTool(targetTool))
+			throw new IllegalArgumentException("targetTool in tryBeginDrag() must be a drag tool (Revise or Recycle)!");
+		
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 		{
-			cap.beginDragTools(isRevise ? IEditTools.ToolMode.REVISE : IEditTools.ToolMode.RECYCLE, blockHit, player);
+			cap.beginDragTools(targetTool, blockHit, player);
 		}
 	}
 	
@@ -131,14 +140,17 @@ public class ClientEditToolDrag
 	/**
 	 * Sets/updates the second selection point according to the given tool,
 	 * and sends a packet to create/update the sburb cursor.
-	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param targetTool The tool you want to update. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 * @param toolKey The given tool's key.
 	 */
-	public static void updateDragPosition(boolean isRevise, IEditTools cap, Player player, KeyMapping toolKey)
+	public static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
-		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), isRevise));
+		if(!validDragTool(targetTool))
+			throw new IllegalArgumentException("targetTool in updateDragPosition() must be a drag tool (Revise or Recycle)!");
+		
+		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
 		MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
 	
@@ -153,23 +165,30 @@ public class ClientEditToolDrag
 	/**
 	 * When the player releases the given tool's key, if a selection is active, a packet for filling/destroying the selected blocks and removing the cursor will be sent.
 	 * Also creates the particles and block sounds on the client-side, whereas the packet handles broadcasting those to other players.
-	 * @param isRevise If true, uses Revise, otherwise uses Recycle.
+	 * @param targetTool The tool you want to finish. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 * @param player Current client-side player.
 	 */
-	public static void finishDragging(boolean isRevise, IEditTools cap, Player player)
+	public static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
+		if(!validDragTool(targetTool))
+			throw new IllegalArgumentException("targetTool in finishDragging() must be a drag tool (Revise or Recycle)!");
+		
 		if (cap.getEditPos1() != null)
 		{
-			if(isRevise)
+			if(targetTool == IEditTools.ToolMode.REVISE)
 				MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 			else
 				MSPacketHandler.sendToServer(new EditmodeDragPacket.Destroy(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
-			playSoundAndSetParticles(player, isRevise, cap.getEditPos1(), cap.getEditPos2());
+			playSoundAndSetParticles(player, targetTool == IEditTools.ToolMode.REVISE ? true : false, cap.getEditPos1(), cap.getEditPos2());
 		}
 		
 		cap.resetDragTools();
 	}
+	
+	private static boolean validDragToolOrNull(IEditTools.ToolMode toolMode) { return toolMode == null || validDragTool(toolMode); }
+	
+	private static boolean validDragTool(IEditTools.ToolMode toolMode) { return toolMode == IEditTools.ToolMode.REVISE || toolMode == IEditTools.ToolMode.RECYCLE; }
 	
 	/**
 	 * Handles code for the revise tool on the client-side.
@@ -190,20 +209,20 @@ public class ClientEditToolDrag
 		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyUse;
 		
-		if(shouldCancelDrag(true, player, toolKey))
+		if(shouldCancelDrag(IEditTools.ToolMode.REVISE, player, toolKey))
 		{
-			cancelDrag(true, cap);
+			cancelDrag(IEditTools.ToolMode.REVISE, cap);
 			return;
 		}
 		
 		if(shouldBeginDrag(toolKey, isDragging))
-			tryBeginDrag(true, cap, player);
+			tryBeginDrag(IEditTools.ToolMode.REVISE, cap, player);
 		
 		if(shouldUpdateDrag(cap))
-			updateDragPosition(true, cap, player, toolKey);
+			updateDragPosition(IEditTools.ToolMode.REVISE, cap, player, toolKey);
 		
 		if(shouldFinishDrag(toolKey, isDragging))
-			finishDragging(true, cap, player);
+			finishDragging(IEditTools.ToolMode.REVISE, cap, player);
 		
 		cap.setEditDragging(toolKey.isDown());
 	}
@@ -240,20 +259,20 @@ public class ClientEditToolDrag
 		boolean isDragging = cap.isEditDragging();
 		KeyMapping toolKey = mc.options.keyAttack;
 		
-		if(shouldCancelDrag(false, player, toolKey))
+		if(shouldCancelDrag(IEditTools.ToolMode.RECYCLE, player, toolKey))
 		{
-			cancelDrag(false, cap);
+			cancelDrag(IEditTools.ToolMode.RECYCLE, cap);
 			return;
 		}
 		
 		if(shouldBeginDrag(toolKey, isDragging))
-			tryBeginDrag(false, cap, player);
+			tryBeginDrag(IEditTools.ToolMode.RECYCLE, cap, player);
 		
 		if(shouldUpdateDrag(cap))
-			updateDragPosition(false, cap, player, toolKey);
+			updateDragPosition(IEditTools.ToolMode.RECYCLE, cap, player, toolKey);
 		
 		if(shouldFinishDrag(toolKey, isDragging))
-			finishDragging(false, cap, player);
+			finishDragging(IEditTools.ToolMode.RECYCLE, cap, player);
 		
 		cap.setEditDragging(toolKey.isDown());
 	}
