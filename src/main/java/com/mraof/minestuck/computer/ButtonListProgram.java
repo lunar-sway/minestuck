@@ -122,10 +122,6 @@ public abstract class ButtonListProgram extends ComputerProgram
 			UnlocalizedString data = entry.getValue();
 			entry.getKey().active = !data.string.isEmpty();
 			entry.getKey().setMessage(data.asTextComponent());
-			
-			// TODO VERY TEMPORARY FIX UNTIL BUTTON LIST GETS DIFFERENT BUTTON TYPES
-			if(gui.be.programSelected == 2 && (!gui.be.hasAllCode() || gui.be.blankDisksStored == 0))
-				entry.getKey().active = false;
 		}
 	}
 	
