@@ -28,7 +28,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
-import java.util.OptionalInt;
 
 /**
  * Holds minestuck configured features. Also creates and registers them when appropriate.
@@ -99,8 +98,10 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(3)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(5)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> SHADE_STONE_BLOCK_BLOB = REGISTER.register("shade_stone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(MSBlocks.SHADE_STONE.get().defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_PILLAR = REGISTER.register("small_pillar", () -> new ConfiguredFeature<>(MSFeatures.SMALL_PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PILLAR = REGISTER.register("pillar", () -> new ConfiguredFeature<>(MSFeatures.PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
-	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_PILLAR = REGISTER.register("large_pillar", () -> new ConfiguredFeature<>(MSFeatures.LARGE_PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> MIXED_PILLARS = REGISTER.register("pillars", () -> new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
+			new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(PILLAR.getHolder().orElseThrow()), 0.4F)), PlacementUtils.inlinePlaced(SMALL_PILLAR.getHolder().orElseThrow()))));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_CAKE = REGISTER.register("large_cake", () -> new ConfiguredFeature<>(MSFeatures.LARGE_CAKE.get(), FeatureConfiguration.NONE));
 	
