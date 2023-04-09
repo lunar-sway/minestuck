@@ -70,64 +70,63 @@ public class EntryProcess
 	{
 		try
 		{
-			if(player.level.dimension() != Level.NETHER)
+			if(player.level.dimension() == Level.NETHER)
+				return;
+			if(!TitleSelectionHook.performEntryCheck(player))
+				return;
+			
+			PlayerIdentifier identifier = IdentifierHandler.encode(player);
+			Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
+			
+			//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
+			if(c.isPresent() && c.get().hasEntered() && (MinestuckConfig.SERVER.stopSecondEntry.get() || MSDimensions.isLandDimension(player.server, player.level.dimension())))
+				return;
+			
+			if(!canModifyEntryBlocks(player.level, player))
 			{
-				if(!TitleSelectionHook.performEntryCheck(player))
-					return;
-				
-				PlayerIdentifier identifier = IdentifierHandler.encode(player);
-				Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
-				
-				//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-				if(!c.isPresent() || !c.get().hasEntered() || !MinestuckConfig.SERVER.stopSecondEntry.get() && !MSDimensions.isLandDimension(player.server, player.level.dimension()))
+				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
+				return;
+			}
+			
+			if(c.isPresent() && c.get().hasEntered())
+			{
+				ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(c.get().getClientDimension());
+				if(landWorld == null)
 				{
-					if(!canModifyEntryBlocks(player.level, player))
-					{
-						player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
-						return;
-					}
-					
-					if(c.isPresent() && c.get().hasEntered())
-					{
-						ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(c.get().getClientDimension());
-						if(landWorld == null)
-						{
-							return;
-						}
-						
-						//Teleports the player to their home in the Medium, without any bells or whistles.
-						BlockPos pos = new BlockPos(0, 100, 0);
-						Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
-						
-						return;
-					}
-					
-					ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
-					if(landDimension == null)
-					{
-						player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
-					} else
-					{
-						ServerLevel oldLevel = (ServerLevel) player.level;
-						ServerLevel newLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
-						if(newLevel == null)
-						{
-							return;
-						}
-						
-						if(this.prepareDestination(player.blockPosition(), player, oldLevel))
-						{
-							moveBlocks(oldLevel, newLevel);
-							if(Teleport.teleportEntity(player, newLevel) != null)
-							{
-								finalizeDestination(player, oldLevel, newLevel);
-								SkaianetHandler.get(player.level).onEntry(identifier);
-							} else
-							{
-								player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
-							}
-						}
-					}
+					return;
+				}
+				
+				//Teleports the player to their home in the Medium, without any bells or whistles.
+				BlockPos pos = new BlockPos(0, 100, 0);
+				Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
+				
+				return;
+			}
+			
+			ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
+			if(landDimension == null)
+			{
+				player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
+				return;
+			}
+			
+			ServerLevel oldLevel = (ServerLevel) player.level;
+			ServerLevel newLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
+			if(newLevel == null)
+			{
+				return;
+			}
+			
+			if(this.prepareDestination(player.blockPosition(), player, oldLevel))
+			{
+				moveBlocks(oldLevel, newLevel);
+				if(Teleport.teleportEntity(player, newLevel) != null)
+				{
+					finalizeDestination(player, oldLevel, newLevel);
+					SkaianetHandler.get(player.level).onEntry(identifier);
+				} else
+				{
+					player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
 				}
 			}
 		} catch(Exception e)
