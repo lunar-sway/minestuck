@@ -39,9 +39,9 @@ public final class LandGenSettings
 	 */
 	public float roughThreshold = 0.0F;
 	
-	public float oceanOffset = -0.27F;
-	public float inlandOffset = 0.00F;
-	public float inlandAngle = 0.35F;
+	public float oceanOffset = -0.12F;
+	public float inlandOffset = 0.15F;
+	public float inlandAngle = 0.2F;
 	
 	public float oceanFactor = 6;
 	public float normalFactor = 5;
@@ -138,8 +138,8 @@ public final class LandGenSettings
 		var builder = CubicSpline.builder(continents);
 		
 		if(this.hasOceanTerrain())
-			builder.addPoint(this.getOceanThreshold(-0.1F), this.oceanOffset, 0);
-		builder.addPoint(this.getOceanThreshold(0.1F), this.inlandOffset, this.inlandAngle);
+			builder.addPoint(this.getOceanThreshold(-0.2F), this.oceanOffset, 0);
+		builder.addPoint(this.getOceanThreshold(0.2F), this.inlandOffset, this.inlandAngle);
 		
 		return DensityFunctions.add(DensityFunctions.constant(-0.50375), DensityFunctions.spline(builder.build()));
 	}
