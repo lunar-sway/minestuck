@@ -150,6 +150,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSBlocks.TRANSPORTALIZER.get()).setWeight(2).setQuality(2))
 						.add(LootItem.lootTableItem(MSItems.DICE.get()).setWeight(5).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.CUEBALL.get()).setWeight(1).setQuality(4))
+						.add(LootItem.lootTableItem(MSItems.CRYPTID_PHOTO.get()).setWeight(1).setQuality(4))
 						.add(LootItem.lootTableItem(MSBlocks.COMPUTER.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.LAPTOP.get()).setWeight(1).setQuality(0))
 						.add(LootItem.lootTableItem(MSBlocks.CHESSBOARD.get()).setWeight(2).setQuality(0))
@@ -368,7 +369,8 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 				.withPool(LootPool.lootPool().name(MISC_POOL).setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSBlocks.BLUE_DIRT.get()).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(MSBlocks.GLOWING_LOG.get()).setWeight(6).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
-						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))));
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM.get()).setWeight(12).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))))
+						.add(LootItem.lootTableItem(MSBlocks.GLOWING_MUSHROOM_VINES.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.WOOD, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()
 				.withPool(LootPool.lootPool().name(WEAPONS_POOL).setRolls(ConstantValue.exactly(1))

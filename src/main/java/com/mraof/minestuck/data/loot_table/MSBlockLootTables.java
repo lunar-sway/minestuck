@@ -248,6 +248,7 @@ public class MSBlockLootTables extends BlockLoot
 		add(END_LEAVES.get(), MSBlockLootTables::endLeavesDrop);
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
+		dropSelf(SHADEWOOD_SAPLING.get());
 		
 		dropSelf(BLOOD_ASPECT_LOG.get());
 		dropSelf(BREATH_ASPECT_LOG.get());
@@ -342,6 +343,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(BLOOMING_CACTUS.get());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
 		add(STRAWBERRY_STEM.get(), (stemBlock) -> createStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));
@@ -465,6 +467,8 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SENDIFICATOR.get());
 		dropSelf(GRIST_WIDGET.get());
 		dropSelf(URANIUM_COOKER.get());
+		dropSelf(GRIST_COLLECTOR.get());
+		dropSelf(SKAIANET_DENIER.get());
 		
 		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
 		add(EMERGING_CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
@@ -481,6 +485,8 @@ public class MSBlockLootTables extends BlockLoot
 		add(FUCHSIA_CAKE.get(), noDrop());
 		add(NEGATIVE_CAKE.get(), noDrop());
 		add(CARROT_CAKE.get(), noDrop());
+		dropSelf(LARGE_CAKE.get());
+		dropSelf(PINK_FROSTED_TOP_LARGE_CAKE.get());
 		
 		dropSelf(PRIMED_TNT.get());
 		dropSelf(UNSTABLE_TNT.get());
@@ -495,6 +501,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MINI_TYPHEUS_STATUE.get());
 		dropSelf(CASSETTE_PLAYER.get());
 		dropSelf(GLOWYSTONE_DUST.get());
+		dropSelf(MIRROR.get());
 	}
 	
 	private static LootTable.Builder cruxiteOreDrop(Block block)
@@ -551,7 +558,7 @@ public class MSBlockLootTables extends BlockLoot
 	}
 	private static LootTable.Builder shadewoodLeavesDrop(Block block)
 	{
-		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES);
+		return createLeavesDrops(block, SHADEWOOD_SAPLING.get(), SAPLING_CHANCES);
 	}
 	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{

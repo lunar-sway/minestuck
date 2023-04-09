@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 1821,
+    "minestuck:chalk": 2732,
+    "minestuck:iodine": 2732,
+    "minestuck:quartz": 2914,
+    "minestuck:ruby": 1639
+  },
+  "ingredient": {
+    "item": "minestuck:skaian_crocker_rocker"
+  }
+}

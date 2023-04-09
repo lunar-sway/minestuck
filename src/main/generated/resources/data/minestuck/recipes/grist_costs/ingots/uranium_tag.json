@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 8
+  },
+  "ingredient": {
+    "tag": "forge:ingots/uranium"
+  }
+}

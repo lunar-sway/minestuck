@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 13,
+    "minestuck:build": 26,
+    "minestuck:iodine": 26,
+    "minestuck:rust": 8
+  },
+  "ingredient": {
+    "item": "minestuck:cricket_bat"
+  }
+}

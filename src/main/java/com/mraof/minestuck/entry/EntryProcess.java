@@ -2,6 +2,7 @@ package com.mraof.minestuck.entry;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -184,6 +185,10 @@ public class EntryProcess
 					} else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
 					{
 						player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
+						return false;
+					} else if(gotBlock == MSBlocks.SKAIANET_DENIER.get())
+					{
+						player.displayClientMessage(Component.literal("Network error (413): Skaianet - failed to Enter user " + player.getDisplayName().getString() + ". Entry denial device used at global coordinates: " + pos.toShortString()), false);
 						return false;
 					} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
 					{

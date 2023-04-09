@@ -6,5 +6,5 @@
       "condition": "forge:can_tool_perform_action"
     }
   ],
-  "multiplier": 1.0
+  "multiplier": 0.5
 }

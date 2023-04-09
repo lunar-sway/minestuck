@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
@@ -19,7 +18,6 @@ public class ThunderLandType extends TitleLandType
 	
 	public ThunderLandType()
 	{
-		super(EnumAspect.DOOM);
 	}
 	
 	@Override

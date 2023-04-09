@@ -5,6 +5,19 @@
     "minestuck:glowing_log",
     "minestuck:glowing_wood",
     "minestuck:glowing_planks",
+    "minestuck:shadewood_log",
+    "minestuck:shadewood",
+    "minestuck:stripped_shadewood_log",
+    "minestuck:stripped_shadewood",
+    "minestuck:scarred_shadewood_log",
+    "minestuck:scarred_shadewood",
+    "minestuck:stripped_scarred_shadewood_log",
+    "minestuck:stripped_scarred_shadewood",
+    "minestuck:rotted_shadewood_log",
+    "minestuck:rotted_shadewood",
+    "minestuck:stripped_rotted_shadewood_log",
+    "minestuck:stripped_rotted_shadewood",
+    "minestuck:shadewood_planks",
     "minestuck:frost_log",
     "minestuck:frost_wood",
     "minestuck:frost_planks",
@@ -92,6 +105,7 @@
     "minestuck:end_planks_slab",
     "minestuck:dead_planks_slab",
     "minestuck:treated_planks_slab",
-    "minestuck:wooden_cactus"
+    "minestuck:wooden_cactus",
+    "minestuck:mirror"
   ]
 }

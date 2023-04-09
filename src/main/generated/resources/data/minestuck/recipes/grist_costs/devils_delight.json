@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 400,
+    "minestuck:garnet": 350,
+    "minestuck:rust": 105,
+    "minestuck:tar": 525
+  },
+  "ingredient": {
+    "item": "minestuck:devils_delight"
+  }
+}
