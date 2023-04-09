@@ -78,28 +78,15 @@ public class EntryProcess
 			PlayerIdentifier identifier = IdentifierHandler.encode(player);
 			Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
 			
-			//Only performs Entry if you have no connection, haven't Entered, or you're not in a Land and additional Entries are permitted.
-			if(c.isPresent() && c.get().hasEntered() && (MinestuckConfig.SERVER.stopSecondEntry.get() || MSDimensions.isLandDimension(player.server, player.level.dimension())))
+			if(c.isPresent() && c.get().hasEntered())
+			{
+				secondEntryTeleport(player, c.get().getClientDimension());
 				return;
+			}
 			
 			if(!canModifyEntryBlocks(player.level, player))
 			{
 				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
-				return;
-			}
-			
-			if(c.isPresent() && c.get().hasEntered())
-			{
-				ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(c.get().getClientDimension());
-				if(landWorld == null)
-				{
-					return;
-				}
-				
-				//Teleports the player to their home in the Medium, without any bells or whistles.
-				BlockPos pos = new BlockPos(0, 100, 0);
-				Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
-				
 				return;
 			}
 			
@@ -134,6 +121,20 @@ public class EntryProcess
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
 			player.sendSystemMessage(Component.literal("[Minestuck] Something went wrong during entry. " + (player.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
 		}
+	}
+	
+	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
+	{
+		if(MinestuckConfig.SERVER.stopSecondEntry.get() || MSDimensions.isLandDimension(player.server, player.level.dimension()))
+			return;
+		
+		ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(land);
+		if(landWorld == null)
+			return;
+		
+		//Teleports the player to their home in the Medium, without any bells or whistles.
+		BlockPos pos = new BlockPos(0, 100, 0);
+		Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
 	}
 	
 	private boolean prepareDestination(BlockPos origin, ServerPlayer player, ServerLevel level)
