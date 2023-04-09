@@ -16,7 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
 - Large cake blocks that are used to make large cake Features in Cake lands
-
+- 2 Sburb Editmode tools (Revise and Recycle)
+- Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
+- Sburb Cursor entity that appears when using Editmode tools
 ### Changed
 
 - Changed Cat Claws recipe to Makeshift Claws || String
@@ -25,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
+- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
 
 ### Removed
 
@@ -32,7 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, Caldw3ll
 
 ## [Unreleased]
 
