@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Changed Cat Claws recipe to Makeshift Claws || String
+- Changed Cat Claws recipe to Makeshift Claws || Iron Ingot
 - Updated Cat Claws texture
 - Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
 - Added Grist Cost to Eightball and Dice items
@@ -37,7 +37,8 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
-- Modified land terrain generation settings to have more variation.
+- Modified land terrain generation settings to have more variation
+- Grist selector screen now exits to the previous screen when pressing esc
 
 ### Removed
 
@@ -46,6 +47,8 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 ### Fixed
 
 - Restore land sky rendering
+- Removed sunset fog coloration in lands
+- Fixed resizing issue with grist selector screen
 
 ### Contributors for this release
 
