@@ -1648,8 +1648,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbServer.SERVER_ACTIVE, "Server with your name exists");
 		add(SburbClient.RESUME_CLIENT, "Waiting for server...");
 		add(SburbServer.RESUME_SERVER, "Waiting for client...");
-		add(DiskBurner.NEED_CODE, "Requires code...");
-		add(DiskBurner.NO_DISKS, "Insert disk...");
+		add(DiskBurner.NEED_CODE, "Requires code to burn disks");
+		add(DiskBurner.NO_DISKS, "Insert disk to burn");
 		add(DiskBurner.BURN_CLIENT_DISK, "Burn Client Disk");
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");

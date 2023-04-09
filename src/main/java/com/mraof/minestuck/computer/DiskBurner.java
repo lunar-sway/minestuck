@@ -22,20 +22,18 @@ public class DiskBurner extends ButtonListProgram
 	public ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
 		ArrayList<UnlocalizedString> list = new ArrayList<>();
-		list.add(new UnlocalizedString(CHOOSE));
 		
 		if(!be.hasAllCode())
-		{
 			list.add(new UnlocalizedString(NEED_CODE));
-		} else if (be.blankDisksStored == 0)
-		{
+		else if (be.blankDisksStored == 0)
 			list.add(new UnlocalizedString(NO_DISKS));
-		} else
+		else
 		{
+			list.add(new UnlocalizedString(CHOOSE));
+			
 			list.add(new UnlocalizedString(BURN_SERVER_DISK));
 			list.add(new UnlocalizedString(BURN_CLIENT_DISK));
 		}
-		
 		return list;
 	}
 	

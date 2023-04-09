@@ -2,6 +2,8 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.resources.ResourceLocation;
 
@@ -31,7 +33,7 @@ public class SettingsApp extends ButtonListProgram
 		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> be.setTheme(be.getTheme().next());
+			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, be.getTheme().next()));
 		}
 	}
 	

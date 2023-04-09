@@ -48,6 +48,7 @@ public class MSPacketHandler
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
 		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
+		registerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);

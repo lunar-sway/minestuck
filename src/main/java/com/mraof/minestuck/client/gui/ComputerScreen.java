@@ -100,7 +100,7 @@ public class ComputerScreen extends Screen
 		var yOffset = (height-ySize)/2;
 		
 		int programCount = be.installedPrograms.size();
-		for(int id : be.installedPrograms.keySet().stream().sorted().toList())
+		for(int id : be.installedPrograms.stream().sorted().toList())
 		{
 			icons.add(addRenderableWidget(new ComputerIcon(
 					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,

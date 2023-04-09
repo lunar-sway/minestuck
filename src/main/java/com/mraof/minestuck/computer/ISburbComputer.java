@@ -4,6 +4,16 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 
 public interface ISburbComputer
 {
+	PlayerIdentifier getOwner();
+	
+	boolean getClientBoolean(String name);
+	boolean getServerBoolean(String name);
+	
+	void putClientBoolean(String name, boolean value);
+	void putServerBoolean(String name, boolean value);
+	
+	void clearConnectedClient();
+	
 	default void setIsResuming(boolean isClient)
 	{
 		if(isClient)
@@ -11,18 +21,11 @@ public interface ISburbComputer
 		else putServerBoolean("isOpen", true);
 	}
 	
-	boolean getClientBoolean(String name);
-	boolean getServerBoolean(String name);
-	void putClientBoolean(String name, boolean value);
-	void putServerBoolean(String name, boolean value);
-	
-	String getProgramMessage(int id);
-	void putProgramMessage(int id, String message);
+	void putClientMessage(String message);
+	void putServerMessage(String message);
 	
 	void connected(PlayerIdentifier player, boolean isClient);
-	void clearConnectedClient();
 	
-	PlayerIdentifier getOwner();
 	ComputerReference createReference();
 	
 	Theme getTheme();

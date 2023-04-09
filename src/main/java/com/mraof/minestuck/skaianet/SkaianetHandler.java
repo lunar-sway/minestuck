@@ -133,7 +133,7 @@ public final class SkaianetHandler extends SavedData
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("SessionHandler denied connection between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putProgramMessage(0, e.getResult().translationKey());
+						computer.putClientMessage(e.getResult().translationKey());
 					}
 				} else
 				{
@@ -145,7 +145,7 @@ public final class SkaianetHandler extends SavedData
 					} catch(MergeResult.SessionMergeException e)
 					{
 						LOGGER.warn("Secondary connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-						computer.putProgramMessage(0, e.getResult().translationKey());
+						computer.putClientMessage(e.getResult().translationKey());
 					}
 				}
 			} else
@@ -158,7 +158,7 @@ public final class SkaianetHandler extends SavedData
 				} catch(MergeResult.SessionMergeException e)
 				{
 					LOGGER.warn("Connection failed between {} and {}, reason: {}", player.getUsername(), server.getUsername(), e.getMessage());
-					computer.putProgramMessage(0, e.getResult().translationKey());
+					computer.putClientMessage(e.getResult().translationKey());
 				}
 			}
 		}
@@ -264,7 +264,7 @@ public final class SkaianetHandler extends SavedData
 			if(computer != null)
 			{
 				computer.putClientBoolean("isResuming", false);
-				computer.putProgramMessage(0, STOP_RESUME);
+				computer.putClientMessage(STOP_RESUME);
 			}
 		} else
 		{
@@ -283,7 +283,7 @@ public final class SkaianetHandler extends SavedData
 		{
 			resumingClients.remove(owner);
 			computer.putClientBoolean("isResuming", false);
-			computer.putProgramMessage(0, STOP_RESUME);
+			computer.putClientMessage(STOP_RESUME);
 		} else
 		{
 			SburbConnection activeConnection = getActiveConnection(owner);
@@ -314,7 +314,7 @@ public final class SkaianetHandler extends SavedData
 		{
 			map.remove(owner);
 			computer.putServerBoolean("isOpen", false);
-			computer.putProgramMessage(1, STOP_RESUME);
+			computer.putServerMessage(STOP_RESUME);
 		}
 	}
 	
@@ -333,12 +333,12 @@ public final class SkaianetHandler extends SavedData
 		if(clientComputer != null)
 		{
 			clientComputer.putClientBoolean("connectedToServer", false);
-			clientComputer.putProgramMessage(0, CLOSED);
+			clientComputer.putClientMessage(CLOSED);
 		}
 		if(serverComputer != null)
 		{
 			serverComputer.clearConnectedClient();
-			serverComputer.putProgramMessage(1, CLOSED);
+			serverComputer.putServerMessage(CLOSED);
 		}
 		//Is secondary connection if primary is present, and does not equal this connection.
 		// TODO it being primary/secondary should be present as a final field in connections
@@ -453,7 +453,7 @@ public final class SkaianetHandler extends SavedData
 	public void onEntry(PlayerIdentifier target)
 	{
 		Optional<SburbConnection> c = getPrimaryConnection(target, true);
-		if(!c.isPresent())
+		if(c.isEmpty())
 		{
 			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());
 			return;

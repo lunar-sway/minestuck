@@ -106,7 +106,7 @@ public class ColorSelectorScreen extends Screen
 	
 	private int getPlayerColorComponent(int comp)
 	{
-		return Integer.parseInt(toFormattedHex(ClientPlayerData.getPlayerColor()).substring(comp*2,comp*2+2),16);
+		return (ClientPlayerData.getPlayerColor() >> (comp*8)) & 0xFF;
 	}
 	
 	private void setTab(Tab tab)
@@ -117,12 +117,15 @@ public class ColorSelectorScreen extends Screen
 		if(tab==Tab.RGB && selectedIndex!=-1)
 		{
 			var color = ColorHandler.getColor(selectedIndex);
-			redSlider.setValue(color & 0xFF0000);
-			greenSlider.setValue(color & 0xFF00);
+			redSlider.setValue((color >> 16) & 0xFF);
+			greenSlider.setValue((color >> 8) & 0xFF);
 			blueSlider.setValue(color & 0xFF);
 			hexBox.setValue(toFormattedHex(color));
 		}
-		else if(tab==Tab.RGB) hexBox.setValue(toFormattedHex(getSlidersValue()));
+		else if(tab==Tab.RGB)
+		{
+			hexBox.setValue(toFormattedHex(getSlidersValue()));
+		}
 		
 		tabButton.setMessage(tab==Tab.RGB?Component.translatable(BASIC_TAB):Component.translatable(ADVANCED_TAB));
 	}

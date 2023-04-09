@@ -50,7 +50,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		
 		if(data != null)
 		{
-			if(!screen.be.getProgramMessage(this.getId()).isEmpty())
+			if(!screen.be.latestmessage.get(this.getId()).isEmpty())
 				MSPacketHandler.sendToServer(new ClearMessagePacket(screen.be.getBlockPos(), this.getId()));
 			onButtonPressed(screen.be, data.string, data.formatData);
 		}
@@ -84,7 +84,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		downButton.active = false;
 		upButton.active = index > 0;
 		ArrayList<UnlocalizedString> list = getStringList(gui.be);
-		if(!gui.be.getProgramMessage(this.getId()).isEmpty())
+		if(!gui.be.latestmessage.get(this.getId()).isEmpty())
 			list.add(1, new UnlocalizedString(CLEAR_BUTTON));
 		
 		int pos = -1;
@@ -136,7 +136,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
 			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor());
 		else
-			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, 4210752);
+			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor());
 	}
 	
 	/**

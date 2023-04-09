@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 
+// TODO make this more data-driven
 public enum Theme
 {
 	DEFAULT    (0x404040),
