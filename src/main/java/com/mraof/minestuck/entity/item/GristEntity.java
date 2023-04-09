@@ -180,7 +180,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		long canPickUp = getPlayerCacheRoom(closestPlayer);
 		
-		if(this.level.isClientSide == true)
+		if(this.level.isClientSide)
 		{
 			shaderAlpha = Math.max(shaderAlpha - 7, 0);
 		}
