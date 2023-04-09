@@ -35,13 +35,13 @@ public final class LandGenSettings
 	 * A threshold that determines the split between rough and normal terrain.
 	 * When the terrain is inland, the terrain will be rough when erosion is below the threshold.
 	 * Thus, a higher threshold will result in more rough terrain.
-	 * At 0, there should be a rough split between normal and rough terrain occurring.
+	 * At 0, there should be a mostly equal chance of normal and rough terrain occurring.
 	 */
-	public float roughThreshold = -0.2F;
+	public float roughThreshold = 0.0F;
 	
 	public float oceanOffset = -0.12F;
-	public float inlandOffset = 0.05F;
-	public float inlandAngle = 0.1F;
+	public float inlandOffset = 0.15F;
+	public float inlandAngle = 0.2F;
 	
 	public float oceanFactor = 6;
 	public float normalFactor = 5;
@@ -138,8 +138,8 @@ public final class LandGenSettings
 		var builder = CubicSpline.builder(continents);
 		
 		if(this.hasOceanTerrain())
-			builder.addPoint(this.getOceanThreshold(-0.1F), this.oceanOffset, 0);
-		builder.addPoint(this.getOceanThreshold(0.1F), this.inlandOffset, this.inlandAngle);
+			builder.addPoint(this.getOceanThreshold(-0.2F), this.oceanOffset, 0);
+		builder.addPoint(this.getOceanThreshold(0.2F), this.inlandOffset, this.inlandAngle);
 		
 		return DensityFunctions.add(DensityFunctions.constant(-0.50375), DensityFunctions.spline(builder.build()));
 	}
