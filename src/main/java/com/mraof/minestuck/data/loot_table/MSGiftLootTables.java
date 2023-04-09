@@ -79,6 +79,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 						.add(LootItem.lootTableItem(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE.get()).setWeight(1))
 						.add(LootItem.lootTableItem(MSItems.MUSIC_DISC_DANCE_STAB_DANCE.get()).setWeight(1))
 						.add(LootItem.lootTableItem(MSItems.ELECTRIC_AUTOHARP.get()).setWeight(1))
+						.add(LootItem.lootTableItem(MSItems.ANCIENT_THUMB_DRIVE.get()).setWeight(3))
 						.add(LootItem.lootTableItem(MSItems.BATTERY.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1,4))))
 						.add(LootItem.lootTableItem(MSItems.GRIMOIRE.get()).setWeight(1).when(ConsortLootCondition.builder(EnumConsort.TURTLE)))
 						.add(LootItem.lootTableItem(MSItems.CRUMPLY_HAT.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))).when(ConsortLootCondition.builder(EnumConsort.SALAMANDER))))
