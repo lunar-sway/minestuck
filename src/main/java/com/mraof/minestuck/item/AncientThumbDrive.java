@@ -27,8 +27,8 @@ public class AncientThumbDrive extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GRAVEL_STEP, SoundSource.PLAYERS, 0.01F, 0.3F);
-		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.02F, 0.6F);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.GRAVEL_STEP, SoundSource.PLAYERS, 0.1F, 0.3F);
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
 		
 		return InteractionResultHolder.sidedSuccess(player.getItemInHand(usedHand), level.isClientSide());
 	}

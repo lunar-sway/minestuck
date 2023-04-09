@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
 {
-	static final double shakeScale = 1.0 / 256.0;
+	static final double SHAKE_INTENSITY = 1.0 / 256.0;
 	public GristRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);
@@ -36,9 +36,9 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 		RenderSystem.setShaderColor(255, 0, 0, 255);
 		
 		poseStack.translate(
-				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * shakeScale,
-				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * shakeScale,
-				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * shakeScale);
+				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * SHAKE_INTENSITY,
+				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * SHAKE_INTENSITY,
+				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * SHAKE_INTENSITY);
 		
 		PoseStack.Pose matrixstack = poseStack.last();
 		Matrix4f matrix4f = matrixstack.pose();

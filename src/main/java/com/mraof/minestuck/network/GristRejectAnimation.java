@@ -7,17 +7,17 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Objects;
 
-public class GristEntityPacket implements PlayToClientPacket
+public class GristRejectAnimation implements PlayToClientPacket
 {
 	private final int entityID;
 	private final GristEntity.Animation animation;
 	
-	public static GristEntityPacket createPacket(GristEntity entity, GristEntity.Animation animation)
+	public static GristRejectAnimation createPacket(GristEntity entity, GristEntity.Animation animation)
 	{
-		return new GristEntityPacket(entity.getId(), animation);
+		return new GristRejectAnimation(entity.getId(), animation);
 	}
 	
-	private GristEntityPacket(int entityID, GristEntity.Animation animation)
+	private GristRejectAnimation(int entityID, GristEntity.Animation animation)
 	{
 		this.entityID = entityID;
 		this.animation = animation;
@@ -31,12 +31,12 @@ public class GristEntityPacket implements PlayToClientPacket
 		buffer.writeInt(animation.ordinal());
 	}
 	
-	public static GristEntityPacket decode(FriendlyByteBuf buffer)
+	public static GristRejectAnimation decode(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt();
 		GristEntity.Animation animation = GristEntity.Animation.values()[buffer.readInt()];
 		
-		return new GristEntityPacket(entityID, animation);
+		return new GristRejectAnimation(entityID, animation);
 	}
 	
 	@Override

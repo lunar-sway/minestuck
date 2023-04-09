@@ -5,7 +5,7 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.network.GristEntityPacket;
+import com.mraof.minestuck.network.GristRejectAnimation;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.Session;
@@ -311,7 +311,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			} else
 			{
 				this.animation = Animation.REJECT;
-				GristEntityPacket packet = GristEntityPacket.createPacket(this, animation);
+				GristRejectAnimation packet = GristRejectAnimation.createPacket(this, animation);
 				MSPacketHandler.sendToTracking(packet, this);
 				shaderAlpha = 255;//used as a timer to tick down how long the animation should play
 			}
