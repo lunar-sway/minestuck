@@ -645,6 +645,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		
 		CombinationRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).namedInput(MSItems.CROCKER_SPOON.get()).or().input(MSItems.CAPTCHA_CARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).namedInput(MSItems.CROCKER_FORK.get()).or().input(MSItems.CAPTCHA_CARD.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GRIST_COLLECTOR.get()).input(MSItems.ITEM_MAGNET.get()).or().input(Items.CHEST).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.TRANSPORTALIZER.get()).input(Items.ENDER_PEARL).and().input(Items.IRON_BLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).input(MSItems.CAPTCHA_CARD.get()).and().namedInput(MSBlocks.COMPUTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CAPTCHAROID_CAMERA.get()).input(MSItems.CAPTCHA_CARD.get()).or().namedInput(Items.ENDER_EYE).build(consumer);
@@ -721,6 +722,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.VINE_LOG.get()).input(Items.OAK_LOG).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.FLOWERY_VINE_LOG.get()).input(MSBlocks.VINE_LOG.get()).or().input(ItemTags.SMALL_FLOWERS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM.get()).input(Items.BROWN_MUSHROOM).or().input(Items.GLOWSTONE_DUST).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.GLOWING_MUSHROOM_VINES.get()).input(MSItems.GLOWING_MUSHROOM_VINES.get()).and().input(Items.VINE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_LOG.get()).input(ItemTags.LOGS).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWING_PLANKS.get()).input(ItemTags.PLANKS).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWY_GOOP.get()).input(Items.SLIME_BLOCK).or().input(MSBlocks.GLOWING_MUSHROOM.get()).build(consumer);
@@ -739,6 +741,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.WOODEN_CACTUS.get()).input(Items.CACTUS).or().namedInput(ItemTags.LOGS).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.RAINBOW_SAPLING.get()).input(MSBlocks.RAINBOW_LEAVES.get()).or().input(MSBlocks.RAINBOW_LOG.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.END_SAPLING.get()).input(MSBlocks.END_LEAVES.get()).or().input(MSBlocks.END_LOG.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SHADEWOOD_SAPLING.get()).input(MSBlocks.SHADEWOOD_LEAVES.get()).or().input(MSBlocks.SHADEWOOD_LOG.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.SPIKES.get()).input(Items.CACTUS).and().input(Items.IRON_SWORD).build(consumer);
 		

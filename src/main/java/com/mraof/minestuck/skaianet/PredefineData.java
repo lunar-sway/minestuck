@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.world.lands.gen.LandTypeSelection;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
@@ -15,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -99,7 +99,9 @@ public final class PredefineData
 	
 	private void forceVerifyTitle(Set<TitleLandType> availableTypes, CommandSourceStack source) throws SkaianetException
 	{
-		Set<EnumAspect> availableAspects = availableTypes.stream().map(TitleLandType::getAspect).filter(Objects::nonNull).collect(Collectors.toSet());
+		Set<EnumAspect> availableAspects = availableTypes.stream()
+				.flatMap(titleType -> LandTypeSelection.compatibleAspects(titleType).stream())
+				.collect(Collectors.toSet());
 		if(title == null || !availableAspects.contains(title.getHeroAspect()))
 		{
 			Title previous = title;
@@ -121,11 +123,11 @@ public final class PredefineData
 	{
 		if(titleLandType == null || !titleLandType.isAspectCompatible(type))
 		{
-			Set<TitleLandType> availableTypes = LandTypes.getCompatibleTitleTypes(type);
+			Set<TitleLandType> availableTypes = LandTypeSelection.compatibleTitleTypes(type);
 			forceVerifyTitle(availableTypes, source);
 			
 			//title should be assumed to be non-null after this point
-			availableTypes.removeIf(landType -> landType.getAspect() != title.getHeroAspect());
+			availableTypes = LandTypeSelection.compatibleTitleTypes(type, title.getHeroAspect());
 			if(availableTypes.isEmpty())
 			{
 				terrainLandType = null; titleLandType = null;

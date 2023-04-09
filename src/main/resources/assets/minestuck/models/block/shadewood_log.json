@@ -1,8 +1,7 @@
 {
-    "parent": "block/cube_bottom_top",
+    "parent": "block/cube_column",
     "textures": {
-        "bottom": "minestuck:block/shadewood_bottom",
-        "top": "minestuck:block/shadewood_top",
-        "side": "minestuck:block/shadewood_side"
+        "end": "minestuck:block/shadewood_top",
+        "side": "minestuck:block/shadewood"
     }
 }

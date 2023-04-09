@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Shadewood blocks
+- New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 - 33 new weapons(8 with alternate form)
@@ -16,26 +16,44 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
 - Large cake blocks that are used to make large cake Features in Cake lands
+- Tag support for terrain land types and title land types
+- Grist costs for additional common Forge metal ingot/ore item tags
+- Grist Collector block
+- New expandable tooltips for puzzle related blocks
 - 2 Sburb Editmode tools (Revise and Recycle)
 - Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
 - Sburb Cursor entity that appears when using Editmode tools
+
 ### Changed
 
-- Changed Cat Claws recipe to Makeshift Claws || String
+- Changed Cat Claws recipe to Makeshift Claws || Iron Ingot
 - Updated Cat Claws texture
 - Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
 - Added Grist Cost to Eightball and Dice items
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
+- The "minestuck:land_type" loot condition now uses tags instead of land type groups
+- Some consort dialogue conditions now uses tags instead of land type groups
+- New way to determine which land types that can get picked at random,
+defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" and "data/\<namespace\>/minestuck/title_land_types.json"
+- Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
+- Minor tweaks to tooltips of some existing puzzle related blocks
+- Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
+- Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 - Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
 
 ### Removed
 
 - Remove json grist cost for treated planks (There is already a grist cost for the planks item tag which will determine the cost instead)
 
+### Fixed
+
+- Restore land sky rendering
+- Removed sunset fog coloration in lands
+
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, Caldw3ll
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, Caldw3ll
 
 ## [Unreleased]
 

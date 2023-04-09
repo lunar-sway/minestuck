@@ -126,6 +126,23 @@
           "name": "minestuck:glowing_mushroom",
           "quality": -2,
           "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minestuck:glowing_mushroom_vines",
+          "quality": -1,
+          "weight": 4
         }
       ],
       "name": "misc",
