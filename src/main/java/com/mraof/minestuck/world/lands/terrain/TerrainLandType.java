@@ -11,13 +11,12 @@ import com.mraof.minestuck.world.lands.ILandType;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypes;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -25,11 +24,9 @@ import java.util.function.Supplier;
 /**
  * Base class for land types that make up the base of a land.
  */
-public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType> implements ILandType<TerrainLandType>
+public abstract class TerrainLandType implements ILandType
 {
 	public static final Codec<TerrainLandType> CODEC = CodecUtil.registryCodec(LandTypes.TERRAIN_REGISTRY);
-	private final ResourceLocation groupName;
-	private final boolean pickedAtRandom;
 	private final String[] names;
 	
 	private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -37,13 +34,10 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	private final Vec3 fogColor, skyColor;
 	
 	private final LandBiomeSetType biomeSet;
-	private final Biome.BiomeCategory biomeCategory;
 	private final Supplier<SoundEvent> backgroundMusic;
 	
 	protected TerrainLandType(Builder builder)
 	{
-		this.groupName = builder.group;
-		this.pickedAtRandom = builder.pickedAtRandom;
 		this.names = Objects.requireNonNull(builder.names);
 		
 		this.consortType = builder.consortType;
@@ -51,7 +45,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		this.fogColor = builder.fogColor;
 		this.skyColor = builder.skyColor;
 		this.biomeSet = builder.biomeSet;
-		this.biomeCategory = builder.biomeCategory;
 		this.backgroundMusic = builder.backgroundMusic;
 	}
 	
@@ -71,20 +64,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	}
 	
 	@Override
-	public final boolean canBePickedAtRandom()
-	{
-		return pickedAtRandom;
-	}
-	
-	@Override
-	public final ResourceLocation getGroup()
-	{
-		if(groupName == null)
-			return this.getRegistryName();
-		else return groupName;
-	}
-	
-	@Override
 	public final String[] getNames()
 	{
 		return this.names;
@@ -98,11 +77,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	public final LandBiomeSetType getBiomeSet()
 	{
 		return this.biomeSet;
-	}
-	
-	public final Biome.BiomeCategory getBiomeCategory()
-	{
-		return this.biomeCategory;
 	}
 	
 	@Override
@@ -130,10 +104,13 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks)
 	{}
 	
+	public final boolean is(TagKey<TerrainLandType> tag)
+	{
+		return Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().tags()).getTag(tag).contains(this);
+	}
+	
 	public static class Builder
 	{
-		private boolean pickedAtRandom = true;
-		private ResourceLocation group = null;
 		private String[] names;
 		
 		private final Supplier<? extends EntityType<? extends ConsortEntity>> consortType;
@@ -141,24 +118,11 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		private Vec3 fogColor = new Vec3(0, 0, 0);
 		private Vec3 skyColor = new Vec3(0, 0, 0);
 		private LandBiomeSetType biomeSet = MSBiomes.DEFAULT_LAND;
-		private Biome.BiomeCategory biomeCategory = Biome.BiomeCategory.NONE;
 		private Supplier<SoundEvent> backgroundMusic = MSSoundEvents.MUSIC_DEFAULT;
 		
 		public Builder(Supplier<? extends EntityType<? extends ConsortEntity>> consortType)
 		{
 			this.consortType = consortType;
-		}
-		
-		public Builder unavailable()
-		{
-			this.pickedAtRandom = false;
-			return this;
-		}
-		
-		public Builder group(ResourceLocation group)
-		{
-			this.group = group;
-			return this;
 		}
 		
 		public Builder names(String... names)
@@ -188,12 +152,6 @@ public abstract class TerrainLandType extends ForgeRegistryEntry<TerrainLandType
 		public Builder biomeSet(LandBiomeSetType biomeSet)
 		{
 			this.biomeSet = biomeSet;
-			return this;
-		}
-		
-		public Builder category(Biome.BiomeCategory biomeCategory)
-		{
-			this.biomeCategory = biomeCategory;
 			return this;
 		}
 		

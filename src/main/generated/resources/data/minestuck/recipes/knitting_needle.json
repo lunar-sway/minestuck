@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  n",
-    " i ",
-    "i  "
-  ],
   "key": {
     "i": {
       "item": "minecraft:iron_ingot"
@@ -13,8 +8,13 @@
       "item": "minecraft:iron_nugget"
     }
   },
+  "pattern": [
+    "  n",
+    " i ",
+    "i  "
+  ],
   "result": {
-    "item": "minestuck:knitting_needle",
-    "count": 2
+    "count": 2,
+    "item": "minestuck:knitting_needle"
   }
 }

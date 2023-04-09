@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:inksplocker_unlocker"
+  },
+  "input2": {
+    "item": "minecraft:heart_of_the_sea"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:inksquidder_depthkey"
+  }
+}

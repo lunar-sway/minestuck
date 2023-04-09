@@ -3,15 +3,16 @@ package com.mraof.minestuck.block.redstone;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
-import com.mraof.minestuck.blockentity.redstone.AreaEffectBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -32,9 +33,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * When powered, the block entity applies an effect to entities in a designated area between two block pos, similar to beacons but with more versatility.
@@ -101,7 +102,7 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 		{
 			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
-			player.displayClientMessage(new TranslatableComponent(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, firstEffect.getEffect().getRegistryName(), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
+			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, ForgeRegistries.MOB_EFFECTS.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
 			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);
 		}
 	}
@@ -142,7 +143,7 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(stateIn.getValue(POWERED))
 			BlockUtil.spawnParticlesAroundSolidBlock(level, pos, () -> DustParticleOptions.REDSTONE);

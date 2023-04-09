@@ -3,6 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -11,8 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
-
-import java.util.Random;
 
 public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 {
@@ -26,7 +25,7 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		
 		int bites = Math.max(0, (int) (rand.nextDouble()*10) - 6);
 		float f = rand.nextFloat();

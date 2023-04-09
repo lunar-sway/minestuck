@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:cobalt": 43,
+    "minestuck:diamond": 5,
+    "minestuck:tar": 13
+  },
+  "ingredient": {
+    "item": "minestuck:inksquidder_depthkey"
+  }
+}

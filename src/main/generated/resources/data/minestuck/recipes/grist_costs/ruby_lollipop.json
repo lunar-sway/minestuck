@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:ruby_lollipop"
-  },
   "grist_cost": {
     "minestuck:ruby": 3
+  },
+  "ingredient": {
+    "item": "minestuck:ruby_lollipop"
   }
 }

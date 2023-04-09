@@ -2,8 +2,6 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "main",
-      "rolls": 5.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -13,29 +11,25 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:grasshopper"
+          "name": "minestuck:grasshopper",
+          "weight": 5
         }
-      ]
+      ],
+      "name": "main",
+      "rolls": 5.0
     },
     {
-      "name": "special",
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 1.0,
-        "max": 2.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -45,19 +39,19 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:pumpkin_pie"
+          "name": "minecraft:pumpkin_pie",
+          "weight": 3
         },
         {
           "type": "minecraft:item",
@@ -67,34 +61,40 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
           "name": "minestuck:candy_corn"
         },
         {
           "type": "minecraft:tag",
+          "expand": true,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:grist_candy",
-          "expand": true
+          "name": "minestuck:grist_candy"
         }
-      ]
+      ],
+      "name": "special",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 2.0,
+        "min": 1.0
+      }
     }
   ]
 }

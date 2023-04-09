@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.blockentity.machine.GristWildcardHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -26,7 +27,7 @@ public class GristWildcardPacket implements PlayToServerPacket
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(gristType);
+		buffer.writeRegistryId(GristTypes.getRegistry(), gristType);
 		buffer.writeBlockPos(pos);
 	}
 	

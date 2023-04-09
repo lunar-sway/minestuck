@@ -4,7 +4,7 @@ import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.CustomMeleeAttackGoal;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
@@ -93,7 +93,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (200 + 3 * getGristType().getPower())); //still give xp up to top rung
-			firstKillBonus(entity, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 4));
+			firstKillBonus(entity, EcheladderBonusType.GICLOPS);
 		}
 	}
 	

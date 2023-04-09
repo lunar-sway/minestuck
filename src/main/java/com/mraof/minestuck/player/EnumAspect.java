@@ -1,10 +1,13 @@
 package com.mraof.minestuck.player;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.RandomSource;
 
 import java.util.EnumSet;
-import java.util.Random;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -17,6 +20,10 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 {
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
 	
+	public static final Codec<EnumAspect> CODEC = Codec.STRING.comapFlatMap(
+			str -> Optional.ofNullable(fromString(str)).map(DataResult::success).orElseGet(() -> DataResult.error("Couldn't parse aspect: " + str)),
+			EnumAspect::toString);
+	
 	/**
 	 * This method generates one of the 12 aspects that is not specified in the
 	 * <code>unavailableAspects</code> array. Beware that this method is not compatible with duplicates in the array.
@@ -25,7 +32,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	 * @return null if <code>unavailableAspects</code> contains 12 or more aspects or
 	 * an <code>EnumAspect</code> of the chosen aspect.
 	 */
-	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects, Random rand)
+	public static EnumAspect getRandomAspect(EnumSet<EnumAspect> unavailableAspects, RandomSource rand)
 	{
 		if(unavailableAspects == null)
 			unavailableAspects = EnumSet.noneOf(EnumAspect.class);
@@ -76,7 +83,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	@Override
 	public String toString()
 	{
-		return this.name().toLowerCase();
+		return this.name().toLowerCase(Locale.ROOT);
 	}
 	
 	public static EnumAspect fromString(String string)
@@ -96,7 +103,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	 */
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(getTranslationKey());
+		return Component.translatable(getTranslationKey());
 	}
 	
 	public String getTranslationKey()

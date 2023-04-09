@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -20,8 +19,8 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -33,10 +32,10 @@ import java.util.Optional;
 
 public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final String TITLE = "container.minestuck.sendificator";
-	public static final int DEFAULT_MAX_PROGRESS = 0;
 	public static final short MAX_FUEL = 128;
+	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	private short fuel = 0;
 	
 	@Nullable
@@ -61,7 +60,6 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public SendificatorBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.SENDIFICATOR.get(), pos, state);
-		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
 	@Nullable
@@ -78,13 +76,15 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	@Override
 	public void load(CompoundTag compound)
 	{
 		super.load(compound);
+		
+		this.progressTracker.load(compound);
 		
 		if(compound.contains("destX") && compound.contains("destY") && compound.contains("destZ"))
 		{
@@ -101,6 +101,8 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
+		
+		this.progressTracker.save(compound);
 		
 		if(destBlockPos != null)
 		{
@@ -119,13 +121,12 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
-	public MachineProcessBlockEntity.RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
@@ -140,8 +141,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	/**
 	 * With the given container possessing block entity system our mod uses, this is the function that connects to the GoButton found in it's screen({@link com.mraof.minestuck.client.gui.SendificatorScreen} in this example)
 	 */
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if(canBeRefueled())
 		{
@@ -156,9 +156,9 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 		
 		if(canSend())
 		{
-			if(itemHandler.getStackInSlot(0).hasContainerItem())
+			if(itemHandler.getStackInSlot(0).hasCraftingRemainingItem())
 			{
-				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getContainerItem());
+				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getCraftingRemainingItem());
 			} else
 			{
 				if(level != null)
@@ -200,7 +200,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			if(side == Direction.UP)
 				return inputHandler.cast();
@@ -214,7 +214,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	
 	public void openMenu(ServerPlayer player)
 	{
-		NetworkHooks.openGui(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
+		NetworkHooks.openScreen(player, this, SendificatorMenu.makeExtraDataWriter(this.worldPosition, this.destBlockPos));
 	}
 	
 	@Nullable
@@ -222,7 +222,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		return new SendificatorMenu(windowId, playerInventory, itemHandler,
-				parameters, fuelHolder, destinationHolder,
+				this.progressTracker, fuelHolder, destinationHolder,
 				ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

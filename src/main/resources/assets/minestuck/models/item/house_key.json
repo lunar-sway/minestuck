@@ -1,0 +1,20 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "minestuck:item/house_key"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "scale": [ 0.6, 0.6, 0.6 ]
+        },
+        "thirdperson_lefthand": {
+            "scale": [ 0.6, 0.6, 0.6 ]
+        },
+        "firstperson_righthand": {
+            "scale": [ 0.6, 0.6, 0.6 ]
+        },
+        "firstperson_lefthand": {
+            "scale": [ 0.6, 0.6, 0.6 ]
+        }
+    }
+}

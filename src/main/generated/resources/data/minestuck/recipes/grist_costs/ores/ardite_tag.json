@@ -1,12 +1,12 @@
 {
   "type": "minestuck:source_grist_cost",
-  "ingredient": {
-    "tag": "forge:ores/ardite"
-  },
   "grist_cost": {
     "minestuck:build": 4
   },
+  "ingredient": {
+    "tag": "forge:ores/ardite"
+  },
   "sources": [
-    "#forge:ingots/ardite"
+    "#forge:raw_materials/ardite"
   ]
 }

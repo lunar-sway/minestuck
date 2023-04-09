@@ -11,6 +11,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -21,8 +22,6 @@ import net.minecraft.world.level.levelgen.placement.BiomeFilter;
 import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
-
-import java.util.Random;
 
 public class RainLandType extends TerrainLandType
 {
@@ -40,9 +39,9 @@ public class RainLandType extends TerrainLandType
 	
 	public RainLandType()
 	{
-		super(new Builder(MSEntityTypes.TURTLE).unavailable().names(RAIN, ISLANDS, SKY)
+		super(new Builder(MSEntityTypes.TURTLE).names(RAIN, ISLANDS, SKY)
 				.fogColor(0.9, 0.8, 0.6).skyColor(0.3, 0.5, 0.98)
-				.biomeSet(MSBiomes.HIGH_HUMID_LAND).category(Biome.BiomeCategory.BEACH).music(MSSoundEvents.MUSIC_RAIN));
+				.biomeSet(MSBiomes.HIGH_HUMID_LAND).music(MSSoundEvents.MUSIC_RAIN));
 	}
 	
 	@Override
@@ -108,7 +107,7 @@ public class RainLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		TurtleVillagePieces.addPieces(register, random);
 	}

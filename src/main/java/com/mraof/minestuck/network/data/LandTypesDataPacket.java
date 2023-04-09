@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.Registry;
@@ -28,8 +29,8 @@ public class LandTypesDataPacket implements PlayToClientPacket
 		for (Map.Entry<ResourceKey<Level>, LandTypePair> entry : types.entrySet())
 		{
 			buffer.writeResourceLocation(entry.getKey().location());
-			buffer.writeRegistryId(entry.getValue().getTerrain());
-			buffer.writeRegistryId(entry.getValue().getTitle());
+			buffer.writeRegistryId(LandTypes.TERRAIN_REGISTRY.get(), entry.getValue().getTerrain());
+			buffer.writeRegistryId(LandTypes.TITLE_REGISTRY.get(), entry.getValue().getTitle());
 		}
 	}
 	

@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:copse_crusher"
-  },
   "grist_cost": {
     "minestuck:build": 62,
     "minestuck:rust": 28
+  },
+  "ingredient": {
+    "item": "minestuck:copse_crusher"
   }
 }

@@ -23,6 +23,7 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A renderer that applies the correct grist texture/color to the underlings
@@ -56,7 +57,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public ResourceLocation getTextureLocation(T entity)
 	{
-		String textureName = entity.getGristType().getRegistryName().getPath();
+		String textureName = entity.getGristType().getEffectiveName().getPath();
 		ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
 		
 		// the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
@@ -98,20 +99,20 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	}
 	
 	private NativeImage loadImage(ResourceManager resourceManager, ResourceLocation location) {
-		try {
-			Resource resource = resourceManager.getResource(location);
-			return NativeImage.read(resource.getInputStream());
+		Resource resource = resourceManager.getResource(location).orElseThrow(() -> new RuntimeException("Couldn't find image %s".formatted(location)));
+		try(InputStream inputStream = resource.open()) {
+			return NativeImage.read(inputStream);
 		} catch (IOException e) {
-			return null;
+			throw new RuntimeException("Failed to load image %s".formatted(location), e);
 		}
 	}
 	
 	private ResourceLocation getGristTexture(T entity)
 	{
-		String textureName = entity.getGristType().getRegistryName().getPath();
+		String textureName = entity.getGristType().getEffectiveName().getPath();
 		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
-		if (!Minecraft.getInstance().getResourceManager().hasResource(textureLocation)) {
-			return this.modelProvider.getTextureLocation(entity);
+		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
+			return this.modelProvider.getTextureResource(entity);
 		}
 		return textureLocation;
 	}
@@ -133,7 +134,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 			float color = getContrastModifier(entityLivingBaseIn);
 			matrixStackIn.pushPose();
 			
-			GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entityLivingBaseIn));
+			GeoModel model = modelProvider.getModel(modelProvider.getModelResource(entityLivingBaseIn));
 			this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, color, color, color, 1);
 			
 			matrixStackIn.popPose();

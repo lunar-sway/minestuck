@@ -1,27 +1,27 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "PiP",
-    "rcr",
-    "PqP"
-  ],
   "key": {
+    "P": {
+      "tag": "minecraft:planks"
+    },
     "c": {
       "item": "minecraft:clock"
     },
     "i": {
       "item": "minecraft:iron_ingot"
     },
-    "r": {
-      "item": "minecraft:repeater"
-    },
     "q": {
       "item": "minecraft:quartz"
     },
-    "P": {
-      "tag": "minecraft:planks"
+    "r": {
+      "item": "minecraft:repeater"
     }
   },
+  "pattern": [
+    "PiP",
+    "rcr",
+    "PqP"
+  ],
   "result": {
     "item": "minestuck:redstone_clock"
   }

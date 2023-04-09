@@ -6,6 +6,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.DataCheckerPermission;
 import com.mraof.minestuck.world.lands.LandTypePair;
+import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -145,8 +146,8 @@ public class DataCheckerManager
 		TerrainLandType terrainType = data.getTerrainLandType();
 		TitleLandType titleType = data.getTitleLandType();
 		if(terrainType != null)
-			nbt.putString("terrainLandType", terrainType.getRegistryName().toString());
+			nbt.putString("terrainLandType", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType).toString());
 		if(titleType != null)
-			nbt.putString("titleLandType", titleType.getRegistryName().toString());
+			nbt.putString("titleLandType", LandTypes.TITLE_REGISTRY.get().getKey(titleType).toString());
 	}
 }

@@ -15,8 +15,8 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.world.inventory.Slot;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,25 +39,25 @@ public class MSKeyHandler
 	public static KeyMapping effectToggleKey;
 	public static KeyMapping sylladexKey;
 	
-	public static void registerKeys()
+	public static void registerKeys(RegisterKeyMappingsEvent event)
 	{
 		if(statKey != null)
 			throw new IllegalStateException("Minestuck keys have already been registered!");
 		
 		statKey = new KeyMapping(STATS_GUI, GLFW.GLFW_KEY_G, CATEGORY);
-		ClientRegistry.registerKeyBinding(statKey);
+		event.register(statKey);
 		editKey = new KeyMapping(EXIT_EDIT_MODE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, CATEGORY);
-		ClientRegistry.registerKeyBinding(editKey);
+		event.register(editKey);
 		captchaKey = new KeyMapping(CAPTCHALOGUE, GLFW.GLFW_KEY_V, CATEGORY);
-		ClientRegistry.registerKeyBinding(captchaKey);
+		event.register(captchaKey);
 		effectToggleKey = new KeyMapping(ASPECT_EFFECT_TOGGLE, KeyConflictContext.IN_GAME, InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_BACKSLASH, CATEGORY);
-		ClientRegistry.registerKeyBinding(effectToggleKey);
+		event.register(effectToggleKey);
 		sylladexKey = new KeyMapping(SYLLADEX, GLFW.GLFW_KEY_UNKNOWN, CATEGORY);
-		ClientRegistry.registerKeyBinding(sylladexKey);
+		event.register(sylladexKey);
 	}
 	
 	@SubscribeEvent
-	public static void guiKeyInput(ScreenEvent.KeyboardKeyPressedEvent.Post event)
+	public static void guiKeyInput(ScreenEvent.KeyPressed.Post event)
 	{
 		InputConstants.Key input = InputConstants.getKey(event.getKeyCode(), event.getScanCode());
 		
@@ -68,13 +68,13 @@ public class MSKeyHandler
 		}
 	}
 	
-	private static boolean isNotRelease(InputEvent.KeyInputEvent event)
+	private static boolean isNotRelease(InputEvent.Key event)
 	{
 		return event.getAction() != 0;
 	}
 	
 	@SubscribeEvent
-	public static void onKeyInput(InputEvent.KeyInputEvent event)	//This is only called during the game, when no gui is active
+	public static void onKeyInput(InputEvent.Key event)	//This is only called during the game, when no gui is active
 	{
 		if(isNotRelease(event) && Minecraft.getInstance().screen == null)
 		{

@@ -2,14 +2,14 @@ package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
@@ -41,8 +41,7 @@ public interface ItemRightClickEffect
 		if(world.isClientSide)
 		{
 			int key = player.getRandom().nextInt(20);
-			TranslatableComponent message = new TranslatableComponent("message.eightball." + key);
-			player.sendMessage(message.withStyle(ChatFormatting.BLUE), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable("message.eightball." + key).withStyle(ChatFormatting.BLUE));
 		}
 		return InteractionResultHolder.success(player.getItemInHand(hand));
 	};
@@ -151,6 +150,24 @@ public interface ItemRightClickEffect
 			
 			return InteractionResultHolder.fail(itemStack);
 		});
+	}
+	
+	/**
+	 * Do not use levitation, as it may break the rules of creative shock as a check for it is not in place
+	 */
+	static ItemRightClickEffect playerPotionEffect(Supplier<MobEffectInstance> effect, int durabilityCost, int cooldownTickDuration)
+	{
+		return (world, player, hand) -> {
+			player.addEffect(effect.get());
+			
+			ItemStack itemStack = player.getItemInHand(hand);
+			
+			player.swing(hand, true);
+			player.getCooldowns().addCooldown(itemStack.getItem(), cooldownTickDuration);
+			itemStack.hurtAndBreak(durabilityCost, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
+			
+			return InteractionResultHolder.pass(itemStack);
+		};
 	}
 	
 	//based on the Item class function of the same name

@@ -11,8 +11,7 @@ import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +32,7 @@ public final class CommandActionHandler
 		{
 			if(forceConnection(skaianet, client, server))
 			{
-				source.sendSuccess(new TranslatableComponent(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+				source.sendSuccess(Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
 				return 1;
 			} else
 			{
@@ -128,7 +127,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
-			source.sendSuccess(new TextComponent(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
+			source.sendSuccess(Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}
 		
 		try

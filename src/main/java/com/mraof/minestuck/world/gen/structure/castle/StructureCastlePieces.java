@@ -1,16 +1,15 @@
 package com.mraof.minestuck.world.gen.structure.castle;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
-
-import java.util.Random;
 
 public class StructureCastlePieces
 {
 
 	public static StructurePiece getNextValidComponent(
 			CastleStartPiece startPiece,
-			StructurePieceAccessor accessor, Random par2Random, int x, int y, int z, int par6, StructureCastlePieces.Type type)
+			StructurePieceAccessor accessor, RandomSource par2Random, int x, int y, int z, int par6, StructureCastlePieces.Type type)
 	{
 		{
 			CastlePiece newPiece = getNextComponent(startPiece, par2Random, x, y, z, par6, type);
@@ -25,7 +24,7 @@ public class StructureCastlePieces
 		}
 	}
 
-	public static CastlePiece getNextComponent(CastleStartPiece startPiece, Random random, int x, int y, int z, int par6, Type type)
+	public static CastlePiece getNextComponent(CastleStartPiece startPiece, RandomSource random, int x, int y, int z, int par6, Type type)
 	{
 		return switch(type)
 				{

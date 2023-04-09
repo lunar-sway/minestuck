@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Registry;
+import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraftforge.registries.DeferredRegister;
@@ -16,18 +17,18 @@ public final class MSSurfaceRules extends SurfaceRules	//This extension is here 
 	public static final DeferredRegister<Codec<? extends SurfaceRules.RuleSource>> REGISTER = DeferredRegister.create(Registry.RULE_REGISTRY, Minestuck.MOD_ID);
 	
 	static {
-		REGISTER.register("checkered", () -> CheckeredRuleSource.CODEC);
+		REGISTER.register("checkered", CheckeredRuleSource.CODEC::codec);
 	}
 	
 	public record CheckeredRuleSource(int squareSize, List<RuleSource> rules) implements RuleSource
 	{
-		private static final Codec<CheckeredRuleSource> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+		private static final KeyDispatchDataCodec<CheckeredRuleSource> CODEC = KeyDispatchDataCodec.of(RecordCodecBuilder.create(instance -> instance.group(
 				Codec.intRange(1, Integer.MAX_VALUE).fieldOf("size").forGetter(CheckeredRuleSource::squareSize),
 				SurfaceRules.RuleSource.CODEC.listOf().fieldOf("rules").forGetter(CheckeredRuleSource::rules)
-		).apply(instance, CheckeredRuleSource::new));
+		).apply(instance, CheckeredRuleSource::new)));
 		
 		@Override
-		public Codec<CheckeredRuleSource> codec()
+		public KeyDispatchDataCodec<CheckeredRuleSource> codec()
 		{
 			return CODEC;
 		}

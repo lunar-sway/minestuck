@@ -2,20 +2,22 @@ package com.mraof.minestuck.world.gen.feature;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public final class FeatureModifier
 {
-	public static Function<PlacedFeature, PlacedFeature> withTargets(List<BlockState> targets)
+	public static Function<PlacedFeature, PlacedFeature> withTargets(BlockPredicate targets)
 	{
 		return configMap(new ConfigMapper()
 		{
@@ -24,7 +26,7 @@ public final class FeatureModifier
 			public <T extends FeatureConfiguration> T map(T config)
 			{
 				if(config instanceof DiskConfiguration diskConfig)
-					return (T) new DiskConfiguration(diskConfig.state(), diskConfig.radius(), diskConfig.halfHeight(), targets);
+					return (T) new DiskConfiguration(diskConfig.stateProvider(), targets, diskConfig.radius(), diskConfig.halfHeight());
 				return config;
 			}
 		});
@@ -41,7 +43,7 @@ public final class FeatureModifier
 				if(config.getClass() == BlockStateConfiguration.class)
 					return (T) new BlockStateConfiguration(state);
 				if(config instanceof DiskConfiguration diskConfig)
-					return (T) new DiskConfiguration(state, diskConfig.radius(), diskConfig.halfHeight(), diskConfig.targets());
+					return (T) new DiskConfiguration(RuleBasedBlockStateProvider.simple(BlockStateProvider.simple(state)), diskConfig.target(), diskConfig.radius(), diskConfig.halfHeight());
 				return config;
 			}
 		});

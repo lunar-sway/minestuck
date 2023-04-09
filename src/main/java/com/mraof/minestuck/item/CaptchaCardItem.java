@@ -4,8 +4,6 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +24,7 @@ public class CaptchaCardItem extends Item
 	}
 	
 	@Override
-	public int getItemStackLimit(ItemStack stack)
+	public int getMaxStackSize(ItemStack stack)
 	{
 		if(stack.hasTag())
 			return 16;
@@ -36,7 +34,7 @@ public class CaptchaCardItem extends Item
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
-		if(this.allowdedIn(tab))
+		if(this.allowedIn(tab))
 		{
 			items.add(new ItemStack(this));
 			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE.get()), true));
@@ -66,19 +64,19 @@ public class CaptchaCardItem extends Item
 			{
 				Component contentName = content.getHoverName();
 				tooltip.add(makeTooltipInfo((AlchemyHelper.isPunchedCard(stack) || AlchemyHelper.isGhostCard(stack))
-						? contentName : new TextComponent(content.getCount() + "x").append(contentName)));
+						? contentName : Component.literal(content.getCount() + "x").append(contentName)));
 				
 				if(AlchemyHelper.isPunchedCard(stack))
-					tooltip.add(makeTooltipInfo(new TranslatableComponent(getDescriptionId() + ".punched")));
+					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
-					tooltip.add(makeTooltipInfo(new TranslatableComponent(getDescriptionId() + ".ghost")));
-			} else tooltip.add(makeTooltipInfo(new TranslatableComponent(getDescriptionId() + ".invalid")));
+					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
+			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
-			tooltip.add(makeTooltipInfo(new TranslatableComponent(getDescriptionId() + ".empty")));
+			tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
 	}
 	
 	private Component makeTooltipInfo(Component info)
 	{
-		return new TextComponent("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
+		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);
 	}
 }

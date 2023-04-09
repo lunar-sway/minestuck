@@ -1,8 +1,6 @@
 package com.mraof.minestuck.player;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -30,7 +28,7 @@ public class KindAbstratusType
 	}
 	
 	public Component getDisplayName() {
-		return new TranslatableComponent("strife."+unlocalizedName);
+		return Component.translatable("strife."+unlocalizedName);
 	}
 	
 	public String getUnlocalizedName() {
@@ -69,17 +67,17 @@ public class KindAbstratusType
 	
 	private static class ItemIdType extends ItemType
 	{
-		final ResourceLocation itemId;
+		final Item item;
 		
 		ItemIdType(Item item)
 		{
-			itemId = item.getRegistryName();
+			this.item = item;
 		}
 		
 		@Override
-		boolean partOf(ItemStack item)
+		boolean partOf(ItemStack stack)
 		{
-			return this.itemId.equals(item.getItem().getRegistryName());
+			return stack.is(this.item);
 		}
 	}
 }

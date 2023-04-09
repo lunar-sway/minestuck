@@ -10,8 +10,6 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -81,8 +79,8 @@ public class ColorHandler
 	public static Component getName(int index)
 	{
 		if(index < 0 || index >= colors.size())
-			return new TextComponent("INVALID");
-		return new TranslatableComponent("minestuck.color." + colors.get(index).getRight());
+			return Component.literal("INVALID");
+		return Component.translatable("minestuck.color." + colors.get(index).getRight());
 	}
 	
 	public static int getColorSize()

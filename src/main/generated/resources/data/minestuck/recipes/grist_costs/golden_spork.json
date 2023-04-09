@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:golden_spork"
-  },
   "grist_cost": {
     "minestuck:build": 19,
-    "minestuck:gold": 11,
-    "minestuck:diamond": 1
+    "minestuck:diamond": 1,
+    "minestuck:gold": 11
+  },
+  "ingredient": {
+    "item": "minestuck:golden_spork"
   }
 }

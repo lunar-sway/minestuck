@@ -3,7 +3,6 @@ package com.mraof.minestuck.alchemy;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -50,7 +49,7 @@ public class GristAmount
 	@Override
 	public String toString()
 	{
-		return "gristAmount:[type="+type.getRegistryName()+",amount="+amount+"]";
+		return "gristAmount:[type="+type+",amount="+amount+"]";
 	}
 	
 	@Override
@@ -71,7 +70,7 @@ public class GristAmount
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(getType());
+		buffer.writeRegistryId(GristTypes.getRegistry(), getType());
 		buffer.writeLong(getAmount());
 	}
 	
@@ -84,7 +83,7 @@ public class GristAmount
 	
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
+		return Component.translatable(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
 	}
 	
 	private static String makeNBTPrefix(String prefix)

@@ -3,13 +3,13 @@ package com.mraof.minestuck.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 import java.util.function.Supplier;
 
 public class BlockUtil
@@ -29,7 +29,7 @@ public class BlockUtil
 	
 	public static void spawnParticlesAroundSolidBlock(Level level, BlockPos pos, Supplier<ParticleOptions> particle)
 	{
-		Random random = level.random;
+		RandomSource random = level.random;
 		
 		for(Direction direction : Direction.values())
 		{

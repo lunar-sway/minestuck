@@ -8,13 +8,13 @@ import net.minecraft.resources.ResourceLocation;
 public class PawnModel extends RotatingHeadAnimatedModel<PawnEntity>
 {
 	@Override
-	public ResourceLocation getModelLocation(PawnEntity object)
+	public ResourceLocation getModelResource(PawnEntity object)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "geo/entity/carapacian/pawn.geo.json");
 	}
 	
 	@Override
-	public ResourceLocation getTextureLocation(PawnEntity object)
+	public ResourceLocation getTextureResource(PawnEntity object)
 	{
 		if(object.getKingdom() == EnumEntityKingdom.DERSITE)
 		{
@@ -26,7 +26,7 @@ public class PawnModel extends RotatingHeadAnimatedModel<PawnEntity>
 	}
 	
 	@Override
-	public ResourceLocation getAnimationFileLocation(PawnEntity animatable)
+	public ResourceLocation getAnimationResource(PawnEntity animatable)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, "animations/entity/carapacian/pawn.animation.json");
 	}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -186,7 +187,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		compound.putString("Type", gristType.getRegistryName().toString());
+		compound.putString("Type", String.valueOf(GristTypes.getRegistry().getKey(gristType)));
 	}
 	
 	@Override
@@ -221,8 +222,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
-		GristHelper.increase(level, identifier, new GristSet(gristType, gristValue));
-		GristHelper.notify(level.getServer(), identifier, new GristSet(gristType, gristValue));
+		GristHelper.increaseAndNotify(level, identifier, new GristSet(gristType, gristValue), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
@@ -256,7 +256,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(gristType);
+		buffer.writeRegistryId(GristTypes.getRegistry(), gristType);
 		buffer.writeLong(gristValue);
 	}
 	

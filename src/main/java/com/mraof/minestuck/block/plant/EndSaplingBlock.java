@@ -5,6 +5,7 @@ import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.feature.tree.EndTree;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -17,8 +18,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Random;
 
 public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 {
@@ -48,7 +47,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state)
 	{
 		return true;
 	}
@@ -58,7 +57,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	 * If Alpha is true and omega is false, then the tree will generate.
 	 */
 	@Override
-	public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state)
 	{
 		if(level.isClientSide || level.dimensionType().moonPhase(level.getDayTime()) == 4)
 		{
@@ -74,18 +73,11 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 		
 		if(state.getValue(ALPHA) && !state.getValue(OMEGA))
 		{
-			generateTree(level, pos, state, rand);
+			tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 		} else
 		{
 			level.setBlockAndUpdate(pos, state);
 		}
-	}
-	
-	private void generateTree(ServerLevel level, BlockPos pos, BlockState state, Random rand)
-	{
-		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(level, rand, pos))
-			return;
-		tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 	}
 	
 	@Override
@@ -109,7 +101,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if (!level.isClientSide)
 		{

@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "n n",
-    "# #",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "minecraft:iron_ingot"
@@ -13,6 +8,11 @@
       "item": "minecraft:iron_nugget"
     }
   },
+  "pattern": [
+    "n n",
+    "# #",
+    "###"
+  ],
   "result": {
     "item": "minestuck:spikes"
   }

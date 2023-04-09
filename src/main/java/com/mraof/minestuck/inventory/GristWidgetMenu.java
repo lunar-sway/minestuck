@@ -49,19 +49,7 @@ public class GristWidgetMenu extends MachineContainerMenu
 				return stack.getItem() == MSItems.CAPTCHA_CARD.get() && AlchemyHelper.hasDecodedItem(stack) && !AlchemyHelper.isPunchedCard(stack);
 			}
 		});
-		
-		bindPlayerInventory(new PlayerMainInvWrapper(playerInventory));
-	}
-	
-	protected void bindPlayerInventory(IItemHandler playerInventory)
-	{
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
-				addSlot(new SlotItemHandler(playerInventory, j + i * 9 + 9,
-						8 + j * 18, 84 + i * 18));
-		
-		for (int i = 0; i < 9; i++)
-			addSlot(new SlotItemHandler(playerInventory, i, 8 + i * 18, 142));
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
 	@Override

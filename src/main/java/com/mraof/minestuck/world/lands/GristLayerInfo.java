@@ -8,9 +8,9 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  * Containers for grist layers.
@@ -53,7 +52,7 @@ public class GristLayerInfo
 		ChunkGenerator generator = level.getChunkSource().getGenerator();
 		if (generator instanceof LandChunkGenerator) {
 			
-			long seed = ((LandChunkGenerator) generator).getSeed();
+			long seed = level.getSeed();
 			
 			GristType baseType;
 			SburbConnection connection = SburbHandler.getConnectionForDimension(level.getServer(), level.dimension());
@@ -101,7 +100,7 @@ public class GristLayerInfo
 		}
 	}
 	
-	private GristTypeLayer randomLayer(Random rand)
+	private GristTypeLayer randomLayer(RandomSource rand)
 	{
 		switch(rand.nextInt(3))
 		{
@@ -120,7 +119,7 @@ public class GristLayerInfo
 		GristType uncommonType = uncommonGristLayer.getTypeAt(x, z);
 		GristType anyType = anyGristLayer.getTypeAt(x, z);
 		
-		return new TranslatableComponent(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
+		return Component.translatable(INFO, commonType.getDisplayName(), uncommonType.getDisplayName(), anyType.getDisplayName());
 	}
 	
 	public GristTypeLayer getCommonGristLayer()

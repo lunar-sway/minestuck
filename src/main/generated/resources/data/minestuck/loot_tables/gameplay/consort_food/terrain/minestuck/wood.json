@@ -2,162 +2,162 @@
   "type": "minecraft:gift",
   "pools": [
     {
-      "name": "main",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:jar_of_bugs"
+          "name": "minestuck:jar_of_bugs",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:bug_on_a_stick"
+          "name": "minestuck:bug_on_a_stick",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:cone_of_flies"
+          "name": "minestuck:cone_of_flies",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:potato"
+          "name": "minecraft:potato",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 10.0
+                "max": 10.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:mushroom_stew"
+          "name": "minecraft:mushroom_stew",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 6.0
+                "max": 6.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:red_mushroom"
+          "name": "minecraft:red_mushroom",
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 6.0
+                "max": 6.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:brown_mushroom"
+          "name": "minecraft:brown_mushroom",
+          "weight": 4
         }
-      ]
+      ],
+      "name": "main",
+      "rolls": 1.0
     },
     {
-      "name": "special",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:poisonous_potato"
+          "name": "minecraft:poisonous_potato",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 6.0
+                "max": 6.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:melon"
+          "name": "minecraft:melon",
+          "weight": 8
         }
-      ]
+      ],
+      "name": "special",
+      "rolls": 1.0
     }
   ]
 }

@@ -1,10 +1,11 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,8 +13,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-
-import java.util.Random;
 
 public class OasisFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -27,7 +26,7 @@ public class OasisFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		
 		boolean[] blocks = new boolean[16*16*4];
 		

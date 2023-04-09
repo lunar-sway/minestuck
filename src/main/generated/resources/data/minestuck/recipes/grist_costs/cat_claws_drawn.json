@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:cat_claws_drawn"
-  },
   "grist_cost": {
     "minestuck:build": 105,
     "minestuck:rust": 9
+  },
+  "ingredient": {
+    "item": "minestuck:cat_claws_drawn"
   }
 }

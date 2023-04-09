@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -11,8 +10,7 @@ import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -24,28 +22,25 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
-import java.util.Random;
-
 public class SandstoneLandType extends TerrainLandType
 {
 	public static final String SANDSTONE = "minestuck.sandstone";
 	public static final String STONY_DESERTS = "minestuck.stony_deserts";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sandstone");
 	private final Variant type;
 	
 	public static TerrainLandType createSandstone()
 	{
-		return new SandstoneLandType(Variant.SANDSTONE, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+		return new SandstoneLandType(Variant.SANDSTONE, new Builder(MSEntityTypes.TURTLE).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.9, 0.7, 0.05).skyColor(0.8, 0.6, 0.2)
-				.category(Biome.BiomeCategory.MESA).music(MSSoundEvents.MUSIC_SANDSTONE));
+				.music(MSSoundEvents.MUSIC_SANDSTONE));
 	}
 	
 	public static TerrainLandType createRedSandstone()
 	{
-		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SANDSTONE, STONY_DESERTS)
+		return new SandstoneLandType(Variant.RED_SANDSTONE, new Builder(MSEntityTypes.TURTLE).names(SANDSTONE, STONY_DESERTS)
 				.skylight(3/4F).fogColor(0.7, 0.4, 0.05).skyColor(0.8, 0.5, 0.1)
-				.category(Biome.BiomeCategory.MESA).music(MSSoundEvents.MUSIC_SANDSTONE));
+				.music(MSSoundEvents.MUSIC_SANDSTONE));
 	}
 	
 	private SandstoneLandType(Variant type, Builder builder)
@@ -135,7 +130,7 @@ public class SandstoneLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		TurtleVillagePieces.addPieces(register, random);
 	}

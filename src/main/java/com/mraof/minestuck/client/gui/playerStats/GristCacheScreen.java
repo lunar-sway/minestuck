@@ -7,8 +7,7 @@ import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -24,7 +23,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 
 	public GristCacheScreen()
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		guiWidth = 226;
 		guiHeight = 190;
 	}
@@ -33,8 +32,8 @@ public class GristCacheScreen extends PlayerStatsScreen
 	public void init()
 	{
 		super.init();
-		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, new TextComponent("<"), button -> prevPage());
-		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, new TextComponent(">"), button -> nextPage());
+		this.previousButton = new ExtendedButton(this.xOffset + 8, this.yOffset + 8, 16, 16, Component.literal("<"), button -> prevPage());
+		this.nextButton = new ExtendedButton(this.xOffset + guiWidth - 24, this.yOffset + 8, 16, 16, Component.literal(">"), button -> nextPage());
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		previousButton.visible = false;

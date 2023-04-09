@@ -4,7 +4,6 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags.Fluids;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.FluidTagsProvider;
-import net.minecraft.tags.FluidTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nullable;
@@ -19,10 +18,8 @@ public class MinestuckFluidTagsProvider extends FluidTagsProvider
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	protected void addTags()
 	{
-		tag(FluidTags.WATER).addTags(Fluids.OIL, Fluids.BLOOD, Fluids.BRAIN_JUICE, Fluids.WATER_COLORS, Fluids.ENDER, Fluids.LIGHT_WATER);
 		tag(Fluids.OIL).add(OIL.get(), FLOWING_OIL.get());
 		tag(Fluids.BLOOD).add(BLOOD.get(), FLOWING_BLOOD.get());
 		tag(Fluids.BRAIN_JUICE).add(BRAIN_JUICE.get(), FLOWING_BRAIN_JUICE.get());

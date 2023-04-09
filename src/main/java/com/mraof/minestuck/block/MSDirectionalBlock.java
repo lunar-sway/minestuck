@@ -13,6 +13,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 import javax.annotation.Nullable;
 
+/**
+ * A copy of {@link DirectionalBlock} that is no longer abstract
+ */
 public class MSDirectionalBlock extends DirectionalBlock
 {
 

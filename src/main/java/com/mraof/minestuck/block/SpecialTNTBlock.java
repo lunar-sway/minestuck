@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +17,6 @@ import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class SpecialTNTBlock extends TntBlock
 {
@@ -74,7 +74,7 @@ public class SpecialTNTBlock extends TntBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(unstable && random.nextDouble() < 0.1)
 		{

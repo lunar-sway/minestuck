@@ -2,20 +2,18 @@ package com.mraof.minestuck.entity.consort;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,6 +26,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -103,16 +102,16 @@ public abstract class MessageType
 					obj[i] = "Player aspect";
 			} else if(args[i].equals("consort_sound"))
 			{
-				obj[i] = new TranslatableComponent(s + ".sound");
+				obj[i] = Component.translatable(s + ".sound");
 			} else if(args[i].equals("consort_sound_2"))
 			{
-				obj[i] = new TranslatableComponent(s + ".sound.2");
+				obj[i] = Component.translatable(s + ".sound.2");
 			} else if(args[i].equals("consort_type"))
 			{
-				obj[i] = new TranslatableComponent(s);
+				obj[i] = Component.translatable(s);
 			} else if(args[i].equals("consort_types"))
 			{
-				obj[i] = new TranslatableComponent(s + ".plural");
+				obj[i] = Component.translatable(s + ".plural");
 			} else if(args[i].equals("player_title"))
 			{
 				PlayerIdentifier identifier = IdentifierHandler.encode(player);
@@ -124,7 +123,7 @@ public abstract class MessageType
 			} else if(args[i].equals("denizen"))
 			{
 				if(worldTitle != null)
-					obj[i] = new TranslatableComponent("denizen." + worldTitle.getHeroAspect().getTranslationKey());
+					obj[i] = Component.translatable("denizen." + worldTitle.getHeroAspect().getTranslationKey());
 				else
 					obj[i] = "Denizen";
 			} else if(args[i].startsWith("nbt_item:"))
@@ -132,18 +131,18 @@ public abstract class MessageType
 				CompoundTag nbt = consort.getMessageTagForPlayer(player);
 				ItemStack stack = ItemStack.of(nbt.getCompound(args[i].substring(9)));
 				if(!stack.isEmpty())
-					obj[i] = new TranslatableComponent(stack.getDescriptionId());
+					obj[i] = Component.translatable(stack.getDescriptionId());
 				else obj[i] = "Item";
 			}
 		}
 		
-		TranslatableComponent message = new TranslatableComponent("consort." + unlocalizedMessage, obj);
+		MutableComponent message = Component.translatable("consort." + unlocalizedMessage, obj);
 		if(consortPrefix)
 		{
 			message.withStyle(consort.getConsortType().getColor());
-			TranslatableComponent entity = new TranslatableComponent(s);
+			Component entity = Component.translatable(s);
 			
-			return new TranslatableComponent("chat.type.text", entity, message);
+			return Component.translatable("chat.type.text", entity, message);
 		} else
 			return message;
 	}
@@ -201,7 +200,7 @@ public abstract class MessageType
 		protected void debugAddAllMessages(List<Component> list)
 		{
 			//noinspection RedundantCast
-			list.add(new TranslatableComponent("consort." + unlocalizedMessage, (Object[]) args));
+			list.add(Component.translatable("consort." + unlocalizedMessage, (Object[]) args));
 		}
 	}
 	
@@ -329,7 +328,7 @@ public abstract class MessageType
 		{
 			message.debugAddAllMessages(list);
 			//noinspection RedundantCast
-			list.add(new TranslatableComponent("consort." + unlocalizedMessage, (Object[]) args));
+			list.add(Component.translatable("consort." + unlocalizedMessage, (Object[]) args));
 		}
 	}
 
@@ -653,7 +652,7 @@ public abstract class MessageType
 				for (SingleMessage optionText : options)
 				{
 					question.append("\n");
-					MutableComponent option = new TextComponent("> ");
+					MutableComponent option = Component.literal("> ");
 					option.append(
 							createMessage(consort, player, optionText.unlocalizedMessage, optionText.args, false));
 					option.withStyle(style -> style.withClickEvent(
@@ -699,9 +698,9 @@ public abstract class MessageType
 							
 							Component innerMessage = createMessage(consort, player, options[index].unlocalizedMessage + ".reply", options[index].args, false);
 							
-							Component out = new TranslatableComponent("chat.type.text", player.getDisplayName(), innerMessage);
+							Component out = Component.translatable("chat.type.text", player.getDisplayName(), innerMessage);
 							
-							player.sendMessage(out, Util.NIL_UUID);
+							player.sendSystemMessage(out);
 						}
 						MutableComponent text = message.getMessage(consort, player, addTo(chainIdentifier, message.getString()));
 						
@@ -712,9 +711,9 @@ public abstract class MessageType
 							
 							Component innerMessage = createMessage(consort, player, options[index].unlocalizedMessage + ".reply", options[index].args, false);
 							
-							Component out = new TranslatableComponent("chat.type.text", player.getDisplayName(), innerMessage);
+							Component out = Component.translatable("chat.type.text", player.getDisplayName(), innerMessage);
 							
-							player.sendMessage(out, Util.NIL_UUID);
+							player.sendSystemMessage(out);
 						}
 						
 						return text;
@@ -742,7 +741,7 @@ public abstract class MessageType
 			{
 				message.debugAddAllMessages(list);
 				//noinspection RedundantCast
-				list.add(new TranslatableComponent("consort." + message.unlocalizedMessage + ".reply", (Object[]) message.args));
+				list.add(Component.translatable("consort." + message.unlocalizedMessage + ".reply", (Object[]) message.args));
 			}
 			for(MessageType message : results)
 				message.debugAddAllMessages(list);
@@ -804,7 +803,7 @@ public abstract class MessageType
 				consort.updatingMessage = this;
 				Component text = messages[0].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[0].getString()));
 				if(text != null)
-					player.sendMessage(text, Util.NIL_UUID);
+					player.sendSystemMessage(text);
 				
 			} else if(nbt.getInt(this.getString()+".i") == messages.length - 1)
 			{
@@ -861,7 +860,7 @@ public abstract class MessageType
 						{
 							Component text = consort.message.getMessage(consort, player);
 							if(text != null)
-								player.sendMessage(text, Util.NIL_UUID);
+								player.sendSystemMessage(text);
 							
 							nbt.remove(this.getString());
 							nbt.remove(this.getString() + ".i");
@@ -871,7 +870,7 @@ public abstract class MessageType
 							update = true;
 							Component text = messages[i].getMessage(consort, player, MessageType.addTo(chainIdentifier, messages[i].getString()));
 							if(text != null)
-								player.sendMessage(text, Util.NIL_UUID);
+								player.sendSystemMessage(text);
 						}
 					} else update = true;
 				}
@@ -954,7 +953,7 @@ public abstract class MessageType
 				return message.getMessage(consort, player, chainIdentifier);
 			} else
 			{
-				player.sendMessage(createMessage(consort, player, "cant_afford", new String[0], false), Util.NIL_UUID);
+				player.sendSystemMessage(createMessage(consort, player, "cant_afford", new String[0], false));
 				
 				return null;
 			}
@@ -1039,8 +1038,7 @@ public abstract class MessageType
 						addTo(chainIdentifier, conditionedMessage.getString()));
 			
 			boolean hasItem = false;
-			List<ItemStack> stackListFromTag = new ArrayList<>();
-			Registry.ITEM.getTagOrEmpty(itemTag).forEach(itemHolder -> stackListFromTag.add(new ItemStack(itemHolder)));
+			List<ItemStack> stackListFromTag = MSTags.getItemStacksFromTag(itemTag);
 			
 			if(random || repeat && nbt.contains(this.getString()))
 			{
@@ -1053,7 +1051,7 @@ public abstract class MessageType
 				{
 					int index = consort.level.random.nextInt(stackListFromTag.size());
 					ItemStack randomStack = stackListFromTag.get(index);
-					nbtString = randomStack.getItem().getRegistryName().toString();
+					nbtString = String.valueOf(ForgeRegistries.ITEMS.getKey(randomStack.getItem()));
 					nbt.putString(this.getString(), nbtString);
 				}
 				
@@ -1073,7 +1071,7 @@ public abstract class MessageType
 					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
-						nbt.putString(this.getString(), stack.getItem().getRegistryName().toString());
+						nbt.putString(this.getString(), String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem())));
 						nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 						hasItem = true;
 						break;
@@ -1086,7 +1084,7 @@ public abstract class MessageType
 				return conditionedMessage.getMessage(consort, player, addTo(chainIdentifier, conditionedMessage.getString()));
 			}
 			
-			player.sendMessage(defaultMessage.getMessage(consort, player, addTo(chainIdentifier, defaultMessage.getString())), Util.NIL_UUID);
+			player.sendSystemMessage(defaultMessage.getMessage(consort, player, addTo(chainIdentifier, defaultMessage.getString())));
 			return null;
 		}
 		
@@ -1215,8 +1213,8 @@ public abstract class MessageType
 				return next.getMessage(consort, player, chainIdentifier);
 			} else
 			{
-				player.sendMessage(
-						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).withStyle(ChatFormatting.RED), Util.NIL_UUID);
+				player.sendSystemMessage(
+						createMessage(consort, player, MISSING_ITEM, new String[] { "nbtItem:" + itemData }, false).withStyle(ChatFormatting.RED));
 				return null;
 			}
 		}
@@ -1267,7 +1265,7 @@ public abstract class MessageType
 				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level.random));
 			}
 			
-			NetworkHooks.openGui(player, new SimpleMenuProvider(consort, new TextComponent("Consort shop")), consort::writeShopMenuBuffer);
+			NetworkHooks.openScreen(player, new SimpleMenuProvider(consort, Component.literal("Consort shop")), consort::writeShopMenuBuffer);
 			
 			return initMessage.getMessage(consort, player, chainIdentifier);
 		}

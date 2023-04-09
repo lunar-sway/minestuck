@@ -1,18 +1,22 @@
 package com.mraof.minestuck.util;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Helper class for reading and writing objects (not provided by minestuck) from and to NBT.
@@ -83,5 +87,48 @@ public class MSNBTUtil
 		Optional<Tag> optional = Level.RESOURCE_KEY_CODEC.encodeStart(NbtOps.INSTANCE, dimension).resultOrPartial(LOGGER::error);
 		optional.ifPresent(inbt -> nbt.put(key, inbt));
 		return optional.isPresent();
+	}
+	
+	public static Set<Block> readBlockSet(CompoundTag nbt, String key)
+	{
+		return nbt.getList(key, Tag.TAG_STRING).stream().map(Tag::getAsString)
+				//Turn the Strings into ResourceLocations
+				.flatMap(blockName -> Stream.ofNullable(ResourceLocation.tryParse(blockName)))
+				//Turn the ResourceLocations into Blocks
+				.flatMap(blockId -> Stream.ofNullable(ForgeRegistries.BLOCKS.getValue(blockId)))
+				//Gather the blocks into a set
+				.collect(Collectors.toSet());
+	}
+	
+	public static void writeBlockSet(CompoundTag nbt, String key, @Nonnull Set<Block> blocks)
+	{
+		ListTag listTag = new ListTag();
+		for(Block blockIterate : blocks)
+		{
+			String blockName = String.valueOf(ForgeRegistries.BLOCKS.getKey(blockIterate));
+			listTag.add(StringTag.valueOf(blockName));
+		}
+		
+		nbt.put(key, listTag);
+	}
+	
+	public static boolean tryAddBlockToSet(CompoundTag nbt, String key, Block block)
+	{
+		StringTag blockIdTag = StringTag.valueOf(String.valueOf(ForgeRegistries.BLOCKS.getKey(block)));
+		
+		if(!nbt.contains(key, Tag.TAG_LIST))
+		{
+			writeBlockSet(nbt, key, Collections.singleton(block));
+			return true;
+		} else
+		{
+			ListTag listTag = nbt.getList(key, Tag.TAG_STRING);
+			if(!listTag.contains(blockIdTag))
+			{
+				listTag.add(blockIdTag);
+				return true;
+			} else
+				return false;
+		}
 	}
 }

@@ -1,7 +1,6 @@
 
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -15,8 +14,7 @@ import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
@@ -27,8 +25,6 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
-import java.util.Random;
-
 public class SandLandType extends TerrainLandType
 {
 	public static final String SAND = "minestuck.sand";
@@ -36,28 +32,27 @@ public class SandLandType extends TerrainLandType
 	public static final String DESERTS = "minestuck.deserts";
 	public static final String LUSH_DESERTS = "minestuck.lush_deserts";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "sand");
 	private final Variant type;
 	
 	public static TerrainLandType createSand()
 	{
-		return new SandLandType(Variant.SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
+		return new SandLandType(Variant.SAND, new Builder(MSEntityTypes.TURTLE).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	public static TerrainLandType createLushDeserts()
 	{
-		return new SandLandType(Variant.LUSH_DESERTS, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(LUSH_DESERTS)
+		return new SandLandType(Variant.LUSH_DESERTS, new Builder(MSEntityTypes.TURTLE).names(LUSH_DESERTS)
 				.fogColor(0.99, 0.8, 0.05).skyColor(0.8, 0.8, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_LUSH_DESERTS));
 	}
 	
 	public static TerrainLandType createRedSand()
 	{
-		return new SandLandType(Variant.RED_SAND, new Builder(MSEntityTypes.TURTLE).group(GROUP_NAME).names(SAND, DUNES, DESERTS)
+		return new SandLandType(Variant.RED_SAND, new Builder(MSEntityTypes.TURTLE).names(SAND, DUNES, DESERTS)
 				.fogColor(0.99, 0.6, 0.05).skyColor(0.8, 0.6, 0.1)
-				.biomeSet(MSBiomes.NO_RAIN_LAND).category(Biome.BiomeCategory.DESERT).music(MSSoundEvents.MUSIC_SAND));
+				.biomeSet(MSBiomes.NO_RAIN_LAND).music(MSSoundEvents.MUSIC_SAND));
 	}
 	
 	private SandLandType(Variant variation, Builder builder)
@@ -158,7 +153,7 @@ public class SandLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		TurtleVillagePieces.addPieces(register, random);
 	}

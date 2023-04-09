@@ -10,7 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class LotusTimeCapsuleMultiblock extends MachineMultiblock
 {
-	public final RegistryObject<Block> CORNER = register("lotus_time_capsule_base", () -> new LotusTimeCapsuleBlock(this, MSBlockShapes.LOTUS_TIME_CAPSULE, Block.Properties.of(Material.STONE).strength(-1F).noDrops()));
+	public final RegistryObject<Block> CORNER = register("lotus_time_capsule_base", () -> new LotusTimeCapsuleBlock(this, MSBlockShapes.LOTUS_TIME_CAPSULE, Block.Properties.of(Material.STONE).strength(-1F).noLootTable()));
 	
 	public LotusTimeCapsuleMultiblock(DeferredRegister<Block> register)
 	{

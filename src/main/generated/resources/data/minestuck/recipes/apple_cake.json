@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "a": {
+      "item": "minecraft:apple"
+    },
+    "e": {
+      "item": "minecraft:egg"
+    },
+    "m": {
+      "item": "minecraft:milk_bucket"
+    },
+    "w": {
+      "item": "minecraft:wheat"
+    }
+  },
   "pattern": [
     "mmm",
     "aea",
     "www"
   ],
-  "key": {
-    "m": {
-      "item": "minecraft:milk_bucket"
-    },
-    "a": {
-      "item": "minecraft:apple"
-    },
-    "w": {
-      "item": "minecraft:wheat"
-    },
-    "e": {
-      "item": "minecraft:egg"
-    }
-  },
   "result": {
     "item": "minestuck:apple_cake"
   }

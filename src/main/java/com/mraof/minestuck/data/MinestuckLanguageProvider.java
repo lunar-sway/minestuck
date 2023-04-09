@@ -6,7 +6,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.skaianet.MergeResult;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
@@ -98,7 +98,7 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	}
 	protected void add(CreativeModeTab key, String value)
 	{
-		add(((TranslatableComponent)key.getDisplayName()).getKey(), value);
+		add(((TranslatableContents)key.getDisplayName().getContents()).getKey(), value);
 	}
 	protected void addEntityTypeExtra(Supplier<? extends EntityType<?>> key, String type, String value)
 	{

@@ -4,21 +4,21 @@ import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-
-import java.util.Random;
 
 public class GatePillarPiece extends GatePiece
 {
-	public GatePillarPiece(ChunkGenerator generator, LevelHeightAccessor level, Random random, int minX, int minZ)
+	public GatePillarPiece(ChunkGenerator generator, LevelHeightAccessor level, RandomState randomState, RandomSource random, int minX, int minZ)
 	{
-		super(MSStructurePieces.GATE_PILLAR.get(), level, generator, random, minX, minZ, 3, 25, 3, -3);
+		super(MSStructurePieces.GATE_PILLAR.get(), level, randomState, generator, random, minX, minZ, 3, 25, 3, -3);
 	}
 	
 	public GatePillarPiece(CompoundTag nbt)
@@ -33,7 +33,7 @@ public class GatePillarPiece extends GatePiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGenerator, Random random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox box, ChunkPos chunkPos, BlockPos pos)
 	{
 		StructureBlockRegistry blocks = StructureBlockRegistry.getOrDefault(chunkGenerator);
 		

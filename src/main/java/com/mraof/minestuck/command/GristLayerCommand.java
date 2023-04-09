@@ -7,7 +7,6 @@ import com.mraof.minestuck.world.lands.GristLayerInfo;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -16,7 +15,7 @@ import java.util.Optional;
 public class GristLayerCommand
 {
 	public static final String FAIL = CheckLandCommand.FAIL;
-	private static final SimpleCommandExceptionType FAIL_EXCEPTION = new SimpleCommandExceptionType(new TranslatableComponent(FAIL));
+	private static final SimpleCommandExceptionType FAIL_EXCEPTION = new SimpleCommandExceptionType(Component.translatable(FAIL));
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{

@@ -7,8 +7,7 @@ import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
-import com.mraof.minestuck.entity.consort.ConsortEntity;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
@@ -28,7 +27,6 @@ import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
@@ -103,7 +101,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
-			firstKillBonus(killer, (byte) (Echeladder.UNDERLING_BONUS_OFFSET + 3));
+			firstKillBonus(killer, EcheladderBonusType.LICH);
 		}
 	}
 	

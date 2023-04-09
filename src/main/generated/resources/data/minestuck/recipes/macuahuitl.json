@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "OPO",
-    "OPO",
-    " s "
-  ],
   "key": {
+    "O": {
+      "item": "minecraft:obsidian"
+    },
     "P": {
       "tag": "minecraft:planks"
     },
     "s": {
       "tag": "forge:rods/wooden"
-    },
-    "O": {
-      "item": "minecraft:obsidian"
     }
   },
+  "pattern": [
+    "OPO",
+    "OPO",
+    " s "
+  ],
   "result": {
     "item": "minestuck:macuahuitl"
   }
