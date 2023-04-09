@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "minestuck:item/scetpre_of_teh_bleu_pegeigns"
+    }
+}
