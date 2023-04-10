@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -17,7 +16,6 @@ import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformFloat;
@@ -45,19 +43,18 @@ public class RockLandType extends TerrainLandType
 	public static final String ORE = "minestuck.ore";
 	public static final String PETRIFICATION = "minestuck.petrification";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "rock");
 	private final Variant type;
 	
 	public static TerrainLandType createRock()
 	{
-		return new RockLandType(Variant.ROCK, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(ROCK, STONE, ORE)
+		return new RockLandType(Variant.ROCK, new Builder(MSEntityTypes.NAKAGATOR).names(ROCK, STONE, ORE)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
 				.music(MSSoundEvents.MUSIC_ROCK));
 	}
 	
 	public static TerrainLandType createPetrification()
 	{
-		return new RockLandType(Variant.PETRIFICATION, new Builder(MSEntityTypes.NAKAGATOR).group(GROUP_NAME).names(PETRIFICATION)
+		return new RockLandType(Variant.PETRIFICATION, new Builder(MSEntityTypes.NAKAGATOR).names(PETRIFICATION)
 				.skylight(7/8F).fogColor(0.5, 0.5, 0.55).skyColor(0.6, 0.6, 0.7)
 				.music(MSSoundEvents.MUSIC_PETRIFICATION));
 	}

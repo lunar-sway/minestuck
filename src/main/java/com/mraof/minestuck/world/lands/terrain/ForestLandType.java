@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.terrain;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -12,7 +11,6 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -32,19 +30,18 @@ public class ForestLandType extends TerrainLandType
 	public static final String TAIGAS = "minestuck.taigas";
 	public static final String COLD_FORESTS = "minestuck.cold_forests";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "forest");
 	private final Variant type;
 	
 	public static TerrainLandType createForest()
 	{
-		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(FORESTS, TREES)
+		return new ForestLandType(Variant.FOREST, new Builder(MSEntityTypes.IGUANA).names(FORESTS, TREES)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
 				.music(MSSoundEvents.MUSIC_FOREST));
 	}
 	
 	public static TerrainLandType createTaiga()
 	{
-		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).group(GROUP_NAME).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
+		return new ForestLandType(Variant.TAIGA, new Builder(MSEntityTypes.IGUANA).names(TAIGAS, BOREAL_FORESTS, COLD_FORESTS)
 				.fogColor(0.0, 1.0, 0.6).skyColor(0.4, 0.7, 1.0)
 				.music(MSSoundEvents.MUSIC_TAIGA));
 	}

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -19,8 +18,6 @@ import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
-
 public class PulseLandType extends TitleLandType
 {
 	public static final String PULSE = "minestuck.pulse";
@@ -28,7 +25,6 @@ public class PulseLandType extends TitleLandType
 	
 	public PulseLandType()
 	{
-		super(EnumAspect.BLOOD);
 	}
 	
 	@Override

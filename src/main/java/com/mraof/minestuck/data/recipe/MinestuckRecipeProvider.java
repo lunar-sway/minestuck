@@ -145,6 +145,13 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapedRecipeBuilder.shaped(MSBlocks.GLOWING_WOOD.get(), 3).define('#', MSBlocks.GLOWING_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.GLOWING_PLANKS.get(), 4).requires(MSTags.Items.GLOWING_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.SHADEWOOD.get(), 3).define('#', MSBlocks.SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.SCARRED_SHADEWOOD.get(), 3).define('#', MSBlocks.SCARRED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.ROTTED_SHADEWOOD.get(), 3).define('#', MSBlocks.ROTTED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_SCARRED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.STRIPPED_ROTTED_SHADEWOOD.get(), 3).define('#', MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
+		ShapelessRecipeBuilder.shapeless(MSBlocks.SHADEWOOD_PLANKS.get(), 4).requires(MSTags.Items.SHADEWOOD_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.FROST_WOOD.get(), 3).define('#', MSBlocks.FROST_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.FROST_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.FROST_PLANKS.get(), 4).requires(MSTags.Items.FROST_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.FROST_LOGS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.RAINBOW_WOOD.get(), 3).define('#', MSBlocks.RAINBOW_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.RAINBOW_LOGS)).save(recipeBuilder);
@@ -180,6 +187,7 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		
 		ShapelessRecipeBuilder.shapeless(MSBlocks.COMPUTER.get()).requires(MSItems.ENERGY_CORE.get()).requires(MSItems.COMPUTER_PARTS.get()).unlockedBy("has_computer_parts", has(MSItems.COMPUTER_PARTS.get())).requires(Items.QUARTZ).requires(Items.REDSTONE).requires(MSItems.RAW_CRUXITE.get()).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.URANIUM_COOKER.get()).define('e', MSItems.ENERGY_CORE.get()).define('i', Tags.Items.INGOTS_IRON).define('F', Items.FURNACE).pattern("iii").pattern("iFi").pattern("iei").unlockedBy("has_energy_core", has(MSItems.ENERGY_CORE.get())).save(recipeBuilder);
+		ShapedRecipeBuilder.shaped(MSBlocks.SKAIANET_DENIER.get()).define('e', MSItems.ENERGY_CORE.get()).define('i', Tags.Items.INGOTS_IRON).define('p', MSItems.COMPUTER_PARTS.get()).define('r', Items.LIGHTNING_ROD).pattern("iri").pattern("ipi").pattern("iei").unlockedBy("has_energy_core", has(MSItems.ENERGY_CORE.get())).save(recipeBuilder);
 		
 		ShapelessRecipeBuilder.shapeless(Items.SPRUCE_PLANKS).requires(MSBlocks.WOODEN_CACTUS.get()).group("planks").unlockedBy("has_cactus", has(MSBlocks.WOODEN_CACTUS.get())).save(recipeBuilder, new ResourceLocation(Minestuck.MOD_ID, "spruce_planks_from_wooden_cactus"));
 		ShapedRecipeBuilder.shaped(MSBlocks.APPLE_CAKE.get()).define('m', Items.MILK_BUCKET).define('a', Items.APPLE).define('w', Items.WHEAT).define('e', Items.EGG).pattern("mmm").pattern("aea").pattern("www").unlockedBy("has_egg", has(Items.EGG)).save(recipeBuilder);

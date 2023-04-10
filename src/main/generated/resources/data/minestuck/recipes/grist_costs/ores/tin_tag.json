@@ -7,6 +7,6 @@
     "tag": "forge:ores/tin"
   },
   "sources": [
-    "#forge:ingots/tin"
+    "#forge:raw_materials/tin"
   ]
 }

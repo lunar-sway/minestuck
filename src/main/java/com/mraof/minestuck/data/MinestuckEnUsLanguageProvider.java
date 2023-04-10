@@ -63,6 +63,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	@Override
 	protected void addTranslations()
 	{
+		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
+		
 		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
 		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
 		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
@@ -264,6 +266,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, "Shroomy Shadewood Leaves");
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
+		addBlock(MSBlocks.SHADEWOOD_SAPLING, "Shadewood Sapling");
 		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
 		addBlock(MSBlocks.BREATH_ASPECT_LOG, "Breath Log");
 		addBlock(MSBlocks.DOOM_ASPECT_LOG, "Doom Log");
@@ -366,6 +369,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		addBlock(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");
@@ -442,7 +446,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STAT_STORER, "Stat Storer");
 		addBlockTooltip(MSBlocks.STAT_STORER, "Lets off a redstone signal with the strength of the signal based on the active value type stored.");
 		addBlock(MSBlocks.REMOTE_OBSERVER, "Remote Observer");
-		addBlockTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a full strength redstone signal if the active condition is met.");
+		addBlockTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a redstone signal if the active condition is met.");
 		addBlock(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
 		addBlockTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Receiver at the input coordinates if the coordinates are loaded.");
 		addBlock(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Wireless Redstone Receiver");
@@ -456,22 +460,42 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
 		addBlockTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		addBlock(MSBlocks.SUMMONER, "Summoner");
+		addBlockTooltip(MSBlocks.SUMMONER, "Summons an entity nearby when powered by redstone and then is disabled.");
+		addBlockExtra(MSBlocks.SUMMONER, "additional_info", "- Can be permanently disabled\n- Spawn region/entity type/disabled status can be changed in UI\n- UI only accessible in creative mode\n- Right clicking with a mob egg in creative mode sets it to that mob\n- Has a cooldown");
 		addBlock(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
+		addBlockTooltip(MSBlocks.AREA_EFFECT_BLOCK, "Applies a potion effect to entities within a specified area when powered.");
+		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, "additional_info", "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect");
 		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		addBlock(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
+		addBlockTooltip(MSBlocks.PLATFORM_GENERATOR, "Creates a temporary platform when powered.");
+		addBlockExtra(MSBlocks.PLATFORM_GENERATOR, "additional_info", "- Length of area where platforms generate is proportional to power\n- Can be toggled to alternate visibility\n- Platform can be blocked by platform receptacles as well as hard or impossible to break blocks");
 		addBlock(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		addBlock(MSBlocks.PLATFORM_RECEPTACLE, "Platform Receptacle");
+		addBlockTooltip(MSBlocks.PLATFORM_RECEPTACLE, "Lets off a redstone signal when a platform block is next to it. Can be toggled to prevent the platform from passing through it.");
 		addBlock(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		addBlockTooltip(MSBlocks.ITEM_MAGNET, "Moves entities when powered.");
+		addBlockExtra(MSBlocks.ITEM_MAGNET, "additional_info", "- Length of area impacted by magnetism is proportional to power\n- Can be toggled to alternate pushing and pulling\n- Moves items/xp/grist entities by default\n- Can also lift and then move pushable blocks");
 		addBlock(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
+		addBlockTooltip(MSBlocks.REDSTONE_CLOCK, "Lets off a redstone pulse at increments controlled through right click and shift right click.");
 		addBlock(MSBlocks.ROTATOR, "Rotator");
+		addBlockTooltip(MSBlocks.ROTATOR, "Rotates the block it is facing when powered.");
+		addBlockExtra(MSBlocks.ROTATOR, "additional_info", "- Can be toggled to change direction of rotation\n- Can be muted by placing sound absorbers behind it");
 		addBlock(MSBlocks.TOGGLER, "Toggler");
+		addBlockTooltip(MSBlocks.TOGGLER, "Flips the Machine Toggle blockstate property in the block it is facing when powered.");
+		addBlockExtra(MSBlocks.TOGGLER, "additional_info", "- Can be toggled to instead discharge redstone power producing blocks and stop them from outputting power\n- Can be muted by placing sound absorbers behind it");
 		addBlock(MSBlocks.REMOTE_COMPARATOR, "Remote Comparator");
+		addBlockTooltip(MSBlocks.REMOTE_COMPARATOR, "Lets off a redstone signal if the block behind it is the same as the block it is observing.");
+		addBlockExtra(MSBlocks.REMOTE_COMPARATOR, "additional_info", "- Right click to change the distance at which it is observing\n- Can be toggled to additionally check if the blockstate properties have the same values");
 		addBlock(MSBlocks.STRUCTURE_CORE, "Structure Core");
 		addBlock(MSBlocks.FALL_PAD, "Fall Pad");
 		addBlock(MSBlocks.FRAGILE_STONE, "Fragile Stone");
 		addBlock(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");
+		addBlockTooltip(MSBlocks.RETRACTABLE_SPIKES, "Harmful spikes shoot out when powered.");
+		addBlockExtra(MSBlocks.RETRACTABLE_SPIKES, "additional_info", "- Can be toggled to have the spikes additionally shoot out when a mob is standing on it");
 		addBlock(MSBlocks.BLOCK_PRESSURE_PLATE, "Block Pressure Plate");
+		addBlockTooltip(MSBlocks.BLOCK_PRESSURE_PLATE, "Lets off a redstone signal when a block is above it or if a player is standing on it without crouching.");
 		addBlock(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
+		addBlockTooltip(MSBlocks.PUSHABLE_BLOCK, "Right click to push and shift right click to pull! Affected by gravity.");
 		addBlock(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		addBlock(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		addBlock(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
@@ -504,6 +528,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
+		addBlock(MSBlocks.GRIST_COLLECTOR, "Grist Collector");
+		addBlockTooltip(MSBlocks.GRIST_COLLECTOR, "Collects grist in a one block radius and releases it when right clicked.");
+		addBlock(MSBlocks.SKAIANET_DENIER, "Skaianet Denier");
+		addBlockTooltip(MSBlocks.SKAIANET_DENIER, "Constantly sends out signals preventing Entry from occurring while it is inside the radius.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
@@ -531,6 +559,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addBlockStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		addBlock(MSBlocks.CARROT_CAKE, "Carrot Cake");
+		addBlock(MSBlocks.LARGE_CAKE, "Large Cake");
+		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -1042,11 +1072,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
 		addItemExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
 		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");
-		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
 		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
-		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");

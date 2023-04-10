@@ -6,7 +6,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.Vec3i;
 import net.minecraft.data.worldgen.features.*;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
@@ -56,8 +55,13 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> PARCEL_PYXIS = REGISTER.register("parcel_pyxis", () -> placed(MSCFeatures.PARCEL_PYXIS,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
 	
+	public static final RegistryObject<PlacedFeature> LARGE_CAKE = REGISTER.register("large_cake", () -> placed(MSCFeatures.LARGE_CAKE,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(50))));
+	
 	public static final RegistryObject<PlacedFeature> BLOOD_POOL = REGISTER.register("blood_pool", () -> placed(MSCFeatures.BLOOD_POOL,
 			worldGenModifiers(CountPlacement.of(5), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> OIL_POOL = REGISTER.register("oil_pool", () -> placed(MSCFeatures.OIL_POOL,
+			worldGenModifiers(CountPlacement.of(4), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OASIS = REGISTER.register("oasis", () -> placed(MSCFeatures.OASIS,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> placed(MSCFeatures.OCEAN_RUNDOWN,
@@ -135,13 +139,15 @@ public final class MSPlacedFeatures
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> placed(MSCFeatures.LARGE_RANDOM_ROCK_BLOCK_BLOB,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+	public static final RegistryObject<PlacedFeature> SHADE_STONE_BLOCK_BLOB = REGISTER.register("shade_stone_block_blob", () -> placed(MSCFeatures.SHADE_STONE_BLOCK_BLOB,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(20), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR)));
 	public static final RegistryObject<PlacedFeature> FOREST_ROCK = REGISTER.register("forest_rock", () -> placed(MiscOverworldFeatures.FOREST_ROCK,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> PILLAR = REGISTER.register("pillar", () -> placed(MSCFeatures.PILLAR,
+	public static final RegistryObject<PlacedFeature> SMALL_PILLAR = REGISTER.register("small_pillar", () -> placed(MSCFeatures.SMALL_PILLAR,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> LARGE_PILLAR = REGISTER.register("large_pillar", () -> placed(MSCFeatures.LARGE_PILLAR,
+	public static final RegistryObject<PlacedFeature> MIXED_PILLARS = REGISTER.register("mixed_pillars", () -> placed(MSCFeatures.MIXED_PILLARS,
 			singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-	public static final RegistryObject<PlacedFeature> LARGE_PILLAR_EXTRA = REGISTER.register("large_pillar_extra", () -> placed(MSCFeatures.LARGE_PILLAR,
+	public static final RegistryObject<PlacedFeature> MIXED_PILLARS_EXTRA = REGISTER.register("mixed_pillars_extra", () -> placed(MSCFeatures.MIXED_PILLARS,
 			worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 	public static final RegistryObject<PlacedFeature> ICE_SPIKE = REGISTER.register("ice_spike", () -> placed(MiscOverworldFeatures.ICE_SPIKE,
 			worldGenModifiers(CountPlacement.of(16), PlacementUtils.HEIGHTMAP)));
@@ -156,6 +162,10 @@ public final class MSPlacedFeatures
 			worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.END_SAPLING.get()))));
 	public static final RegistryObject<PlacedFeature> GLOWING_TREE = REGISTER.register("glowing_tree", () -> placed(MSCFeatures.GLOWING_TREE,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
+	public static final RegistryObject<PlacedFeature> SHADEWOOD_TREE = REGISTER.register("shadewood_tree", () -> placed(MSCFeatures.SHADEWOOD_TREE,
+			worldGenModifiers(PlacementUtils.countExtra(3, 0.1F, 2), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
+	public static final RegistryObject<PlacedFeature> SCARRED_SHADEWOOD_TREE = REGISTER.register("scarred_shadewood_tree", () -> placed(MSCFeatures.SCARRED_SHADEWOOD_TREE,
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(15), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR, BlockPredicateFilter.forPredicate(BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), MSBlocks.BLUE_DIRT.get())))));
 	public static final RegistryObject<PlacedFeature> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> placed(MSCFeatures.PETRIFIED_TREE,
 			worldGenModifiers(PlacementUtils.countExtra(2, 0.5F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.PETRIFIED_GRASS.get()))));
 	public static final RegistryObject<PlacedFeature> SPARSE_PETRIFIED_TREE = REGISTER.register("sparse_petrified_tree", () -> placed(MSCFeatures.PETRIFIED_TREE,
@@ -183,7 +193,7 @@ public final class MSPlacedFeatures
 	public static final RegistryObject<PlacedFeature> RARE_STRAWBERRY_PATCH = REGISTER.register("rare_strawberry_patch", () -> placed(MSCFeatures.STRAWBERRY_PATCH,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
 	public static final RegistryObject<PlacedFeature> GLOWING_MUSHROOM_PATCH = REGISTER.register("glowing_mushroom_patch", () -> placed(MSCFeatures.GLOWING_MUSHROOM_PATCH,
-			worldGenModifiers(RarityFilter.onAverageOnceEvery(2), PlacementUtils.HEIGHTMAP)));
+			worldGenModifiers(RarityFilter.onAverageOnceEvery(1), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> SPARSE_GLOWING_MUSHROOM_PATCH = REGISTER.register("sparse_glowing_mushroom_patch", () -> placed(MSCFeatures.GLOWING_MUSHROOM_PATCH,
 			worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP)));
 	public static final RegistryObject<PlacedFeature> BROWN_MUSHROOM_PATCH = REGISTER.register("brown_mushroom_patch", () -> placed(VegetationFeatures.PATCH_BROWN_MUSHROOM,

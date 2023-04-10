@@ -1,10 +1,10 @@
 {
     "variants": {
         "": [
-            { "model": "minestuck:block/blue_dirt" },
-            { "model": "minestuck:block/blue_dirt", "y": 90 },
-            { "model": "minestuck:block/blue_dirt", "y": 180 },
-            { "model": "minestuck:block/blue_dirt", "y": 270 }
+            { "model": "minestuck:block/blue_dirt0", "weight": 12 },
+            { "model": "minestuck:block/blue_dirt1", "weight": 6 },
+            { "model": "minestuck:block/blue_dirt2", "weight": 1 },
+            { "model": "minestuck:block/blue_dirt3", "weight": 1 }
         ]
     }
 }
