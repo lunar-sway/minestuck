@@ -19,6 +19,6 @@ public class MSLootModifiers extends GlobalLootModifierProvider
 	protected void start()
 	{
 		add("grist_mining", new GristLootModifier(
-				new LootItemCondition[]{new CanToolPerformAction(MSItemTypes.GRIST_HARVEST)}, 1));
+				new LootItemCondition[]{new CanToolPerformAction(MSItemTypes.GRIST_HARVEST)}, 0.5F));
 	}
 }

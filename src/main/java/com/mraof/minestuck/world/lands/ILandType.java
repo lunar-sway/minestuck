@@ -25,17 +25,6 @@ public interface ILandType
 	String[] getNames();
 	
 	/**
-	 * Returns true if the land type should be available when a land type is picked randomly.
-	 */
-	boolean canBePickedAtRandom();
-	
-	/**
-	 * Returns a group id. All land types with the same group are considered equal when picking a random land type.
-	 * Consort dialogue and loot conditions may also match against a group instead of specific land types.
-	 */
-	ResourceLocation getGroup();
-	
-	/**
 	 * Override this function to register blocks to the block palette of a land.
 	 */
 	void registerBlocks(StructureBlockRegistry blocks);
