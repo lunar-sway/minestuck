@@ -441,7 +441,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "jumpAnimation", 1, ConsortEntity::jumpAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
@@ -472,8 +471,12 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		} else if(action != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
-		} else
+		} else if(event.getAnimatable().jumping)
 		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", false));
+			return PlayState.CONTINUE;
+		}
+		else {
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
 			return PlayState.CONTINUE;
 		}
@@ -495,16 +498,6 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(event.getAnimatable().dead)
 		{
 			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
-			return PlayState.CONTINUE;
-		}
-		return PlayState.STOP;
-	}
-	
-	private static PlayState jumpAnimation(AnimationEvent<ConsortEntity> event)
-	{
-		if(event.getAnimatable().jumping)
-		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", false));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
