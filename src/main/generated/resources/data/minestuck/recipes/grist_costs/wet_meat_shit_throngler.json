@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:caulk": 500,
+    "minestuck:iodine": 1,
+    "minestuck:quartz": 266,
+    "minestuck:rust": 200
+  },
+  "ingredient": {
+    "item": "minestuck:wet_meat_shit_throngler"
+  }
+}

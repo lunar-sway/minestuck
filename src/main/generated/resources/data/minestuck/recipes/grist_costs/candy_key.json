@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 7,
+    "minestuck:chalk": 1,
+    "minestuck:iodine": 4,
+    "minestuck:ruby": 1
+  },
+  "ingredient": {
+    "item": "minestuck:candy_key"
+  }
+}
