@@ -9,9 +9,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 
-public class PillarFeature extends Feature<BlockStateConfiguration>
+public class SmallPillarFeature extends Feature<BlockStateConfiguration>
 {
-	public PillarFeature(Codec<BlockStateConfiguration> codec)
+	public SmallPillarFeature(Codec<BlockStateConfiguration> codec)
 	{
 		super(codec);
 	}
@@ -28,13 +28,8 @@ public class PillarFeature extends Feature<BlockStateConfiguration>
 		if(level.getBlockState(pos.above(height - 1)).getMaterial().isLiquid())
 			return false;
 		
-		for(int i = 0; i < height + 3; i++)
-		{
-			setBlock(level, pos.offset(0, i, 0), state);
-			setBlock(level, pos.offset(1, i, 0), state);
-			setBlock(level, pos.offset(1, i, 1), state);
-			setBlock(level, pos.offset(0, i, 1), state);
-		}
+		for(int i = 0; i < height; i++)
+			setBlock(level, pos.above(i), state);
 		return true;
 	}
 }

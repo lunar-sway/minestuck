@@ -38,6 +38,8 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
+- Modified land terrain generation settings to have more variation
+- Grist selector screen now exits to the previous screen when pressing esc
 
 ### Removed
 
@@ -47,6 +49,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 - Restore land sky rendering
 - Removed sunset fog coloration in lands
+- Fixed resizing issue with grist selector screen
 
 ### Contributors for this release
 

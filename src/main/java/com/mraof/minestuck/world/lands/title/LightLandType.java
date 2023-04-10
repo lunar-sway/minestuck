@@ -52,8 +52,8 @@ public class LightLandType extends TitleLandType
 	{
 		BlockState lightBlock = blocks.getBlockState("light_block");
 		
-		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_PILLAR_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
-		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS_EXTRA, FeatureModifier.withState(lightBlock), LandBiomeType.ROUGH);
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.SMALL_PILLAR, FeatureModifier.withState(lightBlock), LandBiomeType.anyExcept(LandBiomeType.ROUGH));
 		
 	}
 	
