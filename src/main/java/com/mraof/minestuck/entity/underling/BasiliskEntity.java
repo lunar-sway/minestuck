@@ -49,6 +49,16 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.4F, 1.3F);
 		parts = new BasiliskPartEntity[]{this.head, this.body, this.tail, this.tailEnd};
 		this.noCulling = true;
+		this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1); // Imitate forges fix to MC-158205
+	}
+	
+	@Override
+	public void setId(int id)
+	{
+		super.setId(id);
+		// Imitate forges fix to MC-158205
+		for(int i = 0; i < this.parts.length; i++)
+			this.parts[i].setId(id + i + 1);
 	}
 	
 	public static AttributeSupplier.Builder basiliskAttributes()
