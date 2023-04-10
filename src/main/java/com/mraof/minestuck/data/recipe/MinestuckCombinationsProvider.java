@@ -540,7 +540,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO.get()).input(MSItems.ZILLYHOO_HAMMER.get()).and().input(MSItems.FROG.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL.get()).input(MSItems.REGI_HAMMER.get()).or().input(MSItems.CUEBALL.get()).build(consumer);
 		
-		CombinationRecipeBuilder.of(MSItems.SCETPRE_OF_TEH_BLEU_PEGEIGNS.get()).input(MSItems.BLACK_KINGS_SCEPTER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.PRIME_STAFF.get()).input(MSItems.BLACK_KINGS_SCEPTER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK.get()).namedInput(MSItems.CANE.get()).and().input(Items.FISHING_ROD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK.get()).namedInput(Items.STICK).or().input(MSItems.WISEGUY.get()).build(consumer);

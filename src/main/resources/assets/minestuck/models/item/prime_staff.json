@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:item/house_key"
+        "layer0": "minestuck:item/prime_staff"
     }
 }

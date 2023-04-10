@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
-- 33 new weapons(8 with alternate form)
+- 64 new weapons(8 with alternate form)
 - Mirror block
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
@@ -23,10 +23,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Changed Cat Claws recipe to Makeshift Claws || Iron Ingot
+- Changed Cat Claws recipe to Makeshift Claws && Iron Ingot
 - Updated Cat Claws texture
+- Changed Jousting Lance recipe to Wooden Lance && Iron Ingot
+- Changed Cigarette Lance recipe to Regilance && Eightball
+- Rebalanced Cigarette Lance Grist Cost and Damage
 - Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
 - Added Grist Cost to Eightball and Dice items
+- Changed Applescab Scalemate's recipe to Red Wool && Dragon Breath
+- Added alchemy recipes for every Scalemate
+- Changed what dyes can be used to change Scalemate color in the offhand to reflect recipe additions
+- Changed Pinesnort Scalemate's registry from Pinesnout to Pinesnort
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups

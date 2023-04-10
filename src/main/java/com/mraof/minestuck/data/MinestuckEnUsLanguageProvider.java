@@ -914,8 +914,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.WHITE_KINGS_SCEPTER, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
 		addItem(MSItems.BLACK_KINGS_SCEPTER, "Kings Scepter");
 		addItemTooltip(MSItems.BLACK_KINGS_SCEPTER, "Super sizes and prototypes a king, but useless to you. Good for whacking however!");
-		addItem(MSItems.SCETPRE_OF_TEH_BLEU_PEGEIGNS, "Scetpre of teh BlEu PEgeigns");
-		addItemTooltip(MSItems.SCETPRE_OF_TEH_BLEU_PEGEIGNS, "The legendary weapon belonging to Carl, the Lord of Jank");
+		addItem(MSItems.PRIME_STAFF, "Prime Staff");
+		addItemTooltip(MSItems.PRIME_STAFF, "An incredibly powerful artifact.");
 		addItem(MSItems.CANE, "Cane");
 		addItemTooltip(MSItems.CANE, "An average walking cane, used by the blind and those with weak knees.");
 		addItem(MSItems.VAUDEVILLE_HOOK, "Vaudeville Hook");

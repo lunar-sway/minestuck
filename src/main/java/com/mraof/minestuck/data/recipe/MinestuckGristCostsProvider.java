@@ -580,7 +580,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CLUB_OF_FELONY.get()).grist(BUILD, 1080).grist(COBALT, 48).grist(URANIUM, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CUESTICK.get()).grist(BUILD, 1080).grist(MERCURY, 48).grist(URANIUM, 3).build(recipeSaver);
 		
-		GristCostRecipeBuilder.of(MSItems.SCETPRE_OF_TEH_BLEU_PEGEIGNS.get()).grist(BUILD, 161973).grist(QUARTZ, 64789).grist(DIAMOND, 32395).grist(ARTIFACT, 311812).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PRIME_STAFF.get()).grist(BUILD, 161973).grist(QUARTZ, 64789).grist(DIAMOND, 32395).grist(ARTIFACT, 311812).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK.get()).grist(IODINE, 6).grist(TAR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BARBERS_BEST_FRIEND.get()).grist(SHALE, 5).grist(MERCURY, 12).build(recipeSaver);

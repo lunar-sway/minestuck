@@ -303,7 +303,7 @@ public class MSItems
 	//Staffs
 	public static final RegistryObject<Item> WHITE_KINGS_SCEPTER = REGISTER.register("white_kings_scepter", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> BLACK_KINGS_SCEPTER = REGISTER.register("black_kings_scepter", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
-	public static final RegistryObject<Item> SCETPRE_OF_TEH_BLEU_PEGEIGNS = REGISTER.register("scetpre_of_teh_bleu_pegeigns", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ZILLY_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> PRIME_STAFF = REGISTER.register("prime_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ZILLY_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.RARE)));
 	
 	
 	//Canes
@@ -593,7 +593,8 @@ public class MSItems
 	public static final RegistryObject<Item> SCALEMATE_CINNAMONWHIFF = REGISTER.register("scalemate_cinnamonwhiff", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_HONEYTONGUE = REGISTER.register("scalemate_honeytongue", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_LEMONSNOUT = REGISTER.register("scalemate_lemonsnout", () -> new ScalemateItem(new Item.Properties()));
-	public static final RegistryObject<Item> SCALEMATE_PINESNORT = REGISTER.register("scalemate_pinesnort", () -> new ScalemateItem(new Item.Properties()));
+	//TODO Map scalemate_pinesnout to scalemate_pinesnort through MissingMappingsEvent
+	public static final RegistryObject<Item> SCALEMATE_PINESNORT = REGISTER.register("scalemate_pinesnout", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_PUCEFOOT = REGISTER.register("scalemate_pucefoot", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_PUMPKINSNUFFLE = REGISTER.register("scalemate_pumpkinsnuffle", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_PYRALSPITE = REGISTER.register("scalemate_pyralspite", () -> new ScalemateItem(new Item.Properties()));
