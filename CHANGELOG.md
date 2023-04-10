@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
+- Added shade stone rock blobs to Shade lands and to the Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
 - 33 new weapons(8 with alternate form)
