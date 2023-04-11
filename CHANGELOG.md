@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 33 new weapons(8 with alternate form)
 - Mirror block
 - Cryptid photo item (alchemy ingredient)
+- Added suspicious chiseled mycelium bricks
 
 ### Changed
 
