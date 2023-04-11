@@ -35,7 +35,10 @@ import net.minecraft.world.phys.AABB;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 public class EntryProcess
 {
@@ -87,29 +90,33 @@ public class EntryProcess
 			ServerLevel oldLevel = (ServerLevel) player.level;
 			ServerLevel newLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
 			if(newLevel == null)
-			{
 				return;
-			}
 			
+			LOGGER.info("Checking entry block conditions");
 			EntryProcess process = new EntryProcess(player);
+			
 			if(!process.canModifyEntryBlocks(player.level, player))
 			{
 				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
 				return;
 			}
 			
-			if(process.prepareDestination(player, oldLevel))
+			if(process.doesBlocksStopEntry(player, oldLevel))
+				return;
+			
+			LOGGER.info("Entry starting");
+			process.copyBlocks(oldLevel, newLevel);
+			
+			if(Teleport.teleportEntity(player, newLevel) == null)
 			{
-				process.moveBlocks(oldLevel, newLevel);
-				if(Teleport.teleportEntity(player, newLevel) != null)
-				{
-					process.finalizeDestination(player, oldLevel, newLevel);
-					SkaianetHandler.get(player.level).onEntry(identifier);
-				} else
-				{
-					player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
-				}
+				player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
+				return;
 			}
+			
+			process.finalizeEntry(player, oldLevel, newLevel);
+			SkaianetHandler.get(player.level).onEntry(identifier);
+			LOGGER.info("Entry finished");
+			
 		} catch(Exception e)
 		{
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
@@ -131,17 +138,10 @@ public class EntryProcess
 		Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
 	}
 	
-	private boolean prepareDestination(ServerPlayer player, ServerLevel level)
+	private boolean doesBlocksStopEntry(ServerPlayer player, ServerLevel level)
 	{
-		
-		LOGGER.info("Starting entry for player {}", player.getName().getString());
-		int x = origin.getX();
-		int y = origin.getY();
-		int z = origin.getZ();
-		
-		LOGGER.debug("Loading block movements...");
 		boolean foundComputer = false;
-		for(BlockPos pos : EntryBlockIterator.get(x, y, z, artifactRange))
+		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
 		{
 			if(!level.isInWorldBounds(pos))
 				continue;
@@ -152,33 +152,33 @@ public class EntryProcess
 			if(!creative && (block.is(Blocks.COMMAND_BLOCK) || block.is(Blocks.CHAIN_COMMAND_BLOCK) || block.is(Blocks.REPEATING_COMMAND_BLOCK)))
 			{
 				player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
-				return false;
+				return true;
 			} else if(block.is(MSBlocks.SKAIANET_DENIER.get()))
 			{
 				player.displayClientMessage(Component.literal("Network error (413): Skaianet - failed to Enter user " + player.getDisplayName().getString() + ". Entry denial device used at global coordinates: " + pos.toShortString()), false);
-				return false;
-			} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
+				return true;
+			} else if(be instanceof ComputerBlockEntity computer)
 			{
-				if(!((ComputerBlockEntity) be).owner.equals(IdentifierHandler.encode(player)))    //You can't Enter with someone else's computer
+				if(!computer.owner.appliesTo(player))
 				{
 					player.displayClientMessage(Component.literal("You are not allowed to move other players' computers."), false);
-					return false;
+					return true;
 				}
 				
-				foundComputer = true;    //You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
+				foundComputer = true;
 			}
 		}
 		
 		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
 		{
 			player.displayClientMessage(Component.literal("There is no computer in range."), false);
-			return false;
+			return true;
 		}
 		
-		return true;
+		return false;
 	}
 	
-	private void moveBlocks(ServerLevel sourceLevel, ServerLevel targetLevel)
+	private void copyBlocks(ServerLevel sourceLevel, ServerLevel targetLevel)
 	{
 		for(BlockPos sourcePos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
 		{
@@ -198,18 +198,77 @@ public class EntryProcess
 		}
 	}
 	
-	private void finalizeDestination(ServerPlayer player, ServerLevel level0, ServerLevel level1)
+	private void finalizeEntry(ServerPlayer player, ServerLevel level0, ServerLevel level1)
 	{
-		int x = origin.getX();
-		int y = origin.getY();
-		int z = origin.getZ();
+		AABB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
+		List<Entity> entities = level0.getEntities(player, entityTeleportBB);
+		moveOrCopyEntities(entities, level1);
 		
-		LOGGER.debug("Teleporting entities...");
+		removeOriginalBlocks(level0);
+		
+		player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
+		
+		//Remove entities that were generated in the process of teleporting entities and removing blocks.
+		// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
+		if(!creative || MinestuckConfig.SERVER.entryCrater.get())
+		{
+			removeDroppedEntities(player, level0, entityTeleportBB, entities);
+		}
+		
+		placeGates(level1);
+		
+		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), origin.getX() + xDiff, origin.getY() + yDiff, origin.getZ() + zDiff, artifactRange, (byte) 0));
+	}
+	
+	private static void removeDroppedEntities(ServerPlayer player, ServerLevel level0, AABB entityTeleportBB, List<Entity> entities)
+	{
+		List<Entity> removalList = level0.getEntities(player, entityTeleportBB);
+		
+		//We check if the old list contains the entity, because that means it was there before the entities were teleported and blocks removed.
+		// This can be caused by them being outside the Entry radius but still within the AABB,
+		// Or by the player being in creative mode, or having entryCrater disabled, etc.
+		// Ultimately, this means that the entity has already been taken care of as much as it needs to be, and it is inappropriate to remove the entity.
+		removalList.removeAll(entities);
+		
+		Iterator<Entity> iterator = removalList.iterator();
+		if(MinestuckConfig.SERVER.entryCrater.get())
+		{
+			while(iterator.hasNext())
+			{
+				iterator.next().remove(Entity.RemovalReason.CHANGED_DIMENSION);
+			}
+		} else
+		{
+			while(iterator.hasNext())
+			{
+				Entity e = iterator.next();
+				if(e instanceof ItemEntity)
+					e.remove(Entity.RemovalReason.CHANGED_DIMENSION);
+			}
+		}
+	}
+	
+	private void removeOriginalBlocks(ServerLevel level0)
+	{
+		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
+		{
+			if(!level0.isInWorldBounds(pos))
+				continue;
+			
+			removeBlockEntity(level0, pos, creative);
+			
+			if(MinestuckConfig.SERVER.entryCrater.get() && !level0.getBlockState(pos).is(Blocks.BEDROCK))
+			{
+				level0.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+			}
+		}
+	}
+	
+	private void moveOrCopyEntities(List<Entity> entities, ServerLevel level1)
+	{
 		//The fudge here is to ensure that the AABB will always contain every entity meant to be moved.
 		// As entities outside the radius will be excluded from transport anyway, this is fine.
-		AABB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
-		List<Entity> list = level0.getEntities(player, entityTeleportBB);
-		Iterator<Entity> iterator = list.iterator();
+		Iterator<Entity> iterator = entities.iterator();
 		while(iterator.hasNext())
 		{
 			Entity e = iterator.next();
@@ -237,59 +296,6 @@ public class EntryProcess
 				}
 			}
 		}
-		
-		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
-		{
-			if(!level0.isInWorldBounds(pos))
-				continue;
-			
-			removeBlockEntity(level0, pos, creative);
-			
-			if(MinestuckConfig.SERVER.entryCrater.get() && !level0.getBlockState(pos).is(Blocks.BEDROCK))
-			{
-				level0.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
-			}
-		}
-		
-		player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
-		
-		//Remove entities that were generated in the process of teleporting entities and removing blocks.
-		// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
-		if(!creative || MinestuckConfig.SERVER.entryCrater.get())
-		{
-			LOGGER.debug("Removing entities left in the crater...");
-			List<Entity> removalList = level0.getEntities(player, entityTeleportBB);
-			
-			//We check if the old list contains the entity, because that means it was there before the entities were teleported and blocks removed.
-			// This can be caused by them being outside the Entry radius but still within the AABB,
-			// Or by the player being in creative mode, or having entryCrater disabled, etc.
-			// Ultimately, this means that the entity has already been taken care of as much as it needs to be, and it is inappropriate to remove the entity.
-			removalList.removeAll(list);
-			
-			iterator = removalList.iterator();
-			if(MinestuckConfig.SERVER.entryCrater.get())
-			{
-				while(iterator.hasNext())
-				{
-					iterator.next().remove(Entity.RemovalReason.CHANGED_DIMENSION);
-				}
-			} else
-			{
-				while(iterator.hasNext())
-				{
-					Entity e = iterator.next();
-					if(e instanceof ItemEntity)
-						e.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-				}
-			}
-		}
-		
-		LOGGER.debug("Placing gates...");
-		placeGates(level1);
-		
-		MSExtraData.get(level1).addPostEntryTask(new PostEntryTask(level1.dimension(), x + xDiff, y + yDiff, z + zDiff, artifactRange, (byte) 0));
-		
-		LOGGER.info("Entry finished");
 	}
 	
 	/**
