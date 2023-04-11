@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -43,6 +44,8 @@ public class ColorSelectorScreen extends Screen
 	private ExtendedButton tabButton;
 	private EditBox hexBox;
 	private Tab tab = Tab.Canon;
+	private int redPrev, greenPrev, bluePrev;
+	private String hexPrev;
 	
 	private @Nullable ComputerBlockEntity be;
 	
@@ -104,6 +107,16 @@ public class ColorSelectorScreen extends Screen
 		setTab(tab);
 	}
 	
+	@Override
+	public void resize(Minecraft mc, int width, int height)
+	{
+		super.resize(mc, width, height);
+		redSlider.setValue(redPrev);
+		greenSlider.setValue(greenPrev);
+		blueSlider.setValue(bluePrev);
+		hexBox.setValue(hexPrev);
+	}
+	
 	private int getPlayerColorComponent(int comp)
 	{
 		return (ClientPlayerData.getPlayerColor() >> (comp*8)) & 0xFF;
@@ -160,14 +173,8 @@ public class ColorSelectorScreen extends Screen
 			{
 				canonColor.draw(poseStack);
 				
-				// SELECTION BOX
 				if(selectedIndex == canonColor.id)
-				{
-					RenderSystem.setShader(GameRenderer::getPositionTexShader);
-					RenderSystem.setShaderColor(1, 1, 1, 1);
-					RenderSystem.setShaderTexture(0, guiBackground);
-					blit(poseStack, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
-				}
+					drawSelectionBox(poseStack, canonColor);
 			}
 		}
 		
@@ -177,6 +184,14 @@ public class ColorSelectorScreen extends Screen
 			for(ColorSelector canonColor : canonColors)
 				if(canonColor.pointWithin(mouseX - xOffset, mouseY - yOffset))
 					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
+	}
+	
+	private void drawSelectionBox(PoseStack poseStack, ColorSelector canonColor)
+	{
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		RenderSystem.setShaderTexture(0, guiBackground);
+		blit(poseStack, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
 	}
 	
 	@Override
@@ -214,7 +229,9 @@ public class ColorSelectorScreen extends Screen
 	
 	private void onBoxUpdate(String hex)
 	{
-		if (hex.length()!=6) return;
+		if(hex == null) return;
+		hexPrev = hex;
+		if(hex.length()!=6) return;
 		redSlider.setValue(Integer.parseInt(hex.substring(0,2),16));
 		greenSlider.setValue(Integer.parseInt(hex.substring(2,4),16));
 		blueSlider.setValue(Integer.parseInt(hex.substring(4,6),16));
@@ -290,6 +307,12 @@ public class ColorSelectorScreen extends Screen
 			String hex = toFormattedHex(getSlidersValue());
 			if(!hexBox.getValue().equalsIgnoreCase(hex))
 				hexBox.setValue(hex);
+			switch(this.color)
+			{
+				case R -> redPrev = this.getValueInt();
+				case G -> greenPrev = this.getValueInt();
+				case B -> bluePrev = this.getValueInt();
+			}
 		}
 	}
 	

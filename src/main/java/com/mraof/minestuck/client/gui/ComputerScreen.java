@@ -132,10 +132,8 @@ public class ComputerScreen extends Screen
 		program = null;
 		be.programSelected = -1;
 		
-		//TODO find way to make this only clear program widgets so we don't regen icons every time
 		clearWidgets();
 		icons.clear();
-		
 		genIcons();
 		addRenderableWidget(powerButton);
 		

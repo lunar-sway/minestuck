@@ -176,10 +176,21 @@ public abstract class ButtonListProgram extends ComputerProgram
 		@Override
 		public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
 		{
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
-			RenderSystem.setShaderColor(1, 1, 1, 1);
-			RenderSystem.setShaderTexture(0, gui.be.getTheme().getTexture());
-			blit(poseStack, x, y, 158+(active?0:20), reverse?0:20, 20, 20);
+			if(active)
+			{
+				RenderSystem.setShader(GameRenderer::getPositionTexShader);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				RenderSystem.setShaderTexture(0, gui.be.getTheme().getTexture());
+				blit(poseStack, x, y, 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
+			} else
+			{
+				// use default minecraft button rendering to draw inactive buttons
+				super.renderButton(poseStack, mouseX, mouseY, partialTick);
+				RenderSystem.setShader(GameRenderer::getPositionTexShader);
+				RenderSystem.setShaderColor(1, 1, 1, 1);
+				RenderSystem.setShaderTexture(0, ComputerScreen.guiBackground);
+				blit(poseStack, x, y, reverse?0:20, ComputerScreen.ySize, 20, 20);
+			}
 		}
 	}
 }
