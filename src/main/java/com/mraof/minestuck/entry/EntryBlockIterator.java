@@ -109,7 +109,7 @@ public final class EntryBlockIterator
 	
 	private static int yReachAtXZ(int range, int xOffset, int zOffset)
 	{
-		return (int) Math.sqrt(range * range - ((xOffset * xOffset + zOffset * zOffset) / 2F));
+		return (int) Math.sqrt((range + 0.5) * (range + 0.5) - ((xOffset * xOffset + zOffset * zOffset) / 2F));
 	}
 	
 	public static int yReach(BlockPos pos, int range, int centerX, int centerZ)
