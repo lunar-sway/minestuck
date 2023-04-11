@@ -178,20 +178,23 @@ public class EntryProcess
 		return true;
 	}
 	
-	private void moveBlocks(ServerLevel level0, ServerLevel level1)
+	private void moveBlocks(ServerLevel sourceLevel, ServerLevel targetLevel)
 	{
-		for(BlockPos pos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
+		for(BlockPos sourcePos : EntryBlockIterator.get(origin.getX(), origin.getY(), origin.getZ(), artifactRange))
 		{
-			if(!level0.isInWorldBounds(pos))
+			if(!sourceLevel.isInWorldBounds(sourcePos))
 				continue;
 			
-			LevelChunk chunk = level0.getChunkAt(pos);
-			BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
-			BlockState block = level0.getBlockState(pos);
+			sourcePos = sourcePos.immutable();
+			BlockPos targetPos = sourcePos.offset(xDiff, yDiff, zDiff);
+			
+			LevelChunk sourceChunk = sourceLevel.getChunkAt(sourcePos);
+			BlockState block = sourceChunk.getBlockState(sourcePos);
 			
 			if(block.is(Blocks.BEDROCK) || block.is(Blocks.NETHER_PORTAL))
 				block = Blocks.AIR.defaultBlockState();
-			BlockCopier.copyBlock(level1, chunk, pos, block, level1.getChunk(pos1), pos1);
+			
+			BlockCopier.copyBlock(sourceChunk, sourcePos, block, targetLevel.getChunkAt(targetPos), targetPos);
 		}
 	}
 	

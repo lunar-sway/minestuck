@@ -8,8 +8,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.levelgen.Heightmap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,7 +89,7 @@ public class PostEntryTask
 				{
 					if(i >= index)
 					{
-						updateBlock(pos, world);
+						updateBlock(pos.immutable(), world);
 						index++;
 						if(time <= System.currentTimeMillis())
 							break main;
@@ -119,16 +117,11 @@ public class PostEntryTask
 		index = -1;
 	}
 	
-	private static void updateBlock(BlockPos pos, ServerLevel world)
+	private static void updateBlock(BlockPos pos, ServerLevel level)
 	{
-		world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
-		world.getChunkSource().getLightEngine().checkBlock(pos);
-		ChunkAccess chunk = world.getChunk(pos);
-		BlockState state = chunk.getBlockState(pos);
-		int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(x, y, z, state);
-		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR).update(x, y, z, state);
-		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE).update(x, y, z, state);
+		BlockState blockState = level.getBlockState(pos);
+		level.getChunkSource().getLightEngine().checkBlock(pos);
+		level.sendBlockUpdated(pos, blockState, blockState, 0);
+		level.updateNeighborsAt(pos, blockState.getBlock());
 	}
 }
