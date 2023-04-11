@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added shade stone rock blobs to Shade lands and to the Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
-- 64 new weapons (8 with alternate form)
+- 66 new weapons (8 with alternate form)
 - Mirror block
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
