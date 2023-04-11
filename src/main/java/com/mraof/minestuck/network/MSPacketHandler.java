@@ -69,7 +69,7 @@ public class MSPacketHandler
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
-		registerMessage(GristEntityPacket.class, GristEntityPacket::decode);
+		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 	}

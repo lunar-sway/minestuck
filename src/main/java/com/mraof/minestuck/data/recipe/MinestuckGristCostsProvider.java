@@ -366,8 +366,8 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.EIGHTBALL.get()).grist(TAR, 888).grist(COBALT, 888).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DICE.get()).grist(BUILD, 26).grist(CHALK, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MIRROR.get()).grist(BUILD, 20).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.GUTTER_BALL.get()).grist(BUILD, 11262014).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.GUTTER_THUMB_DRIVE.get()).grist(BUILD, 2000000).grist(AMETHYST, 2000000).grist(MARBLE, 2000000).grist(RUBY, 2000000).grist(COBALT, 2000000).grist(DIAMOND, 2000000).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.GUTTER_BALL.get()).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.ANCIENT_THUMB_DRIVE.get()).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(MSItems.COMPLETED_SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
@@ -375,7 +375,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_APPLE.get()).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_POTION.get()).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.ANCIENT_THUMB_DRIVE.get()).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.FLUORITE_OCTET.get()).grist(DIAMOND, 5600).grist(COBALT, 8).grist(CHALK, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CAT_CLAWS_DRAWN.get()).grist(BUILD, 105).grist(RUST, 9).build(recipeSaver);

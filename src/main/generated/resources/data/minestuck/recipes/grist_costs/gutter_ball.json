@@ -1,8 +1,6 @@
 {
   "type": "minestuck:grist_cost",
-  "grist_cost": {
-    "minestuck:build": 11262014
-  },
+  "grist_cost": {},
   "ingredient": {
     "item": "minestuck:gutter_ball"
   }
