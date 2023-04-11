@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -88,25 +87,16 @@ public class PostEntryTask
 			{
 				long time = System.currentTimeMillis() + MIN_TIME;
 				int i = 0;
-				for(int blockX = x - entrySize; blockX <= x + entrySize; blockX++)
+				for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
 				{
-					int zWidth = (int) Math.sqrt(entrySize * entrySize - (blockX - x) * (blockX - x));
-					for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+					if(i >= index)
 					{
-						int height = (int) Math.sqrt(MinestuckConfig.SERVER.artifactRange.get() * MinestuckConfig.SERVER.artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
-						if(blockX == x - entrySize || blockX == x + entrySize || blockZ == z - zWidth || blockZ == z + zWidth)
-							for(int blockY = y - height; blockY <= Math.min(128, y + height); blockY++)
-								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, true);
-						else
-						{
-							i = updateBlock(new BlockPos(blockX, y - height, blockZ), world, i, true);
-							for(int blockY = y - height + 1; blockY < Math.min(128, y + height); blockY++)
-								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, false);
-							i = updateBlock(new BlockPos(blockX, Math.min(128, y + height), blockZ), world, i, true);
-						}
+						updateBlock(pos, world);
+						index++;
 						if(time <= System.currentTimeMillis())
 							break main;
 					}
+					i++;
 				}
 			}
 			
@@ -129,22 +119,16 @@ public class PostEntryTask
 		index = -1;
 	}
 	
-	private int updateBlock(BlockPos pos, ServerLevel world, int i, boolean blockUpdate)
+	private static void updateBlock(BlockPos pos, ServerLevel world)
 	{
-		if(i >= index)
-		{
-			if(blockUpdate)
-				world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
-			world.getChunkSource().getLightEngine().checkBlock(pos);
-			ChunkAccess chunk = world.getChunk(pos);
-			BlockState state = chunk.getBlockState(pos);
-			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE).update(x, y, z, state);
-			index++;
-		}
-		return i + 1;
+		world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
+		world.getChunkSource().getLightEngine().checkBlock(pos);
+		ChunkAccess chunk = world.getChunk(pos);
+		BlockState state = chunk.getBlockState(pos);
+		int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
+		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(x, y, z, state);
+		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
+		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR).update(x, y, z, state);
+		chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE).update(x, y, z, state);
 	}
 }

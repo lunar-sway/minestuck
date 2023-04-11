@@ -159,59 +159,43 @@ public class EntryProcess
 		long time = System.currentTimeMillis();
 		int bl = 0;
 		boolean foundComputer = false;
-		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
+		for(BlockPos pos : EntryBlockIterator.get(x, y, z, artifactRange))
 		{
-			int zWidth = (int) Math.sqrt((artifactRange + 0.5) * (artifactRange + 0.5) - (blockX - x) * (blockX - x));
-			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+			if(!level.isInWorldBounds(pos))
+				continue;
+			
+			LevelChunk c = level.getChunkAt(pos);
+			BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
+			BlockState block = level.getBlockState(pos);
+			BlockEntity be = level.getBlockEntity(pos);
+			
+			Block gotBlock = block.getBlock();
+			
+			if(gotBlock == Blocks.BEDROCK || gotBlock == Blocks.NETHER_PORTAL)
 			{
-				LevelChunk c = level.getChunk(blockX >> 4, blockZ >> 4);
-				
-				int height = (int) Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F));
-				
-				int blockY;
-				for(blockY = Math.max(level.getMinBuildHeight(), y - height); blockY <= Math.min(topY, y + height); blockY++)
+				blockMoves.add(new BlockMove(c, pos.immutable(), pos1, Blocks.AIR.defaultBlockState(), true));
+				continue;
+			} else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
+			{
+				player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
+				return false;
+			} else if(gotBlock == MSBlocks.SKAIANET_DENIER.get())
+			{
+				player.displayClientMessage(Component.literal("Network error (413): Skaianet - failed to Enter user " + player.getDisplayName().getString() + ". Entry denial device used at global coordinates: " + pos.toShortString()), false);
+				return false;
+			} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
+			{
+				if(!((ComputerBlockEntity) be).owner.equals(IdentifierHandler.encode(player)))    //You can't Enter with someone else's computer
 				{
-					BlockPos pos = new BlockPos(blockX, blockY, blockZ);
-					BlockPos pos1 = pos.offset(xDiff, yDiff, zDiff);
-					BlockState block = level.getBlockState(pos);
-					BlockEntity be = level.getBlockEntity(pos);
-					
-					Block gotBlock = block.getBlock();
-					
-					if(gotBlock == Blocks.BEDROCK || gotBlock == Blocks.NETHER_PORTAL)
-					{
-						blockMoves.add(new BlockMove(c, pos, pos1, Blocks.AIR.defaultBlockState(), true));
-						continue;
-					} else if(!creative && (gotBlock == Blocks.COMMAND_BLOCK || gotBlock == Blocks.CHAIN_COMMAND_BLOCK || gotBlock == Blocks.REPEATING_COMMAND_BLOCK))
-					{
-						player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
-						return false;
-					} else if(gotBlock == MSBlocks.SKAIANET_DENIER.get())
-					{
-						player.displayClientMessage(Component.literal("Network error (413): Skaianet - failed to Enter user " + player.getDisplayName().getString() + ". Entry denial device used at global coordinates: " + pos.toShortString()), false);
-						return false;
-					} else if(be instanceof ComputerBlockEntity)        //If the block is a computer
-					{
-						if(!((ComputerBlockEntity) be).owner.equals(IdentifierHandler.encode(player)))    //You can't Enter with someone else's computer
-						{
-							player.displayClientMessage(Component.literal("You are not allowed to move other players' computers."), false);
-							return false;
-						}
-						
-						foundComputer = true;    //You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
-					}
-					
-					//Shouldn't this line check if the block is an edge block?
-					blockMoves.add(new BlockMove(c, pos, pos1, block, false));
+					player.displayClientMessage(Component.literal("You are not allowed to move other players' computers."), false);
+					return false;
 				}
 				
-				//What does this code accomplish?
-				for(blockY += yDiff; blockY <= 255; blockY++)
-				{
-					//The first BlockPos isn't used for this operation.
-					blockMoves.add(new BlockMove(c, BlockPos.ZERO, new BlockPos(blockX + xDiff, blockY, blockZ + zDiff), Blocks.AIR.defaultBlockState(), false));
-				}
+				foundComputer = true;    //You have a computer in range. That means you're taking your computer with you when you Enter. Smart move.
 			}
+			
+			//Shouldn't this line check if the block is an edge block?
+			blockMoves.add(new BlockMove(c, pos.immutable(), pos1, block, false));
 		}
 		
 		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
@@ -386,12 +370,10 @@ public class EntryProcess
 		int y = (int) player.getY();
 		int z = (int) player.getZ();
 		if(player.getZ() < 0) z--;
-		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
+		for(BlockPos pos : EntryBlockIterator.getHorizontal(x, y, z, artifactRange))
 		{
-			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
-			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
-				if(!level.mayInteract(player, new BlockPos(blockX, y, blockZ)))
-					return false;
+			if(!level.mayInteract(player, pos))
+				return false;
 		}
 		
 		return true;
@@ -429,19 +411,15 @@ public class EntryProcess
 	{
 		LOGGER.debug("Getting maxY..");
 		int maxY = y;
-		for(int blockX = x - artifactRange; blockX <= x + artifactRange; blockX++)
+		for(BlockPos.MutableBlockPos pos : EntryBlockIterator.getHorizontal(x, y, z, artifactRange))
 		{
-			int zWidth = (int) Math.sqrt(artifactRange * artifactRange - (blockX - x) * (blockX - x));
-			for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
-			{
-				int height = (int) (Math.sqrt(artifactRange * artifactRange - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2F)));
-				for(int blockY = Math.min(255, y + height); blockY > maxY; blockY--)
-					if(!level.isEmptyBlock(new BlockPos(blockX, blockY, blockZ)))
-					{
-						maxY = blockY;
-						break;
-					}
-			}
+			int height = EntryBlockIterator.yReach(pos, artifactRange, x, z);
+			for(int blockY = Math.min(level.getMaxBuildHeight(), y + height); blockY > maxY; blockY--)
+				if(!level.isEmptyBlock(pos.setY(blockY)))
+				{
+					maxY = blockY;
+					break;
+				}
 		}
 		
 		LOGGER.debug("maxY: {}", maxY);
