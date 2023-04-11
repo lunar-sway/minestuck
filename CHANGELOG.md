@@ -60,7 +60,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom
 
 ## [Unreleased]
 
