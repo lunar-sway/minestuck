@@ -16,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
 {
-	static final double SHAKE_INTENSITY = 1.0 / 256.0;
+	static final double SHAKE_INTENSITY = 1.0 / 366.0;
 	public GristRenderer(EntityRendererProvider.Context context)
 	{
 		super(context);

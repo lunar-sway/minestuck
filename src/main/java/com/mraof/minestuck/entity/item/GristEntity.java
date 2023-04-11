@@ -26,6 +26,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import software.bernie.geckolib3.core.builder.Animation;
+
 import javax.annotation.Nullable;
 
 import java.util.function.Predicate;
@@ -47,8 +49,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	private Player closestPlayer;
 	
 	private int targetCycle;
-	
-	private Animation animation = Animation.REJECT;
 	
 	public static GristEntity create(EntityType<? extends GristEntity> type, Level level)
 	{
@@ -118,29 +118,13 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	public void setAnimationFromPacket(Animation animation)
+	public void setAnimationFromPacket()
 	{
-		switch(animation)
-		{
-			case REJECT:
-				shaderAlpha = 255;
-				break;
-		}
-	}
-	
-	public enum Animation
-	{
-		REJECT
+		shaderAlpha = 255;
 	}
 	
 	public class PlayerCanPickUpGristSelector implements Predicate<Entity>
 	{
-		private final GristEntity grist;
-		
-		public PlayerCanPickUpGristSelector(GristEntity gristEntity)
-		{
-			this.grist = gristEntity;
-		}
 		
 		@Override
 		public boolean test(@Nullable Entity player)
@@ -150,7 +134,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				return false;
 			}
 			
-			return grist.getPlayerCacheRoom((Player) player) >= grist.gristValue;
+			return GristEntity.this.getPlayerCacheRoom((Player) player) >= GristEntity.this.gristValue;
 		}
 	}
 	
@@ -207,7 +191,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				this.closestPlayer = this.level.getNearestPlayer(
 						this.getX(), this.getY(), this.getZ(),
 						d0,
-						new PlayerCanPickUpGristSelector(this));
+						new PlayerCanPickUpGristSelector());
 			}
 			
 			this.targetCycle = this.cycle;
@@ -310,8 +294,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				consumeGrist(IdentifierHandler.encode(entityIn), true);
 			} else
 			{
-				this.animation = Animation.REJECT;
-				GristRejectAnimation packet = GristRejectAnimation.createPacket(this, animation);
+				GristRejectAnimation packet = GristRejectAnimation.createPacket(this);
 				MSPacketHandler.sendToTracking(packet, this);
 				shaderAlpha = 255;//used as a timer to tick down how long the animation should play
 			}
