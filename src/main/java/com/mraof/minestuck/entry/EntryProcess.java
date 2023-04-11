@@ -48,8 +48,16 @@ public class EntryProcess
 	
 	private static final Set<EntryBlockProcessing> blockProcessors = new HashSet<>();
 	
-	public EntryProcess()
+	private EntryProcess(ServerPlayer player)
 	{
+		this.origin = player.blockPosition();
+		
+		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.getLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
+		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
+		xDiff = -origin.getX();
+		zDiff = -origin.getZ();
+		
+		creative = player.gameMode.isCreative();
 	}
 	
 	/**
@@ -62,13 +70,11 @@ public class EntryProcess
 	
 	private final int artifactRange = MinestuckConfig.SERVER.artifactRange.get();
 	
-	private int xDiff;
-	private int yDiff;
-	private int zDiff;
-	private BlockPos origin;
-	private boolean creative;
+	private final int xDiff, yDiff, zDiff;
+	private final BlockPos origin;
+	private final boolean creative;
 	
-	public void onArtifactActivated(ServerPlayer player)
+	public static void onArtifactActivated(ServerPlayer player)
 	{
 		try
 		{
@@ -86,12 +92,6 @@ public class EntryProcess
 				return;
 			}
 			
-			if(!canModifyEntryBlocks(player.level, player))
-			{
-				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
-				return;
-			}
-			
 			ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
 			if(landDimension == null)
 			{
@@ -106,12 +106,19 @@ public class EntryProcess
 				return;
 			}
 			
-			if(this.prepareDestination(player.blockPosition(), player, oldLevel))
+			EntryProcess process = new EntryProcess(player);
+			if(!process.canModifyEntryBlocks(player.level, player))
 			{
-				moveBlocks(oldLevel, newLevel);
+				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
+				return;
+			}
+			
+			if(process.prepareDestination(player, oldLevel))
+			{
+				process.moveBlocks(oldLevel, newLevel);
 				if(Teleport.teleportEntity(player, newLevel) != null)
 				{
-					finalizeDestination(player, oldLevel, newLevel);
+					process.finalizeDestination(player, oldLevel, newLevel);
 					SkaianetHandler.get(player.level).onEntry(identifier);
 				} else
 				{
@@ -139,21 +146,13 @@ public class EntryProcess
 		Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
 	}
 	
-	private boolean prepareDestination(BlockPos origin, ServerPlayer player, ServerLevel level)
+	private boolean prepareDestination(ServerPlayer player, ServerLevel level)
 	{
 		
 		LOGGER.info("Starting entry for player {}", player.getName().getString());
 		int x = origin.getX();
 		int y = origin.getY();
 		int z = origin.getZ();
-		this.origin = origin;
-		
-		creative = player.gameMode.isCreative();
-		
-		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(level, x, y, z) : y + artifactRange;
-		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
-		xDiff = 0 - x;
-		zDiff = 0 - z;
 		
 		LOGGER.debug("Loading block movements...");
 		boolean foundComputer = false;
