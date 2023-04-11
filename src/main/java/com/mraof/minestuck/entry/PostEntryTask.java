@@ -23,7 +23,7 @@ public class PostEntryTask
 	 * The maximum amount of time (in milliseconds) to spend updating blocks,
 	 * before leaving the rest for the next game tick.
 	 */
-	private static final long MIN_TIME = 20;
+	private static final long MIN_TIME = 15;
 	
 	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
