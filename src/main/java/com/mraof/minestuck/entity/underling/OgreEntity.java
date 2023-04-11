@@ -124,7 +124,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -134,7 +134,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.walkarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -146,11 +146,11 @@ public class OgreEntity extends UnderlingEntity
 		
 		if(action == MobAnimation.Action.PUNCH)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.punch", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch", false));
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SLAM)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.smash", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("smash", false));
 			return PlayState.CONTINUE;
 		}
 		
@@ -162,7 +162,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.ogre.die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
