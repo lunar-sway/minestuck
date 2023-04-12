@@ -48,6 +48,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Restore land sky rendering
 - Removed sunset fog coloration in lands
 - Fixed resizing issue with grist selector screen
+- Fixed some light problems with entry, possibly fixed other behaviors with entry
 
 ### Contributors for this release
 
