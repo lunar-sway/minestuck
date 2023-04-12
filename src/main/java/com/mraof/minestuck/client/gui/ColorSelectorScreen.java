@@ -53,14 +53,14 @@ public class ColorSelectorScreen extends Screen
 	static
 	{
 		canonColors = new ArrayList<>();
-		int i = -1;
+		int i = 0;
 		int offset = 0;
 		for(int yIndex = 0; yIndex < 5; yIndex++)
 		{
 			if (yIndex == 1 ) { offset+=3; }
 			if (yIndex == 2 ) { offset+=3; }
 			for(int xIndex = 0; xIndex < 4; xIndex++)
-				canonColors.add(new ColorSelector(21 + 34 * xIndex, 32 + 18 * yIndex + offset, ++i));
+				canonColors.add(new ColorSelector(21 + 34 * xIndex, 32 + 18 * yIndex + offset, i++));
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class ColorSelectorScreen extends Screen
 		redSlider.setValue(redPrev);
 		greenSlider.setValue(greenPrev);
 		blueSlider.setValue(bluePrev);
-		hexBox.setValue(hexPrev);
+		if(hexPrev != null) hexBox.setValue(hexPrev);
 	}
 	
 	private int getPlayerColorComponent(int comp)
@@ -140,7 +140,7 @@ public class ColorSelectorScreen extends Screen
 			hexBox.setValue(toFormattedHex(getSlidersValue()));
 		}
 		
-		tabButton.setMessage(tab==Tab.RGB?Component.translatable(BASIC_TAB):Component.translatable(ADVANCED_TAB));
+		tabButton.setMessage( tab==Tab.RGB? Component.translatable(BASIC_TAB) : Component.translatable(ADVANCED_TAB) );
 	}
 	
 	@Override
@@ -158,7 +158,7 @@ public class ColorSelectorScreen extends Screen
 		
 		if(tab==Tab.RGB)
 		{
-			// hide the color boxes by putting this other box on top of them
+			// hide the color box outlines by putting this other box on top
 			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			RenderSystem.setShaderTexture(0, guiBackground);
@@ -182,7 +182,7 @@ public class ColorSelectorScreen extends Screen
 		
 		if(tab==Tab.Canon)
 			for(ColorSelector canonColor : canonColors)
-				if(canonColor.pointWithin(mouseX - xOffset, mouseY - yOffset))
+				if(canonColor.pointWithin(mouseX, mouseY))
 					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
 	}
 	
@@ -198,25 +198,18 @@ public class ColorSelectorScreen extends Screen
 	public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
 	{
 		if(mouseButton == GLFW.GLFW_MOUSE_BUTTON_LEFT && tab==Tab.Canon)
-		{
-			int index = getColorIndexAtMouse(mouseX, mouseY);
-			if(index != -1)
-			{
-				selectedIndex = index != selectedIndex ? index : -1;
-				return true;
-			}
-		}
+			for(ColorSelector canonColor : canonColors)
+				if(canonColor.pointWithin(mouseX, mouseY))
+				{
+					if(selectedIndex != canonColor.id)
+						selectedIndex = canonColor.id;
+					else
+						selectedIndex = -1;
+					return true;
+				}
+		
 		return super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
-	
-	private int getColorIndexAtMouse(double mouseX, double mouseY)
-	{
-		for(ColorSelector canonColor : canonColors)
-			if(canonColor.pointWithin(mouseX-xOffset, mouseY-yOffset))
-				return canonColor.id;
-		return -1;
-	}
-	
 	private int getSlidersValue()
 	{
 		return redSlider.getValueInt() << 16 | greenSlider.getValueInt() << 8 | blueSlider.getValueInt();
@@ -231,6 +224,7 @@ public class ColorSelectorScreen extends Screen
 	{
 		if(hex == null) return;
 		hexPrev = hex;
+		
 		if(hex.length()!=6) return;
 		redSlider.setValue(Integer.parseInt(hex.substring(0,2),16));
 		greenSlider.setValue(Integer.parseInt(hex.substring(2,4),16));
@@ -239,13 +233,12 @@ public class ColorSelectorScreen extends Screen
 	
 	private void selectColor()
 	{
-		if(tab==Tab.RGB)
-			if(hexBox.getValue().length() == 6)
-				ClientPlayerData.selectColorRGB(Integer.parseInt(hexBox.getValue(), 16));
-			else
-				ClientPlayerData.selectColorRGB(getSlidersValue());
-		else
+		if(tab != Tab.RGB)
 			ClientPlayerData.selectColor(selectedIndex);
+		else if(hexBox.getValue().length() != 6)
+			ClientPlayerData.selectColorRGB(getSlidersValue());
+		else
+			ClientPlayerData.selectColorRGB(Integer.parseInt(hexBox.getValue(), 16));
 		
 		if(be != null)
 			minecraft.setScreen(new ComputerScreen(minecraft, be));
@@ -327,7 +320,7 @@ public class ColorSelectorScreen extends Screen
 		}
 		public boolean pointWithin(double mouseX, double mouseY)
 		{
-			return mouseX>=x && mouseX<x+WIDTH && mouseY>=y && mouseY<y+HEIGHT;
+			return mouseX>=x+xOffset && mouseX<x+WIDTH+xOffset && mouseY>=y+yOffset && mouseY<y+HEIGHT+yOffset;
 		}
 	}
 	

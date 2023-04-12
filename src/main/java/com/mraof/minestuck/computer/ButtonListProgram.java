@@ -138,7 +138,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 	/**
 	 * Represents an unlocalized string and the possible format parameters.
 	 * Is used to represent the value on the buttons, but also the message shown above the buttons.
-	 * See getStringList().
+	 * @see ButtonListProgram#getStringList
 	 */
 	protected static class UnlocalizedString
 	{
@@ -188,7 +188,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 				super.renderButton(poseStack, mouseX, mouseY, partialTick);
 				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.setShaderColor(1, 1, 1, 1);
-				RenderSystem.setShaderTexture(0, ComputerScreen.guiBackground);
+				RenderSystem.setShaderTexture(0, ComputerScreen.guiMain);
 				blit(poseStack, x, y, reverse?0:20, ComputerScreen.ySize, 20, 20);
 			}
 		}
