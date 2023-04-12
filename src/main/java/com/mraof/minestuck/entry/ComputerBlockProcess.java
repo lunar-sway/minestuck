@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public class ComputerBlockProcess implements EntryBlockProcessing
+public class ComputerBlockProcess implements BlockCopier.CopyStep
 {
 	@Override
 	public void copyOver(ServerLevel oldWorld, BlockPos oldPos, ServerLevel newWorld, BlockPos newPos, BlockState state, @Nullable BlockEntity oldBE, @Nullable BlockEntity newBE)

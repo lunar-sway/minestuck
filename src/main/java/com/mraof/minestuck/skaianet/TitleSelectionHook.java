@@ -80,8 +80,7 @@ public class TitleSelectionHook
 			
 			player.setPos(pos.x, pos.y, pos.z);
 			
-			EntryProcess process = new EntryProcess();
-			process.onArtifactActivated(player);
+			EntryProcess.onArtifactActivated(player);
 			
 		} else LOGGER.warn("{} tried to select a title without entering.", player.getName().getString());
 	}
