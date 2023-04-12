@@ -29,26 +29,29 @@ import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.function.Consumer;
+
 public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static Tuple<Boolean, GristSet> editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos)
+	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		SburbConnection connection = data.getConnection();
-		ItemStack stack = player.getMainHandItem();
 		
 		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
-			return new Tuple<>(false, new GristSet());
-
+			return false;
 		
 		if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
-			return new Tuple<>(false, cost);
+		{
+			missingGristTracker.accept(cost);
+			return false;
+		}
 		
-		return new Tuple<>(true, new GristSet());
+		return true;
 	}
 	
-	private static Tuple<Boolean, GristSet> editModeDestroyCheck(EditData data, Player player, BlockPos pos)
+	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		SburbConnection connection = data.getConnection();
 		BlockState block = player.level.getBlockState(pos);
@@ -56,14 +59,18 @@ public final class EditmodeDragPacket
 		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level, DeployList.EntryLists.ATHENEUM);
 		
 		if(block.isAir())
-			return new Tuple<>(false, new GristSet());
+			return false;
 		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
 			GristSet cost = new GristSet(GristTypes.BUILD,1);
 			if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
-				return new Tuple<>(false, cost);
+			{
+				missingGristTracker.accept(cost);
+				return false;
+			}
 		}
-		return new Tuple<>(true, new GristSet());
+		
+		return true;
 	}
 	
 	
@@ -118,8 +125,8 @@ public final class EditmodeDragPacket
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
 					int c = stack.getCount();
-					Tuple<Boolean, GristSet> conditionAndCostPair = editModePlaceCheck(data, player, cost, pos);
-					if(conditionAndCostPair.getA() && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
+					Consumer<GristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModePlaceCheck().
+					if(editModePlaceCheck(data, player, cost, pos, missingCostTracker) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
 					{
 						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 						if(player.isCreative())
@@ -131,8 +138,6 @@ public final class EditmodeDragPacket
 						
 						anyBlockPlaced = true;
 					}
-					else if (!conditionAndCostPair.getB().isEmpty())
-						missingCost.addGrist(conditionAndCostPair.getB());
 				}
 				
 				if(anyBlockPlaced)
@@ -193,8 +198,8 @@ public final class EditmodeDragPacket
 				{
 					BlockState block = player.getLevel().getBlockState(pos);
 					
-					Tuple<Boolean, GristSet> conditionAndCostPair = editModeDestroyCheck(data, player, pos);
-					if(conditionAndCostPair.getA())
+					Consumer<GristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
+					if(editModeDestroyCheck(data, player, pos, missingCostTracker))
 					{
 						player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 						
@@ -204,8 +209,6 @@ public final class EditmodeDragPacket
 						
 						anyBlockDestroyed = true;
 					}
-					else if (!conditionAndCostPair.getB().isEmpty())
-						missingCost.addGrist(conditionAndCostPair.getB());
 				}
 				
 				if(anyBlockDestroyed)
