@@ -21,8 +21,8 @@ public final class MSEntityTypes
 {
 	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Minestuck.MOD_ID);
 	
-	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 35, false, false, 128);
-	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 10, true, false, 128);
+	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 28, false, false, 128);
+	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 8, true, false, 128);
 	
 	public static final RegistryObject<EntityType<FrogEntity>> FROG = REGISTER.register("frog", () -> EntityType.Builder.<FrogEntity>of(FrogEntity::new, MobCategory.CREATURE).sized(0.51F, 0.51F).build(new ResourceLocation(Minestuck.MOD_ID, "frog").toString()));
 	public static final RegistryObject<EntityType<ConsortEntity>> SALAMANDER = REGISTER.register("salamander", () -> EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "salamander").toString()));
@@ -30,7 +30,7 @@ public final class MSEntityTypes
 	public static final RegistryObject<EntityType<ConsortEntity>> NAKAGATOR = REGISTER.register("nakagator", () -> EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "nakagator").toString()));
 	public static final RegistryObject<EntityType<ConsortEntity>> IGUANA = REGISTER.register("iguana", () -> EntityType.Builder.of(EnumConsort.IGUANA::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "iguana").toString()));
 	
-	public static final RegistryObject<EntityType<ImpEntity>> IMP = REGISTER.register("imp", () -> EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.5F).build(new ResourceLocation(Minestuck.MOD_ID, "imp").toString())); //TODO adjust hitboxes for all underlings
+	public static final RegistryObject<EntityType<ImpEntity>> IMP = REGISTER.register("imp", () -> EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.5F).build(new ResourceLocation(Minestuck.MOD_ID, "imp").toString()));
 	public static final RegistryObject<EntityType<OgreEntity>> OGRE = REGISTER.register("ogre", () -> EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F).build(new ResourceLocation(Minestuck.MOD_ID, "ogre").toString()));
 	public static final RegistryObject<EntityType<BasiliskEntity>> BASILISK = REGISTER.register("basilisk", () -> EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(1.9F, 1.9F).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "basilisk").toString()));
 	public static final RegistryObject<EntityType<LichEntity>> LICH = REGISTER.register("lich", () -> EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F).build(new ResourceLocation(Minestuck.MOD_ID, "lich").toString()));

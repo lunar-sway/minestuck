@@ -209,7 +209,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 				}
 			}
 			
-			if(this.random.nextInt(4) == 0)
+			if(this.random.nextInt(3) == 0)
 				this.level.addFreshEntity(new VitalityGelEntity(level, randX(), this.getY(), randZ(), this.getVitalityGel()));
 		}
 	}
