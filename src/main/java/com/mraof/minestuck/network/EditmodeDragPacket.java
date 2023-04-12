@@ -103,7 +103,7 @@ public final class EditmodeDragPacket
 				cap.setEditPos2(positionEnd);
 				cap.setEditTrace(hitVector, side);
 				
-				InteractionHand hand = InteractionHand.MAIN_HAND;
+				InteractionHand hand = player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
 				ItemStack stack = player.getItemInHand(hand);
 				
 				if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
