@@ -106,6 +106,13 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.CLAW)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.2F, 1.75F);
+	}
+	
+	@Override
 	public void registerControllers(AnimationData data)
 	{
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));

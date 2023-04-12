@@ -21,7 +21,7 @@ public final class MSEntityTypes
 {
 	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Minestuck.MOD_ID);
 	
-	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 25, false, false, 128);
+	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 28, false, false, 128);
 	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 8, true, false, 128);
 	
 	public static final RegistryObject<EntityType<FrogEntity>> FROG = REGISTER.register("frog", () -> EntityType.Builder.<FrogEntity>of(FrogEntity::new, MobCategory.CREATURE).sized(0.51F, 0.51F).build(new ResourceLocation(Minestuck.MOD_ID, "frog").toString()));
