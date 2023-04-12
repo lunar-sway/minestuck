@@ -32,21 +32,17 @@ public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static Tuple<Boolean, GristSet> editModePlaceCheck(EditData data, Player player, InteractionHand hand, BlockPos pos)
+	private static Tuple<Boolean, GristSet> editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos)
 	{
 		SburbConnection connection = data.getConnection();
 		ItemStack stack = player.getMainHandItem();
 		
-		if(stack.isEmpty() || hand.equals(InteractionHand.OFF_HAND) || !player.level.getBlockState(pos).getMaterial().isReplaceable())
+		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
 			return new Tuple<>(false, new GristSet());
 
-		DeployEntry entry = DeployList.getEntryForItem(stack, connection, player.level);
-		GristSet cost = entry != null ? entry.getCurrentCost(connection) : GristCost.findCostForItem(stack, null, false, player.level);
+		
 		if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
 			return new Tuple<>(false, cost);
-		
-		if(entry == null && !(stack.getItem() instanceof BlockItem))
-			return new Tuple<>(false, new GristSet());
 		
 		return new Tuple<>(true, new GristSet());
 	}
@@ -107,18 +103,21 @@ public final class EditmodeDragPacket
 				cap.setEditPos2(positionEnd);
 				cap.setEditTrace(hitVector, side);
 				
-				InteractionHand hand = player.getMainHandItem().isEmpty() ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+				InteractionHand hand = InteractionHand.MAIN_HAND;
 				ItemStack stack = player.getItemInHand(hand);
 				
 				if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
 					return;
+				
+				DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level);
+				GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
 				
 				GristSet missingCost = new GristSet();
 				boolean anyBlockPlaced = false;
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
 					int c = stack.getCount();
-					Tuple<Boolean, GristSet> conditionAndCostPair = editModePlaceCheck(data, player, hand, pos);
+					Tuple<Boolean, GristSet> conditionAndCostPair = editModePlaceCheck(data, player, cost, pos);
 					if(conditionAndCostPair.getA() && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
 					{
 						//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
