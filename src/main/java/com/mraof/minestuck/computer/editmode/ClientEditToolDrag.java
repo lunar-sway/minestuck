@@ -72,13 +72,11 @@ public class ClientEditToolDrag
 	
 	/**
 	 * Resets the drag tool, and removes the server-cursor if the given edit tool is active.
-	 * @param targetTool The tool you want to check. Must be a drag tool (Revise or Recycle).
 	 * @param cap The current edit-tools capability.
 	 */
-	private static void cancelDrag(IEditTools.ToolMode targetTool, IEditTools cap)
+	private static void cancelDrag(IEditTools cap)
 	{
-		if(cap.getToolMode() == targetTool)
-			MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
+		MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
 		cap.resetDragTools();
 	}
 	
@@ -157,9 +155,9 @@ public class ClientEditToolDrag
 		KeyMapping toolKey = mc.options.keyUse;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
-		if(toolKey.isDown() && !canEditRevise(player))
+		if(toolKey.isDown() && !canEditRevise(player) && (cap.getToolMode() == null || cap.getToolMode() == IEditTools.ToolMode.REVISE))
 		{
-			cancelDrag(IEditTools.ToolMode.REVISE, cap);
+			cancelDrag(cap);
 			return;
 		}
 		
@@ -211,9 +209,9 @@ public class ClientEditToolDrag
 		KeyMapping toolKey = mc.options.keyAttack;
 		
 		//If key is pressed, and not allowed to recycle, cancel the tool.
-		if(toolKey.isDown() && !canEditRecycle(player))
+		if(toolKey.isDown() && !canEditRecycle(player) && (cap.getToolMode() == null || cap.getToolMode() == IEditTools.ToolMode.RECYCLE))
 		{
-			cancelDrag(IEditTools.ToolMode.RECYCLE, cap);
+			cancelDrag(cap);
 			return;
 		}
 		
