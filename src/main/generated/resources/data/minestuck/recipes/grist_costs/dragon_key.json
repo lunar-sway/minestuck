@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 42,
+    "minestuck:ruby": 38
+  },
+  "ingredient": {
+    "item": "minestuck:dragon_key"
+  }
+}

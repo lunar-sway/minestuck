@@ -7,9 +7,11 @@ import net.minecraft.data.worldgen.features.FeatureUtils;
 import net.minecraft.data.worldgen.features.OreFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.data.worldgen.placement.TreePlacements;
+import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -17,9 +19,10 @@ import net.minecraft.world.level.levelgen.feature.LakeFeature;
 import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
 import net.minecraft.world.level.levelgen.feature.featuresize.TwoLayersFeatureSize;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.AcaciaFoliagePlacer;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlacer;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.*;
+import net.minecraft.world.level.levelgen.feature.treedecorators.AttachedToLeavesDecorator;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -54,6 +57,8 @@ public final class MSCFeatures
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> BLOOD_POOL = REGISTER.register("blood_pool", () -> new ConfiguredFeature<>(Feature.LAKE,
 			new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.BLOOD.get()), BlockStateProvider.simple(Blocks.AIR))));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> OIL_POOL = REGISTER.register("oil_pool", () -> new ConfiguredFeature<>(Feature.LAKE,
+			new LakeFeature.Configuration(BlockStateProvider.simple(MSBlocks.OIL.get()), BlockStateProvider.simple(Blocks.AIR))));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> OASIS = REGISTER.register("oasis", () -> new ConfiguredFeature<>(MSFeatures.OASIS.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> OCEAN_RUNDOWN = REGISTER.register("ocean_rundown", () -> new ConfiguredFeature<>(MSFeatures.OCEAN_RUNDOWN.get(), FeatureConfiguration.NONE));
 	
@@ -92,8 +97,13 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RED_SANDSTONE_BLOCK_BLOB = REGISTER.register("red_sandstone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(Blocks.RED_SANDSTONE.defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(3)));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_RANDOM_ROCK_BLOCK_BLOB = REGISTER.register("large_random_rock_block_blob", () -> new ConfiguredFeature<>(MSFeatures.RANDOM_ROCK_BLOCK_BLOB.get(), new RandomRockBlockBlobConfig(5)));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SHADE_STONE_BLOCK_BLOB = REGISTER.register("shade_stone_block_blob", () -> new ConfiguredFeature<>(MSFeatures.BLOCK_BLOB.get(), new BlockStateConfiguration(MSBlocks.SHADE_STONE.get().defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SMALL_PILLAR = REGISTER.register("small_pillar", () -> new ConfiguredFeature<>(MSFeatures.SMALL_PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PILLAR = REGISTER.register("pillar", () -> new ConfiguredFeature<>(MSFeatures.PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
-	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_PILLAR = REGISTER.register("large_pillar", () -> new ConfiguredFeature<>(MSFeatures.LARGE_PILLAR.get(), new BlockStateConfiguration(Blocks.STONE_BRICKS.defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> MIXED_PILLARS = REGISTER.register("pillars", () -> new ConfiguredFeature<>(Feature.RANDOM_SELECTOR,
+			new RandomFeatureConfiguration(List.of(new WeightedPlacedFeature(PlacementUtils.inlinePlaced(PILLAR.getHolder().orElseThrow()), 0.4F)), PlacementUtils.inlinePlaced(SMALL_PILLAR.getHolder().orElseThrow()))));
+	
+	public static final RegistryObject<ConfiguredFeature<?, ?>> LARGE_CAKE = REGISTER.register("large_cake", () -> new ConfiguredFeature<>(MSFeatures.LARGE_CAKE.get(), FeatureConfiguration.NONE));
 	
 	public static final RegistryObject<ConfiguredFeature<?, ?>> RAINBOW_TREE = REGISTER.register("rainbow_tree", () -> new ConfiguredFeature<>(Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
 			BlockStateProvider.simple(MSBlocks.RAINBOW_LOG.get().defaultBlockState()), new StraightTrunkPlacer(4, 2, 0),
@@ -102,6 +112,23 @@ public final class MSCFeatures
 	public static final RegistryObject<ConfiguredFeature<?, ?>> END_TREE = REGISTER.register("end_tree", () -> new ConfiguredFeature<>(MSFeatures.END_TREE.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> GLOWING_TREE = REGISTER.register("glowing_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 			new BlockStateConfiguration(MSBlocks.GLOWING_LOG.get().defaultBlockState())));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SHADEWOOD_TREE = REGISTER.register("shadewood_tree", () -> new ConfiguredFeature<>(Feature.TREE, (new TreeConfiguration.TreeConfigurationBuilder(
+			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LOG.get().defaultBlockState(), 10).add(MSBlocks.ROTTED_SHADEWOOD_LOG.get().defaultBlockState(), 1)),
+			new StraightTrunkPlacer(4, 1, 1),
+			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)),
+			new AcaciaFoliagePlacer(UniformInt.of(2, 3), UniformInt.of(0, 1)),
+			new TwoLayersFeatureSize(1, 0, 2))).ignoreVines()
+			.decorators(List.of(new AttachedToLeavesDecorator(0.20F, 1, 0, new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)), 2, List.of(Direction.DOWN)),
+					new AttachedToLeavesDecorator(0.1F, 1, 0, BlockStateProvider.simple(MSBlocks.GLOWING_MUSHROOM_VINES.get().defaultBlockState()), 1, List.of(Direction.DOWN)))).build()));
+	//scarred variant tends to be a little more scraggly
+	public static final RegistryObject<ConfiguredFeature<?, ?>> SCARRED_SHADEWOOD_TREE = REGISTER.register("scarred_shadewood_tree", () -> new ConfiguredFeature<>(Feature.TREE, (new TreeConfiguration.TreeConfigurationBuilder(
+			BlockStateProvider.simple(MSBlocks.SCARRED_SHADEWOOD_LOG.get().defaultBlockState()), new StraightTrunkPlacer(3, 1, 1),
+			new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)),
+			new AcaciaFoliagePlacer(UniformInt.of(1, 3), UniformInt.of(0, 1)),
+			new TwoLayersFeatureSize(1, 0, 2))).ignoreVines()
+			.decorators(List.of(new AttachedToLeavesDecorator(0.1F, 1, 0, new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(MSBlocks.SHADEWOOD_LEAVES.get().defaultBlockState(), 8).add(MSBlocks.SHROOMY_SHADEWOOD_LEAVES.get().defaultBlockState(), 1)), 2, List.of(Direction.DOWN)),
+					new AttachedToLeavesDecorator(0.4F, 1, 0, BlockStateProvider.simple(MSBlocks.GLOWING_MUSHROOM_VINES.get().defaultBlockState()), 1, List.of(Direction.DOWN)))).build()));
+	public static final RegistryObject<ConfiguredFeature<?, ?>> ORNATE_SHADEWOOD_TREE = REGISTER.register("ornate_shadewood_tree", () -> new ConfiguredFeature<>(MSFeatures.ORNATE_SHADEWOOD_TREE.get(), FeatureConfiguration.NONE));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> PETRIFIED_TREE = REGISTER.register("petrified_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),
 			new BlockStateConfiguration(MSBlocks.PETRIFIED_LOG.get().defaultBlockState())));
 	public static final RegistryObject<ConfiguredFeature<?, ?>> DEAD_TREE = REGISTER.register("dead_tree", () -> new ConfiguredFeature<>(MSFeatures.LEAFLESS_TREE.get(),

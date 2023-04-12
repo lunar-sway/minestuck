@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:artifact": 1,
+    "minestuck:caulk": 423,
+    "minestuck:garnet": 85,
+    "minestuck:quartz": 113
+  },
+  "ingredient": {
+    "item": "minestuck:throngler"
+  }
+}

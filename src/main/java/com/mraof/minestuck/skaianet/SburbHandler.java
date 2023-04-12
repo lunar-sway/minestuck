@@ -8,7 +8,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandTypeGenerator;
+import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;

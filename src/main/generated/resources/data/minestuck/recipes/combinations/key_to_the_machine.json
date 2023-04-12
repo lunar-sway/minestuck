@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:keyblade"
+  },
+  "input2": {
+    "item": "minecraft:repeater"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:key_to_the_machine"
+  }
+}

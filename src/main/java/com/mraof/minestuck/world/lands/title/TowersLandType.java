@@ -1,6 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -18,7 +17,6 @@ public class TowersLandType extends TitleLandType
 	
 	public TowersLandType()
 	{
-		super(EnumAspect.HOPE);
 	}
 	
 	@Override
@@ -39,7 +37,7 @@ public class TowersLandType extends TitleLandType
 	{
 		builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, MSPlacedFeatures.TOWER, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
-		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.LARGE_PILLAR, FeatureModifier.withState(blocks.getBlockState("structure_primary")), LandBiomeType.ROUGH);
+		builder.addModified(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.MIXED_PILLARS, FeatureModifier.withState(blocks.getBlockState("structure_primary")), LandBiomeType.ROUGH);
 		
 	}
 	

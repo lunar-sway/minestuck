@@ -1,7 +1,5 @@
 package com.mraof.minestuck.world.lands.title;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -9,7 +7,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.data.worldgen.placement.CavePlacements;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,12 +19,10 @@ public class MonstersLandType extends TitleLandType
 {
 	public static final String MONSTERS = "minestuck.monsters";
 	
-	public static final ResourceLocation GROUP_NAME = new ResourceLocation(Minestuck.MOD_ID, "monsters");
 	private final Variant type;
 	
 	public MonstersLandType(Variant type)
 	{
-		super(EnumAspect.RAGE, GROUP_NAME);
 		this.type = type;
 	}
 	

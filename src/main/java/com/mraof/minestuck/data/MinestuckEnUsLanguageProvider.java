@@ -63,6 +63,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 	@Override
 	protected void addTranslations()
 	{
+		add("message.shift_for_more_info", "Press §eSHIFT§r for more info");
+		
 		addBlock(MSBlocks.BLACK_CHESS_DIRT, "Black Chess Tile");
 		addBlock(MSBlocks.WHITE_CHESS_DIRT, "White Chess Tile");
 		addBlock(MSBlocks.DARK_GRAY_CHESS_DIRT, "Dark Gray Chess Tile");
@@ -265,6 +267,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHROOMY_SHADEWOOD_LEAVES, "Shroomy Shadewood Leaves");
 		addBlock(MSBlocks.RAINBOW_SAPLING, "Rainbow Sapling");
 		addBlock(MSBlocks.END_SAPLING, "End Sapling");
+		addBlock(MSBlocks.SHADEWOOD_SAPLING, "Shadewood Sapling");
 		addBlock(MSBlocks.BLOOD_ASPECT_LOG, "Blood Log");
 		addBlock(MSBlocks.BREATH_ASPECT_LOG, "Breath Log");
 		addBlock(MSBlocks.DOOM_ASPECT_LOG, "Doom Log");
@@ -367,6 +370,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
 		addBlock(MSBlocks.STRAWBERRY_STEM, "Strawberry Stem");
@@ -443,7 +447,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STAT_STORER, "Stat Storer");
 		addBlockTooltip(MSBlocks.STAT_STORER, "Lets off a redstone signal with the strength of the signal based on the active value type stored.");
 		addBlock(MSBlocks.REMOTE_OBSERVER, "Remote Observer");
-		addBlockTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a full strength redstone signal if the active condition is met.");
+		addBlockTooltip(MSBlocks.REMOTE_OBSERVER, "Lets off a redstone signal if the active condition is met.");
 		addBlock(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Wireless Redstone Transmitter");
 		addBlockTooltip(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER, "Sends a signal to Wireless Redstone Receiver at the input coordinates if the coordinates are loaded.");
 		addBlock(MSBlocks.WIRELESS_REDSTONE_RECEIVER, "Wireless Redstone Receiver");
@@ -457,22 +461,42 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Timed Solid Switch (Two Second)");
 		addBlockTooltip(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, "Loses one value of power every two seconds until it turns off.");
 		addBlock(MSBlocks.SUMMONER, "Summoner");
+		addBlockTooltip(MSBlocks.SUMMONER, "Summons an entity nearby when powered by redstone and then is disabled.");
+		addBlockExtra(MSBlocks.SUMMONER, "additional_info", "- Can be permanently disabled\n- Spawn region/entity type/disabled status can be changed in UI\n- UI only accessible in creative mode\n- Right clicking with a mob egg in creative mode sets it to that mob\n- Has a cooldown");
 		addBlock(MSBlocks.AREA_EFFECT_BLOCK, "Area Effect Block");
+		addBlockTooltip(MSBlocks.AREA_EFFECT_BLOCK, "Applies a potion effect to entities within a specified area when powered.");
+		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, "additional_info", "- Can be toggled to apply the effect only to players\n- Can be permanently disabled\n- Area of effect changes when rotated\n- UI only accessible in creative mode\n- Right clicking with a potion bottle in creative mode sets it to that potion effect");
 		addBlockExtra(MSBlocks.AREA_EFFECT_BLOCK, AreaEffectBlock.EFFECT_CHANGE_MESSAGE, "Effect type changed to %s with the amplification strength %s.");
 		addBlock(MSBlocks.PLATFORM_GENERATOR, "Platform Generator");
+		addBlockTooltip(MSBlocks.PLATFORM_GENERATOR, "Creates a temporary platform when powered.");
+		addBlockExtra(MSBlocks.PLATFORM_GENERATOR, "additional_info", "- Length of area where platforms generate is proportional to power\n- Can be toggled to alternate visibility\n- Platform can be blocked by platform receptacles as well as hard or impossible to break blocks");
 		addBlock(MSBlocks.PLATFORM_BLOCK, "Platform Block");
 		addBlock(MSBlocks.PLATFORM_RECEPTACLE, "Platform Receptacle");
+		addBlockTooltip(MSBlocks.PLATFORM_RECEPTACLE, "Lets off a redstone signal when a platform block is next to it. Can be toggled to prevent the platform from passing through it.");
 		addBlock(MSBlocks.ITEM_MAGNET, "Item Magnet");
+		addBlockTooltip(MSBlocks.ITEM_MAGNET, "Moves entities when powered.");
+		addBlockExtra(MSBlocks.ITEM_MAGNET, "additional_info", "- Length of area impacted by magnetism is proportional to power\n- Can be toggled to alternate pushing and pulling\n- Moves items/xp/grist entities by default\n- Can also lift and then move pushable blocks");
 		addBlock(MSBlocks.REDSTONE_CLOCK, "Redstone Clock");
+		addBlockTooltip(MSBlocks.REDSTONE_CLOCK, "Lets off a redstone pulse at increments controlled through right click and shift right click.");
 		addBlock(MSBlocks.ROTATOR, "Rotator");
+		addBlockTooltip(MSBlocks.ROTATOR, "Rotates the block it is facing when powered.");
+		addBlockExtra(MSBlocks.ROTATOR, "additional_info", "- Can be toggled to change direction of rotation\n- Can be muted by placing sound absorbers behind it");
 		addBlock(MSBlocks.TOGGLER, "Toggler");
+		addBlockTooltip(MSBlocks.TOGGLER, "Flips the Machine Toggle blockstate property in the block it is facing when powered.");
+		addBlockExtra(MSBlocks.TOGGLER, "additional_info", "- Can be toggled to instead discharge redstone power producing blocks and stop them from outputting power\n- Can be muted by placing sound absorbers behind it");
 		addBlock(MSBlocks.REMOTE_COMPARATOR, "Remote Comparator");
+		addBlockTooltip(MSBlocks.REMOTE_COMPARATOR, "Lets off a redstone signal if the block behind it is the same as the block it is observing.");
+		addBlockExtra(MSBlocks.REMOTE_COMPARATOR, "additional_info", "- Right click to change the distance at which it is observing\n- Can be toggled to additionally check if the blockstate properties have the same values");
 		addBlock(MSBlocks.STRUCTURE_CORE, "Structure Core");
 		addBlock(MSBlocks.FALL_PAD, "Fall Pad");
 		addBlock(MSBlocks.FRAGILE_STONE, "Fragile Stone");
 		addBlock(MSBlocks.RETRACTABLE_SPIKES, "Retractable Spikes");
+		addBlockTooltip(MSBlocks.RETRACTABLE_SPIKES, "Harmful spikes shoot out when powered.");
+		addBlockExtra(MSBlocks.RETRACTABLE_SPIKES, "additional_info", "- Can be toggled to have the spikes additionally shoot out when a mob is standing on it");
 		addBlock(MSBlocks.BLOCK_PRESSURE_PLATE, "Block Pressure Plate");
+		addBlockTooltip(MSBlocks.BLOCK_PRESSURE_PLATE, "Lets off a redstone signal when a block is above it or if a player is standing on it without crouching.");
 		addBlock(MSBlocks.PUSHABLE_BLOCK, "Pushable Block");
+		addBlockTooltip(MSBlocks.PUSHABLE_BLOCK, "Right click to push and shift right click to pull! Affected by gravity.");
 		addBlock(MSBlocks.AND_GATE_BLOCK, "AND Gate");
 		addBlock(MSBlocks.OR_GATE_BLOCK, "OR Gate");
 		addBlock(MSBlocks.XOR_GATE_BLOCK, "XOR Gate");
@@ -505,6 +529,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.SENDIFICATOR, "Approximately head sized");
 		addBlock(MSBlocks.GRIST_WIDGET, "GristWidget 12000");
 		addBlock(MSBlocks.URANIUM_COOKER, "Cookalyzer");
+		addBlock(MSBlocks.GRIST_COLLECTOR, "Grist Collector");
+		addBlockTooltip(MSBlocks.GRIST_COLLECTOR, "Collects grist in a one block radius and releases it when right clicked.");
+		addBlock(MSBlocks.SKAIANET_DENIER, "Skaianet Denier");
+		addBlockTooltip(MSBlocks.SKAIANET_DENIER, "Constantly sends out signals preventing Entry from occurring while it is inside the radius.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
@@ -532,6 +560,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.NEGATIVE_CAKE, "Negative Cake");
 		addBlockStore(MSBlocks.FUCHSIA_CAKE, "Fuschia Cake");
 		addBlock(MSBlocks.CARROT_CAKE, "Carrot Cake");
+		addBlock(MSBlocks.LARGE_CAKE, "Large Cake");
+		addBlock(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, "Pink Frosted Top Large Cake");
 		addBlock(MSBlocks.PRIMED_TNT, "Primed TNT");
 		addBlock(MSBlocks.UNSTABLE_TNT, "Unstable TNT");
 		addBlock(MSBlocks.INSTANT_TNT, "Instant TNT");
@@ -646,6 +676,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
+		addItem(MSItems.PIGLINS_PRIDE, "Piglin's Pride");
+		addItemTooltip(MSItems.PIGLINS_PRIDE, "The Piglins' greed was their downfall, and now you can be too!");
+		addItem(MSItems.BASILISK_BREATH_DRAGONSLAYER, "Basilisk Breath Dragonslayer");
+		addItemTooltip(MSItems.BASILISK_BREATH_DRAGONSLAYER, "Those hissing Basilisks will kneel before your power.");
 		addItem(MSItems.HALLOWED_SKEWER, "Hallowed Skewer");
 		addItemTooltip(MSItems.HALLOWED_SKEWER, "This knife is sure to be a lifesaver!");
 		addItem(MSItems.GENESIS_GODSTABBER, "Genesis Godstabber");
@@ -662,11 +696,20 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.HOUSE_KEY, "House Key");
 		addItemTooltip(MSItems.HOUSE_KEY, "This incredible item has the ability to open any wooden door! Wow.");
 		addItem(MSItems.KEYBLADE, "Keyblade");
+		addItem(MSItems.CANDY_KEY, "Candy Key");
 		addItem(MSItems.LOCKSOFTENER, "Locksoftener");
+		addItem(MSItems.BISEKEYAL, "Bisekeyal");
+		addItem(MSItems.KEY_TO_THE_MACHINE, "Key To The Machine");
+		addItem(MSItems.DRAGON_KEY, "Dragon Key");
+		addItem(MSItems.TRUE_BLUE, "True Blue");
+		addItem(MSItems.BLUE_BEAMS, "Blue Beams");
 		addItem(MSItems.INKSPLOCKER_UNLOCKER, "Inksplocker Unlocker");
 		addItem(MSItems.INKSQUIDDER_DEPTHKEY, "Inksquidder Depthkey");
 		addItemTooltip(MSItems.INKSQUIDDER_DEPTHKEY, "Kraken open locks with ease!");
 		addItem(MSItems.REGIKEY, "Regikey");
+		addItem(MSItems.CLOCKKEEPER, "Clockkeeper");
+		addItem(MSItems.HOME_BY_MIDNIGHT, "Home By Midnight");
+		addItemTooltip(MSItems.HOME_BY_MIDNIGHT, "Defy your curfew and sneak back before dawn with this powerful key");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -718,6 +761,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MAKESHIFT_CLAWS_SHEATHED, "Makeshift Claws");
 		addItem(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		addItem(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		addItem(MSItems.POGO_CLAWS, "Pogo Claws");
+		addItemTooltip(MSItems.POGO_CLAWS, "Pounce around and bounce around with these claws!");
 		addItem(MSItems.ATOMIKITTY_KATAR_DRAWN, "Atomikitty Katar");
 		addItem(MSItems.ATOMIKITTY_KATAR_SHEATHED, "Atomikitty Katar");
 		addItem(MSItems.SKELETONIZER_DRAWN, "Skeletonizer");
@@ -740,6 +785,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACTION_CLAWS_SHEATHED, "Action Claws");
 		addItem(MSItems.LIPSTICK_CHAINSAW, "Chainsaw");
 		addItem(MSItems.LIPSTICK, "Jade Lipstick");
+		addItem(MSItems.CAKESAW, "Cakesaw");
+		addItem(MSItems.CAKESAW_LIPSTICK, "Cakepop Lipstick");
 		addItem(MSItems.MAGENTA_MAULER, "Magenta Mauler");
 		addItem(MSItems.MAGENTA_MAULER_LIPSTICK, "Lilac Lipstick");
 		addItem(MSItems.THISTLEBLOWER, "Thistleblower");
@@ -756,16 +803,31 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DEMONBANE_RAGRIPPER, "Demonbane Ragripper");
 		addItemTooltip(MSItems.DEMONBANE_RAGRIPPER, "It's said to be the deadliest chainsaw in the universe.");
 		addItem(MSItems.DEMONBANE_RAGRIPPER_LIPSTICK, "Blood Lipstick");
+		addItem(MSItems.WOODEN_LANCE, "Wooden Lance");
+		addItem(MSItems.LANEC, "lanec");
+		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
 		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
+		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
+		addItem(MSItems.SKY_PIERCER, "Sky Piercer");
+		addItemTooltip(MSItems.SKY_PIERCER, "First the sky, next stop: the heavens!!");
+		addItem(MSItems.FIDUSPAWN_LANCE, "Fiduspawn Lance");
+		addItem(MSItems.REGILANCE, "Regilance");
 		addItem(MSItems.CIGARETTE_LANCE, "Cigarette Holder Lance");
 		addItem(MSItems.LUCERNE_HAMMER, "Lucerne Hammer");
 		addItem(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Lucerne Hammer of Undying");
 		addItemTooltip(MSItems.LUCERNE_HAMMER_OF_UNDYING, "Delays down your imminent doom");
 		addItem(MSItems.OBSIDIAN_AXE_KNIFE, "Obsidian Axe Knife");
 		addItem(MSItems.FAN, "Fan");
+		addItem(MSItems.CANDY_FAN, "Candy Fan");
+		addItem(MSItems.SPINES_OF_FLUTHLU, "Spines of Fluthlu");
+		addItemTooltip(MSItems.SPINES_OF_FLUTHLU, ChatFormatting.OBFUSCATED+"Oooh it's the Spines of FLUTHLU so spooky hehehe");
 		addItem(MSItems.RAZOR_FAN, "Razor Fan");
+		addItem(MSItems.MOTOR_FAN, "Motor Fan");
+		addItemTooltip(MSItems.MOTOR_FAN, "This battery-powered fan has greater knockback, and is great for a hot day.");
+		addItem(MSItems.ATOMIC_VAPORIZER, "Atomic Vaporizer");
+		addItemTooltip(MSItems.ATOMIC_VAPORIZER, "Using this to cool off would be ill-advised.");
 		addItem(MSItems.SHAVING_FAN, "Shaving Fan");
 		addItem(MSItems.FIRESTARTER, "Firestarter");
 		addItem(MSItems.STAR_RAY, "Star Ray");
@@ -792,8 +854,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
 		addItem(MSItems.CANDY_SICKLE, "Candy Sickle");
 		addItem(MSItems.SCYTHE, "Scythe");
+		addItem(MSItems.CANDY_SCYTHE, "Candy Scythe");
+		addItem(MSItems.PROSPECTING_PICKSCYTHE, "Prospecting Pickscythe");
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
+		addItem(MSItems.DESTINY_DECIMATOR, "Destiny Decimator");
 		addItem(MSItems.SUNRAY_HARVESTER,"Sunray Harvester");
 		addItemTooltip(MSItems.SUNRAY_HARVESTER, "Harness the power of the sun with this solar scythe.");
 		addItem(MSItems.GREEN_SUN_RAYREAPER, "Green Sun Rayreaper");
@@ -850,6 +915,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.WHITE_KINGS_SCEPTER, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
 		addItem(MSItems.BLACK_KINGS_SCEPTER, "Kings Scepter");
 		addItemTooltip(MSItems.BLACK_KINGS_SCEPTER, "Super sizes and prototypes a king, but useless to you. Good for whacking however!");
+		addItem(MSItems.PRIME_STAFF, "Prime Staff");
+		addItemTooltip(MSItems.PRIME_STAFF, "An incredibly powerful artifact.");
 		addItem(MSItems.CANE, "Cane");
 		addItemTooltip(MSItems.CANE, "An average walking cane, used by the blind and those with weak knees.");
 		addItem(MSItems.VAUDEVILLE_HOOK, "Vaudeville Hook");
@@ -859,6 +926,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CROWBAR, "Crowbar");
 		addItem(MSItems.UMBRELLA, "Umbrella");
 		addItemTooltip(MSItems.UMBRELLA, "Shit, let's be Mary Poppins.");
+		addItem(MSItems.BARBERS_BEST_FRIEND, "Barber's Best Friend");
 		addItem(MSItems.UPPER_CRUST_CRUST_CANE, "Upper Crust Crust Cane");
 		addItemTooltip(MSItems.UPPER_CRUST_CRUST_CANE, "*Now* you're walking like an upper crust!");
 		addItem(MSItems.IRON_CANE, "Iron-Tipped Cane");
@@ -909,6 +977,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.TERRAIN_FLATENATOR, "Construction worker's pride and joy!");
 		addItem(MSItems.NOSFERATU_SPOON, "Nosferatu Spoon");
 		addItemTooltip(MSItems.NOSFERATU_SPOON, "The life-draining bloodlust of evil, in spoon form");
+		addItem(MSItems.THRONGLER, "The Throngler");
+		addItem(MSItems.WET_MEAT_SHIT_THRONGLER, "Wet Meat Shit-Throngler");
 		addItem(MSItems.CROCKER_SPOON, "Junior Battlemaster's Bowlbuster Stirring Solution 50000");
 		addItemTooltip(MSItems.CROCKER_SPOON, "Whip your foes into shape and bake a cake all at the same time!");
 		addItem(MSItems.CROCKER_FORK, "Junior Battlemaster's Bowlbuster Poking Solution 50000");
@@ -926,6 +996,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SPORK, "Spork");
 		addItem(MSItems.GOLDEN_SPORK, "Golden Spork");
 		addItemTooltip(MSItems.GOLDEN_SPORK, "A spoon and fork with all the awfulness of gold tools? Sign me up!");
+		addItem(MSItems.MEATFORK, "Meatfork");
 		addItem(MSItems.BIDENT, "Bident");
 		addItemTooltip(MSItems.BIDENT, "Double trouble for all your bubble scuffle needs");
 		addItem(MSItems.DOUBLE_ENDED_TRIDENT, "Double-Ended Trident");
@@ -1002,11 +1073,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.SBURB_CODE, "completion", "§dPercent completion: %s%%§r"); //section signs result in the percent number being light purple, double percent symbol required to get it to show up in game
 		addItemExtra(MSItems.SBURB_CODE, "paradox_hint", "All of the hieroglyphs that can be found have been recorded here, what could be missing?");
 		addItemExtra(MSItems.SBURB_CODE, "additional_info", "Right click on different types of hieroglyph blocks to record them, the air to read the code, or a computer to exchange code. Create new code books using a Book and Quill on hieroglyphs.");
-		addItemExtra(MSItems.SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPLETED_SBURB_CODE, "SBURB Code");
 		addItemTooltip(MSItems.COMPLETED_SBURB_CODE, "Everything needed to make... something... is transcribed to this book. If this is for a computer program, it's very big.");
 		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "additional_info", "Right click on an active computer to upload all necessary sburb code.");
-		addItemExtra(MSItems.COMPLETED_SBURB_CODE, "shift_for_more_info", "Press §eSHIFT§r for more info");
 		addItem(MSItems.COMPUTER_PARTS, "Computer Parts");
 		addItemTooltip(MSItems.COMPUTER_PARTS, "Looks like it needs some additional components to get working.");
 		addItem(MSItems.BLANK_DISK, "Blank Disk");
@@ -1197,7 +1266,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SCALEMATE_CINNAMONWHIFF, "Officer Cinnamonwhiff");
 		addItem(MSItems.SCALEMATE_HONEYTONGUE, "Doctor Honeytongue");
 		addItem(MSItems.SCALEMATE_LEMONSNOUT, "Senator Lemonsnout");
-		addItem(MSItems.SCALEMATE_PINESNOUT, "Duke Pinesnout");
+		addItem(MSItems.SCALEMATE_PINESNORT, "Duke Pinesnort");
 		addItem(MSItems.SCALEMATE_PUCEFOOT, "Professor Pucefoot");
 		addItem(MSItems.SCALEMATE_PUMPKINSNUFFLE, "Liason Pumpkinsnuffle");
 		addItem(MSItems.SCALEMATE_PYRALSPITE, "Pyralspite");
