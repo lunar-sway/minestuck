@@ -44,8 +44,6 @@ public class ColorSelectorScreen extends Screen
 	private ExtendedButton tabButton;
 	private EditBox hexBox;
 	private Tab tab = Tab.Canon;
-	private int redPrev, greenPrev, bluePrev;
-	private String hexPrev;
 	
 	private @Nullable ComputerBlockEntity be;
 	
@@ -110,11 +108,17 @@ public class ColorSelectorScreen extends Screen
 	@Override
 	public void resize(Minecraft mc, int width, int height)
 	{
+		String hexPrev = hexBox.getValue();
+		double redPrev = redSlider.getValue();
+		double greenPrev = greenSlider.getValue();
+		double bluePrev = blueSlider.getValue();
+		
 		super.resize(mc, width, height);
+		
 		redSlider.setValue(redPrev);
 		greenSlider.setValue(greenPrev);
 		blueSlider.setValue(bluePrev);
-		if(hexPrev != null) hexBox.setValue(hexPrev);
+		hexBox.setValue(hexPrev);
 	}
 	
 	private int getPlayerColorComponent(int comp)
@@ -222,9 +226,6 @@ public class ColorSelectorScreen extends Screen
 	
 	private void onBoxUpdate(String hex)
 	{
-		if(hex == null) return;
-		hexPrev = hex;
-		
 		if(hex.length()!=6) return;
 		redSlider.setValue(Integer.parseInt(hex.substring(0,2),16));
 		greenSlider.setValue(Integer.parseInt(hex.substring(2,4),16));
@@ -300,12 +301,6 @@ public class ColorSelectorScreen extends Screen
 			String hex = toFormattedHex(getSlidersValue());
 			if(!hexBox.getValue().equalsIgnoreCase(hex))
 				hexBox.setValue(hex);
-			switch(this.color)
-			{
-				case R -> redPrev = this.getValueInt();
-				case G -> greenPrev = this.getValueInt();
-				case B -> bluePrev = this.getValueInt();
-			}
 		}
 	}
 	
