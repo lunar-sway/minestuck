@@ -20,6 +20,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -190,14 +191,16 @@ public final class EditmodeDragPacket
 				boolean anyBlockDestroyed = false;
 				for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 				{
+					BlockState block = player.getLevel().getBlockState(pos);
+					
 					Tuple<Boolean, GristSet> conditionAndCostPair = editModeDestroyCheck(data, player, pos);
 					if(conditionAndCostPair.getA())
 					{
 						player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 						
 						//broadcasts block-break particles and sounds to other players.
-						player.level.levelEvent(2001, pos, Block.getId(player.getLevel().getBlockState(pos)));
-						player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, player.getLevel().getBlockState(pos)));
+						player.level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(block));
+						player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, block));
 						
 						anyBlockDestroyed = true;
 					}
