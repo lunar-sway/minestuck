@@ -505,6 +505,7 @@
   "block.minestuck.summoner.additional_info": "- Can be permanently disabled\n- Spawn region/entity type/disabled status can be changed in UI\n- UI only accessible in creative mode\n- Right clicking with a mob egg in creative mode sets it to that mob\n- Has a cooldown",
   "block.minestuck.summoner.tooltip": "Summons an entity nearby when powered by redstone and then is disabled.",
   "block.minestuck.summoner_block.summon_type_change": "Summoned entity type changed to %s.",
+  "block.minestuck.suspicious_chiseled_mycelium_bricks": "Suspicious Chiseled Mycelium Bricks",
   "block.minestuck.tall_end_grass": "End Grass",
   "block.minestuck.tar_shade_bricks": "Oily Shade Bricks",
   "block.minestuck.thought_dirt": "Thought Dirt",

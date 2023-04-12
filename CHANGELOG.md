@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist costs for additional common Forge metal ingot/ore item tags
 - Grist Collector block
 - New expandable tooltips for puzzle related blocks
+- Added suspicious chiseled mycelium bricks
 
 ### Changed
 

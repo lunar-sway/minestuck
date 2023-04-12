@@ -762,6 +762,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> MYCELIUM_BRICKS = registerBlockItem(MSBlocks.MYCELIUM_BRICKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MYCELIUM_COLUMN = registerBlockItem(MSBlocks.MYCELIUM_COLUMN, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> CHISELED_MYCELIUM_BRICKS = registerBlockItem(MSBlocks.CHISELED_MYCELIUM_BRICKS, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SUSPICIOUS_CHISELED_MYCELIUM_BRICKS = registerBlockItem(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> CRACKED_MYCELIUM_BRICKS = registerBlockItem(MSBlocks.CRACKED_MYCELIUM_BRICKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> MOSSY_MYCELIUM_BRICKS = registerBlockItem(MSBlocks.MOSSY_MYCELIUM_BRICKS, MSItemGroup.LANDS);
 	public static final RegistryObject<BlockItem> FLOWERY_MYCELIUM_BRICKS = registerBlockItem(MSBlocks.FLOWERY_MYCELIUM_BRICKS, MSItemGroup.LANDS);

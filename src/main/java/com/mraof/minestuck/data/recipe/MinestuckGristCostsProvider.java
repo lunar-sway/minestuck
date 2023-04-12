@@ -845,6 +845,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSBlocks.CRUXTRUDER_LID.get()).grist(BUILD, 8).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.BLENDER.get()).grist(BUILD, 16).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get()).grist(BUILD, 2).build(recipeSaver);
 		
 		ContainerGristCostBuilder.of(MSItems.OIL_BUCKET.get()).grist(TAR, 8).grist(SHALE, 8).build(recipeSaver);
 		ContainerGristCostBuilder.of(MSItems.BLOOD_BUCKET.get()).grist(GARNET, 8).grist(IODINE, 8).build(recipeSaver);
