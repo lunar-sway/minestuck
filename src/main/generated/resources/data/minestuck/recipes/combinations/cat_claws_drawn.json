@@ -6,7 +6,7 @@
   "input2": {
     "tag": "forge:ingots/iron"
   },
-  "mode": "or",
+  "mode": "and",
   "output": {
     "item": "minestuck:cat_claws_drawn"
   }

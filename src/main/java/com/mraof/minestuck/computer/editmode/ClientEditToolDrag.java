@@ -57,7 +57,7 @@ public class ClientEditToolDrag
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.side == LogicalSide.CLIENT)
+		if(event.phase == TickEvent.Phase.END)
 		{
 			ClientEditToolDrag.doRecycleCode(event);
 			ClientEditToolDrag.doReviseCode(event);

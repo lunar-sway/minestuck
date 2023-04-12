@@ -1,10 +1,10 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minecraft:iron_sword"
+    "item": "minestuck:wooden_lance"
   },
   "input2": {
-    "tag": "forge:rods/wooden"
+    "tag": "forge:ingots/iron"
   },
   "mode": "and",
   "output": {
