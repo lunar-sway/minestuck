@@ -33,19 +33,19 @@ public class ScalemateItem extends Item
         } else if(offhandItem.is(Tags.Items.DYES_BROWN))
         {
             newItem = MSItems.SCALEMATE_CINNAMONWHIFF.get();
-        } else if(offhandItem.is(Tags.Items.DYES_ORANGE))
+        } else if(offhandItem.is(Tags.Items.DYES_YELLOW))
         {
             newItem = MSItems.SCALEMATE_HONEYTONGUE.get();
-        } else if(offhandItem.is(Tags.Items.DYES_YELLOW))
+        } else if(offhandItem.is(Tags.Items.DYES_LIME))
         {
             newItem = MSItems.SCALEMATE_LEMONSNOUT.get();
         } else if(offhandItem.is(Tags.Items.DYES_LIGHT_BLUE))
         {
-            newItem = MSItems.SCALEMATE_PINESNOUT.get();
+            newItem = MSItems.SCALEMATE_PINESNORT.get();
         } else if(offhandItem.is(Tags.Items.DYES_PINK))
         {
             newItem = MSItems.SCALEMATE_PUCEFOOT.get();
-        } else if(offhandItem.is(Items.PUMPKIN))
+        } else if(offhandItem.is(Tags.Items.DYES_ORANGE))
         {
             newItem = MSItems.SCALEMATE_PUMPKINSNUFFLE.get();
         } else if(offhandItem.is(Tags.Items.DYES_WHITE))

@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 596,
+    "minestuck:caulk": 596,
+    "minestuck:diamond": 239,
+    "minestuck:gold": 239
+  },
+  "ingredient": {
+    "item": "minestuck:sky_piercer"
+  }
+}

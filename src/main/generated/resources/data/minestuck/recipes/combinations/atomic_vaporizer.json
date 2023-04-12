@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:motor_fan"
+  },
+  "input2": {
+    "item": "minestuck:quantum_sabre"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:atomic_vaporizer"
+  }
+}

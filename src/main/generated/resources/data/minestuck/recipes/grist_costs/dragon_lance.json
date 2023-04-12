@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 7,
+    "minestuck:garnet": 62
+  },
+  "ingredient": {
+    "item": "minestuck:dragon_lance"
+  }
+}

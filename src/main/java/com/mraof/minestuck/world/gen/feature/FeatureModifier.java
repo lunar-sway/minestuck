@@ -5,69 +5,82 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.WeightedPlacedFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.stateproviders.RuleBasedBlockStateProvider;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.Optional;
-import java.util.function.Function;
 
-public final class FeatureModifier
+public interface FeatureModifier
 {
-	public static Function<PlacedFeature, PlacedFeature> withTargets(BlockPredicate targets)
+	Holder<PlacedFeature> map(Holder<PlacedFeature> placedFeature);
+	
+	static FeatureModifier withTargets(BlockPredicate targets)
 	{
-		return configMap(new ConfigMapper()
+		return new ConfigMapper()
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public <T extends FeatureConfiguration> T map(T config)
+			public <T extends FeatureConfiguration> Optional<T> maybeMap(T config)
 			{
 				if(config instanceof DiskConfiguration diskConfig)
-					return (T) new DiskConfiguration(diskConfig.stateProvider(), targets, diskConfig.radius(), diskConfig.halfHeight());
-				return config;
+					return Optional.of((T) new DiskConfiguration(diskConfig.stateProvider(), targets, diskConfig.radius(), diskConfig.halfHeight()));
+				return maybeMapBase(config);
 			}
-		});
+		};
 	}
 	
-	public static Function<PlacedFeature, PlacedFeature> withState(BlockState state)
+	static FeatureModifier withState(BlockState state)
 	{
-		return configMap(new ConfigMapper()
+		return new ConfigMapper()
 		{
 			@SuppressWarnings("unchecked")
 			@Override
-			public <T extends FeatureConfiguration> T map(T config)
+			public <T extends FeatureConfiguration> Optional<T> maybeMap(T config)
 			{
 				if(config.getClass() == BlockStateConfiguration.class)
-					return (T) new BlockStateConfiguration(state);
+					return Optional.of((T) new BlockStateConfiguration(state));
 				if(config instanceof DiskConfiguration diskConfig)
-					return (T) new DiskConfiguration(RuleBasedBlockStateProvider.simple(BlockStateProvider.simple(state)), diskConfig.target(), diskConfig.radius(), diskConfig.halfHeight());
-				return config;
+					return Optional.of((T) new DiskConfiguration(RuleBasedBlockStateProvider.simple(BlockStateProvider.simple(state)),
+							diskConfig.target(), diskConfig.radius(), diskConfig.halfHeight()));
+				return maybeMapBase(config);
 			}
-		});
+		};
 	}
 	
-	private static Function<PlacedFeature, PlacedFeature> configMap(ConfigMapper mapper)
+	interface ConfigMapper extends FeatureModifier
 	{
-		return placed -> mapConfigured(placed.feature().value(), mapper)
-				.map(newConfigured -> new PlacedFeature(Holder.direct(newConfigured), placed.placement()))
-				.orElse(placed);
-	}
-	
-	private static <FC extends FeatureConfiguration, F extends Feature<FC>> Optional<ConfiguredFeature<FC, F>> mapConfigured(ConfiguredFeature<FC, F> configured, ConfigMapper mapper)
-	{
-		FC oldConfig = configured.config();
-		FC newConfig = mapper.map(oldConfig);
-		if(oldConfig == newConfig)
+		<T extends FeatureConfiguration> Optional<T> maybeMap(T config);
+		
+		@SuppressWarnings("unchecked")
+		default <T extends FeatureConfiguration> Optional<T> maybeMapBase(T config)
+		{
+			if(config instanceof RandomFeatureConfiguration featureConfig)
+				return Optional.of((T) new RandomFeatureConfiguration(
+						featureConfig.features.stream().map(weighted -> new WeightedPlacedFeature(map(weighted.feature), weighted.chance)).toList(),
+						map(featureConfig.defaultFeature)));
 			return Optional.empty();
-		else
-			return Optional.of(new ConfiguredFeature<>(configured.feature(), newConfig));
-	}
-	
-	private interface ConfigMapper
-	{
-		<T extends FeatureConfiguration> T map(T config);
+		}
+		
+		default Optional<PlacedFeature> maybeMap(PlacedFeature placed)
+		{
+			return maybeMap(placed.feature().value()).map(newConfigured -> new PlacedFeature(Holder.direct(newConfigured), placed.placement()));
+		}
+		
+		default <FC extends FeatureConfiguration, F extends Feature<FC>> Optional<ConfiguredFeature<FC, F>> maybeMap(ConfiguredFeature<FC, F> configured)
+		{
+			return maybeMap(configured.config()).map(newConfig -> new ConfiguredFeature<>(configured.feature(), newConfig));
+		}
+		
+		@Override
+		default Holder<PlacedFeature> map(Holder<PlacedFeature> placedFeature)
+		{
+			return maybeMap(placedFeature.value()).map(Holder::direct).orElse(placedFeature);
+		}
 	}
 }
