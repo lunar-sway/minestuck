@@ -118,8 +118,8 @@ public class ComputerScreen extends Screen
 		be.programSelected = -1;
 		
 		clearWidgets();
-		icons.clear();
-		genIcons();
+		icons.forEach(this::addRenderableWidget);
+		icons.forEach(icon -> icon.visible = true);
 		addRenderableWidget(powerButton);
 		
 		updateGui();
@@ -129,6 +129,8 @@ public class ComputerScreen extends Screen
 	{
 		var xOffset = (width-xSize)/2;
 		var yOffset = (height-ySize)/2;
+		
+		icons.clear();
 		
 		int programCount = be.installedPrograms.size();
 		for(int id : be.installedPrograms.stream().sorted().toList())
