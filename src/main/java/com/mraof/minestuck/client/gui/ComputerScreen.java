@@ -118,8 +118,8 @@ public class ComputerScreen extends Screen
 		be.programSelected = -1;
 		
 		clearWidgets();
-		icons.forEach(this::addRenderableWidget);
-		icons.forEach(icon -> icon.visible = true);
+		icons.clear();
+		genIcons();
 		addRenderableWidget(powerButton);
 		
 		updateGui();
