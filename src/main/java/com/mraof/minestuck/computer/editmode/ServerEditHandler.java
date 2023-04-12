@@ -550,12 +550,12 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static void updateEditToolsServer(ServerPlayer player, boolean isDragging, BlockPos pos1, BlockPos pos2)
 	{
 		if (player == null)
-			throw new NullPointerException("Server Player is NULL in updateEditToolsServer()!");
+			throw LOGGER.throwing(new NullPointerException("Server Player is NULL in updateEditToolsServer()!"));
 		else if (player.getLevel().isClientSide())
-			throw new IllegalStateException("Server Level is clientside in updateEditToolsServer()!");
+			throw LOGGER.throwing(new IllegalStateException("Server Level is clientside in updateEditToolsServer()!"));
 		
 		
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in updateEditToolsServer()!"));
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTools Capability is empty in updateEditToolsServer()!")));
 		
 		//Gets whether the end of the selection-box (pos2) is lesser or greater than the origin-point (pos1)
 		boolean signX = pos1.getX() < pos2.getX();
@@ -595,7 +595,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	{
 		ServerCursorEntity cursor = MSEntityTypes.SERVER_CURSOR.get().create(player.getLevel());
 		if(cursor == null)
-			throw new NullPointerException("Server Cursor is null after creation! Something is wrong!");
+			throw LOGGER.throwing(new NullPointerException("Server Cursor is null after creation! Something is wrong!"));
 		cursor.noPhysics = true;
 		cursor.setNoGravity(true);
 		cursor.setInvulnerable(true);
@@ -625,7 +625,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	 */
 	public static void removeCursorEntity(ServerPlayer player, boolean rejected)
 	{
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTools Capability is empty in removeCursorEntity()!"));
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTools Capability is empty in removeCursorEntity()!")));
 		
 		if(cap.getEditCursorID() != null)
 		{
@@ -633,7 +633,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			cursor.queueRemoval(rejected ? ServerCursorEntity.Animation.REJECTED : ServerCursorEntity.Animation.CLICK);
 		}
 		
-		cap.setEditCursorID(null);
+		cap.resetDragTools();
 	}
 	
 	/**

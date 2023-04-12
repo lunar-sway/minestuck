@@ -77,9 +77,6 @@ public class ClientEditToolDrag
 	 */
 	private static void cancelDrag(IEditTools.ToolMode targetTool, IEditTools cap)
 	{
-		if(!isValidDragTool(targetTool))
-			throw new IllegalArgumentException("targetTool in cancelDrag() must be a drag tool (Revise or Recycle)!");
-		
 		if(cap.getToolMode() == targetTool)
 			MSPacketHandler.sendToServer(new EditmodeDragPacket.Reset());
 		cap.resetDragTools();
@@ -95,9 +92,6 @@ public class ClientEditToolDrag
 	 */
 	private static boolean tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
-		if(!isValidDragTool(targetTool))
-			throw new IllegalArgumentException("targetTool in tryBeginDrag() must be a drag tool (Revise or Recycle)!");
-		
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
 		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 		{
@@ -118,9 +112,6 @@ public class ClientEditToolDrag
 	 */
 	private static void updateDragPosition(IEditTools.ToolMode targetTool, IEditTools cap, Player player, KeyMapping toolKey)
 	{
-		if(!isValidDragTool(targetTool))
-			throw new IllegalArgumentException("targetTool in updateDragPosition() must be a drag tool (Revise or Recycle)!");
-		
 		cap.setEditPos2(getSelectionEndPoint(player, cap.getEditReachDistance(), targetTool == IEditTools.ToolMode.REVISE ? true : false));
 		MSPacketHandler.sendToServer(new EditmodeDragPacket.Cursor(toolKey.isDown(), cap.getEditPos1(), cap.getEditPos2()));
 	}
@@ -134,9 +125,6 @@ public class ClientEditToolDrag
 	 */
 	private static void finishDragging(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
-		if(!isValidDragTool(targetTool))
-			throw new IllegalArgumentException("targetTool in finishDragging() must be a drag tool (Revise or Recycle)!");
-		
 		if(targetTool == IEditTools.ToolMode.REVISE)
 			MSPacketHandler.sendToServer(new EditmodeDragPacket.Fill(false, cap.getEditPos1(), cap.getEditPos2(), cap.getEditTraceHit(), cap.getEditTraceDirection()));
 		else
@@ -199,8 +187,9 @@ public class ClientEditToolDrag
 	{
 		return (ClientEditHandler.isActive()
 				&& !Minecraft.getInstance().isPaused()
-				&& !isBlockDeployable(player)
-				&& (player.getMainHandItem().getItem() instanceof BlockItem) || (player.getOffhandItem().getItem() instanceof BlockItem));
+				&& !player.getMainHandItem().isEmpty()
+				&& player.getMainHandItem().getItem() instanceof BlockItem
+				&& !isBlockDeployable(player));
 	}
 	
 	/**
@@ -332,7 +321,7 @@ public class ClientEditToolDrag
 	 */
 	private static boolean isBlockDeployable(Player player)
 	{
-			ItemStack stack	= player.getMainHandItem().isEmpty() ? player.getOffhandItem() : player.getMainHandItem();
+			ItemStack stack	= player.getMainHandItem();
 		
 			return ClientDeployList.getEntry(stack) != null && stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof MachineBlock;
 	}
