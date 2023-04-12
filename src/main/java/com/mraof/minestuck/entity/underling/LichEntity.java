@@ -111,7 +111,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 0.8, LichEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 0.8, LichEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<LichEntity> event)
@@ -145,7 +145,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationEvent<LichEntity> event)
+	private static PlayState attackAnimation(AnimationEvent<LichEntity> event)
 	{
 		if(event.getAnimatable().isActive())
 		{
