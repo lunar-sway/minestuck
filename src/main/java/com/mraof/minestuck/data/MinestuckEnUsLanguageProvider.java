@@ -1476,6 +1476,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addEntityTypeExtra(MSEntityTypes.GRIST, "type", "%s Grist");
 		addEntityType(MSEntityTypes.VITALITY_GEL, "Vitality Gel");
 		addEntityType(MSEntityTypes.PLAYER_DECOY, "Player Decoy");
+		addEntityType(MSEntityTypes.SERVER_CURSOR, "Server Cursor");
 		addEntityType(MSEntityTypes.METAL_BOAT, "Metal Boat");
 		addEntityType(MSEntityTypes.MIDNIGHT_CREW_POSTER, "Midnight Crew Poster");
 		addEntityType(MSEntityTypes.SBAHJ_POSTER, "SBAHJ Poster");
@@ -1714,6 +1715,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
+		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");
 		add(SylladexScreen.EMPTY_SYLLADEX_2, "This will empty your sylladex.");
@@ -2313,6 +2315,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("lotus_flower_restore", "Flower regrows");
 		addSubtitles("projectile_throw", "Projectile is thrown");
 		addSubtitles("projectile_bounce", "Projectile bounces");
+		addSubtitles("tool_revise", "Server uses Revise tool");
+		addSubtitles("tool_recycle", "Server recycles blocks");
 		
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");

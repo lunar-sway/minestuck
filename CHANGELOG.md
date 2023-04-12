@@ -22,6 +22,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist Collector block
 - New expandable tooltips for puzzle related blocks
 - Added suspicious chiseled mycelium bricks
+- 2 Sburb Editmode tools (Revise and Recycle)
+- Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
+- Sburb Cursor entity that appears when using Editmode tools
 
 ### Changed
 
@@ -48,6 +51,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 - Modified land terrain generation settings to have more variation
 - Grist selector screen now exits to the previous screen when pressing esc
+- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
 
 ### Removed
 
@@ -61,7 +65,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll
 
 ## [Unreleased]
 

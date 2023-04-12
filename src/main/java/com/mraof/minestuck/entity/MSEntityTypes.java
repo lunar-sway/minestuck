@@ -46,6 +46,7 @@ public final class MSEntityTypes
 	public static final RegistryObject<EntityType<GristEntity>> GRIST = REGISTER.register("grist", () -> EntityType.Builder.<GristEntity>of(GristEntity::new, MobCategory.MISC).sized(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).build(new ResourceLocation(Minestuck.MOD_ID, "grist").toString()));
 	public static final RegistryObject<EntityType<VitalityGelEntity>> VITALITY_GEL = REGISTER.register("vitality_gel", () -> EntityType.Builder.<VitalityGelEntity>of(VitalityGelEntity::new, MobCategory.MISC).sized(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).build(new ResourceLocation(Minestuck.MOD_ID, "vitality_gel").toString()));
 	public static final RegistryObject<EntityType<DecoyEntity>> PLAYER_DECOY = REGISTER.register("player_decoy", () -> EntityType.Builder.<DecoyEntity>createNothing(MobCategory.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).noSave().noSummon().build(new ResourceLocation(Minestuck.MOD_ID, "player_decoy").toString()));
+	public static final RegistryObject<EntityType<ServerCursorEntity>> SERVER_CURSOR = REGISTER.register("server_cursor", () -> EntityType.Builder.of(ServerCursorEntity::new, MobCategory.MISC).noSave().noSummon().sized(0.1F, 0.1F).setShouldReceiveVelocityUpdates(false).setTrackingRange(4).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "server_cursor").toString()));
 	
 	public static final RegistryObject<EntityType<MetalBoatEntity>> METAL_BOAT = REGISTER.register("metal_boat", () -> EntityType.Builder.<MetalBoatEntity>of(MetalBoatEntity::new, MobCategory.MISC).sized(1.375F, 0.5625F).build(new ResourceLocation(Minestuck.MOD_ID, "metal_boat").toString()));
 	public static final RegistryObject<EntityType<BarbasolBombEntity>> BARBASOL_BOMB = REGISTER.register("barbasol_bomb", () -> EntityType.Builder.<BarbasolBombEntity>of(BarbasolBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "barbasol_bomb").toString()));
@@ -109,5 +110,6 @@ public final class MSEntityTypes
 		event.put(PLAYER_DECOY.get(), Mob.createMobAttributes().build());
 		
 		event.put(LOTUS_FLOWER.get(), LivingEntity.createLivingAttributes().build());
+		event.put(SERVER_CURSOR.get(), LivingEntity.createLivingAttributes().build());
 	}
 }

@@ -37,12 +37,12 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TotemLatheBlock extends MultiMachineBlock
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -75,13 +75,27 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
-		if(!mainPos.equals(pos) && level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+				&& !(otherState.isAir() || state.isAir())
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.checkStates();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+	
+	@Override
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
+	{
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
+		}
 	}
 	
 	@Override
@@ -109,7 +123,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		protected final Map<Direction, VoxelShape> activeShape;
 		private final Direction dowelDirection;
 		
-		public Rod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Direction dowelDirection, Properties properties)
+		public Rod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape activeShape, BlockPos mainPos, Direction dowelDirection, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.activeShape = activeShape.createRotatedShapes();
@@ -150,7 +164,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL;
 		protected final Map<Direction, VoxelShape> carvedShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(TotemLatheMultiblock machine, CustomVoxelShape shape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, shape, mainPos, properties);
 			this.carvedShape = carvedShape.createRotatedShapes();
@@ -197,7 +211,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(TotemLatheMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}

@@ -20,6 +20,7 @@ public class MSMenuTypes
 	public static final RegistryObject<MenuType<UraniumCookerMenu>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new MenuType<>((IContainerFactory<UraniumCookerMenu>) UraniumCookerMenu::new));
 	public static final RegistryObject<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck", () -> new MenuType<>(CaptchaDeckMenu::new));
 	public static final RegistryObject<MenuType<EditmodeMenu>> EDIT_MODE = REGISTER.register("edit_mode", () -> new MenuType<>(EditmodeMenu::new));
+	public static final RegistryObject<MenuType<AtheneumMenu>> ATHENEUM = REGISTER.register("atheneum", () -> new MenuType<>(AtheneumMenu::new));
 	public static final RegistryObject<MenuType<ConsortMerchantMenu>> CONSORT_MERCHANT = REGISTER.register("consort_merchant", () -> new MenuType<>((IContainerFactory<ConsortMerchantMenu>) ConsortMerchantMenu::load));
 	public static final RegistryObject<MenuType<CassetteContainerMenu>> CASSETTE_CONTAINER = REGISTER.register("cassette_container", () ->new MenuType<>(CassetteContainerMenu::new));
 }
