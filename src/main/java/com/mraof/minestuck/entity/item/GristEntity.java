@@ -49,6 +49,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	private Player closestPlayer;
 	
 	private int targetCycle;
+	private int shakeTimer = 0;
+	
 	
 	public static GristEntity create(EntityType<? extends GristEntity> type, Level level)
 	{
@@ -118,9 +120,16 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
+	private static final int SHAKE_DURATION = 37;
+	
 	public void setAnimationFromPacket()
 	{
-		shaderAlpha = 255;
+		shakeTimer = SHAKE_DURATION;
+	}
+	
+	public float getShakeFactor()
+	{
+		return (float) shakeTimer / SHAKE_DURATION;
 	}
 	
 	public class PlayerCanPickUpGristSelector implements Predicate<Entity>
@@ -164,9 +173,9 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		long canPickUp = getPlayerCacheRoom(closestPlayer);
 		
-		if(this.level.isClientSide)
+		if(this.level.isClientSide && shakeTimer > 0)
 		{
-			shaderAlpha = Math.max(shaderAlpha - 7, 0);
+			shakeTimer--;
 		}
 		
 		this.xo = this.getX();
@@ -274,8 +283,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			this.gristType = GristType.read(compound, "Type");
 	}
 	
-	public int shaderAlpha = 0;
-	
 	/**
 	 * Called by a player entity when they collide with an entity
 	 */
@@ -296,7 +303,6 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			{
 				GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
 				MSPacketHandler.sendToTracking(packet, this);
-				shaderAlpha = 255;//used as a timer to tick down how long the animation should play
 			}
 		}
 	}
