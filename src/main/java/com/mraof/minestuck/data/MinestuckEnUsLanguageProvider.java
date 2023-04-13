@@ -1354,6 +1354,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CASSETTE_5, "desc", "Samuel Åberg - 5");
 		addItem(MSItems.CASSETTE_OTHERSIDE, "Cassette");
 		addItemExtra(MSItems.CASSETTE_OTHERSIDE, "desc", "Lena Raine - otherside");
+		addItem(MSItems.GUTTER_THUMB_DRIVE, "Impetus Drive");
+		addItemTooltip(MSItems.GUTTER_THUMB_DRIVE, "A mysterious USB containing invaluable secrets.");
+		addItemExtra(MSItems.GUTTER_THUMB_DRIVE, "press_shift", "Press §eSHIFT§r for more info");
+		addItemExtra(MSItems.GUTTER_THUMB_DRIVE, "desc", "This piece of hardware was built by a genius of the dark kingdom. It's value seems to have been lost on the locals");
+		addItem(MSItems.ANCIENT_THUMB_DRIVE, "Useless Garbage");
+		addItemTooltip(MSItems.ANCIENT_THUMB_DRIVE, "A small rusted sliver of metal");
+		addItemExtra(MSItems.ANCIENT_THUMB_DRIVE, "press_shift", "Press §eSHIFT§r for more info");
+		addItemExtra(MSItems.ANCIENT_THUMB_DRIVE, "desc", "Who in their right mind would bother carrying this around? Perhaps you need help.");
+		addItem(MSItems.GUTTER_BALL, "Gutter Ball");
+		addItemTooltip(MSItems.GUTTER_BALL, "A hardened crystal in the shape of grist");
+		addItemExtra(MSItems.GUTTER_BALL, "press_shift", "Press §eSHIFT§r for more info");
+		addItemExtra(MSItems.GUTTER_BALL, "desc", "Carved from a common ore, it is believed by the natives to be a kind of food to the yet-born deities.");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");

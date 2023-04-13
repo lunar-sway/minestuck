@@ -76,6 +76,7 @@ public class MSPacketHandler
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
+		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);

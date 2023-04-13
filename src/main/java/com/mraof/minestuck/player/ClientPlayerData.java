@@ -84,7 +84,12 @@ public final class ClientPlayerData
 	
 	public static GristSet getClientGrist()
 	{
-		return ClientEditHandler.isActive() ? targetGrist : playerGrist;
+		return getGristCache(!ClientEditHandler.isActive());
+	}
+	
+	public static GristSet getGristCache(boolean isCacheOwner)
+	{
+		return isCacheOwner ? playerGrist : targetGrist;
 	}
 	
 	public static int getPlayerColor()

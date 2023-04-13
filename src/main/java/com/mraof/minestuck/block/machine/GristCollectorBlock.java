@@ -7,9 +7,11 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.GristCollectorBlockEntity;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.GristCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -47,14 +49,14 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		//when right clicked by a player, all the grist collected by the block entity is transferred
-		if(!level.isClientSide && !(player instanceof FakePlayer) && level.getBlockEntity(pos) instanceof GristCollectorBlockEntity collector)
+		//when right-clicked by a player, all the grist collected by the block entity is transferred
+		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer) && level.getBlockEntity(pos) instanceof GristCollectorBlockEntity collector)
 		{
 			GristSet storedGrist = collector.getStoredGrist();
 			
 			if(!storedGrist.isEmpty())
 			{
-				GristHelper.increaseAndNotify(level, IdentifierHandler.encode(player), storedGrist, GristHelper.EnumSource.CLIENT);
+				GristCache.get(serverPlayer).addWithGutter(storedGrist, GristHelper.EnumSource.CLIENT);
 				collector.clearStoredGrist();
 				
 				level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.1F, 0.5F * ((level.random.nextFloat() - level.random.nextFloat()) * 0.7F + 1.8F));

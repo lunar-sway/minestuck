@@ -1,10 +1,10 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristCost;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.*;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -36,12 +36,10 @@ public final class EditmodeDragPacket
 	
 	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
-		SburbConnection connection = data.getConnection();
-		
 		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
 			return false;
 		
-		if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
+		if(!data.getGristCache().canAfford(cost))
 		{
 			missingGristTracker.accept(cost);
 			return false;
@@ -52,7 +50,6 @@ public final class EditmodeDragPacket
 	
 	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
-		SburbConnection connection = data.getConnection();
 		BlockState block = player.level.getBlockState(pos);
 		ItemStack stack = block.getCloneItemStack(null, player.level, pos, player);
 		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level, DeployList.EntryLists.ATHENEUM);
@@ -62,7 +59,7 @@ public final class EditmodeDragPacket
 		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
 			GristSet cost = new GristSet(GristTypes.BUILD,1);
-			if(!GristHelper.canAfford(PlayerSavedData.getData(connection.getClientIdentifier(), player.level).getGristCache(), cost))
+			if(!data.getGristCache().canAfford(cost))
 			{
 				missingGristTracker.accept(cost);
 				return false;
