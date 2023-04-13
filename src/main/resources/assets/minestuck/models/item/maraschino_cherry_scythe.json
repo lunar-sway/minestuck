@@ -1,7 +1,7 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "minestuck:item/candy_scythe"
+        "layer0": "minestuck:item/maraschino_cherry_scythe"
     },
     "display": {
         "thirdperson_righthand": {

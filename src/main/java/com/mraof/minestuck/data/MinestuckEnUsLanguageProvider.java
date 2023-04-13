@@ -853,7 +853,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.CLAW_OF_NRUBYIGLITH, "Even though it's no longer a part of what you presume to be a living being, it still feels... alive.");
 		addItem(MSItems.CANDY_SICKLE, "Candy Sickle");
 		addItem(MSItems.SCYTHE, "Scythe");
-		addItem(MSItems.CANDY_SCYTHE, "Candy Scythe");
+		addItem(MSItems.MARASCHINO_CHERRY_SCYTHE, "Maraschino Cherry Scythe");
 		addItem(MSItems.PROSPECTING_PICKSCYTHE, "Prospecting Pickscythe");
 		addItem(MSItems.EIGHTBALL_SCYTHE, "Eightball Scythe");
 		addItem(MSItems.TIME_FLAYER, "Time Flayer");
