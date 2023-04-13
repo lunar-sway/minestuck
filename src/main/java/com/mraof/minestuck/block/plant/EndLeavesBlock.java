@@ -84,12 +84,12 @@ public class EndLeavesBlock extends FlammableLeavesBlock
 	@Override
 	public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction face)
 	{
-		return 1;
+		return 2;
 	}
 	
 	@Override
 	public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction face)
 	{
-		return 250;
+		return 50;
 	}
 }
