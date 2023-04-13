@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Animations for the new alchemy equipment, consorts, underlings, and pawn models
+- Horse clock, the animated clock that is also horse themed
+- Sound effect for cruxtruder as well as bite, ground slam, and several limb based attacks
+- Ground slam attack for Ogres
+- Fireball/tail whip attacks for Basilisks (and fire immunity)
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Added shade stone rock blobs to Shade lands and to the Rough biomes
 - Bookshelves for various minestuck wood types
@@ -28,6 +33,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Remodels of alchemy equipment, consorts, underlings, and pawns
+- Changed various speed/knockback resistance/health/damage attributes for underlings and consorts
+- Redstone clock is now muffled by the vibration occluding blocktag instead of just wool
+- Reduced spawn cap of underlings and consorts
+- Changes to underling and consort hitbox sizes
+- Increased number of hitboxes for Basilisk
+- Imps now stop attacking players on their own when they reach rung 15 instead of rung 18
+- Increased frequency of vitality gel drops from underlings
 - Changed Cat Claws recipe to Makeshift Claws && Iron Ingot
 - Updated Cat Claws texture
 - Changed Jousting Lance recipe to Wooden Lance && Iron Ingot
@@ -66,7 +79,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro
 
 ## [Unreleased]
 
