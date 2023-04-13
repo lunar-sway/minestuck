@@ -25,13 +25,13 @@ import java.util.Map;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
+public class CruxtruderBlock extends MultiMachineBlock<CruxtruderMultiblock> implements EntityBlock, EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final boolean hasBlockEntity;
 	protected final BlockPos mainPos;
 	
-	public CruxtruderBlock(MachineMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
+	public CruxtruderBlock(CruxtruderMultiblock machine, CustomVoxelShape shape, boolean blockEntity, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -84,6 +84,19 @@ public class CruxtruderBlock extends MultiMachineBlock implements EntityBlock
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+	
+	@Override
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
+	{
+		var placement = this.machine.findPlacementFromTube(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
+		}
 	}
 	
 	public BlockPos getMainPos(BlockState state, BlockPos pos)

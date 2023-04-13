@@ -3,16 +3,16 @@ package com.mraof.minestuck.block.machine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
+
 import static com.mraof.minestuck.block.MSBlockShapes.*;
-import static com.mraof.minestuck.block.machine.MachineBlock.FACING;
 
 public class TotemLatheMultiblock extends MachineMultiblock
 {
@@ -31,16 +31,16 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	public TotemLatheMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		slotPlacement = registerPlacement(new BlockPos(2, 0, 0), applyDirection(CARD_SLOT, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(BOTTOM_LEFT, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM_RIGHT, Direction.NORTH));
+		slotPlacement = addDirectionPlacement(2, 0, 0, CARD_SLOT, Direction.NORTH);
+		addDirectionPlacement(1, 0, 0, BOTTOM_LEFT, Direction.NORTH);
+		addDirectionPlacement(0, 0, 0, BOTTOM_RIGHT, Direction.NORTH);
 		
-		registerPlacement(new BlockPos(2, 1, 0), applyDirection(MIDDLE, Direction.NORTH));
-		dowelPlacement = registerPlacement(new BlockPos(1, 1, 0), applyDirection(DOWEL_ROD, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 1, 0), applyDirection(WHEEL, Direction.NORTH));
+		addDirectionPlacement(2, 1, 0, MIDDLE, Direction.NORTH);
+		dowelPlacement = addDirectionPlacement(1, 1, 0, DOWEL_ROD, Direction.NORTH);
+		addDirectionPlacement(0, 1, 0, WHEEL, Direction.NORTH);
 		
-		registerPlacement(new BlockPos(1, 2, 0), applyDirection(TOP, Direction.NORTH));
-		registerPlacement(new BlockPos(2, 2, 0), applyDirection(TOP_CORNER, Direction.NORTH));
+		addDirectionPlacement(1, 2, 0, TOP, Direction.NORTH);
+		addDirectionPlacement(2, 2, 0, TOP_CORNER, Direction.NORTH);
 	}
 	
 	public boolean isInvalidFromSlot(BlockGetter level, BlockPos pos)
@@ -50,13 +50,16 @@ public class TotemLatheMultiblock extends MachineMultiblock
 	
 	public BlockPos getDowelPos(BlockPos tilePos, BlockState slotState)
 	{
-		Rotation rotation = slotPlacement.findRotation(slotState);
-		return dowelPlacement.getPos(slotPlacement.getZeroPos(tilePos, rotation), rotation);
+		return dowelPlacement.getPos(slotPlacement.findPlacementOrThrow(tilePos, slotState));
+	}
+	
+	public Optional<Placement> findPlacementFromSlot(LevelAccessor level, BlockPos pos)
+	{
+		return slotPlacement.findPlacement(pos, level.getBlockState(pos));
 	}
 	
 	public BlockPos getSlotPos(BlockPos tilePos, BlockState state)
 	{
-		Rotation rotation = dowelPlacement.findRotation(state);
-		return slotPlacement.getPos(dowelPlacement.getZeroPos(tilePos, rotation), rotation);
+		return slotPlacement.getPos(dowelPlacement.findPlacementOrThrow(tilePos, state));
 	}
 }

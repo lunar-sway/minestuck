@@ -9,9 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
+- Added shade stone rock blobs to Shade lands and to the Rough biomes
 - Bookshelves for various minestuck wood types
 - Ladders for various minestuck wood types
-- 33 new weapons(8 with alternate form)
+- 66 new weapons (8 with alternate form)
 - Mirror block
 - Cryptid photo item (alchemy ingredient)
 - Skaianet Denier block that prevents Entry
@@ -20,13 +21,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist costs for additional common Forge metal ingot/ore item tags
 - Grist Collector block
 - New expandable tooltips for puzzle related blocks
+- Added suspicious chiseled mycelium bricks
+- 2 Sburb Editmode tools (Revise and Recycle)
+- Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
+- Sburb Cursor entity that appears when using Editmode tools
 
 ### Changed
 
-- Changed Cat Claws recipe to Makeshift Claws || String
+- Changed Cat Claws recipe to Makeshift Claws && Iron Ingot
 - Updated Cat Claws texture
+- Changed Jousting Lance recipe to Wooden Lance && Iron Ingot
+- Changed Cigarette Lance recipe to Regilance && Eightball
+- Rebalanced Cigarette Lance Grist Cost and Damage
 - Added alchemy recipe for Ancient Debris: Steel Beam && Raw Uranium
 - Added Grist Cost to Eightball and Dice items
+- Changed Applescab Scalemate's recipe to Red Wool && Dragon Breath
+- Added alchemy recipes for every Scalemate
+- Changed what dyes can be used to change Scalemate color in the offhand to reflect recipe additions
+- Changed Pinesnort Scalemate's in-game name from Pinesnout to Pinesnort
 - Fixed large item models' item frame displays
 - Updated item texture for Mini Wizard Statue
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
@@ -37,6 +49,9 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
+- Modified land terrain generation settings to have more variation
+- Grist selector screen now exits to the previous screen when pressing esc
+- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
 
 ### Removed
 
@@ -46,10 +61,12 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 - Restore land sky rendering
 - Removed sunset fog coloration in lands
+- Fixed resizing issue with grist selector screen
+- Fixed some light problems with entry, possibly fixed other behaviors with entry
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll
 
 ## [Unreleased]
 

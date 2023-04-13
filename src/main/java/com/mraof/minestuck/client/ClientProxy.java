@@ -69,6 +69,7 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
 		EntityRenderers.register(MSEntityTypes.HOLOGRAM.get(), HologramRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
+		EntityRenderers.register(MSEntityTypes.SERVER_CURSOR.get(), ServerCursorRenderer::new);
 		EntityRenderers.register(MSEntityTypes.NAKAGATOR.get(), ConsortRenderer::new);
 		EntityRenderers.register(MSEntityTypes.SALAMANDER.get(), ConsortRenderer::new);
 		EntityRenderers.register(MSEntityTypes.IGUANA.get(), ConsortRenderer::new);

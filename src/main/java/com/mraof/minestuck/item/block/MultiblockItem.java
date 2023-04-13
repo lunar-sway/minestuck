@@ -116,7 +116,8 @@ public class MultiblockItem extends BlockItem
 		{
 			BlockPos pos = getPlacementPos(context);
 			
-			multiblock.placeWithRotation(level, pos, MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite()));
+			multiblock.placeWithRotation(level, new MachineMultiblock.Placement(pos,
+					MSRotationUtil.fromDirection(context.getHorizontalDirection().getOpposite())));
 			
 			if(context.getPlayer() instanceof ServerPlayer player)
 				CriteriaTriggers.PLACED_BLOCK.trigger(player, pos, context.getItemInHand());

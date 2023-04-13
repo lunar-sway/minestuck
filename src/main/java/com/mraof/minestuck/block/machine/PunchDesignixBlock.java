@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,14 +25,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
-public class PunchDesignixBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public PunchDesignixBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos pos, Properties properties)
+	public PunchDesignixBlock(PunchDesignixMultiblock machine, CustomVoxelShape shape, BlockPos pos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -75,6 +79,20 @@ public class PunchDesignixBlock extends MultiMachineBlock
 		}
 	}
 	
+	@Override
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
+	{
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
+		}
+	}
+	
     /**
      *returns the block position of the "Main" block
      *aka the block with the BlockEntity for the machine
@@ -93,7 +111,7 @@ public class PunchDesignixBlock extends MultiMachineBlock
 	{
 		public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(PunchDesignixMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 			registerDefaultState(this.stateDefinition.any().setValue(HAS_CARD, false));
