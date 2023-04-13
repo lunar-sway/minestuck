@@ -30,6 +30,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 2 Sburb Editmode tools (Revise and Recycle)
 - Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
 - Sburb Cursor entity that appears when using Editmode tools
+- Grist gutter, which is separate for each session
+- Gutter-related items that can increase the capacity of the grist gutter
+- New command `/grist_gutter show` to display the content and size of the gutter
 
 ### Changed
 
@@ -65,6 +68,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Modified land terrain generation settings to have more variation
 - Grist selector screen now exits to the previous screen when pressing esc
 - Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
+- Player grist cache now has an upper limit that depends on the echeladder rung of the player
 
 ### Removed
 
@@ -79,7 +83,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro, SarahK
 
 ## [Unreleased]
 
