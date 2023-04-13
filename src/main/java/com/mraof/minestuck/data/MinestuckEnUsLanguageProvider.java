@@ -1350,6 +1350,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		addItem(MSItems.CASSETTE_PIGSTEP, "Cassette");
 		addItemExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Lena Raine - Pigstep");
+		addItem(MSItems.CASSETTE_5, "Cassette");
+		addItemExtra(MSItems.CASSETTE_5, "desc", "Samuel Åberg - 5");
+		addItem(MSItems.CASSETTE_OTHERSIDE, "Cassette");
+		addItemExtra(MSItems.CASSETTE_OTHERSIDE, "desc", "Lena Raine - otherside");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");
