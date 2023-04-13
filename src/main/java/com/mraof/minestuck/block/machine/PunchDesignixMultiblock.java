@@ -8,6 +8,8 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Optional;
+
 import static com.mraof.minestuck.block.MSBlockShapes.*;
 
 public class PunchDesignixMultiblock extends MachineMultiblock
@@ -22,14 +24,19 @@ public class PunchDesignixMultiblock extends MachineMultiblock
 	public PunchDesignixMultiblock(DeferredRegister<Block> register)
 	{
 		super(register);
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(RIGHT_LEG, Direction.NORTH));
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(LEFT_LEG, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 1, 0), applyDirection(KEYBOARD, Direction.NORTH));
-		slotPlacement = registerPlacement(new BlockPos(1, 1, 0), applyDirection(SLOT, Direction.NORTH));
+		addDirectionPlacement(0, 0, 0, RIGHT_LEG, Direction.NORTH);
+		addDirectionPlacement(1, 0, 0, LEFT_LEG, Direction.NORTH);
+		addDirectionPlacement(0, 1, 0, KEYBOARD, Direction.NORTH);
+		slotPlacement = addDirectionPlacement(1, 1, 0, SLOT, Direction.NORTH);
 	}
 	
 	public boolean isInvalidFromSlot(LevelAccessor level, BlockPos pos)
 	{
 		return isInvalidFromPlacement(level, pos, slotPlacement);
+	}
+	
+	public Optional<Placement> findPlacementFromSlot(LevelAccessor level, BlockPos pos)
+	{
+		return slotPlacement.findPlacement(pos, level.getBlockState(pos));
 	}
 }

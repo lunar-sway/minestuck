@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 180,
+    "minestuck:ruby": 108
+  },
+  "ingredient": {
+    "item": "minestuck:fiduspawn_lance"
+  }
+}

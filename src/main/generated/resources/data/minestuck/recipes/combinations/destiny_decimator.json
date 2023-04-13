@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:netherite_hoe"
+  },
+  "input2": {
+    "item": "minecraft:wither_skeleton_skull"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:destiny_decimator"
+  }
+}

@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:dice"
+    "item": "minestuck:jousting_lance"
   },
   "input2": {
-    "item": "minecraft:bucket"
+    "item": "minestuck:chessboard"
   },
   "mode": "or",
   "output": {
-    "item": "minestuck:eightball"
+    "item": "minestuck:regilance"
   }
 }

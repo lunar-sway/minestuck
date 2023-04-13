@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.MachineMultiblock;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -19,8 +18,8 @@ public class HorseClockMultiblock extends MachineMultiblock
 	{
 		super(register);
 		
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(BOTTOM, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 1, 0), applyDirection(CENTER, Direction.NORTH));
-		registerPlacement(new BlockPos(0, 2, 0), applyDirection(TOP, Direction.NORTH));
+		addDirectionPlacement(0, 0, 0, BOTTOM, Direction.NORTH);
+		addDirectionPlacement(0, 1, 0, CENTER, Direction.NORTH);
+		addDirectionPlacement(0, 2, 0, TOP, Direction.NORTH);
 	}
 }

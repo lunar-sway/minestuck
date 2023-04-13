@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 150,
+    "minestuck:iodine": 75
+  },
+  "ingredient": {
+    "item": "minestuck:meatfork"
+  }
+}

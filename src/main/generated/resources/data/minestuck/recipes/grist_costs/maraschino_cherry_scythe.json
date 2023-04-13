@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 56,
+    "minestuck:iodine": 28,
+    "minestuck:ruby": 17
+  },
+  "ingredient": {
+    "item": "minestuck:maraschino_cherry_scythe"
+  }
+}

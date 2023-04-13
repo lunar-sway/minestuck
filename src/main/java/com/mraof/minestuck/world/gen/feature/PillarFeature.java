@@ -11,12 +11,9 @@ import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfi
 
 public class PillarFeature extends Feature<BlockStateConfiguration>
 {
-	private final boolean large;
-	
-	public PillarFeature(Codec<BlockStateConfiguration> codec, boolean large)
+	public PillarFeature(Codec<BlockStateConfiguration> codec)
 	{
 		super(codec);
-		this.large = large;
 	}
 	
 	@Override
@@ -31,21 +28,12 @@ public class PillarFeature extends Feature<BlockStateConfiguration>
 		if(level.getBlockState(pos.above(height - 1)).getMaterial().isLiquid())
 			return false;
 		
-		boolean size = large && rand.nextFloat() < 0.4;
-		
-		if(size)
+		for(int i = 0; i < height + 3; i++)
 		{
-			for(int i = 0; i < height + 3; i++)
-			{
-				setBlock(level, pos.offset(0, i, 0), state);
-				setBlock(level, pos.offset(1, i, 0), state);
-				setBlock(level, pos.offset(1, i, 1), state);
-				setBlock(level, pos.offset(0, i, 1), state);
-			}
-		} else
-		{
-			for(int i = 0; i < height; i++)
-				setBlock(level, pos.above(i), state);
+			setBlock(level, pos.offset(0, i, 0), state);
+			setBlock(level, pos.offset(1, i, 0), state);
+			setBlock(level, pos.offset(1, i, 1), state);
+			setBlock(level, pos.offset(0, i, 1), state);
 		}
 		return true;
 	}

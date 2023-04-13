@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:artifact": 311812,
+    "minestuck:build": 161973,
+    "minestuck:diamond": 32395,
+    "minestuck:quartz": 64789
+  },
+  "ingredient": {
+    "item": "minestuck:prime_staff"
+  }
+}
