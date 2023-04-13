@@ -28,6 +28,7 @@ public record MobAnimation(Action action, int animationLength, boolean freezeMov
 		PUNCH,
 		CLAW,
 		BITE,
+		KICK,
 		SWING,
 		MELEE, //weapon
 		SLAM,
