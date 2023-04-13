@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.10.0.1] - 2023-04-13
+
 ### Fixed
 
 - Fix client-side crash on player death
