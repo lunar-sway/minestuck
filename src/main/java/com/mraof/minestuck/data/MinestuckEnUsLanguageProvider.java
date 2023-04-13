@@ -1666,7 +1666,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
 		
 		add(Theme.DEFAULT.getName(), "Default");
-		add(Theme.PESTERCHUM.getName(), "Pesterhchum");
+		add(Theme.PESTERCHUM.getName(), "Pesterchum");
 		add(Theme.TROLLIAN.getName(), "Trollian");
 		add(Theme.CROCKER.getName(), "Crocker");
 		add(Theme.TYPHEUS.getName(), "Typheus");
