@@ -2,6 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.event.ConnectionClosedEvent;
@@ -9,7 +10,6 @@ import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
@@ -453,7 +453,7 @@ public final class SkaianetHandler extends SavedData
 	public void onEntry(PlayerIdentifier target)
 	{
 		Optional<SburbConnection> c = getPrimaryConnection(target, true);
-		if(!c.isPresent())
+		if(c.isEmpty())
 		{
 			LOGGER.error("Finished entry without a player connection for {}. This should NOT happen!", target.getUsername());
 			return;

@@ -14,7 +14,6 @@ public abstract class CruxiteArtifactItem extends Item implements AlchemizedColo
 	
 	public void onArtifactActivated(ServerPlayer player)
 	{
-		EntryProcess process = new EntryProcess();
-		process.onArtifactActivated(player);
+		EntryProcess.onArtifactActivated(player);
 	}
 }

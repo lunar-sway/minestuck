@@ -8,6 +8,7 @@ import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraftforge.api.distmarker.Dist;
@@ -100,6 +101,14 @@ public final class ClientPlayerData
 	{
 		MSPacketHandler.sendToServer(new ColorSelectPacket(colorIndex));
 		playerColor = ColorHandler.getColor(colorIndex);
+	}
+	
+	public static void selectColorRGB(int color)
+	{
+		if (color < 0 || color > 256*256*256) return;
+		
+		MSPacketHandler.sendToServer(new RGBColorSelectPacket(color));
+		playerColor = color;
 	}
 	
 	public static boolean shouDisplayColorSelection()

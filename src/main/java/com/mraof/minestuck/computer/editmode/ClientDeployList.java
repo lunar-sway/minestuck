@@ -25,6 +25,7 @@ public final class ClientDeployList
 			entry.index = tag.getInt("i");
 			
 			entry.cost = GristSet.read(tag.getList("cost", Tag.TAG_COMPOUND));
+			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);
 		}
@@ -46,15 +47,19 @@ public final class ClientDeployList
 		private ItemStack item;
 		private GristSet cost;
 		private int index;
+		private DeployList.EntryLists category;
 		
 		public GristSet getCost()
 		{
 			return cost;
 		}
 		
+		public DeployList.EntryLists getCategory() { return category; }
+		
 		public int getIndex()
 		{
 			return index;
 		}
+		
 	}
 }

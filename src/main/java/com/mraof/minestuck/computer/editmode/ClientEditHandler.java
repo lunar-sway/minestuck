@@ -100,7 +100,7 @@ public final class ClientEditHandler
 		
 	}
 	
-	private static GristSet itemCost(ItemStack stack, Level level)
+	protected static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
@@ -176,6 +176,12 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
+			{
+				event.setCanceled(true);
+				return;
+			}
+			
 			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
 			ItemStack stack = event.getEntity().getMainHandItem();
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
@@ -206,10 +212,23 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			BlockState block = event.getLevel().getBlockState(event.getPos());
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
+			{
 				event.setCanceled(true);
+				return;
+			}
+			
+			BlockState block = event.getLevel().getBlockState(event.getPos());
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL)
+			{
+				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
+				event.setCanceled(true);
+			}
+			else if(ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
+			{
+				event.getEntity().sendSystemMessage(new GristSet(GristTypes.BUILD.get(), 1).createMissingMessage());
+				event.setCanceled(true);
+			}
 		}
 	}
 	

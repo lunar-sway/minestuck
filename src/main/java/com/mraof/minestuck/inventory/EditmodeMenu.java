@@ -98,7 +98,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 		List<ItemStack> tools = DeployList.getEditmodeTools();
 		//Fill list with harvestTool items when implemented
 		
-		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c);
+		List<DeployEntry> deployItems = DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY);
 		deployItems.removeIf(deployEntry -> deployEntry.getCurrentCost(c) == null);
 		
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)

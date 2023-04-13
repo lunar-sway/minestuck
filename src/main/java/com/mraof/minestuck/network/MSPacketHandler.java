@@ -38,6 +38,7 @@ public class MSPacketHandler
 		
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
+		registerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
 		registerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
 		registerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
@@ -47,10 +48,15 @@ public class MSPacketHandler
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
 		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
+		registerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
+		registerMessage(EditmodeDragPacket.Fill.class, EditmodeDragPacket.Fill::decode);
+		registerMessage(EditmodeDragPacket.Destroy.class, EditmodeDragPacket.Destroy::decode);
+		registerMessage(EditmodeDragPacket.Cursor.class, EditmodeDragPacket.Cursor::decode);
+		registerMessage(EditmodeDragPacket.Reset.class, EditmodeDragPacket.Reset::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
 		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
 		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
@@ -68,10 +74,13 @@ public class MSPacketHandler
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
+		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
+		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
+		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
 	}
 	
 	private static int nextIndex;

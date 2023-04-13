@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import com.mraof.minestuck.block.machine.MachineMultiblock;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Material;
@@ -16,13 +15,10 @@ public class LotusTimeCapsuleMultiblock extends MachineMultiblock
 	{
 		super(register);
 		
-		registerPlacement(new BlockPos(0, 0, 0), applyDirection(CORNER, Direction.WEST));
-		
-		registerPlacement(new BlockPos(1, 0, 0), applyDirection(CORNER, Direction.NORTH));
-		
-		registerPlacement(new BlockPos(0, 0, 1), applyDirection(CORNER, Direction.SOUTH));
-		
-		registerPlacement(new BlockPos(1, 0, 1), applyDirection(CORNER, Direction.EAST));
+		addDirectionPlacement(0, 0, 0, CORNER, Direction.WEST);
+		addDirectionPlacement(1, 0, 0, CORNER, Direction.NORTH);
+		addDirectionPlacement(0, 0, 1, CORNER, Direction.SOUTH);
+		addDirectionPlacement(1, 0, 1, CORNER, Direction.EAST);
 	}
 	
 }

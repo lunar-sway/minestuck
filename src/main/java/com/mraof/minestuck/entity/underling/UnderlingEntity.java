@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -39,17 +40,21 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends PathfinderMob implements Enemy
+public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, IAnimatable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
+	
+	private final AnimationFactory factory = new AnimationFactory(this);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
@@ -63,7 +68,6 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	{
 		super(type, level);
 		this.consortRep = consortRep;
-		
 		attackEntitySelector.entityList.add(EntityType.PLAYER);
 	}
 	
@@ -79,6 +83,12 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 		
 		targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, entity -> entity.getType().is(MSTags.EntityTypes.UNDERLINGS)));
 		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 2, true, false, this::isAppropriateTarget));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	protected boolean isAppropriateTarget(LivingEntity entity)
@@ -166,10 +176,10 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 	}
 	
 	@Override
-	protected void tickDeath()
+	public void remove(RemovalReason reason)
 	{
-		super.tickDeath();
-		if(this.deathTime == 20 && !this.level.isClientSide)
+		super.remove(reason);
+		if(reason == RemovalReason.KILLED)
 		{
 			GristSet grist = this.getGristSpoils();
 			if(grist == null)
@@ -199,7 +209,7 @@ public abstract class UnderlingEntity extends PathfinderMob implements Enemy
 				}
 			}
 			
-			if(this.random.nextInt(4) == 0)
+			if(this.random.nextInt(3) == 0)
 				this.level.addFreshEntity(new VitalityGelEntity(level, randX(), this.getY(), randZ(), this.getVitalityGel()));
 		}
 	}

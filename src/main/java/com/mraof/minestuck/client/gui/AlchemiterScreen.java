@@ -3,23 +3,22 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
-public class AlchemiterScreen extends Screen implements Positioned
+public class AlchemiterScreen extends Screen
 {
 	public static final String TITLE = "minestuck.alchemiter";
 	
@@ -37,12 +36,6 @@ public class AlchemiterScreen extends Screen implements Positioned
 	
 	public AlchemiterBlockEntity getAlchemiter() {
 		return alchemiter;
-	}
-	
-	@Override
-	public BlockPos getPosition()
-	{
-		return getAlchemiter().getBlockPos();
 	}
 	
 	@Override
@@ -132,8 +125,7 @@ public class AlchemiterScreen extends Screen implements Positioned
 				&& alchemiter.getDowel() != null && AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get()
 				&& mouseX >= (width-guiWidth)/2F +80  && mouseX < (width-guiWidth)/2F + 150 && mouseY >= (height-guiHeight)/2F + 8 && mouseY < (height-guiHeight)/2F + 93)
 		{
-			minecraft.screen = new GristSelectorScreen<>(this);
-			minecraft.screen.init(minecraft, width, height);
+			minecraft.pushGuiLayer(new GristSelectorScreen(this.getAlchemiter().getBlockPos()));
 			return true;
 		}
 		return super.mouseClicked(mouseX, mouseY, mouseButton);

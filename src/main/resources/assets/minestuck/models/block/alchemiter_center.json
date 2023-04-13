@@ -1,9 +1,32 @@
 {
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "particle": "minestuck:block/machine/alchemiter/center_top",
-        "bottom": "minestuck:block/machine/alchemiter/down_center",
-        "top": "minestuck:block/machine/alchemiter/center_top",
-        "side": "minestuck:block/machine/alchemiter/inside"
-    }
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [256, 256],
+	"textures": {
+		"0": "minestuck:block/machine/alchemiter",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"name": "core1",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [15, 0, 15]},
+			"faces": {
+				"north": {"uv": [3.6875, 15, 4.6875, 16], "texture": "#0"},
+				"east": {"uv": [2.6875, 15, 3.6875, 16], "texture": "#0"},
+				"south": {"uv": [5.6875, 15, 6.6875, 16], "texture": "#0"},
+				"west": {"uv": [4.6875, 15, 5.6875, 16], "texture": "#0"},
+				"up": {"uv": [4.6875, 15, 3.6875, 14], "texture": "#0"},
+				"down": {"uv": [5.6875, 14, 4.6875, 15], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "core1",
+			"origin": [32, 8, -16],
+			"color": 0,
+			"children": [0]
+		}
+	]
 }

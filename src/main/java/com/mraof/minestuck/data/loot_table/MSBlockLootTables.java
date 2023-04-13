@@ -139,6 +139,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MYCELIUM_BRICKS.get());
 		dropSelf(MYCELIUM_COLUMN.get());
 		dropSelf(CHISELED_MYCELIUM_BRICKS.get());
+		dropSelf(SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get());
 		dropSelf(CRACKED_MYCELIUM_BRICKS.get());
 		dropSelf(MOSSY_MYCELIUM_BRICKS.get());
 		dropSelf(FLOWERY_MYCELIUM_BRICKS.get());
@@ -500,6 +501,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MINI_WIZARD_STATUE.get());
 		dropSelf(MINI_TYPHEUS_STATUE.get());
 		dropSelf(CASSETTE_PLAYER.get());
+		dropSelf(HORSE_CLOCK.BOTTOM.get());
 		dropSelf(GLOWYSTONE_DUST.get());
 		dropSelf(MIRROR.get());
 	}

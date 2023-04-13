@@ -1,6 +1,5 @@
 package com.mraof.minestuck.blockentity.machine;
 
-
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
@@ -16,11 +15,16 @@ import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +39,8 @@ public class TotemLatheBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	private boolean isProcessing;
+	private int animationticks;
 	private boolean broken = false;
 	//two cards so that we can preform the && alchemy operation
 	private ItemStack card1 = ItemStack.EMPTY;
@@ -135,44 +141,42 @@ public class TotemLatheBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void removeDowel()
-	{
-		Objects.requireNonNull(this.level);
-		
-		Direction facing = getFacing();
-		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
-		BlockState state = level.getBlockState(pos);
-		
-		if(isValidDowelRod(state, facing))
-			level.removeBlock(pos, false);
-	}
-	
 	public boolean setDowel(ItemStack dowelStack)
 	{
 		Objects.requireNonNull(this.level);
-		if(!dowelStack.is(MSItems.CRUXITE_DOWEL.get()))
+		if(!(dowelStack.is(MSItems.CRUXITE_DOWEL.get()) || dowelStack.isEmpty()))
 			return false;
 		
 		Direction facing = getFacing();
-		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
-		BlockState oldState = level.getBlockState(pos);
-		
-		if(!oldState.isAir())
-			return false;	// Something is in the way that we shouldn't replace
+		BlockPos dowelPos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
+		BlockState oldState = level.getBlockState(dowelPos);
 		
 		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
 				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
 		
-		level.setBlockAndUpdate(pos, newState);
-		
-		BlockEntity be = level.getBlockEntity(pos);
-		if(be instanceof ItemStackBlockEntity beItem)
+		if(isValidDowelRod(oldState, facing))
 		{
+			BlockEntity be = level.getBlockEntity(dowelPos);
+			if(!(be instanceof TotemLatheDowelBlockEntity))
+			{
+				be = new TotemLatheDowelBlockEntity(dowelPos, newState);
+				level.setBlockEntity(be);
+			}
+			
+			TotemLatheDowelBlockEntity beItem = (TotemLatheDowelBlockEntity) be;
 			beItem.setStack(dowelStack);
+			//updating the dowel block entity
+			if(!oldState.equals(newState))
+				level.setBlockAndUpdate(dowelPos, newState);
+			else level.sendBlockUpdated(dowelPos, oldState, oldState, Block.UPDATE_ALL);
+			
+			//updating the machine's block entity
+			isProcessing = false;
+			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
 			return true;
-		} else
-			return false;
+		}
+		return false;
 	}
 	
 	private boolean setCarvedItem(ItemStack output)
@@ -213,7 +217,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		if(isValidDowelRod(level.getBlockState(pos), getFacing()))
 		{
-			if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
+			if(level.getBlockEntity(pos) instanceof TotemLatheDowelBlockEntity blockEntity)
 				return blockEntity.getStack();
 		}
 		return ItemStack.EMPTY;
@@ -239,14 +243,24 @@ public class TotemLatheBlockEntity extends BlockEntity
 			handleSlotClick(player, working);
 		
 		//if they have clicked the dowel block
-		if(clickedState.is(MSBlocks.TOTEM_LATHE.ROD.get()) || clickedState.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()))
+		if(clickedState.is(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()))
 			handleDowelClick(player, working);
 		
 		//if they have clicked on the lever
-		if(working && clickedState.is(MSBlocks.TOTEM_LATHE.CARVER.get()))
+		if(clickedState.is(MSBlocks.TOTEM_LATHE.TOP.get()) && level != null)
 		{
+			boolean startingCarving = false;
+			
 			//carve the dowel.
-			processContents();
+			if(working && !getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()))
+			{
+				startingCarving = true;
+				isProcessing = true;
+				animationticks = 25;
+				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+			}
+			
+			level.levelEvent(startingCarving ? LevelEvent.SOUND_DISPENSER_DISPENSE : LevelEvent.SOUND_DISPENSER_FAIL, getBlockPos(), 0);
 		}
 	}
 	
@@ -293,7 +307,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			else if(!player.getInventory().add(dowel))
 				dropItem(true, getBlockPos().above().relative(getFacing().getCounterClockWise(), 2), dowel);
 			else player.inventoryMenu.broadcastChanges();
-			removeDowel();
+			setDowel(ItemStack.EMPTY);
 		}
 	}
 	
@@ -341,6 +355,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 		broken = nbt.getBoolean("broken");
 		card1 = ItemStack.of(nbt.getCompound("card1"));
 		card2 = ItemStack.of(nbt.getCompound("card2"));
+		isProcessing = nbt.getBoolean("isProcessing");
 		if(card1.isEmpty() && !card2.isEmpty())
 		{
 			card1 = card2;
@@ -355,9 +370,10 @@ public class TotemLatheBlockEntity extends BlockEntity
 		compound.putBoolean("broken",broken);
 		compound.put("card1", card1.save(new CompoundTag()));
 		compound.put("card2", card2.save(new CompoundTag()));
+		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
-	public void processContents()
+	private void processContents(Level level)
 	{
 		ItemStack dowel = getDowel();
 		ItemStack output;
@@ -380,12 +396,41 @@ public class TotemLatheBlockEntity extends BlockEntity
 				success = setCarvedItem(output);
 		}
 		
-		effects(success);
+		//effects(success);
+	}
+	
+	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)
+	{
+		if(blockEntity.animationticks > 0)
+		{
+			blockEntity.animationticks--;
+			if(blockEntity.animationticks <= 0)
+			{
+				blockEntity.processContents(level);
+			}
+		}
+	}
+	
+	@Override
+	public CompoundTag getUpdateTag()
+	{
+		return this.saveWithoutMetadata();
+	}
+	
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket()
+	{
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
 	private void effects(boolean success)
 	{
 		BlockPos pos = getBlockPos().above().relative(getFacing().getCounterClockWise(), 2);
 		WorldEventUtil.dispenserEffect(getLevel(), pos, getFacing(), success);
+	}
+	
+	public boolean isProcessing()
+	{
+		return isProcessing;
 	}
 }

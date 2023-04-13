@@ -4,19 +4,15 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.model.*;
 import com.mraof.minestuck.client.model.armor.*;
-import com.mraof.minestuck.client.renderer.blockentity.GateRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.HolopadRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.ReturnNodeRenderer;
-import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
+import com.mraof.minestuck.client.model.entity.BishopModel;
+import com.mraof.minestuck.client.model.entity.RookModel;
+import com.mraof.minestuck.client.model.MSModelLayers;
+import com.mraof.minestuck.client.renderer.blockentity.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.computer.DiskBurner;
-import com.mraof.minestuck.computer.SburbClient;
-import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
@@ -48,6 +44,9 @@ public class ClientProxy
 		BlockEntityRenderers.register(MSBlockEntityTypes.GATE.get(), GateRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.RETURN_NODE.get(), ReturnNodeRenderer::new);
 		BlockEntityRenderers.register(MSBlockEntityTypes.HOLOPAD.get(), HolopadRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.TOTEM_LATHE_DOWEL.get(), TotemLatheRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.ALCHEMITER.get(), AlchemiterRenderer::new);
+		BlockEntityRenderers.register(MSBlockEntityTypes.HORSE_CLOCK.get(), HorseClockRenderer::new);
 //		MinecraftForgeClient.registerItemRenderer(Minestuck.captchaCard, new CardRenderer());
 	}
 	
@@ -67,19 +66,20 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.FROG.get(), FrogRenderer::new);
 		EntityRenderers.register(MSEntityTypes.HOLOGRAM.get(), HologramRenderer::new);
 		EntityRenderers.register(MSEntityTypes.LOTUS_FLOWER.get(), LotusFlowerRenderer::new);
-		EntityRenderers.register(MSEntityTypes.NAKAGATOR.get(), context -> new SimpleTexturedEntityRenderer<>(context, new NakagatorModel<>(context.bakeLayer(MSModelLayers.NAKAGATOR)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.SALAMANDER.get(), context -> new SimpleTexturedEntityRenderer<>(context, new SalamanderModel<>(context.bakeLayer(MSModelLayers.SALAMANDER)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.IGUANA.get(), context -> new SimpleTexturedEntityRenderer<>(context, new IguanaModel<>(context.bakeLayer(MSModelLayers.IGUANA)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.TURTLE.get(), context -> new SimpleTexturedEntityRenderer<>(context, new TurtleModel<>(context.bakeLayer(MSModelLayers.TURTLE)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.IMP.get(), context -> new UnderlingEntityRenderer<>(context, new ImpModel<>(context.bakeLayer(MSModelLayers.IMP)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.OGRE.get(), context -> new UnderlingEntityRenderer<>(context, new OgreModel<>(context.bakeLayer(MSModelLayers.OGRE)), 2.8F));
-		EntityRenderers.register(MSEntityTypes.BASILISK.get(), context -> new UnderlingEntityRenderer<>(context, new BasiliskModel<>(context.bakeLayer(MSModelLayers.BASILISK)), 2.8F));
-		EntityRenderers.register(MSEntityTypes.LICH.get(), context -> new UnderlingEntityRenderer<>(context, new LichModel<>(context.bakeLayer(MSModelLayers.LICH)), 0.5F));
-		EntityRenderers.register(MSEntityTypes.GICLOPS.get(), context -> new UnderlingEntityRenderer<>(context, new GiclopsModel<>(context.bakeLayer(MSModelLayers.GICLOPS)), 7.6F));
-		EntityRenderers.register(MSEntityTypes.PROSPITIAN_BISHOP.get(), context -> new SimpleTexturedEntityRenderer<>(context, new BishopModel<>(context.bakeLayer(MSModelLayers.BISHOP)), 1.8F));
-		EntityRenderers.register(MSEntityTypes.DERSITE_BISHOP.get(), context -> new SimpleTexturedEntityRenderer<>(context, new BishopModel<>(context.bakeLayer(MSModelLayers.BISHOP)), 1.8F));
-		EntityRenderers.register(MSEntityTypes.PROSPITIAN_ROOK.get(), context -> new SimpleTexturedEntityRenderer<>(context, new RookModel<>(context.bakeLayer(MSModelLayers.ROOK)), 2.5F));
-		EntityRenderers.register(MSEntityTypes.DERSITE_ROOK.get(), context -> new SimpleTexturedEntityRenderer<>(context, new RookModel<>(context.bakeLayer(MSModelLayers.ROOK)), 2.5F));
+		EntityRenderers.register(MSEntityTypes.SERVER_CURSOR.get(), ServerCursorRenderer::new);
+		EntityRenderers.register(MSEntityTypes.NAKAGATOR.get(), ConsortRenderer::new);
+		EntityRenderers.register(MSEntityTypes.SALAMANDER.get(), ConsortRenderer::new);
+		EntityRenderers.register(MSEntityTypes.IGUANA.get(), ConsortRenderer::new);
+		EntityRenderers.register(MSEntityTypes.TURTLE.get(), ConsortRenderer::new);
+		EntityRenderers.register(MSEntityTypes.IMP.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.OGRE.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.BASILISK.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.LICH.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.GICLOPS.get(), UnderlingRenderer::new);
+		EntityRenderers.register(MSEntityTypes.PROSPITIAN_BISHOP.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(manager.bakeLayer(MSModelLayers.BISHOP)), 1.8F, MSEntityTypes.PROSPITIAN_BISHOP.get()));
+		EntityRenderers.register(MSEntityTypes.DERSITE_BISHOP.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new BishopModel<>(manager.bakeLayer(MSModelLayers.BISHOP)), 1.8F, MSEntityTypes.DERSITE_BISHOP.get()));
+		EntityRenderers.register(MSEntityTypes.PROSPITIAN_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.PROSPITIAN_ROOK.get()));
+		EntityRenderers.register(MSEntityTypes.DERSITE_ROOK.get(), manager -> new SimpleTexturedEntityRenderer<>(manager, new RookModel<>(manager.bakeLayer(MSModelLayers.ROOK)), 2.5F, MSEntityTypes.DERSITE_ROOK.get()));
 		EntityRenderers.register(MSEntityTypes.PROSPITIAN_PAWN.get(), PawnRenderer::new);
 		EntityRenderers.register(MSEntityTypes.DERSITE_PAWN.get(), PawnRenderer::new);
 		EntityRenderers.register(MSEntityTypes.GRIST.get(), GristRenderer::new);
@@ -97,6 +97,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		ComputerProgram.registerProgramClass(2, DiskBurner.class);
+		ComputerProgram.registerProgramClass(3, SettingsApp.class);
 		
 		registerArmorModels();
 

@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:snow_white_dream"
+  },
+  "input2": {
+    "item": "minestuck:deuce_club"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:doctor_deterrent"
+  }
+}

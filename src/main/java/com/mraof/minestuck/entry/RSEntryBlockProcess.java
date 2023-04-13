@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 
-public class RSEntryBlockProcess implements EntryBlockProcessing
+public class RSEntryBlockProcess implements BlockCopier.CopyStep
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 

@@ -26,6 +26,7 @@ public class GristType implements Comparable<GristType>
 	
 	private final float rarity;
 	private final float value;
+	private final int color;
 	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
 	private String translationKey;
@@ -35,6 +36,7 @@ public class GristType implements Comparable<GristType>
 	{
 		rarity = properties.rarity;
 		value = properties.value;
+		color = properties.color;
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
 	}
@@ -185,6 +187,11 @@ public class GristType implements Comparable<GristType>
 		return fallback.get();
 	}
 	
+	public int getColor()
+	{
+		return color;
+	}
+	
 	static class DummyType extends GristType
 	{
 		DummyType()
@@ -208,6 +215,7 @@ public class GristType implements Comparable<GristType>
 	public static class Properties
 	{
 		private final float rarity, value;
+		private int color;
 		private boolean isUnderlingType = true;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
 		
@@ -237,6 +245,12 @@ public class GristType implements Comparable<GristType>
 		public Properties candyStack(Supplier<ItemStack> stack)
 		{
 			candyItem = Objects.requireNonNull(stack);
+			return this;
+		}
+		
+		public Properties color(int color)
+		{
+			this.color = color;
 			return this;
 		}
 	}

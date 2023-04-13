@@ -39,50 +39,31 @@ public final class UnderlingController
 		BlockPos spawn = new BlockPos(0, 0, 0);
 		
 		int difficulty = (int) Math.round(Math.sqrt(new Vec3i(pos.getX() >> 4, 0, pos.getZ() >> 4).distSqr(new Vec3i(spawn.getX() >> 4, 0, spawn.getZ() >> 4))));
+		difficulty = Math.min(30, difficulty / 3);
 		
-		difficulty = Math.min(30, difficulty/3);
-		
-		if(difficultyList[difficulty] != null)
+		if (difficultyList[difficulty] != null) {
 			return difficultyList[difficulty];
+		}
 		
 		List<MobSpawnSettings.SpawnerData> list = new ArrayList<>();
 		
-		int impWeight, ogreWeight = 0, basiliskWeight = 0, lichWeight = 0, giclopsWeight = 0;
-		
-		if(difficulty < 8)
-			impWeight = difficulty + 1;
-		else
-		{
-			impWeight = 8 - (difficulty - 8)/3;
-			if(difficulty < 20)
-				ogreWeight = (difficulty - 5)/3;
-			else ogreWeight = 5 - (difficulty - 20)/3;
-			
-			if(difficulty >= 16)
-			{
-				if(difficulty < 26)
-					basiliskWeight = (difficulty - 14)/2;
-				else basiliskWeight = 6;
-				if(difficulty < 28)
-					lichWeight = (difficulty - 12)/3;
-				else lichWeight = 6;
-				if(difficulty >= 20)
-					if(difficulty < 30)
-						giclopsWeight = (difficulty - 17)/3;
-					else giclopsWeight = 5;
-			}
-		}
+		//for difficulty values: 0,10,20,30
+		int impWeight = difficulty < 8 ? difficulty + 1 : 8 - (difficulty - 8) / 3; //1,7,4,0
+		int ogreWeight = difficulty < 20 ? (difficulty - 5) / 3 : 5 - (difficulty - 20) / 3; //<0,1,5,1
+		int basiliskWeight = (difficulty >= 16 && difficulty < 26) ? (difficulty - 14) / 2 : (difficulty >= 26) ? 6 : 0; //0,0,3,6
+		int lichWeight = difficulty >= 28 ? 6 : difficulty >= 16 ? (difficulty - 12) / 3 : 0; //0,0,2,6
+		int giclopsWeight = (difficulty >= 20 && difficulty < 30) ? (difficulty - 17) / 3 : difficulty >= 30 ? 4 : 0; //0,0,1,5
 		
 		if(impWeight > 0 && MinestuckConfig.SERVER.naturalImpSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.IMP.get(), impWeight, Math.max(1, (int)(impWeight/2.5)), Math.max(3, impWeight)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.IMP.get(), impWeight, Math.max(1, (int) (impWeight / 2.5)), Math.min(5, Math.max(3, impWeight))));
 		if(ogreWeight > 0 && MinestuckConfig.SERVER.naturalOgreSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.OGRE.get(), ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.max(1, ogreWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.OGRE.get(), ogreWeight, ogreWeight >= 5 ? 2 : 1, Math.min(5, Math.max(1, ogreWeight / 2))));
 		if(basiliskWeight > 0 && MinestuckConfig.SERVER.naturalBasiliskSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.BASILISK.get(), basiliskWeight, 1, Math.max(1, basiliskWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.BASILISK.get(), basiliskWeight, 1, Math.min(5, Math.max(1, basiliskWeight / 2))));
 		if(lichWeight > 0 && MinestuckConfig.SERVER.naturalLichSpawn.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.LICH.get(), lichWeight, 1, Math.max(1, lichWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.LICH.get(), lichWeight, 1, Math.min(5, Math.max(1, lichWeight / 2))));
 		if(giclopsWeight > 0 && !MinestuckConfig.SERVER.disableGiclops.get())
-			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.GICLOPS.get(), giclopsWeight, 1, Math.max(1, giclopsWeight/2)));
+			list.add(new MobSpawnSettings.SpawnerData(MSEntityTypes.GICLOPS.get(), giclopsWeight, 1, Math.min(5, Math.max(1, giclopsWeight / 2))));
 		
 		MinecraftForge.EVENT_BUS.post(new UnderlingSpawnListEvent(difficulty, list));
 		
