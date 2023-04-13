@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased 4/13]
+## [Unreleased]
+
+## [1.19.2-1.10.0.0] - 2023-04-13
 
 ### Added
 
@@ -61,14 +63,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" and "data/\<namespace\>/minestuck/title_land_types.json"
+defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 - Modified land terrain generation settings to have more variation
 - Grist selector screen now exits to the previous screen when pressing esc
-- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
+- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks
 - Player grist cache now has an upper limit that depends on the echeladder rung of the player
 
 ### Removed
@@ -87,8 +89,6 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 ### Contributors for this release
 
 - kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro, SarahK
-
-## [Unreleased]
 
 ## [1.19.2-1.9.3.0] - 2023-03-24
 
