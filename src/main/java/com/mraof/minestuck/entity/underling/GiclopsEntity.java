@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entity.underling;
 
+import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
@@ -23,7 +24,6 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
-//TODO check back and make sure removal of disableGiclops config was intentional
 public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 {
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
@@ -83,6 +83,14 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		applyGristModifier(Attributes.MAX_HEALTH, 46 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		applyGristModifier(Attributes.ATTACK_DAMAGE, 4.5 * type.getPower(), AttributeModifier.Operation.ADDITION);
 		this.xpReward = (int) (7 * type.getPower() + 5);
+	}
+	
+	@Override
+	public void baseTick()
+	{
+		super.baseTick();
+		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
+			this.discard();
 	}
 	
 	@Override
