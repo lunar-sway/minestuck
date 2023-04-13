@@ -487,7 +487,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.CLAW_SICKLE.get()).namedInput(MSItems.CAT_CLAWS_SHEATHED.get()).and().input(MSItems.HEMEOREAPER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLAW_OF_NRUBYIGLITH.get()).namedInput(MSItems.CLAW_SICKLE.get()).and().input(MSItems.GRIMOIRE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SCYTHE.get()).input(MSItems.SICKLE.get()).and().input(Items.WOODEN_SWORD).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CANDY_SCYTHE.get()).input(MSItems.SCYTHE.get()).and().input(MSItems.CANDY_CORN.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MARASCHINO_CHERRY_SCYTHE.get()).input(MSItems.SCYTHE.get()).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PROSPECTING_PICKSCYTHE.get()).input(MSItems.SCYTHE.get()).and().input(Items.GOLDEN_PICKAXE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.EIGHTBALL_SCYTHE.get()).input(MSItems.SCYTHE.get()).and().input(MSItems.EIGHTBALL.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TIME_FLAYER.get()).input(MSItems.EIGHTBALL_SCYTHE.get()).and().input(Items.CLOCK).build(consumer);
