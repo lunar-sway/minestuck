@@ -635,6 +635,8 @@ public class MSItems
 	public static final RegistryObject<Item> CASSETTE_STRAD = REGISTER.register("cassette_strad", () -> new CassetteItem(9, EnumCassetteType.STRAD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 3760));
 	public static final RegistryObject<Item> CASSETTE_WAIT = REGISTER.register("cassette_wait", () -> new CassetteItem(12, EnumCassetteType.WAIT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 4760));
 	public static final RegistryObject<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new CassetteItem(10, EnumCassetteType.WARD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 5020));
+	public static final RegistryObject<Item> CASSETTE_OTHERSIDE = REGISTER.register("cassette_otherside", () -> new CassetteItem(14, EnumCassetteType.OTHERSIDE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).tab(MSItemGroup.MAIN), 3900));
+	public static final RegistryObject<Item> CASSETTE_5 = REGISTER.register("cassette_5", () -> new CassetteItem(15, EnumCassetteType.FIVE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 3560));
 	
 	
 	/** Start of block items **/

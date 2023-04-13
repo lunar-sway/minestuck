@@ -1350,6 +1350,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemExtra(MSItems.CASSETTE_RETRO_BATTLE, "desc", "SinFrog - Retro Battle Theme");
 		addItem(MSItems.CASSETTE_PIGSTEP, "Cassette");
 		addItemExtra(MSItems.CASSETTE_PIGSTEP, "desc", "Lena Raine - Pigstep");
+		addItem(MSItems.CASSETTE_5, "Cassette");
+		addItemExtra(MSItems.CASSETTE_5, "desc", "Samuel Åberg - 5");
+		addItem(MSItems.CASSETTE_OTHERSIDE, "Cassette");
+		addItemExtra(MSItems.CASSETTE_OTHERSIDE, "desc", "Lena Raine - otherside");
 		addItem(MSItems.GUTTER_THUMB_DRIVE, "Impetus Drive");
 		addItemTooltip(MSItems.GUTTER_THUMB_DRIVE, "A mysterious USB containing invaluable secrets.");
 		addItemExtra(MSItems.GUTTER_THUMB_DRIVE, "press_shift", "Press §eSHIFT§r for more info");
@@ -1878,11 +1882,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
 		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
+		add(GristCommand.PARTIAL_SUCCESS, "Partially added grist to the grist cache for %s, but failed to add %s.");
+		add(GristCommand.NO_CAPACITY, "Failed to add to the grist cache for %s due to lacking capacity.");
 		add(GristCommand.GET, "%s has: %s");
 		add(GristCommand.ADD, "Successfully modified the grist cache for %s players.");
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
-		add(GristCommand.PARTIAL_SUCCESS, "Partially added grist to the grist cache for %s, but failed to add %s.");
-		add(GristCommand.NO_CAPACITY, "Failed to add to the grist cache for %s due to lacking capacity.");
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
 		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");

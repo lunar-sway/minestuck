@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist gutter, which is separate for each session
 - Gutter-related items that can increase the capacity of the grist gutter
 - New command `/grist_gutter show` to display the content and size of the gutter
+- Cassettes for "5" and "Otherside"
 
 ### Changed
 
