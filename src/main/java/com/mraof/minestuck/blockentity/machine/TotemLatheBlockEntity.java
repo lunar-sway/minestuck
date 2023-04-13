@@ -151,10 +151,6 @@ public class TotemLatheBlockEntity extends BlockEntity
 		BlockPos dowelPos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState oldState = level.getBlockState(dowelPos);
 		
-		//this check doesnt work with the geckolib changes, since the dowel block is that old state
-		//if(!oldState.isAir())
-		//	return false;	// Something is in the way that we shouldn't replace
-		
 		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
 				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
@@ -377,30 +373,30 @@ public class TotemLatheBlockEntity extends BlockEntity
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
-	public static void processContents(TotemLatheBlockEntity blockEntity, Level level)
+	private void processContents(Level level)
 	{
-		ItemStack dowel = blockEntity.getDowel();
+		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!blockEntity.card1.isEmpty() || !blockEntity.card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
-			if(!blockEntity.card1.isEmpty() && !blockEntity.card2.isEmpty())
-				if(!AlchemyHelper.isPunchedCard(blockEntity.card1) || !AlchemyHelper.isPunchedCard(blockEntity.card2))
+			if(!card1.isEmpty() && !card2.isEmpty())
+				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = CombinationRecipe.findResult(new CombinerWrapper(blockEntity.card1, blockEntity.card2, CombinationMode.AND), level);
+				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
-				ItemStack input = blockEntity.card1.isEmpty() ? blockEntity.card2 : blockEntity.card1;
+				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!AlchemyHelper.isPunchedCard(input))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
-				success = blockEntity.setCarvedItem(output);
+				success = setCarvedItem(output);
 		}
 		
-		//blockEntity.effects(success);
+		//effects(success);
 	}
 	
 	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)
@@ -410,7 +406,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			blockEntity.animationticks--;
 			if(blockEntity.animationticks <= 0)
 			{
-				processContents(blockEntity, level); //TODO in 1.16 there was the ITickableTileEntity, which had a nonstatic function. Now we use a static function and cannot handle processContents the same
+				blockEntity.processContents(level);
 			}
 		}
 	}
