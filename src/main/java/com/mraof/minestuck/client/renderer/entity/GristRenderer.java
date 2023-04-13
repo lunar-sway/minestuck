@@ -33,8 +33,6 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
 		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
 		
-		RenderSystem.setShaderColor(255, 0, 0, 255);
-		
 		poseStack.translate(
 				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * SHAKE_INTENSITY,
 				(Math.random() - 0.5) * Math.max(0, grist.shaderAlpha - 128) * SHAKE_INTENSITY,
