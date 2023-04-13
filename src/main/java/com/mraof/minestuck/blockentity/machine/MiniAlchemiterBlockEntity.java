@@ -5,6 +5,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;
@@ -30,6 +31,7 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
@@ -87,7 +89,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			}
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
-			return GristHelper.canAfford(level, owner, cost);
+			return GristCache.get(level, owner).canAfford(cost);
 		}
 		else
 		{
@@ -103,17 +105,19 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+		Objects.requireNonNull(cost);
 		
-		GristHelper.decrease(level, owner, cost);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
-		newItem = event.getItemResult();
-		ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
-		if(!existing.isEmpty())
-			newItem.grow(existing.getCount());
-		
-		itemHandler.setStackInSlot(OUTPUT, newItem);
+		if(GristCache.get(level, owner).tryTake(cost, GristHelper.EnumSource.CLIENT))
+		{
+			AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
+			newItem = event.getItemResult();
+			ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
+			if(!existing.isEmpty())
+				newItem.grow(existing.getCount());
+			
+			itemHandler.setStackInSlot(OUTPUT, newItem);
+		}
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
@@ -211,7 +215,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
 					scale_cost = cost.copy().scale(lvl);
-					if (!GristHelper.canAfford(level, owner, scale_cost))
+					if (!GristCache.get(level, owner).canAfford(scale_cost))
 					{
 						return lvl - 1;
 					}

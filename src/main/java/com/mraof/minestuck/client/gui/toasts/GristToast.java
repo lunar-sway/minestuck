@@ -6,41 +6,66 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.network.GristToastPacket;
+import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * A class that handles Grist Notification popups whenever you gain or lose grist.
  * Utilizes vanilla Minecraft's Toasts system, which is what the advancement and recipe popups use.
  * @author Caldw3ll
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GristToast implements Toast
 {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("minestuck", "textures/gui/toasts.png");
 	
+	
+	private static final int GRIST_VIAL_OUTLINE_OFFSETX = 29;
+	private static final int GRIST_VIAL_OUTLINE_OFFSETY = 13;
+	private static final int GRIST_VIAL_OUTLINE_WIDTH = 101;
+	private static final int GRIST_VIAL_OUTLINE_HEIGHT = 10;
+	
+	private static final int GRIST_VIAL_INSIDE_OFFSETX = 31;
+	private static final int GRIST_VIAL_INSIDE_OFFSETY = 15;
+	private static final int GRIST_VIAL_INSIDE_WIDTH = 97;
+	private static final int GRIST_VIAL_INSIDE_HEIGHT = 6;
+	
 	private static final long DISPLAY_TIME = 5000L;
 	private static final float SCALE_X = 0.6F;
 	private static final float SCALE_Y = 0.6F;
-	private GristType type;
+	
+	private final GristType type;
 	private long difference;
-	private GristHelper.EnumSource source;
-	private boolean increase;
+	private long cacheLimit;
+	private long gristCache;
+	private final GristHelper.EnumSource source;
+	private final boolean increase;
+	
 	private long lastChanged;
 	private boolean changed;
+	private int animationTimer;
 	
-	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, long pCacheLimit, long pGristCache)
 	{
 		this.type = pType;
 		this.difference = pDifference;
 		this.source = pSource;
 		this.increase = pIncrease;
+		this.cacheLimit = pCacheLimit;
+		this.gristCache = pGristCache;
 	}
 	
 	public int width() { return Mth.floor(160.0F * SCALE_X); }
@@ -55,6 +80,11 @@ public class GristToast implements Toast
 	{
 		if (this.changed)
 		{
+			if(this.gristCache >= this.cacheLimit)
+				this.animationTimer = 20;
+			else
+				this.animationTimer = 0;
+			
 			this.lastChanged = pTimeSinceLastVisible;
 			this.changed = false;
 		}
@@ -63,6 +93,7 @@ public class GristToast implements Toast
 		RenderSystem.setShaderTexture(0, TEXTURE);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		
+		//Scales the width and height of the toast's background.
 		PoseStack posestack = RenderSystem.getModelViewStack();
 		posestack.pushPose();
 		//Scales the width and height of the toast's background.
@@ -76,50 +107,74 @@ public class GristToast implements Toast
 		//Draws the icon indication the grist toast's "source".
 		switch(this.source)
 		{
-			case CLIENT -> pToastComponent.blit(pPoseStack, 5, 5, 196, 0, 20, 20);
-			case SERVER -> pToastComponent.blit(pPoseStack, 5, 5, 196, 20, 20, 20);
-			case SENDGRIST -> pToastComponent.blit(pPoseStack, 5, 5, 216, 0, 20, 20);
-			case CONSOLE -> pToastComponent.blit(pPoseStack, 5, 5, 216, 20, 20, 20);
-		}
-		
-		//Changes the colors depending on whether the grist amount is gained or lost.
-		if(this.increase)
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 20, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0x06c31c);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("+" + this.difference), 30.0F, 18.0F, 0x000000);
-		} else
-		{
-			pToastComponent.blit(pPoseStack, 0, 17, 176, 0, 20, 20);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, this.type.getDisplayName(), 30.0F, 7.0F, 0xff0000);
-			pToastComponent.getMinecraft().font.draw(pPoseStack, Component.literal("-" + this.difference), 30.0F, 18.0F, 0x000000);
+			case CLIENT -> pToastComponent.blit(pPoseStack, 133, 7, 196, 0, 20, 20);
+			case SERVER -> pToastComponent.blit(pPoseStack, 133, 7, 196, 20, 20, 20);
+			case SENDGRIST -> pToastComponent.blit(pPoseStack, 133	, 7, 216, 0, 20, 20);
+			case CONSOLE -> pToastComponent.blit(pPoseStack, 133, 7, 216, 20, 20, 20);
 		}
 		
 		posestack = RenderSystem.getModelViewStack();
 		posestack.pushPose();
-		
-		//scale for the grist-icon since it doesn't inherit the background's scale for some reason.
-		posestack.scale(0.8F, 0.8F, 1.0F);
-		
+		posestack.scale(0.8f, 0.8f, 1.0f); //scale for the grist-icon since it doesn't inherit the background's scale for some reason.
 		RenderSystem.applyModelViewMatrix();
-		
-		//draws the grist icon.
-		this.drawIcon(100, 4, type.getIcon());
-		
+		this.drawIcon(5, 4, type.getIcon()); //draws the grist icon.
 		posestack.popPose();
+		
+		posestack = RenderSystem.getModelViewStack();
+		posestack.pushPose();
+		posestack.scale(SCALE_X, SCALE_Y, 1.0F); //Scales the width and height of the toast's other features.
 		RenderSystem.applyModelViewMatrix();
+		posestack.popPose();
+		
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderTexture(0, TEXTURE);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		//Basically determines the y coord of the torrent icon when bumping up and down.
+		int animationOffset = (this.animationTimer/2) <= 5 ? (this.animationTimer/2)%5 : 5 - ((this.animationTimer/2)%5);
+		
+		if(this.gristCache >= this.cacheLimit)
+			pToastComponent.blit(pPoseStack, 0, 17 - animationOffset, 176, 60, 20, 20);
+			
+		//draw meter
+		GuiComponent.fill(pPoseStack,GRIST_VIAL_INSIDE_OFFSETX, GRIST_VIAL_INSIDE_OFFSETY, GRIST_VIAL_INSIDE_OFFSETX + (int)(GRIST_VIAL_INSIDE_WIDTH * this.gristCache / this.cacheLimit), GRIST_VIAL_INSIDE_OFFSETY + GRIST_VIAL_INSIDE_HEIGHT, 0xff19B3EF); //the grist bar (has two extra digits in pColor because fill has opacity.
+		pToastComponent.blit(pPoseStack, GRIST_VIAL_OUTLINE_OFFSETX, GRIST_VIAL_OUTLINE_OFFSETY, 0, 128, GRIST_VIAL_OUTLINE_WIDTH, GRIST_VIAL_OUTLINE_HEIGHT); //Bar outline
+		
+		
+		drawText(pPoseStack, pToastComponent.getMinecraft().font);
+		
+		
+		if(this.animationTimer > 0)
+			this.animationTimer =- 1;
 		
 		return pTimeSinceLastVisible - this.lastChanged >= DISPLAY_TIME ? Toast.Visibility.HIDE : Toast.Visibility.SHOW;
 		
 		
 	}
 	
+	private void drawText(PoseStack poseStack, Font font)
+	{
+		int textColor = this.increase ? 0x06c31c : 0xff0000;
+		
+		font.draw(poseStack, "(%s%s)".formatted(this.increase ? "+" : "-", GuiUtil.addSuffix(this.difference)), 30.0F, 5.0F, textColor);
+		
+		String cacheText = GuiUtil.addSuffix(this.gristCache);
+		String limitText = " / " + GuiUtil.addSuffix(this.cacheLimit);
+		int fullBottomTextWidth = font.width(cacheText) + font.width(limitText);
+		if(fullBottomTextWidth <= GRIST_VIAL_INSIDE_WIDTH)
+		{
+			float xLeft = 31.0F + (GRIST_VIAL_INSIDE_WIDTH - fullBottomTextWidth)/2F;
+			font.draw(poseStack, cacheText, xLeft, 24.0F, textColor);
+			font.draw(poseStack, limitText, xLeft + font.width(cacheText), 24.0F, 0x000000);
+		} else
+		{
+			font.draw(poseStack, cacheText, 31.0F + (GRIST_VIAL_INSIDE_WIDTH - font.width(cacheText))/2F, 24.0F, textColor);
+		}
+	}
+	
 	//modified version of drawIcon() from MinestuckScreen.java
 	private void drawIcon(int x, int y, ResourceLocation icon)
 	{
-		if(icon == null || Minecraft.getInstance() == null)
-			return;
-		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, icon);
 		
@@ -139,50 +194,59 @@ public class GristToast implements Toast
 		Tesselator.getInstance().end();
 	}
 	
-	//adds pDifference to the toast's current grist value.
-	private void addGrist(long pDifference)
+	/**
+	 * adds difference to the toast's current grist value.
+	 */
+	private void addGrist(long difference, long newLimit, long newCacheAmount)
 	{
-		
-		this.difference += pDifference;
+		this.difference += difference;
+		this.cacheLimit = newLimit;
+		this.gristCache = newCacheAmount;
 		this.changed = true;
-		
 	}
 	
 	//Updates the grist value of any existing toasts, and if there aren't any of the same type, it instantiates a new one. NEVER use addToast() directly when adding a grist toast, ALWAYS use this method.
-	public static void addOrUpdate(ToastComponent pToastGui, GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease)
+	public static void addOrUpdate(ToastComponent toastGui, GristType type, long difference, GristHelper.EnumSource source, boolean isIncrease, long cacheLimit, long cacheAmount)
 	{
-		
 		//try to find an existing toast with the same properties as the one being added.
-		GristToast gristToast = pToastGui.getToast(GristToast.class, pType.getTranslationKey() + pSource + String.valueOf(pIncrease));
+		GristToast gristToast = toastGui.getToast(GristToast.class, new Token(type, source, isIncrease));
 		
-		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using pDifference.
+		//if none can be found, add a new toast. If an existing toast *can* be found, update its grist amount using difference.
 		if (gristToast == null)
-			pToastGui.addToast(new GristToast(pType, pDifference, pSource, pIncrease));
+			toastGui.addToast(new GristToast(type, difference, source, isIncrease, cacheLimit, cacheAmount));
 		else
-			gristToast.addGrist(pDifference);
+			gristToast.addGrist(difference, cacheLimit, cacheAmount);
 	}
 	
-	public static void sendGristMessage(GristSet set, GristHelper.EnumSource source, boolean increase)
+	private record Token(GristType type, GristHelper.EnumSource source, boolean isIncrease)
+	{}
+	
+	public static void handlePacket(GristToastPacket packet)
 	{
+		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner());
+		GristHelper.EnumSource source = packet.source();
+		long cacheLimit = packet.cacheLimit();
+		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
-		List<GristAmount> reqs = set.getAmounts();
-		for(GristAmount pairs : reqs)
+		for(GristAmount pairs : packet.gristValue().getAmounts())
 		{
 			//the pair has to be split into two new variables because Map.Entry is immutable.
 			GristType type = pairs.getType();
 			long difference = pairs.getAmount();
+			long total = cache.getGrist(type);
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, difference, source, increase);
+				GristToast.addOrUpdate(toasts, type, difference, source, true, cacheLimit, total);
 			else
-				GristToast.addOrUpdate(Minecraft.getInstance().getToasts(), type, Math.abs(difference), source, !(increase));
+				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cacheLimit, total);
 		}
 	}
 	
 	//returns a single token that contains the grist type, the source, and whether its positive or negative. Used with getToast() to retrieve toasts that can be merged.
-	public String getToken()
+	@Override
+	public Token getToken()
 	{
-		return this.type.getTranslationKey() + this.source + String.valueOf(this.increase);
+		return new Token(this.type, this.source, this.increase);
 	}
 }

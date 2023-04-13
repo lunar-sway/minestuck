@@ -80,7 +80,7 @@ public final class DefaultSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Set<Session> getSessions()
+	public Set<Session> getSessions()
 	{
 		return Collections.unmodifiableSet(sessions);
 	}

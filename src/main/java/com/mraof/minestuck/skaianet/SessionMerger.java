@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
@@ -53,6 +54,7 @@ final class SessionMerger
 		if(originalSession.locked)
 			return Collections.emptyList();
 		
+		double originalGutterMultiplier = originalSession.getGristGutter().gutterMultiplierForSession();
 		Set<SburbConnection> unhandledConnections = new HashSet<>(originalSession.connections);
 		Set<PlayerIdentifier> unhandledPredefine = new HashSet<>(originalSession.predefinedPlayers.keySet());
 		
@@ -77,6 +79,14 @@ final class SessionMerger
 		
 		sessions.forEach(session1 -> originalSession.connections.removeAll(session1.connections));
 		sessions.forEach(session1 -> originalSession.predefinedPlayers.keySet().removeAll(session1.predefinedPlayers.keySet()));
+		
+		for(Session session : sessions)
+		{
+			double gutterMultiplier = session.getGristGutter().gutterMultiplierForSession();
+			GristSet takenGrist = originalSession.getGristGutter().takeFraction(gutterMultiplier/originalGutterMultiplier);
+			session.getGristGutter().addGristFrom(takenGrist);
+			originalGutterMultiplier -= gutterMultiplier;
+		}
 		
 		return sessions;
 	}

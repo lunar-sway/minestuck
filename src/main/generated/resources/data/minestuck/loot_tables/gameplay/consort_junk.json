@@ -101,6 +101,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "minestuck:ancient_thumb_drive"
+        },
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "add": false,

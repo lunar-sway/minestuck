@@ -41,6 +41,12 @@ public class Echeladder
 	private static final UUID echeladderDamageBoostModifierUUID = UUID.fromString("a74176fd-bf4e-4153-bb68-197dbe4109b2");
 	private static final int[] BOONDOLLARS = new int[]{0, 50, 75, 105, 140, 170, 200, 250, 320, 425, 575, 790, 1140, 1630, 2230, 2980, 3850, 4800, 6000, 7500, 9500, 11900, 15200, 19300, 24400, 45000, 68000, 95500, 124000, 180000, 260000, 425000, 632000, 880000, 1000000};
 	
+	private static final long[] GRIST_CAPACITY =
+			{60, 75, 93, 116, 145, 181, 226, 282, 352, 440, 550, 687, 858, 1072, 1340, 1675, 2093, 2616, 3270, 4087, 
+			5108, 6385, 7981, 9976, 12470, 15587, 19483, 24353, 30441, 38051, 47563, 59453, 74316, 92895, 116118, 
+			145147, 181433, 226791, 283488, 354360, 442950, 553687, 692108, 865135, 1081418, 1351772, 1689715, 2112143, 2640178, 3300222};
+			//each value is achieved by multiplying the previous by 1.25 and then rounding the result down to get an integer number
+	
 	public static void increaseProgress(PlayerIdentifier player, Level level, int progress)
 	{
 		PlayerSavedData.getData(player, level).getEcheladder().increaseProgress(progress);
@@ -228,6 +234,16 @@ public class Echeladder
 	public static double getUnderlingProtectionModifier(int rung)
 	{
 		return 1 / (rung * 0.06D + 1);
+	}
+	
+	public static long getGristCapacity(int rung)
+	{
+		return GRIST_CAPACITY[rung];
+	}
+	
+	public long getGristCapacity()
+	{
+		return getGristCapacity(this.rung);
 	}
 	
 	public void setByCommand(int rung, double progress)

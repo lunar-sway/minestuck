@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -24,10 +25,11 @@ public class GristAmount
 	
 	public GristAmount(GristType type, long amount)
 	{
-		this.type = type;
+		this.type = Objects.requireNonNull(type);
 		this.amount = amount;
 	}
 	
+	@Nonnull
 	public GristType getType()
 	{
 		return type;

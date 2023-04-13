@@ -1,29 +1,16 @@
 package com.mraof.minestuck.alchemy;
 
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.GristToastPacket;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerData;
-import com.mraof.minestuck.player.PlayerSavedData;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Supplier;
 
 public class GristHelper
 {
@@ -83,29 +70,7 @@ public class GristHelper
 		
 	}
 	
-	/**
-	 * A shortened statement to obtain a certain grist count.
-	 */
-	public static long getGrist(Level level, PlayerIdentifier player, GristType type)
-	{
-		return PlayerSavedData.getData(player, level).getGristCache().getGrist(type);
-	}
-	
-	public static long getGrist(Level level, PlayerIdentifier player, Supplier<GristType> type)
-	{
-		return getGrist(level, player, type.get());
-	}
-	
-	public static boolean canAfford(ServerPlayer player, GristSet cost)
-	{
-		return canAfford(PlayerSavedData.getData(player).getGristCache(), cost);
-	}
-	
-	public static boolean canAfford(Level level, PlayerIdentifier player, GristSet cost)
-	{
-		return canAfford(PlayerSavedData.getData(player, level).getGristCache(), cost);
-	}
-	
+	//TODO figure out how best to check cache capacity client-side
 	public static boolean canAfford(GristSet base, GristSet cost)
 	{
 		if(base == null || cost == null)
@@ -128,68 +93,4 @@ public class GristHelper
 		return false;
 	}
 	
-	/**
-	 * Uses the encoded version of the username!
-	 */
-	public static void decrease(Level level, PlayerIdentifier player, GristSet set)
-	{
-		increase(level, player, set.copy().scale(-1));
-	}
-	
-	public static void decreaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
-	{
-		decrease(level, player, set);
-		notify(level.getServer(), player, set, source, false);
-	}
-	
-	public static void increase(Level level, PlayerIdentifier player, GristSet set)
-	{
-		Objects.requireNonNull(level);
-		Objects.requireNonNull(player);
-		Objects.requireNonNull(set);
-		PlayerData data = PlayerSavedData.getData(player, level);
-		NonNegativeGristSet newCache = new NonNegativeGristSet(data.getGristCache());
-		newCache.addGrist(set);
-		data.setGristCache(newCache);
-	}
-	
-	public static void increaseAndNotify(Level level, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
-	{
-		increase(level, player, set);
-		notify(level.getServer(), player, set, source, true);
-	}
-	
-	/**
-	 * Sends a request to make a client-side Toast Notification for incoming/outgoing grist, if enabled in the config.
-	 * @param server Used for getting the ServerPlayer from their PlayerIdentifier
-	 * @param player The Player that the notification should appear for.
-	 * @param set The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
-	 * @param source Indicates where the notification is coming from. See EnumSource.
-	 * @param increase Indicates whether the grist is gained or lost.
-	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source, boolean increase)
-	{
-		if(MinestuckConfig.SERVER.showGristChanges.get())
-		{
-			GristToastPacket gristToastPacket = new GristToastPacket(set, source, increase);
-			
-			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(gristToastPacket, player.getPlayer(server));
-			
-			if (source == EnumSource.SERVER)
-			{
-				SburbConnection sc = SkaianetHandler.get(server).getActiveConnection(player);
-				if(sc == null)
-					return;
-				
-				EditData ed = ServerEditHandler.getData(server, sc);
-				if(ed == null)
-					return;
-				
-				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(gristToastPacket, ed.getEditor());
-
-			}
-		}
-	}
 }

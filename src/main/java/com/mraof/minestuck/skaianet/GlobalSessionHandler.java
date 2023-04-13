@@ -52,7 +52,7 @@ public final class GlobalSessionHandler extends SessionHandler
 	}
 	
 	@Override
-	Set<Session> getSessions()
+	public Set<Session> getSessions()
 	{
 		return Collections.singleton(globalSession);
 	}

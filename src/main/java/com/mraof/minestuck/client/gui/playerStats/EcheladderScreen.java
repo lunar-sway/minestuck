@@ -7,6 +7,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.renderer.GameRenderer;
+import com.mraof.minestuck.alchemy.GristHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
@@ -226,8 +227,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.font.draw(poseStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF);
 		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
+		/**
+		 * here we are rendering the grist cache limit.
+		 * we show the current limit by calling the rungGrist array in grist helper.
+		 * this is seen on string.valueOf(GristHelper...
+		 */
 		mc.font.draw(poseStack, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040);
-		mc.font.draw(poseStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
+		mc.font.draw(poseStack, String.valueOf(Echeladder.getGristCapacity(currentRung)), xOffset + 26,
+				yOffset + 147, 0x0094FF);
 		
 		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING),
