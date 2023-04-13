@@ -81,6 +81,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Fixed resizing issue with grist selector screen
 - Fixed some light problems with entry, possibly fixed other behaviors with entry
 - End leaves burn in a more reasonable way now
+- Fix gap between grist toasts
 
 ### Contributors for this release
 

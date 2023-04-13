@@ -44,8 +44,10 @@ public class GristToast implements Toast
 	private static final int GRIST_VIAL_INSIDE_HEIGHT = 6;
 	
 	private static final long DISPLAY_TIME = 5000L;
-	private static final float SCALE_X = 0.6F;
-	private static final float SCALE_Y = 0.6F;
+	
+	// At the time of writing (mc1.19.2), vanilla does not properly support toast sizes smaller than the usual toast size7
+	private static final float SCALE_X = 1;//0.6F;
+	private static final float SCALE_Y = 1;//0.6F;
 	
 	private final GristType type;
 	private long difference;
@@ -99,7 +101,6 @@ public class GristToast implements Toast
 		//Scales the width and height of the toast's background.
 		posestack.scale(SCALE_X, SCALE_Y, 1.0F);
 		RenderSystem.applyModelViewMatrix();
-		posestack.popPose();
 		
 		//draws the background.
 		pToastComponent.blit(pPoseStack, 0, 0, 0, 0, 160, 32);
@@ -113,18 +114,13 @@ public class GristToast implements Toast
 			case CONSOLE -> pToastComponent.blit(pPoseStack, 133, 7, 216, 20, 20, 20);
 		}
 		
-		posestack = RenderSystem.getModelViewStack();
 		posestack.pushPose();
-		posestack.scale(0.8f, 0.8f, 1.0f); //scale for the grist-icon since it doesn't inherit the background's scale for some reason.
+		posestack.scale(4f/3f, 4f/3f, 1.0f);
 		RenderSystem.applyModelViewMatrix();
 		this.drawIcon(5, 4, type.getIcon()); //draws the grist icon.
-		posestack.popPose();
 		
-		posestack = RenderSystem.getModelViewStack();
-		posestack.pushPose();
-		posestack.scale(SCALE_X, SCALE_Y, 1.0F); //Scales the width and height of the toast's other features.
-		RenderSystem.applyModelViewMatrix();
 		posestack.popPose();
+		RenderSystem.applyModelViewMatrix();
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, TEXTURE);
@@ -146,6 +142,8 @@ public class GristToast implements Toast
 		
 		if(this.animationTimer > 0)
 			this.animationTimer =- 1;
+		
+		posestack.popPose();
 		
 		return pTimeSinceLastVisible - this.lastChanged >= DISPLAY_TIME ? Toast.Visibility.HIDE : Toast.Visibility.SHOW;
 		
