@@ -64,7 +64,7 @@ public class ProgramData
 	@Nonnull
 	public static ItemStack getItem(int id)
 	{
-		if(id == 2)
+		if(id == 2 || id==3)
 			return ItemStack.EMPTY;
 		return disks.get(id).copy();
 	}

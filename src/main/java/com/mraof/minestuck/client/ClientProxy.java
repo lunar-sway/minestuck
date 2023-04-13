@@ -13,10 +13,7 @@ import com.mraof.minestuck.client.renderer.blockentity.SkaiaPortalRenderer;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.computer.DiskBurner;
-import com.mraof.minestuck.computer.SburbClient;
-import com.mraof.minestuck.computer.SburbServer;
+import com.mraof.minestuck.computer.*;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
@@ -98,6 +95,7 @@ public class ClientProxy
 		ComputerProgram.registerProgramClass(0, SburbClient.class);
 		ComputerProgram.registerProgramClass(1, SburbServer.class);
 		ComputerProgram.registerProgramClass(2, DiskBurner.class);
+		ComputerProgram.registerProgramClass(3, SettingsApp.class);
 		
 		registerArmorModels();
 

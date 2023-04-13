@@ -11,6 +11,7 @@ public interface ISburbComputer
 	
 	void putClientBoolean(String name, boolean value);
 	void putServerBoolean(String name, boolean value);
+	
 	void clearConnectedClient();
 	
 	default void setIsResuming(boolean isClient)
@@ -26,4 +27,7 @@ public interface ISburbComputer
 	void connected(PlayerIdentifier player, boolean isClient);
 	
 	ComputerReference createReference();
+	
+	Theme getTheme();
+	void setTheme(Theme theme);
 }

@@ -75,6 +75,9 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 ### Added
 
 - Combination recipes and grist costs for items introduced in minecraft 1.19
+- New interface for the computers with a desktop home screen
+- Advanced color selector with support for colors other than the original sixteen
+- Settings program and a simple theming system to change the color of the desktop
 
 ### Changed
 
