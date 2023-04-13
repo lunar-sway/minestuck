@@ -94,6 +94,17 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
+	protected void tickDeath()
+	{
+		this.deathTime++;
+		if (this.deathTime == 90 && !this.level.isClientSide())
+		{
+			this.level.broadcastEntityEvent(this, (byte) 60);
+			this.remove(Entity.RemovalReason.KILLED);
+		}
+	}
+	
+	@Override
 	public void die(DamageSource cause)
 	{
 		super.die(cause);
