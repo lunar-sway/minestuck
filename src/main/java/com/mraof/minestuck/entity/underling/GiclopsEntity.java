@@ -26,9 +26,13 @@ import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 {
 	public static final PhasedMobAnimation KICK_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
@@ -178,7 +182,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 	
@@ -186,7 +190,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -198,7 +202,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 		
 		if(action == MobAnimation.Action.KICK)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("kick", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("kick", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		
@@ -210,7 +214,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
