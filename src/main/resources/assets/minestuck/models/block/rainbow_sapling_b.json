@@ -2,6 +2,6 @@
     "parent": "block/cross",
     "render_type": "cutout",
     "textures": {
-        "cross": "minestuck:block/rainbow_sapling_b"
+        "cross": "minestuck:block/rainbow_sapling"
     }
 }
