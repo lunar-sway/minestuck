@@ -318,6 +318,11 @@ public class WeaponItem extends TieredItem
 			return addItemUses(32, UseAnim.EAT, effects);
 		}
 		
+		public Builder setEating(int duration, FinishUseItemEffect... effects)
+		{
+			return addItemUses(duration, UseAnim.EAT, effects);
+		}
+		
 		public Builder addItemUses(int duration, UseAnim action, FinishUseItemEffect... effects)
 		{
 			useDuration = duration;

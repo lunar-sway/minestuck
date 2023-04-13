@@ -475,6 +475,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SICKLE.get()).input(Items.IRON_HOE).and().input(Items.WHEAT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OW_THE_EDGE.get()).input(MSItems.HEMEOREAPER.get()).or().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.THORNY_SUBJECT.get()).input(MSItems.SICKLE.get()).and().input(Items.ROSE_BUSH).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.SNOW_WHITE_DREAM.get()).input(MSItems.THORNY_SUBJECT.get()).and().input(Items.APPLE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.HOMES_SMELL_YA_LATER.get()).input(MSItems.SICKLE.get()).or().input(MSItems.THRESH_DVD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.HEMEOREAPER.get()).input(MSItems.HOMES_SMELL_YA_LATER.get()).or().input(MSItems.BLOOD_BUCKET.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FUDGESICKLE.get()).input(MSItems.SICKLE.get()).or().input(Items.COCOA_BEANS).build(consumer);
@@ -517,6 +518,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.METAL_BAT.get()).input(MSItems.DEUCE_CLUB.get()).and().input(Items.IRON_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CRICKET_BAT.get()).input(MSItems.METAL_BAT.get()).or().input(MSItems.GRASSHOPPER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CLOWN_CLUB.get()).input(MSItems.METAL_BAT.get()).or().input(MSItems.HORN.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.DOCTOR_DETERRENT.get()).input(MSItems.SNOW_WHITE_DREAM.get()).and().input(MSItems.DEUCE_CLUB.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPIKED_CLUB.get()).input(MSItems.METAL_BAT.get()).or().input(ItemTags.LOGS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.M_ACE.get()).input(MSItems.MACE.get()).and().input(MSItems.NONBINARY_CODE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DESOLATOR_MACE.get()).input(MSItems.MACE.get()).or().input(Items.FLINT).build(consumer);
@@ -794,6 +796,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.FROST_BRICKS.get()).input(Items.STONE_BRICKS).and().namedInput(Items.PACKED_ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.ICE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_FROST_BRICKS.get()).input(Items.CHISELED_STONE_BRICKS).and().namedInput(Items.PACKED_ICE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get()).input(MSBlocks.CHISELED_MYCELIUM_BRICKS.get()).or().namedInput(MSItems.SUSHROOM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CAST_IRON.get()).input(Items.IRON_BLOCK).and().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHISELED_CAST_IRON.get()).input(Items.CHISELED_STONE_BRICKS).or().input(MSBlocks.CAST_IRON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.STEEL_BEAM.get()).input(Items.QUARTZ_PILLAR).and().input(MSBlocks.CAST_IRON.get()).build(consumer);

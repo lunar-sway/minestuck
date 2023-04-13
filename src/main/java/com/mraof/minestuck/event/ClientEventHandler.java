@@ -45,7 +45,6 @@ public class ClientEventHandler
 				if(MinestuckConfig.CLIENT.loginColorSelector.get())
 					Minecraft.getInstance().setScreen(new ColorSelectorScreen(true));
 			}
-			
 		}
 	}
 	

@@ -18,14 +18,16 @@ public class DeployEntry
 	private DeployList.IAvailabilityCondition condition;
 	private BiFunction<SburbConnection, Level, ItemStack> item;
 	private BiFunction<Boolean, SburbConnection, GristSet> grist;
+	private DeployList.EntryLists category;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
 	{
 		this.name = name;
 		this.tier = tier;
 		this.condition = condition;
 		this.item = item;
 		this.grist = grist;
+		this.category = entryList;
 	}
 	
 	public String getName()
@@ -37,6 +39,8 @@ public class DeployEntry
 	{
 		return tier;
 	}
+
+	public DeployList.EntryLists getCategory() { return category; }
 	
 	public boolean isAvailable(SburbConnection c, int tier)
 	{
@@ -73,6 +77,7 @@ public class DeployEntry
 			stack.save(tag);
 			tag.putInt("i", i);
 			tag.put("cost", cost.write(new ListTag()));
+			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}
 	}

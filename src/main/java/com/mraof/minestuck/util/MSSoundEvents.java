@@ -94,7 +94,8 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_LOOT_SPAWN = register("event.lotus_flower.loot_spawn"); //based on boat paddle land and item pop
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_OPEN = register("event.lotus_flower.open"); //identical to composter ready
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
-	
+	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
+	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
 	
 	private static RegistryObject<SoundEvent> register(String name)
 	{

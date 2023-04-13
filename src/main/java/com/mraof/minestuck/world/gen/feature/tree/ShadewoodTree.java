@@ -14,6 +14,7 @@ public class ShadewoodTree extends AbstractTreeGrower
 	@Override
 	protected Holder<? extends ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource rand, boolean hasFlowers)
 	{
+		//TODO theres an issue with structure nbt defined variants that prevent them from generating correctly when grown from saplings
 		return rand.nextInt(20) == 0 ? MSCFeatures.SCARRED_SHADEWOOD_TREE.getHolder().orElseThrow() : MSCFeatures.SHADEWOOD_TREE.getHolder().orElseThrow();
 	}
 }

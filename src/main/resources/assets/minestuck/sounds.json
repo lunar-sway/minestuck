@@ -766,5 +766,25 @@
     "sounds": [
       "minecraft:block/beehive/exit"
     ]
+  },
+  "event.edit_tools.revise": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_revise",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_revise",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_tools.recycle": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_recycle",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_recycle",
+        "stream": false
+      }
+    ]
   }
 }

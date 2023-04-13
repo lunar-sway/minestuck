@@ -11,10 +11,7 @@ import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.ConsortDialogue;
-import com.mraof.minestuck.entry.ComputerBlockProcess;
-import com.mraof.minestuck.entry.EntryProcess;
-import com.mraof.minestuck.entry.RSEntryBlockProcess;
-import com.mraof.minestuck.entry.TransportalizerBlockProcess;
+import com.mraof.minestuck.entry.*;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
@@ -133,9 +130,9 @@ public class Minestuck
 		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
 		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
 		
-		EntryProcess.addBlockProcessing(new ComputerBlockProcess());
-		EntryProcess.addBlockProcessing(new TransportalizerBlockProcess());
+		BlockCopier.addStep(new ComputerBlockProcess());
+		BlockCopier.addStep(new TransportalizerBlockProcess());
 		if(ModList.get().isLoaded("refinedstorage"))
-			EntryProcess.addBlockProcessing(new RSEntryBlockProcess());
+			BlockCopier.addStep(new RSEntryBlockProcess());
 	}
 }

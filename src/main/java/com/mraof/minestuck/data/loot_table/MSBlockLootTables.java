@@ -139,6 +139,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MYCELIUM_BRICKS.get());
 		dropSelf(MYCELIUM_COLUMN.get());
 		dropSelf(CHISELED_MYCELIUM_BRICKS.get());
+		dropSelf(SUSPICIOUS_CHISELED_MYCELIUM_BRICKS.get());
 		dropSelf(CRACKED_MYCELIUM_BRICKS.get());
 		dropSelf(MOSSY_MYCELIUM_BRICKS.get());
 		dropSelf(FLOWERY_MYCELIUM_BRICKS.get());
