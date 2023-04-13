@@ -1882,6 +1882,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SendGristCommand.RECEIVE, "Received grist from %s: %s");
 		add(SendGristCommand.NOT_PERMITTED, "You are not permitted to send grist to %s.");
 		add(SendGristCommand.CANT_AFFORD, "You do not have enough grist to send %s.");
+		add(GristCommand.PARTIAL_SUCCESS, "Partially added grist to the grist cache for %s, but failed to add %s.");
+		add(GristCommand.NO_CAPACITY, "Failed to add to the grist cache for %s due to lacking capacity.");
 		add(GristCommand.GET, "%s has: %s");
 		add(GristCommand.ADD, "Successfully modified the grist cache for %s players.");
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
