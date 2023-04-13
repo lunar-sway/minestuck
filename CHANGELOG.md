@@ -52,6 +52,7 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Modified land terrain generation settings to have more variation
 - Grist selector screen now exits to the previous screen when pressing esc
 - Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
+- Updated textures for the Rainbow wood set
 
 ### Removed
 
