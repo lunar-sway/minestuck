@@ -11,6 +11,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -22,6 +23,11 @@ public class ItemStackBlockEntity extends BlockEntity implements IColored
 	public ItemStackBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.ITEM_STACK.get(), pos, state);
+	}
+	
+	public ItemStackBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+	{
+		super(type, pos, state);
 	}
 	
 	private ItemStack stack = ItemStack.EMPTY;

@@ -3,11 +3,14 @@ package com.mraof.minestuck.entity.consort;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.entity.SimpleTexturedEntity;
+import com.mraof.minestuck.entity.AnimatedPathfinderMob;
+import com.mraof.minestuck.entity.ai.AnimatedPanicGoal;
+import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
@@ -41,17 +44,26 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 import org.slf4j.Logger;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
+public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, IAnimatable
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	private final EnumConsort consortType;
+	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
+	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
 	
+	private final AnimationFactory factory = new AnimationFactory(this);
+	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
 	int messageTicksLeft;
@@ -74,18 +86,24 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 	
 	public static AttributeSupplier.Builder consortAttributes()
 	{
-		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.25);
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10).add(Attributes.MOVEMENT_SPEED, 0.35);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
-		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6F));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D, PANIC_ANIMATION));
+		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 		goalSelector.addGoal(4, new AvoidEntityGoal<>(this, Player.class, 16F, 1.0D, 1.4D, this::shouldFleeFrom));
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return this.factory;
 	}
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
@@ -126,6 +144,7 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 					if(text != null)
 						player.sendSystemMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
+					setCurrentAnimation(TALK_ANIMATION);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -412,5 +431,87 @@ public class ConsortEntity extends SimpleTexturedEntity implements MenuProvider
 	public static boolean canConsortSpawnOn(EntityType<ConsortEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+	}
+	
+	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		return PlayState.CONTINUE;
+	}
+	
+	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		
+		if(!event.isMoving())
+		{
+			return PlayState.STOP;
+		}
+		
+		if(action == MobAnimation.Action.PANIC)
+		{
+			//TODO add a system for the panic animation intended to precede this
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
+			return PlayState.CONTINUE;
+		} else if(action != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		} else if(event.getAnimatable().jumping)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", false));
+			return PlayState.CONTINUE;
+		}
+		else {
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
+	}
+	
+	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+		return PlayState.CONTINUE;
+	}
+	
+	private static PlayState deathAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		if(event.getAnimatable().dead)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+	
+	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
+	{
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		if(action == MobAnimation.Action.TALK)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
+			return PlayState.CONTINUE;
+		}
+		
+		return PlayState.STOP;
 	}
 }

@@ -132,10 +132,23 @@ public class AlchemiterBlock extends MultiMachineBlock<AlchemiterMultiblock> imp
 	public static class Pad extends AlchemiterBlock implements EntityBlock
 	{
 		public static final EnumProperty<EnumDowelType> DOWEL = MSProperties.DOWEL_OR_NONE;
+		private final Map<Direction, VoxelShape> dowelShape;
 		
-		public Pad(AlchemiterMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Pad(AlchemiterMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, Properties properties)
 		{
-			super(machine, shape, false, false, new BlockPos(0, 0, 0), properties);
+			super(machine, emptyShape, false, false, new BlockPos(0, 0, 0), properties);
+			this.dowelShape = dowelShape.createRotatedShapes();
+		}
+		
+		@Override
+		public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context)
+		{
+			if(state.getValue(DOWEL).equals(EnumDowelType.NONE))
+			{
+				return super.getShape(state, worldIn, pos, context);
+			}
+			
+			return dowelShape.get(state.getValue(FACING));
 		}
 		
 		@Nullable

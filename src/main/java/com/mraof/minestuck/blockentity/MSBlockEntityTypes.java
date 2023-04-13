@@ -20,6 +20,7 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<MiniPunchDesignixBlockEntity>> MINI_PUNCH_DESIGNIX = REGISTER.register("mini_punch_designix", () -> BlockEntityType.Builder.of(MiniPunchDesignixBlockEntity::new, MSBlocks.MINI_PUNCH_DESIGNIX.get()).build(null));
 	public static final RegistryObject<BlockEntityType<CruxtruderBlockEntity>> CRUXTRUDER = REGISTER.register("cruxtruder", () -> BlockEntityType.Builder.of(CruxtruderBlockEntity::new, MSBlocks.CRUXTRUDER.CENTER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<TotemLatheBlockEntity>> TOTEM_LATHE = REGISTER.register("totem_lathe", () -> BlockEntityType.Builder.of(TotemLatheBlockEntity::new, MSBlocks.TOTEM_LATHE.CARD_SLOT.get()).build(null));
+	public static final RegistryObject<BlockEntityType<TotemLatheDowelBlockEntity>> TOTEM_LATHE_DOWEL = REGISTER.register("totem_lathe_dowel", () -> BlockEntityType.Builder.of(TotemLatheDowelBlockEntity::new, MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
 	public static final RegistryObject<BlockEntityType<AlchemiterBlockEntity>> ALCHEMITER = REGISTER.register("alchemiter", () -> BlockEntityType.Builder.of(AlchemiterBlockEntity::new, MSBlocks.ALCHEMITER.TOTEM_PAD.get()).build(null));
 	public static final RegistryObject<BlockEntityType<PunchDesignixBlockEntity>> PUNCH_DESIGNIX = REGISTER.register("punch_designix", () -> BlockEntityType.Builder.of(PunchDesignixBlockEntity::new, MSBlocks.PUNCH_DESIGNIX.SLOT.get()).build(null));
 	public static final RegistryObject<BlockEntityType<SendificatorBlockEntity>> SENDIFICATOR = REGISTER.register("sendificator", () -> BlockEntityType.Builder.of(SendificatorBlockEntity::new, MSBlocks.SENDIFICATOR.get()).build(null));
@@ -35,6 +36,8 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE_MAIN.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<CassettePlayerBlockEntity>> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> BlockEntityType.Builder.of(CassettePlayerBlockEntity::new, MSBlocks.CASSETTE_PLAYER.get()).build(null));
+	public static final RegistryObject<BlockEntityType<HorseClockBlockEntity>> HORSE_CLOCK = REGISTER.register("horse_clock", () -> BlockEntityType.Builder.of(HorseClockBlockEntity::new, MSBlocks.HORSE_CLOCK.BOTTOM.get()).build(null));
+	
 	public static final RegistryObject<BlockEntityType<StatStorerBlockEntity>> STAT_STORER = REGISTER.register("stat_storer", () -> BlockEntityType.Builder.of(StatStorerBlockEntity::new, MSBlocks.STAT_STORER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<RemoteObserverBlockEntity>> REMOTE_OBSERVER = REGISTER.register("remote_observer", () -> BlockEntityType.Builder.of(RemoteObserverBlockEntity::new, MSBlocks.REMOTE_OBSERVER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<WirelessRedstoneTransmitterBlockEntity>> WIRELESS_REDSTONE_TRANSMITTER = REGISTER.register("wireless_redstone_transmitter", () -> BlockEntityType.Builder.of(WirelessRedstoneTransmitterBlockEntity::new, MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get()).build(null));

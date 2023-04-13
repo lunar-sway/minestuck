@@ -706,6 +706,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.STONE_TABLET.get()).input(Items.STONE).or().namedInput(MSItems.CAPTCHA_CARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GLOWYSTONE_DUST.get()).input(Items.REDSTONE).or().input(Items.GLOWSTONE_DUST).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COCOA_WART.get()).input(Items.COCOA_BEANS).and().input(Items.NETHER_WART).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.HORSE_CLOCK.getMainBlock()).input(Items.SADDLE).or().input(MSBlocks.REDSTONE_CLOCK.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_13.get()).input(Items.MUSIC_DISC_13).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_CAT.get()).input(Items.MUSIC_DISC_CAT).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);

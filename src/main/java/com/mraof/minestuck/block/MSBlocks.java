@@ -610,6 +610,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> MINI_WIZARD_STATUE = REGISTER.register("mini_wizard_statue", () -> new CustomShapeBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F), MSBlockShapes.WIZARD_STATUE));
 	public static final RegistryObject<Block> MINI_TYPHEUS_STATUE = REGISTER.register("mini_typheus_statue", () -> new CustomShapeBlock(Block.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(0.5F), MSBlockShapes.DENIZEN_STATUE));
 	public static final RegistryObject<CassettePlayerBlock> CASSETTE_PLAYER = REGISTER.register("cassette_player", () -> new CassettePlayerBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(0.5F).sound(SoundType.METAL), MSBlockShapes.CASSETTE_PLAYER));
+	public static final HorseClockMultiblock HORSE_CLOCK = new HorseClockMultiblock(REGISTER);
 	public static final RegistryObject<Block> GLOWYSTONE_DUST = REGISTER.register("glowystone_dust", () -> new GlowystoneWireBlock(Block.Properties.of(Material.DECORATION).strength(0.0F).lightLevel(state -> 16).noCollission()));
 	public static final RegistryObject<Block> MIRROR = REGISTER.register("mirror", () -> new CustomShapeBlock(Block.Properties.copy(Blocks.OAK_PLANKS), MSBlockShapes.MIRROR));
 	

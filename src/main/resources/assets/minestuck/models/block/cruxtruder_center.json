@@ -1,8 +1,44 @@
 {
-	"parent": "block/cube_bottom_top",
+	"credit": "crafted with love by the grease artisan mysterymeat",
+	"texture_size": [256, 256],
 	"textures": {
-		"bottom": "minestuck:block/machine/cruxtruder/down_center",
-		"top": "minestuck:block/machine/cruxtruder/top_tube",
-		"side": "minestuck:block/machine/cruxtruder/inside"
-	}
+		"0": "minestuck:block/machine/cruxtruder",
+		"particle": "minestuck:block/machine/particle"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [1, 9, 2, 10], "texture": "#0"},
+				"east": {"uv": [0, 9, 1, 10], "texture": "#0"},
+				"south": {"uv": [3, 9, 4, 10], "texture": "#0"},
+				"west": {"uv": [2, 9, 3, 10], "texture": "#0"},
+				"up": {"uv": [2, 9, 1, 8], "texture": "#0"},
+				"down": {"uv": [3, 8, 2, 9], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "root",
+			"origin": [1, 24, 0],
+			"color": 0,
+			"children": [
+				{
+					"name": "base",
+					"origin": [1, 24, 0],
+					"color": 0,
+					"children": [
+						{
+							"name": "core",
+							"origin": [-7, 16, -8],
+							"color": 0,
+							"children": [0]
+						}
+					]
+				}
+			]
+		}
+	]
 }

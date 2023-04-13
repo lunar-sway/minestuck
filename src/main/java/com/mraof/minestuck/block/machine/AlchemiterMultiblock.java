@@ -18,9 +18,7 @@ public class AlchemiterMultiblock extends MachineMultiblock
 	public final RegistryObject<Block> LEFT_SIDE = register("alchemiter_left_side", () -> new AlchemiterBlock(this,MSBlockShapes.ALCHEMITER_LEFT_SIDE, true, false, new BlockPos(1, 0, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
 	public final RegistryObject<Block> RIGHT_SIDE = register("alchemiter_right_side", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_RIGHT_SIDE, true, false, new BlockPos(2, 0, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
 	public final RegistryObject<Block> TOTEM_CORNER = register("alchemiter_totem_corner", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_TOTEM_CORNER, false, true, new BlockPos(0, 1, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> TOTEM_PAD = register("alchemiter_totem_pad", () -> new AlchemiterBlock.Pad(this, MSBlockShapes.ALCHEMITER_TOTEM_PAD, Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> LOWER_ROD = register("alchemiter_lower_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_LOWER_ROD, false, false, new BlockPos(0, -1, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
-	public final RegistryObject<Block> UPPER_ROD = register("alchemiter_upper_rod", () -> new AlchemiterBlock(this, MSBlockShapes.ALCHEMITER_UPPER_ROD, false, false, new BlockPos(0, -2, 0), Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
+	public final RegistryObject<Block> TOTEM_PAD = register("alchemiter_totem_pad", () -> new AlchemiterBlock.Pad(this, MSBlockShapes.ALCHEMITER_TOTEM_PAD, MSBlockShapes.ALCHEMITER_TOTEM_PAD_DOWEL, Block.Properties.of(Material.METAL).strength(3.0F, 4.5F).noLootTable()));
 	
 	private final PlacementEntry totemPadPos;
 	
@@ -48,8 +46,6 @@ public class AlchemiterMultiblock extends MachineMultiblock
 		addDirectionPlacement(3, 0, 1, RIGHT_SIDE, Direction.EAST);
 		addDirectionPlacement(2, 0, 2, CENTER, Direction.EAST);
 		totemPadPos = addDirectionPlacement(3, 1, 3, TOTEM_PAD, Direction.EAST);
-		addDirectionPlacement(3, 2, 3, LOWER_ROD, Direction.EAST);
-		addDirectionPlacement(3, 3, 3, UPPER_ROD, Direction.EAST);
 	}
 	
 	public boolean isInvalidFromPad(LevelAccessor level, BlockPos pos)

@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mraof.minestuck.client.model.LotusFlowerModel;
+import com.mraof.minestuck.client.model.entity.LotusFlowerModel;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

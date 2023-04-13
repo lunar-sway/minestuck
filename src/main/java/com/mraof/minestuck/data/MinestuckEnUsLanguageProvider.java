@@ -567,6 +567,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BLENDER, "Blender");
 		addBlock(MSBlocks.CHESSBOARD, "Chessboard");
 		addBlock(MSBlocks.CASSETTE_PLAYER, "Cassette Player");
+		MSBlocks.HORSE_CLOCK.forEachBlock(block -> add(block, "Horse Clock"));
+		addTooltip(MSBlocks.HORSE_CLOCK, "It is so majestic you want to weep");
 		addBlock(MSBlocks.MINI_FROG_STATUE, "Frog Statue Replica");
 		addBlockStoreTooltip(MSBlocks.MINI_FROG_STATUE, "Some say it's creepy, some say it's cute, others would say it's contraband, so keep it out of sight!");
 		addBlock(MSBlocks.MINI_WIZARD_STATUE, "Small Wizard Statue");
@@ -2322,11 +2324,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");
 		addSubtitles("lotus_flower_restore", "Flower regrows");
+		addSubtitles("cruxtruder_dowel", "Cruxite moves in Cruxtruder");
+		addSubtitles("horse_clock_chime", "Clock chimes... and whinnies");
 		addSubtitles("projectile_throw", "Projectile is thrown");
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
 		
+		addSubtitles("swoosh", "Air swooshes from attack");
+		addSubtitles("slam", "Something big hits the ground");
+		addSubtitles("bite", "Teeth bite down");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "ambient", "Nakagator naks");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "hurt", "Nakagator hurts");
 		addEntitySubtitles(MSEntityTypes.NAKAGATOR, "death", "Nakagator dies");

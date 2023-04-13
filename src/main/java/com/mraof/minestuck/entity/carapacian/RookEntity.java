@@ -54,14 +54,4 @@ public class RookEntity extends CarapacianEntity implements Enemy
 		float damage = this.getAttackStrength(entity);
 		return entity.hurt(DamageSource.mobAttack(this), damage);
 	}
-
-//	@Override
-//	protected void attackEntity(Entity entity, float par2)
-//	{
-//		if(this.attackTime <= 0	&& par2 < 2F && entity.boundingBox.maxY > this.boundingBox.minY && entity.boundingBox.minY < this.boundingBox.maxY)
-//		{
-//			this.attackTime = 20;
-//			this.attackEntityAsMob(entity);
-//		}
-//	}
 }
