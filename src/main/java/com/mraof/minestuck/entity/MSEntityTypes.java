@@ -33,7 +33,7 @@ public final class MSEntityTypes
 	public static final RegistryObject<EntityType<ImpEntity>> IMP = REGISTER.register("imp", () -> EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.5F).build(new ResourceLocation(Minestuck.MOD_ID, "imp").toString()));
 	public static final RegistryObject<EntityType<OgreEntity>> OGRE = REGISTER.register("ogre", () -> EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F).build(new ResourceLocation(Minestuck.MOD_ID, "ogre").toString()));
 	public static final RegistryObject<EntityType<BasiliskEntity>> BASILISK = REGISTER.register("basilisk", () -> EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(1.9F, 1.9F).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "basilisk").toString()));
-	public static final RegistryObject<EntityType<LichEntity>> LICH = REGISTER.register("lich", () -> EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F).build(new ResourceLocation(Minestuck.MOD_ID, "lich").toString()));
+	public static final RegistryObject<EntityType<LichEntity>> LICH = REGISTER.register("lich", () -> EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.7F).build(new ResourceLocation(Minestuck.MOD_ID, "lich").toString()));
 	public static final RegistryObject<EntityType<GiclopsEntity>> GICLOPS = REGISTER.register("giclops", () -> EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(5.0F, 6.0F).build(new ResourceLocation(Minestuck.MOD_ID, "giclops").toString()));
 	
 	public static final RegistryObject<EntityType<PawnEntity>> DERSITE_PAWN = REGISTER.register("dersite_pawn", () -> EntityType.Builder.of(PawnEntity::createDersite, MobCategory.MONSTER).sized(0.6F, 2.1F).build(new ResourceLocation(Minestuck.MOD_ID, "dersite_pawn").toString()));

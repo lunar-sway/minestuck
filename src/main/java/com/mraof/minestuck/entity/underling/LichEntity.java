@@ -31,7 +31,7 @@ import java.util.UUID;
 
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 12, false, false), 4, 8, 10);
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{
@@ -118,7 +118,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 0.8, LichEntity::attackAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2.25, LichEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<LichEntity> event)
@@ -134,12 +134,20 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	
 	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)
 	{
-		if(!event.isMoving())
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		
+		if(action == MobAnimation.Action.CLAW)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_legs", false));
+			return PlayState.CONTINUE;
+		} else if(!event.isMoving())
 		{
 			return PlayState.STOP;
+		} else
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
 		}
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
-		return PlayState.CONTINUE;
 	}
 	
 	private static PlayState deathAnimation(AnimationEvent<LichEntity> event)
@@ -156,7 +164,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_arms", false));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
