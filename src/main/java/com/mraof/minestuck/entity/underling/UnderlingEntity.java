@@ -176,10 +176,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	protected void tickDeath()
+	public void remove(RemovalReason reason)
 	{
-		super.tickDeath();
-		if(this.deathTime == 20 && !this.level.isClientSide)
+		super.remove(reason);
+		if(reason == RemovalReason.KILLED)
 		{
 			GristSet grist = this.getGristSpoils();
 			if(grist == null)

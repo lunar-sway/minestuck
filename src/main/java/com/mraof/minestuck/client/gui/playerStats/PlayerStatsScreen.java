@@ -93,7 +93,8 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public enum EditmodeGuiType
 	{
 		DEPLOY_LIST(InventoryEditmodeScreen::new, InventoryEditmodeScreen.TITLE),
-		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE);
+		GRIST_CACHE(GristCacheScreen::new, GristCacheScreen.TITLE),
+		ATHENEUM(AtheneumScreen::new, AtheneumScreen.TITLE);
 		
 		final Supplier<? extends Screen> factory;
 		final BiFunction<Integer, Inventory, ? extends AbstractContainerScreen<?>> factory2;

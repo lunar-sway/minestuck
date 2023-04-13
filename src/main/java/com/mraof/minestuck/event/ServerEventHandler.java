@@ -91,7 +91,8 @@ public class ServerEventHandler
 				}
 			}
 			
-			MSExtraData.get(server).executeEntryTasks(server);
+			if(event.haveTime())
+				MSExtraData.get(server).executeEntryTasks(server);
 			
 			if(MinestuckConfig.SERVER.hardMode.get())
 				EntryEvent.tick(server);

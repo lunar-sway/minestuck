@@ -2,7 +2,6 @@ package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.EnumDowelType;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -20,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -44,12 +42,12 @@ import java.util.Map;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TotemLatheBlock extends MultiMachineBlock
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -82,14 +80,27 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
-		if(!mainPos.equals(pos) && level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
-				&& !otherState.isAir() && !state.isAir()
+		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
+				&& !(otherState.isAir() || state.isAir())
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.checkStates();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+	
+	@Override
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
+	{
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
+		}
 	}
 	
 	@Override
@@ -120,7 +131,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		protected final Map<Direction, VoxelShape> carvedShape;
 		protected final Map<Direction, VoxelShape> dowelShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(TotemLatheMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, emptyShape, mainPos, properties);
 			this.dowelShape = dowelShape.createRotatedShapes();
@@ -180,7 +191,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(TotemLatheMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}

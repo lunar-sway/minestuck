@@ -3,16 +3,15 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,7 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @ParametersAreNonnullByDefault
-public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> implements Positioned
+public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 {
 	
 	private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/alchemiter.png");
@@ -39,12 +38,6 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> impl
 	public MiniAlchemiterScreen(MiniAlchemiterMenu screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
-	}
-	
-	@Override
-	public BlockPos getPosition()
-	{
-		return getMenu().machinePos;
 	}
 	
 	@Override
@@ -113,8 +106,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu> impl
 		if (button == GLFW.GLFW_MOUSE_BUTTON_1 && menu.getCarried().isEmpty() && AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem()).getItem() == MSItems.CAPTCHA_CARD.get()
 				&& mouseX >= leftPos + 9 && mouseX < leftPos + 167 && mouseY >= topPos + 45 && mouseY < topPos + 70)
 		{
-			minecraft.screen = new GristSelectorScreen<>(this);
-			minecraft.screen.init(minecraft, width, height);
+			minecraft.pushGuiLayer(new GristSelectorScreen(this.getMenu().machinePos));
 			return true;
 		}
 		return b;

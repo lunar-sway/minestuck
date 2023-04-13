@@ -1,13 +1,15 @@
 package com.mraof.minestuck.block.machine;
 
-public class MultiMachineBlock extends MachineBlock
+public class MultiMachineBlock<T extends MachineMultiblock> extends MachineBlock
 {
-	protected final MachineMultiblock machine;
+	protected final T machine;
 	
-	public MultiMachineBlock(MachineMultiblock machine, Properties properties)
+	public MultiMachineBlock(T machine, Properties properties)
 	{
 		super(properties);
 		this.machine = machine;
 	}
+	
+	
 	//TODO Is this class needed? Is there anything that subclasses do that is better off done here?
 }
