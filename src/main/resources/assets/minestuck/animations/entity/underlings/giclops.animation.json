@@ -836,7 +836,7 @@
 				}
 			}
 		},
-		"walk cycle": {
+		"walk": {
 			"loop": true,
 			"animation_length": 5.70833,
 			"bones": {
@@ -6547,7 +6547,7 @@
 				}
 			}
 		},
-		"push_attack": {
+		"kick": {
 			"animation_length": 2,
 			"bones": {
 				"chest": {

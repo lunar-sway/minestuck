@@ -21,7 +21,7 @@
 					"pivot": [0, 15.025, 0]
 				},
 				{
-					"name": "pelvis",
+					"name": "hips",
 					"parent": "spinbone",
 					"pivot": [0, 15.025, 3],
 					"cubes": [
@@ -30,7 +30,7 @@
 				},
 				{
 					"name": "right_upleg",
-					"parent": "pelvis",
+					"parent": "hips",
 					"pivot": [-3.5, 8.025, 1],
 					"cubes": [
 						{"origin": [-4.5, 4.025, 0], "size": [2, 3, 2], "uv": [0, 32]}
@@ -62,7 +62,7 @@
 				},
 				{
 					"name": "left_upleg",
-					"parent": "pelvis",
+					"parent": "hips",
 					"pivot": [3.5, 8.025, 1],
 					"cubes": [
 						{"origin": [2.5, 4.025, 0], "size": [2, 3, 2], "uv": [0, 32]}
@@ -93,7 +93,7 @@
 					]
 				},
 				{
-					"name": "shoulders",
+					"name": "chest",
 					"parent": "spinbone",
 					"pivot": [0, 15.025, 3],
 					"cubes": [
@@ -103,7 +103,7 @@
 				},
 				{
 					"name": "neck",
-					"parent": "shoulders",
+					"parent": "chest",
 					"pivot": [0, 26.025, 3],
 					"cubes": [
 						{"origin": [-3, 26.025, -3.9], "size": [6, 2, 7], "uv": [37, 36]},
@@ -120,7 +120,7 @@
 				},
 				{
 					"name": "right_uparm",
-					"parent": "shoulders",
+					"parent": "chest",
 					"pivot": [-5, 23.525, 1.5],
 					"cubes": [
 						{"origin": [-6.75, 14.525, 0.5], "size": [1, 8, 2], "uv": [0, 4]},
@@ -152,7 +152,7 @@
 					]
 				},
 				{
-					"name": "right_pinky",
+					"name": "finger1",
 					"parent": "right_hand",
 					"pivot": [-6.75, 4.275, 3.5],
 					"cubes": [
@@ -160,7 +160,7 @@
 					]
 				},
 				{
-					"name": "right_pointer",
+					"name": "finger2",
 					"parent": "right_hand",
 					"pivot": [-5.75, 4.275, 3.5],
 					"cubes": [
@@ -169,7 +169,7 @@
 				},
 				{
 					"name": "left_uparm",
-					"parent": "shoulders",
+					"parent": "chest",
 					"pivot": [5, 23.525, 1.5],
 					"cubes": [
 						{"origin": [4.5, 22.525, 0.5], "size": [2, 2, 2], "uv": [0, 0]},
@@ -201,7 +201,7 @@
 					]
 				},
 				{
-					"name": "left_pinky",
+					"name": "finger3",
 					"parent": "left_hand",
 					"pivot": [6.75, 4.275, 3.5],
 					"cubes": [
@@ -209,7 +209,7 @@
 					]
 				},
 				{
-					"name": "left_pointer",
+					"name": "finger4",
 					"parent": "left_hand",
 					"pivot": [5.75, 4.275, 3.5],
 					"cubes": [
@@ -246,7 +246,7 @@
 				},
 				{
 					"name": "left_horn",
-					"parent": "right_horn",
+					"parent": "head",
 					"pivot": [4, 30.525, -6.5],
 					"cubes": [
 						{"origin": [4, 29.025, -8], "size": [4, 3, 3], "uv": [33, 1]}
