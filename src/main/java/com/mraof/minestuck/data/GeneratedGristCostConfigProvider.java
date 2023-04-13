@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.generator.recipe.*;
+import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;

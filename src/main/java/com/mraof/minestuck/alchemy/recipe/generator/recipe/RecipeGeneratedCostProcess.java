@@ -1,10 +1,10 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.apache.commons.lang3.tuple.Pair;

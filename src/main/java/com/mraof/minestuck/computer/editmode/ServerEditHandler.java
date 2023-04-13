@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;

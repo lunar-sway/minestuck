@@ -6,7 +6,7 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;

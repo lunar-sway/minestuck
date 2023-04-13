@@ -1,10 +1,13 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristSet;

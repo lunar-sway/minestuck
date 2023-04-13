@@ -1,6 +1,7 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiCombination;
 import net.minecraft.network.FriendlyByteBuf;

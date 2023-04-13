@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
@@ -6,9 +6,9 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
