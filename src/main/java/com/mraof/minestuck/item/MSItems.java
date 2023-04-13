@@ -502,9 +502,9 @@ public class MSItems
 	public static final RegistryObject<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS))); //not used
-	public static final RegistryObject<Item> GUTTER_THUMB_DRIVE = REGISTER.register("gutter_thumb_drive", () -> new GutterThumbDriveItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS).rarity(Rarity.EPIC)));
-	public static final RegistryObject<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS)));
-	public static final RegistryObject<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).tab(MSItemGroup.LANDS).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> GUTTER_THUMB_DRIVE = REGISTER.register("gutter_thumb_drive", () -> new GutterThumbDriveItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	
 	//Buckets
 	public static final RegistryObject<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(MSItemGroup.MAIN)));
