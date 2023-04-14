@@ -17,8 +17,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 
-import java.util.Iterator;
-
 public class GuiUtil
 {
 	public static final String NOT_ALCHEMIZABLE = "minestuck.not_alchemizable";
@@ -50,14 +48,13 @@ public class GuiUtil
 			return;
 		}
 		
-		GristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER).set();
-		Iterator<GristAmount> it = grist.getAmounts().iterator();
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
+		GristSet playerGrist = cache.set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
-			while (it.hasNext())
+			for (GristAmount amount : grist.getAmounts())
 			{
-				GristAmount amount = it.next();
 				GristType type = amount.getType();
 				long need = amount.getAmount();
 				long have = playerGrist.getGrist(type);
@@ -65,7 +62,7 @@ public class GuiUtil
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = getGristColor(mode, need <= have);
+				int color = getGristColor(mode, cache.canAfford(new GristSet(amount)));
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)
@@ -81,9 +78,8 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			while(it.hasNext())
+			for (GristAmount amount : grist.getAmounts())
 			{
-				GristAmount amount = it.next();
 				GristType type = amount.getType();
 				long need = amount.getAmount();
 				long have = playerGrist.getGrist(type);

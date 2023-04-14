@@ -102,6 +102,11 @@ public final class GristCache
 		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
+	public static boolean canAfford(GristSet source, GristSet cost, long limit)
+	{
+		return addWithinCapacity(source.copy(), cost.copy().scale(-1), limit).isEmpty();
+	}
+	
 	/**
 	 * Tries to take a specified amount of grist from this cache.
 	 * If it fails (due to insufficient grist or capacity), the cache will remain unchanged.

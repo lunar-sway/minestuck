@@ -254,13 +254,15 @@ public class ClientEditToolDrag
 				for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
 				{
 					BlockPos pos = new BlockPos(x, y, z);
-					if(!fill && !player.getLevel().getBlockState(pos).isAir() && (ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set().getGrist(GristTypes.BUILD) > 0 || ClientDeployList.getEntry(player.getLevel().getBlockState(pos).getCloneItemStack(null, player.getLevel(), pos, player)) != null))
+					if(!fill && !player.getLevel().getBlockState(pos).isAir()
+							&& (ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).canAfford(ServerEditHandler.blockBreakCost())
+							|| ClientDeployList.getEntry(player.getLevel().getBlockState(pos).getCloneItemStack(null, player.getLevel(), pos, player)) != null))
 					{
 						anyBlockEdited = true;
 						
 						player.level.addDestroyBlockEffect(pos, player.getLevel().getBlockState(pos));
 					}
-					else if(fill && player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && GristHelper.canAfford(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set(), ClientEditHandler.itemCost(stack, player.getLevel())))
+					else if(fill && player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).canAfford(ClientEditHandler.itemCost(stack, player.getLevel())))
 					{
 						anyBlockEdited = true;
 					}

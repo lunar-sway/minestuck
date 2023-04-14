@@ -418,7 +418,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
-	private static GristSet blockBreakCost()
+	static GristSet blockBreakCost()
 	{
 		return new GristSet(GristTypes.BUILD, 1);
 	}

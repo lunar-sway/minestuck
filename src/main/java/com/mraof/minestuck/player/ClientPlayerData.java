@@ -93,7 +93,12 @@ public final class ClientPlayerData
 	}
 	
 	public record ClientCache(GristSet set, long limit)
-	{}
+	{
+		public boolean canAfford(GristSet cost)
+		{
+			return GristCache.canAfford(this.set, cost, this.limit);
+		}
+	}
 	
 	public enum CacheSource
 	{
