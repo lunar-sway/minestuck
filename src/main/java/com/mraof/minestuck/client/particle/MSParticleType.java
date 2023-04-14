@@ -19,7 +19,6 @@ public class MSParticleType
 {
 	public static final DeferredRegister<ParticleType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Minestuck.MOD_ID);
 	
-	public static final RegistryObject<SimpleParticleType> FIREFLY = REGISTER.register("firefly", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> TRANSPORTALIZER = REGISTER.register("transportalizer", () -> new SimpleParticleType(false));
 	
 	@OnlyIn(Dist.CLIENT)
@@ -28,7 +27,6 @@ public class MSParticleType
 	{
 		ParticleEngine particles = Minecraft.getInstance().particleEngine;
 		
-		particles.register(MSParticleType.FIREFLY.get(), FireflyParticle.Provider::new);
 		particles.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
 	}
 }

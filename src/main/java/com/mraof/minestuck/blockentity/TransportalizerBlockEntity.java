@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.particle.MSParticleType;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
@@ -158,9 +159,13 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				return;
 			}
 			
+			level.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
 			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, location.pos().getX() + 0.5, location.pos().getY() + 0.6, location.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
+			{
 				entity.setPortalCooldown();
+				level.sendParticles(MSParticleType.TRANSPORTALIZER.get(), location.pos().getX() + 0.5, location.pos().getY() + 1, location.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
+			}
 		}
 	}
 	
