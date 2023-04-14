@@ -221,7 +221,7 @@ public class GristToast implements Toast
 	
 	public static void handlePacket(GristToastPacket packet)
 	{
-		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner());
+		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
 		GristHelper.EnumSource source = packet.source();
 		long cacheLimit = packet.cacheLimit();
 		ToastComponent toasts = Minecraft.getInstance().getToasts();

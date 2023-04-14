@@ -50,7 +50,7 @@ public class GuiUtil
 			return;
 		}
 		
-		GristSet playerGrist = ClientPlayerData.getClientGrist();
+		GristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
 		Iterator<GristAmount> it = grist.getAmounts().iterator();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
@@ -135,7 +135,7 @@ public class GuiUtil
 		mouseX -= boardX;
 		mouseY -= boardY;
 		
-		GristSet playerGrist = ClientPlayerData.getClientGrist();
+		GristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;

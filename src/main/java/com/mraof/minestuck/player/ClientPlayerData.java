@@ -2,7 +2,6 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -82,14 +81,19 @@ public final class ClientPlayerData
 		return consortReputation;
 	}
 	
-	public static GristSet getClientGrist()
+	public static GristSet getGristCache(CacheSource cacheSource)
 	{
-		return getGristCache(!ClientEditHandler.isActive());
+		return switch(cacheSource)
+		{
+			case PLAYER -> ClientPlayerData.playerGrist;
+			case EDITMODE -> ClientPlayerData.targetGrist;
+		};
 	}
 	
-	public static GristSet getGristCache(boolean isCacheOwner)
+	public enum CacheSource
 	{
-		return isCacheOwner ? playerGrist : targetGrist;
+		PLAYER,
+		EDITMODE,
 	}
 	
 	public static int getPlayerColor()
