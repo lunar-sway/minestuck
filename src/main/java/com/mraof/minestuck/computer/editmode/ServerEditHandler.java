@@ -214,6 +214,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
+			data.sendCacheLimitToEditor();
 		}
 	}
 	
@@ -263,6 +264,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(editor.getServer(), data.connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
 			data.sendGristCacheToEditor();
+			data.sendCacheLimitToEditor();
 		} else
 		{
 			ServerEditPacket packet = ServerEditPacket.exit();
@@ -278,6 +280,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static EditData getData(MinecraftServer server, SburbConnection c)
 	{
 		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(c.getClientIdentifier()) && editData.connection.getServerIdentifier().equals(c.getServerIdentifier()));
+	}
+	
+	public static EditData getData(MinecraftServer server, PlayerIdentifier client)
+	{
+		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(client));
 	}
 	
 	public static EditData getData(DecoyEntity decoy) {

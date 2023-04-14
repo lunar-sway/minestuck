@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed grist cache view in editmode using the limit of the wrong player
 
 ### Contributors for this release
 

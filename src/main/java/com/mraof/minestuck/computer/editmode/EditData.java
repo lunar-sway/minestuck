@@ -3,10 +3,12 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.data.GristCachePacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.util.Teleport;
 import net.minecraft.nbt.CompoundTag;
@@ -78,6 +80,12 @@ public class EditData
 	{
 		GristCachePacket packet = new GristCachePacket(this.getGristCache().getGristSet(), true);
 		MSPacketHandler.sendToPlayer(packet, this.getEditor());
+	}
+	
+	public void sendCacheLimitToEditor()
+	{
+		long limit = PlayerSavedData.getData(connection.getClientIdentifier(), player.server).getEcheladder().getGristCapacity();
+		MSPacketHandler.sendToPlayer(new EditmodeCacheLimitPacket(limit), this.getEditor());
 	}
 	
 	public void sendGivenItemsToEditor()

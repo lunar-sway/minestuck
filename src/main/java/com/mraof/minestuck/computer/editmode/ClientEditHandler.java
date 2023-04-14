@@ -94,7 +94,7 @@ public final class ClientEditHandler
 		if(!isActive())
 			return;
 		
-		GristSet have = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE);
+		GristSet have = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set();
 		
 		addToolTip(event.getItemStack(), event.getToolTip(), have);
 		
@@ -151,7 +151,7 @@ public final class ClientEditHandler
 			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 			{
-				if(ServerEditHandler.isBlockItem(stack.getItem()) || !GristHelper.canAfford(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE), entry.getCost()))
+				if(ServerEditHandler.isBlockItem(stack.getItem()) || !GristHelper.canAfford(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set(), entry.getCost()))
 					event.setCanceled(true);
 			}
 			if(event.isCanceled())
@@ -194,7 +194,7 @@ public final class ClientEditHandler
 			}
 			
 			GristSet cost = itemCost(stack, event.getLevel());
-			if(!GristHelper.canAfford(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE), cost))
+			if(!GristHelper.canAfford(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set(), cost))
 			{
 				if(cost != null)
 				{
@@ -224,7 +224,7 @@ public final class ClientEditHandler
 				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
 				event.setCanceled(true);
 			}
-			else if(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).getGrist(GristTypes.BUILD) <= 0)
+			else if(ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).set().getGrist(GristTypes.BUILD) <= 0)
 			{
 				event.getEntity().sendSystemMessage(new GristSet(GristTypes.BUILD.get(), 1).createMissingMessage());
 				event.setCanceled(true);

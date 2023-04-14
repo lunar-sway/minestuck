@@ -221,9 +221,8 @@ public class GristToast implements Toast
 	
 	public static void handlePacket(GristToastPacket packet)
 	{
-		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
 		GristHelper.EnumSource source = packet.source();
-		long cacheLimit = packet.cacheLimit();
 		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
 		for(GristAmount pairs : packet.gristValue().getAmounts())
@@ -231,13 +230,13 @@ public class GristToast implements Toast
 			//the pair has to be split into two new variables because Map.Entry is immutable.
 			GristType type = pairs.getType();
 			long difference = pairs.getAmount();
-			long total = cache.getGrist(type);
+			long total = cache.set().getGrist(type);
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(toasts, type, difference, source, true, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, difference, source, true, cache.limit(), total);
 			else
-				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cache.limit(), total);
 		}
 	}
 	

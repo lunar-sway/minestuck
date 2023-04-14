@@ -2,13 +2,12 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.Echeladder;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -45,10 +44,10 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		GristSet clientGrist = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
-		int clientRung = ClientPlayerData.getRung();
-		long cacheLimit = Echeladder.getGristCapacity(clientRung);
-
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
+		GristSet clientGrist = cache.set();
+		long cacheLimit = cache.limit();
+		
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);
 		types = types.stream().skip((long) page * rows * columns).limit(rows * columns).collect(Collectors.toList());

@@ -18,7 +18,7 @@ import java.util.function.Supplier;
 
 public class MSPacketHandler
 {
-	private static final String PROTOCOL_VERSION = "1";
+	private static final String PROTOCOL_VERSION = "2";
 	public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new ResourceLocation(Minestuck.MOD_ID, "main"),
 			() -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 	
@@ -33,6 +33,7 @@ public class MSPacketHandler
 		registerMessage(BoondollarDataPacket.class, BoondollarDataPacket::decode);
 		registerMessage(ConsortReputationDataPacket.class, ConsortReputationDataPacket::decode);
 		registerMessage(GristCachePacket.class, GristCachePacket::decode);
+		registerMessage(EditmodeCacheLimitPacket.class, EditmodeCacheLimitPacket::decode);
 		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
 		registerMessage(LandTypesDataPacket.class, LandTypesDataPacket::decode);
 		
