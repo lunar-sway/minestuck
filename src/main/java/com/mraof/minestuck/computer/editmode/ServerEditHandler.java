@@ -433,7 +433,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-				|| (data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
+				|| (!data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
 				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			{
 				event.setCanceled(true);
@@ -442,7 +442,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			
 			if(block.getBlock() instanceof EditmodeDestroyable destroyable)
 				destroyable.destroyFull(block, event.getLevel(), event.getPos());
-			
 		}
 	}
 	
