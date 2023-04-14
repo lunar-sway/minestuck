@@ -93,7 +93,17 @@ public final class DeployList
 		registerItem("torch", new ItemStack(Blocks.TORCH), new GristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("ladder", new ItemStack(Blocks.LADDER), new GristSet(GristTypes.BUILD, 16), 0, EntryLists.ATHENEUM);
 		registerItem("oak_door", new ItemStack(Blocks.OAK_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("birch_door", new ItemStack(Blocks.BIRCH_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("spruce_door", new ItemStack(Blocks.SPRUCE_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("dark_oak_door", new ItemStack(Blocks.DARK_OAK_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("acacia_door", new ItemStack(Blocks.ACACIA_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("jungle_door", new ItemStack(Blocks.JUNGLE_DOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("oak_trapdoor", new ItemStack(Blocks.OAK_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("birch_trapdoor", new ItemStack(Blocks.BIRCH_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("spruce_trapdoor", new ItemStack(Blocks.SPRUCE_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("dark_oak_trapdoor", new ItemStack(Blocks.DARK_OAK_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("acacia_trapdoor", new ItemStack(Blocks.ACACIA_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
+		registerItem("jungle_trapdoor", new ItemStack(Blocks.JUNGLE_TRAPDOOR), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("glass", new ItemStack(Blocks.GLASS), new GristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("white_stained_glass", new ItemStack(Blocks.WHITE_STAINED_GLASS), new GristSet(GristTypes.BUILD, 2), 2, EntryLists.ATHENEUM); //Stained glass and stained glass panes' atheneum costs are given an amount of build grist equal to the number of grist types their normal costs have. To offset farming potential, it has a connection-tier of two.
 		registerItem("orange_stained_glass", new ItemStack(Blocks.ORANGE_STAINED_GLASS), new GristSet(GristTypes.BUILD, 3), 2, EntryLists.ATHENEUM);
@@ -138,7 +148,7 @@ public final class DeployList
 		registerItem("mossy_cobblestone_stairs", new ItemStack(Blocks.MOSSY_COBBLESTONE_STAIRS), new GristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("stone_stairs", new ItemStack(Blocks.STONE_STAIRS), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("stone_brick_stairs", new ItemStack(Blocks.STONE_BRICK_STAIRS), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
-		registerItem("nether_brick_stairs", new ItemStack(Blocks.NETHER_BRICK_SLAB), new GristSet(new GristAmount(GristTypes.BUILD, 2), new GristAmount(GristTypes.TAR, 2)), 3, EntryLists.ATHENEUM);
+		registerItem("nether_brick_stairs", new ItemStack(Blocks.NETHER_BRICK_STAIRS), new GristSet(new GristAmount(GristTypes.BUILD, 2), new GristAmount(GristTypes.TAR, 2)), 3, EntryLists.ATHENEUM);
 		registerItem("cobblestone_wall", new ItemStack(Blocks.COBBLESTONE_WALL), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("mossy_cobblestone_wall", new ItemStack(Blocks.MOSSY_COBBLESTONE_WALL), new GristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("stone_brick_wall", new ItemStack(Blocks.STONE_BRICK_WALL), new GristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
