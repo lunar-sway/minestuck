@@ -1,5 +1,6 @@
 package com.mraof.minestuck.entry;
 
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.GateBlock;
 import com.mraof.minestuck.block.MSBlocks;
@@ -22,9 +23,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -32,6 +36,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,88 +47,75 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	public static final int ENTRY_DELAY = 40;
+	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
-	private EntryProcess(ServerPlayer player)
-	{
-		this.origin = player.blockPosition();
-		
-		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.getLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
-		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
-		xDiff = -origin.getX();
-		zDiff = -origin.getZ();
-		
-		creative = player.gameMode.isCreative();
-	}
-	
+	private final PlayerIdentifier playerId;
+	private final ServerLevel landLevel;
 	private final int artifactRange = MinestuckConfig.SERVER.artifactRange.get();
 	
 	private final int xDiff, yDiff, zDiff;
 	private final BlockPos origin;
 	private final boolean creative;
 	
+	private EntryProcess(ServerPlayer player, ServerLevel landLevel)
+	{
+		this.origin = player.blockPosition();
+		this.landLevel = landLevel;
+		
+		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.getLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
+		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
+		xDiff = -origin.getX();
+		zDiff = -origin.getZ();
+		
+		playerId = IdentifierHandler.encode(player);
+		creative = player.gameMode.isCreative();
+	}
+	
 	public static void onArtifactActivated(ServerPlayer player)
 	{
-		try
+		long time = System.currentTimeMillis();
+		if(player.level.dimension() == Level.NETHER)
+			return;
+		if(!TitleSelectionHook.performEntryCheck(player))
+			return;
+		
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
+		
+		if(c.isPresent() && c.get().hasEntered())
 		{
-			if(player.level.dimension() == Level.NETHER)
-				return;
-			if(!TitleSelectionHook.performEntryCheck(player))
-				return;
-			
-			PlayerIdentifier identifier = IdentifierHandler.encode(player);
-			Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
-			
-			if(c.isPresent() && c.get().hasEntered())
-			{
-				secondEntryTeleport(player, c.get().getClientDimension());
-				return;
-			}
-			
-			ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
-			if(landDimension == null)
-			{
-				player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
-				return;
-			}
-			
-			ServerLevel oldLevel = (ServerLevel) player.level;
-			ServerLevel newLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
-			if(newLevel == null)
-				return;
-			
-			LOGGER.info("Checking entry block conditions");
-			EntryProcess process = new EntryProcess(player);
-			
-			if(!process.canModifyEntryBlocks(player.level, player))
-			{
-				player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
-				return;
-			}
-			
-			if(process.doesBlocksStopEntry(player, oldLevel))
-				return;
-			
-			LOGGER.info("Entry starting");
-			process.copyBlocks(oldLevel, newLevel);
-			
-			if(Teleport.teleportEntity(player, newLevel) == null)
-			{
-				player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
-				return;
-			}
-			
-			process.finalizeEntry(player, oldLevel, newLevel);
-			SkaianetHandler.get(player.level).onEntry(identifier);
-			LOGGER.info("Entry finished");
-			
-		} catch(Exception e)
-		{
-			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendSystemMessage(Component.literal("[Minestuck] Something went wrong during entry. " + (player.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
+			secondEntryTeleport(player, c.get().getClientDimension());
+			return;
 		}
+		
+		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
+		if(landDimension == null)
+		{
+			player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
+			return;
+		}
+		
+		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
+		if(landLevel == null)
+			return;
+		
+		EntryProcess process = new EntryProcess(player, landLevel);
+		if(!process.canModifyEntryBlocks(player.level, player))
+		{
+			player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
+			return;
+		}
+		
+		landLevel.getChunkSource().addRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+		
+		waitingProcess = process;
+		startTime = player.level.getGameTime() + ENTRY_DELAY;
+		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
@@ -136,6 +130,63 @@ public class EntryProcess
 		//Teleports the player to their home in the Medium, without any bells or whistles.
 		BlockPos pos = new BlockPos(0, 100, 0);
 		Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
+	}
+	
+	private static EntryProcess waitingProcess;
+	private static long startTime;
+	
+	@SubscribeEvent
+	public static void onServerTick(TickEvent.ServerTickEvent event)
+	{
+		if(event.phase == TickEvent.Phase.START)
+		{
+			//noinspection resource
+			if(waitingProcess != null && startTime <= event.getServer().overworld().getGameTime())
+			{
+				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
+				waitingProcess.runEntry();
+				waitingProcess = null;
+			}
+		}
+	}
+	
+	private void runEntry()
+	{
+		long time = System.currentTimeMillis();
+		ServerPlayer player = playerId.getPlayer(landLevel.getServer());
+		if(player == null)
+		{
+			LOGGER.warn("Player left before entry was completed. Cancelling entry.");
+			return;
+		}
+		
+		try
+		{
+			ServerLevel oldLevel = (ServerLevel) player.level;
+			
+			LOGGER.info("Checking entry block conditions");
+			
+			if(doesBlocksStopEntry(player, oldLevel))
+				return;
+			
+			LOGGER.info("Entry starting");
+			copyBlocks(oldLevel, landLevel);
+			
+			if(Teleport.teleportEntity(player, landLevel) == null)
+			{
+				player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
+				return;
+			}
+			
+			finalizeEntry(player, oldLevel, landLevel);
+			SkaianetHandler.get(player.level).onEntry(playerId);
+			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
+			
+		} catch(Exception e)
+		{
+			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
+			player.sendSystemMessage(Component.literal("[Minestuck] Something went wrong during entry. " + (landLevel.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
+		}
 	}
 	
 	private boolean doesBlocksStopEntry(ServerPlayer player, ServerLevel level)
