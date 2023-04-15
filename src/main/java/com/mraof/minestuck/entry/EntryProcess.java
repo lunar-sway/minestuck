@@ -7,6 +7,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.network.EntryEffectPackets;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -119,6 +121,7 @@ public class EntryProcess
 		
 		waitingProcess = process;
 		startTime = player.level.getGameTime() + MinestuckConfig.SERVER.entryDelay.get();
+		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level.dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -150,6 +153,7 @@ public class EntryProcess
 				waitingProcess.landLevel.getChunkSource().removeRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 				waitingProcess.runEntry();
 				waitingProcess = null;
+				MSPacketHandler.sendToAll(new EntryEffectPackets.Clear());
 			}
 		}
 	}
