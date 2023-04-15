@@ -7,10 +7,9 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.core.BlockPos;
@@ -29,13 +28,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder
+public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, IAnimatable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	private final AnimationFactory factory = new AnimationFactory(this);
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -55,13 +64,14 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			if(level != null)
 			{
 				BlockState state = level.getBlockState(worldPosition);
-				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))	//If not, then the machine has likely been destroyed; don't bother doing anything about it
+				if(state.hasProperty(AlchemiterBlock.Pad.DOWEL))    //If not, then the machine has likely been destroyed; don't bother doing anything about it
 				{
 					state = state.setValue(AlchemiterBlock.Pad.DOWEL, EnumDowelType.getForDowel(newDowel));
 					level.setBlock(worldPosition, state, Block.UPDATE_CLIENTS);
 				}
 			}
 		}
+		this.requestModelDataUpdate();
 	}
 	
 	public ItemStack getDowel()
@@ -100,7 +110,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			level.sendBlockUpdated(worldPosition, state, state, 2);
 		}
 	}
-
+	
 	//tells the block entity to not stop working
 		public void unbreakMachine()
 		{
@@ -228,11 +238,11 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public void onPadRightClick(Player player, BlockState clickedState, Direction side)
 	{
-		if (isUseable(clickedState))
+		if(isUseable(clickedState))
 		{
 			if(clickedState.getBlock() == MSBlocks.ALCHEMITER.TOTEM_PAD.get())
 			{
-				if (!dowel.isEmpty())
+				if(!dowel.isEmpty())
 				{    //Remove dowel from pad
 					if (player.getMainHandItem().isEmpty())
 						player.setItemInHand(InteractionHand.MAIN_HAND, dowel);
@@ -267,16 +277,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(player, cost);
-		
-		if(canAfford)
+		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
-			
-			
-			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decreaseAndNotify(level, pid, cost, GristHelper.EnumSource.CLIENT);
-			
-			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			AlchemyEvent event = new AlchemyEvent(IdentifierHandler.encode(player), this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();
 			
@@ -305,7 +308,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		
 		return set;
 	}
-
+	
 	public GristType getWildcardGrist()
 	{
 		return wildcardGrist;
@@ -321,5 +324,34 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			if(level != null && !level.isClientSide)
 				level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 0);
 		}
+	}
+	
+	@Override
+	public AABB getRenderBoundingBox()
+	{
+		return INFINITE_EXTENT_AABB;
+	}
+	
+	@Override
+	public AnimationFactory getFactory()
+	{
+		return factory;
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(new AnimationController<>(this, "scanAnimation", 0, this::scanAnimation));
+	}
+	
+	private <E extends BlockEntity & IAnimatable> PlayState scanAnimation(AnimationEvent<E> event)
+	{
+		if(!this.dowel.isEmpty())
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", false));
+			return PlayState.CONTINUE;
+		}
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
 	}
 }

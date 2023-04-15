@@ -501,6 +501,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MINI_WIZARD_STATUE.get());
 		dropSelf(MINI_TYPHEUS_STATUE.get());
 		dropSelf(CASSETTE_PLAYER.get());
+		dropSelf(HORSE_CLOCK.BOTTOM.get());
 		dropSelf(GLOWYSTONE_DUST.get());
 		dropSelf(MIRROR.get());
 	}

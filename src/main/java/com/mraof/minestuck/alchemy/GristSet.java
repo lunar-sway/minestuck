@@ -15,7 +15,10 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -194,7 +197,7 @@ public class GristSet
 		return this;
 
 	}
-
+	
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
@@ -236,9 +239,17 @@ public class GristSet
 	 */
 	public boolean isEmpty()
 	{
-		return this.gristTypes.isEmpty();
+		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
-
+	
+	public boolean equalContent(GristSet other)
+	{
+		for(GristType type : GristTypes.values())
+			if(this.getGrist(type) != other.getGrist(type))
+				return false;
+		return true;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -283,21 +294,31 @@ public class GristSet
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
+	/**
+	 * this is a version of the spawn grist entities function with a delay.
+	 */
+	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
 	{
 		for(GristAmount amount : getAmounts())
 		{
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount()/10 || i == 9 ? countLeft : Math.min(countLeft, (long) (rand.nextDouble()*countLeft) + 1);
+				long spawnedCount = countLeft <= amount.getAmount() / 10 || i ==
+						gusherCount - 1 ? countLeft : Math.min(countLeft,
+						(long) level.random.nextDouble() * countLeft + 1);
 				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
-				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount);
+				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
 				postProcessor.accept(entity);
 				level.addFreshEntity(entity);
 				countLeft -= spawnedCount;
 			}
 		}
+	}
+	
+	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
+	{
+		spawnGristEntities(level, x, y, z, rand, postProcessor, 0, 10);
 	}
 	
 	public JsonElement serialize()

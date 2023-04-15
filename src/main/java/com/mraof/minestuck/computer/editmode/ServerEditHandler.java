@@ -12,8 +12,8 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
@@ -326,10 +326,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
+				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
-					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-					
 					data.connection.setHasGivenItem(entry);
 					if(!data.connection.isMain())
 						SburbHandler.giveItems(event.getPlayer().getServer(), data.connection.getClientIdentifier());
@@ -339,9 +337,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level, DeployList.EntryLists.ATHENEUM))
 			{
 				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().getLevel());
-				if(cost != null && GristHelper.canAfford(PlayerSavedData.getData(data.connection.getClientIdentifier(), event.getPlayer().level).getGristCache(), cost))
-					GristHelper.decreaseAndNotify(event.getPlayer().level, data.connection.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-				else
+				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 					event.setCanceled(true);
 			}
 			else
@@ -394,23 +390,30 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			cleanStackNBT(stack, data.connection, event.getLevel());
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level);
+			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
 				GristSet cost = entry.getCurrentCost(data.connection);
-				if(!GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), cost))
+				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
 						event.getEntity().sendSystemMessage(cost.createMissingMessage());
 					event.setCanceled(true);
 				}
 			}
-			else if(!isBlockItem(stack.getItem()) || !GristHelper.canAfford(event.getLevel(), data.connection.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
+			else if(!isBlockItem(stack.getItem()) ||
+					!gristCache.canAfford(GristCostRecipe.findCostForItem(stack, null, false, event.getLevel())))
 			{
 				event.setCanceled(true);
 			}
 			if(event.getUseItem() == Event.Result.DEFAULT)
 				event.setUseItem(Event.Result.ALLOW);
 		}
+	}
+	
+	private static GristSet blockBreakCost()
+	{
+		return new GristSet(GristTypes.BUILD, 1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -430,7 +433,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
 			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-				|| (GristHelper.getGrist(event.getEntity().level, data.connection.getClientIdentifier(), GristTypes.BUILD) <= 0 && !MinestuckConfig.SERVER.gristRefund.get()
+				|| (data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
 				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			{
 				event.setCanceled(true);
@@ -471,16 +474,16 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			if(!MinestuckConfig.SERVER.gristRefund.get())
 			{
 				if(entry != null)
-					GristHelper.increaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
-				else
-					GristHelper.decreaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), new GristSet(GristTypes.BUILD,1), GristHelper.EnumSource.SERVER);
+					data.getGristCache().addWithGutter(entry.getCurrentCost(data.connection), GristHelper.EnumSource.SERVER);
+				else //Assumes that this will succeed because of the check in onLeftClickBlockControl()
+					data.getGristCache().tryTake(blockBreakCost(), GristHelper.EnumSource.SERVER);
 			}
 			else
 			{
 				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().getLevel());
 				if(set != null && !set.isEmpty())
 				{
-					GristHelper.increaseAndNotify(event.getPlayer().getLevel(), data.connection.getClientIdentifier(), set, GristHelper.EnumSource.SERVER);
+					data.getGristCache().addWithGutter(set, GristHelper.EnumSource.SERVER);
 				}
 			}
 		}
@@ -514,14 +517,16 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				}
 				if(!cost.isEmpty())
 				{
-					GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), cost, GristHelper.EnumSource.SERVER);
-				}
-				if(entry.getCategory() != DeployList.EntryLists.ATHENEUM)
+					//Assumes that this will succeed because of the check in onRightClickBlockControl()
+						data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER);
+					}if(entry.getCategory() != DeployList.EntryLists.ATHENEUM)
 					player.getInventory().items.set(player.getInventory().selected, ItemStack.EMPTY);
 			
 			} else
 			{
-				GristHelper.decreaseAndNotify(player.level, c.getClientIdentifier(), GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld()), GristHelper.EnumSource.SERVER);
+				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
+					//Assumes that this will succeed because of the check in onRightClickBlockControl()
+					data.getGristCache().tryTake(set, GristHelper.EnumSource.SERVER);
 			}
 		}
 	}

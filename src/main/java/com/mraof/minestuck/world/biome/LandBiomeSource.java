@@ -4,13 +4,11 @@ package com.mraof.minestuck.world.biome;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.mojang.serialization.Encoder;
-import com.mraof.minestuck.util.TerraBlenderCompatibility;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraftforge.fml.ModList;
 
 public final class LandBiomeSource extends BiomeSource
 {
@@ -23,9 +21,6 @@ public final class LandBiomeSource extends BiomeSource
 		super(biomes.getAll());
 		
 		this.parameters = settings.createBiomeParameters(biomes);
-		
-		if(ModList.get().isLoaded("terrablender"))
-			TerraBlenderCompatibility.fixBiomeSource(this);
 	}
 	
 	@Override

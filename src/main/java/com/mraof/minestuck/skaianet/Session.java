@@ -1,6 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.GristGutter;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
@@ -19,6 +20,7 @@ import java.util.*;
 
 /**
  * A data structure that contains all related connections, along with any related data, such as predefine data.
+ *
  * @author kirderf1
  */
 public final class Session
@@ -27,6 +29,7 @@ public final class Session
 	
 	final Map<PlayerIdentifier, PredefineData> predefinedPlayers;
 	final Set<SburbConnection> connections;
+	private final GristGutter gutter;
 	String name;
 	
 	/**
@@ -70,6 +73,10 @@ public final class Session
 		
 		if(MinestuckConfig.SERVER.forceMaxSize && getPlayerList().size() > SessionHandler.MAX_SIZE)
 			throw MergeResult.MERGED_SESSION_FULL.exception();
+		
+		// Since the gutter capacity of the merged session should be the sum of the individual sessions,
+		// the gutter should not go over capacity unless one of the previous gutters already were over capacity.
+		this.gutter.addGristUnchecked(other.gutter.getCache());
 	}
 	
 	private boolean canAdd(PlayerIdentifier player, PredefineData data)
@@ -109,6 +116,14 @@ public final class Session
 	{
 		connections = new HashSet<>();
 		predefinedPlayers = new HashMap<>();
+		this.gutter = new GristGutter(this);
+	}
+	
+	private Session(CompoundTag nbt)
+	{
+		connections = new HashSet<>();
+		predefinedPlayers = new HashMap<>();
+		this.gutter = new GristGutter(this, nbt.getList("gutter", Tag.TAG_COMPOUND));
 	}
 	
 	/**
@@ -237,15 +252,21 @@ public final class Session
 	void predefineCall(PlayerIdentifier player, SkaianetException.SkaianetConsumer<PredefineData> consumer) throws SkaianetException
 	{
 		PredefineData data = predefinedPlayers.get(player);
-		if(data == null)	//TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
+		if(data == null)    //TODO Do not create data for players that have entered (and clear predefined data when no longer needed)
 			data = new PredefineData(player, this);
 		consumer.consume(data);
 		predefinedPlayers.put(player, data);
 	}
 	
+	public GristGutter getGristGutter()
+	{
+		return gutter;
+	}
+	
 	/**
 	 * Writes this session to an nbt tag.
 	 * Note that this will only work as long as <code>SkaianetHandler.connections</code> remains unmodified.
+	 *
 	 * @return An CompoundNBT representing this session.
 	 */
 	CompoundTag write()
@@ -255,25 +276,26 @@ public final class Session
 		if(isCustom())
 			nbt.putString("name", name);
 		ListTag list = new ListTag();
-		for(SburbConnection c : connections)
-			list.add(c.write());
+		for(SburbConnection c : connections) list.add(c.write());
 		nbt.put("connections", list);
 		ListTag predefineList = new ListTag();
 		for(Map.Entry<PlayerIdentifier, PredefineData> entry : predefinedPlayers.entrySet())
 			predefineList.add(entry.getKey().saveToNBT(entry.getValue().write(), "player"));
 		nbt.put("predefinedPlayers", predefineList);
 		nbt.putBoolean("locked", locked);
+		nbt.put("gutter", this.gutter.write());
 		return nbt;
 	}
 	
 	/**
 	 * Reads data from the given nbt tag.
+	 *
 	 * @param nbt An CompoundNBT to read from.
 	 * @return This.
 	 */
 	static Session read(CompoundTag nbt, SkaianetHandler handler)
 	{
-		Session s = new Session();
+		Session s = new Session(nbt);
 		if(nbt.contains("name", Tag.TAG_STRING))
 			s.name = nbt.getString("name");
 		else s.name = null;
@@ -292,7 +314,7 @@ public final class Session
 			}
 		}
 		
-		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))	//If it is a tag list
+		if(nbt.contains("predefinedPlayers", Tag.TAG_LIST))    //If it is a tag list
 		{
 			list = nbt.getList("predefinedPlayers", Tag.TAG_COMPOUND);
 			for(int i = 0; i < list.size(); i++)

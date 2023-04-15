@@ -38,7 +38,7 @@ public abstract class SessionHandler
 	 */
 	public abstract Session getPlayerSession(PlayerIdentifier player);
 	
-	abstract Set<Session> getSessions();
+	public abstract Set<Session> getSessions();
 	
 	Stream<SburbConnection> getConnectionStream()
 	{

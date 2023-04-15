@@ -51,6 +51,9 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> MUSIC_UNIVERSAL = register("music.universal"); //play in all lands
 	public static final RegistryObject<SoundEvent> MUSIC_RISE_UP = register("music.rise_up"); //is intended for use during godtiering
 	
+	public static final RegistryObject<SoundEvent> ENTITY_SWOOSH = register("entity.swoosh");
+	public static final RegistryObject<SoundEvent> ENTITY_SLAM = register("entity.slam");
+	public static final RegistryObject<SoundEvent> ENTITY_BITE = register("entity.bite");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_AMBIENT = register("entity.nakagator.ambient");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_HURT = register("entity.nakagator.hurt");
 	public static final RegistryObject<SoundEvent> ENTITY_NAKAGATOR_DEATH = register("entity.nakagator.death");
@@ -96,6 +99,11 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_RESTORE = register("event.lotus_flower.restore"); //identical to beehive exit
 	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
+	public static final RegistryObject<SoundEvent> CRUXTRUDER_DOWEL = register("block.cruxtruder.dowel");
+	public static final RegistryObject<SoundEvent> BLOCK_HORSE_CLOCK_CHIME = register("block.horse_clock.chime");
+	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TICK = register("block.clock.tick");
+	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");
+	
 	
 	private static RegistryObject<SoundEvent> register(String name)
 	{

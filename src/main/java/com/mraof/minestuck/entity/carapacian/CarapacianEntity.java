@@ -1,14 +1,11 @@
 package com.mraof.minestuck.entity.carapacian;
 
+import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.EntityListFilter;
-import com.mraof.minestuck.entity.SimpleTexturedEntity;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -23,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class CarapacianEntity extends SimpleTexturedEntity
+public abstract class CarapacianEntity extends AnimatedPathfinderMob
 {
 	private final EnumEntityKingdom kingdom;
 	
@@ -42,6 +39,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 	@Override
 	protected void registerGoals()
 	{
+		super.registerGoals();
 		this.goalSelector.addGoal(1, new FloatGoal(this));
 		//this.goalSelector.addGoal(4, new EntityAIMoveToBattle(this));
 		this.targetSelector.addGoal(1, new HurtByTargetAlliedGoal(this, this::isAlly));
@@ -60,7 +58,7 @@ public abstract class CarapacianEntity extends SimpleTexturedEntity
 		switch(this.getKingdom())
 		{
 			case PROSPITIAN:
-				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).stream().toList());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place
+				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.DERSITE_CARAPACIANS).stream().toList());    //TODO Should refer to tags directly. Entities will otherwise need to be reconstructed for resource reload changes to take place, is this now resolved?
 				break;
 			case DERSITE:
 				enemyTypes.addAll(ForgeRegistries.ENTITY_TYPES.tags().getTag(MSTags.EntityTypes.PROSPITIAN_CARAPACIANS).stream().toList());

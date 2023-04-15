@@ -41,7 +41,6 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
@@ -57,11 +56,18 @@ public class ClientEditToolDrag
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
-		if(event.phase == TickEvent.Phase.START)
-		{
-			ClientEditToolDrag.doRecycleCode(event);
-			ClientEditToolDrag.doReviseCode(event);
-		}
+		if(event.phase != TickEvent.Phase.START)
+			return;
+		
+		Minecraft mc = Minecraft.getInstance();
+		Player player = mc.player;
+		if (player == null || !player.isAlive() || !ClientEditHandler.isActive())
+			return;
+		
+		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
+		
+		ClientEditToolDrag.doRecycleCode(mc, player, cap);
+		ClientEditToolDrag.doReviseCode(mc, player, cap);
 	}
 	
 	@SubscribeEvent
@@ -139,15 +145,8 @@ public class ClientEditToolDrag
 	/**
 	 * Handles code for the revise tool on the client-side.
 	 */
-	public static void doReviseCode(TickEvent.ClientTickEvent event)
+	public static void doReviseCode(Minecraft mc, Player player, IEditTools cap)
 	{
-		Minecraft mc = Minecraft.getInstance();
-		if (mc.player == null || event.phase == TickEvent.Phase.END)
-			return;
-		
-		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
-		
 		//Return early if there IS a tool active and it ISN'T revise.
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.REVISE)
 			return;
@@ -193,15 +192,8 @@ public class ClientEditToolDrag
 	/**
 	 * Handles code for the recycle tool on the client-side.
 	 */
-	public static void doRecycleCode(TickEvent.ClientTickEvent event)
+	public static void doRecycleCode(Minecraft mc, Player player, IEditTools cap)
 	{
-		Minecraft mc = Minecraft.getInstance();
-		if (mc.player == null || event.phase == TickEvent.Phase.END)
-			return;
-		
-		Player player = mc.player;
-		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
-		
 		//Return early if there IS a tool active and it ISN'T recycle.
 		if (cap.getToolMode() != null && cap.getToolMode() != IEditTools.ToolMode.RECYCLE)
 			return;
@@ -370,7 +362,8 @@ public class ClientEditToolDrag
 		Minecraft mc = Minecraft.getInstance();
 		
 		//make sure the stage is after translucent blocks so that the outlines render over everything.
-		if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player)
+		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player
+				&& mc.player.isAlive() && ClientEditHandler.isActive())
 		{
 			
 			Player player = mc.player;
@@ -404,7 +397,7 @@ public class ClientEditToolDrag
 					BufferBuilder bufferBuilder = tesselator.getBuilder();
 					MultiBufferSource.BufferSource renderTypeBuffer = MultiBufferSource.immediate(bufferBuilder);
 					
-					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox),0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
+					drawReviseToolOutline(event.getPoseStack(), renderTypeBuffer.getBuffer(RenderType.LINES), Shapes.create(boundingBox), 0, 0, 0, cap.getToolMode() == IEditTools.ToolMode.RECYCLE ? 1 : 0, cap.getToolMode() == IEditTools.ToolMode.REVISE ? 1 : 0, 0, 1);
 					renderTypeBuffer.endBatch();
 					
 					RenderSystem.depthMask(true);

@@ -534,8 +534,9 @@ public class MSItems
 	public static final RegistryObject<Item> STONE_EYEBALLS = REGISTER.register("stone_eyeballs", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> STONE_TABLET = REGISTER.register("stone_tablet", () -> new StoneTabletItem(MSBlocks.STONE_TABLET.get(), new Item.Properties().tab(MSItemGroup.LANDS)));
 	public static final RegistryObject<Item> SHOP_POSTER = REGISTER.register("shop_poster", () -> new HangingItem(ShopPosterEntity::new, new Item.Properties().stacksTo(1).tab(MSItemGroup.LANDS))); //not used
-	
-	
+	public static final RegistryObject<Item> GUTTER_THUMB_DRIVE = REGISTER.register("gutter_thumb_drive", () -> new GutterThumbDriveItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> ANCIENT_THUMB_DRIVE = REGISTER.register("ancient_thumb_drive", () -> new AncientThumbDrive(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<Item> GUTTER_BALL = REGISTER.register("gutter_ball", () -> new GutterBallItem(new Item.Properties().stacksTo(5).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	
 	//Buckets
 	public static final RegistryObject<Item> OIL_BUCKET = REGISTER.register("oil_bucket", () -> new BucketItem(MSFluids.OIL, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1).tab(MSItemGroup.MAIN)));
@@ -609,6 +610,7 @@ public class MSItems
 	public static final RegistryObject<Item> IRON_BOAT = REGISTER.register("iron_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.IRON), new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<Item> GOLD_BOAT = REGISTER.register("gold_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.GOLD), new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
+	public static final RegistryObject<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties().tab(MSItemGroup.MAIN)));
 	
 	
 	
@@ -633,6 +635,8 @@ public class MSItems
 	public static final RegistryObject<Item> CASSETTE_STRAD = REGISTER.register("cassette_strad", () -> new CassetteItem(9, EnumCassetteType.STRAD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 3760));
 	public static final RegistryObject<Item> CASSETTE_WAIT = REGISTER.register("cassette_wait", () -> new CassetteItem(12, EnumCassetteType.WAIT, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 4760));
 	public static final RegistryObject<Item> CASSETTE_WARD = REGISTER.register("cassette_ward", () -> new CassetteItem(10, EnumCassetteType.WARD, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 5020));
+	public static final RegistryObject<Item> CASSETTE_OTHERSIDE = REGISTER.register("cassette_otherside", () -> new CassetteItem(14, EnumCassetteType.OTHERSIDE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).tab(MSItemGroup.MAIN), 3900));
+	public static final RegistryObject<Item> CASSETTE_5 = REGISTER.register("cassette_5", () -> new CassetteItem(15, EnumCassetteType.FIVE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).tab(MSItemGroup.MAIN), 3560));
 	
 	
 	/** Start of block items **/

@@ -38,6 +38,7 @@ public class MSPacketHandler
 		
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);
+		registerMessage(RGBColorSelectPacket.class, RGBColorSelectPacket::decode);
 		registerMessage(TitleSelectPacket.class, TitleSelectPacket::decode);
 		registerMessage(ConnectToSburbServerPacket.class, ConnectToSburbServerPacket::decode);
 		registerMessage(OpenSburbServerPacket.class, OpenSburbServerPacket::decode);
@@ -47,6 +48,7 @@ public class MSPacketHandler
 		registerMessage(ClearMessagePacket.class, ClearMessagePacket::decode);
 		registerMessage(SkaianetInfoPacket.class, SkaianetInfoPacket::decode);
 		registerMessage(BurnDiskPacket.class, BurnDiskPacket::decode);
+		registerMessage(ThemeSelectPacket.class, ThemeSelectPacket::decode);
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
@@ -74,6 +76,7 @@ public class MSPacketHandler
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
+		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);

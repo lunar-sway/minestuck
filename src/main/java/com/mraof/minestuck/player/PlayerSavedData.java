@@ -97,7 +97,7 @@ public final class PlayerSavedData extends SavedData
 	{
 		return get(server).getData(player);
 	}
-
+	
 	public PlayerData getData(PlayerIdentifier player)
 	{
 		Objects.requireNonNull(player);

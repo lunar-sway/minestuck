@@ -418,6 +418,27 @@
       }
     ]
   },
+  "entity.swoosh": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.swoosh",
+    "sounds": [
+      "minestuck:mob/swoosh"
+    ]
+  },
+  "entity.slam": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.slam",
+    "sounds": [
+      "minestuck:mob/slam"
+    ]
+  },
+  "entity.bite": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.bite",
+    "sounds": [
+      "minestuck:mob/bite"
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
@@ -785,6 +806,32 @@
         "name": "minestuck:random/tool_recycle",
         "stream": false
       }
+    ]
+  },
+  "block.cruxtruder.dowel": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.cruxtruder_dowel",
+    "sounds": [
+      "minestuck:random/cruxtruder_dowel"
+    ]
+  },
+  "block.horse_clock.chime": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.horse_clock_chime",
+    "sounds": [
+      "minestuck:random/horse_clock_chime"
+    ]
+  },
+  "block.clock.tick": {
+    "category": "block",
+    "sounds": [
+      "minestuck:random/clock_tick"
+    ]
+  },
+  "block.clock.tock": {
+    "category": "block",
+    "sounds": [
+      "minestuck:random/clock_tock"
     ]
   }
 }

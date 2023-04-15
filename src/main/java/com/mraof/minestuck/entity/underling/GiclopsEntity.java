@@ -1,57 +1,57 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.entity.EntityBigPart;
-import com.mraof.minestuck.entity.IBigEntity;
-import com.mraof.minestuck.entity.PartGroup;
-import com.mraof.minestuck.entity.ai.CustomMeleeAttackGoal;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
+import com.mraof.minestuck.entity.animation.MobAnimation;
+import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.player.EcheladderBonusType;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
-public class GiclopsEntity extends UnderlingEntity implements IBigEntity
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+
+public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 {
-	private PartGroup partGroup;
+	public static final PhasedMobAnimation KICK_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
 	
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
 		super(type, level, 7);
-		
 		this.maxUpStep = 2;
-		partGroup = new PartGroup(this);
-		partGroup.addBox(-4, 2, -1.5, 8, 8, 5);
-		partGroup.addBox(-5, 0, -0.5, 3, 2, 3);
-		partGroup.addBox(1, 0, -0.5, 3, 2, 3);
-		partGroup.createEntities(level);
 	}
 	
 	public static AttributeSupplier.Builder giclopsAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 210)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.23)
-				.add(Attributes.ATTACK_DAMAGE, 10);
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.9).add(Attributes.MOVEMENT_SPEED, 0.20)
+				.add(Attributes.ATTACK_DAMAGE, 18);
 	}
 	
 	@Override
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(3, new CustomMeleeAttackGoal(this, 1.0F, false, 50, 1.1F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, KICK_ANIMATION));
+		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
 	@Override
@@ -97,32 +97,8 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 	public void baseTick()
 	{
 		super.baseTick();
-		partGroup.updatePositions();
 		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
 			this.discard();
-	}
-	
-	@Override
-	public void absMoveTo(double par1, double par3, double par5, float par7, float par8)
-	{
-		super.absMoveTo(par1, par3, par5, par7, par8);
-		partGroup.updatePositions();
-	}
-	
-	@Override
-	protected void doPush(Entity entity)
-	{
-		if(!(entity instanceof EntityBigPart))
-			super.doPush(entity);
-	}
-	
-	@Override
-	public void push(Entity entityIn)
-	{
-		if(!entityIn.noPhysics)
-		{
-			partGroup.applyCollision(entityIn);
-		}
 	}
 	
 	@Override
@@ -156,14 +132,13 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		return result;
 	}
 	
-	
-	@Override
+	/*@Override
 	public void move(MoverType typeIn, Vec3 pos)    //TODO probably doesn't work as originally intended anymore. What was this meant to do?
 	{
 		AABB realBox = this.getBoundingBox();
 		double minX = pos.x > 0 ? realBox.maxX - pos.x : realBox.minX;
 		/*				y > 0 ? realBox.maxY - y : realBox.minY,*/
-		double minY = realBox.minY;
+		/*double minY = realBox.minY;
 		double minZ = pos.z > 0 ? realBox.maxZ - pos.z : realBox.minZ;
 		double maxX = pos.x < 0 ? realBox.minX - pos.x : realBox.maxX;
 		double maxY = pos.y < 0 ? realBox.minY - pos.y : realBox.maxY;
@@ -172,27 +147,72 @@ public class GiclopsEntity extends UnderlingEntity implements IBigEntity
 		super.move(typeIn, pos);
 		AABB changedBox = this.getBoundingBox();
 		this.setPos(this.getX() + changedBox.minX - minX, this.getY() + changedBox.minY - minY, this.getZ() + changedBox.minZ - minZ);
-	}
-	
-	@Override
-	public PartGroup getGroup()
-	{
-		return partGroup;
-	}
-	
-	/**
-	 * Will get destroyed next tick.
-	 */
-	@Override
-	public void remove(RemovalReason reason)
-	{
-		super.remove(reason);
-		partGroup.updatePositions();
-	}
+	}*/
 	
 	@Override
 	public boolean isPickable()
 	{
 		return true;
+	}
+	
+	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.KICK)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.75F, 0);
+	}
+	
+	@Override
+	public void registerControllers(AnimationData data)
+	{
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, GiclopsEntity::idleAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, GiclopsEntity::walkAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, GiclopsEntity::attackAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, GiclopsEntity::deathAnimation));
+	}
+	
+	private static PlayState idleAnimation(AnimationEvent<GiclopsEntity> event)
+	{
+		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		{
+			return PlayState.STOP;
+		}
+		
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		return PlayState.CONTINUE;
+	}
+	
+	private static PlayState walkAnimation(AnimationEvent<GiclopsEntity> event)
+	{
+		if(event.isMoving())
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
+	}
+	
+	private static PlayState attackAnimation(AnimationEvent<GiclopsEntity> event)
+	{
+		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		
+		if(action == MobAnimation.Action.KICK)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("kick", false));
+			return PlayState.CONTINUE;
+		}
+		
+		event.getController().markNeedsReload();
+		return PlayState.STOP;
+	}
+	
+	private static PlayState deathAnimation(AnimationEvent<GiclopsEntity> event)
+	{
+		if(event.getAnimatable().dead)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+			return PlayState.CONTINUE;
+		}
+		return PlayState.STOP;
 	}
 }

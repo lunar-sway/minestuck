@@ -15,6 +15,10 @@ import java.util.function.Supplier;
 public enum EnumCassetteType implements StringRepresentable
 {
 	NONE(() -> null, null),
+	FIVE(() -> SoundEvents.MUSIC_DISC_5, onHitEffect(() -> new MobEffectInstance(MobEffects.DARKNESS, 500, 0),
+			0.90F)),
+	OTHERSIDE(() -> SoundEvents.MUSIC_DISC_OTHERSIDE, userEffect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 100, 1,
+			false, false, false))),
 	ELEVEN(() -> SoundEvents.MUSIC_DISC_11, onHitEffect(() -> new MobEffectInstance(MobEffects.WITHER, 160, 0),
 			0.10F)),
 	THIRTEEN(() -> SoundEvents.MUSIC_DISC_13, onHitEffect(() -> new MobEffectInstance(MobEffects.HUNGER, 500, 0), 0.30F)),

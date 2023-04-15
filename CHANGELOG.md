@@ -4,10 +4,35 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased 4/13]
+## [Unreleased]
+
+### Fixed
+
+- Fixed a crash with TerraBlender
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.19.2-1.10.0.1] - 2023-04-13
+
+### Fixed
+
+- Fix client-side crash on player death
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.19.2-1.10.0.0] - 2023-04-13
 
 ### Added
 
+- Animations for the new alchemy equipment, consorts, underlings, and pawn models
+- Horse clock, the animated clock that is also horse themed
+- Sound effect for cruxtruder as well as bite, ground slam, and several limb based attacks
+- Ground slam attack for Ogres
+- Fireball/tail whip attacks for Basilisks (and fire immunity)
 - New wood block set and tree features called Shadewood which generate in Shade land Rough biomes
 - Added shade stone rock blobs to Shade lands and to the Rough biomes
 - Bookshelves for various minestuck wood types
@@ -25,9 +50,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - 2 Sburb Editmode tools (Revise and Recycle)
 - Atheneum tab which allows you to select basic building blocks and deploy their punched cards by holding sneak key
 - Sburb Cursor entity that appears when using Editmode tools
+- Grist gutter, which is separate for each session
+- Gutter-related items that can increase the capacity of the grist gutter
+- New command `/grist_gutter show` to display the content and size of the gutter
+- Cassettes for "5" and "Otherside"
 
 ### Changed
 
+- Remodels of alchemy equipment, consorts, underlings, and pawns
+- Changed various speed/knockback resistance/health/damage attributes for underlings and consorts
+- Redstone clock is now muffled by the vibration occluding blocktag instead of just wool
+- Reduced spawn cap of underlings and consorts
+- Changes to underling and consort hitbox sizes
+- Increased number of hitboxes for Basilisk
+- Imps now stop attacking players on their own when they reach rung 15 instead of rung 18
+- Increased frequency of vitality gel drops from underlings
 - Changed Cat Claws recipe to Makeshift Claws && Iron Ingot
 - Updated Cat Claws texture
 - Changed Jousting Lance recipe to Wooden Lance && Iron Ingot
@@ -44,15 +81,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The "minestuck:land_type" loot condition now uses tags instead of land type groups
 - Some consort dialogue conditions now uses tags instead of land type groups
 - New way to determine which land types that can get picked at random,
-defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" and "data/\<namespace\>/minestuck/title_land_types.json"
+defined using data files `data/<namespace>/minestuck/terrain_land_types.json` and `data/<namespace>/minestuck/title_land_types.json`
 - Grist mining tools (currently only Grist N Mine) now only extract grist at 50% efficiency
 - Minor tweaks to tooltips of some existing puzzle related blocks
 - Land vegetation now has a partial random XZ offset the same way. Hitboxes are more appropriate
 - Fixed blocks in the LOGS tag that Minestuck added not being given an automatic grist cost
 - Modified land terrain generation settings to have more variation
 - Grist selector screen now exits to the previous screen when pressing esc
-- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks.
-- Updated textures for the Rainbow wood set
+- Editmode players will now break the entire multiblock when directly breaking one of their individual blocks
+- Player grist cache now has an upper limit that depends on the echeladder rung of the player
 
 ### Removed
 
@@ -64,18 +101,21 @@ defined using data files "data/\<namespace\>/minestuck/terrain_land_types.json" 
 - Removed sunset fog coloration in lands
 - Fixed resizing issue with grist selector screen
 - Fixed some light problems with entry, possibly fixed other behaviors with entry
+- End leaves burn in a more reasonable way now
+- Fix gap between grist toasts
 
 ### Contributors for this release
 
-- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll
-
-## [Unreleased]
+- kirderf1, Dweblenod, Akisephila, rose_bushes_, Hadean, Emma "Dilemma", Carnie, Riotmode, sipherNil, blankMushroom, Caldw3ll, Amiwyn, LunaticCat, Doro, SarahK
 
 ## [1.19.2-1.9.3.0] - 2023-03-24
 
 ### Added
 
 - Combination recipes and grist costs for items introduced in minecraft 1.19
+- New interface for the computers with a desktop home screen
+- Advanced color selector with support for colors other than the original sixteen
+- Settings program and a simple theming system to change the color of the desktop
 
 ### Changed
 
