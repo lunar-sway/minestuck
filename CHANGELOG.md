@@ -16,7 +16,8 @@ Note that this option is found in the common config and not the world config.
 ### Fixed
 
 - Fixed a crash with TerraBlender
-- Fixed editmode players not being able to destroy machines.
+- Fixed editmode players not being able to destroy machines
+- Messages for more cases where entry may fail
 
 ### Contributors for this release
 

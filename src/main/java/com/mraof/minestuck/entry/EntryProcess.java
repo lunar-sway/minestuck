@@ -82,7 +82,11 @@ public class EntryProcess
 	{
 		long time = System.currentTimeMillis();
 		if(player.level.dimension() == Level.NETHER)
+		{
+			player.sendSystemMessage(Component.literal("Entry not permitted from this dimension."));
 			return;
+		}
+		
 		if(!TitleSelectionHook.performEntryCheck(player))
 			return;
 		if(waitingProcess != null)
@@ -109,7 +113,10 @@ public class EntryProcess
 		
 		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
 		if(landLevel == null)
+		{
+			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
 			return;
+		}
 		
 		EntryProcess process = new EntryProcess(player, landLevel);
 		if(!process.canModifyEntryBlocks(player.level, player))
@@ -128,12 +135,23 @@ public class EntryProcess
 	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
 	{
-		if(MinestuckConfig.SERVER.stopSecondEntry.get() || MSDimensions.isLandDimension(player.server, player.level.dimension()))
+		if(MinestuckConfig.SERVER.stopSecondEntry.get())
+		{
+			player.sendSystemMessage(Component.literal("You have already entered, and are not permitted to re-enter."));
 			return;
+		}
+		if(MSDimensions.isLandDimension(player.server, player.level.dimension()))
+		{
+			player.sendSystemMessage(Component.literal("You may not re-enter from this dimension."));
+			return;
+		}
 		
 		ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(land);
 		if(landWorld == null)
+		{
+			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
 			return;
+		}
 		
 		//Teleports the player to their home in the Medium, without any bells or whistles.
 		BlockPos pos = new BlockPos(0, 100, 0);
