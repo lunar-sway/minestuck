@@ -56,7 +56,7 @@ public class EntryProcess
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
 	private final PlayerIdentifier playerId;
-	private final ServerLevel landLevel;
+	private final ServerLevel originLevel, landLevel;
 	private final int artifactRange = MinestuckConfig.SERVER.artifactRange.get();
 	
 	private final int xDiff, yDiff, zDiff;
@@ -66,6 +66,7 @@ public class EntryProcess
 	private EntryProcess(ServerPlayer player, ServerLevel landLevel)
 	{
 		this.origin = player.blockPosition();
+		this.originLevel = (ServerLevel) player.level;
 		this.landLevel = landLevel;
 		
 		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.getLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
@@ -170,15 +171,13 @@ public class EntryProcess
 		
 		try
 		{
-			ServerLevel oldLevel = (ServerLevel) player.level;
-			
 			LOGGER.info("Checking entry block conditions");
 			
-			if(doesBlocksStopEntry(player, oldLevel))
+			if(doesBlocksStopEntry(player, originLevel))
 				return;
 			
 			LOGGER.info("Entry starting");
-			copyBlocks(oldLevel, landLevel);
+			copyBlocks(originLevel, landLevel);
 			
 			if(Teleport.teleportEntity(player, landLevel) == null)
 			{
@@ -186,7 +185,7 @@ public class EntryProcess
 				return;
 			}
 			
-			finalizeEntry(player, oldLevel, landLevel);
+			finalizeEntry(player, originLevel, landLevel);
 			SkaianetHandler.get(player.level).onEntry(playerId);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
