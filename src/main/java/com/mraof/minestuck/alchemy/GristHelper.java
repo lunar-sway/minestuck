@@ -21,6 +21,7 @@ public class GristHelper
 		CLIENT, //The SBURB client.
 		SERVER, //The SBURB server.
 		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		GUTTER, //Is headed to the displayed players grist gutter
 		CONSOLE //For things like the /grist command.
 	}
 	

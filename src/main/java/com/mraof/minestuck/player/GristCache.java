@@ -150,7 +150,10 @@ public final class GristCache
 		{
 			Session session = SessionHandler.get(mcServer).getPlayerSession(data.identifier);
 			if(session != null)
+			{
 				session.getGristGutter().addGristFrom(overflowedGrist);
+				GristToastPacket.notify(mcServer, data.identifier, set, GristHelper.EnumSource.GUTTER); //still send a grist toast when adding to gutter
+			}
 			
 			ServerPlayer player = data.getPlayer();
 			if(player != null && !overflowedGrist.isEmpty())
