@@ -304,6 +304,14 @@ public final class SburbConnection
 			clientLandKey = dimension;
 		}
 	}
+	
+	void resetEntryState()
+	{
+		hasEntered = false;
+		clientLandKey = null;
+		skaianet.infoTracker.markDirty(this);
+	}
+	
 	void setHasEntered()
 	{
 		if(clientLandKey == null)

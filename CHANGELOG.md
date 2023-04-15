@@ -13,7 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed crash with invalid transportalizer data
+- Connections with missing land dimensions gets partially reset to before entry at server start
 - Fixed editmode players not being able to destroy machines
+- Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
 - Fixed grist cache view in editmode using the limit of the wrong player
 - Cache limit will now be accounted for more often client-side
 
