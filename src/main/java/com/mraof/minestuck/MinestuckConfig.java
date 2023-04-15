@@ -36,7 +36,7 @@ public class MinestuckConfig
 			
 			builder.push("performance");
 			entryDelay = builder.comment("Time reserved for worldgen between generating the land and the actual entry. Measured in ticks. Try increasing this if entry halts the game too much.")
-					.defineInRange("entryDelay", 100, 0, Integer.MAX_VALUE);
+					.defineInRange("entryDelay", 200, 0, Integer.MAX_VALUE);
 			builder.pop();
 		}
 	}
