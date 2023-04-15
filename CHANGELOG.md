@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Config option for delaying entry from when the land dimension is generated, which can help with performance
+- Config option for delaying entry from when the land dimension is generated, which can help with performance.
+Note that this option is found in the common config and not the world config.
 - Particle effect while entering
 
 ### Fixed

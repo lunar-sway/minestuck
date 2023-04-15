@@ -121,7 +121,7 @@ public class EntryProcess
 		landLevel.getChunkSource().addRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 		
 		waitingProcess = process;
-		startTime = player.level.getGameTime() + MinestuckConfig.SERVER.entryDelay.get();
+		startTime = player.level.getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
 		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level.dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
