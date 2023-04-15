@@ -106,7 +106,10 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	protected void teleport(Entity entity)
 	{
-		GlobalPos location = TransportalizerSavedData.get(level).get(this.destId);
+		if(this.level == null)
+			return;
+		
+		GlobalPos destination = TransportalizerSavedData.get(level).get(this.destId);
 		if(!enabled)
 		{
 			entity.setPortalCooldown();
@@ -114,14 +117,20 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				entity.sendSystemMessage(Component.translatable(DISABLED));
 			return;
 		}
-		if(location != null && location.pos().getY() != -1)
+		if(destination != null && entity.getServer() != null)
 		{
-			ServerLevel level = entity.getServer().getLevel(location.dimension());
-			TransportalizerBlockEntity destTransportalizer = (TransportalizerBlockEntity) level.getBlockEntity(location.pos());
-			if(destTransportalizer == null)
+			ServerLevel destinationLevel = entity.getServer().getLevel(destination.dimension());
+			if(destinationLevel == null)
 			{
-				LOGGER.warn("Invalid transportalizer in map: {} at {}", this.destId, location);
-				TransportalizerSavedData.get(level).remove(this.destId, location);
+				LOGGER.warn("Transportalizer at invalid dimension in map: {} at {}", this.destId, destination);
+				TransportalizerSavedData.get(level).remove(this.destId, destination);
+				this.destId = "";
+				return;
+			}
+			if(!(destinationLevel.getBlockEntity(destination.pos()) instanceof TransportalizerBlockEntity destTransportalizer))
+			{
+				LOGGER.warn("Invalid transportalizer in map: {} at {}", this.destId, destination);
+				TransportalizerSavedData.get(level).remove(this.destId, destination);
 				this.destId = "";
 				return;
 			}
@@ -135,7 +144,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 					entity.sendSystemMessage(Component.translatable(FORBIDDEN));
 				return;
 			}
-			if(isDimensionForbidden(level))
+			if(isDimensionForbidden(destinationLevel))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
@@ -151,7 +160,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				return;
 			}
 			
-			if(isBlocked(level, location.pos()))
+			if(isBlocked(destinationLevel, destination.pos()))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
@@ -160,7 +169,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			}
 			
 			level.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
-			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, location.pos().getX() + 0.5, location.pos().getY() + 0.6, location.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
+			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
 			{
 				entity.setPortalCooldown();
