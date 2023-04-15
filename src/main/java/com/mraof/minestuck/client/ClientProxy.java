@@ -8,6 +8,7 @@ import com.mraof.minestuck.client.model.armor.*;
 import com.mraof.minestuck.client.model.entity.BishopModel;
 import com.mraof.minestuck.client.model.entity.RookModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
+import com.mraof.minestuck.particles.TransportalizerParticle;
 import com.mraof.minestuck.client.renderer.blockentity.*;
 import com.mraof.minestuck.client.renderer.entity.*;
 import com.mraof.minestuck.client.renderer.entity.frog.FrogRenderer;
@@ -18,6 +19,7 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
+import com.mraof.minestuck.particles.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
@@ -31,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -138,6 +141,12 @@ public class ClientProxy
 		ArmorModels.register(MSItems.DERSE_SHIRT.get(), pajamasModel);
 		ArmorModels.register(MSItems.DERSE_PANTS.get(), pajamasModel);
 		ArmorModels.register(MSItems.DERSE_SHOES.get(), pajamasModel);
+	}
+	
+	@SubscribeEvent
+	public static void registerFactories(RegisterParticleProvidersEvent event)
+	{
+		event.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.client.particle.MSParticleType;
+import com.mraof.minestuck.particles.MSParticleType;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;

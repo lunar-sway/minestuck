@@ -5,7 +5,7 @@ import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.generator.recipe.InterpreterSerializers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.client.particle.MSParticleType;
+import com.mraof.minestuck.particles.MSParticleType;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
