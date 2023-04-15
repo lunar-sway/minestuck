@@ -83,6 +83,11 @@ public class EntryProcess
 			return;
 		if(!TitleSelectionHook.performEntryCheck(player))
 			return;
+		if(waitingProcess != null)
+		{
+			player.sendSystemMessage(Component.literal("Someone else is already entering."));
+			return;
+		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
