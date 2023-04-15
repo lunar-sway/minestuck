@@ -58,7 +58,7 @@ public class GristGutter
 	
 	public long getRemainingCapacity()
 	{
-		return (long) (GUTTER_CAPACITY * gutterMultiplierForSession()) - gristTotal;
+		return Math.max(0, (long) (GUTTER_CAPACITY * gutterMultiplierForSession()) - gristTotal);
 	}
 	
 	public double gutterMultiplierForSession()

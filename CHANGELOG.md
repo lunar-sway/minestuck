@@ -16,8 +16,11 @@ Note that this option is found in the common config and not the world config.
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed crash with invalid transportalizer data
+- Connections with missing land dimensions gets partially reset to before entry at server start
 - Fixed editmode players not being able to destroy machines
 - Messages for more cases where entry may fail
+- Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
 
 ### Contributors for this release
 
