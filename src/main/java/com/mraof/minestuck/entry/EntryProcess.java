@@ -51,7 +51,6 @@ import java.util.Optional;
 public class EntryProcess
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	public static final int ENTRY_DELAY = 40;
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
 	private final PlayerIdentifier playerId;
@@ -119,7 +118,7 @@ public class EntryProcess
 		landLevel.getChunkSource().addRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 		
 		waitingProcess = process;
-		startTime = player.level.getGameTime() + ENTRY_DELAY;
+		startTime = player.level.getGameTime() + MinestuckConfig.SERVER.entryDelay.get();
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	

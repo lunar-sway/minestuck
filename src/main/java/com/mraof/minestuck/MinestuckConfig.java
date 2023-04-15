@@ -98,6 +98,7 @@ public class MinestuckConfig
 		public final BooleanValue stopSecondEntry;
 		public final BooleanValue needComputer;
 		public final IntValue artifactRange;
+		public final IntValue entryDelay;
 		
 		//Computer
 		public final BooleanValue privateComputers;
@@ -205,6 +206,8 @@ public class MinestuckConfig
 					.define("needComputer", false);
 			artifactRange = builder.comment("Radius of the land brought into the medium.")
 					.defineInRange("artifactRange",30,0,Integer.MAX_VALUE);
+			entryDelay = builder.comment("Time reserved for worldgen between generating the land and the actual entry. Measured in ticks. Try increasing this if entry halts the game too much.")
+					.defineInRange("entryDelay", 40, 0, Integer.MAX_VALUE);
 			builder.pop();
 			
 			builder.push("medium");
