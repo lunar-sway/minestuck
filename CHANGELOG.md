@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Config option for delaying entry from when the land dimension is generated, which can help with performance
+- Particle effect while entering
+
 ### Fixed
 
 - Fixed a crash with TerraBlender
