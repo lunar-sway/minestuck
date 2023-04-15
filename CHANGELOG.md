@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed crash with invalid transportalizer data
 - Fixed editmode players not being able to destroy machines.
 
 ### Contributors for this release
