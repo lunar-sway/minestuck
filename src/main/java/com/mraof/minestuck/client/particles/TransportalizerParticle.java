@@ -1,4 +1,4 @@
-package com.mraof.minestuck.particles;
+package com.mraof.minestuck.client.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;

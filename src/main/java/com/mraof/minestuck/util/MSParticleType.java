@@ -1,4 +1,4 @@
-package com.mraof.minestuck.particles;
+package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.particles.ParticleType;

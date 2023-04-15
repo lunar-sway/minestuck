@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.particles.MSParticleType;
+import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
@@ -177,18 +177,16 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				return;
 			}
 			
-			ServerLevel originServerLevel = (ServerLevel) this.level;
-			ServerLevel destinationServerLevel = (ServerLevel) destTransportalizer.level;
+			ServerLevel originLevel = (ServerLevel) this.level;
 			
-			entity = Teleport.teleportEntity(entity, destinationServerLevel, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
+			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
 			{
 				entity.setPortalCooldown();
 				
-				if(originServerLevel != null)
-					originServerLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
-				if(destinationServerLevel != null)
-					destinationServerLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), destination.pos().getX() + 0.5, destination.pos().getY() + 1, destination.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
+				if(originLevel != null)
+					originLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
+				destinationLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), destination.pos().getX() + 0.5, destination.pos().getY() + 1, destination.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
 			}
 		}
 	}
