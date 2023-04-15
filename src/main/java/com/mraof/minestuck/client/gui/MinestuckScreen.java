@@ -77,8 +77,9 @@ public abstract class MinestuckScreen extends Screen
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());//grist icon
 			minecraft.font.draw(poseStack, amount, gristXOffset + gristCountX - 2, gristYOffset + gristCountY + 10, 0x19b3ef);//renders the text
 			//renders bars
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
+			double gristFraction = Math.min(1, (double) clientGrist.getGrist(type) / cacheLimit);
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
 			offset++;
 		}
 		if (tooltipType != null)
