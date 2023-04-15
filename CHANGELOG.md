@@ -6,13 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added 75 more blocks to the default atheneum list.
+
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed editmode players not being able to destroy machines.
 
 ### Contributors for this release
 
-- kirderf1
+- kirderf1, Caldw3ll
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 
