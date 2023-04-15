@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Added 75 more blocks to the default atheneum list.
 - Config option for delaying entry from when the land dimension is generated, which can help with performance.
 Note that this option is found in the common config and not the world config.
 - Particle effect while entering
@@ -15,10 +16,11 @@ Note that this option is found in the common config and not the world config.
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed editmode players not being able to destroy machines.
 
 ### Contributors for this release
 
-- kirderf1
+- kirderf1, Caldw3ll
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 
