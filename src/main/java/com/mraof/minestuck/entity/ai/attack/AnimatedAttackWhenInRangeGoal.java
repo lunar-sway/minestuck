@@ -119,10 +119,14 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	
 	protected boolean withinAttackCone(@Nonnull LivingEntity target)
 	{
+		//get the attack's direction, offset from the body's Y rotation by attackDirectionOffset degrees
 		Vec3 attackDirection = Vec3.directionFromRotation(0, this.entity.getVisualRotationYInDegrees() + this.attackDirectionOffset);
+		
+		//get the vector direction from the enemy to the target, but make it ignore the y position.
 		Vec3 targetDirection = this.entity.position().vectorTo(target.position()).normalize();
 		targetDirection = new Vec3(targetDirection.x, 0, targetDirection.z);
 		
+		//get how far, in degrees, the target is from the center of the cone.
 		float angleOfTargetFromConeCenter = (180.0F / 2.0F) * ((((float)attackDirection.dot(targetDirection)) * -1.0F) + 1.0F);
 		
 		return angleOfTargetFromConeCenter <= this.attackConeAngle;

@@ -72,8 +72,8 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, TAIL_SWING_ANIMATION, 0, 3.5F, 40, 180.0F, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_ARC));
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, BITE_ANIMATION, 3.5F, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 0, 45.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, TAIL_SWING_ANIMATION, 0, 3.5F, 40, 180.0F, 80.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, BITE_ANIMATION, 3.5F, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 0, 48.0F));
 		this.goalSelector.addGoal(3, new FireballShootGoal<>(this, SHOOT_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 25, 180));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
