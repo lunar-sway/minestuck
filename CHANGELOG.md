@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added 75 more blocks to the default atheneum list.
+- Transportalizer particle
 
 ### Fixed
 
@@ -21,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, Caldw3ll
+- kirderf1, Caldw3ll, Dweblenod, Riotmode
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 
