@@ -2,11 +2,11 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
+import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
@@ -35,6 +35,7 @@ public final class ClientPlayerData
 	private static int consortReputation;
 	private static GristSet playerGrist;
 	private static GristSet targetGrist;
+	private static long targetCacheLimit;
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
@@ -82,14 +83,27 @@ public final class ClientPlayerData
 		return consortReputation;
 	}
 	
-	public static GristSet getClientGrist()
+	public static ClientCache getGristCache(CacheSource cacheSource)
 	{
-		return getGristCache(!ClientEditHandler.isActive());
+		return switch(cacheSource)
+		{
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Echeladder.getGristCapacity(ClientPlayerData.getRung()));
+			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
+		};
 	}
 	
-	public static GristSet getGristCache(boolean isCacheOwner)
+	public record ClientCache(GristSet set, long limit)
 	{
-		return isCacheOwner ? playerGrist : targetGrist;
+		public boolean canAfford(GristSet cost)
+		{
+			return GristCache.canAfford(this.set, cost, this.limit);
+		}
+	}
+	
+	public enum CacheSource
+	{
+		PLAYER,
+		EDITMODE,
 	}
 	
 	public static int getPlayerColor()
@@ -160,6 +174,11 @@ public final class ClientPlayerData
 		if(packet.isEditmode)
 			targetGrist = packet.gristCache;
 		else playerGrist = packet.gristCache;
+	}
+	
+	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
+	{
+		targetCacheLimit = packet.limit();
 	}
 	
 	public static void handleDataPacket(ColorDataPacket packet)

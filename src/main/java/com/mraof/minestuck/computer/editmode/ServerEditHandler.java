@@ -24,6 +24,7 @@ import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -214,6 +215,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
 			data.sendGristCacheToEditor();
+			data.sendCacheLimitToEditor();
 		}
 	}
 	
@@ -251,7 +253,8 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	//Helper function to force a chunk to load, to then get the top block
 	private static int getMotionBlockingY(ServerLevel level, int x, int z)
 	{
-		return level.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getHeight(Heightmap.Types.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
+		return level.getChunk(SectionPos.blockToSectionCoord(x), SectionPos.blockToSectionCoord(z))
+				.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) + 1;
 	}
 	
 	public static void resendEditmodeStatus(ServerPlayer editor)
@@ -263,6 +266,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(editor.getServer(), data.connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
 			data.sendGristCacheToEditor();
+			data.sendCacheLimitToEditor();
 		} else
 		{
 			ServerEditPacket packet = ServerEditPacket.exit();
@@ -278,6 +282,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	public static EditData getData(MinecraftServer server, SburbConnection c)
 	{
 		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(c.getClientIdentifier()) && editData.connection.getServerIdentifier().equals(c.getServerIdentifier()));
+	}
+	
+	public static EditData getData(MinecraftServer server, PlayerIdentifier client)
+	{
+		return MSExtraData.get(server).findEditData(editData -> editData.connection.getClientIdentifier().equals(client));
 	}
 	
 	public static EditData getData(DecoyEntity decoy) {
@@ -411,7 +420,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		}
 	}
 	
-	private static GristSet blockBreakCost()
+	static GristSet blockBreakCost()
 	{
 		return new GristSet(GristTypes.BUILD, 1);
 	}

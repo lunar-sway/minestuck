@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
@@ -87,10 +88,16 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		// Recieving will fail silently. Sending will warn the player.
 		if(level.hasNeighborSignal(blockEntity.getBlockPos()))
 		{
-			if(blockEntity.enabled) { blockEntity.setEnabled(false); }
-		}
-		else {
-			if(!blockEntity.enabled) { blockEntity.setEnabled(true); }
+			if(blockEntity.enabled)
+			{
+				blockEntity.setEnabled(false);
+			}
+		} else
+		{
+			if(!blockEntity.enabled)
+			{
+				blockEntity.setEnabled(true);
+			}
 		}
 		
 		serverTick(level, pos, state, blockEntity);
@@ -99,7 +106,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	protected AABB getTeleportField()
 	{
-		return new AABB(worldPosition.getX() + 1D/16, worldPosition.getY() + 8D/16, worldPosition.getZ() + 1D/16, worldPosition.getX() + 15D/16, worldPosition.getY() + 1, worldPosition.getZ() + 15D/16);
+		return new AABB(worldPosition.getX() + 1D / 16, worldPosition.getY() + 8D / 16, worldPosition.getZ() + 1D / 16, worldPosition.getX() + 15D / 16, worldPosition.getY() + 1, worldPosition.getZ() + 15D / 16);
 	}
 	
 	@Override
@@ -134,7 +141,10 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				return;
 			}
 			
-			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
+			if(!destTransportalizer.getEnabled())
+			{
+				return; // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
+			}
 			
 			if(isDimensionForbidden(this.level))
 			{
@@ -167,9 +177,17 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				return;
 			}
 			
+			ServerLevel originLevel = (ServerLevel) this.level;
+			
 			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
+			{
 				entity.setPortalCooldown();
+				
+				if(originLevel != null)
+					originLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
+				destinationLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), destination.pos().getX() + 0.5, destination.pos().getY() + 1, destination.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
+			}
 		}
 	}
 	
@@ -213,7 +231,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		return destId;
 	}
-
+	
 	public void setDestId(String destId)
 	{
 		this.destId = destId;
@@ -221,8 +239,11 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, state, state, 0);
 	}
-
-	public boolean getEnabled() { return enabled; }
+	
+	public boolean getEnabled()
+	{
+		return enabled;
+	}
 	
 	public boolean isActive()
 	{
@@ -270,7 +291,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		if(nbt.contains("active"))
 			this.active = nbt.getBoolean("active");
 	}
-
+	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{

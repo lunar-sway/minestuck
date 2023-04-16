@@ -14,10 +14,12 @@ import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 /**
  * Block entity present in the bottom of the horse block multiblock. Keeps track of the time and lets off a tick sound each second, which makes the blocks give off a redstone signal.
@@ -25,7 +27,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
  */
 public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	private boolean hasChimed = false; //prevents the sound from getting stacked if the day time is frozen
 	
 	public HorseClockBlockEntity(BlockPos pos, BlockState state)
@@ -132,7 +134,7 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 	
 	private <E extends BlockEntity & IAnimatable> PlayState pendulumAnimation(AnimationEvent<E> event)
 	{
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("ticktockontheclock", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("ticktockontheclock", ILoopType.EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 }

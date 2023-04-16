@@ -13,6 +13,7 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.world.MSDimensions;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -47,14 +48,19 @@ import org.slf4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashSet;
 import java.util.Set;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, IAnimatable
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -62,7 +68,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
 	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
@@ -450,7 +456,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 	
@@ -466,18 +472,18 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(action == MobAnimation.Action.PANIC)
 		{
 			//TODO add a system for the panic animation intended to precede this
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else if(action != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		} else if(event.getAnimatable().jumping)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -489,7 +495,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 	
@@ -497,7 +503,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -508,7 +514,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
 		if(action == MobAnimation.Action.TALK)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		

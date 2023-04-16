@@ -33,19 +33,23 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, PhasedMobAnimation.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
 	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.MELEE, 18, true, false), 3, 6, 7);
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
@@ -180,19 +184,6 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		
 		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
 	}
-
-//	/**
-//	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
-//	 */
-//	@Override
-//	protected void attackEntity(Entity par1Entity, float par2)
-//	{
-//		if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.getEntityBoundingBox().maxY > this.getEntityBoundingBox().minY && par1Entity.getEntityBoundingBox().minY < this.getEntityBoundingBox().maxY)
-//		{
-//			this.attackTime = 20;
-//			this.attackEntityAsMob(par1Entity);
-//		}
-//	}
 	
 	private void setCombatTask()
 	{
@@ -254,7 +245,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		if(event.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -264,7 +255,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -274,7 +265,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -284,7 +275,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

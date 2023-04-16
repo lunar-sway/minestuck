@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.generator.recipe.InterpreterSerializers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.command.argument.MSArgumentTypes;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.editmode.DeployList;
@@ -72,6 +73,7 @@ public class Minestuck
 		MSMenuTypes.REGISTER.register(eventBus);
 		GristTypes.GRIST_TYPES.register(eventBus);
 		MSEffects.REGISTER.register(eventBus);
+		MSParticleType.REGISTER.register(eventBus);
 		MSSoundEvents.REGISTER.register(eventBus);
 		LandTypes.TERRAIN_REGISTER.register(eventBus);
 		LandTypes.TITLE_REGISTER.register(eventBus);

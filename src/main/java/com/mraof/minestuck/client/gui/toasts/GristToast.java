@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.GristToastPacket;
@@ -129,11 +128,16 @@ public class GristToast implements Toast
 		//Basically determines the y coord of the torrent icon when bumping up and down.
 		int animationOffset = (this.animationTimer/2) <= 5 ? (this.animationTimer/2)%5 : 5 - ((this.animationTimer/2)%5);
 		
-		if(this.gristCache >= this.cacheLimit)
-			pToastComponent.blit(pPoseStack, 0, 17 - animationOffset, 176, 60, 20, 20);
+		//going to grist gutter
+		if(source == GristHelper.EnumSource.GUTTER)
+		{
+			pToastComponent.blit(pPoseStack, 0, 17 - animationOffset, 176, 60, 20, 20); //grist gutter icon
+			pToastComponent.blit(pPoseStack, 40, 24 - animationOffset, 176, 80, 67, 8); //going to gutter message
+		}
 			
 		//draw meter
-		GuiComponent.fill(pPoseStack,GRIST_VIAL_INSIDE_OFFSETX, GRIST_VIAL_INSIDE_OFFSETY, GRIST_VIAL_INSIDE_OFFSETX + (int)(GRIST_VIAL_INSIDE_WIDTH * this.gristCache / this.cacheLimit), GRIST_VIAL_INSIDE_OFFSETY + GRIST_VIAL_INSIDE_HEIGHT, 0xff19B3EF); //the grist bar (has two extra digits in pColor because fill has opacity.
+		double gristFraction = Math.min(1, (double) this.gristCache / this.cacheLimit);
+		GuiComponent.fill(pPoseStack,GRIST_VIAL_INSIDE_OFFSETX, GRIST_VIAL_INSIDE_OFFSETY, GRIST_VIAL_INSIDE_OFFSETX + (int)(GRIST_VIAL_INSIDE_WIDTH * gristFraction), GRIST_VIAL_INSIDE_OFFSETY + GRIST_VIAL_INSIDE_HEIGHT, 0xff19B3EF); //the grist bar (has two extra digits in pColor because fill has opacity.
 		pToastComponent.blit(pPoseStack, GRIST_VIAL_OUTLINE_OFFSETX, GRIST_VIAL_OUTLINE_OFFSETY, 0, 128, GRIST_VIAL_OUTLINE_WIDTH, GRIST_VIAL_OUTLINE_HEIGHT); //Bar outline
 		
 		
@@ -154,20 +158,27 @@ public class GristToast implements Toast
 	{
 		int textColor = this.increase ? 0x06c31c : 0xff0000;
 		
+		//amount being added/subtracted, above the cache bar. If one grist is added it looks like "(+1)"
 		font.draw(poseStack, "(%s%s)".formatted(this.increase ? "+" : "-", GuiUtil.addSuffix(this.difference)), 30.0F, 5.0F, textColor);
 		
-		String cacheText = GuiUtil.addSuffix(this.gristCache);
-		String limitText = " / " + GuiUtil.addSuffix(this.cacheLimit);
-		int fullBottomTextWidth = font.width(cacheText) + font.width(limitText);
-		if(fullBottomTextWidth <= GRIST_VIAL_INSIDE_WIDTH)
+		//ignore if its a grist gutter toast
+		if(source != GristHelper.EnumSource.GUTTER)
 		{
-			float xLeft = 31.0F + (GRIST_VIAL_INSIDE_WIDTH - fullBottomTextWidth)/2F;
-			font.draw(poseStack, cacheText, xLeft, 24.0F, textColor);
-			font.draw(poseStack, limitText, xLeft + font.width(cacheText), 24.0F, 0x000000);
-		} else
-		{
-			font.draw(poseStack, cacheText, 31.0F + (GRIST_VIAL_INSIDE_WIDTH - font.width(cacheText))/2F, 24.0F, textColor);
+			//proportion of current cache filled, below the cache bar. If there was no grist with a cache size of 60 and now there is one it looks like "1 / 60"
+			String cacheText = GuiUtil.addSuffix(this.gristCache);
+			String limitText = " / " + GuiUtil.addSuffix(this.cacheLimit);
+			int fullBottomTextWidth = font.width(cacheText) + font.width(limitText);
+			if(fullBottomTextWidth <= GRIST_VIAL_INSIDE_WIDTH)
+			{
+				float xLeft = 31.0F + (GRIST_VIAL_INSIDE_WIDTH - fullBottomTextWidth)/2F;
+				font.draw(poseStack, cacheText, xLeft, 24.0F, textColor);
+				font.draw(poseStack, limitText, xLeft + font.width(cacheText), 24.0F, 0x000000);
+			} else
+			{
+				font.draw(poseStack, cacheText, 31.0F + (GRIST_VIAL_INSIDE_WIDTH - font.width(cacheText))/2F, 24.0F, textColor);
+			}
 		}
+		
 	}
 	
 	//modified version of drawIcon() from MinestuckScreen.java
@@ -221,23 +232,25 @@ public class GristToast implements Toast
 	
 	public static void handlePacket(GristToastPacket packet)
 	{
-		GristSet cache = ClientPlayerData.getGristCache(packet.isCacheOwner());
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(packet.isCacheOwner() ? ClientPlayerData.CacheSource.PLAYER : ClientPlayerData.CacheSource.EDITMODE);
 		GristHelper.EnumSource source = packet.source();
-		long cacheLimit = packet.cacheLimit();
 		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
-		for(GristAmount pairs : packet.gristValue().getAmounts())
+		for(GristAmount pair : packet.gristValue().getAmounts())
 		{
 			//the pair has to be split into two new variables because Map.Entry is immutable.
-			GristType type = pairs.getType();
-			long difference = pairs.getAmount();
-			long total = cache.getGrist(type);
+			GristType type = pair.getType();
+			long difference = pair.getAmount();
+			long total = cache.set().getGrist(type);
+			
+			if(difference == 0)
+				continue;
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
-				GristToast.addOrUpdate(toasts, type, difference, source, true, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, difference, source, true, cache.limit(), total);
 			else
-				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cacheLimit, total);
+				GristToast.addOrUpdate(toasts, type, Math.abs(difference), source, false, cache.limit(), total);
 		}
 	}
 	
