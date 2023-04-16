@@ -20,6 +20,7 @@ Note that this option is found in the common config and not the world config.
 - Connections with missing land dimensions gets partially reset to before entry at server start
 - Fixed editmode players not being able to destroy machines
 - Messages for more cases where entry may fail
+- Spawn height for re-entry is now the top motion-blocking block
 - Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
 
 ### Contributors for this release

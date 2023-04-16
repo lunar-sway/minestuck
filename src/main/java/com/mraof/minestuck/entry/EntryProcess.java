@@ -37,6 +37,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -146,16 +147,16 @@ public class EntryProcess
 			return;
 		}
 		
-		ServerLevel landWorld = Objects.requireNonNull(player.getServer()).getLevel(land);
-		if(landWorld == null)
+		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(land);
+		if(landLevel == null)
 		{
 			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
 			return;
 		}
 		
-		//Teleports the player to their home in the Medium, without any bells or whistles.
-		BlockPos pos = new BlockPos(0, 100, 0);
-		Teleport.teleportEntity(player, landWorld, pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, player.getYRot(), player.getXRot());
+		BlockPos spawn = new BlockPos(0, 0, 0);
+		spawn = spawn.atY(landLevel.getChunk(spawn).getHeight(Heightmap.Types.MOTION_BLOCKING, spawn.getX(), spawn.getZ()) + 1);
+		Teleport.teleportEntity(player, landLevel, spawn.getX() + 0.5F, spawn.getY(), spawn.getZ() + 0.5F, player.getYRot(), player.getXRot());
 	}
 	
 	private static EntryProcess waitingProcess;
