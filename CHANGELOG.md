@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added 75 more blocks to the default atheneum list.
 - Transportalizer particle
 
+### Changed
+
+- Changed how underling attack hit-detection works to use cones instead of spheres.
+
 ### Fixed
 
 - Fixed a crash with TerraBlender
@@ -22,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed grist cache view in editmode using the limit of the wrong player
 - Cache limit will now be accounted for more often client-side
 - Clearer and more accurate grist toasts when at cache capacity
+- Underling attacks will no longer hit the player if the attack is not facing them.
 
 ### Contributors for this release
 
