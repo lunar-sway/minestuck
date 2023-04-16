@@ -5,6 +5,7 @@ import com.mraof.minestuck.entity.animation.ActionCooldown;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 
@@ -15,34 +16,40 @@ import javax.annotation.Nonnull;
 public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAnimation.Phases.Holder> extends MobAnimationPhaseGoal<T>
 {
 	public static final float STANDARD_MELEE_RANGE = -1;
+	public static final float STANDARD_MELEE_ARC = 70.0f;
 	public static final int NO_COOLDOWN = -1;
 	
 	protected final float minRange;
 	protected final float maxRange;
 	protected final int actionCooldown;
+	protected final float attackDirectionOffset;
+	protected final float attackConeAngle;
 	
-	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange, int actionCooldown)
+	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange, int actionCooldown, float attackDirectionOffset, float attackConeAngle)
 	{
 		super(entity, animation);
 		this.minRange = minRange;
 		this.maxRange = maxRange;
 		this.actionCooldown = actionCooldown;
+		this.attackDirectionOffset = attackDirectionOffset;
+		this.attackConeAngle = attackConeAngle;
 	}
 	
 	/**
 	 * For typical melee attacks in entities with alternate attacks that shouldn't use said attack immediately after
+	 * Uses default attack direction and width.
 	 */
 	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation, int actionCooldown)
 	{
-		this(entity, animation, 0, STANDARD_MELEE_RANGE, actionCooldown);
+		this(entity, animation, 0, STANDARD_MELEE_RANGE, actionCooldown, 0, STANDARD_MELEE_ARC);
 	}
 	
 	/**
-	 * For typical melee attacks
+	 * For typical melee attacks that use the default width and direction.
 	 */
 	public AnimatedAttackWhenInRangeGoal(T entity, PhasedMobAnimation animation)
 	{
-		this(entity, animation, 0, STANDARD_MELEE_RANGE, NO_COOLDOWN);
+		this(entity, animation, 0, STANDARD_MELEE_RANGE, NO_COOLDOWN, 0, STANDARD_MELEE_ARC);
 	}
 	
 	@Override
@@ -84,7 +91,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	 */
 	protected boolean targetCanBeHit(@Nonnull LivingEntity target)
 	{
-		return target.isAlive() && belowMaximumRange(target);
+		return target.isAlive() && belowMaximumRange(target) && withinAttackCone(target);
 	}
 	
 	protected boolean belowMaximumRange(@Nonnull LivingEntity target)
@@ -108,6 +115,18 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	{
 		//when min or max range values are -1, the standard melee range is used instead of the actual value
 		return belowMaximumRange(target) && aboveMinimumRange(target);
+	}
+	
+	protected boolean withinAttackCone(@Nonnull LivingEntity target)
+	{
+		Vec3 attackDirection = Vec3.directionFromRotation(0, this.entity.getVisualRotationYInDegrees() + this.attackDirectionOffset);
+		Vec3 targetDirection = this.entity.position().vectorTo(target.position()).normalize();
+		targetDirection = new Vec3(targetDirection.x, 0, targetDirection.z);
+		
+		float angleOfTargetFromConeCenter = (180.0F / 2.0F) * ((((float)attackDirection.dot(targetDirection)) * -1.0F) + 1.0F);
+		
+		return angleOfTargetFromConeCenter <= this.attackConeAngle;
+		
 	}
 	
 	public void attemptToLandAttack(PathfinderMob attacker, LivingEntity target)

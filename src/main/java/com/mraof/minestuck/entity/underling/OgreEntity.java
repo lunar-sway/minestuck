@@ -48,7 +48,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		//no overlap in attack goal ranges
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, 40));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 35.0F, 55.0F));
 		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15, 160));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
