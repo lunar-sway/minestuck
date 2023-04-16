@@ -2,6 +2,8 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.EditData;
+import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.EcheladderDataPacket;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -136,6 +138,13 @@ public class Echeladder
 				updateEcheladderBonuses(player);
 				player.level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.EVENT_ECHELADDER_INCREASE.get(), SoundSource.AMBIENT, 1F, 1F);
 			}
+		}
+		
+		if(rung != prevRung)
+		{
+			EditData data = ServerEditHandler.getData(this.savedData.mcServer, this.identifier);
+			if(data != null)
+				data.sendCacheLimitToEditor();
 		}
 	}
 	

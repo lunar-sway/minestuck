@@ -25,9 +25,9 @@ public class ServerCursorModel extends AnimatedGeoModel<ServerCursorEntity>
 	}
 	
 	@Override
-	public void setLivingAnimations(ServerCursorEntity entity, Integer uniqueID, AnimationEvent customPredicate)
+	public void setCustomAnimations(ServerCursorEntity entity, int uniqueID, AnimationEvent customPredicate)
 	{
-		super.setLivingAnimations(entity, uniqueID, customPredicate);
+		super.setCustomAnimations(entity, uniqueID, customPredicate);
 		IBone cursor = this.getAnimationProcessor().getBone("head");
 		
 		if(!entity.level.isClientSide || !Minecraft.getInstance().isPaused())

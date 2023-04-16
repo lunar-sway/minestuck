@@ -21,10 +21,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 //Makes non-stop ogre puns
+@ParametersAreNonnullByDefault
 public class OgreEntity extends UnderlingEntity
 {
 	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 22, true, true), 7, 10, 13);
@@ -124,7 +128,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -134,7 +138,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.isMoving() && !event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -146,11 +150,11 @@ public class OgreEntity extends UnderlingEntity
 		
 		if(action == MobAnimation.Action.PUNCH)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SLAM)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("smash", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("smash", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		
@@ -162,7 +166,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;

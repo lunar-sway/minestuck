@@ -2,20 +2,17 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.client.util.GuiUtil;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,10 +44,10 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		GristSet clientGrist = ClientPlayerData.getClientGrist();
-		int clientRung = ClientPlayerData.getRung();
-		long cacheLimit = Echeladder.getGristCapacity(clientRung);
-
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
+		GristSet clientGrist = cache.set();
+		long cacheLimit = cache.limit();
+		
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());
 		Collections.sort(types);
 		types = types.stream().skip((long) page * rows * columns).limit(rows * columns).collect(Collectors.toList());
@@ -80,8 +77,9 @@ public abstract class MinestuckScreen extends Screen
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());//grist icon
 			minecraft.font.draw(poseStack, amount, gristXOffset + gristCountX - 2, gristYOffset + gristCountY + 10, 0x19b3ef);//renders the text
 			//renders bars
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * clientGrist.getGrist(type) / cacheLimit)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
+			double gristFraction = Math.min(1, (double) clientGrist.getGrist(type) / cacheLimit);
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
+			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
 			offset++;
 		}
 		if (tooltipType != null)

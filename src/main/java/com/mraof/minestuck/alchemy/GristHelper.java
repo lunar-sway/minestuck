@@ -10,7 +10,6 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class GristHelper
 {
@@ -22,6 +21,7 @@ public class GristHelper
 		CLIENT, //The SBURB client.
 		SERVER, //The SBURB server.
 		SENDGRIST, //The /sendGrist command. (Might be replaced when grist torrent is implemented.)
+		GUTTER, //Is headed to the displayed players grist gutter
 		CONSOLE //For things like the /grist command.
 	}
 	
@@ -69,28 +69,4 @@ public class GristHelper
 		return event.getNewDrops();
 		
 	}
-	
-	//TODO figure out how best to check cache capacity client-side
-	public static boolean canAfford(GristSet base, GristSet cost)
-	{
-		if(base == null || cost == null)
-		{
-			return false;
-		}
-		Map<GristType, Long> reqs = cost.getMap();
-		if(reqs != null)
-		{
-			for(Entry<GristType, Long> pairs : reqs.entrySet())
-			{
-				GristType type = pairs.getKey();
-				long need = pairs.getValue();
-				long have = base.getGrist(type);
-				
-				if(need > have) return false;
-			}
-			return true;
-		}
-		return false;
-	}
-	
 }

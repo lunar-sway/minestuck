@@ -14,18 +14,20 @@ import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.awt.*;
 
 public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements IAnimatable
 {
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	public TotemLatheDowelBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -90,7 +92,7 @@ public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements 
 		TotemLatheBlockEntity totemLathe = getTotemLatheEntity();
 		if(totemLathe != null && totemLathe.isProcessing())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

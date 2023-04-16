@@ -24,11 +24,14 @@ import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class LichEntity extends UnderlingEntity implements IAnimatable
 {
 	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
@@ -139,7 +142,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
 		return PlayState.CONTINUE;
 	}
 	
@@ -149,14 +152,14 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 		
 		if(action == MobAnimation.Action.CLAW)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_legs", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_legs", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		} else if(!event.isMoving())
 		{
 			return PlayState.STOP;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -165,7 +168,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -175,7 +178,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_arms", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_arms", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

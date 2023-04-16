@@ -102,6 +102,11 @@ public final class GristCache
 		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
+	public static boolean canAfford(GristSet source, GristSet cost, long limit)
+	{
+		return addWithinCapacity(source.copy(), cost.copy().scale(-1), limit).isEmpty();
+	}
+	
 	/**
 	 * Tries to take a specified amount of grist from this cache.
 	 * If it fails (due to insufficient grist or capacity), the cache will remain unchanged.
@@ -145,7 +150,10 @@ public final class GristCache
 		{
 			Session session = SessionHandler.get(mcServer).getPlayerSession(data.identifier);
 			if(session != null)
+			{
 				session.getGristGutter().addGristFrom(overflowedGrist);
+				GristToastPacket.notify(mcServer, data.identifier, set, GristHelper.EnumSource.GUTTER); //still send a grist toast when adding to gutter
+			}
 			
 			ServerPlayer player = data.getPlayer();
 			if(player != null && !overflowedGrist.isEmpty())
@@ -176,7 +184,7 @@ public final class GristCache
 		{
 			this.set(newCache);
 			if(source != null)
-				GristToastPacket.notify(mcServer, data.identifier, set, source);
+				GristToastPacket.notify(mcServer, data.identifier, set.copy().addGrist(excessGrist.copy().scale(-1)), source);
 		}
 		
 		return excessGrist;
