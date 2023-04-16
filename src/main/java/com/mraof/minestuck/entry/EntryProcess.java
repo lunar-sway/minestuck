@@ -198,13 +198,15 @@ public class EntryProcess
 			LOGGER.info("Entry starting");
 			copyBlocks(originLevel, landLevel);
 			
+			boolean wasInsideEntryArea = player.level == originLevel && player.distanceToSqr(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5) <= artifactRange * artifactRange;
+			
 			if(Teleport.teleportEntity(player, landLevel) == null)
 			{
 				player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
 				return;
 			}
 			
-			finalizeEntry(player, originLevel, landLevel);
+			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
 			SkaianetHandler.get(player.level).onEntry(playerId);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
@@ -275,7 +277,7 @@ public class EntryProcess
 		}
 	}
 	
-	private void finalizeEntry(ServerPlayer player, ServerLevel level0, ServerLevel level1)
+	private void finalizeEntry(ServerPlayer player, ServerLevel level0, ServerLevel level1, boolean wasInsideEntryArea)
 	{
 		AABB entityTeleportBB = player.getBoundingBox().inflate(artifactRange + 0.5);
 		List<Entity> entities = level0.getEntities(player, entityTeleportBB);
@@ -283,7 +285,10 @@ public class EntryProcess
 		
 		removeOriginalBlocks(level0);
 		
-		player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
+		if(wasInsideEntryArea)
+			player.teleportTo(player.getX() + xDiff, player.getY() + yDiff, player.getZ() + zDiff);
+		else
+			player.teleportTo(origin.getX() + xDiff + 0.5, origin.getY() + yDiff, origin.getZ() + zDiff + 0.5);
 		
 		//Remove entities that were generated in the process of teleporting entities and removing blocks.
 		// This is usually caused by "anchored" blocks being updated between the removal of their anchor and their own removal.
