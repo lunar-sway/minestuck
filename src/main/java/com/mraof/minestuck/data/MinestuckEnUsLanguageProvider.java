@@ -1700,7 +1700,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addLand(TowersLandType.TOWERS, "Towers");
 		add(LandTypePair.FORMAT, "Land of %s and %s");
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
-		add(SburbHandler.TITLE_LAND_ENTRY, "%s");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		

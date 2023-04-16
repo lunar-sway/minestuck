@@ -1,6 +1,5 @@
 package com.mraof.minestuck.skaianet;
 
-import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.DeployList;
@@ -42,7 +41,6 @@ public final class SburbHandler
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String CHAT_LAND_ENTRY = "minestuck.chat_land_entry";
-	public static final String TITLE_LAND_ENTRY = "minestuck.title_land_entry";
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
@@ -229,8 +227,8 @@ public final class SburbHandler
 			
 			//Title style message
 			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
-			player.connection.send(new ClientboundSetTitleTextPacket(Component.translatable(SburbHandler.TITLE_LAND_ENTRY, landTypes.asComponent()).withStyle(Minestuck.CARIMA_FONT_STYLE)));
-			player.connection.send(new ClientboundSetSubtitleTextPacket(Component.empty())); //clears preexisting subtitles
+			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
+			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponent()));
 		}
 	}
 	

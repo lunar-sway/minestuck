@@ -51,11 +51,6 @@ public class Minestuck
 	public static final String MOD_NAME = "Minestuck";
 	public static final String MOD_ID = "minestuck";
 	
-	/**
-	 * Font used for "Land of _ and _" in comic. Font size of 8 is smaller than default of 11
-	 */
-	public static final Style CARIMA_FONT_STYLE = Style.EMPTY.withFont(new ResourceLocation("minestuck", "carima"));
-	
 	public Minestuck()
 	{
 		
