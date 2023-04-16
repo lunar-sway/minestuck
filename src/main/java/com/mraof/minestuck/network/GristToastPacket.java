@@ -7,13 +7,12 @@ import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 
-public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source, long cacheLimit,
+public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source,
 							   boolean isCacheOwner) implements PlayToClientPacket
 {
 	
@@ -29,10 +28,8 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
-			long cacheLimit = PlayerSavedData.getData(player, server).getEcheladder().getGristCapacity();
-			
 			if(player.getPlayer(server) != null)
-				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, true), player.getPlayer(server));
+				MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, true), player.getPlayer(server));
 			
 			if(source == GristHelper.EnumSource.SERVER)
 			{
@@ -45,7 +42,7 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 					return;
 				
 				if(!player.appliesTo(ed.getEditor()))
-					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, cacheLimit, false), ed.getEditor());
+					MSPacketHandler.sendToPlayer(new GristToastPacket(set, source, false), ed.getEditor());
 				
 			}
 		}
@@ -56,7 +53,6 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 	{
 		gristValue.write(buffer);
 		buffer.writeEnum(source);
-		buffer.writeLong(cacheLimit);
 		buffer.writeBoolean(isCacheOwner);
 	}
 	
@@ -64,9 +60,8 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 	{
 		GristSet gristValue = GristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
-		long cacheLimit = buffer.readLong();
 		boolean isCacheOwner = buffer.readBoolean();
-		return new GristToastPacket(gristValue, source, cacheLimit, isCacheOwner);
+		return new GristToastPacket(gristValue, source, isCacheOwner);
 	}
 	
 	@Override
