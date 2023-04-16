@@ -238,22 +238,22 @@ public final class GristCache
 		
 		for(GristAmount amount : source.asAmounts())
 		{
-			if(amount.getAmount() > 0)
+			if(amount.amount() > 0)
 			{
-				long toAdd = Mth.clamp(capacity - target.getGrist(amount.getType()), 0, amount.getAmount());
-				long remainingAmount = amount.getAmount() - toAdd;
+				long toAdd = Mth.clamp(capacity - target.getGrist(amount.type()), 0, amount.amount());
+				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.getType(), toAdd);
+					target.addGrist(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.getType(), remainingAmount);
-			} else if(amount.getAmount() < 0)
+					remainder.addGrist(amount.type(), remainingAmount);
+			} else if(amount.amount() < 0)
 			{
-				long toAdd = Mth.clamp(-target.getGrist(amount.getType()), amount.getAmount(), 0);
-				long remainingAmount = amount.getAmount() - toAdd;
+				long toAdd = Mth.clamp(-target.getGrist(amount.type()), amount.amount(), 0);
+				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.getType(), toAdd);
+					target.addGrist(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.getType(), remainingAmount);
+					remainder.addGrist(amount.type(), remainingAmount);
 			}
 		}
 		

@@ -12,8 +12,8 @@ public class NonNegativeGristSet extends GristSet
 	public NonNegativeGristSet(IGristSet set)
 	{
 		for(GristAmount amount : set.asAmounts())
-			if(amount.getAmount() < 0)
-				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.getType());
+			if(amount.amount() < 0)
+				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.type());
 			else addGrist(amount);
 	}
 	
@@ -49,7 +49,7 @@ public class NonNegativeGristSet extends GristSet
 		for(int i = 0; i < list.size(); i++)
 		{
 			GristAmount amount = GristAmount.read(list.getCompound(i), null);
-			if(amount.getAmount() >= 0)
+			if(amount.amount() >= 0)
 				set.addGrist(amount);
 		}
 		

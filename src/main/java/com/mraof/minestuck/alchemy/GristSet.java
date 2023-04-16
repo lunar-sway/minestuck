@@ -88,7 +88,7 @@ public class GristSet implements IGristSet
 		this();
 		for (GristAmount amount : grist)
 		{
-			this.gristTypes.put(amount.getType(), amount.getAmount());
+			this.gristTypes.put(amount.type(), amount.amount());
 		}
 	}
 	
@@ -191,7 +191,7 @@ public class GristSet implements IGristSet
 	public GristSet addGrist(IGristSet set)
 	{
 		for (GristAmount grist : set.asAmounts())
-			this.addGrist(grist.getType(), grist.getAmount());
+			this.addGrist(grist.type(), grist.amount());
 		
 		return this;
 	}
@@ -290,13 +290,13 @@ public class GristSet implements IGristSet
 	{
 		for(GristAmount amount : asAmounts())
 		{
-			long countLeft = amount.getAmount();
+			long countLeft = amount.amount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
 			{
-				long spawnedCount = countLeft <= amount.getAmount() / 10 || i ==
+				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
 						gusherCount - 1 ? countLeft : Math.min(countLeft,
 						(long) level.random.nextDouble() * countLeft + 1);
-				GristAmount spawnedAmount = new GristAmount(amount.getType(), spawnedCount);
+				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
 				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
 				postProcessor.accept(entity);
 				level.addFreshEntity(entity);

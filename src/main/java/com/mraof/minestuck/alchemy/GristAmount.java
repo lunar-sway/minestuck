@@ -4,42 +4,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public class GristAmount implements IGristSet
+public record GristAmount(GristType type, long amount) implements IGristSet
 {
 	public static final String GRIST_AMOUNT = "grist_amount";
-	
-	private final GristType type;
-	private final long amount;
 	
 	public GristAmount(Supplier<GristType> type, long amount)
 	{
 		this(type.get(), amount);
-	}
-	
-	public GristAmount(GristType type, long amount)
-	{
-		this.type = Objects.requireNonNull(type);
-		this.amount = amount;
-	}
-	
-	@Nonnull
-	public GristType getType()
-	{
-		return type;
-	}
-
-	public long getAmount()
-	{
-		return amount;
 	}
 	
 	/**
@@ -51,28 +29,6 @@ public class GristAmount implements IGristSet
 	}
 	
 	@Override
-	public String toString()
-	{
-		return "gristAmount:[type="+type+",amount="+amount+"]";
-	}
-	
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o) return true;
-		if(o == null || getClass() != o.getClass()) return false;
-		GristAmount that = (GristAmount) o;
-		return amount == that.amount &&
-				type.equals(that.type);
-	}
-	
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(type, amount);
-	}
-	
-	@Override
 	public Collection<GristAmount> asAmounts()
 	{
 		return Collections.singleton(this);
@@ -80,8 +36,8 @@ public class GristAmount implements IGristSet
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(GristTypes.getRegistry(), getType());
-		buffer.writeLong(getAmount());
+		buffer.writeRegistryId(GristTypes.getRegistry(), type());
+		buffer.writeLong(amount());
 	}
 	
 	public static GristAmount read(FriendlyByteBuf buffer)
@@ -93,7 +49,7 @@ public class GristAmount implements IGristSet
 	
 	public Component asTextComponent()
 	{
-		return Component.translatable(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
+		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 	
 	private static String makeNBTPrefix(String prefix)
@@ -104,8 +60,8 @@ public class GristAmount implements IGristSet
 	public CompoundTag write(CompoundTag nbt, String keyPrefix)
 	{
 		keyPrefix = makeNBTPrefix(keyPrefix);
-		getType().write(nbt, keyPrefix + "type");
-		nbt.putLong(keyPrefix + "amount", getAmount());
+		type().write(nbt, keyPrefix + "type");
+		nbt.putLong(keyPrefix + "amount", amount());
 		return nbt;
 	}
 	

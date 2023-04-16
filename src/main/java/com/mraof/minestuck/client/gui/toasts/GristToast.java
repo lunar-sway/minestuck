@@ -239,8 +239,8 @@ public class GristToast implements Toast
 		for(GristAmount pair : packet.gristValue().asAmounts())
 		{
 			//the pair has to be split into two new variables because Map.Entry is immutable.
-			GristType type = pair.getType();
-			long difference = pair.getAmount();
+			GristType type = pair.type();
+			long difference = pair.amount();
 			long total = cache.set().getGrist(type);
 			
 			if(difference == 0)

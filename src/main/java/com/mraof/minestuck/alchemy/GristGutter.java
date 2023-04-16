@@ -42,7 +42,7 @@ public class GristGutter
 		this.gristSet = NonNegativeGristSet.read(listTag);
 		this.gristTotal = 0;
 		for(GristAmount amount : this.gristSet.asAmounts())
-			this.gristTotal += amount.getAmount();
+			this.gristTotal += amount.amount();
 	}
 	
 	public ListTag write()
@@ -82,13 +82,13 @@ public class GristGutter
 	{
 		for(GristAmount amount : set.asAmounts())
 		{
-			GristType type = amount.getType();
+			GristType type = amount.type();
 			long maximumAllowed = getRemainingCapacity();
 			
 			if(maximumAllowed <= 0)
 				return;
 			
-			long amountToAdd = Math.min(maximumAllowed, amount.getAmount());
+			long amountToAdd = Math.min(maximumAllowed, amount.amount());
 			set.addGrist(type, -amountToAdd);
 			this.addGristInternal(type, amountToAdd);
 		}
@@ -101,7 +101,7 @@ public class GristGutter
 	public void addGristUnchecked(IGristSet set)
 	{
 		for(GristAmount amount : set.asAmounts())
-			this.addGristInternal(amount.getType(), amount.getAmount());
+			this.addGristInternal(amount.type(), amount.amount());
 	}
 	
 	/**
@@ -122,13 +122,13 @@ public class GristGutter
 		for(GristAmount gristAmount : this.gristSet.asAmounts())
 		{
 			// add extraGrist to compensate for errors in the previous amounts
-			double takenAmount = extraGrist + fraction*gristAmount.getAmount();
+			double takenAmount = extraGrist + fraction*gristAmount.amount();
 			long actualAmount = Math.round(takenAmount);
 			// update extraGrist with the new error
 			extraGrist = takenAmount - actualAmount;
 			
-			takenGrist.addGrist(gristAmount.getType(), actualAmount);
-			this.addGristInternal(gristAmount.getType(), -actualAmount);
+			takenGrist.addGrist(gristAmount.type(), actualAmount);
+			this.addGristInternal(gristAmount.type(), -actualAmount);
 		}
 		
 		return takenGrist;
@@ -186,11 +186,11 @@ public class GristGutter
 		
 		for(GristAmount capacityAmount : amounts)
 		{
-			GristType type = capacityAmount.getType();
+			GristType type = capacityAmount.type();
 			long amountInGutter = this.gristSet.getGrist(type);
 			if(amountInGutter > 0)
 			{
-				long takenAmount = Math.min(remaining, Math.min(capacityAmount.getAmount(), amountInGutter));
+				long takenAmount = Math.min(remaining, Math.min(capacityAmount.amount(), amountInGutter));
 				this.addGristInternal(type, -takenAmount);
 				takenGrist.addGrist(type, takenAmount);
 				remaining -= takenAmount;

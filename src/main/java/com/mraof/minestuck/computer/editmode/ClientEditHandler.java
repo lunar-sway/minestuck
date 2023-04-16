@@ -121,9 +121,9 @@ public final class ClientEditHandler
 		
 		for(GristAmount amount : cost.asAmounts())
 		{
-			GristType grist = amount.getType();
-			ChatFormatting color = amount.getAmount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
-			toolTip.add(Component.literal(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			GristType grist = amount.type();
+			ChatFormatting color = amount.amount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
+			toolTip.add(Component.literal(amount.amount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
 			toolTip.add(Component.translatable(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
