@@ -3,6 +3,7 @@ package com.mraof.minestuck.entity.ai.attack;
 import com.mraof.minestuck.entity.ai.MobAnimationPhaseGoal;
 import com.mraof.minestuck.entity.animation.ActionCooldown;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.phys.Vec3;
@@ -83,7 +84,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	
 	protected boolean isValidTarget(@Nonnull LivingEntity target)
 	{
-		return target.isAlive() && withinRange(target);
+		return target.isAlive() && withinRange(target) && withinAttackCone(target, 10.0f);
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 	 */
 	protected boolean targetCanBeHit(@Nonnull LivingEntity target)
 	{
-		return target.isAlive() && belowMaximumRange(target) && withinAttackCone(target);
+		return target.isAlive() && belowMaximumRange(target) && withinAttackCone(target, 0.0f);
 	}
 	
 	protected boolean belowMaximumRange(@Nonnull LivingEntity target)
@@ -117,7 +118,12 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 		return belowMaximumRange(target) && aboveMinimumRange(target);
 	}
 	
-	protected boolean withinAttackCone(@Nonnull LivingEntity target)
+	/**
+	 * Uses the dot product of the enemy's attack direction and the direction from the enemy to the target to
+	 * check whether the target is within a cone of attackConeAngle degrees.
+	 * @param anglePadding Degrees added to attackConeAngle. Used for adding leniency when checking if an enemy should start an attempted attack.
+	 */
+	protected boolean withinAttackCone(@Nonnull LivingEntity target, float anglePadding)
 	{
 		//get the attack's direction, offset from the body's Y rotation by attackDirectionOffset degrees
 		Vec3 attackDirection = Vec3.directionFromRotation(0, this.entity.getVisualRotationYInDegrees() + this.attackDirectionOffset);
@@ -129,7 +135,7 @@ public class AnimatedAttackWhenInRangeGoal<T extends PathfinderMob & PhasedMobAn
 		//get how far, in degrees, the target is from the center of the cone.
 		float angleOfTargetFromConeCenter = (180.0F / 2.0F) * ((((float)attackDirection.dot(targetDirection)) * -1.0F) + 1.0F);
 		
-		return angleOfTargetFromConeCenter <= this.attackConeAngle;
+		return angleOfTargetFromConeCenter <= Mth.clamp(this.attackConeAngle + anglePadding, 0.0f, 180.f);
 		
 	}
 	
