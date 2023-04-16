@@ -184,7 +184,7 @@ public final class GristCache
 		{
 			this.set(newCache);
 			if(source != null)
-				GristToastPacket.notify(mcServer, data.identifier, set, source);
+				GristToastPacket.notify(mcServer, data.identifier, set.copy().addGrist(excessGrist.copy().scale(-1)), source);
 		}
 		
 		return excessGrist;

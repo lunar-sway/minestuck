@@ -236,12 +236,15 @@ public class GristToast implements Toast
 		GristHelper.EnumSource source = packet.source();
 		ToastComponent toasts = Minecraft.getInstance().getToasts();
 		
-		for(GristAmount pairs : packet.gristValue().getAmounts())
+		for(GristAmount pair : packet.gristValue().getAmounts())
 		{
 			//the pair has to be split into two new variables because Map.Entry is immutable.
-			GristType type = pairs.getType();
-			long difference = pairs.getAmount();
+			GristType type = pair.getType();
+			long difference = pair.getAmount();
 			long total = cache.set().getGrist(type);
+			
+			if(difference == 0)
+				continue;
 			
 			//ALWAYS use addOrUpdate(), and not addToast, or else grist toasts won't leave a running tally of the amount.
 			if (difference >= 0)
