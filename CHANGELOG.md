@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.10.1.0] - 2023-04-16
+
 ### Added
 
 - Added 75 more blocks to the default atheneum list.
