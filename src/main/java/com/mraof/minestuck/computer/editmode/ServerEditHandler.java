@@ -44,7 +44,6 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
@@ -224,6 +223,9 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		double posX, posY, posZ;
 		ServerLevel level = player.getServer().getLevel(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().dimension());
 		
+		if(level == null)
+			return false;
+		
 		if(lastEditmodePos.containsKey(c))
 		{
 			Vec3 lastPos = lastEditmodePos.get(c);
@@ -235,7 +237,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			posX = center.getX() + 0.5;
 			posZ = center.getZ() + 0.5;
 		}
-		posY = getMotionBlockingY(level, Mth.floor(posX), Mth.floor(posZ));
+		posY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(posX), Mth.floor(posZ));
 		
 		if(Teleport.teleportEntity(player, level, posX, posY, posZ) == null)
 			return false;
@@ -247,12 +249,6 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 		player.onUpdateAbilities();
 		
 		return true;
-	}
-	
-	//Helper function to force a chunk to load, to then get the top block
-	private static int getMotionBlockingY(ServerLevel level, int x, int z)
-	{
-		return level.getChunk(x >> 4, z >> 4, ChunkStatus.FULL, true).getHeight(Heightmap.Types.MOTION_BLOCKING, x & 0xF, x & 0xF) + 1;
 	}
 	
 	public static void resendEditmodeStatus(ServerPlayer editor)
