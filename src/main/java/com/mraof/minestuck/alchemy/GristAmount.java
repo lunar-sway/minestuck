@@ -5,13 +5,15 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public class GristAmount
+public class GristAmount implements IGristSet
 {
 	public static final String GRIST_AMOUNT = "grist_amount";
 	
@@ -68,6 +70,12 @@ public class GristAmount
 	public int hashCode()
 	{
 		return Objects.hash(type, amount);
+	}
+	
+	@Override
+	public Collection<GristAmount> asAmounts()
+	{
+		return Collections.singleton(this);
 	}
 	
 	public void write(FriendlyByteBuf buffer)

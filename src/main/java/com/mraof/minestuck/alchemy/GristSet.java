@@ -21,9 +21,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
-public class GristSet
+public class GristSet implements IGristSet
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -123,7 +122,7 @@ public class GristSet
 	public double getValue()
 	{
 		double sum = 0;
-		for(GristAmount amount : getAmounts())
+		for(GristAmount amount : asAmounts())
 			sum += amount.getValue();
 		return sum;
 	}
@@ -180,30 +179,20 @@ public class GristSet
 	/**
 	 * Returns a ArrayList containing GristAmount objects representing the set.
 	 */
-	public List<GristAmount> getAmounts()
+	@Override
+	public List<GristAmount> asAmounts()
 	{
-		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).collect(Collectors.toList());
+		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).toList();
 	}
 
 	/**
 	 * Adds an amount of grist to a GristSet, given another set of grist.
 	 */
-	public GristSet addGrist(GristSet set)
+	public GristSet addGrist(IGristSet set)
 	{
-		for (GristAmount grist : set.getAmounts())
-		{
-			this.addGrist(grist);
-		}
-		return this;
-
-	}
-	
-	/**
-	 * Adds an amount of grist to a GristSet, given a grist type and amount.
-	 */
-	public GristSet addGrist(GristAmount grist)
-	{
-		this.addGrist(grist.getType(), grist.getAmount());
+		for (GristAmount grist : set.asAmounts())
+			this.addGrist(grist.getType(), grist.getAmount());
+		
 		return this;
 	}
 	
@@ -272,7 +261,7 @@ public class GristSet
 	public Component asTextComponent()
 	{
 		Component component = null;
-		for(GristAmount grist : getAmounts())
+		for(GristAmount grist : asAmounts())
 		{
 			if(component == null)
 				component = grist.asTextComponent();
@@ -299,7 +288,7 @@ public class GristSet
 	 */
 	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
 	{
-		for(GristAmount amount : getAmounts())
+		for(GristAmount amount : asAmounts())
 		{
 			long countLeft = amount.getAmount();
 			for(int i = 0; i < 10 && countLeft > 0; i++)
@@ -355,7 +344,7 @@ public class GristSet
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		List<GristAmount> amounts = getAmounts();
+		List<GristAmount> amounts = asAmounts();
 		buffer.writeInt(amounts.size());
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}
@@ -372,7 +361,7 @@ public class GristSet
 	
 	public ListTag write(ListTag list)
 	{
-		getAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundTag(), null)));
+		asAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundTag(), null)));
 		return list;
 	}
 	

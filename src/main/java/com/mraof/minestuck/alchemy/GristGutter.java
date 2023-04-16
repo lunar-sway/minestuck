@@ -41,7 +41,7 @@ public class GristGutter
 		this.session = session;
 		this.gristSet = NonNegativeGristSet.read(listTag);
 		this.gristTotal = 0;
-		for(GristAmount amount : this.gristSet.getAmounts())
+		for(GristAmount amount : this.gristSet.asAmounts())
 			this.gristTotal += amount.getAmount();
 	}
 	
@@ -80,7 +80,7 @@ public class GristGutter
 	 */
 	public void addGristFrom(GristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
+		for(GristAmount amount : set.asAmounts())
 		{
 			GristType type = amount.getType();
 			long maximumAllowed = getRemainingCapacity();
@@ -98,9 +98,9 @@ public class GristGutter
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
 	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet)}.
 	 */
-	public void addGristUnchecked(GristSet set)
+	public void addGristUnchecked(IGristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
+		for(GristAmount amount : set.asAmounts())
 			this.addGristInternal(amount.getType(), amount.getAmount());
 	}
 	
@@ -119,7 +119,7 @@ public class GristGutter
 		GristSet takenGrist = new GristSet();
 		double extraGrist = 0;
 		
-		for(GristAmount gristAmount : this.gristSet.getAmounts())
+		for(GristAmount gristAmount : this.gristSet.asAmounts())
 		{
 			// add extraGrist to compensate for errors in the previous amounts
 			double takenAmount = extraGrist + fraction*gristAmount.getAmount();
@@ -181,7 +181,7 @@ public class GristGutter
 	{
 		long remaining = amount;
 		GristSet takenGrist = new GristSet();
-		List<GristAmount> amounts = new ArrayList<>(capacity.getAmounts());
+		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
 		
 		for(GristAmount capacityAmount : amounts)

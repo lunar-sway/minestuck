@@ -229,14 +229,14 @@ public final class GristCache
 	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
 	 * Returns any excess grist.
 	 */
-	private static GristSet addWithinCapacity(GristSet target, GristSet source, long capacity)
+	private static GristSet addWithinCapacity(GristSet target, IGristSet source, long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
 		GristSet remainder = new GristSet();
 		
-		for(GristAmount amount : source.getAmounts())
+		for(GristAmount amount : source.asAmounts())
 		{
 			if(amount.getAmount() > 0)
 			{

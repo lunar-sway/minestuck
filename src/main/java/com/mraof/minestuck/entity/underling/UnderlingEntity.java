@@ -190,14 +190,14 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristAmount : grist.getAmounts())
+				for(GristAmount gristAmount : grist.asAmounts())
 				{
 					if(gristAmount.getAmount() > 0)
 						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), gristAmount));
 				}
 			} else
 			{
-				for(GristAmount gristType : grist.getAmounts())
+				for(GristAmount gristType : grist.asAmounts())
 				{
 					int candy = (int) Math.min(64, (gristType.getAmount() + 2) / 4);
 					long gristAmount = gristType.getAmount() - candy * 2;

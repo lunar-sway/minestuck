@@ -9,9 +9,9 @@ public class NonNegativeGristSet extends GristSet
 	
 	}
 	
-	public NonNegativeGristSet(GristSet set)
+	public NonNegativeGristSet(IGristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
+		for(GristAmount amount : set.asAmounts())
 			if(amount.getAmount() < 0)
 				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.getType());
 			else addGrist(amount);

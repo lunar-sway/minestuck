@@ -75,7 +75,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 				.addIngredients(recipe.getIngredient());
 		
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, recipe.getGristSet().getAmounts());
+			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, recipe.getGristSet().asAmounts());
 		//TODO Wildcard grist cost
 	}
 	

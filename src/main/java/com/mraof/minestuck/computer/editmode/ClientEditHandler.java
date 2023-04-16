@@ -119,7 +119,7 @@ public final class ClientEditHandler
 			return;
 		}
 		
-		for(GristAmount amount : cost.getAmounts())
+		for(GristAmount amount : cost.asAmounts())
 		{
 			GristType grist = amount.getType();
 			ChatFormatting color = amount.getAmount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;

@@ -53,7 +53,7 @@ public class GuiUtil
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
-			for (GristAmount amount : grist.getAmounts())
+			for (GristAmount amount : grist.asAmounts())
 			{
 				GristType type = amount.getType();
 				long need = amount.getAmount();
@@ -78,7 +78,7 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			for (GristAmount amount : grist.getAmounts())
+			for (GristAmount amount : grist.asAmounts())
 			{
 				GristType type = amount.getType();
 				long need = amount.getAmount();
@@ -135,7 +135,7 @@ public class GuiUtil
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
-			for(GristAmount entry : grist.getAmounts())
+			for(GristAmount entry : grist.asAmounts())
 			{
 				int row = place % 3;
 				int col = place / 3;
@@ -164,7 +164,7 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			for(GristAmount entry : grist.getAmounts())
+			for(GristAmount entry : grist.asAmounts())
 			{
 				GristType type = entry.getType();
 				long need = entry.getAmount();
