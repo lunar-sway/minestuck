@@ -35,16 +35,18 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, IAnimatable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -348,7 +350,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		if(!this.dowel.isEmpty())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();
