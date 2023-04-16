@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added 75 more blocks to the default atheneum list.
+- Config option for delaying entry from when the land dimension is generated, which can help with performance.
+Note that this option is found in the common config and not the world config.
+- Particle effect while entering
 - Transportalizer particle
 
 ### Changed
@@ -21,6 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed crash with invalid transportalizer data
 - Connections with missing land dimensions gets partially reset to before entry at server start
 - Fixed editmode players not being able to destroy machines
+- Messages for more cases where entry may fail
+- Spawn height for re-entry is now the top motion-blocking block
 - Fixed entering editmode sometimes placing the player at the wrong height
 - Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
 - Fixed grist cache view in editmode using the limit of the wrong player

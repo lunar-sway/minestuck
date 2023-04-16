@@ -20,10 +20,11 @@ public class PostEntryTask
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	/**
-	 * The maximum amount of time (in milliseconds) to spend updating blocks,
-	 * before leaving the rest for the next game tick.
+	 * The minimum amount of time (in milliseconds) to spend each game tick
+	 * updating blocks post-entry.
+	 * Lower it to spend less time each tick, thus spreading out the work over more ticks.
 	 */
-	private static final long MIN_TIME = 15;
+	private static final long MIN_TIME = 10;
 	
 	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
