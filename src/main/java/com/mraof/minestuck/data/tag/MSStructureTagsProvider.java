@@ -2,7 +2,7 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
@@ -20,7 +20,7 @@ public class MSStructureTagsProvider extends TagsProvider<Structure>
 	@Override
 	protected void addTags()
 	{
-		this.tag(MSTags.Structures.SCANNER_LOCATED).add(MSConfiguredStructures.FROG_TEMPLE);
+		this.tag(MSTags.Structures.SCANNER_LOCATED).add(MSStructures.FROG_TEMPLE);
 	}
 	
 	@Override

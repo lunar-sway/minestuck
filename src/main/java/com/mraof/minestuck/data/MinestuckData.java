@@ -10,6 +10,7 @@ import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
 import com.mraof.minestuck.data.worldgen.BiomeModifierProvider;
+import com.mraof.minestuck.data.worldgen.MSStructureProvider;
 import com.mraof.minestuck.data.worldgen.MSStructureSetsProvider;
 import com.mraof.minestuck.data.worldgen.MSBiomeProvider;
 import net.minecraft.core.RegistryAccess;
@@ -29,10 +30,12 @@ public class MinestuckData
 	{
 		DataGenerator gen = event.getGenerator();
 		ExistingFileHelper fileHelper = event.getExistingFileHelper();
-		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
+		RegistryAccess.Writable registryAccess = RegistryAccess.builtinCopy();
+		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 		
 		gen.addProvider(event.includeServer(), MSBiomeProvider.create(gen, fileHelper));
-		gen.addProvider(event.includeServer(), MSStructureSetsProvider.create(gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureSetsProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), BiomeModifierProvider.create(gen, fileHelper, registryOps));
 		
 		BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, fileHelper);
