@@ -7,10 +7,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 public interface LandBiomeGenBuilder
 {
@@ -26,14 +24,9 @@ public interface LandBiomeGenBuilder
 		addFeature(step, feature.unwrapKey().orElseThrow(), modifier, types);
 	}
 	
-	default void addFeature(GenerationStep.Decoration step, RegistryObject<PlacedFeature> feature, LandBiomeType... types)
+	default void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... types)
 	{
 		addFeature(step, feature, null, types);
-	}
-	
-	default void addFeature(GenerationStep.Decoration step, RegistryObject<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
-	{
-		addFeature(step, Objects.requireNonNull(feature.getKey()), modifier, types);
 	}
 	
 	void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types);
