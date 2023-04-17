@@ -82,6 +82,8 @@ public class MSPacketHandler
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
 		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
+		registerMessage(EntryEffectPackets.Effect.class, EntryEffectPackets.Effect::decode);
+		registerMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
 	}
 	
 	private static int nextIndex;

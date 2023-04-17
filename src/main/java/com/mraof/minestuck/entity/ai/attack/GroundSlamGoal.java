@@ -22,7 +22,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	
 	public GroundSlamGoal(T entity, PhasedMobAnimation animation, float minRange, float maxRange, int actionCooldown)
 	{
-		super(entity, animation, minRange, maxRange, actionCooldown);
+		super(entity, animation, minRange, maxRange, actionCooldown, 0, 180.0F);
 	}
 	
 	@Override
