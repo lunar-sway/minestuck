@@ -93,7 +93,6 @@ public class Minestuck
 		MSDensityFunctions.REGISTER.register(eventBus);
 		MSFeatures.REGISTER.register(eventBus);
 		MSCFeatures.REGISTER.register(eventBus);
-		MSPlacedFeatures.REGISTER.register(eventBus);
 		
 		MSStructurePieces.REGISTER.register(eventBus);
 		MSStructureTypes.REGISTER.register(eventBus);

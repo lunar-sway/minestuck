@@ -9,10 +9,7 @@ import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
-import com.mraof.minestuck.data.worldgen.BiomeModifierProvider;
-import com.mraof.minestuck.data.worldgen.MSStructureProvider;
-import com.mraof.minestuck.data.worldgen.MSStructureSetProvider;
-import com.mraof.minestuck.data.worldgen.MSBiomeProvider;
+import com.mraof.minestuck.data.worldgen.*;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -33,6 +30,7 @@ public class MinestuckData
 		RegistryAccess.Writable registryAccess = RegistryAccess.builtinCopy();
 		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 		
+		gen.addProvider(event.includeServer(), MSPlacedFeatureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSBiomeProvider.create(gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSStructureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSStructureSetProvider.create(registryAccess, gen, fileHelper));
