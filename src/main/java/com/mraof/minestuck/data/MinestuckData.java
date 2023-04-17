@@ -11,7 +11,7 @@ import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
 import com.mraof.minestuck.data.worldgen.BiomeModifierProvider;
 import com.mraof.minestuck.data.worldgen.MSStructureProvider;
-import com.mraof.minestuck.data.worldgen.MSStructureSetsProvider;
+import com.mraof.minestuck.data.worldgen.MSStructureSetProvider;
 import com.mraof.minestuck.data.worldgen.MSBiomeProvider;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
@@ -35,7 +35,7 @@ public class MinestuckData
 		
 		gen.addProvider(event.includeServer(), MSBiomeProvider.create(gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSStructureProvider.create(registryAccess, gen, fileHelper));
-		gen.addProvider(event.includeServer(), MSStructureSetsProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureSetProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), BiomeModifierProvider.create(gen, fileHelper, registryOps));
 		
 		BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, fileHelper);

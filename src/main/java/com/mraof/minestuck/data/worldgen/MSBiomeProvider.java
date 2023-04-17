@@ -10,23 +10,21 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiConsumer;
 
 public final class MSBiomeProvider
 {
 	public static DataProvider create(DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
-		Map<ResourceLocation, Biome> biomes = new HashMap<>();
-		generate((key, biome) -> biomes.put(key.location(), biome));
+		DataEntriesBuilder<Biome> biomes = new DataEntriesBuilder<>();
+		generate(biomes::add);
+		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
-				RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS), Registry.BIOME_REGISTRY, biomes);
+				RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS), Registry.BIOME_REGISTRY, biomes.getMap());
 	}
 	
 	private static void generate(BiConsumer<ResourceKey<Biome>, Biome> consumer)

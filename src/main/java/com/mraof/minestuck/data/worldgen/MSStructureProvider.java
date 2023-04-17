@@ -16,7 +16,6 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -24,7 +23,6 @@ import net.minecraft.world.level.levelgen.structure.TerrainAdjustment;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -35,14 +33,14 @@ public final class MSStructureProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var structureRegistry = registryAccess.ownedWritableRegistryOrThrow(Registry.STRUCTURE_REGISTRY);
-		Map<ResourceLocation, Structure> structures = new HashMap<>();
+		DataEntriesBuilder<Structure> structures = new DataEntriesBuilder<>();
 		generate(registryAccess.registryOrThrow(Registry.BIOME_REGISTRY), (key, structure) -> {
-			structures.put(key.location(), structure);
+			structures.add(key, structure);
 			structureRegistry.register(key, structure, Lifecycle.stable());
 		});
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
-				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_REGISTRY, structures);
+				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_REGISTRY, structures.getMap());
 	}
 	
 	private static void generate(Registry<Biome> biomes, BiConsumer<ResourceKey<Structure>, Structure> consumer)

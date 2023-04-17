@@ -9,7 +9,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.resources.RegistryOps;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
@@ -17,19 +16,17 @@ import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.BiConsumer;
 
-public final class MSStructureSetsProvider
+public final class MSStructureSetProvider
 {
 	public static DataProvider create(RegistryAccess registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
-		Map<ResourceLocation, StructureSet> sets = new HashMap<>();
-		generate(registryAccess.ownedRegistryOrThrow(Registry.STRUCTURE_REGISTRY), (name, set) -> sets.put(new ResourceLocation(Minestuck.MOD_ID, name), set));
+		DataEntriesBuilder<StructureSet> sets = new DataEntriesBuilder<>();
+		generate(registryAccess.ownedRegistryOrThrow(Registry.STRUCTURE_REGISTRY), sets.consumerForNamespace(Minestuck.MOD_ID));
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
-				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_SET_REGISTRY, sets);
+				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_SET_REGISTRY, sets.getMap());
 	}
 	
 	private static void generate(Registry<Structure> structures, BiConsumer<String, StructureSet> consumer)

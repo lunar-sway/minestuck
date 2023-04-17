@@ -28,15 +28,11 @@ public class BiomeModifierProvider
 {
 	public static DataProvider create(DataGenerator generator, ExistingFileHelper existingFileHelper, RegistryOps<JsonElement> registryOps)
 	{
-		Map<ResourceLocation, BiomeModifier> entries = new HashMap<>();
-		register(registryOps.registryAccess, (name, modifier) -> {
-			ResourceLocation id = new ResourceLocation(Minestuck.MOD_ID, name);
-			if(entries.containsKey(id))
-				throw new IllegalArgumentException("Name \"" + name + "\" is already used");
-			else
-				entries.put(id, modifier);
-		});
-		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID, registryOps, ForgeRegistries.Keys.BIOME_MODIFIERS, entries);
+		DataEntriesBuilder<BiomeModifier> entries = new DataEntriesBuilder<>();
+		register(registryOps.registryAccess, entries.consumerForNamespace(Minestuck.MOD_ID));
+		
+		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
+				registryOps, ForgeRegistries.Keys.BIOME_MODIFIERS, entries.getMap());
 	}
 	
 	private static void register(RegistryAccess registries, BiConsumer<String, BiomeModifier> builder)
