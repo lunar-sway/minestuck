@@ -65,7 +65,7 @@ public final class LandGatePlacement extends StructurePlacement
 			// but some registries also have separate dynamic registries that are world-specific
 			// We need a configured structure from the dynamic registry and not the builtin registry for getStartForFeature() to work
 			Structure landGate = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
-					.get(MSConfiguredStructures.LAND_GATE.getKey());
+					.get(MSConfiguredStructures.LAND_GATE);
 			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
 			
 			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(level.getChunkSource().randomState());

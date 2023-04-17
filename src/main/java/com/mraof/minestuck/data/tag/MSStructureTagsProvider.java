@@ -20,7 +20,7 @@ public class MSStructureTagsProvider extends TagsProvider<Structure>
 	@Override
 	protected void addTags()
 	{
-		this.tag(MSTags.Structures.SCANNER_LOCATED).add(MSConfiguredStructures.FROG_TEMPLE.get());
+		this.tag(MSTags.Structures.SCANNER_LOCATED).add(MSConfiguredStructures.FROG_TEMPLE);
 	}
 	
 	@Override

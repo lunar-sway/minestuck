@@ -21,12 +21,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 public class MSAdvancementProvider extends AdvancementProvider
@@ -73,8 +72,8 @@ public class MSAdvancementProvider extends AdvancementProvider
 		Advancement treeModus = Advancement.Builder.advancement().parent(newModus).display(MSItems.TREE_MODUS_CARD.get(), Component.translatable(title(TREE_MODUS)), Component.translatable(desc(TREE_MODUS)), null, FrameType.TASK, true, true, false).addCriterion("tree_root", TreeModusRootTrigger.Instance.count(MinMaxBounds.Ints.atLeast(16))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/tree_modus");
 		Advancement killOgre = Advancement.Builder.advancement().parent(entry).display(MSItems.POGO_HAMMER.get(), Component.translatable(title(KILL_OGRE)), Component.translatable(desc(KILL_OGRE)), null, FrameType.TASK, true, true, false).addCriterion("kill_ogre", KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity().of(MSEntityTypes.OGRE.get()))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/kill_ogre");
 		Advancement returnNode = Advancement.Builder.advancement().parent(entry).display(Items.RED_BED, Component.translatable(title(RETURN_NODE)), Component.translatable(desc(RETURN_NODE)), null, FrameType.TASK, true, true, false).addCriterion("touch_return_node", EventTrigger.Instance.returnNode()).save(advancementSaver, Minestuck.MOD_ID+":minestuck/return_node");
-		Advancement dungeon = Advancement.Builder.advancement().parent(returnNode).display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, FrameType.TASK, true, true, false).addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(Objects.requireNonNull(MSConfiguredStructures.IMP_DUNGEON.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/dungeon");
-		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(Objects.requireNonNull(MSConfiguredStructures.CONSORT_VILLAGE.getKey())))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
+		Advancement dungeon = Advancement.Builder.advancement().parent(returnNode).display(MSBlocks.FROST_BRICKS.get(), Component.translatable(title(DUNGEON)), Component.translatable(desc(DUNGEON)), null, FrameType.TASK, true, true, false).addCriterion("imp_dungeon", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(MSConfiguredStructures.IMP_DUNGEON))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/dungeon");
+		Advancement commune = Advancement.Builder.advancement().parent(entry).display(MSItems.STONE_TABLET.get(), Component.translatable(title(COMMUNE)), Component.translatable(desc(COMMUNE)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.AND).addCriterion("talk_to_consort", ConsortTalkTrigger.Instance.any()).addCriterion("visit_village", PlayerTrigger.TriggerInstance.located(LocationPredicate.inStructure(MSConfiguredStructures.CONSORT_VILLAGE))).save(advancementSaver, Minestuck.MOD_ID+":minestuck/commune");
 		Advancement bugs = consumeBugCriteria(Advancement.Builder.advancement().parent(commune).display(MSItems.CHOCOLATE_BEETLE.get(), Component.translatable(title(BUGS)), Component.translatable(desc(BUGS)), null, FrameType.TASK, true, true, false).requirements(RequirementsStrategy.OR)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/bugs");
 		Advancement shadyBuyer = Advancement.Builder.advancement().parent(commune).display(MSItems.ROCK_COOKIE.get(), Component.translatable(title(SHADY_BUYER)), Component.translatable(desc(SHADY_BUYER)), null, FrameType.TASK, true, true, false).addCriterion("buy_item", ConsortItemTrigger.Instance.forType(EnumConsort.MerchantType.SHADY)).save(advancementSaver, Minestuck.MOD_ID+":minestuck/shady_buyer");
 	}
