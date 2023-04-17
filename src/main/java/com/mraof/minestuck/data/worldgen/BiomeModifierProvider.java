@@ -1,4 +1,4 @@
-package com.mraof.minestuck.data;
+package com.mraof.minestuck.data.worldgen;
 
 import com.google.gson.JsonElement;
 import com.mraof.minestuck.Minestuck;
