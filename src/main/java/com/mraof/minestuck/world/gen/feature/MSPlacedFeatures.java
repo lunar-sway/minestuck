@@ -6,7 +6,10 @@ import com.mraof.minestuck.block.MSBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.worldgen.features.*;
+import net.minecraft.data.worldgen.features.CaveFeatures;
+import net.minecraft.data.worldgen.features.MiscOverworldFeatures;
+import net.minecraft.data.worldgen.features.TreeFeatures;
+import net.minecraft.data.worldgen.features.VegetationFeatures;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -14,6 +17,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
@@ -274,5 +279,10 @@ public final class MSPlacedFeatures
 		builder.add(BiomeFilter.biome());
 		
 		return builder.build();
+	}
+	
+	public static <T extends FeatureConfiguration> PlacedFeature inline(Feature<T> feature, T config, PlacementModifier... placements)
+	{
+		return new PlacedFeature(Holder.direct(new ConfiguredFeature<>(feature, config)), List.of(placements));
 	}
 }

@@ -2,15 +2,18 @@ package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.biome.MSBiomes;
+import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public class LandBiomeGenVerifier
@@ -22,7 +25,13 @@ public class LandBiomeGenVerifier
 		LandBiomeGenBuilder builder = new LandBiomeGenBuilder()
 		{
 			@Override
-			public void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, LandBiomeType... types)
+			public void addFeature(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... types)
+			{
+				if(types.length == 0)
+					throw new IllegalArgumentException("Missing land biome types!");
+			}
+			@Override
+			public void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 			{
 				if(types.length == 0)
 					throw new IllegalArgumentException("Missing land biome types!");
