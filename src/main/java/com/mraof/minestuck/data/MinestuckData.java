@@ -32,7 +32,7 @@ public class MinestuckData
 		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
 		
 		gen.addProvider(event.includeServer(), new MinestuckBiomeProvider(gen, fileHelper));
-		gen.addProvider(event.includeServer(), new MSStructureSetsProvider(gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureSetsProvider.create(gen, fileHelper));
 		gen.addProvider(event.includeServer(), BiomeModifierProvider.create(gen, fileHelper, registryOps));
 		
 		BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, fileHelper);
