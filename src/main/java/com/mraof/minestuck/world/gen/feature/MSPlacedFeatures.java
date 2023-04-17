@@ -17,15 +17,15 @@ public final class MSPlacedFeatures
 {
 	public static final ResourceKey<PlacedFeature> RETURN_NODE = key("return_node");
 	
-	public static final ResourceKey<PlacedFeature> COG = key("cog");
-	public static final ResourceKey<PlacedFeature> UNCOMMON_COG = key("uncommon_cog");
-	public static final ResourceKey<PlacedFeature> FLOOR_COG = key("floor_cog");
-	public static final ResourceKey<PlacedFeature> UNCOMMON_FLOOR_COG = key("uncommon_floor_cog");
+	public static final ResourceKey<PlacedFeature> COG = key("cog/regular");
+	public static final ResourceKey<PlacedFeature> UNCOMMON_COG = key("cog/sparse");
+	public static final ResourceKey<PlacedFeature> FLOOR_COG = key("cog/floor_regular");
+	public static final ResourceKey<PlacedFeature> UNCOMMON_FLOOR_COG = key("cog/floor_sparse");
 	
 	public static final ResourceKey<PlacedFeature> SURFACE_FOSSIL = key("surface_fossil");
 	
-	public static final ResourceKey<PlacedFeature> BROKEN_SWORD = key("broken_sword");
-	public static final ResourceKey<PlacedFeature> UNCOMMON_BROKEN_SWORD = key("uncommon_broken_sword");
+	public static final ResourceKey<PlacedFeature> BROKEN_SWORD = key("broken_sword/regular");
+	public static final ResourceKey<PlacedFeature> UNCOMMON_BROKEN_SWORD = key("broken_sword/uncommon");
 	public static final ResourceKey<PlacedFeature> BUCKET = key("bucket");
 	public static final ResourceKey<PlacedFeature> CAKE_PEDESTAL = key("cake_pedestal");
 	public static final ResourceKey<PlacedFeature> SMALL_LIBRARY = key("small_library");
@@ -79,28 +79,28 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> LARGE_RANDOM_ROCK_BLOCK_BLOB = key("large_random_rock_block_blob");
 	public static final ResourceKey<PlacedFeature> SHADE_STONE_BLOCK_BLOB = key("shade_stone_block_blob");
 	public static final ResourceKey<PlacedFeature> FOREST_ROCK = key("forest_rock");
-	public static final ResourceKey<PlacedFeature> SMALL_PILLAR = key("small_pillar");
-	public static final ResourceKey<PlacedFeature> MIXED_PILLARS = key("mixed_pillars");
-	public static final ResourceKey<PlacedFeature> MIXED_PILLARS_EXTRA = key("mixed_pillars_extra");
+	public static final ResourceKey<PlacedFeature> SMALL_PILLAR = key("pillar/small");
+	public static final ResourceKey<PlacedFeature> MIXED_PILLARS = key("pillar/mixed");
+	public static final ResourceKey<PlacedFeature> MIXED_PILLARS_EXTRA = key("pillar/mixed_extra");
 	public static final ResourceKey<PlacedFeature> ICE_SPIKE = key("ice_spike");
 	
 	public static final ResourceKey<PlacedFeature> DARK_OAK = key("dark_oak");
-	public static final ResourceKey<PlacedFeature> RAINBOW_TREE = key("rainbow_tree");
-	public static final ResourceKey<PlacedFeature> EXTRA_RAINBOW_TREE = key("extra_rainbow_tree");
-	public static final ResourceKey<PlacedFeature> END_TREE = key("end_tree");
-	public static final ResourceKey<PlacedFeature> GLOWING_TREE = key("glowing_tree");
-	public static final ResourceKey<PlacedFeature> SHADEWOOD_TREE = key("shadewood_tree");
-	public static final ResourceKey<PlacedFeature> SCARRED_SHADEWOOD_TREE = key("scarred_shadewood_tree");
-	public static final ResourceKey<PlacedFeature> ORNATE_SHADEWOOD_TREE = key("ornate_shadewood_tree");
-	public static final ResourceKey<PlacedFeature> PETRIFIED_TREE = key("petrified_tree");
-	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("sparse_petrified_tree");
-	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("dead_tree");
-	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("extra_dead_tree");
+	public static final ResourceKey<PlacedFeature> RAINBOW_TREE = key("tree/rainbow");
+	public static final ResourceKey<PlacedFeature> EXTRA_RAINBOW_TREE = key("tree/rainbow_extra");
+	public static final ResourceKey<PlacedFeature> END_TREE = key("tree/end");
+	public static final ResourceKey<PlacedFeature> GLOWING_TREE = key("tree/glowing");
+	public static final ResourceKey<PlacedFeature> SHADEWOOD_TREE = key("tree/shadewood");
+	public static final ResourceKey<PlacedFeature> SCARRED_SHADEWOOD_TREE = key("tree/scarred_shadewood");
+	public static final ResourceKey<PlacedFeature> ORNATE_SHADEWOOD_TREE = key("tree/ornate_shadewood");
+	public static final ResourceKey<PlacedFeature> PETRIFIED_TREE = key("tree/petrified");
+	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_TREE = key("tree/petrified_sparse");
+	public static final ResourceKey<PlacedFeature> DEAD_TREE = key("tree/dead");
+	public static final ResourceKey<PlacedFeature> EXTRA_DEAD_TREE = key("tree/dead_extra");
 	
-	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("forest_land_trees");
-	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("dense_forest_land_trees");
-	public static final ResourceKey<PlacedFeature> TAIGA_LAND_TREES = key("taiga_land_trees");
-	public static final ResourceKey<PlacedFeature> DENSE_TAIGA_LAND_TREES = key("dense_taiga_land_trees");
+	public static final ResourceKey<PlacedFeature> FOREST_LAND_TREES = key("tree/forest_land");
+	public static final ResourceKey<PlacedFeature> DENSE_FOREST_LAND_TREES = key("tree/forest_land_dense");
+	public static final ResourceKey<PlacedFeature> TAIGA_LAND_TREES = key("tree/taiga_land");
+	public static final ResourceKey<PlacedFeature> DENSE_TAIGA_LAND_TREES = key("tree/taiga_land_dense");
 	public static final ResourceKey<PlacedFeature> HUGE_MUSHROOMS = key("huge_mushrooms");
 	
 	public static final ResourceKey<PlacedFeature> SPARSE_JUNGLE_GRASS_PATCH = key("sparse_jungle_grass_patch");
