@@ -47,10 +47,10 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	{
 		super(type, level, 5);
 		
-		this.head = new BasiliskPartEntity(this, "head", 2.1F, 2.1F);
-		this.body = new BasiliskPartEntity(this, "body", 2.5F, 1.9F);
-		this.tail = new BasiliskPartEntity(this, "tail", 1.8F, 1.8F);
-		this.tailEnd = new BasiliskPartEntity(this, "tailEnd", 1.4F, 1.3F);
+		this.head = new BasiliskPartEntity(this, 2.1F, 2.1F);
+		this.body = new BasiliskPartEntity(this, 2.5F, 1.9F);
+		this.tail = new BasiliskPartEntity(this, 1.8F, 1.8F);
+		this.tailEnd = new BasiliskPartEntity(this, 1.4F, 1.3F);
 		parts = new BasiliskPartEntity[]{this.head, this.body, this.tail, this.tailEnd};
 		this.noCulling = true;
 		this.setId(ENTITY_COUNTER.getAndAdd(this.parts.length + 1) + 1); // Imitate forges fix to MC-158205
@@ -63,6 +63,14 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		// Imitate forges fix to MC-158205
 		for(int i = 0; i < this.parts.length; i++)
 			this.parts[i].setId(id + i + 1);
+	}
+	
+	@Override
+	public void restoreFrom(Entity entity)
+	{
+		if(entity instanceof BasiliskPartEntity)
+			throw new UnsupportedOperationException("Tried to restore a basilisk from a basilisk part. Might be trying to copy a part and accidentally creating a new basilisk!");
+		super.restoreFrom(entity);
 	}
 	
 	public static AttributeSupplier.Builder basiliskAttributes()
