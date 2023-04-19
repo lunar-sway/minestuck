@@ -17,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- LunaticCat
+- kirderf1, LunaticCat
 
 ## [1.19.2-1.10.1.0] - 2023-04-16
 
