@@ -191,6 +191,11 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - Fix some player decoy behavior when entering editmode while flying
 - Machine guis with a GO-button can now be started with the keypad enter key
 
+### Fixed
+
+- Some cassettes missing a grist cost
+- Cassette "5" and "Otherside" recipe were swap
+
 ### Contributors for this release
 
 - kirderf1, Dweblenod, Akisephila, rose_bushes_
