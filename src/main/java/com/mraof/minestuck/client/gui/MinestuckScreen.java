@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.*;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -45,7 +46,7 @@ public abstract class MinestuckScreen extends Screen
 		boolean showName = false;
 		GristType tooltipType = null;
 		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
-		GristSet clientGrist = cache.set();
+		IGristSet clientGrist = cache.set();
 		long cacheLimit = cache.limit();
 		
 		List<GristType> types = new ArrayList<>(GristTypes.getRegistry().getValues());

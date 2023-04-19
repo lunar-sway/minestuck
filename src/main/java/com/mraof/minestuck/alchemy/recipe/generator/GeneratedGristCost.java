@@ -1,9 +1,10 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,7 @@ import java.util.function.BiConsumer;
 
 public abstract class GeneratedGristCost extends GristCostRecipe implements GeneratedCostProvider
 {
-	private ImmutableGristSet cachedCost = null;
+	private IImmutableGristSet cachedCost = null;
 	private boolean hasGeneratedCost = false;
 	
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
@@ -71,7 +72,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			return GristCostResult.ofOrNull(cachedCost);
 		else
 		{
-			GristSet cost = generateCost(context);
+			IGristSet cost = generateCost(context);
 			if(context.isPrimary())
 			{
 				hasGeneratedCost = true;
@@ -82,9 +83,10 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		}
 	}
 	
-	protected abstract GristSet generateCost(GenerationContext context);
+	@Nullable
+	protected abstract IGristSet generateCost(GenerationContext context);
 	
-	protected final GristSet getCachedCost()
+	protected final IGristSet getCachedCost()
 	{
 		return cachedCost;
 	}

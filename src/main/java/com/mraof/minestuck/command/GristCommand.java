@@ -47,8 +47,8 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristSet grist = GristCache.get(player).getGristSet();
-			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			Component gristComponent = GristCache.get(player).getGristSet().asTextComponent();
+			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), gristComponent), false);
 		}
 		return players.size();
 	}

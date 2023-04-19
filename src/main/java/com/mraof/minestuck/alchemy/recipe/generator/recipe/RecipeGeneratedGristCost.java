@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
@@ -48,7 +49,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 		return getCost(inv.getItem(0).getItem()) != null;
 	}
 	
-	private GristSet getCost(Item item)
+	private IGristSet getCost(Item item)
 	{
 		if(handler != null)
 			return handler.getGristCost(item);

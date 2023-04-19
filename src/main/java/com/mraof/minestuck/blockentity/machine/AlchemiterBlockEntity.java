@@ -300,16 +300,13 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	public GristSet getGristCost(int quantity)
 	{
 		ItemStack dowel = getDowel();
-		GristSet set;
 		ItemStack stack = getOutput();
 		if(dowel.isEmpty() || level == null)
 			return null;
 		
 		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
-		
-		return set;
+		return GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
 	}
 	
 	public GristType getWildcardGrist()

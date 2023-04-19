@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.world.item.Item;
@@ -83,7 +84,7 @@ public final class GristCostGenerator
 		LOGGER.debug("Finished grist cost generation");
 	}
 	
-	private static GristSet lookupCost(GeneratorProcess process, GenerationContext context)
+	private static IGristSet lookupCost(GeneratorProcess process, GenerationContext context)
 	{
 		Item item = context.getCurrentItem();
 		GristCostResult cost = null;

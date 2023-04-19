@@ -2,7 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import net.minecraft.network.chat.Component;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface IGristSet
 {
@@ -19,9 +19,11 @@ public interface IGristSet
 		return sum;
 	}
 	
-	Collection<GristAmount> asAmounts();
+	List<GristAmount> asAmounts();
 	
 	boolean isEmpty();
+	
+	IImmutableGristSet asImmutable();
 	
 	default GristSet mutableCopy()
 	{

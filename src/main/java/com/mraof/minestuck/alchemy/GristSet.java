@@ -100,6 +100,7 @@ public class GristSet implements IGristSet
 		addGrist(set);
 	}
 	
+	@Override
 	public ImmutableGristSet asImmutable()
 	{
 		return new ImmutableGristSet(this);

@@ -82,7 +82,7 @@ public final class GristCache
 		nbt.put("grist_cache", gristSet.write(new ListTag()));
 	}
 	
-	public ImmutableGristSet getGristSet()
+	public IImmutableGristSet getGristSet()
 	{
 		return this.gristSet;
 	}
@@ -203,12 +203,11 @@ public final class GristCache
 	
 	void sendPacket(ServerPlayer player)
 	{
-		GristSet gristSet = this.getGristSet();
 		
 		//Send to the player
 		if(player != null)
 		{
-			GristCachePacket packet = new GristCachePacket(gristSet, false);
+			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		

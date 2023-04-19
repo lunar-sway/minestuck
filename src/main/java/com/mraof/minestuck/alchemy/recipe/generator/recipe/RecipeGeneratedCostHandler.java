@@ -6,6 +6,8 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
@@ -45,7 +47,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
 	private final RecipeManager recipeManager;
-	private Map<Item, GristSet> generatedCosts = Collections.emptyMap();
+	private Map<Item, IImmutableGristSet> generatedCosts = Collections.emptyMap();
 	private RecipeGeneratedCostProcess process = null;
 	
 	private RecipeGeneratedCostHandler(RecipeManager recipeManager)
@@ -53,7 +55,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		this.recipeManager = recipeManager;
 	}
 	
-	private RecipeGeneratedCostHandler(Map<Item, GristSet> generatedCosts)
+	private RecipeGeneratedCostHandler(Map<Item, IImmutableGristSet> generatedCosts)
 	{
 		recipeManager = null;
 		this.generatedCosts = generatedCosts;
@@ -65,7 +67,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		event.addListener(new RecipeGeneratedCostHandler(event.getServerResources().getRecipeManager()));
 	}
 	
-	GristSet getGristCost(Item item)
+	IGristSet getGristCost(Item item)
 	{
 		return generatedCosts.get(item);
 	}
@@ -73,7 +75,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(generatedCosts.size());
-		for(Map.Entry<Item, GristSet> entry : generatedCosts.entrySet())
+		for(Map.Entry<Item, IImmutableGristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
 			GristSet.write(entry.getValue(), buffer);
@@ -86,12 +88,12 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			return null;
 		
 		int size = buffer.readInt();
-		ImmutableMap.Builder<Item, GristSet> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<Item, IImmutableGristSet> builder = new ImmutableMap.Builder<>();
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
 			GristSet cost = GristSet.read(buffer);
-			builder.put(item, cost);
+			builder.put(item, cost.asImmutable());
 		}
 		return new RecipeGeneratedCostHandler(builder.build());
 	}
@@ -99,7 +101,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	List<JeiGristCost> createJeiCosts()
 	{
 		List<JeiGristCost> costs = new ArrayList<>();
-		for(Map.Entry<Item, GristSet> entries : generatedCosts.entrySet())
+		for(Map.Entry<Item, IImmutableGristSet> entries : generatedCosts.entrySet())
 		{
 			if(entries.getValue() != null)
 				costs.add(new JeiGristCost.Set(Ingredient.of(entries.getKey()), entries.getValue()));

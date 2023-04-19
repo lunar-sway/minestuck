@@ -1,6 +1,7 @@
 package com.mraof.minestuck.jei;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Objects;
@@ -23,15 +24,15 @@ public abstract class JeiGristCost
 	
 	public abstract Type getType();
 	
-	public abstract GristSet getGristSet();
+	public abstract IGristSet getGristSet();
 	
 	public abstract long getWildcardAmount();
 	
 	public static class Set extends JeiGristCost
 	{
-		private final GristSet set;
+		private final IImmutableGristSet set;
 		
-		public Set(Ingredient ingredient, GristSet set)
+		public Set(Ingredient ingredient, IImmutableGristSet set)
 		{
 			super(ingredient);
 			this.set = Objects.requireNonNull(set);
@@ -44,7 +45,7 @@ public abstract class JeiGristCost
 		}
 		
 		@Override
-		public GristSet getGristSet()
+		public IGristSet getGristSet()
 		{
 			return set;
 		}
@@ -73,7 +74,7 @@ public abstract class JeiGristCost
 		}
 		
 		@Override
-		public GristSet getGristSet()
+		public IGristSet getGristSet()
 		{
 			throw new UnsupportedOperationException();
 		}

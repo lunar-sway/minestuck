@@ -2,7 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,7 @@ public class ContainerGristCost extends GeneratedGristCost
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final ImmutableGristSet addedCost;
+	private final IImmutableGristSet addedCost;
 	
 	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, @Nullable Integer priority)
 	{
@@ -35,12 +36,12 @@ public class ContainerGristCost extends GeneratedGristCost
 	}
 	
 	@Override
-	protected GristSet generateCost(GenerationContext context)
+	protected IGristSet generateCost(GenerationContext context)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
-			GristSet cost = context.lookupCostFor(container);
+			IGristSet cost = context.lookupCostFor(container);
 			if(cost != null)
 			{
 				return cost.mutableCopy().addGrist(addedCost);

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
@@ -147,22 +148,22 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		return 100 - (ingredient.getItems().length - 1)*10;
 	}
 	
-	public static GristSet scaleToCountAndDurability(GristSet cost, ItemStack stack, boolean shouldRoundDown)
+	public static GristSet scaleToCountAndDurability(IGristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
 		if(cost == null)
 			return null;
 		
-		cost = cost.mutableCopy();
+		GristSet mutableCost = cost.mutableCopy();
 		if (stack.getCount() != 1)
-			cost.scale(stack.getCount());
+			mutableCost.scale(stack.getCount());
 		
 		if (stack.isDamaged())
 		{
 			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-			cost.scale(multiplier, shouldRoundDown);
+			mutableCost.scale(multiplier, shouldRoundDown);
 		}
 		
-		return cost.asImmutable();
+		return mutableCost.asImmutable();
 	}
 	
 	//Helper class for implementing serializer classes

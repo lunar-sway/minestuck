@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collections;
 import java.util.function.Supplier;
 
-public class ImmutableGristSet extends GristSet
+public class ImmutableGristSet extends GristSet implements IImmutableGristSet
 {
 	public ImmutableGristSet()
 	{

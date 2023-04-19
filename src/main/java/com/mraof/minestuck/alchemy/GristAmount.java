@@ -4,14 +4,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public record GristAmount(GristType type, long amount) implements IGristSet
+public record GristAmount(GristType type, long amount) implements IImmutableGristSet
 {
 	public static final String GRIST_AMOUNT = "grist_amount";
 	
@@ -33,9 +33,9 @@ public record GristAmount(GristType type, long amount) implements IGristSet
 	}
 	
 	@Override
-	public Collection<GristAmount> asAmounts()
+	public List<GristAmount> asAmounts()
 	{
-		return Collections.singleton(this);
+		return Collections.singletonList(this);
 	}
 	
 	@Override

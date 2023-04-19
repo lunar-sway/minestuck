@@ -1,26 +1,26 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
 
 import javax.annotation.Nullable;
 
 public class GristCostResult
 {
 	@Nullable
-	private final GristSet cost;
+	private final IGristSet cost;
 	
-	public GristCostResult(@Nullable GristSet cost)
+	public GristCostResult(@Nullable IGristSet cost)
 	{
 		this.cost = cost;
 	}
 	
-	public static GristCostResult ofOrNull(@Nullable GristSet cost)
+	public static GristCostResult ofOrNull(@Nullable IGristSet cost)
 	{
 		return cost != null ? new GristCostResult(cost) : null;
 	}
 	
 	@Nullable
-	public GristSet getCost()
+	public IGristSet getCost()
 	{
 		return cost;
 	}
