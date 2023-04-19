@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Updated textures for Rainbow Logs, Planks, Leaves and Saplings
+
 ### Fixed
 
 - Fixed a crash with TerraBlender
@@ -13,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - kirderf1
+- Carnie
+- Akisephila
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 
