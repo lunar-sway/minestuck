@@ -51,7 +51,7 @@ public class GristGutter
 	}
 	
 	
-	public ImmutableGristSet getCache()
+	public IGristSet getCache()
 	{
 		return gristSet.asImmutable();
 	}

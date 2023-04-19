@@ -1,6 +1,7 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -94,7 +95,7 @@ public final class ClientPlayerData
 	
 	public record ClientCache(GristSet set, long limit)
 	{
-		public boolean canAfford(GristSet cost)
+		public boolean canAfford(IGristSet cost)
 		{
 			return GristCache.canAfford(this.set, cost, this.limit);
 		}

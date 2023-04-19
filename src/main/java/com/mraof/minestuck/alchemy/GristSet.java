@@ -7,7 +7,6 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
@@ -15,10 +14,7 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -98,6 +94,12 @@ public class GristSet implements IGristSet
 		gristTypes.putAll(set.gristTypes);
 	}
 	
+	public GristSet(IGristSet set)
+	{
+		this();
+		addGrist(set);
+	}
+	
 	public ImmutableGristSet asImmutable()
 	{
 		return new ImmutableGristSet(this);
@@ -106,6 +108,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Gets the amount of grist, given a type of grist.
 	 */
+	@Override
 	public long getGrist(GristType type)
 	{
 		return this.gristTypes.getOrDefault(type, 0L);
@@ -114,17 +117,6 @@ public class GristSet implements IGristSet
 	public long getGrist(Supplier<GristType> type)
 	{
 		return getGrist(type.get());
-	}
-	
-	/**
-	 * @return a value estimate for this grist set
-	 */
-	public double getValue()
-	{
-		double sum = 0;
-		for(GristAmount amount : asAmounts())
-			sum += amount.getValue();
-		return sum;
 	}
 	
 	/**
@@ -226,12 +218,13 @@ public class GristSet implements IGristSet
 	/**
 	 * Checks if this grist set is empty.
 	 */
+	@Override
 	public boolean isEmpty()
 	{
 		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
 	
-	public boolean equalContent(GristSet other)
+	public boolean equalContent(IGristSet other)
 	{
 		for(GristType type : GristTypes.values())
 			if(this.getGrist(type) != other.getGrist(type))
@@ -258,27 +251,8 @@ public class GristSet implements IGristSet
 		return build.toString();
 	}
 	
-	public Component asTextComponent()
-	{
-		Component component = null;
-		for(GristAmount grist : asAmounts())
-		{
-			if(component == null)
-				component = grist.asTextComponent();
-			else component = Component.translatable(GRIST_COMMA, component, grist.asTextComponent());
-		}
-		if(component != null)
-			return component;
-		else return Component.empty();
-	}
-	
-	public Component createMissingMessage()
-	{
-		return Component.translatable(MISSING_MESSAGE, asTextComponent());
-	}
-	
-	
-	public GristSet copy()
+	@Override
+	public GristSet mutableCopy()
 	{
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
@@ -342,9 +316,9 @@ public class GristSet implements IGristSet
 		return set;
 	}
 	
-	public void write(FriendlyByteBuf buffer)
+	public static void write(IGristSet gristSet, FriendlyByteBuf buffer)
 	{
-		List<GristAmount> amounts = asAmounts();
+		Collection<GristAmount> amounts = gristSet.asAmounts();
 		buffer.writeInt(amounts.size());
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}

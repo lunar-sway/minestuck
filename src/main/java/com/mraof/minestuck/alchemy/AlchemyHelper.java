@@ -32,7 +32,7 @@ public class AlchemyHelper
 		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{
 			e.checkBonus(EcheladderBonusType.ALCHEMY_1);
-			GristSet cost = event.getCost();
+			IGristSet cost = event.getCost();
 			double value = cost.getValue();
 			if(value >= 50)
 				e.checkBonus(EcheladderBonusType.ALCHEMY_2);

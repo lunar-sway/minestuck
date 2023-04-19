@@ -312,8 +312,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
-		GristSet set = new GristSet(gristType, gristValue);
-		GristCache.get(level, identifier).addWithGutter(set, GristHelper.EnumSource.CLIENT);
+		
+		GristCache.get(level, identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	

@@ -107,7 +107,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			if(recipe.getCachedCost() != null)
 			{
 				buffer.writeBoolean(true);
-				recipe.getCachedCost().write(buffer);
+				GristSet.write(recipe.getCachedCost(), buffer);
 			} else buffer.writeBoolean(false);
 		}
 		

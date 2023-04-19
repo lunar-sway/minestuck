@@ -26,7 +26,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 		super(MSBlockEntityTypes.GRIST_COLLECTOR.get(), pos, state);
 	}
 	
-	public GristSet getStoredGrist()
+	public IGristSet getStoredGrist()
 	{
 		return storedGrist.asImmutable();
 	}

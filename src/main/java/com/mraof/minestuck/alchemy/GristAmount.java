@@ -20,18 +20,28 @@ public record GristAmount(GristType type, long amount) implements IGristSet
 		this(type.get(), amount);
 	}
 	
-	/**
-	 * @return a value estimate for this grist amount
-	 */
+	@Override
+	public long getGrist(GristType type)
+	{
+		return this.type == type ? amount : 0;
+	}
+	
+	@Override
 	public double getValue()
 	{
-		return type.getValue()*amount;
+		return type.getValue() * amount;
 	}
 	
 	@Override
 	public Collection<GristAmount> asAmounts()
 	{
 		return Collections.singleton(this);
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return amount != 0;
 	}
 	
 	public void write(FriendlyByteBuf buffer)
@@ -47,6 +57,7 @@ public record GristAmount(GristType type, long amount) implements IGristSet
 		return new GristAmount(type, amount);
 	}
 	
+	@Override
 	public Component asTextComponent()
 	{
 		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());

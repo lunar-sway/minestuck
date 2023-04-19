@@ -19,7 +19,7 @@ public class GristCachePacket implements PlayToClientPacket
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		gristCache.write(buffer);
+		GristSet.write(gristCache, buffer);
 		buffer.writeBoolean(isEditmode);
 	}
 	

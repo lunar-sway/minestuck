@@ -27,7 +27,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		if(cost != null && recipe instanceof AbstractCookingRecipe)
 		{
 			float cookTime = ((AbstractCookingRecipe) recipe).getCookingTime();
-			cost.addGrist(fuelCost.copy().scale(cookTime / STANDARD_COOKING_TIME, false));
+			cost.addGrist(fuelCost.mutableCopy().scale(cookTime / STANDARD_COOKING_TIME, false));
 		}
 		
 		return cost;

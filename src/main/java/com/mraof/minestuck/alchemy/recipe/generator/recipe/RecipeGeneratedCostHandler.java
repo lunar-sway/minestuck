@@ -76,7 +76,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(Map.Entry<Item, GristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			entry.getValue().write(buffer);
+			GristSet.write(entry.getValue(), buffer);
 		}
 	}
 	

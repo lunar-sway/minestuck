@@ -215,7 +215,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 						return 15;
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
-					scale_cost = cost.copy().scale(lvl);
+					scale_cost = cost.mutableCopy().scale(lvl);
 					if (!GristCache.get(level, owner).canAfford(scale_cost))
 					{
 						return lvl - 1;

@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mojang.math.Vector3f;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.GristCollectorBlockEntity;
@@ -52,7 +53,7 @@ public class GristCollectorBlock extends HorizontalDirectionalBlock implements E
 		//when right-clicked by a player, all the grist collected by the block entity is transferred
 		if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer) && level.getBlockEntity(pos) instanceof GristCollectorBlockEntity collector)
 		{
-			GristSet storedGrist = collector.getStoredGrist();
+			IGristSet storedGrist = collector.getStoredGrist();
 			
 			if(!storedGrist.isEmpty())
 			{

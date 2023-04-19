@@ -43,8 +43,8 @@ public class GutterCommand
 		GristGutter gutter = session.getGristGutter();
 		double multiplier = gutter.gutterMultiplierForSession();
 		long capacity = gutter.getRemainingCapacity();
-		ImmutableGristSet gristSet = gutter.getCache();
-		source.sendSuccess(Component.translatable("Gutter modifier: %s, remaining capacity: %s, grist contained: %s", multiplier, capacity, gristSet.asTextComponent()), false);
+		Component gutterContentText = gutter.getCache().asTextComponent();
+		source.sendSuccess(Component.translatable("Gutter modifier: %s, remaining capacity: %s, grist contained: %s", multiplier, capacity, gutterContentText), false);
 		
 		return 1;
 	}

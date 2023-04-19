@@ -43,7 +43,7 @@ public class ContainerGristCost extends GeneratedGristCost
 			GristSet cost = context.lookupCostFor(container);
 			if(cost != null)
 			{
-				return cost.copy().addGrist(addedCost);
+				return cost.mutableCopy().addGrist(addedCost);
 			} else
 			{
 				if(context.isPrimary())

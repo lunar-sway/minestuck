@@ -92,19 +92,19 @@ public final class GristCache
 		return Math.max(0, data.getEcheladder().getGristCapacity() - gristSet.getGrist(type));
 	}
 	
-	public boolean canAfford(GristSet cost)
+	public boolean canAfford(IGristSet cost)
 	{
-		return canAdd(cost.copy().scale(-1));
+		return canAdd(cost.mutableCopy().scale(-1));
 	}
 	
 	public boolean canAdd(GristSet addition)
 	{
-		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
+		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
-	public static boolean canAfford(GristSet source, GristSet cost, long limit)
+	public static boolean canAfford(IGristSet source, IGristSet cost, long limit)
 	{
-		return addWithinCapacity(source.copy(), cost.copy().scale(-1), limit).isEmpty();
+		return addWithinCapacity(source.mutableCopy(), cost.mutableCopy().scale(-1), limit).isEmpty();
 	}
 	
 	/**
@@ -114,9 +114,9 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source if successful.
 	 * @return true if it succeeded. false otherwise.
 	 */
-	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
+	public boolean tryTake(IGristSet cost, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet change = cost.copy().scale(-1);
+		GristSet change = cost.mutableCopy().scale(-1);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
@@ -142,7 +142,7 @@ public final class GristCache
 	 * @param set The grist to add to this cache.
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 */
-	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
+	public void addWithGutter(IGristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		GristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
@@ -172,7 +172,7 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 * @return any grist that did not fit in the cache.
 	 */
-	public GristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
+	public GristSet addWithinCapacity(IGristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
 		
@@ -184,7 +184,7 @@ public final class GristCache
 		{
 			this.set(newCache);
 			if(source != null)
-				GristToastPacket.notify(mcServer, data.identifier, set.copy().addGrist(excessGrist.copy().scale(-1)), source);
+				GristToastPacket.notify(mcServer, data.identifier, set.mutableCopy().addGrist(excessGrist.mutableCopy().scale(-1)), source);
 		}
 		
 		return excessGrist;

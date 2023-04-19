@@ -64,7 +64,7 @@ public class GristCost extends GristCostRecipe
 		public void toNetwork(FriendlyByteBuf buffer, GristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
-			recipe.cost.write(buffer);
+			GristSet.write(recipe.cost, buffer);
 		}
 	}
 }
