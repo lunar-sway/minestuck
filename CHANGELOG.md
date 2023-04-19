@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Some cassettes missing a grist cost
+- Cassette "5" and "Otherside" recipe were swap
+
+### Contributors for this release
+
+- LunaticCat
+
 ## [1.19.2-1.10.1.0] - 2023-04-16
 
 ### Added
@@ -190,11 +199,6 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - Reapply stone tablet crash fix that was mistakenly reverted during the mc1.16->mc1.18 move
 - Fix some player decoy behavior when entering editmode while flying
 - Machine guis with a GO-button can now be started with the keypad enter key
-
-### Fixed
-
-- Some cassettes missing a grist cost
-- Cassette "5" and "Otherside" recipe were swap
 
 ### Contributors for this release
 
