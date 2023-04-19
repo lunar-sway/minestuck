@@ -724,8 +724,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_STRAD.get()).input(Items.MUSIC_DISC_STRAD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WAIT.get()).input(Items.MUSIC_DISC_WAIT).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CASSETTE_WARD.get()).input(Items.MUSIC_DISC_WARD).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CASSETTE_OTHERSIDE.get()).input(Items.MUSIC_DISC_5).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CASSETTE_5.get()).input(Items.MUSIC_DISC_OTHERSIDE).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_OTHERSIDE.get()).input(Items.MUSIC_DISC_OTHERSIDE).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CASSETTE_5.get()).input(Items.MUSIC_DISC_5).or().namedInput(MSBlocks.CASSETTE_PLAYER.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSBlocks.BLACK_CHESS_DIRT.get()).input(Items.DIRT).and().input(Items.BLACK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.DARK_GRAY_CHESS_DIRT).input(Items.DIRT).and().input(Items.GRAY_DYE).build(consumer);

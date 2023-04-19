@@ -10,6 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Some land worldgen features are now replacable by datapacks
 
+### Fixed
+
+- Some cassettes missing a grist cost
+- Cassette "5" and "Otherside" recipe were swap
+
+### Contributors for this release
+
+- LunaticCat
+
 ## [1.19.2-1.10.1.0] - 2023-04-16
 
 ### Added
