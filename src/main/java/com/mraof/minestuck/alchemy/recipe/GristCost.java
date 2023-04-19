@@ -3,6 +3,7 @@ package com.mraof.minestuck.alchemy.recipe;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -32,7 +33,7 @@ public class GristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public IGristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}

@@ -346,7 +346,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			}
 			else if(AlchemyHelper.isPunchedCard(stack) && DeployList.containsItemStack(AlchemyHelper.getDecodedItem(stack), data.connection, event.getEntity().level, DeployList.EntryLists.ATHENEUM))
 			{
-				GristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().getLevel());
+				IGristSet cost = GristCostRecipe.findCostForItem(MSItems.CAPTCHA_CARD.get().getDefaultInstance(), GristTypes.BUILD.get(), false, event.getPlayer().getLevel());
 				if(cost == null || !data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 					event.setCanceled(true);
 			}
@@ -489,7 +489,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			}
 			else
 			{
-				GristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().getLevel());
+				IGristSet set = entry != null ? entry.getCurrentCost(data.connection) : GristCostRecipe.findCostForItem(stack, null, false, event.getPlayer().getLevel());
 				if(set != null && !set.isEmpty())
 				{
 					data.getGristCache().addWithGutter(set, GristHelper.EnumSource.SERVER);
@@ -533,7 +533,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			
 			} else
 			{
-				GristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
+				IGristSet set = GristCostRecipe.findCostForItem(stack, null, false, player.getCommandSenderWorld());
 					//Assumes that this will succeed because of the check in onRightClickBlockControl()
 					data.getGristCache().tryTake(set, GristHelper.EnumSource.SERVER);
 			}

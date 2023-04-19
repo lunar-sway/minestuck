@@ -1,18 +1,18 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+@MethodsReturnNonnullByDefault
 public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -91,12 +92,12 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Nullable
-	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
+	public static IGristSet getGristWidgetResult(ItemStack stack, Level level)
 	{
 		if(level == null)
 			return null;
 		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
-		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
+		IGristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
 		if(stack.getItem() != MSItems.CAPTCHA_CARD.get() || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		

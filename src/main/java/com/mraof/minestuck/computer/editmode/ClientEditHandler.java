@@ -101,7 +101,7 @@ public final class ClientEditHandler
 		
 	}
 	
-	protected static GristSet itemCost(ItemStack stack, Level level)
+	static IGristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
@@ -112,7 +112,7 @@ public final class ClientEditHandler
 	private static void addToolTip(ItemStack stack, List<Component> toolTip, IGristSet have)
 	{
 		Level level = Objects.requireNonNull(Minecraft.getInstance().level);
-		GristSet cost = itemCost(stack, level);
+		IGristSet cost = itemCost(stack, level);
 		
 		if(cost == null)
 		{
@@ -194,7 +194,7 @@ public final class ClientEditHandler
 				return;
 			}
 			
-			GristSet cost = itemCost(stack, event.getLevel());
+			IGristSet cost = itemCost(stack, event.getLevel());
 			if(!getGristCache().canAfford(cost))
 			{
 				if(cost != null)

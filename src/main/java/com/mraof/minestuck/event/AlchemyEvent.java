@@ -19,7 +19,7 @@ public class AlchemyEvent extends Event
 	private ItemStack result;
 	private final IImmutableGristSet cost;
 	
-	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
+	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, IGristSet cost)
 	{
 		this.player = player;
 		this.alchemiter = alchemiter;

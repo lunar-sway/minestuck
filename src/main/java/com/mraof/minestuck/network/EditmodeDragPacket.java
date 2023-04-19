@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
@@ -34,7 +35,7 @@ public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
+	private static boolean editModePlaceCheck(EditData data, Player player, IGristSet cost, BlockPos pos, Consumer<IGristSet> missingGristTracker)
 	{
 		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
 			return false;
@@ -116,15 +117,15 @@ public final class EditmodeDragPacket
 				return;
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level);
-			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
+			IGristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
 			
 			GristSet missingCost = new GristSet();
 			boolean anyBlockPlaced = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{
 				int c = stack.getCount();
-				Consumer<GristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModePlaceCheck().
-				if(editModePlaceCheck(data, player, cost, pos, missingCostTracker) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
+				//Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModePlaceCheck().
+				if(editModePlaceCheck(data, player, cost, pos, missingCost::addGrist) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
 				{
 					//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 					if(player.isCreative())

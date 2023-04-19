@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
@@ -44,7 +45,7 @@ public class AlchemiterScreen extends Screen
 		Button alchemize = new ExtendedButton((width - 100) / 2, (height - guiHeight) / 2 + 110, 100, 20, Component.literal("ALCHEMIZE"), button -> alchemize());
 		addRenderableWidget(alchemize);
 		
-		GristSet cost = alchemiter.getGristCost(1);
+		IGristSet cost = alchemiter.getGristCost(1);
 		//don't add the buttons if the item is free or unalchemizeable
 		if(cost != null && !cost.isEmpty())
 		{
@@ -85,8 +86,7 @@ public class AlchemiterScreen extends Screen
 		
 		
 		//Calculate the grist set
-		GristSet set;
-		set = alchemiter.getGristCost(itemQuantity);
+		IGristSet set = alchemiter.getGristCost(itemQuantity);
 		//draw the grist board	//TODO Handle select mode correctly
 		GuiUtil.drawGristBoard(poseStack, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist

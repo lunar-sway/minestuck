@@ -10,6 +10,7 @@ import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -22,16 +23,19 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public abstract class GristCostRecipe implements Recipe<Container>
 {
 	@Nullable
-	public static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
+	public static IGristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
 	}
@@ -113,7 +117,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		else return priority;
 	}
 	
-	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
+	public abstract IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
 	
 	public boolean canPickWildcard()
 	{
@@ -129,6 +133,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	
 	private class DefaultProvider implements GeneratedCostProvider
 	{
+		@Nullable
 		@Override
 		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
 		{
@@ -148,10 +153,14 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		return 100 - (ingredient.getItems().length - 1)*10;
 	}
 	
-	public static GristSet scaleToCountAndDurability(IGristSet cost, ItemStack stack, boolean shouldRoundDown)
+	@Nullable
+	public static IGristSet scaleToCountAndDurability(@Nullable IGristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
 		if(cost == null)
 			return null;
+		
+		if(stack.getCount() == 1 || !stack.isDamaged())
+			return cost;
 		
 		GristSet mutableCost = cost.mutableCopy();
 		if (stack.getCount() != 1)
@@ -163,7 +172,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 			mutableCost.scale(multiplier, shouldRoundDown);
 		}
 		
-		return mutableCost.asImmutable();
+		return mutableCost;
 	}
 	
 	//Helper class for implementing serializer classes

@@ -88,7 +88,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			{
 				return false;
 			}
-			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+			IGristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
 			return GristCache.get(level, owner).canAfford(cost);
 		}
@@ -105,7 +105,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		if (newItem.isEmpty())
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
-		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+		IGristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 		Objects.requireNonNull(cost);
 		
 		if(GristCache.get(level, owner).tryTake(cost, GristHelper.EnumSource.CLIENT))
@@ -201,7 +201,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			{
 				return 0;
 			}
-			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+			IGristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			// We need to run the check 16 times. Don't want to hammer the game with too many of these, so the comparators are only told to update every 20 ticks.
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
