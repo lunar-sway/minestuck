@@ -1,5 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
+import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.MSBiomes;
@@ -18,13 +19,13 @@ import java.util.function.BiConsumer;
 
 public final class MSBiomeProvider
 {
-	public static DataProvider create(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public static DataProvider create(RegistryOps<JsonElement> registryOps, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		DataEntriesBuilder<Biome> biomes = new DataEntriesBuilder<>();
 		generate(biomes::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
-				RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS), Registry.BIOME_REGISTRY, biomes.getMap());
+				registryOps, Registry.BIOME_REGISTRY, biomes.getMap());
 	}
 	
 	private static void generate(BiConsumer<ResourceKey<Biome>, Biome> consumer)

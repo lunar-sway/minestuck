@@ -23,7 +23,7 @@ public final class MSStructureSetProvider
 	public static DataProvider create(RegistryAccess registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		DataEntriesBuilder<StructureSet> sets = new DataEntriesBuilder<>();
-		generate(registryAccess.ownedRegistryOrThrow(Registry.STRUCTURE_REGISTRY), sets.consumerForNamespace(Minestuck.MOD_ID));
+		generate(registryAccess.registryOrThrow(Registry.STRUCTURE_REGISTRY), sets.consumerForNamespace(Minestuck.MOD_ID));
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
 				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_SET_REGISTRY, sets.getMap());

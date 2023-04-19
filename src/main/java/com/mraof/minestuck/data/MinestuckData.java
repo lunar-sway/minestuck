@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class MinestuckData
+public final class MinestuckData
 {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
@@ -32,7 +32,7 @@ public class MinestuckData
 		
 		gen.addProvider(event.includeServer(), MSConfiguredFeatureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSPlacedFeatureProvider.create(registryAccess, gen, fileHelper));
-		gen.addProvider(event.includeServer(), MSBiomeProvider.create(gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSBiomeProvider.create(registryOps, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSStructureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSStructureSetProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), BiomeModifierProvider.create(gen, fileHelper, registryOps));
