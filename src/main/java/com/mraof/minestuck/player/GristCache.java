@@ -3,6 +3,7 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
@@ -159,7 +160,7 @@ public final class GristCache
 			if(player != null && !overflowedGrist.isEmpty())
 			{
 				int gusherCount = player.getRandom().nextInt(6) > 0 ? 1 : 2;
-				overflowedGrist.spawnGristEntities(player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
+				GristEntity.spawnGristEntities(overflowedGrist, player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
 						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
 			}
 		}

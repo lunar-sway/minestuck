@@ -1,8 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
@@ -82,11 +84,13 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		}
 	}
 	
-	public GristSet getGristWidgetResult()
+	@Nullable
+	public IGristSet getGristWidgetResult()
 	{
 		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
 	}
 	
+	@Nullable
 	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
 	{
 		if(level == null)
@@ -101,11 +105,10 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	public int getGristWidgetBoondollarValue()
 	{
-		GristSet set = getGristWidgetResult();
-		return getGristWidgetBoondollarValue(set);
+		return getGristWidgetBoondollarValue(getGristWidgetResult());
 	}
 	
-	public static int getGristWidgetBoondollarValue(GristSet set)
+	public static int getGristWidgetBoondollarValue(IGristSet set)
 	{
 		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1/1.5));
 	}
@@ -128,7 +131,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	private void processContents()
 	{
-		GristSet gristSet = getGristWidgetResult();
+		IGristSet gristSet = getGristWidgetResult();
 		
 		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
 		{
@@ -136,7 +139,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 			return;
 		}
 		
-		gristSet.spawnGristEntities(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
+		GristEntity.spawnGristEntities(gristSet, level, worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
 		
 		itemHandler.extractItem(0, 1, false);
 	}

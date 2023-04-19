@@ -3,19 +3,15 @@ package com.mraof.minestuck.alchemy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class GristSet implements IGristSet
@@ -256,33 +252,6 @@ public class GristSet implements IGristSet
 	public GristSet mutableCopy()
 	{
 		return new GristSet(new TreeMap<>(gristTypes));
-	}
-	
-	/**
-	 * this is a version of the spawn grist entities function with a delay.
-	 */
-	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
-	{
-		for(GristAmount amount : asAmounts())
-		{
-			long countLeft = amount.amount();
-			for(int i = 0; i < 10 && countLeft > 0; i++)
-			{
-				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
-						gusherCount - 1 ? countLeft : Math.min(countLeft,
-						(long) level.random.nextDouble() * countLeft + 1);
-				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
-				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
-				postProcessor.accept(entity);
-				level.addFreshEntity(entity);
-				countLeft -= spawnedCount;
-			}
-		}
-	}
-	
-	public void spawnGristEntities(Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
-	{
-		spawnGristEntities(level, x, y, z, rand, postProcessor, 0, 10);
 	}
 	
 	public JsonElement serialize()

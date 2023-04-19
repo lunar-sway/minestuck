@@ -18,6 +18,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -30,6 +31,7 @@ import software.bernie.geckolib3.core.builder.Animation;
 
 import javax.annotation.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
@@ -84,6 +86,32 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		// Set the class's consume-delay variable to equal the pickupDelay value that got passed in.
 	}
 	
+	/**
+	 * This is a version of the spawn grist entities function with a delay.
+	 */
+	public static void spawnGristEntities(IGristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
+	{
+		for(GristAmount amount : gristSet.asAmounts())
+		{
+			long countLeft = amount.amount();
+			for(int i = 0; i < 10 && countLeft > 0; i++)
+			{
+				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
+						gusherCount - 1 ? countLeft : Math.min(countLeft,
+						(long) level.random.nextDouble() * countLeft + 1);
+				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
+				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
+				postProcessor.accept(entity);
+				level.addFreshEntity(entity);
+				countLeft -= spawnedCount;
+			}
+		}
+	}
+	
+	public static void spawnGristEntities(IGristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
+	{
+		spawnGristEntities(gristSet, level, x, y, z, rand, postProcessor, 0, 10);
+	}
 	
 	@Override
 	protected void defineSynchedData()

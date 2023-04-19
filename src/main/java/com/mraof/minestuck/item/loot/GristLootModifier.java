@@ -2,8 +2,9 @@ package com.mraof.minestuck.item.loot;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.entity.item.GristEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -46,12 +47,12 @@ public class GristLootModifier extends LootModifier
 			
 			for(ItemStack stack : generatedLoot)
 			{
-				GristSet cost = GristCostRecipe.findCostForItem(stack, null, true, context.getLevel());
+				IGristSet cost = GristCostRecipe.findCostForItem(stack, null, true, context.getLevel());
 				if(cost != null && multiplier != 1)
-					cost = new GristSet(cost).scale(multiplier, false);
+					cost = cost.mutableCopy().scale(multiplier, false);
 				
 				if(cost != null && !cost.isEmpty())
-					cost.spawnGristEntities(context.getLevel(), pos.x, pos.y, pos.z,
+					GristEntity.spawnGristEntities(cost, context.getLevel(), pos.x, pos.y, pos.z,
 							context.getRandom(), entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
 				else
 					remainingLoot.add(stack);
