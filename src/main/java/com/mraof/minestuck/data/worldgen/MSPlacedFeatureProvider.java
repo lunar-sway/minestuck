@@ -11,7 +11,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.worldgen.features.CaveFeatures;
@@ -30,7 +29,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.JsonCodecProvider;
-import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -44,16 +42,16 @@ public final class MSPlacedFeatureProvider
 	{
 		var placedRegistry = registryAccess.ownedWritableRegistryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
 		DataEntriesBuilder<PlacedFeature> builder = new DataEntriesBuilder<>();
-		generate(BuiltinRegistries.CONFIGURED_FEATURE, (key, feature) -> {
+		generate(registryAccess.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY), (key, feature) -> {
 			builder.add(key, feature);
 			placedRegistry.register(key, feature, Lifecycle.stable());
 		});
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
-				RegistryOps.create(JsonOps.INSTANCE, BuiltinRegistries.ACCESS), Registry.PLACED_FEATURE_REGISTRY, builder.getMap());
+				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.PLACED_FEATURE_REGISTRY, builder.getMap());
 	}
 	
-	private static void generate(@SuppressWarnings("SameParameterValue") Registry<ConfiguredFeature<?, ?>> features, BiConsumer<ResourceKey<PlacedFeature>, PlacedFeature> consumer)
+	private static void generate(Registry<ConfiguredFeature<?, ?>> features, BiConsumer<ResourceKey<PlacedFeature>, PlacedFeature> consumer)
 	{
 		consumer.accept(RETURN_NODE, placed(features, MSCFeatures.RETURN_NODE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(128), PlacementUtils.HEIGHTMAP)));
@@ -131,21 +129,21 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		
 		//these are similar to the ones in CavePlacements, but with edits to the height at which they generate and count
-		consumer.accept(DRIPSTONE_CLUSTER, placed(CaveFeatures.DRIPSTONE_CLUSTER,
+		consumer.accept(DRIPSTONE_CLUSTER, placed(features, CaveFeatures.DRIPSTONE_CLUSTER,
 				worldGenModifiers(CountPlacement.of(UniformInt.of(22, 74)), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(60)))));
-		consumer.accept(OCEANIC_DRIPSTONE_CLUSTER, placed(CaveFeatures.DRIPSTONE_CLUSTER,
+		consumer.accept(OCEANIC_DRIPSTONE_CLUSTER, placed(features, CaveFeatures.DRIPSTONE_CLUSTER,
 				worldGenModifiers(CountPlacement.of(UniformInt.of(42, 96)), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(48)))));
-		consumer.accept(LARGE_DRIPSTONE, placed(CaveFeatures.LARGE_DRIPSTONE,
+		consumer.accept(LARGE_DRIPSTONE, placed(features, CaveFeatures.LARGE_DRIPSTONE,
 				worldGenModifiers(CountPlacement.of(UniformInt.of(10, 48)), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)))));
-		consumer.accept(POINTED_DRIPSTONE, placed(CaveFeatures.POINTED_DRIPSTONE,
+		consumer.accept(POINTED_DRIPSTONE, placed(features, CaveFeatures.POINTED_DRIPSTONE,
 				worldGenModifiers(CountPlacement.of(UniformInt.of(100, 200)), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(60)))));
-		consumer.accept(OCEANIC_POINTED_DRIPSTONE, placed(CaveFeatures.POINTED_DRIPSTONE,
+		consumer.accept(OCEANIC_POINTED_DRIPSTONE, placed(features, CaveFeatures.POINTED_DRIPSTONE,
 				worldGenModifiers(CountPlacement.of(UniformInt.of(164, 256)), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(48)))));
-		consumer.accept(LUSH_CAVES_VEGETATION, placed(CaveFeatures.MOSS_PATCH,
+		consumer.accept(LUSH_CAVES_VEGETATION, placed(features, CaveFeatures.MOSS_PATCH,
 				worldGenModifiers(CountPlacement.of(125), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), EnvironmentScanPlacement.scanningFor(Direction.DOWN, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12), RandomOffsetPlacement.vertical(ConstantInt.of(1)))));
-		consumer.accept(LUSH_CAVES_CEILING_VEGETATION, placed(CaveFeatures.MOSS_PATCH_CEILING,
+		consumer.accept(LUSH_CAVES_CEILING_VEGETATION, placed(features, CaveFeatures.MOSS_PATCH_CEILING,
 				worldGenModifiers(CountPlacement.of(125), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12), RandomOffsetPlacement.vertical(ConstantInt.of(-1)))));
-		consumer.accept(SPARSE_LUSH_CAVES_CEILING_VEGETATION, placed(CaveFeatures.MOSS_PATCH_CEILING,
+		consumer.accept(SPARSE_LUSH_CAVES_CEILING_VEGETATION, placed(features, CaveFeatures.MOSS_PATCH_CEILING,
 				worldGenModifiers(CountPlacement.of(35), HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.absolute(64)), EnvironmentScanPlacement.scanningFor(Direction.UP, BlockPredicate.solid(), BlockPredicate.ONLY_IN_AIR_PREDICATE, 12), RandomOffsetPlacement.vertical(ConstantInt.of(-1)))));
 		
 		consumer.accept(CEILING_ROOTS, placed(features, MSCFeatures.CEILING_ROOTS,
@@ -171,7 +169,7 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(SHADE_STONE_BLOCK_BLOB, placed(features, MSCFeatures.SHADE_STONE_BLOCK_BLOB,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_OCEAN_FLOOR)));
-		consumer.accept(FOREST_ROCK, placed(MiscOverworldFeatures.FOREST_ROCK,
+		consumer.accept(FOREST_ROCK, placed(features, MiscOverworldFeatures.FOREST_ROCK,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		consumer.accept(SMALL_PILLAR, placed(features, MSCFeatures.SMALL_PILLAR,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
@@ -179,10 +177,10 @@ public final class MSPlacedFeatureProvider
 				singlePlacementModifiers(PlacementUtils.HEIGHTMAP_TOP_SOLID)));
 		consumer.accept(MIXED_PILLARS_EXTRA, placed(features, MSCFeatures.MIXED_PILLARS,
 				worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP_TOP_SOLID)));
-		consumer.accept(ICE_SPIKE, placed(MiscOverworldFeatures.ICE_SPIKE,
+		consumer.accept(ICE_SPIKE, placed(features, MiscOverworldFeatures.ICE_SPIKE,
 				worldGenModifiers(CountPlacement.of(16), PlacementUtils.HEIGHTMAP)));
 		
-		consumer.accept(DARK_OAK, placed(TreeFeatures.DARK_OAK,
+		consumer.accept(DARK_OAK, placed(features, TreeFeatures.DARK_OAK,
 				worldGenModifiers(CountPlacement.of(10), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(Blocks.DARK_OAK_SAPLING))));
 		consumer.accept(RAINBOW_TREE, placed(features, MSCFeatures.RAINBOW_TREE,
 				worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.RAINBOW_SAPLING.get()))));
@@ -215,10 +213,10 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(PlacementUtils.countExtra(5, 0.1F, 1), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(DENSE_TAIGA_LAND_TREES, placed(features, MSCFeatures.TAIGA_LAND_TREES,
 				worldGenModifiers(PlacementUtils.countExtra(12, 0.1F, 1), PlacementUtils.HEIGHTMAP)));
-		consumer.accept(HUGE_MUSHROOMS, placed(VegetationFeatures.MUSHROOM_ISLAND_VEGETATION,
+		consumer.accept(HUGE_MUSHROOMS, placed(features, VegetationFeatures.MUSHROOM_ISLAND_VEGETATION,
 				worldGenModifiers(CountPlacement.of(3), PlacementUtils.HEIGHTMAP)));
 		
-		consumer.accept(SPARSE_JUNGLE_GRASS_PATCH, placed(VegetationFeatures.PATCH_GRASS_JUNGLE,
+		consumer.accept(SPARSE_JUNGLE_GRASS_PATCH, placed(features, VegetationFeatures.PATCH_GRASS_JUNGLE,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(15), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(STRAWBERRY_PATCH, placed(features, MSCFeatures.STRAWBERRY_PATCH,
 				singlePlacementModifiers(PlacementUtils.HEIGHTMAP_WORLD_SURFACE)));
@@ -228,9 +226,9 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(1), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(SPARSE_GLOWING_MUSHROOM_PATCH, placed(features, MSCFeatures.GLOWING_MUSHROOM_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(4), PlacementUtils.HEIGHTMAP)));
-		consumer.accept(BROWN_MUSHROOM_PATCH, placed(VegetationFeatures.PATCH_BROWN_MUSHROOM,
+		consumer.accept(BROWN_MUSHROOM_PATCH, placed(features, VegetationFeatures.PATCH_BROWN_MUSHROOM,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
-		consumer.accept(RED_MUSHROOM_PATCH, placed(VegetationFeatures.PATCH_RED_MUSHROOM,
+		consumer.accept(RED_MUSHROOM_PATCH, placed(features, VegetationFeatures.PATCH_RED_MUSHROOM,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(TALL_END_GRASS_PATCH, placed(features, MSCFeatures.TALL_END_GRASS_PATCH,
 				worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_END_GRASS.get()))));
@@ -254,7 +252,7 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(16), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(BLOOMING_CACTUS_PATCH, placed(features, MSCFeatures.BLOOMING_CACTUS_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
-		consumer.accept(WATERLILY_PATCH, placed(VegetationFeatures.PATCH_WATERLILY,
+		consumer.accept(WATERLILY_PATCH, placed(features, VegetationFeatures.PATCH_WATERLILY,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(15), PlacementUtils.HEIGHTMAP)));
 		consumer.accept(CRIMSON_FUNGUS_PATCH, placed(features, MSCFeatures.CRIMSON_FUNGUS_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(12), PlacementUtils.HEIGHTMAP)));
@@ -276,19 +274,14 @@ public final class MSPlacedFeatureProvider
 		
 	}
 	
-	private static PlacedFeature placed(Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
+	private static PlacedFeature placed(Registry<ConfiguredFeature<?, ?>> registry, Holder<? extends ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
 	{
-		return new PlacedFeature(Holder.hackyErase(feature), modifiers);
+		return placed(registry, Holder.<ConfiguredFeature<?, ?>>hackyErase(feature).unwrapKey().orElseThrow(), modifiers);
 	}
 	
 	private static PlacedFeature placed(Registry<ConfiguredFeature<?, ?>> registry, ResourceKey<ConfiguredFeature<?, ?>> key, List<PlacementModifier> modifiers)
 	{
-		return placed(registry.getHolderOrThrow(key), modifiers);
-	}
-	
-	private static PlacedFeature placed(RegistryObject<ConfiguredFeature<?, ?>> feature, List<PlacementModifier> modifiers)
-	{
-		return new PlacedFeature(feature.getHolder().orElseThrow(), modifiers);
+		return new PlacedFeature(registry.getHolderOrThrow(key), modifiers);
 	}
 	
 	private static List<PlacementModifier> singlePlacementModifiers(PlacementModifier... afterSquareModifiers)
