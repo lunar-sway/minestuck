@@ -70,8 +70,8 @@ public class TotemLatheRenderer extends GeoBlockRenderer<TotemLatheDowelBlockEnt
 			
 			// position adjustments
 			stack.pushPose();
-			RenderUtils.translate(bone, stack);
-			RenderUtils.moveToPivot(bone, stack);
+			RenderUtils.translateMatrixToBone(stack, bone);
+			RenderUtils.translateToPivotPoint(stack, bone);
 			stack.translate(0.25, -0.375, 0.03125);
 			stack.mulPose(Vector3f.ZP.rotationDegrees(90));
 			

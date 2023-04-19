@@ -24,9 +24,13 @@ import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
 	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
@@ -131,7 +135,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(!event.isMoving() && !event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -146,11 +150,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		
 		if(event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -164,11 +168,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		
 		if(event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -177,7 +181,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -187,7 +191,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

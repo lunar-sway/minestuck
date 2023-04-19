@@ -287,23 +287,22 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	 * Called by a player entity when they collide with an entity
 	 */
 	@Override
-	public void playerTouch(Player entityIn)
+	public void playerTouch(Player player)
 	{
-		if(this.level.isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(entityIn) != null)
-			return; //checks if player is in edit mode. returns nothing and doesn't allow the entities to touch.
+		if(this.level.isClientSide || player instanceof FakePlayer)
+			return;
 		
-		if(!this.level.isClientSide && !(entityIn instanceof FakePlayer))
+		if(ServerEditHandler.getData(player) != null)
+			return;
+		
+		long canPickUp = getPlayerCacheRoom(player);
+		
+		if(canPickUp >= gristValue)
+			consumeGrist(IdentifierHandler.encode(player), true);
+		else
 		{
-			long canPickUp = getPlayerCacheRoom(entityIn);
-			
-			if(canPickUp >= gristValue)
-			{
-				consumeGrist(IdentifierHandler.encode(entityIn), true);
-			} else
-			{
-				GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
-				MSPacketHandler.sendToTracking(packet, this);
-			}
+			GristRejectAnimationPacket packet = GristRejectAnimationPacket.createPacket(this);
+			MSPacketHandler.sendToTracking(packet, this);
 		}
 	}
 	

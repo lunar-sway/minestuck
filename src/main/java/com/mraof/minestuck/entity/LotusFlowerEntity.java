@@ -1,12 +1,11 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.IncompleteSburbCodeItem;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.network.LotusFlowerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -33,15 +32,20 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -58,7 +62,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	private static final int VANISH_START = OPEN_IDLE_START + OPEN_IDLE_LENGTH;
 	private static final int ANIMATION_END = VANISH_START + VANISHING_LENGTH;
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	//Only used server-side. Used to track the flower state and the progression of the animation
 	private int eventTimer = IDLE_TIME;
@@ -78,7 +82,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	
 	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
 	{
-		event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, true));
+		event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, ILoopType.EDefaultLoopTypes.LOOP));
 		
 		return PlayState.CONTINUE;
 	}

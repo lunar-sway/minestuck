@@ -2,6 +2,7 @@ package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerCursorPacket;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,14 +22,18 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
 {
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	//These are only used server-side to make sure cursors are removed properly.
 	private int despawnTimer = 0;

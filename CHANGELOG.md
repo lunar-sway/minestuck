@@ -6,19 +6,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Added 75 more blocks to the default atheneum list.
+- Transportalizer particle
+
 ### Changed
 
 - Updated textures for Rainbow Logs, Planks, Leaves and Saplings
 
+### Removed
+
+- Removed unused blockstates and models for the Rainbow Sapling
+
 ### Fixed
 
 - Fixed a crash with TerraBlender
+- Fixed crash with invalid transportalizer data
+- Connections with missing land dimensions gets partially reset to before entry at server start
+- Fixed editmode players not being able to destroy machines
+- Fixed entering editmode sometimes placing the player at the wrong height
+- Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
+- Fixed grist cache view in editmode using the limit of the wrong player
+- Cache limit will now be accounted for more often client-side
+- Clearer and more accurate grist toasts when at cache capacity
 
 ### Contributors for this release
 
-- kirderf1
-- Carnie
-- Akisephila
+- kirderf1, Caldw3ll, Dweblenod, Riotmode, Carnie, Akisephila
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 

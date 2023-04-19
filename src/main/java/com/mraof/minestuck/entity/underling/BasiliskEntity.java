@@ -24,9 +24,13 @@ import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 {
 	public static final PhasedMobAnimation TAIL_SWING_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SWING, 12, true, false), 2, 4, 6);
@@ -232,11 +236,11 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		
 		if(event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -245,7 +249,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -257,15 +261,15 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		
 		if(action == MobAnimation.Action.BITE)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SWING)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("tail_whip", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("tail_whip", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SHOOT)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("shoot", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("shoot", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		
