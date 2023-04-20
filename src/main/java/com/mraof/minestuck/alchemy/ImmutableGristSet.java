@@ -4,33 +4,24 @@ import com.google.common.collect.ImmutableMap;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
-public class ImmutableGristSet extends GristSet implements IImmutableGristSet
+public final class ImmutableGristSet implements IImmutableGristSet
 {
-	public ImmutableGristSet(GristSet set)
-	{
-		super(ImmutableMap.copyOf(set.getMap()));
-	}
+	private final ImmutableMap<GristType, Long> map;
 	
-	public ImmutableGristSet(ImmutableMap.Builder<GristType, Long> builder)
+	public ImmutableGristSet(IGristSet set)
 	{
-		super(builder.build());
-	}
-	
-	public ImmutableGristSet(GristType type, long amount)
-	{
-		super(ImmutableMap.of(type, amount));
-	}
-	
-	public ImmutableGristSet(Supplier<GristType> type, long amount)
-	{
-		this(type.get(), amount);
+		this(set.asMap());
 	}
 	
 	public ImmutableGristSet(Map<GristType, Long> grist)
 	{
-		super(ImmutableMap.copyOf(grist));
+		map = ImmutableMap.copyOf(grist);
+	}
+	
+	public ImmutableGristSet(ImmutableMap.Builder<GristType, Long> builder)
+	{
+		map = builder.build();
 	}
 	
 	public static ImmutableGristSet create(List<GristAmount> amounts)
@@ -42,8 +33,27 @@ public class ImmutableGristSet extends GristSet implements IImmutableGristSet
 	}
 	
 	@Override
+	public long getGrist(GristType type)
+	{
+		//noinspection DataFlowIssue
+		return this.map.getOrDefault(type, 0L);
+	}
+	
+	@Override
+	public List<GristAmount> asAmounts()
+	{
+		return this.map.entrySet().stream().map(entry -> new GristAmount(entry.getKey(), entry.getValue())).toList();
+	}
+	
+	@Override
 	public Map<GristType, Long> asMap()
 	{
-		return this.getMap();
+		return this.map;
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return this.map.values().stream().allMatch(amount -> amount == 0);
 	}
 }

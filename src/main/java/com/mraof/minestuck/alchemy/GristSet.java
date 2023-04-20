@@ -153,14 +153,6 @@ public class GristSet implements IGristSet
 	{
 		return addGrist(type.get(), amount);
 	}
-
-	/**
-	 * Returns a Hashtable with grist->amount pairs.
-	 */
-	protected Map<GristType, Long> getMap()
-	{
-		return this.gristTypes;
-	}
 	
 	public boolean hasType(GristType type)
 	{
@@ -175,7 +167,13 @@ public class GristSet implements IGristSet
 	{
 		return this.gristTypes.entrySet().stream().map((entry) -> new GristAmount(entry.getKey(), entry.getValue())).toList();
 	}
-
+	
+	@Override
+	public Map<GristType, Long> asMap()
+	{
+		return this.gristTypes;
+	}
+	
 	/**
 	 * Adds an amount of grist to a GristSet, given another set of grist.
 	 */

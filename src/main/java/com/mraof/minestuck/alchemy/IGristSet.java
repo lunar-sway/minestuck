@@ -23,6 +23,8 @@ public interface IGristSet
 	
 	List<GristAmount> asAmounts();
 	
+	Map<GristType, Long> asMap();
+	
 	boolean isEmpty();
 	
 	IImmutableGristSet asImmutable();

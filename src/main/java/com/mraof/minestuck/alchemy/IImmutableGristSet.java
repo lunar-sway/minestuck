@@ -13,8 +13,6 @@ public interface IImmutableGristSet extends IGristSet
 	 */
 	Codec<IImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.getRegistry().getCodec(), Codec.LONG).xmap(ImmutableGristSet::new, IImmutableGristSet::asMap);
 	
-	Map<GristType, Long> asMap();
-	
 	@Override
 	default IImmutableGristSet asImmutable()
 	{

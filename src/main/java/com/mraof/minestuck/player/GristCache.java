@@ -42,7 +42,7 @@ public final class GristCache
 	{
 		this.data = data;
 		this.mcServer = mcServer;
-		this.gristSet = new ImmutableGristSet(GristTypes.BUILD, 20);
+		this.gristSet = new GristAmount(GristTypes.BUILD, 20);
 	}
 	
 	public static GristCache get(ServerPlayer player)
