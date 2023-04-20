@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Changed textures for Rainbow Logs, Rainbow Leaves, Rainbow Planks, and Rainbow Saplings
+- Changed Rainbow Sapling to use a simpler growth process without using colored state properties
+
+### Removed
+
+- Removed color blockstates and models for the Rainbow Sapling
+
+### Contributors for this release
+
+- Carnie, Akisephila, kirderf
+
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
 ### Added
