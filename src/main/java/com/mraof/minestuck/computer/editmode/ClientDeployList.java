@@ -1,6 +1,6 @@
 package com.mraof.minestuck.computer.editmode;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -29,7 +29,7 @@ public final class ClientDeployList
 			entry.item = ItemStack.of(tag);
 			entry.index = tag.getInt("i");
 			
-			entry.cost = GristSet.CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow(false, LOGGER::error);
+			entry.cost = MutableGristSet.CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow(false, LOGGER::error);
 			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);
@@ -50,11 +50,11 @@ public final class ClientDeployList
 	public static class Entry
 	{
 		private ItemStack item;
-		private GristSet cost;
+		private MutableGristSet cost;
 		private int index;
 		private DeployList.EntryLists category;
 		
-		public GristSet getCost()
+		public MutableGristSet getCost()
 		{
 			return cost;
 		}

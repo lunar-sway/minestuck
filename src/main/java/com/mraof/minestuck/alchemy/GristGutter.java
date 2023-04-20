@@ -83,7 +83,7 @@ public class GristGutter
 	 * Any grist that was added to the gutter will be removed from the given grist set,
 	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
 	 */
-	public void addGristFrom(GristSet set)
+	public void addGristFrom(MutableGristSet set)
 	{
 		for(GristAmount amount : set.asAmounts())
 		{
@@ -101,7 +101,7 @@ public class GristGutter
 	
 	/**
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
-	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet)}.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(MutableGristSet)}.
 	 */
 	public void addGristUnchecked(IGristSet set)
 	{
@@ -119,9 +119,9 @@ public class GristGutter
 		this.gristTotal += amount;
 	}
 	
-	public GristSet takeFraction(double fraction)
+	public MutableGristSet takeFraction(double fraction)
 	{
-		GristSet takenGrist = new GristSet();
+		MutableGristSet takenGrist = new MutableGristSet();
 		double extraGrist = 0;
 		
 		for(GristAmount gristAmount : this.gristSet.asAmounts())
@@ -171,8 +171,8 @@ public class GristGutter
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
 		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
-		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		MutableGristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
+		MutableGristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}
@@ -182,10 +182,10 @@ public class GristGutter
 		return 1D/20D;
 	}
 	
-	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
+	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
 		long remaining = amount;
-		GristSet takenGrist = new GristSet();
+		MutableGristSet takenGrist = new MutableGristSet();
 		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
 		

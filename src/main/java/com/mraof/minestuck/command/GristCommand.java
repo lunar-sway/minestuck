@@ -3,7 +3,8 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.GristCache;
@@ -53,14 +54,14 @@ public class GristCommand
 		return players.size();
 	}
 	
-	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, GristSet grist)
+	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, IGristSet grist)
 	{
 		int i = 0;
 		for(ServerPlayer player : players)
 		{
 			try
 			{
-				GristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
+				MutableGristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
 				if(remainingGrist.equalContent(grist))
 				{
 					source.sendFailure(Component.translatable(NO_CAPACITY, player.getDisplayName()));

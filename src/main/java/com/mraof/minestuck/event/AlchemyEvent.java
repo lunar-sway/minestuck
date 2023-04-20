@@ -1,6 +1,5 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;

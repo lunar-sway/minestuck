@@ -1,7 +1,7 @@
 package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.PlayerIdentifier;
 
 import java.util.*;
@@ -83,7 +83,7 @@ final class SessionMerger
 		for(Session session : sessions)
 		{
 			double gutterMultiplier = session.getGristGutter().gutterMultiplierForSession();
-			GristSet takenGrist = originalSession.getGristGutter().takeFraction(gutterMultiplier/originalGutterMultiplier);
+			MutableGristSet takenGrist = originalSession.getGristGutter().takeFraction(gutterMultiplier/originalGutterMultiplier);
 			session.getGristGutter().addGristFrom(takenGrist);
 			originalGutterMultiplier -= gutterMultiplier;
 		}

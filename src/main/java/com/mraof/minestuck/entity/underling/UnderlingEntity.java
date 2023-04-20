@@ -166,7 +166,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	//used when getting how much grist should be dropped on death
-	public abstract GristSet getGristSpoils();
+	public abstract MutableGristSet getGristSpoils();
 	
 	protected abstract int getVitalityGel();
 	
@@ -182,7 +182,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		super.remove(reason);
 		if(reason == RemovalReason.KILLED)
 		{
-			GristSet grist = this.getGristSpoils();
+			MutableGristSet grist = this.getGristSpoils();
 			if(grist == null)
 				return;
 			if(fromSpawner)

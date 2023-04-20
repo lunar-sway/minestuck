@@ -2,7 +2,7 @@ package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
@@ -67,7 +67,7 @@ public class GristCost extends GristCostRecipe
 		@Override
 		protected GristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
-			IGristSet cost = GristSet.read(buffer);
+			IGristSet cost = MutableGristSet.read(buffer);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
@@ -75,7 +75,7 @@ public class GristCost extends GristCostRecipe
 		public void toNetwork(FriendlyByteBuf buffer, GristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
-			GristSet.write(recipe.cost, buffer);
+			MutableGristSet.write(recipe.cost, buffer);
 		}
 	}
 }

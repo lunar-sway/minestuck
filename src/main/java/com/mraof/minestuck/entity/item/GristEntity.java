@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.item;
 
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
@@ -27,7 +26,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib3.core.builder.Animation;
 
 import javax.annotation.Nullable;
 

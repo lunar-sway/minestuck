@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
@@ -103,7 +103,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		protected T read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			boolean hasCost = buffer.readBoolean();
-			IGristSet cost = hasCost ? GristSet.read(buffer) : null;
+			IGristSet cost = hasCost ? MutableGristSet.read(buffer) : null;
 			
 			return create(recipeId, buffer, ingredient, priority, cost);
 		}
@@ -115,7 +115,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			if(recipe.getCachedCost() != null)
 			{
 				buffer.writeBoolean(true);
-				GristSet.write(recipe.getCachedCost(), buffer);
+				MutableGristSet.write(recipe.getCachedCost(), buffer);
 			} else buffer.writeBoolean(false);
 		}
 		

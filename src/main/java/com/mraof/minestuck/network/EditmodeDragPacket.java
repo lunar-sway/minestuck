@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCost;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -49,7 +49,7 @@ public final class EditmodeDragPacket
 		return true;
 	}
 	
-	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<GristSet> missingGristTracker)
+	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<MutableGristSet> missingGristTracker)
 	{
 		BlockState block = player.level.getBlockState(pos);
 		ItemStack stack = block.getCloneItemStack(null, player.level, pos, player);
@@ -59,7 +59,7 @@ public final class EditmodeDragPacket
 			return false;
 		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
-			GristSet cost = new GristSet(GristTypes.BUILD,1);
+			MutableGristSet cost = new MutableGristSet(GristTypes.BUILD,1);
 			if(!data.getGristCache().canAfford(cost))
 			{
 				missingGristTracker.accept(cost);
@@ -119,7 +119,7 @@ public final class EditmodeDragPacket
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level);
 			IGristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
 			
-			GristSet missingCost = new GristSet();
+			MutableGristSet missingCost = new MutableGristSet();
 			boolean anyBlockPlaced = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{
@@ -192,13 +192,13 @@ public final class EditmodeDragPacket
 			cap.setEditPos2(positionEnd);
 			cap.setEditTrace(hitVector, side);
 			
-			GristSet missingCost = new GristSet();
+			MutableGristSet missingCost = new MutableGristSet();
 			boolean anyBlockDestroyed = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{
 				BlockState block = player.getLevel().getBlockState(pos);
 				
-				Consumer<GristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
+				Consumer<MutableGristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
 				if(editModeDestroyCheck(data, player, pos, missingCostTracker))
 				{
 					player.gameMode.destroyAndAck(pos, 3, "creative destroy");

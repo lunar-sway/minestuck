@@ -2,7 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
@@ -21,12 +21,12 @@ public class SmithingInterpreter extends DefaultInterpreter
 	private static final Field additionField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44519_");
 	
 	@Override
-	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
+	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		// UpgradeRecipes don't list their ingredients as ingredients so use this as workaround
 		try
 		{
-			GristSet totalCost = new GristSet();
+			MutableGristSet totalCost = new MutableGristSet();
 
 			Ingredient base = (Ingredient)baseField.get(recipe);
 			IGristSet baseCost = context.costForIngredient(base, true);

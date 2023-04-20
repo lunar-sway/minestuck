@@ -103,7 +103,7 @@ public final class GristCache
 		return canAdd(cost.mutableCopy().scale(-1));
 	}
 	
-	public boolean canAdd(GristSet addition)
+	public boolean canAdd(IGristSet addition)
 	{
 		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
@@ -122,11 +122,11 @@ public final class GristCache
 	 */
 	public boolean tryTake(IGristSet cost, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet change = cost.mutableCopy().scale(-1);
+		MutableGristSet change = cost.mutableCopy().scale(-1);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{
@@ -150,7 +150,7 @@ public final class GristCache
 	 */
 	public void addWithGutter(IGristSet set, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet overflowedGrist = this.addWithinCapacity(set, source);
+		MutableGristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
 		if(!overflowedGrist.isEmpty())
 		{
@@ -178,13 +178,13 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 * @return any grist that did not fit in the cache.
 	 */
-	public GristSet addWithinCapacity(IGristSet set, @Nullable GristHelper.EnumSource source)
+	public MutableGristSet addWithinCapacity(IGristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
 		
 		if(!excessGrist.equalContent(set))
 		{
@@ -234,12 +234,12 @@ public final class GristCache
 	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
 	 * Returns any excess grist.
 	 */
-	private static GristSet addWithinCapacity(GristSet target, IGristSet source, long capacity)
+	private static MutableGristSet addWithinCapacity(MutableGristSet target, IGristSet source, long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
-		GristSet remainder = new GristSet();
+		MutableGristSet remainder = new MutableGristSet();
 		
 		for(GristAmount amount : source.asAmounts())
 		{

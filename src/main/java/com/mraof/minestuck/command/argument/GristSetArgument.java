@@ -8,7 +8,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import net.minecraft.commands.CommandBuildContext;
@@ -17,7 +17,7 @@ import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
-public class GristSetArgument implements ArgumentType<GristSet>
+public class GristSetArgument implements ArgumentType<MutableGristSet>
 {
 	
 	//TODO List suggestions
@@ -49,9 +49,9 @@ public class GristSetArgument implements ArgumentType<GristSet>
 	}
 	
 	@Override
-	public GristSet parse(StringReader reader) throws CommandSyntaxException
+	public MutableGristSet parse(StringReader reader) throws CommandSyntaxException
 	{
-		GristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : new GristSet();
+		MutableGristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : new MutableGristSet();
 		do
 		{
 			int start1 = reader.getCursor();
@@ -82,9 +82,9 @@ public class GristSetArgument implements ArgumentType<GristSet>
 		return set;
 	}
 	
-	public static GristSet getGristArgument(CommandContext<CommandSourceStack> context, String id)
+	public static MutableGristSet getGristArgument(CommandContext<CommandSourceStack> context, String id)
 	{
-		return context.getArgument(id, GristSet.class);
+		return context.getArgument(id, MutableGristSet.class);
 	}
 	
 	public static NonNegativeGristSet getNonNegativeGristArgument(CommandContext<CommandSourceStack> context, String id)

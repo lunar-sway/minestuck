@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
-public class GristSet implements IGristSet
+public class MutableGristSet implements IGristSet
 {
-	public static final Codec<GristSet> CODEC = GristAmount.LIST_CODEC.xmap(GristSet::new, GristSet::asAmounts);
+	public static final Codec<MutableGristSet> CODEC = GristAmount.LIST_CODEC.xmap(MutableGristSet::new, MutableGristSet::asAmounts);
 	public static final String MISSING_MESSAGE = "grist.missing";
 	public static final String GRIST_COMMA = "grist.comma";
 	
@@ -20,17 +20,17 @@ public class GristSet implements IGristSet
 	/**
 	 * Creates a blank set of grist values, used in setting up the Grist Registry.
 	 */
-	public GristSet()
+	public MutableGristSet()
 	{
 		this(new TreeMap<>());
 	}
 	
-	protected GristSet(Map<GristType, Long> map)
+	protected MutableGristSet(Map<GristType, Long> map)
 	{
 		this.gristTypes = map;
 	}
 	
-	public GristSet(Supplier<GristType> type, long amount)
+	public MutableGristSet(Supplier<GristType> type, long amount)
 	{
 		this(type.get(), amount);
 	}
@@ -38,13 +38,13 @@ public class GristSet implements IGristSet
 	/**
 	 * Creates a set of grist values with one grist/amount pair. used in setting up the Grist Registry.
 	 */
-	public GristSet(GristType type, long amount)
+	public MutableGristSet(GristType type, long amount)
 	{
 		this();
 		this.gristTypes.put(type, amount);
 	}
 	
-	public GristSet(Supplier<GristType>[] type, long[] amount)
+	public MutableGristSet(Supplier<GristType>[] type, long[] amount)
 	{
 		this();
 		
@@ -57,7 +57,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Creates a set of grist values with multiple grist/amount pairs. used in setting up the Grist Registry.
 	 */
-	public GristSet(GristType[] type, long[] amount)
+	public MutableGristSet(GristType[] type, long[] amount)
 	{
 		this();
 
@@ -68,7 +68,7 @@ public class GristSet implements IGristSet
 	}
 	
 	@Deprecated
-	public GristSet(GristAmount... grist)
+	public MutableGristSet(GristAmount... grist)
 	{
 		this();
 		for (GristAmount amount : grist)
@@ -77,19 +77,13 @@ public class GristSet implements IGristSet
 		}
 	}
 	
-	public GristSet(GristSet set)
-	{
-		this();
-		gristTypes.putAll(set.gristTypes);
-	}
-	
-	public GristSet(IGristSet set)
+	public MutableGristSet(IGristSet set)
 	{
 		this();
 		addGrist(set);
 	}
 	
-	public GristSet(Iterable<GristAmount> amounts)
+	public MutableGristSet(Iterable<GristAmount> amounts)
 	{
 		this();
 		for (GristAmount amount : amounts)
@@ -99,9 +93,9 @@ public class GristSet implements IGristSet
 	}
 	
 	@Override
-	public ImmutableGristSet asImmutable()
+	public IImmutableGristSet asImmutable()
 	{
-		return new ImmutableGristSet(this);
+		return new DefaultImmutableGristSet(this);
 	}
 	
 	/**
@@ -121,7 +115,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Sets the amount of grist, given a type of grist and the new amount.
 	 */
-	public GristSet setGrist(GristType type, long amount)
+	public MutableGristSet setGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
@@ -140,7 +134,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
-	public GristSet addGrist(GristType type, long amount)
+	public MutableGristSet addGrist(GristType type, long amount)
 	{
 		if(type != null)
 		{
@@ -149,7 +143,7 @@ public class GristSet implements IGristSet
 		return this;
 	}
 	
-	public GristSet addGrist(Supplier<GristType> type, long amount)
+	public MutableGristSet addGrist(Supplier<GristType> type, long amount)
 	{
 		return addGrist(type.get(), amount);
 	}
@@ -177,7 +171,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Adds an amount of grist to a GristSet, given another set of grist.
 	 */
-	public GristSet addGrist(IGristSet set)
+	public MutableGristSet addGrist(IGristSet set)
 	{
 		for (GristAmount grist : set.asAmounts())
 			this.addGrist(grist.type(), grist.amount());
@@ -185,7 +179,7 @@ public class GristSet implements IGristSet
 		return this;
 	}
 	
-	public GristSet scale(int scale)
+	public MutableGristSet scale(int scale)
 	{
 		return scale(scale, true);
 	}
@@ -193,7 +187,7 @@ public class GristSet implements IGristSet
 	/**
 	 * Multiplies all the grist amounts by a factor.
 	 */
-	public GristSet scale(float scale, boolean roundDown)
+	public MutableGristSet scale(float scale, boolean roundDown)
 	{
 		this.gristTypes.forEach((type, amount) -> {
 			if (amount != 0)
@@ -249,9 +243,9 @@ public class GristSet implements IGristSet
 	}
 	
 	@Override
-	public GristSet mutableCopy()
+	public MutableGristSet mutableCopy()
 	{
-		return new GristSet(new TreeMap<>(gristTypes));
+		return new MutableGristSet(new TreeMap<>(gristTypes));
 	}
 	
 	public static void write(IGristSet gristSet, FriendlyByteBuf buffer)
@@ -268,6 +262,6 @@ public class GristSet implements IGristSet
 		for(int i = 0; i < size; i++)
 			amounts[i] = GristAmount.read(buffer);
 		
-		return new GristSet(amounts);
+		return new MutableGristSet(amounts);
 	}
 }

@@ -29,9 +29,9 @@ public interface IGristSet
 	
 	IImmutableGristSet asImmutable();
 	
-	default GristSet mutableCopy()
+	default MutableGristSet mutableCopy()
 	{
-		return new GristSet(this);
+		return new MutableGristSet(this);
 	}
 	
 	default Component asTextComponent()
@@ -41,7 +41,7 @@ public interface IGristSet
 		{
 			if(component == null)
 				component = grist.asTextComponent();
-			else component = Component.translatable(GristSet.GRIST_COMMA, component, grist.asTextComponent());
+			else component = Component.translatable(MutableGristSet.GRIST_COMMA, component, grist.asTextComponent());
 		}
 		if(component != null)
 			return component;
@@ -50,7 +50,7 @@ public interface IGristSet
 	
 	default Component createMissingMessage()
 	{
-		return Component.translatable(GristSet.MISSING_MESSAGE, asTextComponent());
+		return Component.translatable(MutableGristSet.MISSING_MESSAGE, asTextComponent());
 	}
 	
 	IImmutableGristSet EMPTY = new IImmutableGristSet()

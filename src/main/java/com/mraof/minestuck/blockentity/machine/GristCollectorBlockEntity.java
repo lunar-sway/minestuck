@@ -1,7 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -26,7 +26,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private GristSet storedGrist = new GristSet();
+	private MutableGristSet storedGrist = new MutableGristSet();
 	
 	public GristCollectorBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -49,7 +49,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	 */
 	public void clearStoredGrist()
 	{
-		storedGrist = new GristSet();
+		storedGrist = new MutableGristSet();
 		this.setChanged();
 	}
 	
@@ -57,15 +57,15 @@ public class GristCollectorBlockEntity extends BlockEntity
 	public void load(CompoundTag compound)
 	{
 		super.load(compound);
-		storedGrist = GristSet.CODEC.parse(NbtOps.INSTANCE, compound.get("storedGrist"))
-				.resultOrPartial(LOGGER::error).orElse(new GristSet());
+		storedGrist = MutableGristSet.CODEC.parse(NbtOps.INSTANCE, compound.get("storedGrist"))
+				.resultOrPartial(LOGGER::error).orElse(new MutableGristSet());
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		GristSet.CODEC.encodeStart(NbtOps.INSTANCE, storedGrist)
+		MutableGristSet.CODEC.encodeStart(NbtOps.INSTANCE, storedGrist)
 				.resultOrPartial(LOGGER::error).ifPresent(tag -> compound.put("storedGrist", tag));
 	}
 	

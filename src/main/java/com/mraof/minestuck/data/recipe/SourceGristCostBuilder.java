@@ -107,7 +107,7 @@ public class SourceGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result extends GristCostRecipeBuilder.Result

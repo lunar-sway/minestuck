@@ -1,7 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -22,10 +22,10 @@ public class DeployEntry
 	private final int tier;
 	private final DeployList.IAvailabilityCondition condition;
 	private final BiFunction<SburbConnection, Level, ItemStack> item;
-	private final BiFunction<Boolean, SburbConnection, GristSet> grist;
+	private final BiFunction<Boolean, SburbConnection, MutableGristSet> grist;
 	private final DeployList.EntryLists category;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, MutableGristSet> grist, DeployList.EntryLists entryList)
 	{
 		this.name = name;
 		this.tier = tier;
@@ -57,17 +57,17 @@ public class DeployEntry
 		return item.apply(c, level).copy();
 	}
 	
-	public GristSet getPrimaryGristCost(SburbConnection c)
+	public MutableGristSet getPrimaryGristCost(SburbConnection c)
 	{
 		return grist.apply(true, c);
 	}
 	
-	public GristSet getSecondaryGristCost(SburbConnection c)
+	public MutableGristSet getSecondaryGristCost(SburbConnection c)
 	{
 		return grist.apply(false, c);
 	}
 	
-	public GristSet getCurrentCost(SburbConnection c)
+	public MutableGristSet getCurrentCost(SburbConnection c)
 	{
 		return c.hasGivenItem(this) ? getSecondaryGristCost(c) : getPrimaryGristCost(c);
 	}
@@ -77,11 +77,11 @@ public class DeployEntry
 		if(isAvailable(c, tier))
 		{
 			ItemStack stack = getItemStack(c, level);
-			GristSet cost = getCurrentCost(c);
+			MutableGristSet cost = getCurrentCost(c);
 			CompoundTag tag = new CompoundTag();
 			stack.save(tag);
 			tag.putInt("i", i);
-			tag.put("cost", GristSet.CODEC.encodeStart(NbtOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
+			tag.put("cost", MutableGristSet.CODEC.encodeStart(NbtOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
 			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}

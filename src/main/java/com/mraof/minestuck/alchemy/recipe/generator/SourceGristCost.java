@@ -3,7 +3,7 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -54,9 +54,9 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	@Nullable
 	@Override
-	protected GristSet generateCost(GenerationContext context)
+	protected MutableGristSet generateCost(GenerationContext context)
 	{
-		GristSet costSum = new GristSet();
+		MutableGristSet costSum = new MutableGristSet();
 		for(Source source : sources)
 		{
 			IGristSet sourceCost = source.getCostFor(context);

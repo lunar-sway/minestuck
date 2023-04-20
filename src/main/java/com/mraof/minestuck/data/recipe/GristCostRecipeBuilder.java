@@ -6,7 +6,7 @@ import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -92,7 +92,7 @@ public class GristCostRecipeBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result implements FinishedRecipe

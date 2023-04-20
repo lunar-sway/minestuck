@@ -2,7 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
@@ -52,7 +52,7 @@ class RecipeGeneratedCostProcess
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
 		{
-			GristSet result = costFromRecipes(item, context);
+			MutableGristSet result = costFromRecipes(item, context);
 			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 			
 			if(context.isPrimary())
@@ -61,16 +61,16 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costFromRecipes(Item item, GenerationContext context)
+	private MutableGristSet costFromRecipes(Item item, GenerationContext context)
 	{
 		List<Pair<Recipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
 		if(!recipes.isEmpty())
 		{
-			GristSet minCost = null;
+			MutableGristSet minCost = null;
 			for(Pair<Recipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
-				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, context);
+				MutableGristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, context);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}
@@ -81,7 +81,7 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
+	private MutableGristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
 	{
 		try
 		{
@@ -97,7 +97,7 @@ class RecipeGeneratedCostProcess
 	{
 		if(MinestuckConfig.COMMON.logItemsWithRecipeAndCost.get())
 		{
-			GristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, context));
+			MutableGristSet generatedCost = context.withoutCache(() -> costFromRecipes(item, context));
 			
 			if(generatedCost != null)
 			{

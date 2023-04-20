@@ -5,7 +5,7 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
@@ -78,7 +78,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(Map.Entry<Item, IImmutableGristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			GristSet.write(entry.getValue(), buffer);
+			MutableGristSet.write(entry.getValue(), buffer);
 		}
 	}
 	
@@ -92,7 +92,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			IGristSet cost = GristSet.read(buffer);
+			IGristSet cost = MutableGristSet.read(buffer);
 			builder.put(item, cost.asImmutable());
 		}
 		return new RecipeGeneratedCostHandler(builder.build());

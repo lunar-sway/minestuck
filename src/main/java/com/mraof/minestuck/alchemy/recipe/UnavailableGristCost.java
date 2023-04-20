@@ -1,7 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -25,7 +25,7 @@ public class UnavailableGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public MutableGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return null;
 	}

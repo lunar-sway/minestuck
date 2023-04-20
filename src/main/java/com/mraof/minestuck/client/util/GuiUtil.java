@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -63,7 +63,7 @@ public class GuiUtil
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = getGristColor(mode, cache.canAfford(new GristSet(amount)));
+				int color = getGristColor(mode, cache.canAfford(new MutableGristSet(amount)));
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)
