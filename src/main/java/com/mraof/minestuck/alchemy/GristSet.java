@@ -3,8 +3,7 @@ package com.mraof.minestuck.alchemy;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -18,6 +17,7 @@ public class GristSet implements IGristSet
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	public static final Codec<GristSet> CODEC = GristAmount.LIST_CODEC.xmap(GristSet::new, GristSet::asAmounts);
 	public static final String MISSING_MESSAGE = "grist.missing";
 	public static final String GRIST_COMMA = "grist.comma";
 	
@@ -74,7 +74,8 @@ public class GristSet implements IGristSet
 			this.gristTypes.put(type[i], amount[i]);
 		}
 	}
-
+	
+	@Deprecated
 	public GristSet(GristAmount... grist)
 	{
 		this();
@@ -94,6 +95,15 @@ public class GristSet implements IGristSet
 	{
 		this();
 		addGrist(set);
+	}
+	
+	public GristSet(Iterable<GristAmount> amounts)
+	{
+		this();
+		for (GristAmount amount : amounts)
+		{
+			this.gristTypes.put(amount.type(), amount.amount());
+		}
 	}
 	
 	@Override
@@ -301,20 +311,5 @@ public class GristSet implements IGristSet
 			amounts[i] = GristAmount.read(buffer);
 		
 		return new GristSet(amounts);
-	}
-	
-	public ListTag write(ListTag list)
-	{
-		asAmounts().forEach(gristAmount -> list.add(gristAmount.write(new CompoundTag(), null)));
-		return list;
-	}
-	
-	public static GristSet read(ListTag list)
-	{
-		GristSet set = new GristSet();
-		for(int i = 0; i < list.size(); i++)
-			set.addGrist(GristAmount.read(list.getCompound(i), null));
-		
-		return set;
 	}
 }

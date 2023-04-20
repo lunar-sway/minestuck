@@ -1,9 +1,14 @@
 package com.mraof.minestuck.alchemy;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.nbt.ListTag;
+
+import java.util.List;
 
 public class NonNegativeGristSet extends GristSet
 {
+	public static Codec<NonNegativeGristSet> CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(NonNegativeGristSet::new, NonNegativeGristSet::asAmounts);
+	
 	public NonNegativeGristSet()
 	{
 	
@@ -11,7 +16,12 @@ public class NonNegativeGristSet extends GristSet
 	
 	public NonNegativeGristSet(IGristSet set)
 	{
-		for(GristAmount amount : set.asAmounts())
+		this(set.asAmounts());
+	}
+	
+	public NonNegativeGristSet(List<GristAmount> amounts)
+	{
+		for(GristAmount amount : amounts)
 			if(amount.amount() < 0)
 				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.type());
 			else addGrist(amount);
@@ -41,18 +51,5 @@ public class NonNegativeGristSet extends GristSet
 		if(scale < 0)
 			throw new IllegalArgumentException("Negative values not allowed!");
 		return super.scale(scale, roundDown);
-	}
-	
-	public static NonNegativeGristSet read(ListTag list)
-	{
-		NonNegativeGristSet set = new NonNegativeGristSet();
-		for(int i = 0; i < list.size(); i++)
-		{
-			GristAmount amount = GristAmount.read(list.getCompound(i), null);
-			if(amount.amount() >= 0)
-				set.addGrist(amount);
-		}
-		
-		return set;
 	}
 }

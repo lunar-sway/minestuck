@@ -6,13 +6,17 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -23,6 +27,8 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class GristGutter
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final int GUTTER_CAPACITY = 10000;
 	
 	private final Session session;
@@ -36,20 +42,19 @@ public class GristGutter
 		this.gristTotal = 0;
 	}
 	
-	public GristGutter(Session session, ListTag listTag)
+	public GristGutter(Session session, Tag tag)
 	{
 		this.session = session;
-		this.gristSet = NonNegativeGristSet.read(listTag);
+		this.gristSet = NonNegativeGristSet.CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(LOGGER::error).orElse(new NonNegativeGristSet());
 		this.gristTotal = 0;
 		for(GristAmount amount : this.gristSet.asAmounts())
 			this.gristTotal += amount.amount();
 	}
 	
-	public ListTag write()
+	public Tag write()
 	{
-		return this.gristSet.write(new ListTag());
+		return NonNegativeGristSet.CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet).resultOrPartial(LOGGER::error).orElse(EndTag.INSTANCE);
 	}
-	
 	
 	public IGristSet getCache()
 	{

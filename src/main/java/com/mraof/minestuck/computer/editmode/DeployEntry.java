@@ -5,20 +5,25 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.function.BiFunction;
 
 public class DeployEntry
 {
-	private String name;
+	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private int tier;
-	private DeployList.IAvailabilityCondition condition;
-	private BiFunction<SburbConnection, Level, ItemStack> item;
-	private BiFunction<Boolean, SburbConnection, GristSet> grist;
-	private DeployList.EntryLists category;
+	private final String name;
+	
+	private final int tier;
+	private final DeployList.IAvailabilityCondition condition;
+	private final BiFunction<SburbConnection, Level, ItemStack> item;
+	private final BiFunction<Boolean, SburbConnection, GristSet> grist;
+	private final DeployList.EntryLists category;
 	
 	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
 	{
@@ -76,7 +81,7 @@ public class DeployEntry
 			CompoundTag tag = new CompoundTag();
 			stack.save(tag);
 			tag.putInt("i", i);
-			tag.put("cost", cost.write(new ListTag()));
+			tag.put("cost", GristSet.CODEC.encodeStart(NbtOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
 			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}

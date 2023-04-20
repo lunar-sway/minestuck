@@ -12,12 +12,13 @@ import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -31,9 +32,11 @@ import java.util.Objects;
  */
 public final class GristCache
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final PlayerData data;
 	private final MinecraftServer mcServer;
-	private ImmutableGristSet gristSet;
+	private IImmutableGristSet gristSet;
 	
 	GristCache(PlayerData data, MinecraftServer mcServer)
 	{
@@ -75,12 +78,14 @@ public final class GristCache
 	
 	void read(CompoundTag nbt)
 	{
-		gristSet = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
+		gristSet = IImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
+				.resultOrPartial(LOGGER::error).orElse(new ImmutableGristSet());
 	}
 	
 	void write(CompoundTag nbt)
 	{
-		nbt.put("grist_cache", gristSet.write(new ListTag()));
+		IImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+				.resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("grist_cache", tag));
 	}
 	
 	public IImmutableGristSet getGristSet()

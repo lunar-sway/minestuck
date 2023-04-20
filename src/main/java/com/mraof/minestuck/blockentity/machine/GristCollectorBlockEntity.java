@@ -1,24 +1,31 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class GristCollectorBlockEntity extends BlockEntity
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private GristSet storedGrist = new GristSet();
 	
 	public GristCollectorBlockEntity(BlockPos pos, BlockState state)
@@ -50,14 +57,16 @@ public class GristCollectorBlockEntity extends BlockEntity
 	public void load(CompoundTag compound)
 	{
 		super.load(compound);
-		storedGrist = GristSet.read(compound.getList("storedGrist", Tag.TAG_COMPOUND));
+		storedGrist = GristSet.CODEC.parse(NbtOps.INSTANCE, compound.get("storedGrist"))
+				.resultOrPartial(LOGGER::error).orElse(new GristSet());
 	}
 	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		compound.put("storedGrist", storedGrist.write(new ListTag()));
+		GristSet.CODEC.encodeStart(NbtOps.INSTANCE, storedGrist)
+				.resultOrPartial(LOGGER::error).ifPresent(tag -> compound.put("storedGrist", tag));
 	}
 	
 	public static void serverTick(Level level, BlockPos pos, BlockState state, GristCollectorBlockEntity blockEntity)

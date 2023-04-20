@@ -1,11 +1,15 @@
 package com.mraof.minestuck.alchemy;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -13,6 +17,22 @@ import java.util.function.Supplier;
  */
 public record GristAmount(GristType type, long amount) implements IImmutableGristSet
 {
+	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(GristTypes.getRegistry().getCodec().fieldOf("type").forGetter(GristAmount::type),
+							Codec.LONG.fieldOf("amount").forGetter(GristAmount::amount))
+					.apply(instance, GristAmount::new));
+	public static final Codec<List<GristAmount>> LIST_CODEC = CODEC.listOf();
+	public static final Codec<GristAmount> NON_NEGATIVE_CODEC = CODEC.comapFlatMap(GristAmount::checkNonNegative, Function.identity());
+	public static final Codec<List<GristAmount>> NON_NEGATIVE_LIST_CODEC = NON_NEGATIVE_CODEC.listOf();
+	
+	private static DataResult<GristAmount> checkNonNegative(GristAmount gristAmount)
+	{
+		if(gristAmount.amount >= 0)
+			return DataResult.success(gristAmount);
+		else
+			return DataResult.error("Negative amount %s for grist type %s".formatted(gristAmount.amount, gristAmount.type));
+	}
+	
 	public static final String GRIST_AMOUNT = "grist_amount";
 	
 	public GristAmount(Supplier<GristType> type, long amount)
