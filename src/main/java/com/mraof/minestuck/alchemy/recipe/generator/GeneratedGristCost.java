@@ -25,6 +25,7 @@ import java.util.function.BiConsumer;
 @MethodsReturnNonnullByDefault
 public abstract class GeneratedGristCost extends GristCostRecipe implements GeneratedCostProvider
 {
+	@Nullable
 	private IImmutableGristSet cachedCost = null;
 	private boolean hasGeneratedCost = false;
 	
@@ -33,7 +34,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		super(id, ingredient, priority);
 	}
 	
-	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority);
 		cachedCost = cost != null ? cost.asImmutable() : null;
@@ -68,7 +69,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	@Override
-	public final GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
+	public final GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
 	{
 		if(lastCost != null)
 			return lastCost;
@@ -90,6 +91,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	@Nullable
 	protected abstract IGristSet generateCost(GenerationContext context);
 	
+	@Nullable
 	protected final IGristSet getCachedCost()
 	{
 		return cachedCost;
@@ -117,6 +119,6 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			} else buffer.writeBoolean(false);
 		}
 		
-		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost);
+		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost);
 	}
 }

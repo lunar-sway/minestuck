@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.IGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -14,21 +15,25 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class WildcardGristCost extends GristCostRecipe
 {
 	private final long wildcardCost;
 	
-	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, Integer priority)
+	public WildcardGristCost(ResourceLocation id, Ingredient ingredient, long wildcardCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.wildcardCost = wildcardCost;
 	}
 	
 	@Override
-	public IGristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, Level level)
+	public IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return wildcardType != null ? scaleToCountAndDurability(new GristAmount(wildcardType, wildcardCost), input, shouldRoundDown) : null;
 	}
@@ -54,7 +59,7 @@ public class WildcardGristCost extends GristCostRecipe
 	public static class Serializer extends AbstractSerializer<WildcardGristCost>
 	{
 		@Override
-		protected WildcardGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
+		protected WildcardGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
 			long wildcardCost = GsonHelper.getAsLong(json, "grist_cost");
 			return new WildcardGristCost(recipeId, ingredient, wildcardCost, priority);

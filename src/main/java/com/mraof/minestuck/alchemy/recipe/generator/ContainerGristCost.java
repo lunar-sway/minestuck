@@ -33,7 +33,7 @@ public class ContainerGristCost extends GeneratedGristCost
 		this.addedCost = addedCost.asImmutable();
 	}
 	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.addedCost = null;
@@ -80,7 +80,7 @@ public class ContainerGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
 		{
 			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}

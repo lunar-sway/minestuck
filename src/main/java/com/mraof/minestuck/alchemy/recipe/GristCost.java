@@ -26,14 +26,14 @@ public class GristCost extends GristCostRecipe
 {
 	private final IImmutableGristSet cost;
 	
-	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.cost = cost.asImmutable();
 	}
 	
 	@Override
-	public IGristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}
@@ -53,7 +53,7 @@ public class GristCost extends GristCostRecipe
 	public static class Serializer extends AbstractSerializer<GristCost>
 	{
 		@Override
-		protected GristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
+		protected GristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
 			GristSet cost = GristSet.deserialize(json.getAsJsonObject("grist_cost"));
 			return new GristCost(recipeId, ingredient, cost, priority);

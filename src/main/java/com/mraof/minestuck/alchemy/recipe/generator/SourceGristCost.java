@@ -18,10 +18,12 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SourceGristCost extends GeneratedGristCost
 {
@@ -37,7 +39,7 @@ public class SourceGristCost extends GeneratedGristCost
 		this.addedCost = addedCost.asImmutable();
 	}
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.sources = null;
@@ -83,7 +85,7 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
 		{
 			return new SourceGristCost(recipeId, ingredient, priority, cost);
 		}

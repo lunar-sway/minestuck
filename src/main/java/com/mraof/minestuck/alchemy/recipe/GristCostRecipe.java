@@ -117,6 +117,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		else return priority;
 	}
 	
+	@Nullable
 	public abstract IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
 	
 	public boolean canPickWildcard()
@@ -124,6 +125,10 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		return false;
 	}
 	
+	/**
+	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
+	 * which then get used during grist cost generation.
+	 */
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
 		GeneratedCostProvider provider = new DefaultProvider();
@@ -135,7 +140,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	{
 		@Nullable
 		@Override
-		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
+		public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
 				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
@@ -187,7 +192,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 			return read(recipeId, json, ingredient, priority);
 		}
 		
-		protected abstract T read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority);
+		protected abstract T read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority);
 		
 		@Nullable
 		@Override
