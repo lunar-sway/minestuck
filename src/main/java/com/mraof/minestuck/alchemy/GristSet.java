@@ -6,8 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An interface for anything that might contain grist.
+ * For an implementation that can be modified, see {@link MutableGristSet}.
+ * For an implementation that cannot be modified, see {@link DefaultImmutableGristSet}.
+ * There's also an immutable version of the interface: {@link ImmutableGristSet}.
+ */
 public interface GristSet
 {
+	String MISSING_MESSAGE = "grist.missing";
+	String GRIST_COMMA = "grist.comma";
+	
 	long getGrist(GristType type);
 	
 	/**
@@ -27,6 +36,14 @@ public interface GristSet
 	
 	boolean isEmpty();
 	
+	default boolean equalContent(GristSet other)
+	{
+		for(GristType type : GristTypes.values())
+			if(this.getGrist(type) != other.getGrist(type))
+				return false;
+		return true;
+	}
+	
 	ImmutableGristSet asImmutable();
 	
 	default MutableGristSet mutableCopy()
@@ -41,7 +58,7 @@ public interface GristSet
 		{
 			if(component == null)
 				component = grist.asTextComponent();
-			else component = Component.translatable(MutableGristSet.GRIST_COMMA, component, grist.asTextComponent());
+			else component = Component.translatable(GRIST_COMMA, component, grist.asTextComponent());
 		}
 		if(component != null)
 			return component;
@@ -50,7 +67,7 @@ public interface GristSet
 	
 	default Component createMissingMessage()
 	{
-		return Component.translatable(MutableGristSet.MISSING_MESSAGE, asTextComponent());
+		return Component.translatable(MISSING_MESSAGE, asTextComponent());
 	}
 	
 	ImmutableGristSet EMPTY = new ImmutableGristSet()

@@ -1,10 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
@@ -1521,8 +1518,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addGristType(GristTypes.ARTIFACT, "Artifact");
 		addGristType(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
-		add(MutableGristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
-		add(MutableGristSet.GRIST_COMMA, "%s, %s");
+		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
+		add(GristSet.GRIST_COMMA, "%s, %s");
 		add(GristAmount.GRIST_AMOUNT, "%s %s");
 		
 		add(EnumClass.BARD, "Bard");

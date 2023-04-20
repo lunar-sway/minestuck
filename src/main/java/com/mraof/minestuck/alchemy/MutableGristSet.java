@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 public class MutableGristSet implements GristSet
 {
 	public static final Codec<MutableGristSet> CODEC = GristAmount.LIST_CODEC.xmap(MutableGristSet::new, MutableGristSet::asAmounts);
-	public static final String MISSING_MESSAGE = "grist.missing";
-	public static final String GRIST_COMMA = "grist.comma";
 	
 	private final Map<GristType, Long> gristTypes;
 
@@ -213,14 +211,6 @@ public class MutableGristSet implements GristSet
 	public boolean isEmpty()
 	{
 		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
-	}
-	
-	public boolean equalContent(GristSet other)
-	{
-		for(GristType type : GristTypes.values())
-			if(this.getGrist(type) != other.getGrist(type))
-				return false;
-		return true;
 	}
 	
 	@Override

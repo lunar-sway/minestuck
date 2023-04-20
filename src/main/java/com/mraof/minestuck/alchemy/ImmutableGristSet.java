@@ -2,6 +2,10 @@ package com.mraof.minestuck.alchemy;
 
 import com.mojang.serialization.Codec;
 
+/**
+ * A version of {@link GristSet}, but with the extra guarantee that this set cannot be changed.
+ * Suitable for things like recipes, where the set should not be allowed to change after the recipe was loaded.
+ */
 public interface ImmutableGristSet extends GristSet
 {
 	Codec<ImmutableGristSet> NON_NEGATIVE_CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
