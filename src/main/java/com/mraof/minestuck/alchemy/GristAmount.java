@@ -67,7 +67,7 @@ public record GristAmount(GristType type, long amount) implements IImmutableGris
 	@Override
 	public boolean isEmpty()
 	{
-		return amount != 0;
+		return amount == 0;
 	}
 	
 	public void write(FriendlyByteBuf buffer)
