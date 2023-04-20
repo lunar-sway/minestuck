@@ -10,14 +10,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Some land worldgen features are now replacable by datapacks
 
+### Contributors for this release
+
+- kirderf1
+
+## [1.19.2-1.10.2.0] - 2023-04-20
+
+### Added
+
+- Ogre left hand punch
+
 ### Fixed
 
+- Fixes a basilisk duplication bug with transportalizers
 - Some cassettes missing a grist cost
 - Cassette "5" and "Otherside" recipe were swap
 
 ### Contributors for this release
 
-- kirderf1, LunaticCat
+- Caldw3ll, kirderf1, LunaticCat
 
 ## [1.19.2-1.10.1.0] - 2023-04-16
 
