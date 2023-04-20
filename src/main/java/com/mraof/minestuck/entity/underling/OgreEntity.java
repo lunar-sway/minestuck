@@ -31,7 +31,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.PUNCH, 22, true, true), 7, 10, 13);
+	public static final PhasedMobAnimation RIGHT_PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.RIGHT_PUNCH, 22, true, true), 7, 10, 13);
+	public static final PhasedMobAnimation LEFT_PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.LEFT_PUNCH, 22, true, true), 7, 10, 13);
 	public static final PhasedMobAnimation SLAM_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
@@ -52,7 +53,8 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		//no overlap in attack goal ranges
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, PUNCH_ANIMATION, 40));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, RIGHT_PUNCH_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 35.0F, 55.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, LEFT_PUNCH_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, -35.0F, 55.0F));
 		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15, 160));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
@@ -111,7 +113,7 @@ public class OgreEntity extends UnderlingEntity
 	@Override
 	public void initiationPhaseStart(MobAnimation.Action animation)
 	{
-		if(animation == MobAnimation.Action.PUNCH || animation == MobAnimation.Action.SLAM)
+		if(animation == MobAnimation.Action.RIGHT_PUNCH || animation == MobAnimation.Action.LEFT_PUNCH || animation == MobAnimation.Action.SLAM)
 			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.5F, 0);
 	}
 	
@@ -148,9 +150,13 @@ public class OgreEntity extends UnderlingEntity
 	{
 		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
 		
-		if(action == MobAnimation.Action.PUNCH)
+		if(action == MobAnimation.Action.RIGHT_PUNCH)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("right_punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			return PlayState.CONTINUE;
+		} else if(action == MobAnimation.Action.LEFT_PUNCH)
+		{
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("left_punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SLAM)
 		{

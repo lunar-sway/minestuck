@@ -1,26 +1,28 @@
 package com.mraof.minestuck.entity.underling;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraftforge.entity.PartEntity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 {
-	public final BasiliskEntity parentMob;
-	public final String name;
+	private final BasiliskEntity parentMob;
 	private final EntityDimensions size;
 	
-	public BasiliskPartEntity(BasiliskEntity parent, String name, float width, float height)
+	public BasiliskPartEntity(BasiliskEntity parent, float width, float height)
 	{
 		super(parent);
 		this.size = EntityDimensions.scalable(width, height);
 		this.refreshDimensions();
 		this.parentMob = parent;
-		this.name = name;
 	}
 	
 	@Override
@@ -29,12 +31,12 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 	}
 	
 	@Override
-	protected void readAdditionalSaveData(CompoundTag pCompound)
+	protected void readAdditionalSaveData(CompoundTag compound)
 	{
 	}
 	
 	@Override
-	protected void addAdditionalSaveData(CompoundTag pCompound)
+	protected void addAdditionalSaveData(CompoundTag compound)
 	{
 	}
 	
@@ -44,21 +46,25 @@ public class BasiliskPartEntity extends PartEntity<BasiliskEntity>
 		return true;
 	}
 	
-	public boolean hurt(DamageSource pSource, float pAmount)
+	@Override
+	public boolean canChangeDimensions()
 	{
-		return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount);
+		return false;
 	}
 	
+	@Override
+	public boolean hurt(DamageSource source, float amount)
+	{
+		return !this.isInvulnerableTo(source) && this.parentMob.hurt(source, amount);
+	}
+	
+	@Override
 	public boolean is(Entity pEntity)
 	{
 		return this == pEntity || this.parentMob == pEntity;
 	}
 	
-	public Packet<?> getAddEntityPacket()
-	{
-		throw new UnsupportedOperationException();
-	}
-	
+	@Override
 	public EntityDimensions getDimensions(Pose pPose)
 	{
 		return this.size;

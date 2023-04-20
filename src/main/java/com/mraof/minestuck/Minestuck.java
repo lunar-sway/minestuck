@@ -32,6 +32,8 @@ import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.*;
 import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;

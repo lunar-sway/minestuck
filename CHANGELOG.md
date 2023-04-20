@@ -6,18 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.10.2.0] - 2023-04-20
+
+### Added
+
+- Ogre left hand punch
+
+### Fixed
+
+- Fixes a basilisk duplication bug with transportalizers
+- Some cassettes missing a grist cost
+- Cassette "5" and "Otherside" recipe were swap
+
+### Contributors for this release
+
+- Caldw3ll, kirderf1, LunaticCat
+
+## [1.19.2-1.10.1.0] - 2023-04-16
+
 ### Added
 
 - Added 75 more blocks to the default atheneum list.
+- Config option for delaying entry from when the land dimension is generated, which can help with performance.
+Note that this option is found in the common config and not the world config.
+- Particle effect while entering
 - Transportalizer particle
 
 ### Changed
 
-- Updated textures for Rainbow Logs, Planks, Leaves and Saplings
-
-### Removed
-
-- Removed unused blockstates and models for the Rainbow Sapling
+- Changed how underling attack hit-detection works to use cones instead of spheres.
 
 ### Fixed
 
@@ -25,15 +42,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed crash with invalid transportalizer data
 - Connections with missing land dimensions gets partially reset to before entry at server start
 - Fixed editmode players not being able to destroy machines
+- Messages for more cases where entry may fail
+- Spawn height for re-entry is now the top motion-blocking block
 - Fixed entering editmode sometimes placing the player at the wrong height
 - Prevent an overflowed grist gutter from negatively influencing ability to pick up grist
 - Fixed grist cache view in editmode using the limit of the wrong player
 - Cache limit will now be accounted for more often client-side
 - Clearer and more accurate grist toasts when at cache capacity
+- Underling attacks will no longer hit the player if the attack is not facing them.
 
 ### Contributors for this release
 
-- kirderf1, Caldw3ll, Dweblenod, Riotmode, Carnie, Akisephila
+- kirderf1, Caldw3ll, Dweblenod, Riotmode
 
 ## [1.19.2-1.10.0.1] - 2023-04-13
 

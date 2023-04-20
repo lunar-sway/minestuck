@@ -14,6 +14,9 @@ import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +40,7 @@ public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final String LAND_ENTRY = "minestuck.land_entry";
+	public static final String CHAT_LAND_ENTRY = "minestuck.chat_land_entry";
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
@@ -218,7 +221,14 @@ public final class SburbHandler
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.getLevel()).orElseThrow();
-			player.sendSystemMessage(Component.translatable(LAND_ENTRY, landTypes.asComponent()));
+			
+			//chat message
+			player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
+			
+			//Title style message
+			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
+			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
+			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponent()));
 		}
 	}
 	
