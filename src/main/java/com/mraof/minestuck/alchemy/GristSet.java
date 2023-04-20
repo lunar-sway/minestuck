@@ -21,8 +21,6 @@ public class GristSet implements IGristSet
 	public static final String MISSING_MESSAGE = "grist.missing";
 	public static final String GRIST_COMMA = "grist.comma";
 	
-	public static final GristSet EMPTY = new GristSet(Collections.emptyMap());
-
 	private final Map<GristType, Long> gristTypes;
 
 	/**

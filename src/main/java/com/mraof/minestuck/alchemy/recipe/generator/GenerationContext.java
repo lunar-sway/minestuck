@@ -76,7 +76,7 @@ public class GenerationContext
 	public IGristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost)
 	{
 		if(ingredient.test(ItemStack.EMPTY))
-			return GristSet.EMPTY;
+			return IGristSet.EMPTY;
 		
 		if(testWithGeneratedItems(ingredient))
 			return null;	//If the ingredient tests positive for an item already in generation, prevent recursion and return a null grist cost

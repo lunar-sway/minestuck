@@ -79,7 +79,7 @@ public final class GristCache
 	void read(CompoundTag nbt)
 	{
 		gristSet = IImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
-				.resultOrPartial(LOGGER::error).orElse(new ImmutableGristSet());
+				.resultOrPartial(LOGGER::error).orElse(IGristSet.EMPTY);
 	}
 	
 	void write(CompoundTag nbt)

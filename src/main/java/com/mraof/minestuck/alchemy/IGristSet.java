@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import net.minecraft.network.chat.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 public interface IGristSet
@@ -48,4 +49,23 @@ public interface IGristSet
 	{
 		return Component.translatable(GristSet.MISSING_MESSAGE, asTextComponent());
 	}
+	
+	IImmutableGristSet EMPTY = new IImmutableGristSet()
+	{
+		@Override
+		public long getGrist(GristType type)
+		{
+			return 0;
+		}
+		@Override
+		public List<GristAmount> asAmounts()
+		{
+			return Collections.emptyList();
+		}
+		@Override
+		public boolean isEmpty()
+		{
+			return true;
+		}
+	};
 }

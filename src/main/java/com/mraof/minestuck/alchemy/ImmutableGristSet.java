@@ -8,11 +8,6 @@ import java.util.function.Supplier;
 
 public class ImmutableGristSet extends GristSet implements IImmutableGristSet
 {
-	public ImmutableGristSet()
-	{
-		super(Collections.emptyMap());
-	}
-	
 	public ImmutableGristSet(GristSet set)
 	{
 		super(ImmutableMap.copyOf(set.getMap()));
