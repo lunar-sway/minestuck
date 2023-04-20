@@ -278,7 +278,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		if(facing.getClockWise().getAxisDirection() == Direction.AxisDirection.NEGATIVE)
 			spawnPos = spawnPos.relative(facing.getCounterClockWise());
 		//get the grist cost
-		IGristSet cost = getGristCost(quantity);
+		GristSet cost = getGristCost(quantity);
 		
 		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
@@ -297,7 +297,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		}
 	}
 	
-	public IGristSet getGristCost(int quantity)
+	public GristSet getGristCost(int quantity)
 	{
 		ItemStack dowel = getDowel();
 		ItemStack stack = getOutput();

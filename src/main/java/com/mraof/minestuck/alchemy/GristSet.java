@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public interface IGristSet
+public interface GristSet
 {
 	long getGrist(GristType type);
 	
@@ -27,7 +27,7 @@ public interface IGristSet
 	
 	boolean isEmpty();
 	
-	IImmutableGristSet asImmutable();
+	ImmutableGristSet asImmutable();
 	
 	default MutableGristSet mutableCopy()
 	{
@@ -53,7 +53,7 @@ public interface IGristSet
 		return Component.translatable(MutableGristSet.MISSING_MESSAGE, asTextComponent());
 	}
 	
-	IImmutableGristSet EMPTY = new IImmutableGristSet()
+	ImmutableGristSet EMPTY = new ImmutableGristSet()
 	{
 		@Override
 		public long getGrist(GristType type)

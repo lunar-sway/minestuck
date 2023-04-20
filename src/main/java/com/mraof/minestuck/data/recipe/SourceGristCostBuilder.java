@@ -115,7 +115,7 @@ public class SourceGristCostBuilder
 		private final List<String> sources;
 		private final float multiplier;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, IImmutableGristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, ImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 			this.sources = sources;

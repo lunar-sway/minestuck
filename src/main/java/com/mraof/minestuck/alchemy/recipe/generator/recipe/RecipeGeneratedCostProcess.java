@@ -3,8 +3,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import net.minecraft.world.item.Item;
@@ -20,14 +20,14 @@ class RecipeGeneratedCostProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap;
-	private final Map<Item, IImmutableGristSet> generatedCosts = new HashMap<>();
+	private final Map<Item, ImmutableGristSet> generatedCosts = new HashMap<>();
 	
 	RecipeGeneratedCostProcess(Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
 	
-	Map<Item, IImmutableGristSet> buildMap()
+	Map<Item, ImmutableGristSet> buildMap()
 	{
 		//Clean out null grist costs
 		generatedCosts.entrySet().removeIf(entry -> entry.getValue() == null);
@@ -93,7 +93,7 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private void checkRecipeLogging(Item item, IGristSet cost, GenerationContext context)
+	private void checkRecipeLogging(Item item, GristSet cost, GenerationContext context)
 	{
 		if(MinestuckConfig.COMMON.logItemsWithRecipeAndCost.get())
 		{

@@ -3,7 +3,7 @@ package com.mraof.minestuck.network;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
@@ -13,7 +13,7 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
 
-public record GristToastPacket(IGristSet gristValue, GristHelper.EnumSource source,
+public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource source,
 							   boolean isCacheOwner) implements PlayToClientPacket
 {
 	
@@ -25,7 +25,7 @@ public record GristToastPacket(IGristSet gristValue, GristHelper.EnumSource sour
 	 * @param set    The grist type and value pairs associated with the notifications. There can be multiple pairs in the set, but usually only one.
 	 * @param source Indicates where the notification is coming from. See EnumSource.
 	 */
-	public static void notify(MinecraftServer server, PlayerIdentifier player, IGristSet set, GristHelper.EnumSource source)
+	public static void notify(MinecraftServer server, PlayerIdentifier player, GristSet set, GristHelper.EnumSource source)
 	{
 		if(MinestuckConfig.SERVER.showGristChanges.get())
 		{
@@ -59,7 +59,7 @@ public record GristToastPacket(IGristSet gristValue, GristHelper.EnumSource sour
 	
 	public static GristToastPacket decode(FriendlyByteBuf buffer)
 	{
-		IGristSet gristValue = MutableGristSet.read(buffer);
+		GristSet gristValue = MutableGristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
 		boolean isCacheOwner = buffer.readBoolean();
 		return new GristToastPacket(gristValue, source, isCacheOwner);

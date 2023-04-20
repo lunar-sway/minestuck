@@ -1,17 +1,17 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class GristCachePacket implements PlayToClientPacket
 {
-	public final IGristSet gristCache;
+	public final GristSet gristCache;
 	public final boolean isEditmode;
 	
-	public GristCachePacket(IGristSet gristCache, boolean isEditmode)
+	public GristCachePacket(GristSet gristCache, boolean isEditmode)
 	{
 		this.gristCache = gristCache;
 		this.isEditmode = isEditmode;
@@ -26,7 +26,7 @@ public class GristCachePacket implements PlayToClientPacket
 	
 	public static GristCachePacket decode(FriendlyByteBuf buffer)
 	{
-		IGristSet gristCache = MutableGristSet.read(buffer);
+		GristSet gristCache = MutableGristSet.read(buffer);
 		boolean isEditmode = buffer.readBoolean();
 		return new GristCachePacket(gristCache, isEditmode);
 	}

@@ -6,7 +6,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
@@ -35,7 +35,7 @@ public class GuiUtil
 	
 	public static final int GRIST_BOARD_WIDTH = 158, GRIST_BOARD_HEIGHT = 24;
 	
-	public static void drawGristBoard(PoseStack poseStack, IGristSet grist, GristboardMode mode, int boardX, int boardY, Font font)
+	public static void drawGristBoard(PoseStack poseStack, GristSet grist, GristboardMode mode, int boardX, int boardY, Font font)
 	{
 		if (grist == null)
 		{
@@ -50,7 +50,7 @@ public class GuiUtil
 		}
 		
 		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
-		IGristSet playerGrist = cache.set();
+		GristSet playerGrist = cache.set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
@@ -125,14 +125,14 @@ public class GuiUtil
 		}
 	}
 	
-	public static Component getGristboardTooltip(IGristSet grist, GristboardMode mode, double mouseX, double mouseY, int boardX, int boardY, Font font)
+	public static Component getGristboardTooltip(GristSet grist, GristboardMode mode, double mouseX, double mouseY, int boardX, int boardY, Font font)
 	{
 		if (grist == null || grist.isEmpty())
 			return null;
 		mouseX -= boardX;
 		mouseY -= boardY;
 		
-		IGristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER).set();
+		GristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER).set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;

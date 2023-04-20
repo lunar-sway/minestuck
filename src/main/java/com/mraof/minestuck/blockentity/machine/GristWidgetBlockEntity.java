@@ -2,7 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -86,18 +86,18 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Nullable
-	public IGristSet getGristWidgetResult()
+	public GristSet getGristWidgetResult()
 	{
 		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
 	}
 	
 	@Nullable
-	public static IGristSet getGristWidgetResult(ItemStack stack, Level level)
+	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
 	{
 		if(level == null)
 			return null;
 		ItemStack heldItem = AlchemyHelper.getDecodedItem(stack, true);
-		IGristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
+		GristSet gristSet = GristCostRecipe.findCostForItem(heldItem, null, true, level);
 		if(stack.getItem() != MSItems.CAPTCHA_CARD.get() || AlchemyHelper.isPunchedCard(stack) || gristSet == null)
 			return null;
 		
@@ -109,7 +109,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		return getGristWidgetBoondollarValue(getGristWidgetResult());
 	}
 	
-	public static int getGristWidgetBoondollarValue(IGristSet set)
+	public static int getGristWidgetBoondollarValue(GristSet set)
 	{
 		return set == null ? 0 : Math.max(1, (int) Math.pow(set.getValue(), 1/1.5));
 	}
@@ -132,7 +132,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	private void processContents()
 	{
-		IGristSet gristSet = getGristWidgetResult();
+		GristSet gristSet = getGristWidgetResult();
 		
 		if(!PlayerSavedData.getData(owner, level).tryTakeBoondollars(getGristWidgetBoondollarValue()))
 		{

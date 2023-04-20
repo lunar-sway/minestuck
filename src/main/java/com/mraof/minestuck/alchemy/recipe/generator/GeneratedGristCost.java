@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -26,7 +26,7 @@ import java.util.function.BiConsumer;
 public abstract class GeneratedGristCost extends GristCostRecipe implements GeneratedCostProvider
 {
 	@Nullable
-	private IImmutableGristSet cachedCost = null;
+	private ImmutableGristSet cachedCost = null;
 	private boolean hasGeneratedCost = false;
 	
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
@@ -34,7 +34,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		super(id, ingredient, priority);
 	}
 	
-	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable IGristSet cost)
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority);
 		cachedCost = cost != null ? cost.asImmutable() : null;
@@ -42,7 +42,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	@Override
-	public IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
 	}
@@ -77,7 +77,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			return GristCostResult.ofOrNull(cachedCost);
 		else
 		{
-			IGristSet cost = generateCost(context);
+			GristSet cost = generateCost(context);
 			if(context.isPrimary())
 			{
 				hasGeneratedCost = true;
@@ -89,10 +89,10 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 	}
 	
 	@Nullable
-	protected abstract IGristSet generateCost(GenerationContext context);
+	protected abstract GristSet generateCost(GenerationContext context);
 	
 	@Nullable
-	protected final IGristSet getCachedCost()
+	protected final GristSet getCachedCost()
 	{
 		return cachedCost;
 	}
@@ -103,7 +103,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		protected T read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			boolean hasCost = buffer.readBoolean();
-			IGristSet cost = hasCost ? MutableGristSet.read(buffer) : null;
+			GristSet cost = hasCost ? MutableGristSet.read(buffer) : null;
 			
 			return create(recipeId, buffer, ingredient, priority, cost);
 		}
@@ -119,6 +119,6 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			} else buffer.writeBoolean(false);
 		}
 		
-		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable IGristSet cost);
+		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost);
 	}
 }

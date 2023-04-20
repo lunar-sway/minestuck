@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
@@ -18,12 +18,12 @@ public class GristDropsEvent extends LivingEvent
 {
 	private final UnderlingEntity underling;
 	private final Map<PlayerIdentifier, Double> damageMap;
-	private final IGristSet originalDrops;
+	private final GristSet originalDrops;
 	private final GristType primaryType, bonusType;
 	private final double originalMultiplier;
 	private MutableGristSet newDrops;
 	
-	public GristDropsEvent(UnderlingEntity underling, Map<PlayerIdentifier, Double> damageMap, IGristSet originalDrops, GristType primaryType, GristType bonusType, double multiplier)
+	public GristDropsEvent(UnderlingEntity underling, Map<PlayerIdentifier, Double> damageMap, GristSet originalDrops, GristType primaryType, GristType bonusType, double multiplier)
 	{
 		super(underling);
 		this.underling = underling;
@@ -50,7 +50,7 @@ public class GristDropsEvent extends LivingEvent
 		return damageMap;
 	}
 	
-	public IGristSet getOriginalDrops()
+	public GristSet getOriginalDrops()
 	{
 		return originalDrops;
 	}

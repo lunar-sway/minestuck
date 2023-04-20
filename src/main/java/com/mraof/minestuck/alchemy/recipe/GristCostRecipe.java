@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
 public abstract class GristCostRecipe implements Recipe<Container>
 {
 	@Nullable
-	public static IGristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
+	public static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
 	}
@@ -118,7 +118,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	@Nullable
-	public abstract IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
+	public abstract GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
 	
 	public boolean canPickWildcard()
 	{
@@ -159,7 +159,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	@Nullable
-	public static IGristSet scaleToCountAndDurability(@Nullable IGristSet cost, ItemStack stack, boolean shouldRoundDown)
+	public static GristSet scaleToCountAndDurability(@Nullable GristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
 		if(cost == null)
 			return null;

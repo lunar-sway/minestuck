@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
@@ -51,7 +51,7 @@ public class GristWidgetScreen extends MachineScreen<GristWidgetMenu>
 		if (menu.getSlot(0).hasItem())
 		{
 			//Render grist requirements
-			IGristSet set = GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
+			GristSet set = GristWidgetBlockEntity.getGristWidgetResult(menu.getSlot(0).getItem(), minecraft.level);
 
 			GuiUtil.drawGristBoard(poseStack, set, GuiUtil.GristboardMode.GRIST_WIDGET, 9, 45, font);
 			

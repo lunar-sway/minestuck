@@ -2,7 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -43,7 +43,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
 	}
@@ -55,7 +55,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Nullable
-	private IGristSet getCost(Item item)
+	private GristSet getCost(Item item)
 	{
 		if(handler != null)
 			return handler.getGristCost(item);

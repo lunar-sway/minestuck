@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,27 +25,27 @@ public class ContainerGristCost extends GeneratedGristCost
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final IImmutableGristSet addedCost;
+	private final ImmutableGristSet addedCost;
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, IGristSet addedCost, @Nullable Integer priority)
+	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.addedCost = addedCost.asImmutable();
 	}
 	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable IGristSet cost)
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.addedCost = null;
 	}
 	
 	@Override
-	protected IGristSet generateCost(GenerationContext context)
+	protected GristSet generateCost(GenerationContext context)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
-			IGristSet cost = context.lookupCostFor(container);
+			GristSet cost = context.lookupCostFor(container);
 			if(cost != null)
 			{
 				return cost.mutableCopy().addGrist(addedCost);
@@ -75,13 +75,13 @@ public class ContainerGristCost extends GeneratedGristCost
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			IGristSet cost = IImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
 					.getOrThrow(false, LOGGER::error);
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable IGristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
 		{
 			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}

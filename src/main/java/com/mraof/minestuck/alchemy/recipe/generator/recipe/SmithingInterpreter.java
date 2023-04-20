@@ -3,7 +3,7 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -29,13 +29,13 @@ public class SmithingInterpreter extends DefaultInterpreter
 			MutableGristSet totalCost = new MutableGristSet();
 
 			Ingredient base = (Ingredient)baseField.get(recipe);
-			IGristSet baseCost = context.costForIngredient(base, true);
+			GristSet baseCost = context.costForIngredient(base, true);
 			if(baseCost == null)
 				return null;
 			else totalCost.addGrist(baseCost);
 
 			Ingredient addition = (Ingredient)additionField.get(recipe);
-			IGristSet additionCost = context.costForIngredient(addition, true);
+			GristSet additionCost = context.costForIngredient(addition, true);
 			if(additionCost == null)
 				return null;
 			else totalCost.addGrist(additionCost);

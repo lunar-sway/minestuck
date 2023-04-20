@@ -56,7 +56,7 @@ public class GristGutter
 		return NonNegativeGristSet.CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet).resultOrPartial(LOGGER::error).orElse(EndTag.INSTANCE);
 	}
 	
-	public IGristSet getCache()
+	public GristSet getCache()
 	{
 		return gristSet.asImmutable();
 	}
@@ -103,7 +103,7 @@ public class GristGutter
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
 	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(MutableGristSet)}.
 	 */
-	public void addGristUnchecked(IGristSet set)
+	public void addGristUnchecked(GristSet set)
 	{
 		for(GristAmount amount : set.asAmounts())
 			this.addGristInternal(amount.type(), amount.amount());

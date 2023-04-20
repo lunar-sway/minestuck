@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
-public class MutableGristSet implements IGristSet
+public class MutableGristSet implements GristSet
 {
 	public static final Codec<MutableGristSet> CODEC = GristAmount.LIST_CODEC.xmap(MutableGristSet::new, MutableGristSet::asAmounts);
 	public static final String MISSING_MESSAGE = "grist.missing";
@@ -77,7 +77,7 @@ public class MutableGristSet implements IGristSet
 		}
 	}
 	
-	public MutableGristSet(IGristSet set)
+	public MutableGristSet(GristSet set)
 	{
 		this();
 		addGrist(set);
@@ -93,7 +93,7 @@ public class MutableGristSet implements IGristSet
 	}
 	
 	@Override
-	public IImmutableGristSet asImmutable()
+	public ImmutableGristSet asImmutable()
 	{
 		return new DefaultImmutableGristSet(this);
 	}
@@ -171,7 +171,7 @@ public class MutableGristSet implements IGristSet
 	/**
 	 * Adds an amount of grist to a GristSet, given another set of grist.
 	 */
-	public MutableGristSet addGrist(IGristSet set)
+	public MutableGristSet addGrist(GristSet set)
 	{
 		for (GristAmount grist : set.asAmounts())
 			this.addGrist(grist.type(), grist.amount());
@@ -215,7 +215,7 @@ public class MutableGristSet implements IGristSet
 		return this.gristTypes.values().stream().allMatch(amount -> amount == 0);
 	}
 	
-	public boolean equalContent(IGristSet other)
+	public boolean equalContent(GristSet other)
 	{
 		for(GristType type : GristTypes.values())
 			if(this.getGrist(type) != other.getGrist(type))
@@ -248,14 +248,14 @@ public class MutableGristSet implements IGristSet
 		return new MutableGristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public static void write(IGristSet gristSet, FriendlyByteBuf buffer)
+	public static void write(GristSet gristSet, FriendlyByteBuf buffer)
 	{
 		Collection<GristAmount> amounts = gristSet.asAmounts();
 		buffer.writeInt(amounts.size());
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}
 	
-	public static IGristSet read(FriendlyByteBuf buffer)
+	public static GristSet read(FriendlyByteBuf buffer)
 	{
 		int size = buffer.readInt();
 		GristAmount[] amounts = new GristAmount[size];

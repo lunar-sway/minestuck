@@ -36,7 +36,7 @@ public final class GristCache
 	
 	private final PlayerData data;
 	private final MinecraftServer mcServer;
-	private IImmutableGristSet gristSet;
+	private ImmutableGristSet gristSet;
 	
 	GristCache(PlayerData data, MinecraftServer mcServer)
 	{
@@ -78,17 +78,17 @@ public final class GristCache
 	
 	void read(CompoundTag nbt)
 	{
-		gristSet = IImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
-				.resultOrPartial(LOGGER::error).orElse(IGristSet.EMPTY);
+		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
+				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
 	}
 	
 	void write(CompoundTag nbt)
 	{
-		IImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+		ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
 				.resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("grist_cache", tag));
 	}
 	
-	public IImmutableGristSet getGristSet()
+	public ImmutableGristSet getGristSet()
 	{
 		return this.gristSet;
 	}
@@ -98,17 +98,17 @@ public final class GristCache
 		return Math.max(0, data.getEcheladder().getGristCapacity() - gristSet.getGrist(type));
 	}
 	
-	public boolean canAfford(IGristSet cost)
+	public boolean canAfford(GristSet cost)
 	{
 		return canAdd(cost.mutableCopy().scale(-1));
 	}
 	
-	public boolean canAdd(IGristSet addition)
+	public boolean canAdd(GristSet addition)
 	{
 		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
-	public static boolean canAfford(IGristSet source, IGristSet cost, long limit)
+	public static boolean canAfford(GristSet source, GristSet cost, long limit)
 	{
 		return addWithinCapacity(source.mutableCopy(), cost.mutableCopy().scale(-1), limit).isEmpty();
 	}
@@ -120,7 +120,7 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source if successful.
 	 * @return true if it succeeded. false otherwise.
 	 */
-	public boolean tryTake(IGristSet cost, @Nullable GristHelper.EnumSource source)
+	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
 	{
 		MutableGristSet change = cost.mutableCopy().scale(-1);
 		
@@ -148,7 +148,7 @@ public final class GristCache
 	 * @param set The grist to add to this cache.
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 */
-	public void addWithGutter(IGristSet set, @Nullable GristHelper.EnumSource source)
+	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		MutableGristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
@@ -178,7 +178,7 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 * @return any grist that did not fit in the cache.
 	 */
-	public MutableGristSet addWithinCapacity(IGristSet set, @Nullable GristHelper.EnumSource source)
+	public MutableGristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
 		
@@ -234,7 +234,7 @@ public final class GristCache
 	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
 	 * Returns any excess grist.
 	 */
-	private static MutableGristSet addWithinCapacity(MutableGristSet target, IGristSet source, long capacity)
+	private static MutableGristSet addWithinCapacity(MutableGristSet target, GristSet source, long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
@@ -32,7 +32,7 @@ public final class ClientPlayerData
 	private static float rungProgress;
 	private static long boondollars;
 	private static int consortReputation;
-	private static IGristSet playerGrist, targetGrist;
+	private static GristSet playerGrist, targetGrist;
 	private static long targetCacheLimit;
 	private static int playerColor;
 	private static boolean displaySelectionGui;
@@ -90,9 +90,9 @@ public final class ClientPlayerData
 		};
 	}
 	
-	public record ClientCache(IGristSet set, long limit)
+	public record ClientCache(GristSet set, long limit)
 	{
-		public boolean canAfford(IGristSet cost)
+		public boolean canAfford(GristSet cost)
 		{
 			return GristCache.canAfford(this.set, cost, this.limit);
 		}

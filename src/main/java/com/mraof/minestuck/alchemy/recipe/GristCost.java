@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -29,16 +29,16 @@ public class GristCost extends GristCostRecipe
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final IImmutableGristSet cost;
+	private final ImmutableGristSet cost;
 	
-	public GristCost(ResourceLocation id, Ingredient ingredient, IGristSet cost, @Nullable Integer priority)
+	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.cost = cost.asImmutable();
 	}
 	
 	@Override
-	public IGristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}
@@ -60,14 +60,14 @@ public class GristCost extends GristCostRecipe
 		@Override
 		protected GristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			IGristSet cost = IImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonObject("grist_cost")).getOrThrow(false, LOGGER::error);
+			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonObject("grist_cost")).getOrThrow(false, LOGGER::error);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
 		protected GristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
-			IGristSet cost = MutableGristSet.read(buffer);
+			GristSet cost = MutableGristSet.read(buffer);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		

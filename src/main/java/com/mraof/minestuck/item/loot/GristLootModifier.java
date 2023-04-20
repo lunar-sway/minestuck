@@ -2,7 +2,7 @@ package com.mraof.minestuck.item.loot;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.entity.item.GristEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -47,7 +47,7 @@ public class GristLootModifier extends LootModifier
 			
 			for(ItemStack stack : generatedLoot)
 			{
-				IGristSet cost = GristCostRecipe.findCostForItem(stack, null, true, context.getLevel());
+				GristSet cost = GristCostRecipe.findCostForItem(stack, null, true, context.getLevel());
 				if(cost != null && multiplier != 1)
 					cost = cost.mutableCopy().scale(multiplier, false);
 				

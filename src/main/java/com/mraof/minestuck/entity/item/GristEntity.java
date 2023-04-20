@@ -87,7 +87,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	/**
 	 * This is a version of the spawn grist entities function with a delay.
 	 */
-	public static void spawnGristEntities(IGristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
+	public static void spawnGristEntities(GristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
 	{
 		for(GristAmount amount : gristSet.asAmounts())
 		{
@@ -106,7 +106,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		}
 	}
 	
-	public static void spawnGristEntities(IGristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
+	public static void spawnGristEntities(GristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
 	{
 		spawnGristEntities(gristSet, level, x, y, z, rand, postProcessor, 0, 10);
 	}

@@ -1,7 +1,7 @@
 package com.mraof.minestuck.event;
 
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -16,9 +16,9 @@ public class AlchemyEvent extends Event
 	private final BlockEntity alchemiter;
 	private final ItemStack dowel;
 	private ItemStack result;
-	private final IImmutableGristSet cost;
+	private final ImmutableGristSet cost;
 	
-	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, IGristSet cost)
+	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
 	{
 		this.player = player;
 		this.alchemiter = alchemiter;
@@ -60,7 +60,7 @@ public class AlchemyEvent extends Event
 		this.result = result.copy();
 	}
 	
-	public IGristSet getCost()
+	public GristSet getCost()
 	{
 		return cost;
 	}

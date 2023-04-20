@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Registry;
@@ -34,9 +34,9 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	private final List<Source> sources;
 	private final float multiplier;
-	private final IImmutableGristSet addedCost;
+	private final ImmutableGristSet addedCost;
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, IGristSet addedCost, @Nullable Integer priority)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, GristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.sources = sources;
@@ -44,7 +44,7 @@ public class SourceGristCost extends GeneratedGristCost
 		this.addedCost = addedCost.asImmutable();
 	}
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable IGristSet cost)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.sources = null;
@@ -59,7 +59,7 @@ public class SourceGristCost extends GeneratedGristCost
 		MutableGristSet costSum = new MutableGristSet();
 		for(Source source : sources)
 		{
-			IGristSet sourceCost = source.getCostFor(context);
+			GristSet sourceCost = source.getCostFor(context);
 			if(sourceCost != null)
 				costSum.addGrist(sourceCost);
 			else return null;
@@ -79,7 +79,7 @@ public class SourceGristCost extends GeneratedGristCost
 		@Override
 		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			IGristSet cost = IImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
 					.getOrThrow(false, LOGGER::error);
 			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
 			
@@ -91,7 +91,7 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable IGristSet cost)
+		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
 		{
 			return new SourceGristCost(recipeId, ingredient, priority, cost);
 		}
@@ -107,7 +107,7 @@ public class SourceGristCost extends GeneratedGristCost
 	private interface Source
 	{
 		@Nullable
-		IGristSet getCostFor(GenerationContext context);
+		GristSet getCostFor(GenerationContext context);
 	}
 	
 	private static class ItemSource implements Source
@@ -120,7 +120,7 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		public IGristSet getCostFor(GenerationContext context)
+		public GristSet getCostFor(GenerationContext context)
 		{
 			return context.lookupCostFor(item);
 		}
@@ -141,12 +141,12 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		public IGristSet getCostFor(GenerationContext context)
+		public GristSet getCostFor(GenerationContext context)
 		{
-			IGristSet maxCost = null;
+			GristSet maxCost = null;
 			for(Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.tag))
 			{
-				IGristSet cost = context.lookupCostFor(item);
+				GristSet cost = context.lookupCostFor(item);
 				
 				if(cost != null && (maxCost == null || cost.getValue() > maxCost.getValue()))
 					maxCost = cost;

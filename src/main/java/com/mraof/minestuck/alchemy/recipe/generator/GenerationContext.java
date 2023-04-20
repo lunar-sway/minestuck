@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,12 +17,12 @@ public class GenerationContext
 {
 	private final GenerationContext parent;
 	private final Item itemGeneratedFor;
-	private final HashMap<Item, IGristSet> localCache = new HashMap<>();
-	private final Function<GenerationContext, IGristSet> itemLookup;
+	private final HashMap<Item, GristSet> localCache = new HashMap<>();
+	private final Function<GenerationContext, GristSet> itemLookup;
 	private final boolean primary;
 	private boolean shouldUseCache;
 	
-	GenerationContext(Item itemGeneratedFor, Function<GenerationContext, IGristSet> itemLookup)
+	GenerationContext(Item itemGeneratedFor, Function<GenerationContext, GristSet> itemLookup)
 	{
 		parent = null;
 		this.itemGeneratedFor = itemGeneratedFor;
@@ -72,20 +72,20 @@ public class GenerationContext
 		return shouldUseCache;
 	}
 	
-	public IGristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost)
+	public GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost)
 	{
 		if(ingredient.test(ItemStack.EMPTY))
-			return IGristSet.EMPTY;
+			return GristSet.EMPTY;
 		
 		if(testWithGeneratedItems(ingredient))
 			return null;	//If the ingredient tests positive for an item already in generation, prevent recursion and return a null grist cost
 		
-		IGristSet minCost = null;
+		GristSet minCost = null;
 		for(ItemStack stack : ingredient.getItems())
 		{
 			if(ingredient.test(new ItemStack(stack.getItem())))
 			{
-				IGristSet cost;
+				GristSet cost;
 				if(removeContainerCost)
 					cost = costWithoutContainer(stack);
 				else cost = lookupCostFor(stack);
@@ -97,19 +97,19 @@ public class GenerationContext
 		return minCost;
 	}
 	
-	public IGristSet lookupCostFor(ItemStack stack)
+	public GristSet lookupCostFor(ItemStack stack)
 	{
 		return lookupCostFor(stack.getItem());
 	}
 	
-	public IGristSet lookupCostFor(Item item)
+	public GristSet lookupCostFor(Item item)
 	{
 		if(!localCache.containsKey(item))
 		{
 			if(isItemInProcess(item))
 				return null;
 			
-			IGristSet result = itemLookup.apply(nextGeneration(item));
+			GristSet result = itemLookup.apply(nextGeneration(item));
 			
 			localCache.put(item, result);
 			
@@ -117,16 +117,16 @@ public class GenerationContext
 		} else return localCache.get(item);
 	}
 	
-	public IGristSet costWithoutContainer(ItemStack stack)
+	public GristSet costWithoutContainer(ItemStack stack)
 	{
-		IGristSet cost = lookupCostFor(stack);
+		GristSet cost = lookupCostFor(stack);
 		
 		if(cost != null)
 		{
 			ItemStack container = stack.getCraftingRemainingItem();
 			if(!container.isEmpty())
 			{
-				IGristSet containerCost = lookupCostFor(container);
+				GristSet containerCost = lookupCostFor(container);
 				if(containerCost != null)
 					return containerCost.mutableCopy().scale(-1).addGrist(cost);
 				else return null;
@@ -142,7 +142,7 @@ public class GenerationContext
 		else
 		{
 			shouldUseCache = false;
-			Map<Item, IGristSet> savedCache = new HashMap<>(localCache);
+			Map<Item, GristSet> savedCache = new HashMap<>(localCache);
 			localCache.clear();
 			
 			S value = supplier.get();

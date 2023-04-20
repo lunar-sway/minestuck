@@ -95,13 +95,13 @@ public final class ClientEditHandler
 		if(!isActive())
 			return;
 		
-		IGristSet have = getGristCache().set();
+		GristSet have = getGristCache().set();
 		
 		addToolTip(event.getItemStack(), event.getToolTip(), have);
 		
 	}
 	
-	static IGristSet itemCost(ItemStack stack, Level level)
+	static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
@@ -109,10 +109,10 @@ public final class ClientEditHandler
 		else return GristCostRecipe.findCostForItem(stack, null, false, level);
 	}
 	
-	private static void addToolTip(ItemStack stack, List<Component> toolTip, IGristSet have)
+	private static void addToolTip(ItemStack stack, List<Component> toolTip, GristSet have)
 	{
 		Level level = Objects.requireNonNull(Minecraft.getInstance().level);
-		IGristSet cost = itemCost(stack, level);
+		GristSet cost = itemCost(stack, level);
 		
 		if(cost == null)
 		{
@@ -194,7 +194,7 @@ public final class ClientEditHandler
 				return;
 			}
 			
-			IGristSet cost = itemCost(stack, event.getLevel());
+			GristSet cost = itemCost(stack, event.getLevel());
 			if(!getGristCache().canAfford(cost))
 			{
 				if(cost != null)

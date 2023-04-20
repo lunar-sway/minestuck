@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristTypes;
@@ -35,7 +35,7 @@ public final class EditmodeDragPacket
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static boolean editModePlaceCheck(EditData data, Player player, IGristSet cost, BlockPos pos, Consumer<IGristSet> missingGristTracker)
+	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
 			return false;
@@ -117,7 +117,7 @@ public final class EditmodeDragPacket
 				return;
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level);
-			IGristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
+			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
 			
 			MutableGristSet missingCost = new MutableGristSet();
 			boolean anyBlockPlaced = false;

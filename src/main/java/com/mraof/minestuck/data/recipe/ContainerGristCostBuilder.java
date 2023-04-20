@@ -1,7 +1,7 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
@@ -88,7 +88,7 @@ public class ContainerGristCostBuilder
 	
 	public static class Result extends GristCostRecipeBuilder.Result
 	{
-		public Result(ResourceLocation id, Ingredient ingredient, IImmutableGristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 		}

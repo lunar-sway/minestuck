@@ -2,7 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -33,7 +33,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 		super(MSBlockEntityTypes.GRIST_COLLECTOR.get(), pos, state);
 	}
 	
-	public IGristSet getStoredGrist()
+	public GristSet getStoredGrist()
 	{
 		return storedGrist.asImmutable();
 	}

@@ -3,7 +3,7 @@ package com.mraof.minestuck.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
@@ -54,7 +54,7 @@ public class GristCommand
 		return players.size();
 	}
 	
-	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, IGristSet grist)
+	private static int add(CommandSourceStack source, Collection<ServerPlayer> players, GristSet grist)
 	{
 		int i = 0;
 		for(ServerPlayer player : players)

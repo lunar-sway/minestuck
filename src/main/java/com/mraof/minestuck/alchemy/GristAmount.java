@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public record GristAmount(GristType type, long amount) implements IImmutableGristSet
+public record GristAmount(GristType type, long amount) implements ImmutableGristSet
 {
 	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
 			instance.group(GristTypes.getRegistry().getCodec().fieldOf("type").forGetter(GristAmount::type),

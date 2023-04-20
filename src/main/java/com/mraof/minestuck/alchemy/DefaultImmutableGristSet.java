@@ -5,11 +5,11 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 
-public final class DefaultImmutableGristSet implements IImmutableGristSet
+public final class DefaultImmutableGristSet implements ImmutableGristSet
 {
 	private final ImmutableMap<GristType, Long> map;
 	
-	public DefaultImmutableGristSet(IGristSet set)
+	public DefaultImmutableGristSet(GristSet set)
 	{
 		this(set.asMap());
 	}
@@ -24,7 +24,7 @@ public final class DefaultImmutableGristSet implements IImmutableGristSet
 		map = builder.build();
 	}
 	
-	public static IImmutableGristSet create(List<GristAmount> amounts)
+	public static ImmutableGristSet create(List<GristAmount> amounts)
 	{
 		ImmutableMap.Builder<GristType, Long> builder = ImmutableMap.builder();
 		for(GristAmount gristAmount : amounts)

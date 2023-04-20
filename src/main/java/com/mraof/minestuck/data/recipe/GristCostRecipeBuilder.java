@@ -3,7 +3,7 @@ package com.mraof.minestuck.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.IImmutableGristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
@@ -99,10 +99,10 @@ public class GristCostRecipeBuilder
 	{
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
-		public final IImmutableGristSet cost;
+		public final ImmutableGristSet cost;
 		public final Integer priority;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, IImmutableGristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
 		{
 			this.id = id;
 			this.ingredient = ingredient;
@@ -114,7 +114,7 @@ public class GristCostRecipeBuilder
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
 			jsonObject.add("ingredient", ingredient.toJson());
-			jsonObject.add("grist_cost", IImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
+			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}

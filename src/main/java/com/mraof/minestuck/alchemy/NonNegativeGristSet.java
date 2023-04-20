@@ -13,7 +13,7 @@ public class NonNegativeGristSet extends MutableGristSet
 	
 	}
 	
-	public NonNegativeGristSet(IGristSet set)
+	public NonNegativeGristSet(GristSet set)
 	{
 		this(set.asAmounts());
 	}
