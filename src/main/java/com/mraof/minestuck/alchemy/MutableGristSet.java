@@ -3,10 +3,7 @@ package com.mraof.minestuck.alchemy;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class MutableGristSet implements GristSet
@@ -40,39 +37,6 @@ public class MutableGristSet implements GristSet
 	{
 		this();
 		this.gristTypes.put(type, amount);
-	}
-	
-	public MutableGristSet(Supplier<GristType>[] type, long[] amount)
-	{
-		this();
-		
-		for (int i = 0; i < type.length; i++)
-		{
-			this.gristTypes.put(type[i].get(), amount[i]);
-		}
-	}
-	
-	/**
-	 * Creates a set of grist values with multiple grist/amount pairs. used in setting up the Grist Registry.
-	 */
-	public MutableGristSet(GristType[] type, long[] amount)
-	{
-		this();
-
-		for (int i = 0; i < type.length; i++)
-		{
-			this.gristTypes.put(type[i], amount[i]);
-		}
-	}
-	
-	@Deprecated
-	public MutableGristSet(GristAmount... grist)
-	{
-		this();
-		for (GristAmount amount : grist)
-		{
-			this.gristTypes.put(amount.type(), amount.amount());
-		}
 	}
 	
 	public MutableGristSet(GristSet set)
@@ -248,10 +212,10 @@ public class MutableGristSet implements GristSet
 	public static GristSet read(FriendlyByteBuf buffer)
 	{
 		int size = buffer.readInt();
-		GristAmount[] amounts = new GristAmount[size];
+		List<GristAmount> list = new ArrayList<>(size);
 		for(int i = 0; i < size; i++)
-			amounts[i] = GristAmount.read(buffer);
+			list.add(GristAmount.read(buffer));
 		
-		return new MutableGristSet(amounts);
+		return new MutableGristSet(list);
 	}
 }

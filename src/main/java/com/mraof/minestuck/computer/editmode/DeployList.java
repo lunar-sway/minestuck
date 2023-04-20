@@ -1,13 +1,12 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.MiniCruxtruderItem;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.ColorHandler;
@@ -82,8 +81,8 @@ public final class DeployList
 		registerItem("smooth_stone", new ItemStack(Blocks.SMOOTH_STONE), new MutableGristSet(GristTypes.BUILD, 1), 2, EntryLists.ATHENEUM);
 		registerItem("stone_bricks", new ItemStack(Blocks.STONE_BRICKS), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("chiseled_stone_bricks", new ItemStack(Blocks.CHISELED_STONE_BRICKS), new MutableGristSet(GristTypes.BUILD, 1), 2, EntryLists.ATHENEUM);
-		registerItem("nether_bricks", new ItemStack(Blocks.NETHER_BRICKS), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.TAR, 1)), 3, EntryLists.ATHENEUM);
-		registerItem("chiseled_nether_bricks", new ItemStack(Blocks.CHISELED_NETHER_BRICKS), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.TAR, 1)), 4, EntryLists.ATHENEUM);
+		registerItem("nether_bricks", new ItemStack(Blocks.NETHER_BRICKS), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.TAR, 1), 3, EntryLists.ATHENEUM);
+		registerItem("chiseled_nether_bricks", new ItemStack(Blocks.CHISELED_NETHER_BRICKS), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.TAR, 1), 4, EntryLists.ATHENEUM);
 		registerItem("oak_planks", new ItemStack(Blocks.OAK_PLANKS), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("birch_planks", new ItemStack(Blocks.BIRCH_PLANKS), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("spruce_planks", new ItemStack(Blocks.SPRUCE_PLANKS), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
@@ -143,17 +142,17 @@ public final class DeployList
 		registerItem("smooth_stone_slab", new ItemStack(Blocks.SMOOTH_STONE_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 2, EntryLists.ATHENEUM);
 		registerItem("stone_slab", new ItemStack(Blocks.STONE_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("stone_brick_slab", new ItemStack(Blocks.STONE_BRICK_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
-		registerItem("nether_brick_slab", new ItemStack(Blocks.NETHER_BRICK_SLAB), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.TAR, 1)), 3, EntryLists.ATHENEUM);
+		registerItem("nether_brick_slab", new ItemStack(Blocks.NETHER_BRICK_SLAB), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.TAR, 1), 3, EntryLists.ATHENEUM);
 		registerItem("cobblestone_stairs", new ItemStack(Blocks.COBBLESTONE_STAIRS), new MutableGristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("mossy_cobblestone_stairs", new ItemStack(Blocks.MOSSY_COBBLESTONE_STAIRS), new MutableGristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("stone_stairs", new ItemStack(Blocks.STONE_STAIRS), new MutableGristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("stone_brick_stairs", new ItemStack(Blocks.STONE_BRICK_STAIRS), new MutableGristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
-		registerItem("nether_brick_stairs", new ItemStack(Blocks.NETHER_BRICK_STAIRS), new MutableGristSet(new GristAmount(GristTypes.BUILD, 2), new GristAmount(GristTypes.TAR, 2)), 3, EntryLists.ATHENEUM);
+		registerItem("nether_brick_stairs", new ItemStack(Blocks.NETHER_BRICK_STAIRS), new MutableGristSet(GristTypes.BUILD, 2).addGrist(GristTypes.TAR, 2), 3, EntryLists.ATHENEUM);
 		registerItem("cobblestone_wall", new ItemStack(Blocks.COBBLESTONE_WALL), new MutableGristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
 		registerItem("mossy_cobblestone_wall", new ItemStack(Blocks.MOSSY_COBBLESTONE_WALL), new MutableGristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("stone_brick_wall", new ItemStack(Blocks.STONE_BRICK_WALL), new MutableGristSet(GristTypes.BUILD, 2), 0, EntryLists.ATHENEUM);
-		registerItem("nether_brick_wall", new ItemStack(Blocks.NETHER_BRICK_WALL), new MutableGristSet(new GristAmount(GristTypes.BUILD, 2), new GristAmount(GristTypes.TAR, 2)), 3, EntryLists.ATHENEUM);
-		registerItem("nether_brick_fence", new ItemStack(Blocks.NETHER_BRICK_FENCE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 2), new GristAmount(GristTypes.TAR, 2)), 3, EntryLists.ATHENEUM);
+		registerItem("nether_brick_wall", new ItemStack(Blocks.NETHER_BRICK_WALL), new MutableGristSet(GristTypes.BUILD, 2).addGrist(GristTypes.TAR, 2), 3, EntryLists.ATHENEUM);
+		registerItem("nether_brick_fence", new ItemStack(Blocks.NETHER_BRICK_FENCE), new MutableGristSet(GristTypes.BUILD, 2).addGrist(GristTypes.TAR, 2), 3, EntryLists.ATHENEUM);
 		registerItem("oak_slab", new ItemStack(Blocks.OAK_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("birch_slab", new ItemStack(Blocks.BIRCH_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
 		registerItem("spruce_slab", new ItemStack(Blocks.SPRUCE_SLAB), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);
@@ -216,22 +215,22 @@ public final class DeployList
 		registerItem("polished_deepslate_wall", new ItemStack(Blocks.POLISHED_DEEPSLATE_WALL), new MutableGristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("deepslate_brick_wall", new ItemStack(Blocks.DEEPSLATE_BRICK_WALL), new MutableGristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
 		registerItem("deepslate_tile_wall", new ItemStack(Blocks.DEEPSLATE_TILE_WALL), new MutableGristSet(GristTypes.BUILD, 2), 1, EntryLists.ATHENEUM);
-		registerItem("white_concrete", new ItemStack(Blocks.WHITE_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("orange_concrete", new ItemStack(Blocks.ORANGE_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMBER, 1), new GristAmount(GristTypes.GARNET, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("magenta_concrete", new ItemStack(Blocks.MAGENTA_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMETHYST, 1), new GristAmount(GristTypes.GARNET, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("light_blue_concrete", new ItemStack(Blocks.LIGHT_BLUE_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1), new GristAmount(GristTypes.AMETHYST, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("yellow_concrete", new ItemStack(Blocks.YELLOW_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMBER, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("lime_concrete", new ItemStack(Blocks.LIME_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1), new GristAmount(GristTypes.AMBER, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("pink_concrete", new ItemStack(Blocks.PINK_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1), new GristAmount(GristTypes.GARNET, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("gray_concrete", new ItemStack(Blocks.GRAY_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1), new GristAmount(GristTypes.TAR, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("light_gray_concrete", new ItemStack(Blocks.LIGHT_GRAY_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.CHALK, 1), new GristAmount(GristTypes.TAR, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("cyan_concrete", new ItemStack(Blocks.CYAN_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMBER, 1), new GristAmount(GristTypes.AMETHYST, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("purple_concrete", new ItemStack(Blocks.PURPLE_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.GARNET, 1), new GristAmount(GristTypes.AMETHYST, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("blue_concrete", new ItemStack(Blocks.BLUE_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMETHYST, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("brown_concrete", new ItemStack(Blocks.BROWN_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMBER, 1), new GristAmount(GristTypes.IODINE, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("green_concrete", new ItemStack(Blocks.GREEN_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.AMBER, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("red_concrete", new ItemStack(Blocks.RED_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.GARNET, 1)), 2, EntryLists.ATHENEUM);
-		registerItem("black_concrete", new ItemStack(Blocks.BLACK_CONCRETE), new MutableGristSet(new GristAmount(GristTypes.BUILD, 1), new GristAmount(GristTypes.COBALT, 1), new GristAmount(GristTypes.TAR, 1)), 2, EntryLists.ATHENEUM);
+		registerItem("white_concrete", new ItemStack(Blocks.WHITE_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1), 2, EntryLists.ATHENEUM);
+		registerItem("orange_concrete", new ItemStack(Blocks.ORANGE_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMBER, 1).addGrist(GristTypes.GARNET, 1), 2, EntryLists.ATHENEUM);
+		registerItem("magenta_concrete", new ItemStack(Blocks.MAGENTA_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMETHYST, 1).addGrist(GristTypes.GARNET, 1), 2, EntryLists.ATHENEUM);
+		registerItem("light_blue_concrete", new ItemStack(Blocks.LIGHT_BLUE_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1).addGrist(GristTypes.AMETHYST, 1), 2, EntryLists.ATHENEUM);
+		registerItem("yellow_concrete", new ItemStack(Blocks.YELLOW_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMBER, 1), 2, EntryLists.ATHENEUM);
+		registerItem("lime_concrete", new ItemStack(Blocks.LIME_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1).addGrist(GristTypes.AMBER, 1), 2, EntryLists.ATHENEUM);
+		registerItem("pink_concrete", new ItemStack(Blocks.PINK_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1).addGrist(GristTypes.GARNET, 1), 2, EntryLists.ATHENEUM);
+		registerItem("gray_concrete", new ItemStack(Blocks.GRAY_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1).addGrist(GristTypes.TAR, 1), 2, EntryLists.ATHENEUM);
+		registerItem("light_gray_concrete", new ItemStack(Blocks.LIGHT_GRAY_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.CHALK, 1).addGrist(GristTypes.TAR, 1), 2, EntryLists.ATHENEUM);
+		registerItem("cyan_concrete", new ItemStack(Blocks.CYAN_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMBER, 1).addGrist(GristTypes.AMETHYST, 1), 2, EntryLists.ATHENEUM);
+		registerItem("purple_concrete", new ItemStack(Blocks.PURPLE_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.GARNET, 1).addGrist(GristTypes.AMETHYST, 1), 2, EntryLists.ATHENEUM);
+		registerItem("blue_concrete", new ItemStack(Blocks.BLUE_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMETHYST, 1), 2, EntryLists.ATHENEUM);
+		registerItem("brown_concrete", new ItemStack(Blocks.BROWN_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMBER, 1).addGrist(GristTypes.IODINE, 1), 2, EntryLists.ATHENEUM);
+		registerItem("green_concrete", new ItemStack(Blocks.GREEN_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.AMBER, 1), 2, EntryLists.ATHENEUM);
+		registerItem("red_concrete", new ItemStack(Blocks.RED_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.GARNET, 1), 2, EntryLists.ATHENEUM);
+		registerItem("black_concrete", new ItemStack(Blocks.BLACK_CONCRETE), new MutableGristSet(GristTypes.BUILD, 1).addGrist(GristTypes.COBALT, 1).addGrist(GristTypes.TAR, 1), 2, EntryLists.ATHENEUM);
 		
 	}
 	
