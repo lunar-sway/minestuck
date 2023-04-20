@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public interface IGristSet
 {
@@ -61,6 +62,11 @@ public interface IGristSet
 		public List<GristAmount> asAmounts()
 		{
 			return Collections.emptyList();
+		}
+		@Override
+		public Map<GristType, Long> asMap()
+		{
+			return Collections.emptyMap();
 		}
 		@Override
 		public boolean isEmpty()

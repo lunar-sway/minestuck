@@ -88,7 +88,7 @@ public class ContainerGristCostBuilder
 	
 	public static class Result extends GristCostRecipeBuilder.Result
 	{
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 		}

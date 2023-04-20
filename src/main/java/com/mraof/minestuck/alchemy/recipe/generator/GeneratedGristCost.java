@@ -34,7 +34,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		super(id, ingredient, priority);
 	}
 	
-	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable IGristSet cost)
 	{
 		super(id, ingredient, priority);
 		cachedCost = cost != null ? cost.asImmutable() : null;
@@ -103,7 +103,7 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 		protected T read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
 			boolean hasCost = buffer.readBoolean();
-			GristSet cost = hasCost ? GristSet.read(buffer) : null;
+			IGristSet cost = hasCost ? GristSet.read(buffer) : null;
 			
 			return create(recipeId, buffer, ingredient, priority, cost);
 		}
@@ -119,6 +119,6 @@ public abstract class GeneratedGristCost extends GristCostRecipe implements Gene
 			} else buffer.writeBoolean(false);
 		}
 		
-		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost);
+		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable IGristSet cost);
 	}
 }

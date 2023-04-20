@@ -59,7 +59,7 @@ public record GristToastPacket(IGristSet gristValue, GristHelper.EnumSource sour
 	
 	public static GristToastPacket decode(FriendlyByteBuf buffer)
 	{
-		GristSet gristValue = GristSet.read(buffer);
+		IGristSet gristValue = GristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
 		boolean isCacheOwner = buffer.readBoolean();
 		return new GristToastPacket(gristValue, source, isCacheOwner);

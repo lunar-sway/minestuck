@@ -3,12 +3,12 @@ package com.mraof.minestuck.alchemy;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -59,6 +59,12 @@ public record GristAmount(GristType type, long amount) implements IImmutableGris
 	}
 	
 	@Override
+	public Map<GristType, Long> asMap()
+	{
+		return Map.of(type, amount);
+	}
+	
+	@Override
 	public boolean isEmpty()
 	{
 		return amount != 0;
@@ -81,26 +87,5 @@ public record GristAmount(GristType type, long amount) implements IImmutableGris
 	public Component asTextComponent()
 	{
 		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
-	}
-	
-	private static String makeNBTPrefix(String prefix)
-	{
-		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
-	}
-	
-	public CompoundTag write(CompoundTag nbt, String keyPrefix)
-	{
-		keyPrefix = makeNBTPrefix(keyPrefix);
-		type().write(nbt, keyPrefix + "type");
-		nbt.putLong(keyPrefix + "amount", amount());
-		return nbt;
-	}
-	
-	public static GristAmount read(CompoundTag nbt, String keyPrefix)
-	{
-		keyPrefix = makeNBTPrefix(keyPrefix);
-		GristType type = GristType.read(nbt, keyPrefix + "type");
-		long amount = nbt.getLong(keyPrefix + "amount");
-		return new GristAmount(type, amount);
 	}
 }

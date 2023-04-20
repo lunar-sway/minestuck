@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.ImmutableMap;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ImmutableGristSet extends GristSet implements IImmutableGristSet
@@ -28,6 +28,11 @@ public class ImmutableGristSet extends GristSet implements IImmutableGristSet
 		this(type.get(), amount);
 	}
 	
+	public ImmutableGristSet(Map<GristType, Long> grist)
+	{
+		super(ImmutableMap.copyOf(grist));
+	}
+	
 	public static ImmutableGristSet create(List<GristAmount> amounts)
 	{
 		ImmutableMap.Builder<GristType, Long> builder = ImmutableMap.builder();
@@ -37,9 +42,8 @@ public class ImmutableGristSet extends GristSet implements IImmutableGristSet
 	}
 	
 	@Override
-	public ImmutableGristSet asImmutable()
+	public Map<GristType, Long> asMap()
 	{
-		return this;
+		return this.getMap();
 	}
-	
 }

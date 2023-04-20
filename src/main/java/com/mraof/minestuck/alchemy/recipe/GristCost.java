@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.IGristSet;
@@ -14,6 +15,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,9 +27,11 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class GristCost extends GristCostRecipe
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final IImmutableGristSet cost;
 	
-	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, @Nullable Integer priority)
+	public GristCost(ResourceLocation id, Ingredient ingredient, IGristSet cost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.cost = cost.asImmutable();
@@ -55,14 +60,14 @@ public class GristCost extends GristCostRecipe
 		@Override
 		protected GristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(json.getAsJsonObject("grist_cost"));
+			IGristSet cost = IImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonObject("grist_cost")).getOrThrow(false, LOGGER::error);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
 		protected GristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
-			GristSet cost = GristSet.read(buffer);
+			IGristSet cost = GristSet.read(buffer);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		

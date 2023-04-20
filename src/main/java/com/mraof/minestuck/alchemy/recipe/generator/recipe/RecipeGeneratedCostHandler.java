@@ -92,7 +92,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			GristSet cost = GristSet.read(buffer);
+			IGristSet cost = GristSet.read(buffer);
 			builder.put(item, cost.asImmutable());
 		}
 		return new RecipeGeneratedCostHandler(builder.build());

@@ -26,7 +26,7 @@ public class GristCachePacket implements PlayToClientPacket
 	
 	public static GristCachePacket decode(FriendlyByteBuf buffer)
 	{
-		GristSet gristCache = GristSet.read(buffer);
+		IGristSet gristCache = GristSet.read(buffer);
 		boolean isEditmode = buffer.readBoolean();
 		return new GristCachePacket(gristCache, isEditmode);
 	}

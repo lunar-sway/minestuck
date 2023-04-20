@@ -1,22 +1,16 @@
 package com.mraof.minestuck.alchemy;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.mojang.serialization.Codec;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Supplier;
 
 public class GristSet implements IGristSet
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	public static final Codec<GristSet> CODEC = GristAmount.LIST_CODEC.xmap(GristSet::new, GristSet::asAmounts);
 	public static final String MISSING_MESSAGE = "grist.missing";
 	public static final String GRIST_COMMA = "grist.comma";
@@ -262,38 +256,6 @@ public class GristSet implements IGristSet
 		return new GristSet(new TreeMap<>(gristTypes));
 	}
 	
-	public JsonElement serialize()
-	{
-		JsonObject json = new JsonObject();
-		for(Map.Entry<GristType, Long> entry : gristTypes.entrySet())
-		{
-			ResourceLocation id = GristTypes.getRegistry().getKey(entry.getKey());
-			if(id == null)
-			{
-				LOGGER.warn("Found grist type without a registry name! ({})", entry.getKey());
-				continue;
-			}
-			json.addProperty(id.toString(), entry.getValue());
-		}
-		return json;
-	}
-	
-	public static GristSet deserialize(JsonObject json)
-	{
-		GristSet set = new GristSet();
-		for(Map.Entry<String, JsonElement> entry : json.entrySet())
-		{
-			ResourceLocation gristId = new ResourceLocation(entry.getKey());
-			GristType type = GristTypes.getRegistry().getValue(gristId);
-			if(type == null)
-				throw new JsonParseException("'"+entry.getKey()+"' did not match an existing grist type!");
-			long amount = GsonHelper.convertToLong(entry.getValue(), entry.getKey());	//getLong
-			set.addGrist(type, amount);
-		}
-		
-		return set;
-	}
-	
 	public static void write(IGristSet gristSet, FriendlyByteBuf buffer)
 	{
 		Collection<GristAmount> amounts = gristSet.asAmounts();
@@ -301,7 +263,7 @@ public class GristSet implements IGristSet
 		amounts.forEach(gristAmount -> gristAmount.write(buffer));
 	}
 	
-	public static GristSet read(FriendlyByteBuf buffer)
+	public static IGristSet read(FriendlyByteBuf buffer)
 	{
 		int size = buffer.readInt();
 		GristAmount[] amounts = new GristAmount[size];

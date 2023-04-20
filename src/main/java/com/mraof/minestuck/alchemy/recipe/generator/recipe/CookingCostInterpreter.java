@@ -1,22 +1,27 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.IGristSet;
+import com.mraof.minestuck.alchemy.IImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CookingCostInterpreter extends DefaultInterpreter
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	private static final int STANDARD_COOKING_TIME = 200;
 	
-	private final GristSet fuelCost;
+	private final IImmutableGristSet fuelCost;
 	
-	public CookingCostInterpreter(GristSet fuelCost)
+	public CookingCostInterpreter(IGristSet fuelCost)
 	{
-		this.fuelCost = fuelCost;
+		this.fuelCost = fuelCost.asImmutable();
 	}
 	
 	@Override
@@ -44,14 +49,14 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		@Override
 		public CookingCostInterpreter read(JsonElement json)
 		{
-			GristSet cost = GristSet.deserialize(GsonHelper.convertToJsonObject(json, "grist cost"));
+			IGristSet cost = IImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
 			return new CookingCostInterpreter(cost);
 		}
 		
 		@Override
 		public JsonElement write(CookingCostInterpreter interpreter)
 		{
-			return interpreter.fuelCost.serialize();
+			return IImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, interpreter.fuelCost).getOrThrow(false, LOGGER::error);
 		}
 	}
 }

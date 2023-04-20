@@ -3,10 +3,8 @@ package com.mraof.minestuck.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -117,7 +115,7 @@ public class SourceGristCostBuilder
 		private final List<String> sources;
 		private final float multiplier;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, IImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 			this.sources = sources;
