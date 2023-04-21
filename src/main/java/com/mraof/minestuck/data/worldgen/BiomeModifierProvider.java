@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-public class BiomeModifierProvider
+public final class BiomeModifierProvider
 {
 	public static DataProvider create(DataGenerator generator, ExistingFileHelper existingFileHelper, RegistryOps<JsonElement> registryOps)
 	{

@@ -1,75 +1,40 @@
 package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.util.CubicSpline;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.DensityFunctions;
-import net.minecraft.world.level.levelgen.Noises;
 import net.minecraft.world.level.levelgen.synth.BlendedNoise;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
-import javax.annotation.Nonnull;
-import java.util.Objects;
-import java.util.function.Supplier;
-
-public class MSDensityFunctions
+public final class MSDensityFunctions
 {
-	public static final DeferredRegister<DensityFunction> REGISTER = DeferredRegister.create(Registry.DENSITY_FUNCTION_REGISTRY, Minestuck.MOD_ID);
-	
 	// Our own set of shift functions imitating vanillas. By not using vanillas functions directly, we will not be affected by datapacks targeting the vanilla functions.
-	public static final RegistryObject<DensityFunction> SHIFT_X = REGISTER.register("shift_x",
-			() -> DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.shiftA(BuiltinRegistries.NOISE.getHolderOrThrow(Noises.SHIFT)))));
-	public static final RegistryObject<DensityFunction> SHIFT_Z = REGISTER.register("shift_z",
-			() -> DensityFunctions.flatCache(DensityFunctions.cache2d(DensityFunctions.shiftB(BuiltinRegistries.NOISE.getHolderOrThrow(Noises.SHIFT)))));
+	public static final ResourceKey<DensityFunction> SHIFT_X = key("shift_x");
+	public static final ResourceKey<DensityFunction> SHIFT_Z = key("shift_z");
 	
-	public static final RegistryObject<DensityFunction> SKAIA_RIDGES = REGISTER.register("skaia/ridges",
-			() -> base2dNoise(MSNoiseParameters.SKAIA_RIDGES));
+	public static final ResourceKey<DensityFunction> SKAIA_RIDGES = key("skaia/ridges");
 	
-	public static final RegistryObject<DensityFunction> SKAIA_OFFSET = REGISTER.register("skaia/offset", MSDensityFunctions::skaiaOffset);
-	public static final RegistryObject<DensityFunction> SKAIA_DEPTH = REGISTER.register("skaia/depth",
-			() -> depth(SKAIA_OFFSET));
-	public static final RegistryObject<DensityFunction> SKAIA_FACTOR = REGISTER.register("skaia/factor",
-			() -> DensityFunctions.constant(5));
-	public static final RegistryObject<DensityFunction> SKAIA_INITIAL_DENSITY = REGISTER.register("skaia/initial_density",
-			() -> initialDensity(SKAIA_DEPTH.get(), SKAIA_FACTOR.get()));
-	public static final RegistryObject<DensityFunction> SKAIA_FINAL_DENSITY = REGISTER.register("skaia/final_density",
-			() -> finalDensity(SKAIA_DEPTH.get(), SKAIA_FACTOR.get(), DensityFunctions.zero(), 256));
+	public static final ResourceKey<DensityFunction> SKAIA_OFFSET = key("skaia/offset");
+	public static final ResourceKey<DensityFunction> SKAIA_DEPTH = key("skaia/depth");
+	public static final ResourceKey<DensityFunction> SKAIA_FACTOR = key("skaia/factor");
+	public static final ResourceKey<DensityFunction> SKAIA_INITIAL_DENSITY = key("skaia/initial_density");
+	public static final ResourceKey<DensityFunction> SKAIA_FINAL_DENSITY = key("skaia/final_density");
 	
-	private static DensityFunction skaiaOffset()
+	public static final ResourceKey<DensityFunction> LAND_CONTINENTS = key("land/continents");
+	public static final ResourceKey<DensityFunction> LAND_EROSION = key("land/erosion");
+	
+	private static ResourceKey<DensityFunction> key(String name)
 	{
-		var builder = CubicSpline.builder(new DensityFunctions.Spline.Coordinate(SKAIA_RIDGES.getHolder().orElseThrow()));
-		builder.addPoint(-1.5F, -0.2F);
-		builder.addPoint(-0.5F, 1F);
-		builder.addPoint(0.5F, -0.2F);
-		builder.addPoint(1.5F, 1F);
-		return DensityFunctions.add(DensityFunctions.constant(-0.50375), DensityFunctions.spline(builder.build()));
+		return ResourceKey.create(Registry.DENSITY_FUNCTION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 	}
 	
-	
-	public static final RegistryObject<DensityFunction> LAND_CONTINENTS = REGISTER.register("land/continents",
-			() -> base2dNoise(MSNoiseParameters.LAND_CONTINENTS));
-	public static final RegistryObject<DensityFunction> LAND_EROSION = REGISTER.register("land/erosion",
-			() -> base2dNoise(MSNoiseParameters.LAND_EROSION));
-	
-	
-	@Nonnull
-	public static DensityFunction from(Registry<DensityFunction> registry, RegistryObject<DensityFunction> builtinFunction)
+	public static DensityFunction depth(DensityFunction offset)
 	{
-		return registry.getOrThrow(Objects.requireNonNull(builtinFunction.getKey()));
-	}
-	
-	private static DensityFunction base2dNoise(RegistryObject<NormalNoise.NoiseParameters> noise)
-	{
-		return DensityFunctions.flatCache(DensityFunctions.shiftedNoise2d(SHIFT_X.get(), SHIFT_Z.get(), 0.25, noise.getHolder().orElseThrow()));
-	}
-	
-	public static DensityFunction depth(Supplier<DensityFunction> offset)
-	{
-		return DensityFunctions.add(DensityFunctions.yClampedGradient(-64, 320, 1.5, -1.5), offset.get());
+		return DensityFunctions.add(DensityFunctions.yClampedGradient(-64, 320, 1.5, -1.5), offset);
 	}
 	
 	public static DensityFunction initialDensity(DensityFunction depth, DensityFunction factor)
@@ -78,10 +43,9 @@ public class MSDensityFunctions
 	}
 	
 	@SuppressWarnings("ConstantConditions")
-	public static DensityFunction finalDensity(DensityFunction depth, DensityFunction factor, DensityFunction jaggedness, int height)
+	public static DensityFunction finalDensity(DensityFunction depth, DensityFunction factor, DensityFunction jaggedness, Holder<NormalNoise.NoiseParameters> jagged, int height)
 	{
-		// Uses vanilla noise settings because I'm lazy + we're not using jaggedness at the time of writing
-		DensityFunction noise = DensityFunctions.noise(BuiltinRegistries.NOISE.getHolderOrThrow(Noises.JAGGED), 1500, 0);
+		DensityFunction noise = DensityFunctions.noise(jagged, 1500, 0);
 		DensityFunction jaggednessFactor = DensityFunctions.mul(jaggedness, noise.halfNegative());
 		
 		DensityFunction modifiedDepth = DensityFunctions.add(depth, jaggednessFactor);

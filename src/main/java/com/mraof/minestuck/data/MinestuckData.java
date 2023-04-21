@@ -30,6 +30,9 @@ public final class MinestuckData
 		RegistryAccess.Writable registryAccess = RegistryAccess.builtinCopy();
 		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 		
+		gen.addProvider(event.includeServer(), MSNoiseParametersProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSDensityFunctionProvider.create(registryAccess, gen, fileHelper));
+		
 		gen.addProvider(event.includeServer(), MSConfiguredFeatureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSPlacedFeatureProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), MSBiomeProvider.create(registryOps, gen, fileHelper));

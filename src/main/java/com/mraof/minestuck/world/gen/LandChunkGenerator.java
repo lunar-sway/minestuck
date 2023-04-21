@@ -76,7 +76,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, WorldGenBiomeSet biomeSet, Registry<Biome> biomes, Registry<PlacedFeature> features, LandGenSettings genSettings)
 	{
 		super(structureSets, noises, new LandBiomeSource(biomeSet.baseBiomes, genSettings), biome -> biomeSet.getBiomeFromBase(biome).get().getGenerationSettings(),
-				genSettings.createDimensionSettings(densityFunctions));
+				genSettings.createDimensionSettings(noises, densityFunctions));
 		
 		this.densityFunctions = densityFunctions;
 		this.biomeSet = biomeSet;

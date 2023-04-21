@@ -25,13 +25,9 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.KindAbstratusList;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
-import com.mraof.minestuck.world.gen.MSDensityFunctions;
-import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import com.mraof.minestuck.world.gen.MSSurfaceRules;
 import com.mraof.minestuck.world.gen.MSWorldGenTypes;
-import com.mraof.minestuck.world.gen.feature.MSCFeatures;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
-import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.feature.MSStructureProcessorTypes;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
@@ -89,8 +85,6 @@ public class Minestuck
 		MSLootTables.MODIFIER_REGISTER.register(eventBus);
 		ModusTypes.REGISTER.register(eventBus);
 		
-		MSNoiseParameters.REGISTER.register(eventBus);
-		MSDensityFunctions.REGISTER.register(eventBus);
 		MSFeatures.REGISTER.register(eventBus);
 		
 		MSStructurePieces.REGISTER.register(eventBus);
