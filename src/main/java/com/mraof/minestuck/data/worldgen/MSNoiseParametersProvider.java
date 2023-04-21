@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -22,11 +21,8 @@ public final class MSNoiseParametersProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var registry = registryAccess.ownedWritableRegistryOrThrow(Registry.NOISE_REGISTRY);
-		DataEntriesBuilder<NormalNoise.NoiseParameters> builder = new DataEntriesBuilder<>();
-		generate((key, parameters) -> {
-			builder.add(key, parameters);
-			registry.register(key, parameters, Lifecycle.stable());
-		});
+		DataEntriesBuilder<NormalNoise.NoiseParameters> builder = new DataEntriesBuilder<>(registry);
+		generate(builder::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
 				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.NOISE_REGISTRY, builder.getMap());

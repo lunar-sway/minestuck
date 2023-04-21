@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.MSNoiseParameters;
 import net.minecraft.core.Holder;
@@ -28,11 +27,8 @@ public final class MSDensityFunctionProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var registry = registryAccess.ownedWritableRegistryOrThrow(Registry.DENSITY_FUNCTION_REGISTRY);
-		DataEntriesBuilder<DensityFunction> builder = new DataEntriesBuilder<>();
-		generate(registry, registryAccess.registryOrThrow(Registry.NOISE_REGISTRY), (key, function) -> {
-			builder.add(key, function);
-			registry.register(key, function, Lifecycle.stable());
-		});
+		DataEntriesBuilder<DensityFunction> builder = new DataEntriesBuilder<>(registry);
+		generate(registry, registryAccess.registryOrThrow(Registry.NOISE_REGISTRY), builder::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
 				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.DENSITY_FUNCTION_REGISTRY, builder.getMap());

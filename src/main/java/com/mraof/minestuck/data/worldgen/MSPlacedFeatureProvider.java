@@ -41,11 +41,8 @@ public final class MSPlacedFeatureProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var placedRegistry = registryAccess.ownedWritableRegistryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
-		DataEntriesBuilder<PlacedFeature> builder = new DataEntriesBuilder<>();
-		generate(registryAccess.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY), (key, feature) -> {
-			builder.add(key, feature);
-			placedRegistry.register(key, feature, Lifecycle.stable());
-		});
+		DataEntriesBuilder<PlacedFeature> builder = new DataEntriesBuilder<>(placedRegistry);
+		generate(registryAccess.registryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY), builder::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
 				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.PLACED_FEATURE_REGISTRY, builder.getMap());

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.structure.FrogTempleStructure;
@@ -33,11 +32,8 @@ public final class MSStructureProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var structureRegistry = registryAccess.ownedWritableRegistryOrThrow(Registry.STRUCTURE_REGISTRY);
-		DataEntriesBuilder<Structure> structures = new DataEntriesBuilder<>();
-		generate(registryAccess.registryOrThrow(Registry.BIOME_REGISTRY), (key, structure) -> {
-			structures.add(key, structure);
-			structureRegistry.register(key, structure, Lifecycle.stable());
-		});
+		DataEntriesBuilder<Structure> structures = new DataEntriesBuilder<>(structureRegistry);
+		generate(registryAccess.registryOrThrow(Registry.BIOME_REGISTRY), structures::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID,
 				RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.STRUCTURE_REGISTRY, structures.getMap());

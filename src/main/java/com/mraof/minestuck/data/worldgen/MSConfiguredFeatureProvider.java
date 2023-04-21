@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.worldgen;
 
 import com.mojang.serialization.JsonOps;
-import com.mojang.serialization.Lifecycle;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.feature.MSFeatures;
@@ -52,11 +51,8 @@ public final class MSConfiguredFeatureProvider
 	public static DataProvider create(RegistryAccess.Writable registryAccess, DataGenerator generator, ExistingFileHelper existingFileHelper)
 	{
 		var registry = registryAccess.ownedWritableRegistryOrThrow(Registry.CONFIGURED_FEATURE_REGISTRY);
-		DataEntriesBuilder<ConfiguredFeature<?, ?>> builder = new DataEntriesBuilder<>();
-		generate(registry, registryAccess.registryOrThrow(Registry.PLACED_FEATURE_REGISTRY), (key, feature) -> {
-			builder.add(key, feature);
-			registry.register(key, feature, Lifecycle.stable());
-		});
+		DataEntriesBuilder<ConfiguredFeature<?, ?>> builder = new DataEntriesBuilder<>(registry);
+		generate(registry, registryAccess.registryOrThrow(Registry.PLACED_FEATURE_REGISTRY), builder::add);
 		
 		return JsonCodecProvider.forDatapackRegistry(generator, existingFileHelper, Minestuck.MOD_ID, RegistryOps.create(JsonOps.INSTANCE, registryAccess), Registry.CONFIGURED_FEATURE_REGISTRY, builder.getMap());
 	}
