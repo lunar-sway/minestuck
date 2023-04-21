@@ -36,15 +36,15 @@ public class SourceGristCost extends GeneratedGristCost
 	private final float multiplier;
 	private final ImmutableGristSet addedCost;
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, GristSet addedCost, @Nullable Integer priority)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.sources = sources;
 		this.multiplier = multiplier;
-		this.addedCost = addedCost.asImmutable();
+		this.addedCost = addedCost;
 	}
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.sources = null;
@@ -54,7 +54,7 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	@Nullable
 	@Override
-	protected MutableGristSet generateCost(GenerationContext context)
+	protected GristSet generateCost(GenerationContext context)
 	{
 		MutableGristSet costSum = new MutableGristSet();
 		for(Source source : sources)
@@ -79,7 +79,7 @@ public class SourceGristCost extends GeneratedGristCost
 		@Override
 		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
 					.getOrThrow(false, LOGGER::error);
 			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
 			
@@ -91,7 +91,7 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
+		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost)
 		{
 			return new SourceGristCost(recipeId, ingredient, priority, cost);
 		}

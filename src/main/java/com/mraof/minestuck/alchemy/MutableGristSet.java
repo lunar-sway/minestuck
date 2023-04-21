@@ -1,7 +1,6 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -200,22 +199,5 @@ public class MutableGristSet implements GristSet
 	public MutableGristSet mutableCopy()
 	{
 		return new MutableGristSet(new TreeMap<>(gristTypes));
-	}
-	
-	public static void write(GristSet gristSet, FriendlyByteBuf buffer)
-	{
-		Collection<GristAmount> amounts = gristSet.asAmounts();
-		buffer.writeInt(amounts.size());
-		amounts.forEach(gristAmount -> gristAmount.write(buffer));
-	}
-	
-	public static GristSet read(FriendlyByteBuf buffer)
-	{
-		int size = buffer.readInt();
-		List<GristAmount> list = new ArrayList<>(size);
-		for(int i = 0; i < size; i++)
-			list.add(GristAmount.read(buffer));
-		
-		return new MutableGristSet(list);
 	}
 }

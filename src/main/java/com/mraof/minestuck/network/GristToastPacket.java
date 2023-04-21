@@ -2,7 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
@@ -52,14 +52,14 @@ public record GristToastPacket(GristSet gristValue, GristHelper.EnumSource sourc
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		MutableGristSet.write(gristValue, buffer);
+		GristSet.write(gristValue, buffer);
 		buffer.writeEnum(source);
 		buffer.writeBoolean(isCacheOwner);
 	}
 	
 	public static GristToastPacket decode(FriendlyByteBuf buffer)
 	{
-		GristSet gristValue = MutableGristSet.read(buffer);
+		ImmutableGristSet gristValue = GristSet.read(buffer);
 		GristHelper.EnumSource source = buffer.readEnum(GristHelper.EnumSource.class);
 		boolean isCacheOwner = buffer.readBoolean();
 		return new GristToastPacket(gristValue, source, isCacheOwner);

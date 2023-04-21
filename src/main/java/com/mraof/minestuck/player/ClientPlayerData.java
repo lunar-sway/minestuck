@@ -169,9 +169,10 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
-		if(packet.isEditmode)
-			targetGrist = packet.gristCache;
-		else playerGrist = packet.gristCache;
+		if(packet.isEditmode())
+			targetGrist = packet.gristCache();
+		else
+			playerGrist = packet.gristCache();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)

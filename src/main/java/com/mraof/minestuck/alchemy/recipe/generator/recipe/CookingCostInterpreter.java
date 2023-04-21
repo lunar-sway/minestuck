@@ -2,9 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -19,9 +18,9 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	
 	private final ImmutableGristSet fuelCost;
 	
-	public CookingCostInterpreter(GristSet fuelCost)
+	public CookingCostInterpreter(ImmutableGristSet fuelCost)
 	{
-		this.fuelCost = fuelCost.asImmutable();
+		this.fuelCost = fuelCost;
 	}
 	
 	@Override
@@ -49,7 +48,7 @@ public class CookingCostInterpreter extends DefaultInterpreter
 		@Override
 		public CookingCostInterpreter read(JsonElement json)
 		{
-			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json).getOrThrow(false, LOGGER::error);
 			return new CookingCostInterpreter(cost);
 		}
 		

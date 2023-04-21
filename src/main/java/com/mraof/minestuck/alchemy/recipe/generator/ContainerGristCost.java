@@ -27,13 +27,13 @@ public class ContainerGristCost extends GeneratedGristCost
 	
 	private final ImmutableGristSet addedCost;
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, @Nullable Integer priority)
+	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
-		this.addedCost = addedCost.asImmutable();
+		this.addedCost = addedCost;
 	}
 	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable GristSet cost)
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.addedCost = null;
@@ -75,13 +75,13 @@ public class ContainerGristCost extends GeneratedGristCost
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
 					.getOrThrow(false, LOGGER::error);
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable GristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost)
 		{
 			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}

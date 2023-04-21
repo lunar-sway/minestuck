@@ -1,10 +1,9 @@
 package com.mraof.minestuck.alchemy;
 
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An interface for anything that might contain grist.
@@ -93,4 +92,21 @@ public interface GristSet
 			return true;
 		}
 	};
+	
+	static void write(GristSet gristSet, FriendlyByteBuf buffer)
+	{
+		Collection<GristAmount> amounts = gristSet.asAmounts();
+		buffer.writeInt(amounts.size());
+		amounts.forEach(gristAmount -> gristAmount.write(buffer));
+	}
+	
+	static ImmutableGristSet read(FriendlyByteBuf buffer)
+	{
+		int size = buffer.readInt();
+		List<GristAmount> list = new ArrayList<>(size);
+		for(int i = 0; i < size; i++)
+			list.add(GristAmount.read(buffer));
+		
+		return DefaultImmutableGristSet.create(list);
+	}
 }

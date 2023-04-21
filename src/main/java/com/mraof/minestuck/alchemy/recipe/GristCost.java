@@ -2,7 +2,6 @@ package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
@@ -31,10 +30,10 @@ public class GristCost extends GristCostRecipe
 	
 	private final ImmutableGristSet cost;
 	
-	public GristCost(ResourceLocation id, Ingredient ingredient, GristSet cost, @Nullable Integer priority)
+	public GristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
-		this.cost = cost.asImmutable();
+		this.cost = cost;
 	}
 	
 	@Override
@@ -60,14 +59,14 @@ public class GristCost extends GristCostRecipe
 		@Override
 		protected GristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			GristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonObject("grist_cost")).getOrThrow(false, LOGGER::error);
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, json.getAsJsonObject("grist_cost")).getOrThrow(false, LOGGER::error);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
 		protected GristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
-			GristSet cost = MutableGristSet.read(buffer);
+			ImmutableGristSet cost = GristSet.read(buffer);
 			return new GristCost(recipeId, ingredient, cost, priority);
 		}
 		
@@ -75,7 +74,7 @@ public class GristCost extends GristCostRecipe
 		public void toNetwork(FriendlyByteBuf buffer, GristCost recipe)
 		{
 			super.toNetwork(buffer, recipe);
-			MutableGristSet.write(recipe.cost, buffer);
+			GristSet.write(recipe.cost, buffer);
 		}
 	}
 }
