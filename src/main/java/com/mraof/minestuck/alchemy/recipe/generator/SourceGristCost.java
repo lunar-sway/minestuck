@@ -61,11 +61,11 @@ public class SourceGristCost extends GeneratedGristCost
 		{
 			GristSet sourceCost = source.getCostFor(context);
 			if(sourceCost != null)
-				costSum.addGrist(sourceCost);
+				costSum.add(sourceCost);
 			else return null;
 		}
 		
-		return costSum.scale(multiplier, false).addGrist(addedCost);
+		return costSum.scale(multiplier, false).add(addedCost);
 	}
 	
 	@Override

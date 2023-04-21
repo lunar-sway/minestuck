@@ -42,7 +42,7 @@ public class MutableGristSet implements GristSet
 	public MutableGristSet(GristSet set)
 	{
 		this();
-		addGrist(set);
+		add(set);
 	}
 	
 	public MutableGristSet(Iterable<GristAmount> amounts)
@@ -96,7 +96,7 @@ public class MutableGristSet implements GristSet
 	/**
 	 * Adds an amount of grist to a GristSet, given a grist type and amount.
 	 */
-	public MutableGristSet addGrist(GristType type, long amount)
+	public MutableGristSet add(GristType type, long amount)
 	{
 		if(type != null)
 		{
@@ -105,9 +105,20 @@ public class MutableGristSet implements GristSet
 		return this;
 	}
 	
-	public MutableGristSet addGrist(Supplier<GristType> type, long amount)
+	public MutableGristSet add(Supplier<GristType> type, long amount)
 	{
-		return addGrist(type.get(), amount);
+		return add(type.get(), amount);
+	}
+	
+	/**
+	 * Adds an amount of grist to a GristSet, given another set of grist.
+	 */
+	public MutableGristSet add(GristSet set)
+	{
+		for (GristAmount grist : set.asAmounts())
+			this.add(grist.type(), grist.amount());
+		
+		return this;
 	}
 	
 	public boolean hasType(GristType type)
@@ -128,17 +139,6 @@ public class MutableGristSet implements GristSet
 	public Map<GristType, Long> asMap()
 	{
 		return this.gristTypes;
-	}
-	
-	/**
-	 * Adds an amount of grist to a GristSet, given another set of grist.
-	 */
-	public MutableGristSet addGrist(GristSet set)
-	{
-		for (GristAmount grist : set.asAmounts())
-			this.addGrist(grist.type(), grist.amount());
-		
-		return this;
 	}
 	
 	public MutableGristSet scale(int scale)

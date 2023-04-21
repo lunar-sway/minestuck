@@ -32,13 +32,13 @@ public class SmithingInterpreter extends DefaultInterpreter
 			GristSet baseCost = context.costForIngredient(base, true);
 			if(baseCost == null)
 				return null;
-			else totalCost.addGrist(baseCost);
+			else totalCost.add(baseCost);
 
 			Ingredient addition = (Ingredient)additionField.get(recipe);
 			GristSet additionCost = context.costForIngredient(addition, true);
 			if(additionCost == null)
 				return null;
-			else totalCost.addGrist(additionCost);
+			else totalCost.add(additionCost);
 
 			totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 

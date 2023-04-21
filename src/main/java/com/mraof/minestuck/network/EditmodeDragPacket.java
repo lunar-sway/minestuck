@@ -125,7 +125,7 @@ public final class EditmodeDragPacket
 			{
 				int c = stack.getCount();
 				//Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModePlaceCheck().
-				if(editModePlaceCheck(data, player, cost, pos, missingCost::addGrist) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
+				if(editModePlaceCheck(data, player, cost, pos, missingCost::add) && stack.useOn(new UseOnContext(player, hand, new BlockHitResult(hitVector, side, pos, false))) != InteractionResult.FAIL)
 				{
 					//Check exists in-case we ever let non-editmode players use this tool for whatever reason.
 					if(player.isCreative())
@@ -198,7 +198,7 @@ public final class EditmodeDragPacket
 			{
 				BlockState block = player.getLevel().getBlockState(pos);
 				
-				Consumer<MutableGristSet> missingCostTracker = missingCost::addGrist; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
+				Consumer<MutableGristSet> missingCostTracker = missingCost::add; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
 				if(editModeDestroyCheck(data, player, pos, missingCostTracker))
 				{
 					player.gameMode.destroyAndAck(pos, 3, "creative destroy");

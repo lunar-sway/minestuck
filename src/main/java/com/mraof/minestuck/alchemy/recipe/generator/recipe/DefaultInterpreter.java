@@ -38,7 +38,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			GristSet ingredientCost = context.costForIngredient(ingredient, true);
 			if(ingredientCost == null)
 				return null;
-			else totalCost.addGrist(ingredientCost);
+			else totalCost.add(ingredientCost);
 		}
 		
 		totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing

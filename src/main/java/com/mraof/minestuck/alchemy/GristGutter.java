@@ -94,7 +94,7 @@ public class GristGutter
 				return;
 			
 			long amountToAdd = Math.min(maximumAllowed, amount.amount());
-			set.addGrist(type, -amountToAdd);
+			set.add(type, -amountToAdd);
 			this.addGristInternal(type, amountToAdd);
 		}
 	}
@@ -115,7 +115,7 @@ public class GristGutter
 	 */
 	private void addGristInternal(GristType type, long amount)
 	{
-		this.gristSet.addGrist(type, amount);
+		this.gristSet.add(type, amount);
 		this.gristTotal += amount;
 	}
 	
@@ -132,7 +132,7 @@ public class GristGutter
 			// update extraGrist with the new error
 			extraGrist = takenAmount - actualAmount;
 			
-			takenGrist.addGrist(gristAmount.type(), actualAmount);
+			takenGrist.add(gristAmount.type(), actualAmount);
 			this.addGristInternal(gristAmount.type(), -actualAmount);
 		}
 		
@@ -197,7 +197,7 @@ public class GristGutter
 			{
 				long takenAmount = Math.min(remaining, Math.min(capacityAmount.amount(), amountInGutter));
 				this.addGristInternal(type, -takenAmount);
-				takenGrist.addGrist(type, takenAmount);
+				takenGrist.add(type, takenAmount);
 				remaining -= takenAmount;
 				if(remaining <= 0)
 					break;

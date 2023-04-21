@@ -71,7 +71,7 @@ public final class GristCache
 		{
 			long amountInCache = this.getGristSet().getGrist(type);
 			if(amountInCache < capacity)
-				capacitySet.addGrist(type, capacity - amountInCache);
+				capacitySet.add(type, capacity - amountInCache);
 		}
 		return capacitySet;
 	}
@@ -190,7 +190,7 @@ public final class GristCache
 		{
 			this.set(newCache);
 			if(source != null)
-				GristToastPacket.notify(mcServer, data.identifier, set.mutableCopy().addGrist(excessGrist.mutableCopy().scale(-1)), source);
+				GristToastPacket.notify(mcServer, data.identifier, set.mutableCopy().add(excessGrist.mutableCopy().scale(-1)), source);
 		}
 		
 		return excessGrist;
@@ -248,17 +248,17 @@ public final class GristCache
 				long toAdd = Mth.clamp(capacity - target.getGrist(amount.type()), 0, amount.amount());
 				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.type(), toAdd);
+					target.add(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.type(), remainingAmount);
+					remainder.add(amount.type(), remainingAmount);
 			} else if(amount.amount() < 0)
 			{
 				long toAdd = Mth.clamp(-target.getGrist(amount.type()), amount.amount(), 0);
 				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.type(), toAdd);
+					target.add(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.type(), remainingAmount);
+					remainder.add(amount.type(), remainingAmount);
 			}
 		}
 		

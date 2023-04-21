@@ -23,7 +23,7 @@ public class NonNegativeGristSet extends MutableGristSet
 		for(GristAmount amount : amounts)
 			if(amount.amount() < 0)
 				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.type());
-			else addGrist(amount);
+			else add(amount);
 	}
 	
 	@Override
@@ -35,13 +35,13 @@ public class NonNegativeGristSet extends MutableGristSet
 	}
 	
 	@Override
-	public MutableGristSet addGrist(GristType type, long amount)
+	public MutableGristSet add(GristType type, long amount)
 	{
 		if(getGrist(type) + amount < 0)
 		{
 			throw new IllegalArgumentException("Grist count may not go below 0" + " Type " + type.getDisplayName().toString() + " has " + getGrist(type) + " and adding " + amount);
 		}
-		return super.addGrist(type, amount);
+		return super.add(type, amount);
 	}
 	
 	@Override

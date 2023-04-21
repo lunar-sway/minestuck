@@ -128,7 +128,7 @@ public class GenerationContext
 			{
 				GristSet containerCost = lookupCostFor(container);
 				if(containerCost != null)
-					return containerCost.mutableCopy().scale(-1).addGrist(cost);
+					return containerCost.mutableCopy().scale(-1).add(cost);
 				else return null;
 			}
 		}
