@@ -4,6 +4,10 @@ import com.mojang.serialization.Codec;
 
 import java.util.List;
 
+/**
+ * A version of {@link MutableGristSet}, which ensures that the grist set never reaches negative amounts
+ * and instead throws an exception when an operation is made that would otherwise set a negative amount.
+ */
 public class NonNegativeGristSet extends MutableGristSet
 {
 	public static Codec<NonNegativeGristSet> CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(NonNegativeGristSet::new, NonNegativeGristSet::asAmounts);

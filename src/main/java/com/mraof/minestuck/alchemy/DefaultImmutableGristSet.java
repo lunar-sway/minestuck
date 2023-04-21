@@ -5,6 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An immutable grist set that can hold any number of grist types.
+ * Suitable when an immutable grist set is needed, but {@link GristAmount} is insufficient.
+ */
 public final class DefaultImmutableGristSet implements ImmutableGristSet
 {
 	private final ImmutableMap<GristType, Long> map;

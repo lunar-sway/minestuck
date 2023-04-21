@@ -5,6 +5,10 @@ import com.mojang.serialization.Codec;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * A grist set that can be modified after creation.
+ * See {@link GristSet#mutableCopy()} for a quick way to create a mutable grist set from an existing grist set.
+ */
 public class MutableGristSet implements GristSet
 {
 	public static final Codec<MutableGristSet> CODEC = GristAmount.LIST_CODEC.xmap(MutableGristSet::new, MutableGristSet::asAmounts);
