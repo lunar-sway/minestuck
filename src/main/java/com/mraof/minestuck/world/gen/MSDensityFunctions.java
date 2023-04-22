@@ -20,7 +20,6 @@ public final class MSDensityFunctions
 	
 	public static final ResourceKey<DensityFunction> SKAIA_OFFSET = key("skaia/offset");
 	public static final ResourceKey<DensityFunction> SKAIA_DEPTH = key("skaia/depth");
-	public static final ResourceKey<DensityFunction> SKAIA_FACTOR = key("skaia/factor");
 	public static final ResourceKey<DensityFunction> SKAIA_INITIAL_DENSITY = key("skaia/initial_density");
 	public static final ResourceKey<DensityFunction> SKAIA_FINAL_DENSITY = key("skaia/final_density");
 	

@@ -45,8 +45,7 @@ public final class MSDensityFunctionProvider
 		
 		consumer.accept(SKAIA_OFFSET, skaiaOffset(functions.getHolderOrThrow(SKAIA_RIDGES)));
 		consumer.accept(SKAIA_DEPTH, depth(get(functions, SKAIA_OFFSET)));
-		consumer.accept(SKAIA_FACTOR, DensityFunctions.constant(5));
-		DensityFunction skaiaDepth = get(functions, SKAIA_DEPTH), skaiaFactor = get(functions, SKAIA_FACTOR);
+		DensityFunction skaiaDepth = get(functions, SKAIA_DEPTH), skaiaFactor = DensityFunctions.constant(5);
 		
 		consumer.accept(SKAIA_INITIAL_DENSITY, initialDensity(skaiaDepth, skaiaFactor));
 		consumer.accept(SKAIA_FINAL_DENSITY, finalDensity(skaiaDepth, skaiaFactor, DensityFunctions.zero(), noises.getHolderOrThrow(Noises.JAGGED), 256));
