@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Some land worldgen features are now replacable by datapacks
+- Tree features for our saplings are now replacable by datapacks
 
 ### Contributors for this release
 
