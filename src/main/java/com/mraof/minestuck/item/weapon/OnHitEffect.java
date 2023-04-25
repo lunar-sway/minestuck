@@ -13,7 +13,11 @@ import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,6 +25,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.ParticleUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -31,6 +36,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -372,6 +378,37 @@ public interface OnHitEffect
 			}
 			playerAttacker.level().playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
 			playerAttacker.sweepAttack();
+		};
+	}
+	
+	static OnHitEffect storeLifeSteal()
+	{
+		return (stack, target, attacker) -> {
+			CompoundTag tag = stack.serializeNBT();
+			
+			if(tag.get("life_store") == null || tag.getInt("life_store") == 0)
+			{
+				tag.putInt("life_store", 3);
+			}
+			else
+			{
+				tag.putInt("life_store", tag.getInt("life_store") + 3);
+			}
+			if(tag.getInt("life_store") > 30)
+			{
+				tag.putInt("life_store", 30);
+			}
+			stack.setTag(tag);
+		};
+	}
+	
+	static OnHitEffect spawnParticles(SimpleParticleType pType, int amount)
+	{
+		return (stack, target, attacker) -> {
+			if(attacker instanceof Player && attacker != null && target != null)
+			{
+				attacker.getLevel().getServer().getLevel(attacker.getLevel().dimension()).sendParticles(pType, target.getX(), target.getY(), target.getZ(), amount, 0.2, 0.5, 0.2, 2);
+			}
 		};
 	}
 	

@@ -24,6 +24,7 @@ import com.mraof.minestuck.item.weapon.projectiles.ReturningProjectileWeaponItem
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -126,8 +127,12 @@ public class MSItems
 	public static final RegistryObject<Item> CANDY_KEY = REGISTER.register("candy_key", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties()));
 	public static final RegistryObject<Item> LOCKSOFTENER = REGISTER.register("locksoftener", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(500)));
 	public static final RegistryObject<Item> BISEKEYAL = REGISTER.register("bisekeyal", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(450)));
+	public static final RegistryObject<Item> LATCHMELTER = REGISTER.register("latchmelter", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(450).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> KEY_TO_THE_MACHINE = REGISTER.register("key_to_the_machine", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
+	public static final RegistryObject<Item> KEY_TO_THE_CITY = REGISTER.register("key_to_the_city", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(650).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> CRIMSON_LEAP = REGISTER.register("crimson_leap", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(1200).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> DRAGON_KEY = REGISTER.register("dragon_key", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
+	public static final RegistryObject<Item> LOCH_PICK = REGISTER.register("loch_pick", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(1560).tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> TRUE_BLUE = REGISTER.register("true_blue", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().defaultDurability(888)));
 	public static final RegistryObject<Item> BLUE_BEAMS = REGISTER.register("blue_beams", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.RANDOM_DAMAGE), new Item.Properties().defaultDurability(1616)));
 	public static final RegistryObject<Item> INKSPLOCKER_UNLOCKER = REGISTER.register("inksplocker_unlocker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties()));
@@ -135,7 +140,18 @@ public class MSItems
 	public static final RegistryObject<Item> REGIKEY = REGISTER.register("regikey", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> CLOCKKEEPER = REGISTER.register("clockkeeper", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 3, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(3500).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> HOME_BY_MIDNIGHT = REGISTER.register("home_by_midnight", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 3, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(PogoEffect.EFFECT_07).add(PogoEffect.EFFECT_07), new Item.Properties().defaultDurability(4000).rarity(Rarity.UNCOMMON)));
+	public static final RegistryObject<Item> NO_TIME_FOR_FLIES = REGISTER.register("no_time_for_flies", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 3, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(2500).tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> NATURES_HEART = REGISTER.register("natures_heart", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CACTUS_TIER, 4, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(2005).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> YALDABAOTHS_KEYTON = REGISTER.register("yaldabaoths_keyton", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 5, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.enemyKnockback(2.0F)), new Item.Properties().defaultDurability(4000).tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> KEYTAR = REGISTER.register("keytar", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_GUITAR)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10)), new Item.Properties().defaultDurability(265).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	
+	//Batons
+	public static final RegistryObject<Item> CONDUCTORS_BATON = REGISTER.register("conductors_baton", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 1, -0.5F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_HARP, 4, 0.5F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 10)), new Item.Properties().defaultDurability(200).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> SHARP_NOTE = REGISTER.register("sharp_note", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -0.5F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_HARP, 4, 2.0F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 12)), new Item.Properties().defaultDurability(350).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> URANIUM_BATON = REGISTER.register("uranium_baton", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.URANIUM_TIER, 0, -0.5F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_BASS, 4, 0.3F)).add(OnHitEffect.spawnParticles(ParticleTypes.ITEM_SLIME, 10)), new Item.Properties().defaultDurability(285).tab(MSItemGroup.WEAPONS)));
+	public static final RegistryObject<Item> WIND_WAKER = REGISTER.register("wind_waker", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CORUNDUM_TIER, 1, -0.5F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.extinguishFire(1)).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_FLUTE, 4, 0.8F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 8)), new Item.Properties().defaultDurability(750).tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
+	public static final RegistryObject<Item> CELESTIAL_FULCRUM = REGISTER.register("celestial_fulcrum", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 3, -0.5F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.enemyKnockback(2.0F)).add(OnHitEffect.playSound(() -> SoundEvents.NOTE_BLOCK_BELL, 4, 1.5F)).add(OnHitEffect.spawnParticles(ParticleTypes.NOTE, 14)), new Item.Properties().defaultDurability(800).tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
+	//public static final RegistryObject<Item> HYMN_FOR_HORRORTERRORS
 	
 	//Axes
 	public static final RegistryObject<Item> BATLEACKS = REGISTER.register("batleacks", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -3.5F).efficiency(1.0F).set(MSItemTypes.AXE_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties()));
@@ -296,6 +312,7 @@ public class MSItems
 	public static final RegistryObject<Item> SPIKED_CLUB = REGISTER.register("spiked_club", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(100)));
 	public static final RegistryObject<Item> RUBIKS_MACE = REGISTER.register("rubiks_mace", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(500)));
 	public static final RegistryObject<Item> HOME_GROWN_MACE = REGISTER.register("home_grown_mace", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD , 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties().defaultDurability(500)));
+	public static final RegistryObject<Item> CARNIE_CLUB = REGISTER.register("carnie_club", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.storeLifeSteal()).add(InventoryTickEffect.drainLifeStore()).set(ItemRightClickEffect.useLifeStore()), new Item.Properties().defaultDurability(3666).tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	
 	public static final RegistryObject<Item> HORSE_HITCHER = REGISTER.register("horse_hitcher", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 7, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.switchTo(MSItems.ACE_OF_SPADES)), new Item.Properties().defaultDurability(500).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ACE_OF_SPADES = REGISTER.register("ace_of_spades", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PAPER_TIER, 0, -1.8F).efficiency(0.0F).set(ItemRightClickEffect.switchTo(MSItems.HORSE_HITCHER)), new Item.Properties().defaultDurability(500)));
@@ -841,6 +858,9 @@ public class MSItems
 	public static final RegistryObject<BlockItem> DENSE_CLOUD = registerBlockItem(MSBlocks.DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> BRIGHT_DENSE_CLOUD = registerBlockItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 	public static final RegistryObject<BlockItem> SUGAR_CUBE = registerBlockItem(MSBlocks.SUGAR_CUBE);
+	public static final RegistryObject<BlockItem> CINDERED_LOG = registerBlockItem(MSBlocks.CINDERED_LOG, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> CINDERED_WOOD = registerBlockItem(MSBlocks.CINDERED_WOOD, MSItemGroup.LANDS);
+	public static final RegistryObject<BlockItem> SULFUR = registerBlockItem(MSBlocks.SULFUR, MSItemGroup.LANDS);
 	
 	
 	

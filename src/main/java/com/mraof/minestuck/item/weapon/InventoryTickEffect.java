@@ -47,4 +47,29 @@ public interface InventoryTickEffect
 			}
 		};
 	}
+	
+	static InventoryTickEffect drainLifeStore()
+	{
+		return (stack, level, entityIn, itemSlot, isSelected) ->
+		{
+			CompoundTag tag = stack.serializeNBT();
+			
+			if(tag.get("cooldown") == null)
+			{
+				tag.putLong("cooldown", level.getGameTime());
+			}
+			if(level.getGameTime() == tag.getLong("cooldown") + 10) {
+				if(tag.get("life_store") == null || tag.getInt("life_store") == 0)
+				{
+					tag.putInt("life_store", 0);
+				}
+				else
+				{
+					tag.putInt("life_store", tag.getInt("life_store") - 1);
+				}
+				tag.putLong("cooldown", level.getGameTime());
+			}
+			stack.setTag(tag);
+		};
+	}
 }

@@ -3,6 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -166,6 +167,22 @@ public interface ItemRightClickEffect
 			player.getCooldowns().addCooldown(itemStack.getItem(), cooldownTickDuration);
 			itemStack.hurtAndBreak(durabilityCost, player, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 			
+			return InteractionResultHolder.pass(itemStack);
+		};
+	}
+	
+	static ItemRightClickEffect useLifeStore()
+	{
+		return (world, player, hand) -> {
+			ItemStack itemStack = player.getItemInHand(hand);
+			CompoundTag tag = itemStack.serializeNBT();
+			
+			if(tag.get("life_store") != null && tag.getInt("life_store") >= 3) {
+				player.heal(3.0F);
+				tag.putInt("life_store", tag.getInt("life_store") - 3);
+			}
+			itemStack.setTag(tag);
+			player.getCooldowns().addCooldown(itemStack.getItem(), 30);
 			return InteractionResultHolder.pass(itemStack);
 		};
 	}
