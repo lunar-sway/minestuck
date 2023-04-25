@@ -14,8 +14,8 @@ public class RedsplatParticle extends TextureSheetParticle
 		
 		this.spriteSet = spriteSet;
 		this.setSpriteFromAge(this.spriteSet);
-		this.lifetime = 4;
-		this.scale(7); //still has some size variation
+		this.lifetime = 5;
+		this.scale(6);
 	}
 	
 	@Override

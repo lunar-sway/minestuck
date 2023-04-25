@@ -14,8 +14,8 @@ public class RedpopParticle extends TextureSheetParticle
 		
 		this.spriteSet = spriteSet;
 		this.setSpriteFromAge(this.spriteSet);
-		this.lifetime = 4;
-		this.scale(7); //still has some size variation
+		this.lifetime = 6;
+		this.scale(5);
 	}
 	
 	@Override
