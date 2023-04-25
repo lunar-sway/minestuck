@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 884,
+    "minestuck:garnet": 663,
+    "minestuck:gold": 147,
+    "minestuck:rust": 221
+  },
+  "ingredient": {
+    "item": "minestuck:carnie_club"
+  }
+}

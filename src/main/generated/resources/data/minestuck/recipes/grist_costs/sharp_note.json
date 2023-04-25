@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 210,
+    "minestuck:gold": 10,
+    "minestuck:rust": 40
+  },
+  "ingredient": {
+    "item": "minestuck:sharp_note"
+  }
+}

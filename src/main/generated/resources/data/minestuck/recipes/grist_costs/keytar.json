@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 140,
+    "minestuck:diamond": 7,
+    "minestuck:mercury": 14
+  },
+  "ingredient": {
+    "item": "minestuck:keytar"
+  }
+}

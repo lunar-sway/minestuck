@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 80,
+    "minestuck:build": 187,
+    "minestuck:ruby": 26
+  },
+  "ingredient": {
+    "item": "minestuck:natures_heart"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 370,
+    "minestuck:ruby": 37,
+    "minestuck:rust": 74
+  },
+  "ingredient": {
+    "item": "minestuck:no_time_for_flies"
+  }
+}
