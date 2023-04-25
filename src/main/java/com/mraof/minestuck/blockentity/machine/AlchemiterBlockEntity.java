@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
+import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSParticleType;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +23,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -49,6 +52,8 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	
+	private boolean hasChimed = false;
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -265,11 +270,21 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		}
 	}
 	
-	public void spawnAlchemyParticles(ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
+	public void spawnAlchemyParticles(ServerPlayer player, ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
 	{
+		if(player == null)
+		{
+			return;
+		}
 			originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 			originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 			originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+	}
+	
+	public static void playAlchemySound(Level level, AlchemiterBlockEntity blockEntity)
+	{
+		level.playSound(null, blockEntity.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
+		blockEntity.hasChimed = true;
 	}
 	
 	public void processContents(int quantity, ServerPlayer player)
@@ -303,11 +318,9 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
-				if(player == null)
-				{
-					return;
-				}
-					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
+				
+				spawnAlchemyParticles(player, blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
+				playAlchemySound(level, this);
 			}
 		}
 	}

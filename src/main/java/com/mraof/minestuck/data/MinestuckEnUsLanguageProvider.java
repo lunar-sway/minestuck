@@ -2348,6 +2348,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("alchemiter_resonate", "Item pops into existence");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");

@@ -815,6 +815,13 @@
       "minestuck:random/cruxtruder_dowel"
     ]
   },
+  "block.alchemiter.resonate": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.alchemiter_resonate",
+    "sounds": [
+      "minestuck:random/alchemiter_resonate"
+    ]
+},
   "block.horse_clock.chime": {
     "category": "block",
     "subtitle": "subtitles.minestuck.horse_clock_chime",
