@@ -15,7 +15,7 @@ public class PlasmaParticle extends TextureSheetParticle
 		this.spriteSet = spriteSet;
 		this.setSpriteFromAge(this.spriteSet);
 		this.lifetime = 4;
-		this.scale(5); //still has some size variation
+		this.scale(7); //still has some size variation
 	}
 	
 	@Override

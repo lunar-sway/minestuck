@@ -307,7 +307,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				{
 					return;
 				}
-					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
+					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.2, 1, 0, 0, 0, 0);
 			}
 		}
 	}
