@@ -267,7 +267,6 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public void spawnAlchemyParticles(ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
 	{
-		if()
 			originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 			originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 			originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
