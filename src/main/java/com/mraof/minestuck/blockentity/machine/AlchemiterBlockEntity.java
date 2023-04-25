@@ -12,12 +12,14 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSParticleType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -263,6 +265,14 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		}
 	}
 	
+	public void spawnAlchemyParticles(ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
+	{
+		originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+		originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+		originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+		
+	}
+	
 	public void processContents(int quantity, ServerPlayer player)
 	{
 		ItemStack newItem = getOutput();
@@ -287,11 +297,17 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			
 			while(quantity > 0)
 			{
+				ServerLevel blockLevel = (ServerLevel) this.level;
+				
 				ItemStack stack = newItem.copy();
 				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
+				if(player != null)
+				{
+					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
+				}
 			}
 		}
 	}
