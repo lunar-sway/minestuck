@@ -267,10 +267,10 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	
 	public void spawnAlchemyParticles(ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
 	{
-		originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-		originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-		originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-		
+		if()
+			originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+			originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
+			originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 	}
 	
 	public void processContents(int quantity, ServerPlayer player)
@@ -304,10 +304,11 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
-				if(player != null)
+				if(player == null)
 				{
-					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
+					return;
 				}
+					spawnAlchemyParticles(blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
 			}
 		}
 	}
