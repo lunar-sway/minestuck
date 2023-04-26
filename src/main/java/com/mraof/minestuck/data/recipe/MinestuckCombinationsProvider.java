@@ -450,6 +450,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.URANIUM_BATON.get()).input(MSItems.RAW_URANIUM.get()).or().input(MSItems.CONDUCTORS_BATON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.WIND_WAKER.get()).input(Items.OAK_BOAT).or().input(MSItems.CONDUCTORS_BATON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CELESTIAL_FULCRUM.get()).input(Items.AMETHYST_SHARD).or().input(MSItems.CONDUCTORS_BATON.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HYMN_FOR_HORRORTERRORS.get()).input(MSItems.THORN_OF_OGLOGOTH.get()).and().input(MSItems.CELESTIAL_FULCRUM.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(MSItems.BATTLEAXE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);

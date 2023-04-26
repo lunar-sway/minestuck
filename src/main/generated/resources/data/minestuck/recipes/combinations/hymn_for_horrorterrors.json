@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:thorn_of_oglogoth"
+  },
+  "input2": {
+    "item": "minestuck:celestial_fulcrum"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:hymn_for_horrorterrors"
+  }
+}

@@ -381,24 +381,12 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect storeLifeSteal()
+	static OnHitEffect bossBuster()
 	{
 		return (stack, target, attacker) -> {
-			CompoundTag tag = stack.serializeNBT();
-			
-			if(tag.get("life_store") == null || tag.getInt("life_store") == 0)
-			{
-				tag.putInt("life_store", 3);
+			if(attacker instanceof ServerPlayer player && target instanceof UnderlingEntity) {
+				target.hurt(DamageSource.playerAttack(player), target.getMaxHealth() / 20);
 			}
-			else
-			{
-				tag.putInt("life_store", tag.getInt("life_store") + 3);
-			}
-			if(tag.getInt("life_store") > 30)
-			{
-				tag.putInt("life_store", 30);
-			}
-			stack.setTag(tag);
 		};
 	}
 	

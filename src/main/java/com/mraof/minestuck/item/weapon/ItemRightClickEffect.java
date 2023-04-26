@@ -171,22 +171,6 @@ public interface ItemRightClickEffect
 		};
 	}
 	
-	static ItemRightClickEffect useLifeStore()
-	{
-		return (world, player, hand) -> {
-			ItemStack itemStack = player.getItemInHand(hand);
-			CompoundTag tag = itemStack.serializeNBT();
-			
-			if(tag.get("life_store") != null && tag.getInt("life_store") >= 3) {
-				player.heal(3.0F);
-				tag.putInt("life_store", tag.getInt("life_store") - 3);
-			}
-			itemStack.setTag(tag);
-			player.getCooldowns().addCooldown(itemStack.getItem(), 30);
-			return InteractionResultHolder.pass(itemStack);
-		};
-	}
-	
 	//based on the Item class function of the same name
 	static BlockHitResult getPlayerPOVHitResult(Level level, Player playerEntity)
 	{

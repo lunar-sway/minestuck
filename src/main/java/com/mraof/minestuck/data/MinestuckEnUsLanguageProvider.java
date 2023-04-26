@@ -741,6 +741,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.WIND_WAKER, "Wind Waker");
 		addItemTooltip(MSItems.WIND_WAKER, "You get the sudden urge to sail the great seas.");
 		addItem(MSItems.CELESTIAL_FULCRUM, "Celestial Fulcrum");
+		addItem(MSItems.HYMN_FOR_HORRORTERRORS, "Hymn for Horrorterrors");
+		addItemTooltip(MSItems.HYMN_FOR_HORRORTERRORS, "Where we're going, we don't need ears to hear.");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
