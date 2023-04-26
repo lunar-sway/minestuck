@@ -821,7 +821,21 @@
     "sounds": [
       "minestuck:random/alchemiter_resonate"
     ]
-},
+  },
+  "block.transportalizer.teleport": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.transportalizer_teleport",
+    "sounds": [
+      "minestuck:random/transportalizer_teleport"
+    ]
+  },
+  "block.totem_lathe.lathe": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.totem_lathe_lathe",
+    "sounds": [
+      "minestuck:random/totemlathe_lathe"
+    ]
+  },
   "block.horse_clock.chime": {
     "category": "block",
     "subtitle": "subtitles.minestuck.horse_clock_chime",
