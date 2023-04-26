@@ -298,4 +298,9 @@ public class Echeladder
 	{
 		return "echeladder.rung." + rung;
 	}
+	
+	public static String translationAspectKey(int rung, String aspect)
+	{
+		return "echeladder.rung." + rung + aspect;
+	}
 }

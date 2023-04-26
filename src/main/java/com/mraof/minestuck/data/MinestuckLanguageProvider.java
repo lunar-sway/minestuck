@@ -132,6 +132,10 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(Echeladder.translationKey(rung), value);
 	}
+	protected void addAspectRung(int rung, String aspect, String value)
+	{
+		add(Echeladder.translationAspectKey(rung, aspect), value);
+	}
 	protected void addAdvancement(String key, String title, String description)
 	{
 		add("advancements."+key+".title", title);
