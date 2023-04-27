@@ -452,6 +452,10 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.CELESTIAL_FULCRUM.get()).input(Items.AMETHYST_SHARD).or().input(MSItems.CONDUCTORS_BATON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.HYMN_FOR_HORRORTERRORS.get()).input(MSItems.THORN_OF_OGLOGOTH.get()).and().input(MSItems.CELESTIAL_FULCRUM.get()).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.BO_STAFF.get()).input(Items.STICK).and().input(Items.IRON_INGOT).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.WIZARD_STAFF.get()).input(MSItems.MINI_WIZARD_STATUE.get()).and().input(MSItems.BO_STAFF.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BAMBOO_BEATSTICK.get()).input(MSItems.BO_STAFF.get()).and().input(Items.BAMBOO).build(consumer);
+		
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(MSItems.BATTLEAXE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BATLEACKS.get()).namedInput(Items.WOODEN_AXE).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.COPSE_CRUSHER.get()).input(Items.IRON_AXE).and().input(Items.PISTON).build(consumer);

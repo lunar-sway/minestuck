@@ -215,7 +215,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_SANDSTONE_COLUMN, "Chiseled Sandstone Column");
 		addBlock(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
-		addBlock(MSBlocks.SULFUR, "Sulfur");
+		addBlock(MSBlocks.SULFUR, "Native Sulfur");
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
 		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
@@ -743,6 +743,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CELESTIAL_FULCRUM, "Celestial Fulcrum");
 		addItem(MSItems.HYMN_FOR_HORRORTERRORS, "Hymn for Horrorterrors");
 		addItemTooltip(MSItems.HYMN_FOR_HORRORTERRORS, "Where we're going, we don't need ears to hear.");
+		addItem(MSItems.BO_STAFF, "Bo Staff");
+		addItem(MSItems.WIZARD_STAFF, "Wizard Staff");
+		addItem(MSItems.BAMBOO_BEATSTICK, "Bamboo Beatstick");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");

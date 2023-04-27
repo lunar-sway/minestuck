@@ -381,22 +381,19 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect bossBuster()
+	static OnHitEffect bossBuster(int divideAmount, Supplier<? extends EntityType<?>> targetEntity)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player && target instanceof UnderlingEntity) {
-				target.hurt(DamageSource.playerAttack(player), target.getMaxHealth() / 20);
+			if(attacker instanceof ServerPlayer player && target.getType() == targetEntity.get()) {
+				target.hurt(DamageSource.playerAttack(player), target.getMaxHealth() / divideAmount);
 			}
 		};
 	}
 	
-	static OnHitEffect spawnParticles(SimpleParticleType pType, int amount)
+	static OnHitEffect spawnParticles(SimpleParticleType particle, int amount, double xMovement, double yMovement, double zMovement, double speed)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof Player && attacker != null && target != null)
-			{
-				attacker.getLevel().getServer().getLevel(attacker.getLevel().dimension()).sendParticles(pType, target.getX(), target.getY(), target.getZ(), amount, 0.2, 0.5, 0.2, 2);
-			}
+			target.level.getServer().getLevel(target.level.dimension()).sendParticles(particle, target.getX(), target.getY(), target.getZ(), amount, xMovement, yMovement, zMovement, speed);
 		};
 	}
 	
