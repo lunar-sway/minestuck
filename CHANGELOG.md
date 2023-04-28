@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Cinnamon Sword
+
 ### Changed
 
 - Some land worldgen features are now replacable by datapacks
@@ -13,7 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1
+- Vivian-Zane, rose_bushes_, kirderf1
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
