@@ -98,7 +98,7 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	@Override
 	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
 	{
-		//draws the name of the TE
+		//draws the name of the BE
 		font.draw(poseStack, this.title, 8, 6, 0x404040);
 		
 		//draws "Inventory" or your regional equivalent

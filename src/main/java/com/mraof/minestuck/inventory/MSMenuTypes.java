@@ -18,6 +18,7 @@ public class MSMenuTypes
 	public static final RegistryObject<MenuType<SendificatorMenu>> SENDIFICATOR = REGISTER.register("sendificator", () -> new MenuType<>((IContainerFactory<SendificatorMenu>) SendificatorMenu::newFromPacket));
 	public static final RegistryObject<MenuType<GristWidgetMenu>> GRIST_WIDGET = REGISTER.register("grist_widget", () -> new MenuType<>((IContainerFactory<GristWidgetMenu>) GristWidgetMenu::new));
 	public static final RegistryObject<MenuType<UraniumCookerMenu>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new MenuType<>((IContainerFactory<UraniumCookerMenu>) UraniumCookerMenu::new));
+	public static final RegistryObject<MenuType<AnthvilMenu>> ANTHVIL = REGISTER.register("anthvil", () -> new MenuType<>((IContainerFactory<AnthvilMenu>) AnthvilMenu::new));
 	public static final RegistryObject<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck", () -> new MenuType<>(CaptchaDeckMenu::new));
 	public static final RegistryObject<MenuType<EditmodeMenu>> EDIT_MODE = REGISTER.register("edit_mode", () -> new MenuType<>(EditmodeMenu::new));
 	public static final RegistryObject<MenuType<AtheneumMenu>> ATHENEUM = REGISTER.register("atheneum", () -> new MenuType<>(AtheneumMenu::new));

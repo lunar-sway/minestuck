@@ -29,6 +29,7 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<ItemStackBlockEntity>> ITEM_STACK = REGISTER.register("item_stack", () -> BlockEntityType.Builder.of(ItemStackBlockEntity::new, MSBlocks.CRUXITE_DOWEL.get(), MSBlocks.EMERGING_CRUXITE_DOWEL.get(), MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()).build(null));
 	public static final RegistryObject<BlockEntityType<UraniumCookerBlockEntity>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> BlockEntityType.Builder.of(UraniumCookerBlockEntity::new, MSBlocks.URANIUM_COOKER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GristCollectorBlockEntity>> GRIST_COLLECTOR = REGISTER.register("grist_collector", () -> BlockEntityType.Builder.of(GristCollectorBlockEntity::new, MSBlocks.GRIST_COLLECTOR.get()).build(null));
+	public static final RegistryObject<BlockEntityType<AnthvilBlockEntity>> ANTHVIL = REGISTER.register("anthvil", () -> BlockEntityType.Builder.of(AnthvilBlockEntity::new, MSBlocks.ANTHVIL.get()).build(null));
 	public static final RegistryObject<BlockEntityType<HolopadBlockEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadBlockEntity::new, MSBlocks.HOLOPAD.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, MSBlocks.SKAIA_PORTAL.get()).build(null));
