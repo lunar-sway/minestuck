@@ -673,6 +673,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
+		addItem(MSItems.CINNAMON_SWORD, "Cinnamon Sword");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
 		addItem(MSItems.PIGLINS_PRIDE, "Piglin's Pride");
