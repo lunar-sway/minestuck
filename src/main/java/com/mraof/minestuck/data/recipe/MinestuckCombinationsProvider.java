@@ -429,6 +429,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.CLOTHES_IRON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BISEKEYAL.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.BI_DYE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KEY_TO_THE_MACHINE.get()).input(MSItems.KEYBLADE.get()).or().input(Items.REPEATER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.INNER_HEART.get()).input(MSItems.GAMEGRL_MAGAZINE.get()).and().input(MSItems.KEYBLADE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DRAGON_KEY.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.SCALEMATE_APPLESCAB.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TRUE_BLUE.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.EIGHTBALL.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLUE_BEAMS.get()).input(MSItems.TRUE_BLUE.get()).or().input(MSItems.SHATTER_BEACON.get()).build(consumer);

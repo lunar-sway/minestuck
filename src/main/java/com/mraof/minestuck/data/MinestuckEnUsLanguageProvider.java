@@ -718,6 +718,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.NATURES_HEART, "Nature's Heart");
 		addItem(MSItems.KEY_TO_THE_MACHINE, "Key To The Machine");
 		addItem(MSItems.KEY_TO_THE_CITY, "Key To The City");
+		addItem(MSItems.INNER_HEART, "Inner Heart");
+		addItemTooltip(MSItems.INNER_HEART, "Unlock your inner magical girl!");
 		addItem(MSItems.DRAGON_KEY, "Dragon Key");
 		addItem(MSItems.LOCH_PICK, "Loch Pick");
 		addItem(MSItems.TRUE_BLUE, "True Blue");
