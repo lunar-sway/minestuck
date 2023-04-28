@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.10.2.1] - 2023-04-27
+
+### Added
+
+- Cinnamon Sword
+
+### Contributors for this release
+
+- Vivian-Zane, rose_bushes_
+
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
 ### Added
