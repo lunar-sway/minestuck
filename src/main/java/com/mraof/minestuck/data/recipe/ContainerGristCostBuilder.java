@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -83,12 +83,12 @@ public class ContainerGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result extends GristCostRecipeBuilder.Result
 	{
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 		}

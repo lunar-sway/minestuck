@@ -32,7 +32,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public String getDisplayName(GristAmount ingredient)
 	{
-		return ingredient.getType().getDisplayName().getString();
+		return ingredient.type().getDisplayName().getString();
 	}
 
 	@Override
@@ -50,13 +50,13 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public ResourceLocation getResourceLocation(GristAmount ingredient)
 	{
-		return GristTypes.getRegistry().getKey(ingredient.getType());
+		return GristTypes.getRegistry().getKey(ingredient.type());
 	}
 	
 	@Override
 	public GristAmount copyIngredient(GristAmount ingredient)
 	{
-		return new GristAmount(ingredient.getType(), ingredient.getAmount());
+		return new GristAmount(ingredient.type(), ingredient.amount());
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	{
 		if(ingredient == null)
 			return "grist:null";
-		else if(ingredient.getType() == null)
-			return "grist:null:"+ingredient.getAmount();
-		else return "grist:"+getResourceLocation(ingredient)+":"+ingredient.getAmount();
+		else if(ingredient.type() == null)
+			return "grist:null:"+ingredient.amount();
+		else return "grist:"+getResourceLocation(ingredient)+":"+ingredient.amount();
 	}
 }

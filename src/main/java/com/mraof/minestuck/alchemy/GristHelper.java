@@ -51,16 +51,16 @@ public class GristHelper
 	/**
 	 * Returns a GristSet representing the drops from an underling, given the underling's type and a static loot multiplier.
 	 */
-	public static GristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
+	public static MutableGristSet generateUnderlingGristDrops(UnderlingEntity entity, Map<PlayerIdentifier, Double> damageMap, double multiplier)
 	{
 		RandomSource random = entity.getRandom();
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
 		
-		GristSet set = new GristSet();
-		set.addGrist(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
-		set.addGrist(primary, (int) (1 * multiplier + random.nextDouble() * 9 * multiplier));
-		set.addGrist(secondary, (int) (0.5 * multiplier + random.nextDouble() * 4 * multiplier));
+		MutableGristSet set = new MutableGristSet();
+		set.add(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
+		set.add(primary, (int) (1 * multiplier + random.nextDouble() * 9 * multiplier));
+		set.add(secondary, (int) (0.5 * multiplier + random.nextDouble() * 4 * multiplier));
 		
 		GristDropsEvent event = new GristDropsEvent(entity, damageMap, set, primary, secondary, multiplier);
 		if(MinecraftForge.EVENT_BUS.post(event))

@@ -1,9 +1,10 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,24 +21,24 @@ public class SmithingInterpreter extends DefaultInterpreter
 	private static final Field additionField = ObfuscationReflectionHelper.findField(UpgradeRecipe.class, "f_44519_");
 	
 	@Override
-	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
+	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		// UpgradeRecipes don't list their ingredients as ingredients so use this as workaround
 		try
 		{
-			GristSet totalCost = new GristSet();
+			MutableGristSet totalCost = new MutableGristSet();
 
 			Ingredient base = (Ingredient)baseField.get(recipe);
 			GristSet baseCost = context.costForIngredient(base, true);
 			if(baseCost == null)
 				return null;
-			else totalCost.addGrist(baseCost);
+			else totalCost.add(baseCost);
 
 			Ingredient addition = (Ingredient)additionField.get(recipe);
 			GristSet additionCost = context.costForIngredient(addition, true);
 			if(additionCost == null)
 				return null;
-			else totalCost.addGrist(additionCost);
+			else totalCost.add(additionCost);
 
 			totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 

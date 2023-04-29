@@ -1,10 +1,11 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.apache.commons.lang3.tuple.Pair;
@@ -18,14 +19,14 @@ class RecipeGeneratedCostProcess
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap;
-	private final Map<Item, GristSet> generatedCosts = new HashMap<>();
+	private final Map<Item, ImmutableGristSet> generatedCosts = new HashMap<>();
 	
 	RecipeGeneratedCostProcess(Map<Item, List<Pair<Recipe<?>, RecipeInterpreter>>> lookupMap)
 	{
 		this.lookupMap = lookupMap;
 	}
 	
-	Map<Item, GristSet> buildMap()
+	Map<Item, ImmutableGristSet> buildMap()
 	{
 		//Clean out null grist costs
 		generatedCosts.entrySet().removeIf(entry -> entry.getValue() == null);
@@ -54,7 +55,7 @@ class RecipeGeneratedCostProcess
 			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 			
 			if(context.isPrimary())
-				generatedCosts.put(item, result);
+				generatedCosts.put(item, result == null ? null : result.asImmutable());
 			return GristCostResult.ofOrNull(result);
 		}
 	}

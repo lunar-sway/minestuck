@@ -1,11 +1,16 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -18,12 +23,15 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public abstract class GristCostRecipe implements Recipe<Container>
 {
 	@Nullable
@@ -109,13 +117,18 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		else return priority;
 	}
 	
-	public abstract GristSet getGristCost(ItemStack input, GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
+	@Nullable
+	public abstract GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
 	
 	public boolean canPickWildcard()
 	{
 		return false;
 	}
 	
+	/**
+	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
+	 * which then get used during grist cost generation.
+	 */
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
 		GeneratedCostProvider provider = new DefaultProvider();
@@ -125,8 +138,9 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	
 	private class DefaultProvider implements GeneratedCostProvider
 	{
+		@Nullable
 		@Override
-		public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
+		public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
 				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
@@ -144,22 +158,26 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		return 100 - (ingredient.getItems().length - 1)*10;
 	}
 	
-	public static GristSet scaleToCountAndDurability(GristSet cost, ItemStack stack, boolean shouldRoundDown)
+	@Nullable
+	public static GristSet scaleToCountAndDurability(@Nullable GristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
 		if(cost == null)
 			return null;
 		
-		cost = cost.copy();
+		if(stack.getCount() == 1 || !stack.isDamaged())
+			return cost;
+		
+		MutableGristSet mutableCost = cost.mutableCopy();
 		if (stack.getCount() != 1)
-			cost.scale(stack.getCount());
+			mutableCost.scale(stack.getCount());
 		
 		if (stack.isDamaged())
 		{
 			float multiplier = 1 - stack.getItem().getDamage(stack) / ((float) stack.getMaxDamage());
-			cost.scale(multiplier, shouldRoundDown);
+			mutableCost.scale(multiplier, shouldRoundDown);
 		}
 		
-		return cost.asImmutable();
+		return mutableCost;
 	}
 	
 	//Helper class for implementing serializer classes
@@ -174,7 +192,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 			return read(recipeId, json, ingredient, priority);
 		}
 		
-		protected abstract T read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority);
+		protected abstract T read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority);
 		
 		@Nullable
 		@Override

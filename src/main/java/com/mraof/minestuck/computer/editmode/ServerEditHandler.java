@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -45,7 +46,6 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
@@ -334,7 +334,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level, DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				GristSet cost = entry.getCurrentCost(data.connection);
+				MutableGristSet cost = entry.getCurrentCost(data.connection);
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.connection.setHasGivenItem(entry);
@@ -402,7 +402,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
-				GristSet cost = entry.getCurrentCost(data.connection);
+				MutableGristSet cost = entry.getCurrentCost(data.connection);
 				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
@@ -422,7 +422,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	static GristSet blockBreakCost()
 	{
-		return new GristSet(GristTypes.BUILD, 1);
+		return new GristAmount(GristTypes.BUILD, 1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -516,7 +516,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level);
 			if(entry != null)
 			{
-				GristSet cost = entry.getCurrentCost(c);
+				MutableGristSet cost = entry.getCurrentCost(c);
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
 					c.setHasGivenItem(entry);

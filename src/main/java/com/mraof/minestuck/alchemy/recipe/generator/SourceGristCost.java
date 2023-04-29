@@ -1,10 +1,13 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -14,27 +17,34 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class SourceGristCost extends GeneratedGristCost
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final List<Source> sources;
 	private final float multiplier;
 	private final ImmutableGristSet addedCost;
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, GristSet addedCost, @Nullable Integer priority)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
 		this.sources = sources;
 		this.multiplier = multiplier;
-		this.addedCost = addedCost.asImmutable();
+		this.addedCost = addedCost;
 	}
 	
-	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.sources = null;
@@ -42,19 +52,20 @@ public class SourceGristCost extends GeneratedGristCost
 		this.addedCost = null;
 	}
 	
+	@Nullable
 	@Override
 	protected GristSet generateCost(GenerationContext context)
 	{
-		GristSet costSum = new GristSet();
+		MutableGristSet costSum = new MutableGristSet();
 		for(Source source : sources)
 		{
 			GristSet sourceCost = source.getCostFor(context);
 			if(sourceCost != null)
-				costSum.addGrist(sourceCost);
+				costSum.add(sourceCost);
 			else return null;
 		}
 		
-		return costSum.scale(multiplier, false).addGrist(addedCost);
+		return costSum.scale(multiplier, false).add(addedCost);
 	}
 	
 	@Override
@@ -66,9 +77,10 @@ public class SourceGristCost extends GeneratedGristCost
 	public static class Serializer extends GeneratedCostSerializer<SourceGristCost>
 	{
 		@Override
-		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
+		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(GsonHelper.getAsJsonObject(json, "grist_cost"));
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+					.getOrThrow(false, LOGGER::error);
 			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
 			
 			JsonArray jsonList = GsonHelper.getAsJsonArray(json, "sources");
@@ -79,7 +91,7 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost)
 		{
 			return new SourceGristCost(recipeId, ingredient, priority, cost);
 		}
@@ -94,6 +106,7 @@ public class SourceGristCost extends GeneratedGristCost
 	
 	private interface Source
 	{
+		@Nullable
 		GristSet getCostFor(GenerationContext context);
 	}
 	
