@@ -5,7 +5,6 @@ import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
-import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -52,8 +51,6 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-	
-	private boolean hasChimed = false;
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -281,12 +278,6 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
 	}
 	
-	public static void playAlchemySound(Level level, AlchemiterBlockEntity blockEntity)
-	{
-		level.playSound(null, blockEntity.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
-		blockEntity.hasChimed = true;
-	}
-	
 	public void processContents(int quantity, ServerPlayer player)
 	{
 		ItemStack newItem = getOutput();
@@ -320,7 +311,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				level.addFreshEntity(item);
 				
 				spawnAlchemyParticles(player, blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
-				playAlchemySound(level, this);
+				level.playSound(null, this.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
 			}
 		}
 	}
