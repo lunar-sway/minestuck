@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Cinnamon Sword
 
+### Fixed
+
+- TPZ command now accepts TRANSportalizers
+
 ### Contributors for this release
 
-- Vivian-Zane, rose_bushes_
+- Vivian-Zane, rose_bushes_, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 

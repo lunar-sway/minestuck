@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.machine.TransportalizerBlock;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
@@ -45,7 +45,7 @@ public class TransportalizerCommand
 		
 		ServerLevel level = source.getServer().getLevel(destination.dimension());
 		
-		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER.get())
+		if(level == null || !(level.getBlockState(destination.pos()).getBlock() instanceof TransportalizerBlock))
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
 		if(TransportalizerBlockEntity.isBlocked(level, destination.pos()))
