@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Cinnamon Sword
 
+### Fixed
+
+- Basilisks can now despawn again
+
 ### Contributors for this release
 
 - Vivian-Zane, rose_bushes_

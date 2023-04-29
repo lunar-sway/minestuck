@@ -147,10 +147,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 		return true;
 	}
 	
-	public void checkDespawn()
-	{
-	}
-	
 	@Override
 	public boolean isPickable()
 	{
