@@ -58,7 +58,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	private GristSet getCost(Item item)
 	{
 		if(handler != null)
-			return handler.getGristCost(item);
+			return handler.getMap().get(item);
 		else return null;
 	}
 	

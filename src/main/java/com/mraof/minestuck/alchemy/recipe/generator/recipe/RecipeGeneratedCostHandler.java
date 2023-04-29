@@ -66,9 +66,13 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		event.addListener(new RecipeGeneratedCostHandler(event.getServerResources().getRecipeManager()));
 	}
 	
-	GristSet getGristCost(Item item)
+	/**
+	 * Returns an immutable map of all grist costs generated from recipes.
+	 * If called before grist cost generation has finished, an empty map will be returned.
+	 */
+	public Map<Item, ImmutableGristSet> getMap()
 	{
-		return generatedCosts.get(item);
+		return generatedCosts;
 	}
 	
 	void write(FriendlyByteBuf buffer)
