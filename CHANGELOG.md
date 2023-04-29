@@ -5,8 +5,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
-## [1.19.2-1.10.2.1] - 2023-04-28
-
 ### Added
 
 - Various new weapons including 9 keys, 6 batons, and 3 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
