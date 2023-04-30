@@ -101,7 +101,7 @@ public class MSItems
 	public static final RegistryObject<Item> MUSIC_SWORD = REGISTER.register("music_sword", () -> new MusicPlayerWeapon(new WeaponItem.Builder(Tiers.DIAMOND, 6, -2.4F).efficiency(5.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> PILLOW_TALK = REGISTER.register("pillow_talk", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 6, -2.4F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.setOnFire(10)), new Item.Properties().defaultDurability(2031).tab(MSItemGroup.WEAPONS).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> KRAKENS_EYE = REGISTER.register("krakens_eye", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.PRISMARINE_TIER, 5, -2.6F).efficiency(15.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).set(ItemRightClickEffect.playerPotionEffect(() -> new MobEffectInstance(MobEffects.CONDUIT_POWER, 120, 0), 1, 120)), new Item.Properties().defaultDurability(650).tab(MSItemGroup.WEAPONS)));
-	
+	public static final RegistryObject<Item> CINNAMON_SWORD = REGISTER.register("cinnamon_sword", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 4, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));

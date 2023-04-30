@@ -1,6 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.CombinationMode;
+import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
+import com.mraof.minestuck.alchemy.recipe.ItemCombiner;
+import com.mraof.minestuck.alchemy.recipe.ItemCombinerWrapper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;

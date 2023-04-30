@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.alchemy.GristSet;
 import net.minecraft.world.item.Item;
@@ -128,7 +128,7 @@ public class GenerationContext
 			{
 				GristSet containerCost = lookupCostFor(container);
 				if(containerCost != null)
-					return containerCost.copy().scale(-1).addGrist(cost);
+					return containerCost.mutableCopy().scale(-1).add(cost);
 				else return null;
 			}
 		}

@@ -1,9 +1,11 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -15,20 +17,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ContainerGristCost extends GeneratedGristCost
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final ImmutableGristSet addedCost;
 	
-	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, GristSet addedCost, @Nullable Integer priority)
+	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
-		this.addedCost = addedCost.asImmutable();
+		this.addedCost = addedCost;
 	}
 	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GristSet cost)
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
 	{
 		super(id, ingredient, priority, cost);
 		this.addedCost = null;
@@ -43,7 +48,7 @@ public class ContainerGristCost extends GeneratedGristCost
 			GristSet cost = context.lookupCostFor(container);
 			if(cost != null)
 			{
-				return cost.copy().addGrist(addedCost);
+				return cost.mutableCopy().add(addedCost);
 			} else
 			{
 				if(context.isPrimary())
@@ -70,12 +75,13 @@ public class ContainerGristCost extends GeneratedGristCost
 		@Override
 		protected ContainerGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, Integer priority)
 		{
-			GristSet cost = GristSet.deserialize(GsonHelper.getAsJsonObject(json, "grist_cost"));
+			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
+					.getOrThrow(false, LOGGER::error);
 			return new ContainerGristCost(recipeId, ingredient, cost, priority);
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost)
 		{
 			return new ContainerGristCost(recipeId, ingredient, priority, cost);
 		}
