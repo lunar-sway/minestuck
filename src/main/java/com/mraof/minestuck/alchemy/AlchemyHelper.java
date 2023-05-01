@@ -100,6 +100,11 @@ public class AlchemyHelper
 		return item.hasTag() && item.getTag().contains("contentID", Tag.TAG_STRING);
 	}
 	
+	public static boolean isUnreadable(ItemStack item)
+	{
+		return item.hasTag() && item.getTag().contains("unreadable", Tag.TAG_STRING);
+	}
+	
 	/**
 	 * Given a punched card, this method returns a new item that represents the encoded data,
 	 * or it just returns the item directly if it's not a punched card.

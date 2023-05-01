@@ -9,10 +9,13 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CombinationMode;
 import com.mraof.minestuck.alchemy.CombinationRecipe;
 import com.mraof.minestuck.alchemy.CombinerWrapper;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.WorldEventUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -114,11 +117,16 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			if(AlchemyHelper.hasDecodedItem(heldStack))
 			{
-				ItemStack output;
-				if(AlchemyHelper.isPunchedCard(getCard()))	//|| combination
+				ItemStack output = AlchemyHelper.getDecodedItem(heldStack);
+				if(output.is(MSTags.Items.UNREADABLE))
+				{
+					player.sendSystemMessage(Component.translatable("On closer inspection, the code on the back seems to be almost unreadable").withStyle(ChatFormatting.AQUA));
+				return; //card unreadable
+				}
+				if(AlchemyHelper.isPunchedCard(getCard()))    //|| combination
 				{
 					output = CombinationRecipe.findResult(new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), level);
-				} else output = AlchemyHelper.getDecodedItem(heldStack);
+				}
 				
 				if(!output.isEmpty())
 				{

@@ -30,7 +30,7 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<UraniumCookerBlockEntity>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> BlockEntityType.Builder.of(UraniumCookerBlockEntity::new, MSBlocks.URANIUM_COOKER.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GristCollectorBlockEntity>> GRIST_COLLECTOR = REGISTER.register("grist_collector", () -> BlockEntityType.Builder.of(GristCollectorBlockEntity::new, MSBlocks.GRIST_COLLECTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<HolopadBlockEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadBlockEntity::new, MSBlocks.HOLOPAD.get()).build(null));
-	
+	public static final RegistryObject<BlockEntityType<IntellibeamLaserstationBlockEntity>> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", () -> BlockEntityType.Builder.of(IntellibeamLaserstationBlockEntity::new, MSBlocks.INTELLIBEAM_LASERSTATION.get()).build(null));
 	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, MSBlocks.SKAIA_PORTAL.get()).build(null));
 	public static final RegistryObject<BlockEntityType<GateBlockEntity>> GATE = REGISTER.register("gate", () -> BlockEntityType.Builder.of(GateBlockEntity::new, MSBlocks.GATE_MAIN.get()).build(null));
 	public static final RegistryObject<BlockEntityType<ReturnNodeBlockEntity>> RETURN_NODE = REGISTER.register("return_node", () -> BlockEntityType.Builder.of(ReturnNodeBlockEntity::new, MSBlocks.RETURN_NODE_MAIN.get()).build(null));
