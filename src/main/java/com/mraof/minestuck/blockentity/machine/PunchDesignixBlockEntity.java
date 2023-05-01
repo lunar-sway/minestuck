@@ -6,9 +6,9 @@ import com.mraof.minestuck.block.machine.PunchDesignixBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.CombinationMode;
-import com.mraof.minestuck.alchemy.CombinationRecipe;
-import com.mraof.minestuck.alchemy.CombinerWrapper;
+import com.mraof.minestuck.alchemy.recipe.CombinationMode;
+import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
+import com.mraof.minestuck.alchemy.recipe.CombinerWrapper;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.ChatFormatting;
@@ -126,7 +126,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 				if(AlchemyHelper.isPunchedCard(getCard()))    //|| combination
 				{
 					output = CombinationRecipe.findResult(new CombinerWrapper(heldStack, getCard(), CombinationMode.OR), level);
-				}
+				} else output = AlchemyHelper.getDecodedItem(heldStack);
 				
 				if(!output.isEmpty())
 				{
