@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 

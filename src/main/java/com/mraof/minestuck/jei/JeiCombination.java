@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 
-import com.mraof.minestuck.alchemy.CombinationMode;
+import com.mraof.minestuck.alchemy.recipe.CombinationMode;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 

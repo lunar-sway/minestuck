@@ -1,9 +1,9 @@
-package com.mraof.minestuck.alchemy.generator;
+package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;

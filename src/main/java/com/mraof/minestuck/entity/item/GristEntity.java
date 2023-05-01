@@ -2,7 +2,6 @@ package com.mraof.minestuck.entity.item;
 
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
@@ -18,6 +17,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -26,10 +26,10 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib3.core.builder.Animation;
 
 import javax.annotation.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class GristEntity extends Entity implements IEntityAdditionalSpawnData
@@ -60,13 +60,13 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	public GristEntity(Level level, double x, double y, double z, GristAmount gristData)
 	{
 		super(MSEntityTypes.GRIST.get(), level);
-		this.gristValue = gristData.getAmount();
+		this.gristValue = gristData.amount();
 		//this.yOffset = this.height / 2.0F;
 		this.setPos(x, y, z);
 		this.setYRot((float) (Math.random() * 360.0D));
 		this.setDeltaMovement(level.random.nextGaussian() * 0.2D - 0.1D, level.random.nextGaussian() * 0.2D, level.random.nextGaussian() * 0.2D - 0.1D);
 		
-		this.gristType = gristData.getType();
+		this.gristType = gristData.type();
 	}
 	
 	public GristEntity(EntityType<? extends GristEntity> type, Level level)
@@ -84,6 +84,32 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		// Set the class's consume-delay variable to equal the pickupDelay value that got passed in.
 	}
 	
+	/**
+	 * This is a version of the spawn grist entities function with a delay.
+	 */
+	public static void spawnGristEntities(GristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor, int delay, int gusherCount)
+	{
+		for(GristAmount amount : gristSet.asAmounts())
+		{
+			long countLeft = amount.amount();
+			for(int i = 0; i < 10 && countLeft > 0; i++)
+			{
+				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
+						gusherCount - 1 ? countLeft : Math.min(countLeft,
+						(long) level.random.nextDouble() * countLeft + 1);
+				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
+				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
+				postProcessor.accept(entity);
+				level.addFreshEntity(entity);
+				countLeft -= spawnedCount;
+			}
+		}
+	}
+	
+	public static void spawnGristEntities(GristSet gristSet, Level level, double x, double y, double z, RandomSource rand, Consumer<GristEntity> postProcessor)
+	{
+		spawnGristEntities(gristSet, level, x, y, z, rand, postProcessor, 0, 10);
+	}
 	
 	@Override
 	protected void defineSynchedData()
@@ -312,8 +338,8 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
-		GristSet set = new GristSet(gristType, gristValue);
-		GristCache.get(level, identifier).addWithGutter(set, GristHelper.EnumSource.CLIENT);
+		
+		GristCache.get(level, identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	

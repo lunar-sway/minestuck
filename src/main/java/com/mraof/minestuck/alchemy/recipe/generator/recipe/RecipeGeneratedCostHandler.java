@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.*;
@@ -6,11 +6,12 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
-import net.minecraft.core.Registry;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -28,6 +29,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -35,6 +38,13 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+/**
+ * A portion of the grist cost generation process responsible for generating grist costs from recipes.
+ * Loads a configuration file to determine which types of recipes should be processed and in which manner.
+ * Any produced grist costs are then made available through a {@link RecipeGeneratedGristCost} instance.
+ */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<List<RecipeGeneratedCostHandler.SourceEntry>> implements GeneratedCostProvider
 {
@@ -45,7 +55,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	public static final String PATH = "minestuck/grist_cost_generation_recipes.json";
 	
 	private final RecipeManager recipeManager;
-	private Map<Item, GristSet> generatedCosts = Collections.emptyMap();
+	private Map<Item, ImmutableGristSet> generatedCosts = Collections.emptyMap();
 	private RecipeGeneratedCostProcess process = null;
 	
 	private RecipeGeneratedCostHandler(RecipeManager recipeManager)
@@ -53,7 +63,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		this.recipeManager = recipeManager;
 	}
 	
-	private RecipeGeneratedCostHandler(Map<Item, GristSet> generatedCosts)
+	private RecipeGeneratedCostHandler(Map<Item, ImmutableGristSet> generatedCosts)
 	{
 		recipeManager = null;
 		this.generatedCosts = generatedCosts;
@@ -65,32 +75,37 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		event.addListener(new RecipeGeneratedCostHandler(event.getServerResources().getRecipeManager()));
 	}
 	
-	GristSet getGristCost(Item item)
+	/**
+	 * Returns an immutable map of all grist costs generated from recipes.
+	 * If called before grist cost generation has finished, an empty map will be returned.
+	 */
+	public Map<Item, ImmutableGristSet> getMap()
 	{
-		return generatedCosts.get(item);
+		return generatedCosts;
 	}
 	
 	void write(FriendlyByteBuf buffer)
 	{
 		buffer.writeInt(generatedCosts.size());
-		for(Map.Entry<Item, GristSet> entry : generatedCosts.entrySet())
+		for(Map.Entry<Item, ImmutableGristSet> entry : generatedCosts.entrySet())
 		{
 			buffer.writeVarInt(Item.getId(entry.getKey()));
-			entry.getValue().write(buffer);
+			GristSet.write(entry.getValue(), buffer);
 		}
 	}
 	
+	@Nullable
 	static RecipeGeneratedCostHandler read(FriendlyByteBuf buffer)
 	{
 		if(buffer.readableBytes() == 0)
 			return null;
 		
 		int size = buffer.readInt();
-		ImmutableMap.Builder<Item, GristSet> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<Item, ImmutableGristSet> builder = new ImmutableMap.Builder<>();
 		for(int i = 0; i < size; i++)
 		{
 			Item item = Item.byId(buffer.readVarInt());
-			GristSet cost = GristSet.read(buffer);
+			ImmutableGristSet cost = GristSet.read(buffer);
 			builder.put(item, cost);
 		}
 		return new RecipeGeneratedCostHandler(builder.build());
@@ -99,7 +114,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	List<JeiGristCost> createJeiCosts()
 	{
 		List<JeiGristCost> costs = new ArrayList<>();
-		for(Map.Entry<Item, GristSet> entries : generatedCosts.entrySet())
+		for(Map.Entry<Item, ImmutableGristSet> entries : generatedCosts.entrySet())
 		{
 			if(entries.getValue() != null)
 				costs.add(new JeiGristCost.Set(Ingredient.of(entries.getKey()), entries.getValue()));
@@ -137,14 +152,16 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	
 	private static List<SourceEntry> readEntries(Reader reader)
 	{
-		TypeToken<List<SourceEntry>> type = new TypeToken<List<SourceEntry>>(){};
+		TypeToken<List<SourceEntry>> type = new TypeToken<>()
+		{
+		};
 		try
 		{
 			JsonReader jsonreader = new JsonReader(reader);
 			jsonreader.setLenient(false);
 			
 			return GSON.getAdapter(type).read(jsonreader);
-		} catch (IOException e)
+		} catch(IOException e)
 		{
 			throw new JsonParseException(e);
 		}
@@ -171,19 +188,27 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		String type = GsonHelper.getAsString(json, "source_type");
 		switch(type)
 		{
-			case "recipe":
+			case "recipe" ->
+			{
 				ResourceLocation recipe = new ResourceLocation(GsonHelper.getAsString(json, "source"));
 				return new RecipeSource(recipe);
-			case "recipe_serializer":
+			}
+			case "recipe_serializer" ->
+			{
 				ResourceLocation serializerName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
 				RecipeSerializer<?> recipeSerializer = ForgeRegistries.RECIPE_SERIALIZERS.getValue(serializerName);
 				if(recipeSerializer == null)
 					throw new JsonParseException("No recipe type by name " + serializerName);
 				return new RecipeSerializerSource(recipeSerializer);
-			case "recipe_type":
+			}
+			case "recipe_type" ->
+			{
 				ResourceLocation typeName = new ResourceLocation(GsonHelper.getAsString(json, "source"));
-				RecipeType<?> recipeType = Registry.RECIPE_TYPE.getOptional(typeName).orElseThrow(() -> new JsonParseException("No recipe type by name " + typeName));
+				RecipeType<?> recipeType = ForgeRegistries.RECIPE_TYPES.getValue(typeName);
+				if(recipeType == null)
+					throw new JsonParseException("No recipe type by name " + typeName);
 				return new RecipeTypeSource(recipeType);
+			}
 		}
 		throw new JsonParseException("Invalid source type " + type);
 	}
@@ -221,7 +246,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, GristCostResult lastCost, GenerationContext context)
+	public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
 	{
 		return process.generateCost(item, lastCost, context);
 	}
@@ -234,7 +259,8 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			generatedCosts = process.buildMap();
 			process = null;
 			LOGGER.info("Generated {} grist conversions from recipes.", generatedCosts.size());
-		} else throw new IllegalStateException("Tried to build recipe-generated costs, but did not have an ongoing process!");
+		} else
+			throw new IllegalStateException("Tried to build recipe-generated costs, but did not have an ongoing process!");
 	}
 	
 	/**
@@ -294,15 +320,8 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		List<Recipe<?>> findRecipes(RecipeManager recipeManager);
 	}
 	
-	private static class RecipeSource implements Source
+	private record RecipeSource(ResourceLocation recipe) implements Source
 	{
-		private final ResourceLocation recipe;
-		
-		private RecipeSource(ResourceLocation recipe)
-		{
-			this.recipe = Objects.requireNonNull(recipe);
-		}
-		
 		@Override
 		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
@@ -313,19 +332,12 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		@Override
 		public String toString()
 		{
-			return "recipe_source[recipe="+recipe+"]";
+			return "recipe_source[recipe=" + recipe + "]";
 		}
 	}
 	
-	private static class RecipeSerializerSource implements Source
+	private record RecipeSerializerSource(RecipeSerializer<?> serializer) implements Source
 	{
-		private final RecipeSerializer<?> serializer;
-		
-		private RecipeSerializerSource(RecipeSerializer<?> serializer)
-		{
-			this.serializer = Objects.requireNonNull(serializer);
-		}
-		
 		@Override
 		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
@@ -335,19 +347,12 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		@Override
 		public String toString()
 		{
-			return "recipe_source[serializer="+ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer)+"]";
+			return "recipe_source[serializer=" + ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer) + "]";
 		}
 	}
 	
-	private static class RecipeTypeSource implements Source
+	private record RecipeTypeSource(RecipeType<?> recipeType) implements Source
 	{
-		private final RecipeType<?> recipeType;
-		
-		private RecipeTypeSource(RecipeType<?> recipeType)
-		{
-			this.recipeType = Objects.requireNonNull(recipeType);
-		}
-		
 		@Override
 		public List<Recipe<?>> findRecipes(RecipeManager recipeManager)
 		{
@@ -357,7 +362,7 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 		@Override
 		public String toString()
 		{
-			return "recipe_source[type="+recipeType+"]";
+			return "recipe_source[type=" + recipeType + "]";
 		}
 	}
 }

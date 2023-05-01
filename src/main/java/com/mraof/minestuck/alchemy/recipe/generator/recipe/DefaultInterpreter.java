@@ -1,9 +1,10 @@
-package com.mraof.minestuck.alchemy.generator.recipe;
+package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -26,18 +27,18 @@ public class DefaultInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
+	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		if(recipe.isSpecial())
 			return null;
 
-		GristSet totalCost = new GristSet();
+		MutableGristSet totalCost = new MutableGristSet();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
 			GristSet ingredientCost = context.costForIngredient(ingredient, true);
 			if(ingredientCost == null)
 				return null;
-			else totalCost.addGrist(ingredientCost);
+			else totalCost.add(ingredientCost);
 		}
 		
 		totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
