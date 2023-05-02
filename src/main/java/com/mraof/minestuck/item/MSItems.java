@@ -653,7 +653,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> MINI_ALCHEMITER = registerBlockItem(MSBlocks.MINI_ALCHEMITER, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> MINI_PUNCH_DESIGNIX = registerBlockItem(MSBlocks.MINI_PUNCH_DESIGNIX, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> HOLOPAD = registerBlockItem(MSBlocks.HOLOPAD, MSItemGroup.MAIN);
-	
+	public static final RegistryObject<BlockItem> INTELLIBEAM_LAZERSTATION = registerBlockItem(MSBlocks.INTELLIBEAM_LASERSTATION, MSItemGroup.MAIN);
 	
 	
 	//Misc Core Objects
