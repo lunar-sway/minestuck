@@ -610,6 +610,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.TELESCOPIC_SASSACRUSHER, "Telescopic Sassacrusher");
 		addItemTooltip(MSItems.TELESCOPIC_SASSACRUSHER, "OH ho! The perfect hammer for the dashing young gent who loves a pranksters gambit or a good grist horde!");
 		addItem(MSItems.DEMOCRATIC_DEMOLITIONER, "DEMOCRATIC DEMOLITIONER");
+		addItem(MSItems.BOOMBOX_BEATER, "Boombox Beater");
 		addItem(MSItems.REGI_HAMMER, "Regihammer");
 		addItem(MSItems.FEAR_NO_ANVIL, "Fear No Anvil");
 		addItemTooltip(MSItems.FEAR_NO_ANVIL, "Break blocks and stop clocks with the hammer of Hephaestus");
@@ -683,6 +684,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.SHATTER_BACON, "This thing is so unspeakably greasy you are having a hard time even holding it.");
 		addItemExtra(MSItems.SHATTER_BACON, OnHitEffect.SORD_DROP_MESSAGE, "The grease caused the ShatterBacon to slip from your grasp!");
 		addItem(MSItems.MUSIC_SWORD, "Music Sword");
+		addItem(MSItems.THORN_IN_YOUR_SIDE, "Thorn in Your Side");
+		addItem(MSItems.ROSE_PROTOCOL, "Rose Protocol");
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
@@ -737,6 +740,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.YALDABAOTHS_KEYTON, "A song of victory.");
 		addItem(MSItems.KEYTAR, "Keytar");
 		addItemTooltip(MSItems.KEYTAR, "Yes it's a real instrument.");
+		addItem(MSItems.ALLWEDDOL, "Allweddol");
 		addItem(MSItems.CONDUCTORS_BATON, "Conductor's Baton");
 		addItem(MSItems.SHARP_NOTE, "Sharp Note");
 		addItem(MSItems.URANIUM_BATON, "Uranium Baton");
@@ -748,6 +752,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.BO_STAFF, "Bo Staff");
 		addItem(MSItems.WIZARD_STAFF, "Wizard Staff");
 		addItem(MSItems.BAMBOO_BEATSTICK, "Bamboo Beatstick");
+		addItem(MSItems.TELESCOPIC_BEATDOWN_BRUISER, "Telescopic Beatdown Bruiser");
+		addItem(MSItems.BARBERS_MAGIC_TOUCH, "Barber's Magic Touch");
+		addItem(MSItems.ION_DESTABILIZER, "Ionic Destabilizer");
 		addItem(MSItems.BATLEACKS, "batleacks!!");
 		addItemTooltip(MSItems.BATLEACKS, "A shitty axe. Not much more to it.");
 		addItemExtra(MSItems.BATLEACKS, OnHitEffect.SORD_DROP_MESSAGE, "The shittiness of the batleacks made it phase through your hand");
@@ -829,6 +836,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MAGENTA_MAULER_LIPSTICK, "Lilac Lipstick");
 		addItem(MSItems.THISTLEBLOWER, "Thistleblower");
 		addItem(MSItems.THISTLEBLOWER_LIPSTICK, "Rosy Lipstick");
+		addItem(MSItems.HAND_CRANKED_VAMPIRE_ERASER, "Hand-Cranked Vampire Eraser");
+		addItem(MSItems.SPLINTERSTICK, "Splinterstick");
+		addItemTooltip(MSItems.SPLINTERSTICK, "Beauty is pain.");
 		addItem(MSItems.EMERALD_IMMOLATOR, "Emerald Immolator");
 		addItem(MSItems.EMERALD_IMMOLATOR_LIPSTICK, "Lipodemic Lipstick");
 		addItem(MSItems.FROSTTOOTH, "Frosttooth");
@@ -841,6 +851,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DEMONBANE_RAGRIPPER, "Demonbane Ragripper");
 		addItemTooltip(MSItems.DEMONBANE_RAGRIPPER, "It's said to be the deadliest chainsaw in the universe.");
 		addItem(MSItems.DEMONBANE_RAGRIPPER_LIPSTICK, "Blood Lipstick");
+		addItem(MSItems.CHAINSAW_KATANA, "Chainsaw Katana");
+		addItemTooltip(MSItems.CHAINSAW_KATANA, "Is it practical? It's practically the best weapon you've ever seen!");
 		addItem(MSItems.WOODEN_LANCE, "Wooden Lance");
 		addItem(MSItems.LANEC, "lanec");
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
@@ -933,6 +945,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		addItem(MSItems.CARNIE_CLUB, "Carnage Incarnate");
 		addItemTooltip(MSItems.CARNIE_CLUB, "Afterlife of the party.");
+		addItem(MSItems.TOFFEE_CLUB, "Toffee Club");
 		addItem(MSItems.MACE, "Mace");
 		addItem(MSItems.M_ACE, "mACE");
 		addItem(MSItems.M_ACE_OF_CLUBS, "mACE of Clubs");
@@ -1052,6 +1065,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.EDISONS_SERENITY, "Edison's Serenity");
 		addItem(MSItems.POINTY_STICK, "Pointy Stick");
 		addItem(MSItems.KNITTING_NEEDLE, "Knitting Needle");
+		addItem(MSItems.WAND, "Magic Wand");
 		addItem(MSItems.ARTIFUCKER, "Artifucker");
 		addItemTooltip(MSItems.ARTIFUCKER, "What's the opposite of an aimbot?");
 		addItem(MSItems.POINTER_WAND, "Pointer Wand");
@@ -1319,6 +1333,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SCALEMATE_PUMPKINSNUFFLE, "Liason Pumpkinsnuffle");
 		addItem(MSItems.SCALEMATE_PYRALSPITE, "Pyralspite");
 		addItem(MSItems.SCALEMATE_WITNESS, "The Witness");
+		addItem(MSItems.PLUSH_SALAMANDER, "Salamander Plushie");
+		addItem(MSItems.PLUSH_NAKAGATOR, "Nakagator Plushie");
+		addItem(MSItems.PLUSH_IGUANA, "Iguana Plushie");
+		addItem(MSItems.PLUSH_TURTLE, "Turtle Plushie");
 		addItem(MSItems.IRON_BOAT, "Iron Boat");
 		addItem(MSItems.GOLD_BOAT, "Golden Boat");
 		addItem(MSItems.FLARP_MANUAL, "Flarp Manual");
@@ -1353,6 +1371,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.CARDBOARD_TUBE, "Cardboard Tube");
 		addItem(MSItems.CRYPTID_PHOTO, "Cryptid Photo");
 		addItemTooltip(MSItems.CRYPTID_PHOTO, "You can make out a blurry figure surrounded by trees.");
+		addItem(MSItems.PARTICLE_ACCELERATOR, "Particle Accelerator");
 		addItem(MSItems.INK_SQUID_PRO_QUO, "Ink of Squid Pro Quo");
 		addItemTooltip(MSItems.INK_SQUID_PRO_QUO, "For the love of god, don't drink it.");
 		addItem(MSItems.CUEBALL, "Magic Cueball");

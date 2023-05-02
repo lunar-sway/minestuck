@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 70,
+    "minestuck:garnet": 21,
+    "minestuck:gold": 3,
+    "minestuck:shale": 35
+  },
+  "ingredient": {
+    "item": "minestuck:barbers_magic_touch"
+  }
+}

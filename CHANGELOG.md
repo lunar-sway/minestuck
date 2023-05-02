@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Various new weapons including 9 keys, 6 batons, and 3 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
+- Various new weapons including 10 keys, 6 batons, 1 wand, 2 clubs, 3 swords, 1 chainsaw, and 6 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
 - New effects: Boss Buster and an effect used to spawn particles on hit.
 - 3 new blocks to be used in decorating Heat lands.
 
