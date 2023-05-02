@@ -18,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 public class TransportalizerCommand
 {
@@ -32,7 +33,7 @@ public class TransportalizerCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("tpz").requires(commandSource -> commandSource.hasPermission(2))
-				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code")))
+				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code").toUpperCase(Locale.ROOT)))
 				.then(Commands.argument("targets", EntityArgument.entities()).executes(context -> teleport(context.getSource(), EntityArgument.getEntities(context, "targets"), StringArgumentType.getString(context, "code"))))));
 	}
 	

@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- TPZ command now accepts TRANSportalizers
+- TPZ command now accepts TRANSportalizers and is no longer case sensitive
 
 ### Contributors for this release
 
