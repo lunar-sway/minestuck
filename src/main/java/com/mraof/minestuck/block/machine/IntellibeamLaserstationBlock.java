@@ -1,10 +1,7 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
-import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -15,13 +12,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -53,14 +47,7 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
 	{
-		return new HolopadBlockEntity(pos, state);
-	}
-	
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
-	{
-		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.HOLOPAD.get(), HolopadBlockEntity::clientTick) : null;
+		return new IntellibeamLaserstationBlockEntity(pos, state);
 	}
 	
 	@SuppressWarnings("deprecation")

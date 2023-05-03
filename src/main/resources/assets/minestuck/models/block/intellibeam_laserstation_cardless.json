@@ -1,9 +1,10 @@
 {
 	"credit": "Made with Blockbench",
+	"render_type": "cutout",
 	"texture_size": [128, 128],
 	"textures": {
-		"0": "intellibeam_cardless",
-		"particle": "intellibeam_cardless"
+		"0": "minestuck:block/machine/intellibeam_cardless",
+		"particle": "minestuck:block/machine/intellibeam_cardless"
 	},
 	"elements": [
 		{

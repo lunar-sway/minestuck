@@ -61,7 +61,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		if (taggedCard.hasTag() && taggedCard.getTag().contains("unreadable"))
 			taggedItem = AlchemyHelper.getDecodedItem(taggedCard);
 		
-		
 		return taggedItem;
 	}
 	
@@ -161,7 +160,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		//tagCompound.setBoolean("broken", this.broken);
 		compound.put("card", card.save(new CompoundTag()));
 	}
 	
