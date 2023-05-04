@@ -28,7 +28,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	protected ItemStack card = ItemStack.EMPTY;
 	protected int EXP_LEVEL_CAPACITY = 10;
 	protected int EXPERIENCE_LEVEL = 0;
-	protected int WAIT_TIMER = 20;
+	protected float SOUND_SCALER = 0F;
+	protected int WAIT_TIMER = 0;
 	
 	public IntellibeamLaserstationBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -40,6 +41,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		ItemStack heldItem = player.getMainHandItem();
 		ItemStack taggedItem = AlchemyHelper.getDecodedItem(heldItem);
 		
+		if(isDecoded(taggedItem))
+		{
+			return;
+		}
 		if(card.isEmpty() && !this.hasCard() && !isDecoded(taggedItem))
 		{
 			tryInsertCard(heldItem);
@@ -47,12 +52,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY)
 		{
-			decodeItem();
+			insertCard(decodeItem(taggedItem));
 			takeCard(player);
 			return;
 		}
 		addExperience(player);
-		WAIT_TIMER += 20;
 	}
 	
 	public void takeCard(Player player)
@@ -111,15 +115,15 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
-	public ItemStack decodeItem()
+	public ItemStack decodeItem(ItemStack taggedCard)
 	{
-		ItemStack taggedCard = getCard();
-		ItemStack taggedItem = AlchemyHelper.getDecodedItem(taggedCard);
+		ItemStack stack = createEncodedItem(taggedCard, true);
+		stack.getOrCreateTag().putBoolean("decoded", true);
 		
-		taggedItem.getOrCreateTag().putBoolean("decoded", true);
 		EXPERIENCE_LEVEL = 0;
+		SOUND_SCALER = 0F;
 		
-		return taggedItem;
+		return stack;
 	}
 	
 	public void addExperience(Player player)
@@ -132,8 +136,9 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		{
 			player.giveExperienceLevels(-1);
 			EXPERIENCE_LEVEL += 1;
-			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_EXP_GATHER.get(), SoundSource.BLOCKS, 0.5F, (EXPERIENCE_LEVEL / 10) + 1F);
+			SOUND_SCALER += 0.1;
 			
+			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_EXP_GATHER.get(), SoundSource.BLOCKS, 0.5F, 1F + SOUND_SCALER);
 		}
 	}
 	
