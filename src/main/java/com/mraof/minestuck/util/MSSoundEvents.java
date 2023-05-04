@@ -100,6 +100,8 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_REVISE = register("event.edit_tools.revise");
 	public static final RegistryObject<SoundEvent> EVENT_EDIT_TOOL_RECYCLE = register("event.edit_tools.recycle");
 	public static final RegistryObject<SoundEvent> CRUXTRUDER_DOWEL = register("block.cruxtruder.dowel");
+	public static final RegistryObject<SoundEvent> INTELLIBEAM_LAZERSTATION_EXP_GATHER = register("block.intellibeam_lazerstation.exp_gather");
+	public static final RegistryObject<SoundEvent> INTELLIBEAM_LAZERSTATION_REMOVE_CARD = register("block.intellibeam_lazerstation.remove_card");
 	public static final RegistryObject<SoundEvent> BLOCK_HORSE_CLOCK_CHIME = register("block.horse_clock.chime");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TICK = register("block.clock.tick");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");

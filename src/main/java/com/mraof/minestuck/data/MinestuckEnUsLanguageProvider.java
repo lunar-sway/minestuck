@@ -507,7 +507,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
 		addBlock(MSBlocks.HOLOPAD, "Holopad");
-		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "intellibeamlazerstation");
+		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "Intellibeam Lazerstation");
 		addBlock(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		addBlock(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
 		addBlock(MSBlocks.MINI_ALCHEMITER, "Miniature Alchemiter");

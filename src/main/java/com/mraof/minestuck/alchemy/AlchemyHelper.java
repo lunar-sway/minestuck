@@ -85,6 +85,11 @@ public class AlchemyHelper
 		
 	}
 	
+	public static boolean isReadableCard(ItemStack decodedItem)
+	{
+		return decodedItem.getItem() == MSItems.CAPTCHA_CARD.get() && decodedItem.hasTag() && decodedItem.getTag().getBoolean("decoded");
+	};
+	
 	public static boolean isPunchedCard(ItemStack item)
 	{
 		return item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && item.getTag().getBoolean("punched");
@@ -98,11 +103,6 @@ public class AlchemyHelper
 	public static boolean hasDecodedItem(ItemStack item)
 	{
 		return item.hasTag() && item.getTag().contains("contentID", Tag.TAG_STRING);
-	}
-	
-	public static boolean isUnreadable(ItemStack item)
-	{
-		return item.hasTag() && item.getTag().contains("unreadable", Tag.TAG_STRING);
 	}
 	
 	/**

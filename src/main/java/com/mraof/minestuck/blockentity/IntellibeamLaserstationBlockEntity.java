@@ -4,12 +4,14 @@ import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -19,67 +21,49 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import static com.mraof.minestuck.alchemy.AlchemyHelper.createEncodedItem;
+
 public class IntellibeamLaserstationBlockEntity extends BlockEntity
 {
-	
 	protected ItemStack card = ItemStack.EMPTY;
-	protected int EXP_LEVEL_CAPACITY = 15;
+	protected int EXP_LEVEL_CAPACITY = 10;
 	protected int EXPERIENCE_LEVEL = 0;
+	protected int WAIT_TIMER = 20;
 	
 	public IntellibeamLaserstationBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.INTELLIBEAM_LASERSTATION.get(), pos, state);
 	}
 	
-	public int remainingExpCapacity()
+	public void onRightClick(Player player)
 	{
-		return Math.max(0, EXP_LEVEL_CAPACITY - EXPERIENCE_LEVEL);
-	}
-	
-	public void attemptAddExperience(Player player)
-	{
-		if (remainingExpCapacity() >= 0)
+		ItemStack heldItem = player.getMainHandItem();
+		ItemStack taggedItem = AlchemyHelper.getDecodedItem(heldItem);
+		
+		if(card.isEmpty() && !this.hasCard() && !isDecoded(taggedItem))
 		{
+			tryInsertCard(heldItem);
 			return;
 		}
-		if (player.experienceLevel <= 0)
+		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY)
 		{
+			decodeItem();
+			takeCard(player);
 			return;
 		}
-		if (player.getMainHandItem().isEmpty() && !this.hasCard())
-		{
-			player.giveExperienceLevels(-1);
-			EXPERIENCE_LEVEL += 1;
-		}
+		addExperience(player);
+		WAIT_TIMER += 20;
 	}
 	
-	public ItemStack getTaggedItem()
-	{
-		ItemStack taggedCard = getCard();
-		ItemStack taggedItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
-		
-		if (taggedCard.hasTag() && taggedCard.getTag().contains("unreadable"))
-			taggedItem = AlchemyHelper.getDecodedItem(taggedCard);
-		
-		return taggedItem;
-	}
-	
-	public void attemptRemoveUnreadableTag()
-	{
-		if(remainingExpCapacity() >= 0)
-		{
-			getTaggedItem().removeTagKey("unreadable");
-			EXPERIENCE_LEVEL = 0;
-		}
-	}
-	
-	public void attemptTakeCard(Player player)
+	public void takeCard(Player player)
 	{
 		if (player.getMainHandItem().isEmpty())
 			player.setItemInHand(InteractionHand.MAIN_HAND, card);
 		else if (!player.getInventory().add(card))
 			dropCard(false, level, worldPosition, card);
 		else player.inventoryMenu.broadcastChanges();
+		
+		this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 1F);
 		
 		insertCard(ItemStack.EMPTY);
 	}
@@ -95,22 +79,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			if (cardStack.hasTag() && cardStack.getTag().contains("contentID"))
 				item = AlchemyHelper.getDecodedItem(cardStack);
 		}
-	}
-	
-	public void onRightClick(Player player)
-	{
-		if(card.isEmpty())
-		{
-			ItemStack heldItem = player.getMainHandItem();
-			if (card.isEmpty())
-			{
-				tryInsertCard(heldItem);
-			}
-			return;
-		}
-		attemptAddExperience(player);
-		attemptRemoveUnreadableTag();
-		attemptTakeCard(player);
 	}
 	
 	public void dropCard(boolean inBlock, Level level, BlockPos pos, ItemStack item)
@@ -143,10 +111,41 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
+	public ItemStack decodeItem()
+	{
+		ItemStack taggedCard = getCard();
+		ItemStack taggedItem = AlchemyHelper.getDecodedItem(taggedCard);
+		
+		taggedItem.getOrCreateTag().putBoolean("decoded", true);
+		EXPERIENCE_LEVEL = 0;
+		
+		return taggedItem;
+	}
+	
+	public void addExperience(Player player)
+	{
+		if (player.experienceLevel <= 0)
+		{
+			return;
+		}
+		if (player.getMainHandItem().isEmpty() && this.hasCard())
+		{
+			player.giveExperienceLevels(-1);
+			EXPERIENCE_LEVEL += 1;
+			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_EXP_GATHER.get(), SoundSource.BLOCKS, 0.5F, (EXPERIENCE_LEVEL / 10) + 1F);
+			
+		}
+	}
+	
 	public ItemStack getCard()
 	{
 		return this.card;
 	}
+	
+	public static boolean isDecoded(ItemStack decodedItem)
+	{
+		return decodedItem.getItem() == MSItems.CAPTCHA_CARD.get() && decodedItem.hasTag() && decodedItem.getTag().getBoolean("decoded");
+	};
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -175,6 +174,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	public Packet<ClientGamePacketListener> getUpdatePacket()
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	public static void clientTick(Level level, BlockPos pos, BlockState state, IntellibeamLaserstationBlockEntity intellibeam)
+	{
+		intellibeam.WAIT_TIMER--;
 	}
 	
 	private void updateState()

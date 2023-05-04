@@ -290,7 +290,7 @@
   "block.minestuck.hot_cake": "Really Hot Cake",
   "block.minestuck.hubtop": "Hubtop",
   "block.minestuck.instant_tnt": "Instant TNT",
-  "block.minestuck.intellibeam_laserstation": "intellibeamlazerstation",
+  "block.minestuck.intellibeam_laserstation": "Intellibeam Lazerstation",
   "block.minestuck.item_magnet": "Item Magnet",
   "block.minestuck.item_magnet.additional_info": "- Length of area impacted by magnetism is proportional to power\n- Can be toggled to alternate pushing and pulling\n- Moves items/xp/grist entities by default\n- Can also lift and then move pushable blocks",
   "block.minestuck.item_magnet.tooltip": "Moves entities when powered.",
