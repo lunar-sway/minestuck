@@ -997,6 +997,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.KISSY_CUTIE_HEART_HITTER, "Furiosity wills the cat.");
 		addItem(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Kissy Cutie Heart Splitter");
 		addItemTooltip(MSItems.KISSY_CUTIE_HEART_SPLITTER, "Meowing into primetime!");
+		addItem(MSItems.MUTANT_CUTIE_CELL_PUTTER, "Mutant Cutie Cell Putter");
+		addItem(MSItems.MUTANT_CUTIE_CELL_CUTTER, "Mutant Cutie Cell Cutter");
 		addItem(MSItems.ZEPHYR_CANE, "Zephyr Cane");
 		addItemTooltip(MSItems.ZEPHYR_CANE, "Catch your breath and relax with this casual weapon by your side.");
 		addItem(MSItems.SPEAR_CANE, "Spear Cane");
@@ -1337,6 +1339,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.PLUSH_NAKAGATOR, "Nakagator Plushie");
 		addItem(MSItems.PLUSH_IGUANA, "Iguana Plushie");
 		addItem(MSItems.PLUSH_TURTLE, "Turtle Plushie");
+		addItem(MSItems.PLUSH_MUTINI, "Mutini Plushie");
 		addItem(MSItems.IRON_BOAT, "Iron Boat");
 		addItem(MSItems.GOLD_BOAT, "Golden Boat");
 		addItem(MSItems.FLARP_MANUAL, "Flarp Manual");
