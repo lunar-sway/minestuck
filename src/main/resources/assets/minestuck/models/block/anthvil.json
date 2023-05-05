@@ -1,21 +1,47 @@
 {
+    "render_type": "cutout",
     "parent": "block/block",
+    "credit": "Made with Blockbench by rose_bushes_",
+    "texture_size": [28, 28],
     "textures": {
-        "front": "minestuck:block/area_effect_block_front_unpowered",
-        "back": "minestuck:block/area_effect_block_side",
-        "side": "minestuck:block/redstone_machine_block",
-        "particle": "minestuck:block/area_effect_block_side"
+        "texture": "minestuck:block/anthvil",
+        "particle": "minestuck:block/anthvil"
     },
     "elements": [
-        {   "from": [ 0, 0, 0 ],
-            "to": [ 16, 16, 16 ],
+        {
+            "from": [2, 0, 6],
+            "to": [14, 4, 10],
             "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "down" },
-                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#side", "cullface": "up" },
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "north" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#back", "cullface": "south" },
-                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "west" },
-                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "east" }
+                "north": {"uv": [0, 10.85714, 6.85714, 13.14286], "texture": "#texture"},
+                "east": {"uv": [11.42857, 13.71429, 13.71429, 16], "texture": "#texture"},
+                "south": {"uv": [0, 10.85714, 6.85714, 13.14286], "texture": "#texture"},
+                "west": {"uv": [13.71429, 13.71429, 16, 16], "texture": "#texture"},
+                "up": {"uv": [0, 13.71429, 6.85714, 16], "texture": "#texture"},
+                "down": {"uv": [0, 13.71429, 6.85714, 16], "texture": "#texture"}
+            }
+        },
+        {
+            "from": [4, 4, 7],
+            "to": [12, 7, 9],
+            "faces": {
+                "north": {"uv": [11.42857, 11.42857, 16, 13.14286], "texture": "#texture"},
+                "east": {"uv": [14.85714, 13.71429, 16, 16], "texture": "#texture"},
+                "south": {"uv": [11.42857, 11.42857, 16, 13.14286], "texture": "#texture"},
+                "west": {"uv": [11.42857, 13.71429, 12.57143, 16], "texture": "#texture"},
+                "up": {"uv": [11.42857, 11.42857, 16, 13.14286], "texture": "#texture"},
+                "down": {"uv": [11.42857, 11.42857, 16, 13.14286], "texture": "#texture"}
+            }
+        },
+        {
+            "from": [0, 7, 4],
+            "to": [16, 14, 12],
+            "faces": {
+                "north": {"uv": [0, 4.57143, 9.14286, 8.57143], "texture": "#texture"},
+                "east": {"uv": [9.14286, 0, 13.14286, 4], "texture": "#texture"},
+                "south": {"uv": [0, 4.57143, 9.14286, 8.57143], "texture": "#texture"},
+                "west": {"uv": [9.14286, 4, 13.14286, 8], "texture": "#texture"},
+                "up": {"uv": [0, 0, 9.14286, 4.57143], "texture": "#texture"},
+                "down": {"uv": [0, 5.71429, 9.14286, 8.57143], "texture": "#texture"}
             }
         }
     ]
