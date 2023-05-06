@@ -80,9 +80,7 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	@Override
 	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		IntellibeamLaserstationBlockEntity intelibeamEntity = (IntellibeamLaserstationBlockEntity) level.getBlockEntity(pos);
-		
-		if(intelibeamEntity != null && !level.isClientSide)
+		if(!level.isClientSide && level.getBlockEntity(pos) instanceof IntellibeamLaserstationBlockEntity intelibeamEntity)
 		{
 			intelibeamEntity.dropCard(true, level, pos, intelibeamEntity.getCard());
 		}
