@@ -105,7 +105,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void insertCard(ItemStack card)
 	{
-		if (card.getItem() == MSItems.CAPTCHA_CARD.get() || card.isEmpty())
+		if (card.is(MSItems.CAPTCHA_CARD.get()) || card.isEmpty())
 		{
 			this.card = card;
 			if(level != null)
