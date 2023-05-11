@@ -18,6 +18,7 @@
     "minecraft:command_block_minecart",
     "minecraft:chain_command_block",
     "minecraft:repeating_command_block",
-    "minecraft:end_crystal"
+    "minecraft:end_crystal",
+    "minecraft:experience_bottle"
   ]
 }

@@ -1406,6 +1406,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.3", "You rolled a 4.");
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
+		
+		add("punch_designix.code_rejected", "On closer inspection, the code on the back seems to be almost unreadable");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");

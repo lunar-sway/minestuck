@@ -85,10 +85,10 @@ public class AlchemyHelper
 		
 	}
 	
-	public static boolean isReadableCard(ItemStack decodedItem)
+	public static boolean isReadableCard(ItemStack readItem)
 	{
-		return decodedItem.is(MSItems.CAPTCHA_CARD.get()) && decodedItem.hasTag() && decodedItem.getTag().getBoolean("decoded");
-	};
+		return readItem.is(MSItems.CAPTCHA_CARD.get()) && readItem.hasTag() && readItem.getTag().getBoolean("decoded");
+	}
 	
 	public static boolean isPunchedCard(ItemStack item)
 	{

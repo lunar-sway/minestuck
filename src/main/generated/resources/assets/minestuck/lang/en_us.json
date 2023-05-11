@@ -2106,6 +2106,7 @@
   "minestuck.transportalizer.forbidden": "Transportalizers have been disabled for this dimension.",
   "minestuck.transportalizer.forbidden_destination": "Transportalizers have been disabled for the destination dimension.",
   "minestuck.wireless_redstone": "Wireless Redstone",
+  "punch_designix.code_rejected": "On closer inspection, the code on the back seems to be almost unreadable",
   "store.block.minecraft.cactus.tooltip": "It's the quenchiest!",
   "store.block.minecraft.melon.tooltip": "How about something juicy? Melons sure are juicy.",
   "store.block.minecraft.obsidian": "Black Stone",

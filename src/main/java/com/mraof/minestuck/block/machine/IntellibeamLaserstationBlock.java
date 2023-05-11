@@ -3,9 +3,9 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.HolopadBlockEntity;
 import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -18,13 +18,11 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -32,18 +30,10 @@ import java.util.Map;
 
 public class IntellibeamLaserstationBlock extends MachineBlock implements EntityBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = createRotatedShapes(2, 0, 1, 14, 6, 13);
-	public static final Map<Direction, VoxelShape> COLLISION_SHAPE;
+	private Map<Direction, VoxelShape> shape = MSBlockShapes.INTELLIBEAM_LAZERSTATION.createRotatedShapes();
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
-	static
-	{
-		VoxelShape topShape = Block.box(3, 6, 3, 13, 7, 13);
-		COLLISION_SHAPE = createRotatedShapes(4, 0, 14, 12, 10, 16);
-		COLLISION_SHAPE.replaceAll((enumFacing, shape) -> Shapes.or(shape, topShape));
-	}
-	
-	public IntellibeamLaserstationBlock(BlockBehaviour.Properties builder)
+	public IntellibeamLaserstationBlock(Properties builder)
 	{
 		super(builder);
 		registerDefaultState(defaultBlockState().setValue(HAS_CARD, false));
@@ -53,7 +43,7 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
 	{
-		return level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.INTELLIBEAM_LASERSTATION.get(), IntellibeamLaserstationBlockEntity::clientTick) : null;
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.INTELLIBEAM_LASERSTATION.get(), IntellibeamLaserstationBlockEntity::serverTick) : null;
 	}
 	
 	
@@ -68,7 +58,6 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	@Override
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if(player.isShiftKeyDown()) return InteractionResult.PASS;
 		if(level.isClientSide)
 			return InteractionResult.SUCCESS;
 		
@@ -99,14 +88,14 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		return SHAPE.get(state.getValue(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	@Override
 	@SuppressWarnings("deprecation")
 	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		return COLLISION_SHAPE.get(state.getValue(FACING));
+		return shape.get(state.getValue(FACING));
 	}
 	
 	

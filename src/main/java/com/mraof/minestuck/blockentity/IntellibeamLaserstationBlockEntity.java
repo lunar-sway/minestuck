@@ -5,9 +5,11 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -21,15 +23,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import static com.mraof.minestuck.alchemy.AlchemyHelper.createEncodedItem;
-
 public class IntellibeamLaserstationBlockEntity extends BlockEntity
 {
 	protected ItemStack card = ItemStack.EMPTY;
 	protected int EXP_LEVEL_CAPACITY = 10;
 	protected int EXPERIENCE_LEVEL = 0;
 	protected float SOUND_SCALER = 0F;
-	protected int WAIT_TIMER = 0;
+	protected static int WAIT_TIMER = 0;
 	
 	public IntellibeamLaserstationBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -39,24 +39,38 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	public void onRightClick(Player player)
 	{
 		ItemStack heldItem = player.getMainHandItem();
-		ItemStack taggedItem = AlchemyHelper.getDecodedItem(heldItem);
+		ItemStack itemInsideCard = AlchemyHelper.getDecodedItem(heldItem);
 		
-		if(isDecoded(taggedItem))
+		if(!card.isEmpty() && player.isShiftKeyDown() && WAIT_TIMER <= 0)
 		{
+			takeCard(player);
+			WAIT_TIMER = 20;
 			return;
 		}
-		if(card.isEmpty() && !this.hasCard() && !isDecoded(taggedItem))
+		if(AlchemyHelper.isReadableCard(card) && WAIT_TIMER <= 0)
+		{
+			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
+			WAIT_TIMER = 20;
+			return;
+		}
+		if(card.isEmpty() && !AlchemyHelper.isReadableCard(itemInsideCard) && WAIT_TIMER <= 0)
 		{
 			tryInsertCard(heldItem);
+			WAIT_TIMER = 20;
 			return;
 		}
-		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY)
+		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY && WAIT_TIMER <= 0)
 		{
-			insertCard(decodeItem(taggedItem));
+			applyDecodedTag(card);
 			takeCard(player);
+			
+			EXPERIENCE_LEVEL = 0;
+			SOUND_SCALER = 0F;
+			WAIT_TIMER = 20;
 			return;
 		}
 		addExperience(player);
+		WAIT_TIMER = 20;
 	}
 	
 	public void takeCard(Player player)
@@ -115,15 +129,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
-	public ItemStack decodeItem(ItemStack taggedCard)
+	public ItemStack applyDecodedTag(ItemStack taggedCard)
 	{
-		ItemStack stack = createEncodedItem(taggedCard, true);
-		stack.getOrCreateTag().putBoolean("decoded", true);
+		taggedCard.getOrCreateTag().putBoolean("decoded", true);
 		
-		EXPERIENCE_LEVEL = 0;
-		SOUND_SCALER = 0F;
-		
-		return stack;
+		return taggedCard;
 	}
 	
 	public void addExperience(Player player)
@@ -147,17 +157,12 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		return this.card;
 	}
 	
-	public static boolean isDecoded(ItemStack decodedItem)
-	{
-		return decodedItem.getItem() == MSItems.CAPTCHA_CARD.get() && decodedItem.hasTag() && decodedItem.getTag().getBoolean("decoded");
-	};
-	
 	@Override
 	public void load(CompoundTag nbt)
 	{
 		super.load(nbt);
 		insertCard(ItemStack.of(nbt.getCompound("card")));
-		
+		EXPERIENCE_LEVEL = nbt.getInt("experience_level");
 	}
 	
 	@Override
@@ -165,25 +170,15 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound);
 		compound.put("card", card.save(new CompoundTag()));
+		compound.putInt("experience_level", EXPERIENCE_LEVEL);
 	}
 	
-	@Override
-	public CompoundTag getUpdateTag()
+	public static void serverTick(Level level, BlockPos pos, BlockState state, IntellibeamLaserstationBlockEntity intellibeam)
 	{
-		CompoundTag nbt = super.getUpdateTag();
-		nbt.put("card", card.save(new CompoundTag()));
-		return nbt;
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket()
-	{
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-	
-	public static void clientTick(Level level, BlockPos pos, BlockState state, IntellibeamLaserstationBlockEntity intellibeam)
-	{
-		intellibeam.WAIT_TIMER--;
+		if(WAIT_TIMER > 0)
+		{
+			intellibeam.WAIT_TIMER--;
+		}
 	}
 	
 	private void updateState()

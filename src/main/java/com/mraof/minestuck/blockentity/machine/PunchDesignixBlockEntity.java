@@ -118,9 +118,9 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			if(AlchemyHelper.hasDecodedItem(heldStack))
 			{
 				ItemStack output = AlchemyHelper.getDecodedItem(heldStack);
-				if(output.is(MSTags.Items.UNREADABLE) && !AlchemyHelper.isReadableCard(output))
+				if(output.is(MSTags.Items.UNREADABLE) && !AlchemyHelper.isReadableCard(heldStack))
 				{
-					player.sendSystemMessage(Component.translatable("On closer inspection, the code on the back seems to be almost unreadable").withStyle(ChatFormatting.BOLD));
+					player.sendSystemMessage(Component.translatable("punch_designix.code_rejected").withStyle(ChatFormatting.BOLD));
 				return; //card unreadable
 				}
 				if(AlchemyHelper.isPunchedCard(getCard()))    //|| combination
