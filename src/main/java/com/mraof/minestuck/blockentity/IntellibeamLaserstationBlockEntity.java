@@ -41,13 +41,17 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		ItemStack heldItem = player.getMainHandItem();
 		ItemStack itemInsideCard = AlchemyHelper.getDecodedItem(heldItem);
 		
-		if(!card.isEmpty() && player.isShiftKeyDown() && WAIT_TIMER <= 0)
+		if(WAIT_TIMER <= 0)
+		{
+			return;
+		}
+		if(!card.isEmpty() && player.isShiftKeyDown())
 		{
 			takeCard(player);
 			WAIT_TIMER = 20;
 			return;
 		}
-		if(AlchemyHelper.isReadableCard(card) && WAIT_TIMER <= 0)
+		if(AlchemyHelper.isReadableCard(card))
 		{
 			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LAZERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
 			WAIT_TIMER = 20;
@@ -59,7 +63,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			WAIT_TIMER = 20;
 			return;
 		}
-		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY && WAIT_TIMER <= 0)
+		if(EXPERIENCE_LEVEL >= EXP_LEVEL_CAPACITY)
 		{
 			applyDecodedTag(card);
 			takeCard(player);
