@@ -19,6 +19,10 @@
     "minecraft:chain_command_block",
     "minecraft:repeating_command_block",
     "minecraft:end_crystal",
-    "minecraft:experience_bottle"
+    "minecraft:experience_bottle",
+    "minecraft:elytra",
+    "minecraft:totem_of_undying",
+    "minecraft:beacon",
+    "minecraft:pumpkin"
   ]
 }

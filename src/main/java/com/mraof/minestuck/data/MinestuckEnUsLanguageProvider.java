@@ -2349,6 +2349,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("intellibeam_remove_card", "Intellibeam ejects card");
+		addSubtitles("intellibeam_exp_add", "Intellibeam absorbs experience");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");

@@ -41,7 +41,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		ItemStack heldItem = player.getMainHandItem();
 		ItemStack itemInsideCard = AlchemyHelper.getDecodedItem(heldItem);
 		
-		if(WAIT_TIMER <= 0)
+		if(WAIT_TIMER <= 1)
 		{
 			return;
 		}
@@ -57,7 +57,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			WAIT_TIMER = 20;
 			return;
 		}
-		if(card.isEmpty() && !AlchemyHelper.isReadableCard(itemInsideCard) && WAIT_TIMER <= 0)
+		if(card.isEmpty() && !AlchemyHelper.isReadableCard(itemInsideCard))
 		{
 			tryInsertCard(heldItem);
 			WAIT_TIMER = 20;
