@@ -16,6 +16,4 @@ public class MSParticleType
 	
 	public static final RegistryObject<SimpleParticleType> TRANSPORTALIZER = REGISTER.register("transportalizer", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> PLASMA = REGISTER.register("plasma", () -> new SimpleParticleType(false));
-	public static final RegistryObject<SimpleParticleType> REDSPLAT = REGISTER.register("redsplat", () -> new SimpleParticleType(false));
-	public static final RegistryObject<SimpleParticleType> REDPOP = REGISTER.register("redpop", () -> new SimpleParticleType(false));
 }

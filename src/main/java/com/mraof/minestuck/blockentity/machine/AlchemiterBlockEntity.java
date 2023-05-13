@@ -268,17 +268,6 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		}
 	}
 	
-	public void spawnAlchemyParticles(ServerPlayer player, ServerLevel originLevel, double x, double y, double z, int count, int xOffset, int yOffset, int zOffset, int speed)
-	{
-		if(player == null)
-		{
-			return;
-		}
-			originLevel.sendParticles(MSParticleType.PLASMA.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-			originLevel.sendParticles(MSParticleType.REDSPLAT.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-			originLevel.sendParticles(MSParticleType.REDPOP.get(), x, y, z, count, xOffset, yOffset, zOffset, speed);
-	}
-	
 	public void processContents(int quantity, ServerPlayer player)
 	{
 		ItemStack newItem = getOutput();
@@ -311,7 +300,11 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
 				
-				spawnAlchemyParticles(player, blockLevel, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
+				if(player == null)
+				{
+					return;
+				}
+				blockLevel.sendParticles(MSParticleType.PLASMA.get(), spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
 				level.playSound(null, this.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
 			}
 		}

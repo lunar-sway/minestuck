@@ -9,8 +9,6 @@ import com.mraof.minestuck.client.model.entity.BishopModel;
 import com.mraof.minestuck.client.model.entity.RookModel;
 import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.client.particles.PlasmaParticle;
-import com.mraof.minestuck.client.particles.RedpopParticle;
-import com.mraof.minestuck.client.particles.RedsplatParticle;
 import com.mraof.minestuck.client.particles.TransportalizerParticle;
 import com.mraof.minestuck.client.renderer.blockentity.*;
 import com.mraof.minestuck.client.renderer.entity.*;
@@ -151,8 +149,6 @@ public class ClientProxy
 	{
 		event.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
 		event.register(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
-		event.register(MSParticleType.REDPOP.get(), RedpopParticle.Provider::new);
-		event.register(MSParticleType.REDSPLAT.get(), RedsplatParticle.Provider::new);
 	}
 	
 	/**
