@@ -35,7 +35,7 @@ public class GutterBallItem extends Item
 		ItemStack itemStack = player.getItemInHand(usedHand);
 		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
 		itemStack.shrink(1);
-		player.sendSystemMessage(Component.translatable("Gutter Size Increased").withStyle(ChatFormatting.BOLD));
+		player.sendSystemMessage(Component.translatable("message.gutter.minor_increase").withStyle(ChatFormatting.BOLD));
 		
 		if(player instanceof ServerPlayer serverPlayer)
 		{
