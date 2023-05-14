@@ -33,7 +33,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
+public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
 	
@@ -120,8 +120,9 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	private void processContents()
 	{
 		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
-		{    //Refill fuel
-			fuel += FUEL_INCREASE;
+		{
+			//Refill fuel
+			addFuel((short) FUEL_INCREASE);
 			itemHandler.extractItem(1, 1, false);
 		}
 		if(canIrradiate())
@@ -189,5 +190,11 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public boolean canBeRefueled()
 	{
 		return fuel <= MAX_FUEL - FUEL_INCREASE;
+	}
+	
+	@Override
+	public void addFuel(short fuelAmount)
+	{
+		fuel += fuelAmount;
 	}
 }

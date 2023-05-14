@@ -532,6 +532,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.ANTHVIL, "Recover lost durability on weapons that have a grist cost.");
 		addBlock(MSBlocks.SKAIANET_DENIER, "Skaianet Denier");
 		addBlockTooltip(MSBlocks.SKAIANET_DENIER, "Constantly sends out signals preventing Entry from occurring while it is inside the radius.");
+		addBlock(MSBlocks.POWER_HUB, "Power Hub");
+		addBlockTooltip(MSBlocks.POWER_HUB, "Slowly powers a uranium fueled device that directly above it.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
@@ -1748,6 +1750,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristWidgetBlockEntity.TITLE, "GristWidget 12000");
 		add(AnthvilBlockEntity.TITLE, "Anthvil");
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
+		add(PowerHubBlockEntity.POWER_PROMPT, "%s fuel stored");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(GoButton.GO, "GO");

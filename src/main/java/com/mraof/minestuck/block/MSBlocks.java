@@ -560,6 +560,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> GRIST_COLLECTOR = REGISTER.register("grist_collector", () -> new GristCollectorBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> ANTHVIL = REGISTER.register("anthvil", () -> new AnthvilBlock(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> SKAIANET_DENIER = REGISTER.register("skaianet_denier", () -> new Block(Block.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(6).sound(SoundType.METAL)));
+	public static final RegistryObject<Block> POWER_HUB = REGISTER.register("power_hub", () -> new PowerHubBlock(Block.Properties.of(Material.METAL).strength(2).sound(SoundType.METAL)));
 	
 	
 	

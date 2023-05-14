@@ -1106,6 +1106,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> GRIST_COLLECTOR = registerBlockItem(MSBlocks.GRIST_COLLECTOR, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> ANTHVIL = registerBlockItem(MSBlocks.ANTHVIL, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> SKAIANET_DENIER = registerBlockItem(MSBlocks.SKAIANET_DENIER, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> POWER_HUB = registerBlockItem(MSBlocks.POWER_HUB, MSItemGroup.MAIN);
 	
 	
 	

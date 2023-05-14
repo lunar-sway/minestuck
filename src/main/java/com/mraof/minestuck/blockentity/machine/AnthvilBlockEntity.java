@@ -26,7 +26,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider
+public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
 {
 	public static final String TITLE = "container.minestuck.anthvil";
 	public static final short MAX_FUEL = 128;
@@ -138,7 +138,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 			{
 				//Refill fuel
-				fuel += FUEL_INCREASE;
+				addFuel((short) FUEL_INCREASE);
 				itemHandler.extractItem(1, 1, false);
 			}
 		}
@@ -184,6 +184,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public boolean canBeRefueled()
 	{
 		return fuel <= MAX_FUEL - FUEL_INCREASE;
+	}
+	
+	@Override
+	public void addFuel(short fuelAmount)
+	{
+		fuel += fuelAmount;
 	}
 	
 	/**
