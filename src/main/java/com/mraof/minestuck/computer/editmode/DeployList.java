@@ -73,6 +73,7 @@ public final class DeployList
 		registerItem("portable_totem_lathe", new MutableGristSet(GristTypes.BUILD, 200), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_TOTEM_LATHE.get()), EntryLists.DEPLOY);
 		registerItem("portable_alchemiter", new MutableGristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()), EntryLists.DEPLOY);
 		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new MutableGristSet(GristTypes.BUILD, 4000), 2, EntryLists.DEPLOY);
+		registerItem("intellibeam_laserstation", new ItemStack(MSBlocks.INTELLIBEAM_LASERSTATION.get()), new MutableGristSet(GristTypes.BUILD, 100000), 2, EntryLists.DEPLOY);
 		registerItem("card_punched_card", new MutableGristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD.get()), true), EntryLists.DEPLOY);
 		
 		//Atheneum
