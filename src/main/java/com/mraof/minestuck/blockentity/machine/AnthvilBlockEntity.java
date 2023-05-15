@@ -1,6 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -22,6 +25,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -111,6 +115,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		this.progressTracker.tick(this::processContents);
 	}
 	
+	/*public void openScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn)
+	{
+		MSScreenFactories.displayAnthvilScreen(, inv, titleIn, this);
+		//NetworkHooks.openScreen(serverPlayer, menuProvider, pos);
+	}*/
+	
 	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
@@ -171,11 +181,17 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	}
 	
 	/**
-	 * Checks that there is enough fuel energy/cruxite for the machine to work and that there is something to mend
+	 * Checks that there is enough fuel energy/cruxite/grist for the machine to work and that there is something to mend
 	 */
 	private boolean canMend()
 	{
-		return fuel > 0 && cruxite > 0 && !itemHandler.getStackInSlot(0).isEmpty();
+		ItemStack slotStack = itemHandler.getStackInSlot(0);
+		GristSet set = GristCostRecipe.findCostForItem(slotStack, null, false, level);
+		boolean hasGristCost = set != null && !set.isEmpty();
+		
+		boolean cacheHasEnough = false;
+		
+		return fuel > 0 && cruxite > 0 && !itemHandler.getStackInSlot(0).isEmpty() && hasGristCost && cacheHasEnough;
 	}
 	
 	/**

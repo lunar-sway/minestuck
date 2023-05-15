@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
+import com.mraof.minestuck.client.gui.MSScreenFactories;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,9 +49,11 @@ public class AnthvilBlock extends MachineProcessBlock implements EntityBlock
 		if(player instanceof ServerPlayer serverPlayer)
 		{
 			BlockEntity blockEntity = level.getBlockEntity(pos);
-			if(blockEntity instanceof AnthvilBlockEntity)
+			if(blockEntity instanceof AnthvilBlockEntity anthvilBlockEntity)
 			{
 				MenuProvider menuProvider = (MenuProvider) blockEntity;
+				
+				//anthvilBlockEntity.openScreen(serverPlayer, menuProvider, pos);
 				NetworkHooks.openScreen(serverPlayer, menuProvider, pos);
 			}
 		}

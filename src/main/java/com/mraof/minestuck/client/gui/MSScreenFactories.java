@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
+import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
@@ -13,7 +15,9 @@ import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 
@@ -105,6 +109,11 @@ public class MSScreenFactories
 	{
 		Minecraft.getInstance().setScreen(new AlchemiterScreen(blockEntity));
 	}
+	
+	/*public static void displayAnthvilScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn, AnthvilBlockEntity blockEntity)
+	{
+		Minecraft.getInstance().setScreen(new AnthvilScreen(MSMenuTypes.ANTHVIL.get(), inv, titleIn, blockEntity));
+	}*/
 	
 	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)
 	{

@@ -3,12 +3,16 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.GristCostRecipe;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
+import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -29,12 +33,18 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 	private static final int BUTTON_X = 20;
 	private static final int BUTTON_Y = 30;
 	
+	//private final AnthvilBlockEntity anthvilBE;
+	//private final AnthvilMenu screenContainer;
+	
 	private ExtendedButton goButton;
 	
 	
-	AnthvilScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn)
+	AnthvilScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn/*, AnthvilBlockEntity anthvilBE*/)
 	{
 		super(screenContainer, inv, titleIn);
+		
+		//this.screenContainer = screenContainer;
+		//this.anthvilBE = anthvilBE;
 	}
 	
 	@Override
@@ -43,8 +53,8 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 		super.init();
 		
 		//activates processContents() in AnthvilBlockEntity
-		goButton = new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true);
-		addRenderableWidget(goButton);
+		//goButton = new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true);
+		//addRenderableWidget(goButton);
 	}
 	
 	@Override
@@ -52,10 +62,28 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 	{
 		goButton.active = true;
 		
+		/*ItemStack stack = screenContainer.getSlot(0).getItem();
+		GristSet set = GristCostRecipe.findCostForItem(stack, null, false, anthvilBE.getLevel());
+		if(set != null && !set.isEmpty())
+		{
+			Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
+			//Component tooltip = GuiUtil.getGristboardTooltip(selectGrist(set), GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
+			this.renderTooltip(poseStack, tooltip, mouseX, mouseY);
+		}*/
+		
 		this.renderBackground(poseStack);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(poseStack, mouseX, mouseY);
 	}
+	
+	/**
+	 * Takes the GristSet of the item stored in the mending slot of the anthvil, finds the most used grist type, then returns a GristSet composed of one value of said grist type
+	 */
+	/*private GristSet selectGrist(GristSet setIn)
+	{
+		
+		return;
+	}*/
 	
 	@Override
 	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
