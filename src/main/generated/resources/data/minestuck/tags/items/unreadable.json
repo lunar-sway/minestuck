@@ -2,14 +2,13 @@
   "values": [
     "minestuck:cruel_fate_crucible",
     "minestuck:royal_deringer",
+    "minestuck:transportalizer",
+    "minestuck:trans_portalizer",
     "minestuck:fear_no_anvil",
     "minestuck:typhonic_trivializer",
     "minestuck:quill_of_echidna",
     "minestuck:umbral_infiltrator",
     "minestuck:fluorite_octet",
-    "minestuck:zillyhoo_hammer",
-    "minestuck:cutlass_of_zillywair",
-    "minestuck:thistle_of_zillywich",
     "minestuck:client_disk",
     "minestuck:server_disk",
     "minestuck:gutter_thumb_drive",
@@ -33,6 +32,7 @@
     "minecraft:elytra",
     "minecraft:totem_of_undying",
     "minecraft:beacon",
+    "minecraft:bedrock",
     "minecraft:pumpkin"
   ]
 }
