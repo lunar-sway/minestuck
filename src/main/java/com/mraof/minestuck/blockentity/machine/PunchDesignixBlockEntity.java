@@ -37,6 +37,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	private boolean broken = false;
 	private ItemStack card = ItemStack.EMPTY;
 	
+	public static final String REJECT_CARD = "block.minestuck.punch_designix.code_rejected";
+	
 	public PunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.PUNCH_DESIGNIX.get(), pos, state);
@@ -120,7 +122,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 				ItemStack output = AlchemyHelper.getDecodedItem(heldStack);
 				if(output.is(MSTags.Items.UNREADABLE) && !AlchemyHelper.isReadableCard(heldStack))
 				{
-					player.sendSystemMessage(Component.translatable("punch_designix.code_rejected").withStyle(ChatFormatting.BOLD));
+					player.displayClientMessage(Component.translatable(REJECT_CARD).withStyle(ChatFormatting.BOLD), true);
 				return; //card unreadable
 				}
 				if(AlchemyHelper.isPunchedCard(getCard()))    //|| combination

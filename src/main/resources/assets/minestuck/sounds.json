@@ -822,16 +822,16 @@
       "minestuck:random/horse_clock_chime"
     ]
   },
-  "block.intellibeam_lazerstation.exp_gather": {
+  "block.intellibeam_laserstation.exp_gather": {
     "category": "block",
-    "subtitle": "subtitles.minestuck.intellibeam_lazerstation_exp_gather",
+    "subtitle": "subtitles.minestuck.intellibeam_laserstation_exp_gather",
     "sounds": [
       "minestuck:random/intellibeam_exp_add"
     ]
   },
-  "block.intellibeam_lazerstation.remove_card": {
+  "block.intellibeam_laserstation.remove_card": {
     "category": "block",
-    "subtitle": "subtitles.minestuck.intellibeam_lazerstation_remove_card",
+    "subtitle": "subtitles.minestuck.intellibeam_laserstation_remove_card",
     "sounds": [
       "minestuck:random/intellibeam_remove_card"
     ]

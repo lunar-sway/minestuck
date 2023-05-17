@@ -6,6 +6,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -507,7 +508,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
 		addBlock(MSBlocks.HOLOPAD, "Holopad");
-		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "Intellibeam Lazerstation");
+		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "Intellibeam Laserstation");
 		addBlock(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		addBlock(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
 		addBlock(MSBlocks.MINI_ALCHEMITER, "Miniature Alchemiter");
@@ -1406,8 +1407,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.3", "You rolled a 4.");
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
-		
-		add("punch_designix.code_rejected", "On closer inspection, the code on the back seems to be almost unreadable");
 
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
@@ -1746,6 +1745,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SendificatorBlockEntity.TITLE, "Sendificator");
 		add(GristWidgetBlockEntity.TITLE, "GristWidget 12000");
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
+		add(PunchDesignixBlockEntity.REJECT_CARD, "On closer inspection, the code on the back seems to be almost unreadable");
+		add(IntellibeamLaserstationBlockEntity.DECODING_PROGRESS, "Decoding Progress: %s");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(GoButton.GO, "GO");
@@ -2349,8 +2350,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
-		addSubtitles("intellibeam_remove_card", "Intellibeam ejects card");
-		addSubtitles("intellibeam_exp_add", "Intellibeam absorbs experience");
+		addSubtitles("intellibeam_laserstation_remove_card", "Intellibeam ejects card");
+		addSubtitles("intellibeam_laserstation_exp_add", "Intellibeam absorbs experience");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");
