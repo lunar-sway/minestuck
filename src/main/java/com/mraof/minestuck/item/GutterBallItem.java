@@ -24,6 +24,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class GutterBallItem extends Item
 {
+	public static final String MINOR_INCREASE = "message.gutter.minor_increase";
 	public GutterBallItem(Properties properties)
 	{
 		super(properties);
@@ -35,7 +36,7 @@ public class GutterBallItem extends Item
 		ItemStack itemStack = player.getItemInHand(usedHand);
 		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
 		itemStack.shrink(1);
-		player.sendSystemMessage(Component.translatable("message.gutter.minor_increase").withStyle(ChatFormatting.BOLD));
+		player.displayClientMessage(Component.translatable(MINOR_INCREASE).withStyle(ChatFormatting.BOLD), true);
 		
 		if(player instanceof ServerPlayer serverPlayer)
 		{
