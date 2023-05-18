@@ -11,6 +11,7 @@ import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
 import com.mraof.minestuck.alchemy.recipe.CombinerWrapper;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -254,6 +256,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			//carve the dowel.
 			if(working && !getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()))
 			{
+				this.level.playSound(null, this.getBlockPos(), MSSoundEvents.TOTEM_LATHE_LATHE.get(), SoundSource.BLOCKS, 1F, 1F);
 				startingCarving = true;
 				isProcessing = true;
 				animationticks = 25;
