@@ -300,11 +300,8 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
 				
-				if(player == null)
-				{
-					return;
-				}
-				blockLevel.sendParticles(MSParticleType.PLASMA.get(), spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ() + 0.4, 1, 0, 0, 0, 0);
+				if(blockLevel != null)
+					blockLevel.sendParticles(MSParticleType.PLASMA.get(), spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
 				level.playSound(null, this.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
 			}
 		}
