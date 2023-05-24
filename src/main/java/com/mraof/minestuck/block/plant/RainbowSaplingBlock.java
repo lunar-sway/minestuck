@@ -5,6 +5,7 @@ import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,8 +24,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-
-import java.util.Random;
 
 public class RainbowSaplingBlock extends BushBlock implements BonemealableBlock
 {
@@ -50,7 +49,7 @@ public class RainbowSaplingBlock extends BushBlock implements BonemealableBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		super.tick(state, level, pos, random);
 		if (!level.isAreaLoaded(pos, 1)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light
@@ -65,17 +64,17 @@ public class RainbowSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state)
+	public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state)
 	{
 		return level.random.nextFloat() < 0.45F;
 	}
 	
 	@Override
-	public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state)
+	public void performBonemeal(ServerLevel level, RandomSource rand, BlockPos pos, BlockState state)
 	{
 		if(state.getValue(RED) && state.getValue(GREEN) && state.getValue(BLUE))
 		{
-			generateTree(level, pos, state, rand);
+			tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 		} else
 		{
 			float f = rand.nextFloat();
@@ -218,12 +217,5 @@ public class RainbowSaplingBlock extends BushBlock implements BonemealableBlock
 	protected boolean mayPlaceOn(BlockState state, BlockGetter worldIn, BlockPos pos)
 	{
 		return state.is(BlockTags.WOOL) || super.mayPlaceOn(state, worldIn, pos);
-	}
-	
-	private void generateTree(ServerLevel level, BlockPos pos, BlockState state, Random rand)
-	{
-		if(!net.minecraftforge.event.ForgeEventFactory.saplingGrowTree(level, rand, pos))
-			return;
-		tree.growTree(level, level.getChunkSource().getGenerator(), pos, state, rand);
 	}
 }

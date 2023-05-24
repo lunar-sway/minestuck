@@ -1,10 +1,10 @@
 {
   "type": "minestuck:source_grist_cost",
-  "ingredient": {
-    "item": "minecraft:lime_concrete"
-  },
   "grist_cost": {
     "minestuck:cobalt": 1
+  },
+  "ingredient": {
+    "item": "minecraft:lime_concrete"
   },
   "sources": [
     "minecraft:lime_concrete_powder"

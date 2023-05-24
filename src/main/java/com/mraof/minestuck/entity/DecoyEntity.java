@@ -1,11 +1,9 @@
 package com.mraof.minestuck.entity;
 
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +28,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public boolean isFlying;
 	public GameType gameType;
 	public String username;
 	private UUID playerId;
@@ -74,7 +71,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		this.setHealth(player.getHealth());
 		username = player.getGameProfile().getName();
 		playerId = player.getUUID();
-		isFlying = player.getAbilities().flying;
+		setNoGravity(player.getAbilities().flying);
 		player.getAbilities().addSaveData(this.capabilities);
 		foodStatsNBT = new CompoundTag();
 		player.getFoodData().addAdditionalSaveData(foodStatsNBT);
@@ -117,7 +114,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		{
 			foodStats = null;
 			LOGGER.error("Couldn't initiate food stats for player decoy. Proceeding to not simulate food stats.", e);
-			sourcePlayer.sendMessage(new TextComponent("An issue came up while creating the decoy. More info in the server logs."), Util.NIL_UUID);
+			sourcePlayer.sendSystemMessage(Component.literal("An issue came up while creating the decoy. More info in the server logs."));
 		}
 	}
 	
@@ -137,7 +134,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		buffer.writeUtf(username, 16);
 		buffer.writeUUID(playerId);
 		buffer.writeFloat(yHeadRot);
-		buffer.writeBoolean(isFlying);
 	}
 	
 	@Override
@@ -146,7 +142,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		username = additionalData.readUtf(16);
 		playerId = additionalData.readUUID();
 		yHeadRot = additionalData.readFloat();
-		isFlying = additionalData.readBoolean();
 		yHeadRotO = yHeadRot;
 		this.setYRot(yHeadRot);    //I don't know how much of this that is necessary
 		yRotO = getYRot();
@@ -177,9 +172,6 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 		yHeadRot = yHeadRotO;    //Neutralize the effect of the LookHelper
 		setYRot(yRotO);
 		setXRot(xRotO);
-		
-		if(isFlying)
-			this.setPos(this.getX(), yo, this.getZ());
 		
 		if(!level.isClientSide)
 		{
@@ -214,7 +206,7 @@ public class DecoyEntity extends Mob implements IEntityAdditionalSpawnData
 	@Override
 	public Component getName()
 	{
-		return new TextComponent(username != null ? username : "DECOY");
+		return Component.literal(username != null ? username : "DECOY");
 	}
 	
 	@Override

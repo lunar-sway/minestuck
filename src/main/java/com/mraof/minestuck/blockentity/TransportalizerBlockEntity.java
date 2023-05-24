@@ -1,22 +1,22 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.util.MSParticleType;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -90,10 +90,16 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		// Recieving will fail silently. Sending will warn the player.
 		if(level.hasNeighborSignal(blockEntity.getBlockPos()))
 		{
-			if(blockEntity.enabled) { blockEntity.setEnabled(false); }
-		}
-		else {
-			if(!blockEntity.enabled) { blockEntity.setEnabled(true); }
+			if(blockEntity.enabled)
+			{
+				blockEntity.setEnabled(false);
+			}
+		} else
+		{
+			if(!blockEntity.enabled)
+			{
+				blockEntity.setEnabled(true);
+			}
 		}
 		
 		serverTick(level, pos, state, blockEntity);
@@ -102,46 +108,58 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	protected AABB getTeleportField()
 	{
-		return new AABB(worldPosition.getX() + 1D/16, worldPosition.getY() + 8D/16, worldPosition.getZ() + 1D/16, worldPosition.getX() + 15D/16, worldPosition.getY() + 1, worldPosition.getZ() + 15D/16);
+		return new AABB(worldPosition.getX() + 1D / 16, worldPosition.getY() + 8D / 16, worldPosition.getZ() + 1D / 16, worldPosition.getX() + 15D / 16, worldPosition.getY() + 1, worldPosition.getZ() + 15D / 16);
 	}
 	
 	@Override
 	protected void teleport(Entity entity)
 	{
-		GlobalPos location = TransportalizerSavedData.get(level).get(this.destId);
+		if(this.level == null)
+			return;
+		
+		GlobalPos destination = TransportalizerSavedData.get(level).get(this.destId);
 		if(!enabled)
 		{
 			entity.setPortalCooldown();
 			if(entity instanceof ServerPlayer)
-				entity.sendMessage(new TranslatableComponent(DISABLED), Util.NIL_UUID);
+				entity.sendSystemMessage(Component.translatable(DISABLED));
 			return;
 		}
-		if(location != null && location.pos().getY() != -1)
+		if(destination != null && entity.getServer() != null)
 		{
-			ServerLevel level = entity.getServer().getLevel(location.dimension());
-			TransportalizerBlockEntity destTransportalizer = (TransportalizerBlockEntity) level.getBlockEntity(location.pos());
-			if(destTransportalizer == null)
+			ServerLevel destinationLevel = entity.getServer().getLevel(destination.dimension());
+			if(destinationLevel == null)
 			{
-				LOGGER.warn("Invalid transportalizer in map: {} at {}", this.destId, location);
-				TransportalizerSavedData.get(level).remove(this.destId, location);
+				LOGGER.warn("Transportalizer at invalid dimension in map: {} at {}", this.destId, destination);
+				TransportalizerSavedData.get(level).remove(this.destId, destination);
+				this.destId = "";
+				return;
+			}
+			if(!(destinationLevel.getBlockEntity(destination.pos()) instanceof TransportalizerBlockEntity destTransportalizer))
+			{
+				LOGGER.warn("Invalid transportalizer in map: {} at {}", this.destId, destination);
+				TransportalizerSavedData.get(level).remove(this.destId, destination);
 				this.destId = "";
 				return;
 			}
 			
-			if(!destTransportalizer.getEnabled()) { return; } // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
+			if(!destTransportalizer.getEnabled())
+			{
+				return; // Fail silently to make it look as though the player entered an ID that doesn't map to a transportalizer.
+			}
 			
 			if(isDimensionForbidden(this.level))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(FORBIDDEN), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(FORBIDDEN));
 				return;
 			}
-			if(isDimensionForbidden(level))
+			if(isDimensionForbidden(destinationLevel))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(FORBIDDEN_DESTINATION), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(FORBIDDEN_DESTINATION));
 				return;
 			}
 			
@@ -149,21 +167,30 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(BLOCKED), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(BLOCKED));
 				return;
 			}
 			
-			if(isBlocked(level, location.pos()))
+			if(isBlocked(destinationLevel, destination.pos()))
 			{
 				entity.setPortalCooldown();
 				if(entity instanceof ServerPlayer)
-					entity.sendMessage(new TranslatableComponent(BLOCKED_DESTINATION), Util.NIL_UUID);
+					entity.sendSystemMessage(Component.translatable(BLOCKED_DESTINATION));
 				return;
 			}
 			
-			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, location.pos().getX() + 0.5, location.pos().getY() + 0.6, location.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
+			ServerLevel originLevel = (ServerLevel) this.level;
+			
+			entity = Teleport.teleportEntity(entity, (ServerLevel) destTransportalizer.level, destination.pos().getX() + 0.5, destination.pos().getY() + 0.6, destination.pos().getZ() + 0.5, entity.getYRot(), entity.getXRot());
 			if(entity != null)
+			{
 				entity.setPortalCooldown();
+				
+				if(originLevel != null)
+					originLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
+				this.level.playSound(null, this.getBlockPos(), MSSoundEvents.TRANSPORTALIZER_TELEPORT.get(), SoundSource.BLOCKS, 1F, 1F);
+				destinationLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), destination.pos().getX() + 0.5, destination.pos().getY() + 1, destination.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
+			}
 		}
 	}
 	
@@ -207,7 +234,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		return destId;
 	}
-
+	
 	public void setDestId(String destId)
 	{
 		this.destId = destId;
@@ -215,8 +242,11 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		this.setChanged();
 		level.sendBlockUpdated(worldPosition, state, state, 0);
 	}
-
-	public boolean getEnabled() { return enabled; }
+	
+	public boolean getEnabled()
+	{
+		return enabled;
+	}
 	
 	public boolean isActive()
 	{
@@ -239,7 +269,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	public Component getName()
 	{
-		return new TextComponent("Transportalizer");
+		return Component.literal("Transportalizer");
 	}
 	
 	@Override
@@ -252,7 +282,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	@Override
 	public Component getCustomName()
 	{
-		return id.isEmpty() ? null : new TextComponent(id);
+		return id.isEmpty() ? null : Component.literal(id);
 	}
 	
 	@Override
@@ -264,7 +294,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		if(nbt.contains("active"))
 			this.active = nbt.getBoolean("active");
 	}
-
+	
 	@Override
 	public void saveAdditional(CompoundTag compound)
 	{

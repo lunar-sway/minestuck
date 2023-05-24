@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:gold": 434,
+    "minestuck:tar": 271
+  },
+  "ingredient": {
+    "item": "minestuck:sunray_harvester"
+  }
+}

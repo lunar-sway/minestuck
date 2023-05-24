@@ -7,7 +7,7 @@
     }
   ],
   "result": {
-    "item": "minestuck:dead_planks",
-    "count": 4
+    "count": 4,
+    "item": "minestuck:dead_planks"
   }
 }

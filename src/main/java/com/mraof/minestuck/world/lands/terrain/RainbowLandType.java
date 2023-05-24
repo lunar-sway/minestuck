@@ -10,9 +10,9 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.TurtleVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import net.minecraft.data.worldgen.placement.PlacementUtils;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,7 +28,6 @@ import net.minecraft.world.level.levelgen.placement.CountPlacement;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
 
-import java.util.Random;
 import java.util.stream.Stream;
 
 public class RainbowLandType extends TerrainLandType
@@ -40,7 +39,7 @@ public class RainbowLandType extends TerrainLandType
 	{
 		super(new Builder(MSEntityTypes.TURTLE).names(RAINBOW, COLORS)
 				.fogColor(0.0, 0.6, 0.8).skyColor(0.9, 0.6, 0.8)
-				.category(Biome.BiomeCategory.PLAINS).music(MSSoundEvents.MUSIC_RAINBOW));
+				.music(MSSoundEvents.MUSIC_RAINBOW));
 	}
 	
 	@Override
@@ -135,7 +134,7 @@ public class RainbowLandType extends TerrainLandType
 	}
 	
 	@Override
-	public void addVillagePieces(PieceRegister register, Random random)
+	public void addVillagePieces(PieceRegister register, RandomSource random)
 	{
 		TurtleVillagePieces.addPieces(register, random);
 	}

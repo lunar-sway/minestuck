@@ -1,24 +1,24 @@
 {
   "parent": "minestuck:minestuck/entry",
+  "criteria": {
+    "use_punch_designix": {
+      "conditions": {},
+      "trigger": "minestuck:punch_designix"
+    }
+  },
   "display": {
-    "icon": {
-      "item": "minestuck:captcha_card"
-    },
-    "title": {
-      "translate": "advancements.minestuck.alchemy.title"
-    },
+    "announce_to_chat": true,
     "description": {
       "translate": "advancements.minestuck.alchemy.description"
     },
     "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:captcha_card"
+    },
     "show_toast": true,
-    "announce_to_chat": true,
-    "hidden": false
-  },
-  "criteria": {
-    "use_punch_designix": {
-      "trigger": "minestuck:punch_designix",
-      "conditions": {}
+    "title": {
+      "translate": "advancements.minestuck.alchemy.title"
     }
   },
   "requirements": [

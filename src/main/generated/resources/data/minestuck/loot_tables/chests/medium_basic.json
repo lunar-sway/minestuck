@@ -2,8 +2,6 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "name": "weapons",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -13,311 +11,311 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minecraft:bow"
+          "name": "minecraft:bow",
+          "quality": 1,
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minecraft:stone_sword",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:stone_sword"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minecraft:iron_sword",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:iron_sword"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:claw_hammer",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:claw_hammer"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:sickle",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:sickle"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:katana",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:katana"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:lipstick",
+          "quality": 1
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:sledge_hammer",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:lipstick"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:sledge_hammer"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 5,
+          "name": "minestuck:wooden_spoon",
           "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:wooden_spoon"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:scythe"
+          "name": "minestuck:scythe",
+          "quality": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:knitting_needle",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:knitting_needle"
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:shuriken",
           "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:shuriken"
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:metal_bat",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:metal_bat"
+          "weight": 4
         },
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:mace",
+          "quality": 1
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:jousting_lance",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:mace"
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "functions": [
+            {
+              "add": false,
+              "damage": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.75
+              },
+              "function": "minecraft:set_damage"
+            }
+          ],
+          "name": "minestuck:fan",
           "quality": 1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:jousting_lance"
+          "weight": 4
         },
         {
           "type": "minecraft:item",
-          "weight": 4,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:fan"
+          "name": "minestuck:lucerne_hammer",
+          "quality": 2
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_damage",
+              "add": false,
               "damage": {
                 "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
+                "max": 1.0,
+                "min": 0.75
               },
-              "add": false
+              "function": "minecraft:set_damage"
             }
           ],
-          "name": "minestuck:lucerne_hammer"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 4,
+          "name": "minestuck:fork",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "type": "minecraft:uniform",
-                "min": 0.75,
-                "max": 1.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minestuck:fork"
+          "weight": 4
         }
-      ]
+      ],
+      "name": "weapons",
+      "rolls": 1.0
     },
     {
-      "name": "supplies",
-      "rolls": 3.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -327,149 +325,145 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 16.0
+                "max": 16.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:arrow"
+          "name": "minecraft:arrow",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 20,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:bread"
+          "name": "minecraft:bread",
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:wheat"
+          "name": "minecraft:wheat",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:apple"
+          "name": "minecraft:apple",
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 2.0
+                "max": 2.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:experience_bottle"
+          "name": "minecraft:experience_bottle",
+          "quality": 2
         },
         {
           "type": "minecraft:item",
-          "quality": 2,
-          "name": "minecraft:golden_apple"
+          "name": "minecraft:golden_apple",
+          "quality": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 5.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:rotten_flesh",
           "quality": -2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:rotten_flesh"
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:bone",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:bone"
+          "weight": 12
         },
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 7.0
+                "max": 7.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:phlegm_gushers"
+          "name": "minestuck:phlegm_gushers",
+          "quality": 1,
+          "weight": 7
         }
-      ]
+      ],
+      "name": "supplies",
+      "rolls": 3.0
     },
     {
-      "name": "misc",
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 2.0,
-        "max": 4.0
-      },
       "bonus_rolls": 0.0,
       "entries": [
         {
@@ -479,256 +473,261 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:iron_ingot",
+          "quality": 1,
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_ingot",
+          "quality": 1,
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 3.0
+                "max": 3.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:redstone"
+          "name": "minecraft:redstone",
+          "quality": 1,
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "name": "minecraft:ender_pearl",
           "quality": 2,
-          "name": "minecraft:ender_pearl"
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:flarp_manual"
+          "name": "minestuck:flarp_manual",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:sassacre_text"
+          "name": "minestuck:sassacre_text",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:wiseguy"
+          "name": "minestuck:wiseguy",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:tablestuck_manual"
+          "name": "minestuck:tablestuck_manual",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:tilldeath_handbook"
+          "name": "minestuck:tilldeath_handbook",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:binary_code"
+          "name": "minestuck:binary_code",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:nonbinary_code"
+          "name": "minestuck:nonbinary_code",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 8,
-          "name": "minestuck:ink_squid_pro_quo"
+          "name": "minestuck:ink_squid_pro_quo",
+          "weight": 8
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 8.0
+                "max": 8.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:barbasol"
+          "name": "minestuck:barbasol",
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "name": "minestuck:generic_object",
           "quality": -1,
-          "name": "minestuck:generic_object"
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:raw_cruxite"
+          "name": "minestuck:raw_cruxite",
+          "quality": 1,
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 12,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 1.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 1.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:raw_uranium"
+          "name": "minestuck:raw_uranium",
+          "quality": 1,
+          "weight": 12
         }
-      ]
-    },
-    {
-      "name": "rare",
+      ],
+      "name": "misc",
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 0.0,
-        "max": 1.0
-      },
+        "max": 4.0,
+        "min": 2.0
+      }
+    },
+    {
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 20,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 5.0
+                "max": 5.0,
+                "min": 0.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:iron_ingot",
+          "quality": 1,
+          "weight": 20
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
-          "quality": 1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 4.0
+                "max": 4.0,
+                "min": 0.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:gold_ingot"
+          "name": "minecraft:gold_ingot",
+          "quality": 1,
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 0.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minecraft:diamond",
           "quality": 2,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 2.0
-              },
-              "add": false
-            }
-          ],
-          "name": "minecraft:diamond"
+          "weight": 15
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "name": "minestuck:grimoire",
           "quality": 1,
-          "name": "minestuck:grimoire"
+          "weight": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
+          "name": "minestuck:mini_wizard_statue",
           "quality": 1,
-          "name": "minestuck:mini_wizard_statue"
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "quality": 3,
-          "name": "minestuck:cassette_player"
+          "name": "minestuck:cassette_player",
+          "quality": 3
         },
         {
           "type": "minecraft:item",
-          "quality": 3,
-          "name": "minestuck:sendificator"
+          "name": "minestuck:sendificator",
+          "quality": 3
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
+          "name": "minestuck:transportalizer",
           "quality": 2,
-          "name": "minestuck:transportalizer"
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "minestuck:dice"
+          "name": "minestuck:dice",
+          "weight": 5
         },
         {
           "type": "minecraft:item",
-          "quality": 4,
-          "name": "minestuck:cueball"
+          "name": "minestuck:cueball",
+          "quality": 4
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:cryptid_photo",
+          "quality": 4
         },
         {
           "type": "minecraft:item",
@@ -740,110 +739,120 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:chessboard"
+          "name": "minestuck:chessboard",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:cigarette_lance"
+          "name": "minestuck:cigarette_lance",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:ace_of_clubs"
+          "name": "minestuck:ace_of_clubs",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:ace_of_diamonds"
+          "name": "minestuck:ace_of_diamonds",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:ace_of_hearts"
+          "name": "minestuck:ace_of_hearts",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
-          "name": "minestuck:ace_of_spades"
+          "name": "minestuck:ace_of_spades",
+          "weight": 2
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
-          "name": "minestuck:energy_core"
+          "name": "minestuck:energy_core",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:gutter_ball"
         }
-      ]
+      ],
+      "name": "rare",
+      "rolls": {
+        "type": "minecraft:uniform",
+        "max": 1.0,
+        "min": 0.0
+      }
     },
     {
-      "name": "boondollars",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 7,
-          "quality": -1,
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "min": 3.0,
-                "max": 7.0
+                "max": 7.0,
+                "min": 3.0
               },
-              "add": false
+              "function": "minecraft:set_count"
             }
           ],
-          "name": "minestuck:sorrow_gushers"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 10,
+          "name": "minestuck:sorrow_gushers",
           "quality": -1,
-          "functions": [
-            {
-              "function": "minestuck:set_boondollar_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 5.0,
-                "max": 50.0
-              }
-            }
-          ],
-          "name": "minestuck:boondollars"
+          "weight": 7
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
           "functions": [
             {
-              "function": "minestuck:set_boondollar_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 50.0,
-                "max": 250.0
-              }
+                "max": 50.0,
+                "min": 5.0
+              },
+              "function": "minestuck:set_boondollar_count"
             }
           ],
-          "name": "minestuck:boondollars"
+          "name": "minestuck:boondollars",
+          "quality": -1,
+          "weight": 10
         },
         {
           "type": "minecraft:item",
-          "weight": 2,
           "functions": [
             {
-              "function": "minestuck:set_boondollar_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 250.0,
-                "max": 1000.0
-              }
+                "max": 250.0,
+                "min": 50.0
+              },
+              "function": "minestuck:set_boondollar_count"
             }
           ],
-          "name": "minestuck:boondollars"
+          "name": "minestuck:boondollars",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1000.0,
+                "min": 250.0
+              },
+              "function": "minestuck:set_boondollar_count"
+            }
+          ],
+          "name": "minestuck:boondollars",
+          "weight": 2
         }
-      ]
+      ],
+      "name": "boondollars",
+      "rolls": 1.0
     }
   ]
 }

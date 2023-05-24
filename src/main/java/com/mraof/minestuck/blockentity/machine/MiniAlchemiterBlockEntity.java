@@ -1,17 +1,18 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -22,8 +23,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -31,13 +32,15 @@ import net.minecraftforge.registries.ForgeRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Objects;
 
 public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable, GristWildcardHolder
 {
 	public static final String TITLE = "container.minestuck.mini_alchemiter";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
 	public static final int INPUT = 0, OUTPUT = 1;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private final DataSlot wildcardGristHolder = new DataSlot()
 	{
 		@Override
@@ -71,14 +74,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		return new CustomHandler(2, (slot, stack) ->  slot == INPUT && stack.getItem() == MSBlocks.CRUXITE_DOWEL.get().asItem());
 	}
 	
-	@Override
-	public RunType getRunType()
-	{
-		return TYPE;
-	}
-	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(!level.hasNeighborSignal(this.getBlockPos()) && !itemHandler.getStackInSlot(INPUT).isEmpty() && this.owner != null)
 		{
@@ -94,7 +90,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			}
 			GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
 			
-			return GristHelper.canAfford(level, owner, cost);
+			return GristCache.get(level, owner).canAfford(cost);
 		}
 		else
 		{
@@ -102,8 +98,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		}
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		ItemStack newItem = AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(INPUT));
 		
@@ -111,24 +106,27 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			newItem = new ItemStack(MSBlocks.GENERIC_OBJECT.get());
 		
 		GristSet cost = GristCostRecipe.findCostForItem(newItem, wildcardGrist, false, level);
+		Objects.requireNonNull(cost);
 		
-		GristHelper.decrease(level, owner, cost);
-		
-		AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
-		MinecraftForge.EVENT_BUS.post(event);
-		newItem = event.getItemResult();
-		ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
-		if(!existing.isEmpty())
-			newItem.grow(existing.getCount());
-		
-		itemHandler.setStackInSlot(OUTPUT, newItem);
+		if(GristCache.get(level, owner).tryTake(cost, GristHelper.EnumSource.CLIENT))
+		{
+			AlchemyEvent event = new AlchemyEvent(owner, this, itemHandler.getStackInSlot(INPUT), newItem, cost);
+			MinecraftForge.EVENT_BUS.post(event);
+			newItem = event.getItemResult();
+			ItemStack existing = itemHandler.getStackInSlot(OUTPUT);
+			if(!existing.isEmpty())
+				newItem.grow(existing.getCount());
+			
+			itemHandler.setStackInSlot(OUTPUT, newItem);
+		}
 	}
 	
 	// We're going to want to trigger a block update every 20 ticks to have comparators pull data from the Alchemiter.
 	@Override
 	protected void tick()
 	{
-		super.tick();
+		this.progressTracker.tick(this::processContents);
+		
 		if (this.ticks_since_update == 20)
 		{
 			level.updateNeighbourForOutputSignal(this.getBlockPos(), this.getBlockState().getBlock());
@@ -145,6 +143,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		super.load(nbt);
 		
+		this.progressTracker.load(nbt);
+		
 		this.wildcardGrist = GristType.read(nbt, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
@@ -156,7 +156,9 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	{
 		super.saveAdditional(compound);
 		
-		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		this.progressTracker.save(compound);
+		
+		compound.putString("gristType", String.valueOf(GristTypes.getRegistry().getKey(wildcardGrist)));
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -165,7 +167,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	private final LazyOptional<IItemHandler> sideHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, INPUT, INPUT + 1));
@@ -175,7 +177,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() : sideHandler.cast();
 		}
@@ -204,7 +206,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
 			{
-				GristSet scale_cost;
+				MutableGristSet scale_cost;
 				for (int lvl = 1; lvl <= 17; lvl++)
 				{
 					// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
@@ -213,8 +215,8 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 						return 15;
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
-					scale_cost = cost.copy().scale(lvl);
-					if (!GristHelper.canAfford(level, owner, scale_cost))
+					scale_cost = cost.mutableCopy().scale(lvl);
+					if (!GristCache.get(level, owner).canAfford(scale_cost))
 					{
 						return lvl - 1;
 					}
@@ -228,7 +230,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, parameters, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new MiniAlchemiterMenu(windowId, playerInventory, itemHandler, this.progressTracker, wildcardGristHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	public GristType getWildcardGrist()

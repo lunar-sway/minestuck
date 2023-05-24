@@ -1,20 +1,21 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.inventory.GristWidgetMenu;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristCostRecipe;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -31,15 +32,16 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.Objects;
 
+@MethodsReturnNonnullByDefault
 public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements MenuProvider, IOwnable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final String TITLE = "container.minestuck.grist_widget";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
+	public static final int MAX_PROGRESS = 100;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, MAX_PROGRESS, this::setChanged, this::contentsValid);
 	private PlayerIdentifier owner;
-	private boolean hasItem;
 	
 	public GristWidgetBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -83,11 +85,13 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		}
 	}
 	
+	@Nullable
 	public GristSet getGristWidgetResult()
 	{
 		return getGristWidgetResult(itemHandler.getStackInSlot(0), level);
 	}
 	
+	@Nullable
 	public static GristSet getGristWidgetResult(ItemStack stack, Level level)
 	{
 		if(level == null)
@@ -102,8 +106,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	
 	public int getGristWidgetBoondollarValue()
 	{
-		GristSet set = getGristWidgetResult();
-		return getGristWidgetBoondollarValue(set);
+		return getGristWidgetBoondollarValue(getGristWidgetResult());
 	}
 	
 	public static int getGristWidgetBoondollarValue(GristSet set)
@@ -112,13 +115,12 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(MinestuckConfig.SERVER.disableGristWidget.get())
 			return false;
@@ -127,9 +129,8 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 		int i = getGristWidgetBoondollarValue();
 		return owner != null && i != 0 && i <= PlayerSavedData.getData(owner, level).getBoondollars();
 	}
-
-	@Override
-	public void processContents()
+	
+	private void processContents()
 	{
 		GristSet gristSet = getGristWidgetResult();
 		
@@ -139,7 +140,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 			return;
 		}
 		
-		gristSet.spawnGristEntities(level, worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
+		GristEntity.spawnGristEntities(gristSet, level, worldPosition.getX() + 0.5, worldPosition.getY() + 1, worldPosition.getZ() + 0.5, level.random, entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(0.5, 0.5, 0.5)));
 		
 		itemHandler.extractItem(0, 1, false);
 	}
@@ -149,6 +150,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		super.load(nbt);
 		
+		this.progressTracker.load(nbt);
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
 			owner = IdentifierHandler.load(nbt, "owner");
 	}
@@ -158,6 +160,7 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	{
 		super.saveAdditional(compound);
 		
+		this.progressTracker.save(compound);
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
 	}
@@ -165,14 +168,14 @@ public class GristWidgetBlockEntity extends MachineProcessBlockEntity implements
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	@Nullable
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new GristWidgetMenu(windowId, playerInventory, itemHandler, parameters, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new GristWidgetMenu(windowId, playerInventory, itemHandler, this.progressTracker, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override

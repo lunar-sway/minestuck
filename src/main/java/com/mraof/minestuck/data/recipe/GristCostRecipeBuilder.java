@@ -2,10 +2,12 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,14 +15,20 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@MethodsReturnNonnullByDefault
 public class GristCostRecipeBuilder
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
@@ -34,7 +42,7 @@ public class GristCostRecipeBuilder
 	
 	public static GristCostRecipeBuilder of(ItemLike item)
 	{
-		return new GristCostRecipeBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
+		return new GristCostRecipeBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
 	public static GristCostRecipeBuilder of(Ingredient ingredient)
@@ -72,29 +80,29 @@ public class GristCostRecipeBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result implements FinishedRecipe
 	{
 		public final ResourceLocation id;
 		public final Ingredient ingredient;
-		public final GristSet cost;
+		public final ImmutableGristSet cost;
 		public final Integer priority;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
 		{
 			this.id = id;
 			this.ingredient = ingredient;
@@ -106,7 +114,7 @@ public class GristCostRecipeBuilder
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
 			jsonObject.add("ingredient", ingredient.toJson());
-			jsonObject.add("grist_cost", cost.serialize());
+			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
 			if(priority != null)
 				jsonObject.addProperty("priority", priority);
 		}

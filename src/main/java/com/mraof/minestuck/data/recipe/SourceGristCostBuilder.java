@@ -3,11 +3,9 @@ package com.mraof.minestuck.data.recipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.generator.SourceGristCost;
+import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -15,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class SourceGristCostBuilder
 	
 	public static SourceGristCostBuilder of(ItemLike item)
 	{
-		return new SourceGristCostBuilder(item.asItem().getRegistryName(), Ingredient.of(item));
+		return new SourceGristCostBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
 	public static SourceGristCostBuilder of(Ingredient ingredient)
@@ -96,19 +95,19 @@ public class SourceGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, name);
 	}
 	
 	public void buildFor(Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
-		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ingredient.getItems()[0].getItem().getRegistryName());
+		ResourceLocation name = Objects.requireNonNull(defaultName != null ? defaultName : ForgeRegistries.ITEMS.getKey(ingredient.getItems()[0].getItem()));
 		build(recipeSaver, new ResourceLocation(modId, name.getPath()));
 	}
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new ImmutableGristSet(costBuilder), priority));
+		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, sources, multiplier, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
 	public static class Result extends GristCostRecipeBuilder.Result
@@ -116,7 +115,7 @@ public class SourceGristCostBuilder
 		private final List<String> sources;
 		private final float multiplier;
 		
-		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, GristSet cost, Integer priority)
+		public Result(ResourceLocation id, Ingredient ingredient, List<String> sources, float multiplier, ImmutableGristSet cost, Integer priority)
 		{
 			super(id, ingredient, cost, priority);
 			this.sources = sources;

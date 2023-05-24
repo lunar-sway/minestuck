@@ -9,12 +9,14 @@ import com.mraof.minestuck.blockentity.machine.TotemLatheBlockEntity;
 import com.mraof.minestuck.blockentity.machine.TotemLatheDowelBlockEntity;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSRotationUtil;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,17 +34,20 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
 /**
  * Carves a cruxite dowel into a totem based on the card(s) put into the machines card slots. It has two block entities. One for the slot and one for dowel area which is rendered in a distinct way
  */
-public class TotemLatheBlock extends MultiMachineBlock
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TotemLatheBlock extends MultiMachineBlock<TotemLatheMultiblock> implements EditmodeDestroyable
 {
 	protected final Map<Direction, VoxelShape> shape;
 	protected final BlockPos mainPos;
 	
-	public TotemLatheBlock(MachineMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
+	public TotemLatheBlock(TotemLatheMultiblock machine, CustomVoxelShape shape, BlockPos mainPos, Properties properties)
 	{
 		super(machine, properties);
 		this.shape = shape.createRotatedShapes();
@@ -76,13 +81,26 @@ public class TotemLatheBlock extends MultiMachineBlock
 		BlockPos mainPos = getMainPos(state, pos);
 		BlockState otherState = level.getBlockState(mainPos);
 		if(level.getBlockEntity(mainPos) instanceof TotemLatheBlockEntity totemLathe
-				&& !otherState.isAir() && !state.isAir()
+				&& !(otherState.isAir() || state.isAir())
 				&& otherState.getValue(FACING) == state.getValue(FACING))
 		{
 			totemLathe.checkStates();
 		}
 		
 		super.onRemove(state, level, pos, newState, isMoving);
+	}
+	
+	@Override
+	public void destroyFull(BlockState state, Level level, BlockPos pos)
+	{
+		var placement = this.machine.findPlacementFromSlot(level, this.getMainPos(state, pos));
+		if(placement.isPresent())
+			this.machine.removeAt(level, placement.get());
+		else
+		{
+			for(var placementGuess : this.machine.guessPlacement(pos, state))
+				this.machine.removeAt(level, placementGuess);
+		}
 	}
 	
 	@Override
@@ -113,7 +131,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 		protected final Map<Direction, VoxelShape> carvedShape;
 		protected final Map<Direction, VoxelShape> dowelShape;
 		
-		public DowelRod(MachineMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
+		public DowelRod(TotemLatheMultiblock machine, CustomVoxelShape emptyShape, CustomVoxelShape dowelShape, CustomVoxelShape carvedShape, BlockPos mainPos, Properties properties)
 		{
 			super(machine, emptyShape, mainPos, properties);
 			this.dowelShape = dowelShape.createRotatedShapes();
@@ -150,17 +168,19 @@ public class TotemLatheBlock extends MultiMachineBlock
 		}
 		
 		@Override
-		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 		{
-			if(state.getBlock() != newState.getBlock())
+			if(!newState.is(this) && level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 			{
-				BlockEntity totemLathe = worldIn.getBlockEntity(pos);
-				if(totemLathe instanceof ItemStackBlockEntity)
+				ItemStack stack = blockEntity.getStack();
+				if(!stack.isEmpty())
 				{
-					Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), ((ItemStackBlockEntity) totemLathe).getStack());
+					Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+					blockEntity.setStack(ItemStack.EMPTY);
 				}
 			}
-			super.onRemove(state, worldIn, pos, newState, isMoving);
+			
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 	
@@ -171,7 +191,7 @@ public class TotemLatheBlock extends MultiMachineBlock
 	{
 		public static final IntegerProperty COUNT = MSProperties.COUNT_0_2;
 		
-		public Slot(MachineMultiblock machine, CustomVoxelShape shape, Properties properties)
+		public Slot(TotemLatheMultiblock machine, CustomVoxelShape shape, Properties properties)
 		{
 			super(machine, shape, new BlockPos(0, 0, 0), properties);
 		}
@@ -197,26 +217,14 @@ public class TotemLatheBlock extends MultiMachineBlock
 			builder.add(COUNT);
 		}
 		
-		//TODO blockentity is not deleted on destruction of slot component, even if every block in the machine is destroyed. Once the world is quit and reloaded, it is fixed
 		@Override
-		public void onRemove(BlockState state, Level worldIn, BlockPos pos, BlockState newState, boolean isMoving)
+		public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 		{
-			if(state.getBlock() != newState.getBlock())
-			{
-				BlockEntity be = worldIn.getBlockEntity(pos);
-				if(be instanceof TotemLatheBlockEntity totemLathe)
-				{
-					if(!totemLathe.getCard1().isEmpty())
-					{
-						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard1());
-					}
-					if(!totemLathe.getCard2().isEmpty())
-					{
-						Containers.dropItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), totemLathe.getCard2());
-					}
-				}
-			}
-			super.onRemove(state, worldIn, pos, newState, isMoving);
+			if(!newState.is(state.getBlock()) &&
+					level.getBlockEntity(pos) instanceof TotemLatheBlockEntity blockEntity)
+				blockEntity.dropItems();
+			
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 }

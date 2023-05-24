@@ -765,7 +765,7 @@
 				}
 			}
 		},
-		"fire": {
+		"shoot": {
 			"animation_length": 1.48,
 			"bones": {
 				"head": {
@@ -1129,7 +1129,7 @@
 				}
 			}
 		},
-		"tailwhip": {
+		"tail_whip": {
 			"animation_length": 1,
 			"bones": {
 				"tail1": {

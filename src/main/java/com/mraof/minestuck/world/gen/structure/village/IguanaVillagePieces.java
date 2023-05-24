@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.WallTorchBlock;
@@ -18,8 +19,6 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-
-import java.util.Random;
 
 public class IguanaVillagePieces
 {
@@ -33,7 +32,7 @@ public class IguanaVillagePieces
 	/**
 	 * Helper function for adding village pieces associated with iguanas.
 	 */
-	public static void addPieces(ILandType.PieceRegister register, Random random)
+	public static void addPieces(ILandType.PieceRegister register, RandomSource random)
 	{
 		register.add(SmallTent1::createPiece, 3, Mth.nextInt(random, 5, 8));
 		register.add(LargeTent1::createPiece, 10, Mth.nextInt(random, 1, 2));
@@ -44,7 +43,7 @@ public class IguanaVillagePieces
 	{
 		private int woolType = 1;
 		
-		SmallTent1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		SmallTent1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.SMALL_VILLAGE_TENT_1.get(), 0, boundingBox, 1);
 			setOrientation(facing);
@@ -57,7 +56,7 @@ public class IguanaVillagePieces
 			this.woolType = nbt.getInt("Wool");
 		}
 		
-		public static SmallTent1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static SmallTent1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 9, 6, 6, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new SmallTent1(start, rand, boundingBox, facing) : null;
@@ -71,7 +70,7 @@ public class IguanaVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -123,7 +122,7 @@ public class IguanaVillagePieces
 	{
 		private int woolType = 1;
 		
-		LargeTent1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		LargeTent1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.LARGE_VILLAGE_TENT_1.get(), 0, boundingBox, 4);
 			setOrientation(facing);
@@ -136,7 +135,7 @@ public class IguanaVillagePieces
 			this.woolType = nbt.getInt("Wool");
 		}
 		
-		public static LargeTent1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static LargeTent1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 12, 8, 16, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new LargeTent1(start, rand, boundingBox, facing) : null;
@@ -150,7 +149,7 @@ public class IguanaVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -246,7 +245,7 @@ public class IguanaVillagePieces
 	{
 		private int woolType = 1;
 		
-		SmallTentStore(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		SmallTentStore(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.SMALL_TENT_STORE.get(), 0, boundingBox, 1);
 			setOrientation(facing);
@@ -259,7 +258,7 @@ public class IguanaVillagePieces
 			this.woolType = nbt.getInt("Wool");
 		}
 		
-		public static SmallTentStore createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static SmallTentStore createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 7, 7, 7, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new SmallTentStore(start, rand, boundingBox, facing) : null;
@@ -273,7 +272,7 @@ public class IguanaVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{

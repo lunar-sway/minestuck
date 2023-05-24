@@ -13,7 +13,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -59,7 +58,7 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 		return MSRecipeTypes.IRRADIATING_FALLBACK.get();
 	}
 	
-	public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IrradiatingFallbackRecipe>
+	public static class Serializer implements RecipeSerializer<IrradiatingFallbackRecipe>
 	{
 		@Override
 		public IrradiatingFallbackRecipe fromJson(ResourceLocation recipeId, JsonObject json)

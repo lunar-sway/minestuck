@@ -12,7 +12,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -36,7 +35,7 @@ public class TitleSelectorScreen extends Screen
 	
 	TitleSelectorScreen(Title title)
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		previous = title;
 	}
 	
@@ -67,8 +66,8 @@ public class TitleSelectorScreen extends Screen
 			}
 		}
 		
-		addRenderableWidget(selectButton = new ExtendedButton(leftX + 24, topY + 128, 60, 20, new TranslatableComponent(SELECT), button -> select()));
-		addRenderableWidget(new ExtendedButton(leftX + 102, topY + 128, 60, 20, new TranslatableComponent(RANDOMIZE), button -> random()));
+		addRenderableWidget(selectButton = new ExtendedButton(leftX + 24, topY + 128, 60, 20, Component.translatable(SELECT), button -> select()));
+		addRenderableWidget(new ExtendedButton(leftX + 102, topY + 128, 60, 20, Component.translatable(RANDOMIZE), button -> random()));
 	}
 	
 	@Override

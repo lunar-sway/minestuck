@@ -7,8 +7,8 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.SimpleWeightedRandomList;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
@@ -22,9 +22,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.*;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Random;
 
 public class BucketFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -44,7 +43,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 	{
 		BlockPos pos = context.origin();
 		WorldGenLevel level = context.level();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		ResourceLocation structure;
 		if(rand.nextFloat() < 0.6F)
 		{
@@ -55,7 +54,7 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 		}
 		
 		Rotation rotation = Rotation.getRandom(rand);
-		StructureManager templates = context.level().getLevel().getStructureManager();
+		StructureTemplateManager templates = context.level().getLevel().getStructureManager();
 		StructureTemplate template = templates.getOrCreate(structure);
 		
 		ChunkPos chunkPos = new ChunkPos(pos);
@@ -70,13 +69,17 @@ public class BucketFeature extends Feature<NoneFeatureConfiguration>
 			list.add(Blocks.AIR.defaultBlockState(), 50);
 			for(Fluid fluid : ForgeRegistries.FLUIDS)
 			{
-				Rarity rarity = fluid.getAttributes().getRarity();
-				if(rarity == Rarity.COMMON)
-					list.add(fluid.defaultFluidState().createLegacyBlock(), 50);
-				else if(rarity == Rarity.UNCOMMON)
-					list.add(fluid.defaultFluidState().createLegacyBlock(), 10);
-				else if(rarity == Rarity.RARE)
-					list.add(fluid.defaultFluidState().createLegacyBlock(), 1);
+				FluidState fluidState = fluid.defaultFluidState();
+				if(fluidState.isSource())
+				{
+					BlockState fluidBlock = fluidState.createLegacyBlock();
+					switch(fluid.getFluidType().getRarity())
+					{
+						case COMMON -> list.add(fluidBlock, 50);
+						case UNCOMMON -> list.add(fluidBlock, 10);
+						case RARE -> list.add(fluidBlock, 1);
+					}
+				}
 			}
 			
 			bucketFluid = list.build().getRandomValue(rand).orElseThrow();

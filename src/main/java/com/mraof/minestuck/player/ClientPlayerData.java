@@ -1,13 +1,13 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,14 +32,14 @@ public final class ClientPlayerData
 	private static float rungProgress;
 	private static long boondollars;
 	private static int consortReputation;
-	private static GristSet playerGrist;
-	private static GristSet targetGrist;
+	private static GristSet playerGrist, targetGrist;
+	private static long targetCacheLimit;
 	private static int playerColor;
 	private static boolean displaySelectionGui;
 	private static boolean dataCheckerAccess;
 	
 	@SubscribeEvent
-	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggedInEvent event)
+	public static void onLoggedIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
 		modus = null;
 		title = null;
@@ -81,9 +81,27 @@ public final class ClientPlayerData
 		return consortReputation;
 	}
 	
-	public static GristSet getClientGrist()
+	public static ClientCache getGristCache(CacheSource cacheSource)
 	{
-		return ClientEditHandler.isActive() ? targetGrist : playerGrist;
+		return switch(cacheSource)
+		{
+			case PLAYER -> new ClientCache(ClientPlayerData.playerGrist, Echeladder.getGristCapacity(ClientPlayerData.getRung()));
+			case EDITMODE -> new ClientCache(ClientPlayerData.targetGrist, targetCacheLimit);
+		};
+	}
+	
+	public record ClientCache(GristSet set, long limit)
+	{
+		public boolean canAfford(GristSet cost)
+		{
+			return GristCache.canAfford(this.set, cost, this.limit);
+		}
+	}
+	
+	public enum CacheSource
+	{
+		PLAYER,
+		EDITMODE,
 	}
 	
 	public static int getPlayerColor()
@@ -95,6 +113,14 @@ public final class ClientPlayerData
 	{
 		MSPacketHandler.sendToServer(new ColorSelectPacket(colorIndex));
 		playerColor = ColorHandler.getColor(colorIndex);
+	}
+	
+	public static void selectColorRGB(int color)
+	{
+		if (color < 0 || color > 256*256*256) return;
+		
+		MSPacketHandler.sendToServer(new RGBColorSelectPacket(color));
+		playerColor = color;
 	}
 	
 	public static boolean shouDisplayColorSelection()
@@ -143,9 +169,15 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
-		if(packet.isEditmode)
-			targetGrist = packet.gristCache;
-		else playerGrist = packet.gristCache;
+		if(packet.isEditmode())
+			targetGrist = packet.gristCache();
+		else
+			playerGrist = packet.gristCache();
+	}
+	
+	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
+	{
+		targetCacheLimit = packet.limit();
 	}
 	
 	public static void handleDataPacket(ColorDataPacket packet)

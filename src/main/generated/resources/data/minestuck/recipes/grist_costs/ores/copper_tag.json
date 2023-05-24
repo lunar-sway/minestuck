@@ -1,13 +1,13 @@
 {
   "type": "minestuck:source_grist_cost",
-  "ingredient": {
-    "tag": "forge:ores/copper"
-  },
   "grist_cost": {
     "minestuck:build": 4
   },
+  "ingredient": {
+    "tag": "forge:ores/copper"
+  },
+  "multiplier": 8.0,
   "sources": [
     "minecraft:raw_copper"
-  ],
-  "multiplier": 8.0
+  ]
 }

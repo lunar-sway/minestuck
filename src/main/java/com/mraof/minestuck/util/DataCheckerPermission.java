@@ -29,13 +29,13 @@ public class DataCheckerPermission
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		sendPacket((ServerPlayer) event.getPlayer());
+		sendPacket((ServerPlayer) event.getEntity());
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
 	{
-		dataCheckerPermission.remove(event.getPlayer().getGameProfile().getId());
+		dataCheckerPermission.remove(event.getEntity().getGameProfile().getId());
 	}
 	
 	@SubscribeEvent

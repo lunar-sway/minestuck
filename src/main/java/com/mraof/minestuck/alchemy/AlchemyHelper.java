@@ -5,6 +5,7 @@ import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -19,7 +20,6 @@ import javax.annotation.Nonnull;
 
 import static com.mraof.minestuck.block.MSBlocks.CRUXITE_DOWEL;
 import static com.mraof.minestuck.item.MSItems.CAPTCHA_CARD;
-import static com.mraof.minestuck.item.MSItems.SHUNT;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class AlchemyHelper
@@ -31,13 +31,13 @@ public class AlchemyHelper
 		
 		if(!(event.getItemResult().getItem() instanceof CruxiteArtifactItem))
 		{
-			e.checkBonus(Echeladder.ALCHEMY_BONUS_OFFSET);
+			e.checkBonus(EcheladderBonusType.ALCHEMY_1);
 			GristSet cost = event.getCost();
 			double value = cost.getValue();
 			if(value >= 50)
-				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 1));
+				e.checkBonus(EcheladderBonusType.ALCHEMY_2);
 			if(value >= 500)
-				e.checkBonus((byte) (Echeladder.ALCHEMY_BONUS_OFFSET + 2));
+				e.checkBonus(EcheladderBonusType.ALCHEMY_3);
 		}
 		
 	}
@@ -65,15 +65,21 @@ public class AlchemyHelper
 		
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tag.getString(("contentID"))));
 		if (item == null) {return ItemStack.EMPTY;}
-		ItemStack newItem = new ItemStack(item);
+		
+		int count = 1;
+		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
+			count = 0;
+		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
+			count = tag.getInt("contentSize");
+		
+		CompoundTag capabilityData = null;
+		if(tag.contains("contentCaps", Tag.TAG_COMPOUND))
+			capabilityData = tag.getCompound("contentCaps");
+		
+		ItemStack newItem = new ItemStack(item, count, capabilityData);
 		
 		if(tag.contains("contentTags"))
 			newItem.setTag(tag.getCompound("contentTags"));
-		
-		if(ignoreGhost && tag.contains("contentSize") && tag.getInt("contentSize") <= 0)
-			newItem.setCount(0);
-		else if(tag.contains("contentSize") && tag.getInt("contentSize") >= 1)
-			newItem.setCount(tag.getInt("contentSize"));
 		
 		return newItem;
 		
@@ -117,15 +123,7 @@ public class AlchemyHelper
 	@Nonnull
 	public static ItemStack createEncodedItem(ItemStack item, boolean registerToCard)
 	{
-		CompoundTag nbt = null;
-		if(!item.isEmpty())
-		{
-			nbt = new CompoundTag();
-			nbt.putString("contentID", item.getItem().getRegistryName().toString());
-		}
-		ItemStack stack = new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get());
-		stack.setTag(nbt);
-		return stack;
+		return createEncodedItem(item, new ItemStack(registerToCard ? CAPTCHA_CARD.get() : CRUXITE_DOWEL.get()));
 	}
 	
 	@Nonnull
@@ -135,19 +133,11 @@ public class AlchemyHelper
 		if(!itemIn.isEmpty())
 		{
 			nbt = new CompoundTag();
-			nbt.putString("contentID", itemIn.getItem().getRegistryName().toString());
+			nbt.putString("contentID", ForgeRegistries.ITEMS.getKey(itemIn.getItem()).toString());
 		}
-		ItemStack stack = itemOut;
 		
-		
-		stack.setTag(nbt);
-		return stack;
-	}
-	
-	@Nonnull
-	public static ItemStack createEncodedItem(ItemStack itemIn, Item itemOut)
-	{
-		return createEncodedItem(itemIn, new ItemStack(itemOut));
+		itemOut.setTag(nbt);
+		return itemOut;
 	}
 	
 	@Nonnull
@@ -159,6 +149,9 @@ public class AlchemyHelper
 		{
 			if(item.hasTag())
 				stack.getOrCreateTag().put("contentTags", item.getTag());
+			CompoundTag capsData = item.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
+			if(!capsData.isEmpty())
+				stack.getOrCreateTag().put("contentCaps", capsData);
 			stack.getOrCreateTag().putInt("contentSize", item.getCount());
 		}
 		
@@ -170,9 +163,7 @@ public class AlchemyHelper
 	{
 		ItemStack stack = createEncodedItem(item, true);
 		stack.getOrCreateTag().putBoolean("punched", false);
-			if(item.hasTag())
-				stack.getOrCreateTag().put("contentTags", item.getTag());
-			stack.getOrCreateTag().putInt("contentSize", 0);
+		stack.getOrCreateTag().putInt("contentSize", 0);
 		return stack;
 	}
 	
@@ -181,25 +172,7 @@ public class AlchemyHelper
 		card.removeTagKey("contentID");
 		card.removeTagKey("punched");
 		card.removeTagKey("contentTags");
+		card.removeTagKey("contentCaps");
 		card.removeTagKey("contentSize");
-	}
-	
-	public static ItemStack changeEncodeSize(ItemStack stack, int size)
-	{
-		stack.getOrCreateTag().putInt("contentSize", size);
-		
-		return stack;
-	}
-	
-	public static ItemStack createShunt(ItemStack item)
-	{
-		ItemStack stack = createEncodedItem(item, SHUNT.get());
-		stack.getOrCreateTag().putBoolean("punched", true);
-		
-		if(item.hasTag())
-			stack.getOrCreateTag().put("contentTags", item.getTag());
-		stack.getOrCreateTag().putInt("contentSize", item.getCount());
-		
-		return stack;
 	}
 }

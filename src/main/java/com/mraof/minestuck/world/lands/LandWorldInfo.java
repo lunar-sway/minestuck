@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
@@ -18,7 +19,7 @@ public class LandWorldInfo implements ServerLevelData
 	private final long dayTime;
 	
 	public LandWorldInfo(ServerLevelData wrapped,
-						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder, float skylight)
+						 LandProperties.ForceType forceRain, LandProperties.ForceType forceThunder, double skylight)
 	{
 		this.wrapped = wrapped;
 		this.forceRain = forceRain;
@@ -26,10 +27,20 @@ public class LandWorldInfo implements ServerLevelData
 		this.dayTime = dayTimeFromSkylight(skylight);
 	}
 	
-	private static long dayTimeFromSkylight(float skylight) {
-		double timeOfDay = Math.acos((skylight - 0.5F) / 2) / (Math.PI * 2F);
-		// Not a perfect inversion of DimensionType.timeOfDay(), but might be good enough
-		return (long) ((timeOfDay + 0.25) * 24000);
+	private static final int SUNSET_START = 11868, SUNSET_END = 13670;
+	
+	private static long dayTimeFromSkylight(double desiredLight) {
+		final int STEPS = 20;
+		for(int i = 0; i <= STEPS; i++)
+		{
+			int timeTicks = Math.round(Mth.lerp(((float) i)/STEPS, SUNSET_START, SUNSET_END));
+			double timeFraction = Mth.frac(timeTicks / 24000D - 0.25D);
+			timeFraction = (2D*timeFraction + (0.5D - Math.cos(timeFraction * Math.PI)/2D))/3D;
+			double light = 0.5D + 2D*Math.cos(timeFraction * 2D*Math.PI);
+			if(desiredLight >= light)
+				return timeTicks;
+		}
+		return SUNSET_END;
 	}
 	
 	@Override

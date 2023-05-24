@@ -8,13 +8,15 @@ import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.world.MSDimensions;
-import com.mraof.minestuck.world.lands.LandTypeGenerator;
+import com.mraof.minestuck.world.lands.gen.LandTypeGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
+import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -38,7 +40,7 @@ public final class SburbHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final String LAND_ENTRY = "minestuck.land_entry";
+	public static final String CHAT_LAND_ENTRY = "minestuck.chat_land_entry";
 	
 	private static Title produceTitle(Level level, PlayerIdentifier player)
 	{
@@ -166,7 +168,7 @@ public final class SburbHandler
 				titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), terrainLandType, connection.getClientIdentifier());
 				if(terrainLandType != null && titleLandType == LandTypes.TITLE_NULL.get())
 				{
-					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", terrainLandType.getRegistryName());
+					LOGGER.warn("Failed to find a title land aspect compatible with land aspect \"{}\". Forced to use a poorly compatible land aspect instead.", LandTypes.TERRAIN_REGISTRY.get().getKey(terrainLandType));
 					titleLandType = Generator.generateWeightedTitleLandType(mcServer, session, title.getHeroAspect(), null, connection.getClientIdentifier());
 				}
 			}
@@ -219,7 +221,14 @@ public final class SburbHandler
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.getLevel()).orElseThrow();
-			player.sendMessage(new TranslatableComponent(LAND_ENTRY, landTypes.asComponent()), Util.NIL_UUID);
+			
+			//chat message
+			player.sendSystemMessage(Component.translatable(CHAT_LAND_ENTRY, landTypes.asComponent()));
+			
+			//Title style message
+			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
+			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
+			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponent()));
 		}
 	}
 	

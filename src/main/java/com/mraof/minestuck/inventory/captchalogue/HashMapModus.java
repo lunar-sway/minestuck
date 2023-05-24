@@ -1,16 +1,16 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Iterator;
 
@@ -88,7 +88,7 @@ public class HashMapModus extends Modus
 		if(list.size() == 0 || item.isEmpty())
 			return false;
 		
-		String itemName = item.getItem().getRegistryName().getPath().replace('_', ' ');
+		String itemName = ForgeRegistries.ITEMS.getKey(item.getItem()).getPath().replace('_', ' ');
 		
 		int index = ((item.hasCustomHoverName()) ? item.getHoverName() : itemName).hashCode() % list.size();	//TODO Perhaps use a custom hashcode function that behaves more like the one in comic
 		
@@ -111,7 +111,7 @@ public class HashMapModus extends Modus
 		markDirty();
 		
 		if(ejectByChat && MinestuckConfig.SERVER.hashmapChatModusSetting.get() != MinestuckConfig.AvailableOptions.OFF || MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON)
-			player.sendMessage(new TranslatableComponent(MESSAGE, item.getDisplayName(), getSize(), index), Util.NIL_UUID);
+			player.sendSystemMessage(Component.translatable(MESSAGE, item.getDisplayName(), getSize(), index));
 		
 		return true;
 	}
@@ -269,7 +269,7 @@ public class HashMapModus extends Modus
 			player.getInventory().setItem(player.getInventory().selected, stack);
 		else CaptchaDeckHandler.launchAnyItem(player, stack);
 		
-		player.sendMessage(new TranslatableComponent("message.hash_map", i, getSize(), index, stack.getDisplayName()), Util.NIL_UUID);
+		player.sendSystemMessage(Component.translatable("message.hash_map", i, getSize(), index, stack.getDisplayName()));
 	}
 	
 }

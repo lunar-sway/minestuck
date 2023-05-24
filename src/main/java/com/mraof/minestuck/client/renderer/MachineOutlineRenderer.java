@@ -28,7 +28,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.common.Mod;
 public class MachineOutlineRenderer
 {
 	@SubscribeEvent
-	public static void renderWorld(DrawSelectionEvent.HighlightBlock event)
+	public static void renderWorld(RenderHighlightEvent.Block event)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		BlockHitResult rayTrace = event.getTarget();

@@ -6,23 +6,20 @@ import com.mraof.minestuck.entity.EntityListFilter;
 import com.mraof.minestuck.entity.ai.HurtByTargetAlliedGoal;
 import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
-import com.mraof.minestuck.player.Echeladder;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.UnderlingController;
 import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,6 +42,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +55,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
@@ -122,14 +120,14 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	protected void defineSynchedData()
 	{
 		super.defineSynchedData();
-		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.get().getRegistryName()));
+		entityData.define(GRIST_TYPE, String.valueOf(GristTypes.ARTIFACT.getId()));
 	}
 	
 	protected void applyGristType(GristType type)
 	{
 		if(!type.isUnderlingType())    //Utility grist type
-			throw new IllegalArgumentException("Can't set underling grist type to " + type.getRegistryName());
-		entityData.set(GRIST_TYPE, String.valueOf(type.getRegistryName()));
+			throw new IllegalArgumentException("Can't set underling grist type to " + type);
+		entityData.set(GRIST_TYPE, String.valueOf(GristTypes.getRegistry().getKey(type)));
 		
 		onGristTypeUpdated(type);
 		setHealth(getMaxHealth());
@@ -168,7 +166,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	//used when getting how much grist should be dropped on death
-	public abstract GristSet getGristSpoils();
+	public abstract MutableGristSet getGristSpoils();
 	
 	protected abstract int getVitalityGel();
 	
@@ -179,12 +177,12 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	protected void tickDeath()
+	public void remove(RemovalReason reason)
 	{
-		super.tickDeath();
-		if(this.deathTime == 20 && !this.level.isClientSide)
+		super.remove(reason);
+		if(reason == RemovalReason.KILLED)
 		{
-			GristSet grist = this.getGristSpoils();
+			MutableGristSet grist = this.getGristSpoils();
 			if(grist == null)
 				return;
 			if(fromSpawner)
@@ -192,27 +190,27 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristAmount : grist.getAmounts())
+				for(GristAmount gristAmount : grist.asAmounts())
 				{
-					if(gristAmount.getAmount() > 0)
+					if(gristAmount.amount() > 0)
 						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), gristAmount));
 				}
 			} else
 			{
-				for(GristAmount gristType : grist.getAmounts())
+				for(GristAmount gristType : grist.asAmounts())
 				{
-					int candy = (int) Math.min(64, (gristType.getAmount() + 2) / 4);
-					long gristAmount = gristType.getAmount() - candy * 2;
-					ItemStack candyItem = gristType.getType().getCandyItem();
+					int candy = (int) Math.min(64, (gristType.amount() + 2) / 4);
+					long gristAmount = gristType.amount() - candy * 2;
+					ItemStack candyItem = gristType.type().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
 						this.level.addFreshEntity(new ItemEntity(level, randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.getType(), gristAmount)));
+						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.type(), gristAmount)));
 				}
 			}
 			
-			if(this.random.nextInt(4) == 0)
+			if(this.random.nextInt(3) == 0)
 				this.level.addFreshEntity(new VitalityGelEntity(level, randX(), this.getY(), randZ(), this.getVitalityGel()));
 		}
 	}
@@ -241,7 +239,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public Component getName()
 	{
 		if(getCustomName() == null)
-			return new TranslatableComponent(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
+			return Component.translatable(getType().getDescriptionId() + ".type", getGristType().getDisplayName());
 		else return super.getName();
 	}
 	
@@ -301,7 +299,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		}
 	}
 	
-	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends Mob> type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn)
+	public static boolean canSpawnOnAndNotPeaceful(EntityType<? extends Mob> type, LevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn)
 	{
 		return worldIn.getDifficulty() != Difficulty.PEACEFUL && checkMobSpawnRules(type, worldIn, reason, pos, randomIn);
 	}
@@ -362,7 +360,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		}
 		
 		if(playerList.length > 0)
-			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType().getRegistryName());
+			LOGGER.debug("{} players are splitting on {} progress from {}", playerList.length, progress, getType());
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
@@ -372,7 +370,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
 	}
 	
-	protected static void firstKillBonus(Entity killer, byte type)
+	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)
 	{
 		if(killer instanceof ServerPlayer && (!(killer instanceof FakePlayer)))
 		{

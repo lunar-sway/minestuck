@@ -1,7 +1,6 @@
 package com.mraof.minestuck.skaianet;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class SkaianetException extends Exception
 {
@@ -9,7 +8,7 @@ public class SkaianetException extends Exception
 	
 	public SkaianetException(String translationKey, Object... args)
 	{
-		this(new TranslatableComponent(translationKey, args));
+		this(Component.translatable(translationKey, args));
 	}
 	
 	public SkaianetException(Component textComponent)

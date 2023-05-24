@@ -3,14 +3,13 @@ package com.mraof.minestuck.world.gen.structure.castle;
 import com.mraof.minestuck.world.gen.structure.MSStructurePieces;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-
-import java.util.Random;
 
 public class CastleLibraryPiece extends CastleRoomPiece
 {
@@ -31,7 +30,7 @@ public class CastleLibraryPiece extends CastleRoomPiece
 	}
 	
 	@Override
-	public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator generator, Random random, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
+	public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator generator, RandomSource random, BoundingBox boundingBox, ChunkPos chunkPosIn, BlockPos pos)
 	{
 		super.postProcess(level, manager, generator, random, boundingBox, chunkPosIn, pos);
 		this.generateBox(level, boundingBox, 1, 1, 1, 1, 3, 6, Blocks.BOOKSHELF.defaultBlockState(), Blocks.AIR.defaultBlockState(), false);

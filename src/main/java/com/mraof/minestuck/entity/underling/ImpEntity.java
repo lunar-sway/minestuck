@@ -1,13 +1,13 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
-import com.mraof.minestuck.player.Echeladder;
+import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -24,12 +24,16 @@ import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class ImpEntity extends UnderlingEntity implements IAnimatable
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, true, false), 2, 4, 5);
+	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
 	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
@@ -39,7 +43,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	public static AttributeSupplier.Builder impAttributes()
 	{
 		return UnderlingEntity.underlingAttributes().add(Attributes.MAX_HEALTH, 6)
-				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 1);
+				.add(Attributes.MOVEMENT_SPEED, 0.28).add(Attributes.ATTACK_DAMAGE, 2);
 	}
 	
 	@Override
@@ -52,7 +56,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public GristSet getGristSpoils()
+	public MutableGristSet getGristSpoils()
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 1);
 	}
@@ -95,19 +99,26 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		if(this.dead && !this.level.isClientSide)
 		{
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
-			firstKillBonus(entity, Echeladder.UNDERLING_BONUS_OFFSET);
+			firstKillBonus(entity, EcheladderBonusType.IMP);
 		}
 	}
 	
 	@Override
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
+		//imps will not attack players above rung 15 unless an underling is attacked in their presence
 		if(entity instanceof ServerPlayer)
 		{
-			//Rung was chosen fairly arbitrary. Feel free to change it if you think a different rung is better
-			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 19;
+			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 16;
 		}
 		return super.isAppropriateTarget(entity);
+	}
+	
+	@Override
+	public void initiationPhaseStart(MobAnimation.Action animation)
+	{
+		if(animation == MobAnimation.Action.CLAW)
+			this.playSound(MSSoundEvents.ENTITY_SWOOSH.get(), 0.2F, 1.75F);
 	}
 	
 	@Override
@@ -117,14 +128,14 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
 		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, ImpEntity::swingAnimation));
+		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2, ImpEntity::attackAnimation));
 	}
 	
 	private static PlayState idleAnimation(AnimationEvent<ImpEntity> event)
 	{
 		if(!event.isMoving() && !event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
@@ -139,11 +150,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		
 		if(event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -157,11 +168,11 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 		
 		if(event.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", true));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", ILoopType.EDefaultLoopTypes.LOOP));
 			return PlayState.CONTINUE;
 		}
 	}
@@ -170,17 +181,17 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState attackAnimation(AnimationEvent<ImpEntity> event)
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

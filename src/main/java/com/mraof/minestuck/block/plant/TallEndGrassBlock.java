@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
-import java.util.Random;
 
 public class TallEndGrassBlock extends DoublePlantBlock
 {
@@ -34,7 +34,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
 	{
 		if(!level.isClientSide && random.nextFloat() >= .75F)
 		{
@@ -60,7 +60,7 @@ public class TallEndGrassBlock extends DoublePlantBlock
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		super.animateTick(stateIn, level, pos, rand);
 		

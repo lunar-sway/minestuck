@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:piglins_pride"
+  },
+  "input2": {
+    "item": "minecraft:dragon_breath"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:basilisk_breath_dragonslayer"
+  }
+}

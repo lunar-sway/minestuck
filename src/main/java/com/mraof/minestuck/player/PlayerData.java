@@ -2,22 +2,11 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.ServerEditHandler;
-import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
-import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.inventory.captchalogue.ModusType;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.ColorHandler;
-import com.mraof.minestuck.inventory.captchalogue.StartingModusManager;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -34,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +42,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		ServerPlayer player = (ServerPlayer) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerSavedData.getData(player).onPlayerLoggedIn(player);
 		MSDimensions.sendDimensionData(player);
 	}
@@ -60,7 +50,7 @@ public final class PlayerData
 	@SubscribeEvent
 	public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event)
 	{
-		ServerPlayer player = (ServerPlayer) event.getPlayer();
+		ServerPlayer player = (ServerPlayer) event.getEntity();
 		PlayerSavedData.getData(player).sendConsortReputation(player);
 	}
 	
@@ -74,7 +64,8 @@ public final class PlayerData
 	private boolean givenModus;
 	private Modus modus;
 	private long boondollars;
-	private ImmutableGristSet gristCache;	//This is immutable in order to control where it can be changed
+	final GristCache gristCache;
+	private double gutterMultiplier = 1;
 	
 	private final Map<ResourceLocation, Integer> consortReputation = new HashMap<>();
 	
@@ -88,7 +79,7 @@ public final class PlayerData
 		this.savedData = savedData;
 		this.identifier = player;
 		echeladder = new Echeladder(savedData, player);
-		gristCache = new ImmutableGristSet(GristTypes.BUILD, 20);
+		gristCache = new GristCache(this, savedData.mcServer);
 		hasLoggedIn = false;
 	}
 	
@@ -109,7 +100,9 @@ public final class PlayerData
 		}
 		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
-		gristCache = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
+		
+		gristCache = new GristCache(this, savedData.mcServer);
+		gristCache.read(nbt);
 		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
 		for(int i = 0; i < list.size(); i++)
@@ -137,7 +130,7 @@ public final class PlayerData
 			nbt.put("modus", CaptchaDeckHandler.writeToNBT(modus));
 		else nbt.putBoolean("given_modus", givenModus);
 		nbt.putLong("boondollars", boondollars);
-		nbt.put("grist_cache", gristCache.write(new ListTag()));
+		gristCache.write(nbt);
 		
 		ListTag list = new ListTag();
 		for(Map.Entry<ResourceLocation, Integer> entry : consortReputation.entrySet())
@@ -156,7 +149,7 @@ public final class PlayerData
 		return nbt;
 	}
 	
-	private void markDirty()
+	void markDirty()
 	{
 		savedData.setDirty();
 	}
@@ -211,6 +204,18 @@ public final class PlayerData
 			markDirty();
 		}
 	}
+	public double getGutterMultipler()
+	{
+		return gutterMultiplier;
+	}
+	public void addGutterMultiplier(double amount)
+	{
+		if(amount < 0)
+			throw new IllegalArgumentException("Multiplier amount may not be negative.");
+		gutterMultiplier += amount;
+		markDirty();
+	}
+	
 	
 	public long getBoondollars()
 	{
@@ -285,16 +290,9 @@ public final class PlayerData
 		}
 	}
 	
-	public ImmutableGristSet getGristCache()
+	public GristCache getGristCache()
 	{
 		return gristCache;
-	}
-	
-	public void setGristCache(NonNegativeGristSet cache)
-	{
-		gristCache = cache.asImmutable();
-		markDirty();
-		updateGristCache(getPlayer());
 	}
 	
 	public Title getTitle()
@@ -345,7 +343,7 @@ public final class PlayerData
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
 			setModus(modus);
-		} else LOGGER.warn("Couldn't create a starting modus type {}.", type.getRegistryName());
+		} else LOGGER.warn("Couldn't create a starting modus type {}.", ModusTypes.REGISTRY.get().getKey(type));
 	}
 	
 	public void onPlayerLoggedIn(ServerPlayer player)
@@ -364,7 +362,7 @@ public final class PlayerData
 		echeladder.sendInitialPacket(player);
 		sendColor(player, !hasLoggedIn);
 		sendBoondollars(player);
-		updateGristCache(player);
+		gristCache.sendPacket(player);
 		sendTitle(player);
 		
 		hasLoggedIn = true;
@@ -399,29 +397,6 @@ public final class PlayerData
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	private void updateGristCache(ServerPlayer player)
-	{
-		GristSet gristSet = getGristCache();
-		
-		//Send to the player
-		if(player != null)
-		{
-			GristCachePacket packet = new GristCachePacket(gristSet, false);
-			MSPacketHandler.sendToPlayer(packet, player);
-		}
-		
-		//Also send to the editing player, if there is any
-		SburbConnection c = SkaianetHandler.get(savedData.mcServer).getActiveConnection(identifier);
-		if(c != null)
-		{
-			EditData data = ServerEditHandler.getData(savedData.mcServer, c);
-			if(data != null)
-			{
-				data.sendGristCacheToEditor();
-			}
-		}
-	}
-	
 	private void sendTitle(ServerPlayer player)
 	{
 		Title newTitle = getTitle();
@@ -431,7 +406,8 @@ public final class PlayerData
 		MSPacketHandler.sendToPlayer(packet, player);
 	}
 	
-	private ServerPlayer getPlayer()
+	@Nullable
+	ServerPlayer getPlayer()
 	{
 		return identifier.getPlayer(savedData.mcServer);
 	}

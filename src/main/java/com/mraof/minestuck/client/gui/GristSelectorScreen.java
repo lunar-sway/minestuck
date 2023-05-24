@@ -10,8 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
@@ -20,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class GristSelectorScreen<T extends Screen & Positioned> extends MinestuckScreen
+public class GristSelectorScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.grist_selector";
 	public static final String SELECT_GRIST = "minestuck.select_grist";
@@ -28,15 +27,15 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 
 	private static final int guiWidth = 226, guiHeight = 190;
 
-	private T otherScreen;
+	private final BlockPos gristHolderPos;
 	private int page = 0;
 	private ExtendedButton previousButton;
 	private ExtendedButton nextButton;
 
-	public GristSelectorScreen(T screen)
+	public GristSelectorScreen(BlockPos gristHolderPos)
 	{
-		super(new TranslatableComponent(TITLE));
-		this.otherScreen = screen;
+		super(Component.translatable(TITLE));
+		this.gristHolderPos = gristHolderPos;
 	}
 
 	/**
@@ -49,8 +48,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		super.init();
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
-		this.previousButton = addRenderableWidget(new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, new TextComponent("<"), button -> prevPage()));
-		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, new TextComponent(">"), button -> nextPage()));
+		this.previousButton = addRenderableWidget(new ExtendedButton((this.width) + 8, yOffset + 8, 16, 16, Component.literal("<"), button -> prevPage()));
+		this.nextButton = addRenderableWidget(new ExtendedButton(xOffset + guiWidth - 24, yOffset + 8, 16, 16, Component.literal(">"), button -> nextPage()));
 		
 		previousButton.visible = false;
 		nextButton.visible = GristTypes.getRegistry().getValues().size() > rows * columns;
@@ -107,13 +106,8 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 				int gristYOffset = yOffset + gristIconY + (gristDisplayYOffset * row - row);
 				if (isPointInRegion(gristXOffset, gristYOffset, 16, 16, xcor, ycor))
 				{
-					BlockPos pos = otherScreen.getPosition();
-					
-					otherScreen.width = this.width;
-					otherScreen.height = this.height;
-					minecraft.screen = otherScreen;
-					GristWildcardPacket packet = new GristWildcardPacket(pos, type);
-					MSPacketHandler.INSTANCE.sendToServer(packet);
+					this.onClose();
+					MSPacketHandler.INSTANCE.sendToServer(new GristWildcardPacket(gristHolderPos, type));
 					return true;
 				}
 				offset++;
@@ -122,13 +116,6 @@ public class GristSelectorScreen<T extends Screen & Positioned> extends Minestuc
 		return false;
 	}
 	
-	@Override
-	public void removed()
-	{
-		minecraft.screen = otherScreen;
-		minecraft.player.closeContainer();
-	}
-
 	protected boolean isPointInRegion(int regionX, int regionY, int regionWidth, int regionHeight, double pointX, double pointY)
 	{
 		return pointX >= regionX && pointX < regionX + regionWidth && pointY >= regionY && pointY < regionY + regionHeight;

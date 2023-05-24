@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:trident"
+  },
+  "input2": {
+    "item": "minecraft:beef"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:meatfork"
+  }
+}

@@ -418,6 +418,27 @@
       }
     ]
   },
+  "entity.swoosh": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.swoosh",
+    "sounds": [
+      "minestuck:mob/swoosh"
+    ]
+  },
+  "entity.slam": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.slam",
+    "sounds": [
+      "minestuck:mob/slam"
+    ]
+  },
+  "entity.bite": {
+    "category": "hostile",
+    "subtitle": "subtitles.minestuck.bite",
+    "sounds": [
+      "minestuck:mob/bite"
+    ]
+  },
   "entity.nakagator.ambient": {
     "category": "friendly",
     "subtitle": "subtitles.entity.minestuck.nakagator.ambient",
@@ -765,6 +786,54 @@
     "subtitle": "subtitles.minestuck.lotus_flower_restore",
     "sounds": [
       "minecraft:block/beehive/exit"
+    ]
+  },
+  "event.edit_tools.revise": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_revise",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_revise",
+        "stream": false
+      }
+    ]
+  },
+  "event.edit_tools.recycle": {
+    "category": "ambient",
+    "subtitle": "subtitles.minestuck.tool_recycle",
+    "sounds": [
+      {
+        "name": "minestuck:random/tool_recycle",
+        "stream": false
+      }
+    ]
+  },
+  "block.cruxtruder.dowel": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.cruxtruder_dowel",
+    "sounds": [
+      "minestuck:random/cruxtruder_dowel"
+    ]
+  },
+  "block.alchemiter.resonate": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.alchemiter_resonate",
+    "sounds": [
+      "minestuck:random/alchemiter_resonate"
+    ]
+  },
+  "block.transportalizer.teleport": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.transportalizer_teleport",
+    "sounds": [
+      "minestuck:random/transportalizer_teleport"
+    ]
+  },
+  "block.totem_lathe.lathe": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.totem_lathe_lathe",
+    "sounds": [
+      "minestuck:random/totemlathe_lathe"
     ]
   },
   "block.horse_clock.chime": {

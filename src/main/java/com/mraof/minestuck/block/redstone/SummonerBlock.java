@@ -7,7 +7,7 @@ import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -61,7 +62,7 @@ public class SummonerBlock extends Block implements EntityBlock
 					if(!level.isClientSide)
 					{
 						summonerTE.setSummonedEntity(eggItem.getType(stackIn.getTag()));
-						player.displayClientMessage(new TranslatableComponent(SUMMON_TYPE_CHANGE, eggItem.getType(stackIn.getTag()).getRegistryName()), true);
+						player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, ForgeRegistries.ENTITY_TYPES.getKey(eggItem.getType(stackIn.getTag()))), true);
 					}
 					
 					level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);

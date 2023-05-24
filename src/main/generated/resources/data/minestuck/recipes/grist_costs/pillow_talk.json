@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 2108,
+    "minestuck:build": 4217,
+    "minestuck:quartz": 5061,
+    "minestuck:ruby": 2530,
+    "minestuck:uranium": 6748
+  },
+  "ingredient": {
+    "item": "minestuck:pillow_talk"
+  }
+}

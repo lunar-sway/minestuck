@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 
 import java.util.List;
-import java.util.Random;
 
 public class TurtleVillagePieces
 {
@@ -36,7 +36,7 @@ public class TurtleVillagePieces
 	/**
 	 * Helper function for adding village pieces associated with turtles.
 	 */
-	public static void addPieces(ILandType.PieceRegister register, Random random)
+	public static void addPieces(ILandType.PieceRegister register, RandomSource random)
 	{
 		register.add(ShellHouse1::createPiece, 3, Mth.nextInt(random, 5, 8));
 		register.add(TurtleMarket1::createPiece, 10, Mth.nextInt(random, 0, 2));
@@ -45,7 +45,7 @@ public class TurtleVillagePieces
 	
 	public static class TurtleWellCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public TurtleWellCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			super(MSStructurePieces.TURTLE_WELL_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 60, z, x + 8 - 1, 70, z + 8 - 1), 0);
 			this.setOrientation(getRandomHorizontalDirection(rand));
@@ -57,7 +57,7 @@ public class TurtleVillagePieces
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor builder, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor builder, RandomSource rand)
 		{
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, builder, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, builder, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.WEST);
@@ -66,7 +66,7 @@ public class TurtleVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -148,7 +148,7 @@ public class TurtleVillagePieces
 	
 	public static class ShellHouse1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		ShellHouse1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		ShellHouse1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.SHELL_HOUSE_1.get(), 0, boundingBox, 2);
 			setOrientation(facing);
@@ -159,14 +159,14 @@ public class TurtleVillagePieces
 			super(MSStructurePieces.SHELL_HOUSE_1.get(), nbt, 2);
 		}
 		
-		public static ShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static ShellHouse1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, -2, 0, 8, 5, 9, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new ShellHouse1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -219,7 +219,7 @@ public class TurtleVillagePieces
 	
 	public static class TurtleMarket1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		TurtleMarket1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		TurtleMarket1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.TURTLE_MARKET_1.get(), 0, boundingBox, 2);
 			setOrientation(facing);
@@ -230,14 +230,14 @@ public class TurtleVillagePieces
 			super(MSStructurePieces.TURTLE_MARKET_1.get(), nbt, 2);
 		}
 		
-		public static TurtleMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static TurtleMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 14, 7, 19, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new TurtleMarket1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -326,7 +326,7 @@ public class TurtleVillagePieces
 	
 	public static class TurtleTemple1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		TurtleTemple1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		TurtleTemple1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), 0, boundingBox, 3);
 			setOrientation(facing);
@@ -337,14 +337,14 @@ public class TurtleVillagePieces
 			super(MSStructurePieces.TURTLE_TEMPLE_1.get(), nbt, 3);
 		}
 		
-		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static TurtleTemple1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, -1, 0, 11, 6, 14, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new TurtleTemple1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{

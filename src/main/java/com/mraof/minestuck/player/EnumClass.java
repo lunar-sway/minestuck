@@ -1,7 +1,6 @@
 package com.mraof.minestuck.player;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.stream.Stream;
 
@@ -80,7 +79,7 @@ public enum EnumClass
 	 */
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(getTranslationKey());
+		return Component.translatable(getTranslationKey());
 	}
 	
 	public String getTranslationKey()

@@ -27,9 +27,7 @@ import net.minecraftforge.common.TierSortingRegistry;
 import net.minecraftforge.common.ToolAction;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class WeaponItem extends TieredItem
 {
@@ -39,6 +37,7 @@ public class WeaponItem extends TieredItem
 	
 	@Nullable
 	private final MSToolType toolType;
+	private final Set<ToolAction> toolActions;
 	private final List<OnHitEffect> onHitEffects;
 	@Nullable
 	private final DestroyBlockEffect destroyBlockEffect;
@@ -63,6 +62,7 @@ public class WeaponItem extends TieredItem
 	{
 		super(builder.tier, properties);
 		toolType = builder.toolType;
+		toolActions = builder.toolActions;
 		efficiency = builder.efficiency;
 		disableShield = builder.disableShield;
 		onHitEffects = ImmutableList.copyOf(builder.onHitEffects);
@@ -129,7 +129,7 @@ public class WeaponItem extends TieredItem
 	@Override
 	public boolean canPerformAction(ItemStack stack, ToolAction toolAction)
 	{
-		return this.toolType != null && this.toolType.hasAction(toolAction);
+		return this.toolActions.contains(toolAction) || this.toolType != null && this.toolType.hasAction(toolAction);
 	}
 	
 	@Override
@@ -230,6 +230,7 @@ public class WeaponItem extends TieredItem
 		private final float attackSpeed;
 		@Nullable
 		private MSToolType toolType;
+		private final Set<ToolAction> toolActions = new HashSet<>();
 		private float efficiency;
 		private boolean disableShield;
 		private final List<OnHitEffect> onHitEffects = new ArrayList<>();
@@ -306,9 +307,20 @@ public class WeaponItem extends TieredItem
 			return this;
 		}
 		
+		public Builder add(ToolAction... actions)
+		{
+			toolActions.addAll(List.of(actions));
+			return this;
+		}
+		
 		public Builder setEating(FinishUseItemEffect... effects)
 		{
 			return addItemUses(32, UseAnim.EAT, effects);
+		}
+		
+		public Builder setEating(int duration, FinishUseItemEffect... effects)
+		{
+			return addItemUses(duration, UseAnim.EAT, effects);
 		}
 		
 		public Builder addItemUses(int duration, UseAnim action, FinishUseItemEffect... effects)

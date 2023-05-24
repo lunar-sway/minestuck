@@ -1,78 +1,79 @@
 package com.mraof.minestuck.alchemy;
 
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
-import java.util.Objects;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
  * Container for a GristType + integer combination that might be useful when iterating through a GristSet.
  */
-public class GristAmount
+public record GristAmount(GristType type, long amount) implements ImmutableGristSet
 {
-	public static final String GRIST_AMOUNT = "grist_amount";
+	public static final Codec<GristAmount> CODEC = RecordCodecBuilder.create(instance ->
+			instance.group(GristTypes.getRegistry().getCodec().fieldOf("type").forGetter(GristAmount::type),
+							Codec.LONG.fieldOf("amount").forGetter(GristAmount::amount))
+					.apply(instance, GristAmount::new));
+	public static final Codec<List<GristAmount>> LIST_CODEC = CODEC.listOf();
+	public static final Codec<GristAmount> NON_NEGATIVE_CODEC = CODEC.comapFlatMap(GristAmount::checkNonNegative, Function.identity());
+	public static final Codec<List<GristAmount>> NON_NEGATIVE_LIST_CODEC = NON_NEGATIVE_CODEC.listOf();
 	
-	private final GristType type;
-	private final long amount;
+	private static DataResult<GristAmount> checkNonNegative(GristAmount gristAmount)
+	{
+		if(gristAmount.amount >= 0)
+			return DataResult.success(gristAmount);
+		else
+			return DataResult.error("Negative amount %s for grist type %s".formatted(gristAmount.amount, gristAmount.type));
+	}
+	
+	public static final String GRIST_AMOUNT = "grist_amount";
 	
 	public GristAmount(Supplier<GristType> type, long amount)
 	{
 		this(type.get(), amount);
 	}
 	
-	public GristAmount(GristType type, long amount)
+	@Override
+	public long getGrist(GristType type)
 	{
-		this.type = type;
-		this.amount = amount;
+		return this.type == type ? amount : 0;
 	}
 	
-	public GristType getType()
-	{
-		return type;
-	}
-
-	public long getAmount()
-	{
-		return amount;
-	}
-	
-	/**
-	 * @return a value estimate for this grist amount
-	 */
+	@Override
 	public double getValue()
 	{
-		return type.getValue()*amount;
+		return type.getValue() * amount;
 	}
 	
 	@Override
-	public String toString()
+	public List<GristAmount> asAmounts()
 	{
-		return "gristAmount:[type="+type.getRegistryName()+",amount="+amount+"]";
+		return Collections.singletonList(this);
 	}
 	
 	@Override
-	public boolean equals(Object o)
+	public Map<GristType, Long> asMap()
 	{
-		if(this == o) return true;
-		if(o == null || getClass() != o.getClass()) return false;
-		GristAmount that = (GristAmount) o;
-		return amount == that.amount &&
-				type.equals(that.type);
+		return Map.of(type, amount);
 	}
 	
 	@Override
-	public int hashCode()
+	public boolean isEmpty()
 	{
-		return Objects.hash(type, amount);
+		return amount == 0;
 	}
 	
 	public void write(FriendlyByteBuf buffer)
 	{
-		buffer.writeRegistryId(getType());
-		buffer.writeLong(getAmount());
+		buffer.writeRegistryId(GristTypes.getRegistry(), type());
+		buffer.writeLong(amount());
 	}
 	
 	public static GristAmount read(FriendlyByteBuf buffer)
@@ -82,29 +83,9 @@ public class GristAmount
 		return new GristAmount(type, amount);
 	}
 	
+	@Override
 	public Component asTextComponent()
 	{
-		return new TranslatableComponent(GRIST_AMOUNT, getAmount(), getType().getDisplayName());
-	}
-	
-	private static String makeNBTPrefix(String prefix)
-	{
-		return prefix != null && !prefix.isEmpty() ? prefix + "_" : "";
-	}
-	
-	public CompoundTag write(CompoundTag nbt, String keyPrefix)
-	{
-		keyPrefix = makeNBTPrefix(keyPrefix);
-		getType().write(nbt, keyPrefix + "type");
-		nbt.putLong(keyPrefix + "amount", getAmount());
-		return nbt;
-	}
-	
-	public static GristAmount read(CompoundTag nbt, String keyPrefix)
-	{
-		keyPrefix = makeNBTPrefix(keyPrefix);
-		GristType type = GristType.read(nbt, keyPrefix + "type");
-		long amount = nbt.getLong(keyPrefix + "amount");
-		return new GristAmount(type, amount);
+		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 }

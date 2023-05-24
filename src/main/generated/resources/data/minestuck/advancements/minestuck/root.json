@@ -1,23 +1,6 @@
 {
-  "display": {
-    "icon": {
-      "item": "minestuck:raw_cruxite"
-    },
-    "title": {
-      "translate": "advancements.minestuck.root.title"
-    },
-    "description": {
-      "translate": "advancements.minestuck.root.description"
-    },
-    "frame": "task",
-    "show_toast": false,
-    "announce_to_chat": false,
-    "hidden": false,
-    "background": "minestuck:textures/gui/advancement_bg.png"
-  },
   "criteria": {
     "raw_cruxite": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -26,7 +9,24 @@
             ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minestuck:textures/gui/advancement_bg.png",
+    "description": {
+      "translate": "advancements.minestuck.root.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minestuck:raw_cruxite"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.minestuck.root.title"
     }
   },
   "requirements": [

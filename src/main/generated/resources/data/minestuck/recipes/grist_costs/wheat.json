@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:wheat"
-  },
   "grist_cost": {
     "minestuck:iodine": 2
+  },
+  "ingredient": {
+    "item": "minecraft:wheat"
   }
 }

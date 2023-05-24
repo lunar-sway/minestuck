@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 
@@ -32,7 +33,7 @@ public class SimpleTexturedEntityRenderer<T extends Mob, M extends EntityModel<T
 	
 	public static ResourceLocation textureFromType(EntityType<?> entityType)
 	{
-		ResourceLocation entityName = Objects.requireNonNull(entityType.getRegistryName(), () -> "Getting texture for entity type without a registry name! " + entityType);
+		ResourceLocation entityName = Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(entityType), () -> "Getting texture for entity type without a registry name! " + entityType);
 		
 		return new ResourceLocation(entityName.getNamespace(), "textures/entity/" + entityName.getPath() + ".png");
 	}

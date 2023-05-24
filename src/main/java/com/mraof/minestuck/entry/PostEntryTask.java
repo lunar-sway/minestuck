@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entry;
 
-import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,8 +8,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.levelgen.Heightmap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,10 +20,11 @@ public class PostEntryTask
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	/**
-	 * The maximum amount of time (in milliseconds) to spend updating blocks,
-	 * before leaving the rest for the next game tick.
+	 * The minimum amount of time (in milliseconds) to spend each game tick
+	 * updating blocks post-entry.
+	 * Lower it to spend less time each tick, thus spreading out the work over more ticks.
 	 */
-	private static final long MIN_TIME = 20;
+	private static final long MIN_TIME = 10;
 	
 	private final ResourceKey<Level> dimension;
 	private final int x, y, z;
@@ -88,25 +86,16 @@ public class PostEntryTask
 			{
 				long time = System.currentTimeMillis() + MIN_TIME;
 				int i = 0;
-				for(int blockX = x - entrySize; blockX <= x + entrySize; blockX++)
+				for(BlockPos pos : EntryBlockIterator.get(x, y, z, entrySize))
 				{
-					int zWidth = (int) Math.sqrt(entrySize * entrySize - (blockX - x) * (blockX - x));
-					for(int blockZ = z - zWidth; blockZ <= z + zWidth; blockZ++)
+					if(i >= index)
 					{
-						int height = (int) Math.sqrt(MinestuckConfig.SERVER.artifactRange.get() * MinestuckConfig.SERVER.artifactRange.get() - (((blockX - x) * (blockX - x) + (blockZ - z) * (blockZ - z)) / 2));
-						if(blockX == x - entrySize || blockX == x + entrySize || blockZ == z - zWidth || blockZ == z + zWidth)
-							for(int blockY = y - height; blockY <= Math.min(128, y + height); blockY++)
-								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, true);
-						else
-						{
-							i = updateBlock(new BlockPos(blockX, y - height, blockZ), world, i, true);
-							for(int blockY = y - height + 1; blockY < Math.min(128, y + height); blockY++)
-								i = updateBlock(new BlockPos(blockX, blockY, blockZ), world, i, false);
-							i = updateBlock(new BlockPos(blockX, Math.min(128, y + height), blockZ), world, i, true);
-						}
+						updateBlock(pos.immutable(), world);
+						index++;
 						if(time <= System.currentTimeMillis())
 							break main;
 					}
+					i++;
 				}
 			}
 			
@@ -129,22 +118,11 @@ public class PostEntryTask
 		index = -1;
 	}
 	
-	private int updateBlock(BlockPos pos, ServerLevel world, int i, boolean blockUpdate)
+	private static void updateBlock(BlockPos pos, ServerLevel level)
 	{
-		if(i >= index)
-		{
-			if(blockUpdate)
-				world.updateNeighborsAt(pos, world.getBlockState(pos).getBlock());
-			world.getChunkSource().getLightEngine().checkBlock(pos);
-			ChunkAccess chunk = world.getChunk(pos);
-			BlockState state = chunk.getBlockState(pos);
-			int x = pos.getX() & 15, y = pos.getY(), z = pos.getZ() & 15;
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR).update(x, y, z, state);
-			chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE).update(x, y, z, state);
-			index++;
-		}
-		return i + 1;
+		BlockState blockState = level.getBlockState(pos);
+		level.getChunkSource().getLightEngine().checkBlock(pos);
+		level.sendBlockUpdated(pos, blockState, blockState, 0);
+		level.updateNeighborsAt(pos, blockState.getBlock());
 	}
 }

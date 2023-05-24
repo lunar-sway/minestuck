@@ -89,7 +89,7 @@ public class ClientEditPacket implements PlayToServerPacket
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
 					return;
 				
-				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c))
+				for(DeployEntry entry : DeployList.getItemList(player.getServer(), c, DeployList.EntryLists.DEPLOY))
 				{
 					if(!c.hasGivenItem(entry))
 					{

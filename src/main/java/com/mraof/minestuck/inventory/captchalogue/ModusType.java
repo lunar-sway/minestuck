@@ -3,12 +3,11 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public final class ModusType<T extends Modus> extends ForgeRegistryEntry<ModusType<?>>
+public final class ModusType<T extends Modus>
 {
 	private final ModusFactory<T> factory;
 	private final Supplier<Item> modusItem;

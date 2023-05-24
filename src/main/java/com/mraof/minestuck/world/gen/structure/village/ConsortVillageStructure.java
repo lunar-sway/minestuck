@@ -1,35 +1,42 @@
 package com.mraof.minestuck.world.gen.structure.village;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
+import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
-public class ConsortVillageStructure extends StructureFeature<NoneFeatureConfiguration>
+public class ConsortVillageStructure extends Structure
 {
-	public ConsortVillageStructure(Codec<NoneFeatureConfiguration> codec)
+	public static final Codec<ConsortVillageStructure> CODEC = simpleCodec(ConsortVillageStructure::new);
+	
+	public ConsortVillageStructure(StructureSettings pSettings)
 	{
-		super(codec, PieceGeneratorSupplier.simple(PieceGeneratorSupplier.checkForBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG), ConsortVillageStructure::generatePieces));
+		super(pSettings);
 	}
 	
 	@Override
-	public GenerationStep.Decoration step()
+	public Optional<GenerationStub> findGenerationPoint(GenerationContext context)
 	{
-		return GenerationStep.Decoration.SURFACE_STRUCTURES;
+		return onTopOfChunkCenter(context, Heightmap.Types.WORLD_SURFACE_WG, builder -> generatePieces(builder, context));
 	}
 	
-	private static void generatePieces(StructurePiecesBuilder builder, PieceGenerator.Context<NoneFeatureConfiguration> context)
+	@Override
+	public StructureType<?> type()
 	{
-		Random random = context.random();
+		return MSStructures.CONSORT_VILLAGE.get();
+	}
+	
+	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)
+	{
+		RandomSource random = context.random();
 		LandTypePair landTypes = LandTypePair.getTypesOrDefaulted(context.chunkGenerator());
 		int x = context.chunkPos().getBlockX(random.nextInt(16)), z = context.chunkPos().getBlockZ(random.nextInt(16));
 		

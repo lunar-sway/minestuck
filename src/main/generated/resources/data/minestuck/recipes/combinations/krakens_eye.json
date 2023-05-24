@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:heart_of_the_sea"
+  },
+  "input2": {
+    "item": "minestuck:claymore"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:krakens_eye"
+  }
+}

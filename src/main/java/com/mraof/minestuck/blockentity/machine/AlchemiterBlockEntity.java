@@ -2,23 +2,28 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.event.AlchemyEvent;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSParticleType;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -35,16 +40,18 @@ import org.apache.logging.log4j.Logger;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, IAnimatable
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final AnimationFactory factory = new AnimationFactory(this);
+	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -197,7 +204,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.saveAdditional(compound);
 
-		compound.putString("gristType", wildcardGrist.getRegistryName().toString());
+		compound.putString("gristType", GristTypes.getRegistry().getKey(wildcardGrist).toString());
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)
@@ -277,26 +284,25 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 		//get the grist cost
 		GristSet cost = getGristCost(quantity);
 		
-		boolean canAfford = GristHelper.canAfford(player, cost);
-		
-		if(canAfford)
+		if(GristCache.get(player).tryTake(cost, GristHelper.EnumSource.CLIENT))
 		{
-			
-			
-			PlayerIdentifier pid = IdentifierHandler.encode(player);
-			GristHelper.decrease(level, pid, cost);
-			
-			AlchemyEvent event = new AlchemyEvent(pid, this, getDowel(), newItem, cost);
+			AlchemyEvent event = new AlchemyEvent(IdentifierHandler.encode(player), this, getDowel(), newItem, cost);
 			MinecraftForge.EVENT_BUS.post(event);
 			newItem = event.getItemResult();
 			
 			while(quantity > 0)
 			{
+				ServerLevel blockLevel = (ServerLevel) this.level;
+				
 				ItemStack stack = newItem.copy();
 				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
+				
+				if(blockLevel != null)
+					blockLevel.sendParticles(MSParticleType.PLASMA.get(), spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
+				level.playSound(null, this.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
 			}
 		}
 	}
@@ -304,16 +310,13 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	public GristSet getGristCost(int quantity)
 	{
 		ItemStack dowel = getDowel();
-		GristSet set;
 		ItemStack stack = getOutput();
 		if(dowel.isEmpty() || level == null)
 			return null;
 		
 		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
-		
-		return set;
+		return GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
 	}
 	
 	public GristType getWildcardGrist()
@@ -355,7 +358,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		if(!this.dowel.isEmpty())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", false));
+			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
 			return PlayState.CONTINUE;
 		}
 		event.getController().markNeedsReload();

@@ -5,6 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -14,11 +15,9 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-
-import java.util.Random;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 {
@@ -39,7 +38,7 @@ public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 	{
 		WorldGenLevel level = context.level();
 		BlockPos pos = context.origin();
-		Random rand = context.random();
+		RandomSource rand = context.random();
 		
 		ResourceLocation hilt, blade;
 		if(rand.nextInt(600) == 0)
@@ -58,7 +57,7 @@ public class BrokenSwordFeature extends Feature<NoneFeatureConfiguration>
 		
 		Rotation hiltRotation = Rotation.getRandom(rand), bladeRotation = Rotation.getRandom(rand);
 		Mirror bladeMirror = rand.nextBoolean() ? Mirror.NONE : Mirror.LEFT_RIGHT;
-		StructureManager templates = level.getLevel().getStructureManager();
+		StructureTemplateManager templates = level.getLevel().getStructureManager();
 		StructureTemplate hiltTemplate = templates.getOrCreate(hilt), bladeTemplate = templates.getOrCreate(blade);
 		
 		StructurePlaceSettings settings = new StructurePlaceSettings().setBoundingBox(new BoundingBox(pos.getX() - 8, 0, pos.getZ() - 8, pos.getX() + 24 - 1, 255, pos.getZ() + 24 - 1)).setRandom(rand);

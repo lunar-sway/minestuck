@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"render_type": "cutout",
 	"textures": {
 		"0": "minestuck:block/machine/blender/blender",
 		"1": "minestuck:block/machine/blender/blender_side",

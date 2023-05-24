@@ -1,18 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "l": {
+      "tag": "forge:leather"
+    },
+    "s": {
+      "tag": "forge:rods/wooden"
+    }
+  },
   "pattern": [
     "  s",
     " s ",
     "l  "
   ],
-  "key": {
-    "s": {
-      "tag": "forge:rods/wooden"
-    },
-    "l": {
-      "tag": "forge:leather"
-    }
-  },
   "result": {
     "item": "minestuck:bear_poking_stick"
   }

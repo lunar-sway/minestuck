@@ -12,7 +12,9 @@ public class DreamerPajamasModel
 		MeshDefinition mesh = HumanoidModel.createMesh(LayerDefinitions.OUTER_ARMOR_DEFORMATION, 0);
 		PartDefinition root = mesh.getRoot();
 		
-		root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 51).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 5.0F, 8.0F, new CubeDeformation(0.17F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+		root.addOrReplaceChild("head", CubeListBuilder.create()
+				.texOffs(0, 51).addBox(-4.0F, -9.0F, -4.0F, 8.0F, 5.0F, 8.0F, new CubeDeformation(0.17F)),
+				PartPose.offset(0.0F, 24.0F, 0.0F));
 		
 		root.addOrReplaceChild("body", CubeListBuilder.create()
 						.texOffs(0, 16).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.1F))

@@ -3,26 +3,37 @@ package com.mraof.minestuck.blockentity.machine;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ColorHandler;
-import net.minecraft.Util;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is broken
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
+
+@ParametersAreNonnullByDefault
+public class CruxtruderBlockEntity extends BlockEntity
 {
+	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String EMPTY = "block.minestuck.cruxtruder.empty";
 	
+	private static final int CRUXITE_CAPACITY = 64;
+	
 	private int color = -1;
-	private boolean broken = false;
+	private boolean isBroken = false;
 	private int material = 0;
 	
 	public CruxtruderBlockEntity(BlockPos pos, BlockState state)
@@ -40,37 +51,70 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 		color = Color;
 	}
 	
-	public boolean isBroken()
+	public void setBroken()
 	{
-		return broken;
+		this.isBroken = true;
+		this.setChanged();
 	}
-	public void destroy()
+	
+	private void checkIfValid()
 	{
-		broken = true;
+		if(this.isBroken || this.level == null)
+			return;
+		
+		if(MSBlocks.CRUXTRUDER.isInvalidFromTube(this.level, this.getBlockPos()))
+		{
+			this.setBroken();
+			LOGGER.warn("Failed to notice a block being changed until afterwards at the cruxtruder at {}", getBlockPos());
+		}
+	}
+	
+	private void setMaterial(int material)
+	{
+		this.material = material;
+		this.setChanged();
+	}
+	
+	public void dropItems()
+	{
+		if(this.material > 0)
+		{
+			BlockPos pos = this.getBlockPos();
+			Containers.dropItemStack(Objects.requireNonNull(this.level), pos.getX(), pos.getY(), pos.getZ(),
+					new ItemStack(MSItems.RAW_CRUXITE.get(), this.material));
+			this.setMaterial(0);
+		}
 	}
 
 	public void onRightClick(Player player, boolean top)
 	{
-		if(!isBroken() && level != null)
+		this.checkIfValid();
+		if(!this.isBroken && level != null)
 		{
 			BlockPos pos = getBlockPos().above();
 			BlockState state = level.getBlockState(pos);
-			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && material < 64 && material > -1)
+			if(top && MinestuckConfig.SERVER.cruxtruderIntake.get() && state.isAir() && -1 < material && material < CRUXITE_CAPACITY)
 			{
 				ItemStack stack = player.getMainHandItem();
-				if(stack.getItem() != MSItems.RAW_CRUXITE.get())
+				if(!stack.is(MSItems.RAW_CRUXITE.get()))
 					stack = player.getOffhandItem();
-				if(stack.getItem() == MSItems.RAW_CRUXITE.get())
+				
+				if(stack.is(MSItems.RAW_CRUXITE.get()))
 				{
 					int count = 1;
 					if(player.isShiftKeyDown())	//Doesn't actually work just yet
-						count = Math.min(64 - material, stack.getCount());
-					stack.shrink(count);
-					material += count;
+						count = Math.min(CRUXITE_CAPACITY - material, stack.getCount());
+					
+					if(!player.isCreative())
+						stack.shrink(count);
+					
+					this.setMaterial(this.material + count);
+					
+					level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1F);
 				}
 			} else if(!top)
 			{
-				if(state.getBlock() == MSBlocks.CRUXITE_DOWEL.get())
+				if(state.is(MSBlocks.EMERGING_CRUXITE_DOWEL.get()))
 				{
 					CruxiteDowelBlock.dropDowel(level, pos);
 				} else if(state.isAir())
@@ -78,14 +122,18 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 					if(MinestuckConfig.SERVER.cruxtruderIntake.get() && material == 0)
 					{
 						level.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
-						player.sendMessage(new TranslatableComponent(EMPTY), Util.NIL_UUID);
+						player.sendSystemMessage(Component.translatable(EMPTY));
 					} else
 					{
-						level.setBlockAndUpdate(pos, MSBlocks.CRUXITE_DOWEL.get().defaultBlockState().setValue(CruxiteDowelBlock.DOWEL_TYPE, CruxiteDowelBlock.Type.CRUXTRUDER));
+						level.setBlockAndUpdate(pos, MSBlocks.EMERGING_CRUXITE_DOWEL.get().defaultBlockState());
+						level.playSound(null, pos, MSSoundEvents.CRUXTRUDER_DOWEL.get(), SoundSource.BLOCKS, 1F, 1.75F);
+						
 						if(level.getBlockEntity(pos) instanceof ItemStackBlockEntity blockEntity)
 							ColorHandler.setColor(blockEntity.getStack(), color);
-						if(material > 0)
-							material--;
+						else
+							LOGGER.warn("Did not find block entity for setting cruxite color after placing cruxtruder dowel at {}", pos);
+						if(0 < material)
+							this.setMaterial(this.material - 1);
 					}
 				}
 			}
@@ -99,8 +147,7 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 		
 		if(nbt.contains("color"))
 			color = nbt.getInt("color");
-		if(nbt.contains("broken"))
-			broken = nbt.getBoolean("broken");
+		this.isBroken = nbt.getBoolean("broken");
 		material = nbt.getInt("material");
 	}
 	
@@ -109,7 +156,7 @@ public class CruxtruderBlockEntity extends BlockEntity    //TODO check if it is 
 	{
 		super.saveAdditional(compound);
 		compound.putInt("color", color);
-		compound.putBoolean("broken", broken);
+		compound.putBoolean("broken", this.isBroken);
 		compound.putInt("material", material);
 	}
 }

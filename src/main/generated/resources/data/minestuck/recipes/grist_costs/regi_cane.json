@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:regi_cane"
-  },
   "grist_cost": {
     "minestuck:amethyst": 32,
-    "minestuck:tar": 72,
-    "minestuck:gold": 32
+    "minestuck:gold": 32,
+    "minestuck:tar": 72
+  },
+  "ingredient": {
+    "item": "minestuck:regi_cane"
   }
 }

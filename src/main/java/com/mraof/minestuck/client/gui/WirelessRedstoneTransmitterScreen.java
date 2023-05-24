@@ -9,12 +9,13 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 public class WirelessRedstoneTransmitterScreen extends Screen
 {
+	public static final String TITLE = "minestuck.wireless_redstone";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_medium.png");
 	
 	private static final int GUI_WIDTH = 150;
@@ -28,7 +29,7 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	
 	WirelessRedstoneTransmitterScreen(WirelessRedstoneTransmitterBlockEntity be)
 	{
-		super(new TextComponent("Wireless Redstone"));
+		super(Component.translatable(TITLE));
 		
 		this.be = be;
 	}
@@ -38,21 +39,21 @@ public class WirelessRedstoneTransmitterScreen extends Screen
 	{
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, new TextComponent("X value of destination block pos")); //TODO make these translatable
+		this.destinationTextFieldX = new EditBox(this.font, this.width / 2 - 60, yOffset + 10, 40, 20, Component.literal("X value of destination block pos")); //TODO make these translatable
 		this.destinationTextFieldX.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getX()));
 		addRenderableWidget(destinationTextFieldX);
 		
-		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, new TextComponent("Y value of destination block pos"));
+		this.destinationTextFieldY = new EditBox(this.font, this.width / 2 - 20, yOffset + 10, 40, 20, Component.literal("Y value of destination block pos"));
 		this.destinationTextFieldY.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getY()));
 		addRenderableWidget(destinationTextFieldY);
 		
-		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, new TextComponent("Z value of destination block pos"));
+		this.destinationTextFieldZ = new EditBox(this.font, this.width / 2 + 20, yOffset + 10, 40, 20, Component.literal("Z value of destination block pos"));
 		this.destinationTextFieldZ.setValue(String.valueOf(be.getDestinationBlockPosFromOffset().getZ()));
 		addRenderableWidget(destinationTextFieldZ);
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, new TextComponent("Find Receiver"), button -> findReceiver()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 - 45, yOffset + 40, 90, 20, Component.literal("Find Receiver"), button -> findReceiver()));
 		
-		addRenderableWidget(new ExtendedButton(this.width / 2 - 20, yOffset + 70, 40, 20, new TextComponent("DONE"), button -> finish()));
+		addRenderableWidget(new ExtendedButton(this.width / 2 - 20, yOffset + 70, 40, 20, Component.literal("DONE"), button -> finish()));
 	}
 	
 	@Override

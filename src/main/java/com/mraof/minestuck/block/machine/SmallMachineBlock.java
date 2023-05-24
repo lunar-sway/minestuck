@@ -57,7 +57,7 @@ public class SmallMachineBlock<T extends MachineProcessBlockEntity> extends Mach
 				if(blockEntity instanceof IOwnable ownable)
 					ownable.setOwner(IdentifierHandler.encode(player));
 				if(blockEntity instanceof MenuProvider menuProvider)
-					NetworkHooks.openGui((ServerPlayer) player, menuProvider, pos);
+					NetworkHooks.openScreen((ServerPlayer) player, menuProvider, pos);
 			}
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);

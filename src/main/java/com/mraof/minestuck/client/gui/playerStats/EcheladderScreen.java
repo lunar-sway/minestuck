@@ -7,12 +7,11 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.renderer.GameRenderer;
+import com.mraof.minestuck.alchemy.GristHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffects;
@@ -61,7 +60,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	
 	public EcheladderScreen()
 	{
-		super(new TranslatableComponent(TITLE));
+		super(Component.translatable(TITLE));
 		guiWidth = 250;
 		guiHeight = 202;
 	}
@@ -228,15 +227,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 		mc.font.draw(poseStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF);
 		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
+		/**
+		 * here we are rendering the grist cache limit.
+		 * we show the current limit by calling the rungGrist array in grist helper.
+		 * this is seen on string.valueOf(GristHelper...
+		 */
 		mc.font.draw(poseStack, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040);
-		mc.font.draw(poseStack, "Unlimited", xOffset + 26, yOffset + 147, 0x0094FF);
+		mc.font.draw(poseStack, String.valueOf(Echeladder.getGristCapacity(currentRung)), xOffset + 26,
+				yOffset + 147, 0x0094FF);
 		
 		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))
-			return ImmutableList.of(new TranslatableComponent(DAMAGE_UNDERLING),
-					new TextComponent(Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"));
+			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING),
+					Component.literal(Math.round(attack*Echeladder.getUnderlingDamageModifier(currentRung)) + "%"));
 		if(mouseY >= yOffset + 93 && mouseY < yOffset + 93 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(String.valueOf(health)))
-			return ImmutableList.of(new TranslatableComponent(PROTECTION_UNDERLING),
-					new TextComponent(String.format(Locale.ROOT, "%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"));
+			return ImmutableList.of(Component.translatable(PROTECTION_UNDERLING),
+					Component.literal(String.format(Locale.ROOT, "%.1f", 100*Echeladder.getUnderlingProtectionModifier(currentRung))+"%"));
 		return null;
 	}
 	
@@ -264,14 +269,14 @@ public class EcheladderScreen extends PlayerStatsScreen
 		{
 			int diff = (int) Math.round(100*Echeladder.attackBonus(rung)*Echeladder.getUnderlingDamageModifier(rung));
 			diff -= Math.round(100*Echeladder.attackBonus(rung - 1)*Echeladder.getUnderlingDamageModifier(rung - 1));
-			return Collections.singletonList(new TranslatableComponent(DAMAGE_UNDERLING_INCREASE, diff));
+			return Collections.singletonList(Component.translatable(DAMAGE_UNDERLING_INCREASE, diff));
 		}
 		
 		if(mouseY >= strY && mouseY < strY + mc.font.lineHeight && mouseX >= strX && mouseX < strX + mc.font.width(str))
 		{
 			int diff = (int) Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung - 1));
 			diff -= Math.round(1000*Echeladder.getUnderlingProtectionModifier(rung));
-			return Collections.singletonList(new TranslatableComponent(PROTECTION_UNDERLING_INCREASE, diff/10D));
+			return Collections.singletonList(Component.translatable(PROTECTION_UNDERLING_INCREASE, diff/10D));
 		}
 		
 		return null;

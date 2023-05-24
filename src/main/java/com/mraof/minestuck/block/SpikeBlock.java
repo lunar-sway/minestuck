@@ -59,7 +59,7 @@ public class SpikeBlock extends CustomShapeBlock
 	 */
 	@Nullable
 	@Override
-	public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
+	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
 	{
 		return BlockPathTypes.DAMAGE_OTHER;
 	}

@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "iri",
-    "rgr",
-    "iri"
-  ],
   "key": {
     "g": {
       "item": "minecraft:glowstone"
@@ -16,8 +11,13 @@
       "item": "minecraft:redstone"
     }
   },
+  "pattern": [
+    "iri",
+    "rgr",
+    "iri"
+  ],
   "result": {
-    "item": "minestuck:solid_switch",
-    "count": 2
+    "count": 2,
+    "item": "minestuck:solid_switch"
   }
 }

@@ -1,9 +1,17 @@
 package com.mraof.minestuck.alchemy;
 
-import net.minecraft.nbt.ListTag;
+import com.mojang.serialization.Codec;
 
-public class NonNegativeGristSet extends GristSet
+import java.util.List;
+
+/**
+ * A version of {@link MutableGristSet}, which ensures that the grist set never reaches negative amounts
+ * and instead throws an exception when an operation is made that would otherwise set a negative amount.
+ */
+public class NonNegativeGristSet extends MutableGristSet
 {
+	public static Codec<NonNegativeGristSet> CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(NonNegativeGristSet::new, NonNegativeGristSet::asAmounts);
+	
 	public NonNegativeGristSet()
 	{
 	
@@ -11,14 +19,19 @@ public class NonNegativeGristSet extends GristSet
 	
 	public NonNegativeGristSet(GristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
-			if(amount.getAmount() < 0)
-				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.getType());
-			else addGrist(amount);
+		this(set.asAmounts());
+	}
+	
+	public NonNegativeGristSet(List<GristAmount> amounts)
+	{
+		for(GristAmount amount : amounts)
+			if(amount.amount() < 0)
+				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.type());
+			else add(amount);
 	}
 	
 	@Override
-	public GristSet setGrist(GristType type, long amount)
+	public MutableGristSet setGrist(GristType type, long amount)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Negative values not allowed!");
@@ -26,31 +39,20 @@ public class NonNegativeGristSet extends GristSet
 	}
 	
 	@Override
-	public GristSet addGrist(GristType type, long amount)
+	public MutableGristSet add(GristType type, long amount)
 	{
 		if(getGrist(type) + amount < 0)
-			throw new IllegalArgumentException("Grist count may not go below 0");
-		return super.addGrist(type, amount);
+		{
+			throw new IllegalArgumentException("Grist count may not go below 0" + " Type " + type.getDisplayName().toString() + " has " + getGrist(type) + " and adding " + amount);
+		}
+		return super.add(type, amount);
 	}
 	
 	@Override
-	public GristSet scale(float scale, boolean roundDown)
+	public MutableGristSet scale(float scale, boolean roundDown)
 	{
 		if(scale < 0)
 			throw new IllegalArgumentException("Negative values not allowed!");
 		return super.scale(scale, roundDown);
-	}
-	
-	public static NonNegativeGristSet read(ListTag list)
-	{
-		NonNegativeGristSet set = new NonNegativeGristSet();
-		for(int i = 0; i < list.size(); i++)
-		{
-			GristAmount amount = GristAmount.read(list.getCompound(i), null);
-			if(amount.getAmount() >= 0)
-				set.addGrist(amount);
-		}
-		
-		return set;
 	}
 }

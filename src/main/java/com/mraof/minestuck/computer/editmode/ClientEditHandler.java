@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
@@ -10,14 +11,11 @@ import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -31,14 +29,14 @@ import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ScreenOpenEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -97,13 +95,13 @@ public final class ClientEditHandler
 		if(!isActive())
 			return;
 		
-		GristSet have = ClientPlayerData.getClientGrist();
+		GristSet have = getGristCache().set();
 		
 		addToolTip(event.getItemStack(), event.getToolTip(), have);
 		
 	}
 	
-	private static GristSet itemCost(ItemStack stack, Level level)
+	static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
@@ -121,14 +119,14 @@ public final class ClientEditHandler
 			return;
 		}
 		
-		for(GristAmount amount : cost.getAmounts())
+		for(GristAmount amount : cost.asAmounts())
 		{
-			GristType grist = amount.getType();
-			ChatFormatting color = amount.getAmount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
-			toolTip.add(new TextComponent(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			GristType grist = amount.type();
+			ChatFormatting color = amount.amount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
+			toolTip.add(Component.literal(amount.amount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
-			toolTip.add(new TranslatableComponent(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
+			toolTip.add(Component.translatable(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
 	}
 	
 	@SubscribeEvent
@@ -150,11 +148,11 @@ public final class ClientEditHandler
 		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			Inventory inventory = event.getPlayer().getInventory();
-			ItemStack stack = event.getEntityItem().getItem();
+			ItemStack stack = event.getEntity().getItem();
 			ClientDeployList.Entry entry = ClientDeployList.getEntry(stack);
 			if(entry != null)
 			{
-				if(ServerEditHandler.isBlockItem(stack.getItem()) || !GristHelper.canAfford(ClientPlayerData.getClientGrist(), entry.getCost()))
+				if(ServerEditHandler.isBlockItem(stack.getItem()) || !getGristCache().canAfford(entry.getCost()))
 					event.setCanceled(true);
 			}
 			if(event.isCanceled())
@@ -163,24 +161,30 @@ public final class ClientEditHandler
 				if(!menu.getCarried().isEmpty())
 					menu.setCarried(ItemStack.EMPTY);
 				else inventory.setItem(inventory.selected, ItemStack.EMPTY);
-				event.getEntityItem().discard();
+				event.getEntity().discard();
 			}
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().level.isClientSide && isActive() && event.getPlayer().equals(Minecraft.getInstance().player))
+		if(event.getEntity().level.isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
-			ItemStack stack = event.getPlayer().getMainHandItem();
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
+			{
+				event.setCanceled(true);
+				return;
+			}
+			
+			Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
+			ItemStack stack = event.getEntity().getMainHandItem();
 			event.setUseBlock((block instanceof DoorBlock || block instanceof TrapDoorBlock || block instanceof FenceGateBlock) ? Event.Result.ALLOW : Event.Result.DENY);
 			if(event.getUseBlock() == Event.Result.ALLOW)
 				return;
@@ -190,12 +194,12 @@ public final class ClientEditHandler
 				return;
 			}
 			
-			GristSet cost = itemCost(stack, event.getWorld());
-			if(!GristHelper.canAfford(ClientPlayerData.getClientGrist(), cost))
+			GristSet cost = itemCost(stack, event.getLevel());
+			if(!getGristCache().canAfford(cost))
 			{
 				if(cost != null)
 				{
-					event.getPlayer().sendMessage(cost.createMissingMessage(), Util.NIL_UUID);
+					event.getEntity().sendSystemMessage(cost.createMissingMessage());
 				}
 				event.setCanceled(true);
 			}
@@ -207,19 +211,32 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			BlockState block = event.getWorld().getBlockState(event.getPos());
-			if(block.getDestroySpeed(event.getWorld(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL
-					|| ClientPlayerData.getClientGrist().getGrist(GristTypes.BUILD) <= 0)
+			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
+			{
 				event.setCanceled(true);
+				return;
+			}
+			
+			BlockState block = event.getLevel().getBlockState(event.getPos());
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL)
+			{
+				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
+				event.setCanceled(true);
+			}
+			else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
+			{
+				event.getEntity().sendSystemMessage(ServerEditHandler.blockBreakCost().createMissingMessage());
+				event.setCanceled(true);
+			}
 		}
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
 	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getWorld().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
 			event.setCanceled(true);
 		}
@@ -228,33 +245,33 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload event)
+	public static void onWorldUnload(LevelEvent.Unload event)
 	{
-		if(event.getWorld().isClientSide())
+		if(event.getLevel().isClientSide())
 			activated = false;
 	}
 	
 	@SubscribeEvent(priority=EventPriority.HIGH)
-	public static void onScreenOpened(ScreenOpenEvent event)
+	public static void onScreenOpened(ScreenEvent.Opening event)
 	{
 		if(isActive() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
 		{
@@ -262,5 +279,10 @@ public final class ClientEditHandler
 				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
 				PlayerStatsScreen.openGui(true);
 		}
+	}
+	
+	private static ClientPlayerData.ClientCache getGristCache()
+	{
+		return ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE);
 	}
 }

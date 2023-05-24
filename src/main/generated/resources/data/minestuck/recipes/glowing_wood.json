@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "group": "bark",
-  "pattern": [
-    "##",
-    "##"
-  ],
   "key": {
     "#": {
       "item": "minestuck:glowing_log"
     }
   },
+  "pattern": [
+    "##",
+    "##"
+  ],
   "result": {
-    "item": "minestuck:glowing_wood",
-    "count": 3
+    "count": 3,
+    "item": "minestuck:glowing_wood"
   }
 }

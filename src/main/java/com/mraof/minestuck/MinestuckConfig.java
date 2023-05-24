@@ -11,7 +11,6 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -24,6 +23,8 @@ public class MinestuckConfig
 		public final BooleanValue logIngredientItemsWithoutCosts;
 		public final BooleanValue logItemsWithRecipeAndCost;
 		
+		public final IntValue entryDelay;
+		
 		private Common(ForgeConfigSpec.Builder builder)
 		{
 			builder.comment("If you're looking for a config option that isn't here, try looking in the world-specific config").push("logging");
@@ -31,6 +32,11 @@ public class MinestuckConfig
 					.define("logIngredientItemsWithoutCosts", false);
 			logItemsWithRecipeAndCost = builder.comment("Makes the recipe-generated grist cost process log any items that has a grist cost, but which could also be provided as a recipe generated cost. Useful for finding items that probably do not need manual grist costs.")
 					.define("logItemsWithRecipeAndCost", false);
+			builder.pop();
+			
+			builder.push("performance");
+			entryDelay = builder.comment("Time reserved for worldgen between generating the land and the actual entry. Measured in ticks. Try increasing this if entry halts the game too much.")
+					.defineInRange("entryDelay", 200, 0, Integer.MAX_VALUE);
 			builder.pop();
 		}
 	}
@@ -72,10 +78,6 @@ public class MinestuckConfig
 		public final BooleanValue naturalBasiliskSpawn;
 		public final BooleanValue naturalLichSpawn;
 		public final BooleanValue allowSecondaryConnections;
-		
-		//Ores
-		public final BooleanValue generateCruxiteOre;
-		public final BooleanValue generateUraniumOre;
 		
 		//Sylladex
 		public final BooleanValue dropItemsInCards;
@@ -122,13 +124,6 @@ public class MinestuckConfig
 		
 		private Server(Builder builder)
 		{
-			builder.push("ores");
-			generateCruxiteOre = builder.comment("If cruxite ore should be generated in the overworld.")
-					.define("generateCruxiteOre",true);
-			generateUraniumOre = builder.comment("If uranium ore should be generated in the overworld.")
-					.define("generateUraniumOre",true);
-			builder.pop();
-			
 			builder.push("mechanics");
 			echeladderProgress = builder.comment("If this is true, players will be able to see their progress towards the next rung. This is server side and will only be active in multiplayer if the server/Lan host has it activated.")
 					.define("echeladderProgress", true);

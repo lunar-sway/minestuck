@@ -13,9 +13,7 @@ import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
-import net.minecraft.commands.synchronization.EmptyArgumentSerializer;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,15 +24,14 @@ import java.util.stream.Stream;
 
 public class TitleArgument implements ArgumentType<Title>
 {
-	public static final ArgumentSerializer<TitleArgument> SERIALIZER = new EmptyArgumentSerializer<>(TitleArgument::title);
 	
 	private static final List<String> EXAMPLES = Arrays.asList("heir light", "bard void", "lord doom");
 	public static final String INCOMPLETE = "argument.title.incomplete";
 	public static final String INVALID_CLASS = "argument.title.invalid_class";
 	public static final String INVALID_ASPECT = "argument.title.invalid_aspect";
-	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(new TranslatableComponent(INCOMPLETE));
-	private static final DynamicCommandExceptionType INVALID_CLASS_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID_CLASS, o));
-	private static final DynamicCommandExceptionType INVALID_ASPECT_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(INVALID_ASPECT, o));
+	private static final SimpleCommandExceptionType PAIR_INCOMPLETE = new SimpleCommandExceptionType(Component.translatable(INCOMPLETE));
+	private static final DynamicCommandExceptionType INVALID_CLASS_TYPE = new DynamicCommandExceptionType(o -> Component.translatable(INVALID_CLASS, o));
+	private static final DynamicCommandExceptionType INVALID_ASPECT_TYPE = new DynamicCommandExceptionType(o -> Component.translatable(INVALID_ASPECT, o));
 	
 	public static TitleArgument title()
 	{

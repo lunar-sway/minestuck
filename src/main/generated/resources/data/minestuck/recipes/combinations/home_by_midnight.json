@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:clockkeeper"
+  },
+  "input2": {
+    "item": "minestuck:estrogen_empowered_everything_eradicator"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:home_by_midnight"
+  }
+}

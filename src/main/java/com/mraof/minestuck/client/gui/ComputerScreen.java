@@ -2,8 +2,9 @@ package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.computer.ComputerProgram;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.ComputerProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Widget;
@@ -11,60 +12,159 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
+import org.lwjgl.glfw.GLFW;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ComputerScreen extends Screen
 {
-
-	public static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/sburb.png");
-	public static final ResourceLocation guiBsod = new ResourceLocation("minestuck", "textures/gui/bsod_message.png");
+	
+	public static final String TITLE = "minestuck.computer";
+	public static final ResourceLocation guiMain = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/sburb.png");
+	public static final ResourceLocation guiBsod = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/bsod_message.png");
 	
 	public static final int xSize = 176;
 	public static final int ySize = 166;
 	
-	private Button programButton;
-	
-	public final Minecraft mc;
 	public final ComputerBlockEntity be;
+	private final List<ComputerIcon> icons;
+	private PowerButton powerButton;
 	private ComputerProgram program;
 	
 	ComputerScreen(Minecraft mc, ComputerBlockEntity be)
 	{
-		super(new TextComponent("Computer"));
+		super(Component.translatable(TITLE));
 		
-		this.mc = mc;
-		this.font = mc.font;
+		this.minecraft = mc;
+		this.font = minecraft.font;
 		this.be = be;
+		this.icons = new ArrayList<>();
 		be.gui = this;
+	}
+	
+	@Override
+	public void init()
+	{
+		genIcons();
+		powerButton = addRenderableWidget(new PowerButton());
+		setProgram(be.programSelected);
 	}
 	
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
 		this.renderBackground(poseStack);
-		boolean bsod = be.hasProgram(-1);
+		boolean bsod = be.isBroken();
+		int xOffset = (this.width / 2) - (xSize / 2);
 		int yOffset = (this.height / 2) - (ySize / 2);
 		
+		//outside gui bits
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, bsod ? guiBsod : guiBackground);
-		this.blit(poseStack, (this.width / 2) - (xSize / 2), yOffset, 0, 0, xSize, ySize);
+		RenderSystem.setShaderTexture(0, guiMain);
+		blit(poseStack, xOffset, yOffset, 0, 0, xSize, ySize);
 		
-		if(!bsod && program != null)
-			program.paintGui(poseStack, this, be);
-		else {
-			font.draw(poseStack, "Insert disk.", (width - xSize) / 2F +15, (height - ySize) / 2F +45, 4210752);
+		if(bsod)
+		{
+			//blue screen of death
+			RenderSystem.setShaderTexture(0, guiBsod);
+			blit(poseStack, xOffset+9, yOffset+38, 0, 0, 158, 120);
+		} else
+		{
+			//desktop background
+			RenderSystem.setShaderTexture(0, this.be.getTheme().getTexture());
+			blit(poseStack, xOffset + 9, yOffset + 38, 0, 0, 158, 120);
+			
+			//program and widgets
+			if(program != null) program.paintGui(poseStack, this, be);
+			super.render(poseStack, mouseX, mouseY, partialTicks);
 		}
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		//corner bits (goes on top of computer screen slightly)
+		RenderSystem.setShaderTexture(0, guiMain);
+		blit(poseStack, xOffset + 9, yOffset + 38, xSize, 0, 3, 3);
+		blit(poseStack, xOffset + 164, yOffset + 38, xSize + 3, 0, 3, 3);
 	}
+	
+	public void updateGui()
+	{
+		if(program!=null) program.onUpdateGui(this);
+	}
+	
+	protected void setProgram(int id)
+	{
+		if(be.isBroken() || id == -1 || id == -2)
+			return;
+		
+		program = ComputerProgram.getProgram(id);
+		if(program==null) return;
+		
+		be.programSelected = id;
+		program.onInitGui(this);
+		
+		for(ComputerIcon icon : icons)
+			icon.visible = false;
+		
+		updateGui();
+	}
+	
+	protected void exitProgram()
+	{
+		program = null;
+		be.programSelected = -1;
+		
+		clearWidgets();
+		icons.forEach(this::addRenderableWidget);
+		icons.forEach(icon -> icon.visible = true);
+		addRenderableWidget(powerButton);
+		
+		updateGui();
+	}
+	
+	protected void genIcons()
+	{
+		var xOffset = (width-xSize)/2;
+		var yOffset = (height-ySize)/2;
+		
+		icons.clear();
+		
+		int programCount = be.installedPrograms.size();
+		for(int id : be.installedPrograms.stream().sorted().toList())
+		{
+			icons.add(addRenderableWidget(new ComputerIcon(
+					xOffset + 15 + Math.floorDiv(programCount, 5) * 20,
+					yOffset + 24 + programCount % 5 * 20, id)
+			));
+			programCount--;
+		}
+	}
+	
+	@Override
+	public boolean shouldCloseOnEsc() { return false; }
+	
+	@Override
+	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers)
+	{
+		if(pKeyCode == GLFW.GLFW_KEY_ESCAPE)
+		{
+			if(program == null)
+				onClose();
+			else
+				exitProgram();
+			
+			return true;
+		}
+		
+		return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+	}
+	
+	// make this method public so that programs can add widgets
+	@Override
+	public <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T button) {return super.addRenderableWidget(button);}
 	
 	@Override
 	public boolean isPauseScreen()
@@ -72,86 +172,44 @@ public class ComputerScreen extends Screen
 		return false;
 	}
 	
-	@Override
-	public void init() {
-		super.init();
-		
-		if(be.programSelected == -1 && !be.hasProgram(-1))
-			for(Entry<Integer, Boolean> entry : be.installedPrograms.entrySet())
-				if(entry.getValue() && (be.programSelected == -1 || be.programSelected > entry.getKey()))
-						be.programSelected = entry.getKey();
-		
-		if(be.programSelected != -1 && (program == null || program.getId() != be.programSelected))
-			program = ComputerProgram.getProgram(be.programSelected);
-		
-		programButton = new ExtendedButton((width - xSize)/2 +95,(height - ySize)/2 +10,70,20, TextComponent.EMPTY, button -> changeProgram());
-		addRenderableWidget(programButton);
-		if(be.programSelected != -1)
-			program.onInitGui(this);
-		
-		updateGui();
-	}
-	
-	public void updateGui()
+	private class ComputerIcon extends ExtendedButton
 	{
+		private final ComputerProgram program;
+		private static final int WIDTH = 16, HEIGHT = 16;
 		
-		programButton.active = be.installedPrograms.size() > 1;
-		
-		if(be.hasProgram(-1)) {
-			clearWidgets();
-			return;
-		}
-		
-		if(program != null) {
-			program.onUpdateGui(this);
-			programButton.setMessage(new TranslatableComponent(program.getName()));
-		}
-		
-	}
-	
-	private void changeProgram()
-	{
-		if(be.hasProgram(-1))
-			return;
-		
-		be.programSelected = getNextProgram();
-		program = ComputerProgram.getProgram(be.programSelected);
-		if(program != null)
+		public ComputerIcon(int xPos, int yPos, int id)
 		{
-			clearWidgets();
-			addRenderableWidget(programButton);
-			program.onInitGui(this);
+			super(xPos, yPos, WIDTH, HEIGHT, Component.empty(), button -> setProgram(id));
+			
+			this.program = ComputerProgram.getProgram(id);
 		}
 		
-		updateGui();
+		@Override
+		public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
+		{
+			if(!visible) return;
+			RenderSystem.setShader(GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+			RenderSystem.setShaderTexture(0, this.program.getIcon());
+			
+			blit(poseStack, x, y, WIDTH, HEIGHT, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
+		}
 	}
 	
-	private int getNextProgram() {
-	   	if (be.installedPrograms.size() == 1) {
-	   		return be.programSelected;
-	   	}
-		Iterator<Entry<Integer, Boolean>> it = be.installedPrograms.entrySet().iterator();
-		//int place = 0;
-	   	boolean found = false;
-	   	int lastProgram = be.programSelected;
-        while (it.hasNext()) {
-			Map.Entry<Integer, Boolean> pairs = it.next();
-            int program = pairs.getKey();
-            if (found) {
-            	return program;
-            } else if (program== be.programSelected) {
-            	found = true;
-            } else {
-            	lastProgram = program;
-            }
-            //place++;
-        }
-		return lastProgram;
-	}
-	
-	@Override
-	public <T extends GuiEventListener & Widget & NarratableEntry> T addRenderableWidget(T button)
+	//TODO make this button have its own texture instead of just using screen  main
+	private class PowerButton extends Button
 	{
-		return super.addRenderableWidget(button);
+		public PowerButton()
+		{
+			super((ComputerScreen.this.width-xSize)/2+143,
+					(ComputerScreen.this.height-ySize)/2+3,
+					29,
+					29,
+					Component.empty(),
+					b->minecraft.setScreen(null));
+		}
+		
+		@Override
+		public void render(PoseStack poseStack, int mouseX, int mouseY, float pt) { /* invisible */ }
 	}
 }

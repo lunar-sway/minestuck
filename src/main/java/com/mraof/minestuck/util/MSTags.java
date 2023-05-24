@@ -1,6 +1,9 @@
 package com.mraof.minestuck.util;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -9,15 +12,25 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MSTags
 {
 	public static class Blocks
 	{
+		// If other colored hieroglyph sets are added, switch to creating a tag for each analogous block instead of the whole set
+		// I.e. a tag for lotus, a tag for frogs, a tag for skaia etc. instead of a tag for all hieroglyphs
+		public static final TagKey<Block> GREEN_HIEROGLYPHS = tag("green_hieroglyphs");
 		public static final TagKey<Block> GLOWING_LOGS = tag("logs/glowing");
 		public static final TagKey<Block> FROST_LOGS = tag("logs/frost");
 		public static final TagKey<Block> RAINBOW_LOGS = tag("logs/rainbow");
@@ -30,6 +43,10 @@ public class MSTags
 		public static final TagKey<Block> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Block> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Block> ASPECT_SAPLINGS = tag("saplings/aspect");
+		public static final TagKey<Block> ASPECT_BOOKSHELVES = tag("bookshelves/aspect");
+		public static final TagKey<Block> ASPECT_LADDERS = tag("ladders/aspect");
+		public static final TagKey<Block> SHADEWOOD_LOGS = tag("logs/shadewood");
+		public static final TagKey<Block> SHADEWOOD_LEAVES = tag("leaves/shadewood");
 		public static final TagKey<Block> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Block> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Block> COAL_ORES = tag("ores/coal");
@@ -66,6 +83,8 @@ public class MSTags
 		public static final TagKey<Item> ASPECT_PLANKS = tag("planks/aspect");
 		public static final TagKey<Item> ASPECT_LEAVES = tag("leaves/aspect");
 		public static final TagKey<Item> ASPECT_SAPLINGS = tag("saplings/aspect");
+		public static final TagKey<Item> SHADEWOOD_LOGS = tag("logs/shadewood");
+		public static final TagKey<Item> SHADEWOOD_LEAVES = tag("leaves/shadewood");
 		public static final TagKey<Item> CRUXITE_ORES = tag("ores/cruxite");
 		public static final TagKey<Item> URANIUM_ORES = tag("ores/uranium");
 		public static final TagKey<Item> COAL_ORES = tag("ores/coal");
@@ -151,11 +170,45 @@ public class MSTags
 	
 	public static class Structures
 	{
-		public static final TagKey<ConfiguredStructureFeature<?, ?>> SCANNER_LOCATED = tag("scanner_located");
+		public static final TagKey<Structure> SCANNER_LOCATED = tag("scanner_located");
 		
-		private static TagKey<ConfiguredStructureFeature<?, ?>> tag(String name)
+		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
+	}
+	
+	public static class TerrainLandTypes
+	{
+		public static final TagKey<TerrainLandType> FOREST = tag("forest");
+		public static final TagKey<TerrainLandType> ROCK = tag("rock");
+		public static final TagKey<TerrainLandType> SAND = tag("sand");
+		public static final TagKey<TerrainLandType> SANDSTONE = tag("sandstone");
+		
+		private static TagKey<TerrainLandType> tag(String name)
+		{
+			return TagKey.create(LandTypes.TERRAIN_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	
+	public static class TitleLandTypes
+	{
+		public static final TagKey<TitleLandType> MONSTERS = tag("monsters");
+		
+		private static TagKey<TitleLandType> tag(@SuppressWarnings("SameParameterValue") String name)
+		{
+			return TagKey.create(LandTypes.TITLE_KEY, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static Set<Block> getBlocksFromTag(TagKey<Block> blockTag)
+	{
+		return Objects.requireNonNull(ForgeRegistries.BLOCKS.tags()).getTag(blockTag).stream().collect(Collectors.toSet());
+	}
+	
+	public static List<ItemStack> getItemStacksFromTag(TagKey<Item> itemTag)
+	{
+		return ForgeRegistries.ITEMS.tags().getTag(itemTag).stream().map(ItemStack::new).toList();
 	}
 }

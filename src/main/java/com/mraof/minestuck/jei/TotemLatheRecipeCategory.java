@@ -13,7 +13,6 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -37,24 +36,10 @@ public class TotemLatheRecipeCategory implements IRecipeCategory<JeiCombination>
 		return MinestuckJeiPlugin.LATHE;
 	}
 	
-	@SuppressWarnings("removal")
-	@Override
-	public Class<? extends JeiCombination> getRecipeClass()
-	{
-		return getRecipeType().getRecipeClass();
-	}
-	
-	@SuppressWarnings("removal")
-	@Override
-	public ResourceLocation getUid()
-	{
-		return getRecipeType().getUid();
-	}
-
 	@Override
 	public Component getTitle()
 	{
-		return new TranslatableComponent(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
+		return Component.translatable(MSBlocks.TOTEM_LATHE.MIDDLE.get().getDescriptionId());
 	}
 
 	@Override

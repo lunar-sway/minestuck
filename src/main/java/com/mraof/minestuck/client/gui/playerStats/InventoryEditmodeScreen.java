@@ -8,7 +8,7 @@ import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,17 +19,14 @@ import java.time.Month;
 public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<EditmodeMenu>
 {
 	public static final String TITLE = "minestuck.deploy_list";
-
-	private static final ResourceLocation guiBackground = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
-	private static final ResourceLocation icons = new ResourceLocation("minestuck", "textures/gui/icons.png");
-	
-	private static final int leftArrowX = 7, rightArrowX = 151, arrowY = 23;
+	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
+	private static final int LEFT_ARROW_X = 7, RIGHT_ARROW_X = 151, ARROW_Y = 23;
 	
 	public boolean more, less;
 	
 	public InventoryEditmodeScreen(int windowId, Inventory playerInventory)
 	{
-		super(new EditmodeMenu(windowId, playerInventory), playerInventory, new TranslatableComponent(TITLE));
+		super(new EditmodeMenu(windowId, playerInventory), playerInventory, Component.translatable(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
 	}
@@ -41,7 +38,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
+		RenderSystem.setShaderTexture(0, GUI_BACKGROUND);
 		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		LocalDate localdate = LocalDate.now();
@@ -51,30 +48,32 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		boolean b2 = !b1 && (m == Month.APRIL && d == 13 || m == Month.JUNE && d == 12
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
-		this.blit(poseStack, xOffset+leftArrowX, yOffset+arrowY, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		this.blit(poseStack, xOffset+rightArrowX, yOffset+arrowY, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
+		
+		this.blit(poseStack, xOffset+ LEFT_ARROW_X, yOffset+ ARROW_Y, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
+		this.blit(poseStack, xOffset+ RIGHT_ARROW_X, yOffset+ ARROW_Y, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
 		
 		drawActiveTabAndIcons(poseStack);
 		
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY) {
-		
+	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	{
 		this.font.draw(poseStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
 	}
 	
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		if(ycor >= yOffset + arrowY && ycor < yOffset + arrowY + 18)
+		if(ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + 18)
 		{
 			EditmodeInventoryPacket packet = null;
-			if(less && xcor >= xOffset + leftArrowX && xcor < xOffset + leftArrowX + 18)
+			if(less && xcor >= xOffset + LEFT_ARROW_X && xcor < xOffset + LEFT_ARROW_X + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
-			} else if(more && xcor >= xOffset + rightArrowX && xcor < xOffset + rightArrowX + 18)
+			}
+			else if(more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);

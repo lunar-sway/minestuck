@@ -21,7 +21,7 @@ public class LandRespawnHandler
 	@SubscribeEvent
 	public static void onRespawn(PlayerEvent.PlayerRespawnEvent event)
 	{
-		if (!event.isEndConquered() && event.getPlayer() instanceof ServerPlayer player)
+		if (!event.isEndConquered() && event.getEntity() instanceof ServerPlayer player)
 		{
 			if (player.getRespawnPosition() == null)
 			{

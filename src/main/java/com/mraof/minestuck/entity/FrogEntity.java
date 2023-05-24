@@ -12,6 +12,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -664,7 +665,7 @@ public class FrogEntity extends PathfinderMob
 		return false;
 	}
 	
-	public static boolean canFrogSpawnOn(EntityType<FrogEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, Random random)
+	public static boolean canFrogSpawnOn(EntityType<FrogEntity> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random)
 	{
 		return true;
 	}

@@ -4,21 +4,19 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-
-import java.util.Iterator;
 
 public class GuiUtil
 {
@@ -51,22 +49,21 @@ public class GuiUtil
 			return;
 		}
 		
-		GristSet playerGrist = ClientPlayerData.getClientGrist();
-		Iterator<GristAmount> it = grist.getAmounts().iterator();
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER);
+		GristSet playerGrist = cache.set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
-			while (it.hasNext())
+			for (GristAmount amount : grist.asAmounts())
 			{
-				GristAmount amount = it.next();
-				GristType type = amount.getType();
-				long need = amount.getAmount();
+				GristType type = amount.type();
+				long need = amount.amount();
 				long have = playerGrist.getGrist(type);
 				
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = getGristColor(mode, need <= have);
+				int color = getGristColor(mode, cache.canAfford(new MutableGristSet(amount)));
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)
@@ -82,11 +79,10 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			while(it.hasNext())
+			for (GristAmount amount : grist.asAmounts())
 			{
-				GristAmount amount = it.next();
-				GristType type = amount.getType();
-				long need = amount.getAmount();
+				GristType type = amount.type();
+				long need = amount.amount();
 				long have = playerGrist.getGrist(type);
 				int row = index/GRIST_BOARD_WIDTH;
 				int color = getGristColor(mode, need <= have);
@@ -136,32 +132,32 @@ public class GuiUtil
 		mouseX -= boardX;
 		mouseY -= boardY;
 		
-		GristSet playerGrist = ClientPlayerData.getClientGrist();
+		GristSet playerGrist = ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.PLAYER).set();
 		if(!MinestuckConfig.CLIENT.alchemyIcons.get())
 		{
 			int place = 0;
-			for(GristAmount entry : grist.getAmounts())
+			for(GristAmount entry : grist.asAmounts())
 			{
 				int row = place % 3;
 				int col = place / 3;
 				
 				if(mouseY >= 8*row && mouseY < 8*row + 8)
 				{
-					long need = entry.getAmount();
+					long need = entry.amount();
 					String needStr = addSuffix(need);
 					
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= GRIST_BOARD_WIDTH/2F*col && mouseX < GRIST_BOARD_WIDTH/2F*col + font.width(needStr))
-						return new TextComponent(String.valueOf(need));
+						return Component.literal(String.valueOf(need));
 					
 					if(mode == GristboardMode.JEI_WILDCARD)
 						continue;
 					
-					int width = font.width(needStr + " " + entry.getType().getDisplayName() + " (");
-					long have = playerGrist.getGrist(entry.getType());
+					int width = font.width(needStr + " " + entry.type().getDisplayName() + " (");
+					long have = playerGrist.getGrist(entry.type());
 					String haveStr = addSuffix(have);
 					
 					if(!haveStr.equals(String.valueOf(have)) && mouseX >= boardX + GRIST_BOARD_WIDTH/2F*col + width && mouseX < boardX + GRIST_BOARD_WIDTH/2F*col + width + font.width(haveStr))
-						return new TextComponent(String.valueOf(have));
+						return Component.literal(String.valueOf(have));
 				}
 				
 				place++;
@@ -169,10 +165,10 @@ public class GuiUtil
 		} else
 		{
 			int index = 0;
-			for(GristAmount entry : grist.getAmounts())
+			for(GristAmount entry : grist.asAmounts())
 			{
-				GristType type = entry.getType();
-				long need = entry.getAmount();
+				GristType type = entry.type();
+				long need = entry.amount();
 				long have = playerGrist.getGrist(type);
 				int row = index/GRIST_BOARD_WIDTH;
 				
@@ -197,11 +193,11 @@ public class GuiUtil
 				if(mouseY >= 8*row && mouseY < 8*row + 8)
 				{
 					if(!needStr.equals(String.valueOf(need)) && mouseX >= index%GRIST_BOARD_WIDTH && mouseX < index%GRIST_BOARD_WIDTH + needStrWidth)
-						return new TextComponent(String.valueOf(need));
+						return Component.literal(String.valueOf(need));
 					else if(mouseX >= index%158 + needStrWidth + needOffset && mouseX < index%158+ needStrWidth + needOffset + iconSize)
 						return type.getDisplayName();
 					else if(!haveStr.isEmpty() && !haveStr.equals(String.valueOf(have)) && mouseX >= index%158 + needStrWidth + needOffset + iconSize + haveOffset + font.width("(") && mouseX < index%158 + needStrWidth + needOffset + iconSize + haveOffset + font.width("("+haveStr))
-						return new TextComponent(String.valueOf(have));
+						return Component.literal(String.valueOf(have));
 				}
 				
 				index += needStrWidth + 10 + haveStrWidth;

@@ -4,14 +4,15 @@ import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.DirectionalCustomShapeBlock;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.blockentity.redstone.ItemMagnetBlockEntity;
+import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +30,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * When powered, the block entity for this block pulls item entities towards it(or pushes item entities if REVERSE_POLARITY is true)
@@ -106,7 +106,7 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 	}
 	
 	@Override
-	public void animateTick(BlockState stateIn, Level level, BlockPos pos, Random rand)
+	public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource rand)
 	{
 		if(rand.nextInt(15) < stateIn.getValue(POWER))
 		{

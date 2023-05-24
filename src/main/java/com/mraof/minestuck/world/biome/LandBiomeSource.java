@@ -33,10 +33,4 @@ public final class LandBiomeSource extends BiomeSource
 	{
 		return CODEC;
 	}
-	
-	@Override
-	public BiomeSource withSeed(long seed)
-	{
-		return this;
-	}
 }

@@ -1,6 +1,4 @@
 {
-    "bedrock_roof_position": -1,
-    "bedrock_floor_position": 0,
     "sea_level": 0,
     "disable_mob_generation": false,
     "default_block": {
@@ -12,69 +10,11 @@
         },
         "Name": "minecraft:water"
     },
-    "structures": {
-        "structures": {
-            "minestuck:skaia_castle": {
-                "spacing": 1,
-                "separation": 0,
-                "salt": 0
-            }
-        }
-    },
     "noise": {
-        "top_slide": {
-            "target": -1,
-            "size": 2,
-            "offset": 0
-        },
-        "bottom_slide": {
-            "target": 1,
-            "size": 3,
-            "offset": 0
-        },
-        "sampling": {
-            "xz_scale": 1,
-            "xz_factor": 80,
-            "y_scale": 1,
-            "y_factor": 160
-        },
         "size_vertical": 2,
         "size_horizontal": 1,
         "min_y": 0,
-        "height": 256,
-        "random_density_offset": true,
-        "simplex_surface_noise": true,
-        "island_noise_override": false,
-        "amplified": false,
-        "terrain_shaper": {
-            "offset": {
-                "coordinate": "weirdness",
-                "points": [
-                    {
-                        "location": -1.5,
-                        "value": -0.2,
-                        "derivative": 0
-                    },
-                    {
-                        "location": -0.5,
-                        "value": 1,
-                        "derivative": 0
-                    },
-                    {
-                        "location": 0.5,
-                        "value": -0.2,
-                        "derivative": 0
-                    },
-                    {
-                        "location": 1.5,
-                        "value": 1,
-                        "derivative": 0
-                    }
-                ]
-            },
-            "factor": 5,
-            "jaggedness": 0
-        }
+        "height": 256
     },
     "noise_router": {
         "barrier": "zero",
@@ -185,6 +125,7 @@
             }
         ]
     },
+    "spawn_target": [],
     "aquifers_enabled": false,
     "ore_veins_enabled": false,
     "legacy_random_source": true

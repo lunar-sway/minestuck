@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minestuck:pogo_club"
-  },
   "grist_cost": {
     "minestuck:build": 60,
     "minestuck:shale": 35
+  },
+  "ingredient": {
+    "item": "minestuck:pogo_club"
   }
 }

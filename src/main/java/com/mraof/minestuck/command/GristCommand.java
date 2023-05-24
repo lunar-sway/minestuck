@@ -2,16 +2,16 @@ package com.mraof.minestuck.command;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
-import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.command.argument.GristSetArgument;
+import com.mraof.minestuck.player.GristCache;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.Collection;
@@ -21,6 +21,8 @@ public class GristCommand
 	public static final String GET = "commands.minestuck.grist.get";
 	public static final String ADD = "commands.minestuck.grist.add";
 	public static final String SUCCESS = "commands.minestuck.grist.add.success";
+	public static final String PARTIAL_SUCCESS = "commands.minestuck.grist.add.partial";
+	public static final String NO_CAPACITY = "commands.minestuck.grist.add.no_capacity";
 	public static final String FAILURE = "commands.minestuck.grist.add.failure";
 	public static final String SET = "commands.minestuck.grist.set";
 	
@@ -46,8 +48,8 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristSet grist = PlayerSavedData.getData(player).getGristCache();
-			source.sendSuccess(new TranslatableComponent(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			Component gristComponent = GristCache.get(player).getGristSet().asTextComponent();
+			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), gristComponent), false);
 		}
 		return players.size();
 	}
@@ -59,16 +61,26 @@ public class GristCommand
 		{
 			try
 			{
-				GristHelper.increase(player.level, IdentifierHandler.encode(player), grist);
-				i++;
-				source.sendSuccess(new TranslatableComponent(SUCCESS, player.getDisplayName()), true);
+				MutableGristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
+				if(remainingGrist.equalContent(grist))
+				{
+					source.sendFailure(Component.translatable(NO_CAPACITY, player.getDisplayName()));
+				} else
+				{
+					i++;
+					if(remainingGrist.isEmpty())
+						source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
+					else
+						source.sendSuccess(Component.translatable(PARTIAL_SUCCESS, player.getDisplayName(), remainingGrist.asTextComponent()), true);
+				}
 			} catch(IllegalArgumentException e)
 			{
 				e.printStackTrace();
-				source.sendFailure(new TranslatableComponent(FAILURE, player.getDisplayName()));
+				source.sendFailure(Component.translatable(FAILURE, player.getDisplayName()));
 			}
 		}
-		source.sendSuccess(new TranslatableComponent(ADD, i), true);
+		if(players.size() > 1)
+			source.sendSuccess(Component.translatable(ADD, i), true);
 		return i;
 	}
 	
@@ -76,9 +88,9 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			PlayerSavedData.getData(player).setGristCache(grist);
+			GristCache.get(player).set(grist);
 		}
-		source.sendSuccess(new TranslatableComponent(SET, players.size(), grist.asTextComponent()), true);
+		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();
 	}
 }

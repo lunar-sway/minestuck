@@ -1,9 +1,9 @@
 {
   "type": "minestuck:grist_cost",
-  "ingredient": {
-    "item": "minecraft:rabbit"
-  },
   "grist_cost": {
     "minestuck:iodine": 8
+  },
+  "ingredient": {
+    "item": "minecraft:rabbit"
   }
 }

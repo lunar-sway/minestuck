@@ -8,24 +8,24 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.synchronization.ArgumentSerializer;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 
-public class GristSetArgument implements ArgumentType<GristSet>
+public class GristSetArgument implements ArgumentType<MutableGristSet>
 {
-	public static final ArgumentSerializer<GristSetArgument> SERIALIZER = new Serializer();
 	
 	//TODO List suggestions
 	//TODO Provide examples
 	public static final String INCOMPLETE = "argument.grist_set.incomplete";
 	public static final String DUPLICATE = "argument.grist_set.duplicate";
-	public static final SimpleCommandExceptionType SET_INCOMPLETE = new SimpleCommandExceptionType(new TranslatableComponent(INCOMPLETE));
-	public static final DynamicCommandExceptionType DUPLICATE_TYPE = new DynamicCommandExceptionType(o -> new TranslatableComponent(DUPLICATE, o));
+	public static final SimpleCommandExceptionType SET_INCOMPLETE = new SimpleCommandExceptionType(Component.translatable(INCOMPLETE));
+	public static final DynamicCommandExceptionType DUPLICATE_TYPE = new DynamicCommandExceptionType(o -> Component.translatable(DUPLICATE, o));
 	
 	private static final GristTypeArgument gristArgument = GristTypeArgument.gristType();
 	
@@ -49,9 +49,9 @@ public class GristSetArgument implements ArgumentType<GristSet>
 	}
 	
 	@Override
-	public GristSet parse(StringReader reader) throws CommandSyntaxException
+	public MutableGristSet parse(StringReader reader) throws CommandSyntaxException
 	{
-		GristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : new GristSet();
+		MutableGristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : new MutableGristSet();
 		do
 		{
 			int start1 = reader.getCursor();
@@ -64,14 +64,14 @@ public class GristSetArgument implements ArgumentType<GristSet>
 				GristType type = gristArgument.parse(reader);
 				if(!set.hasType(type))
 				{
-					set.addGrist(type, count);
+					set.add(type, count);
 					
 					if(reader.canRead() && reader.peek() == ' ')
 						reader.skip();
 					else break;
 				} else {
 					reader.setCursor(start2);
-					throw DUPLICATE_TYPE.createWithContext(reader, type.getRegistryName());
+					throw DUPLICATE_TYPE.createWithContext(reader, type);
 				}
 			} else
 			{
@@ -82,9 +82,9 @@ public class GristSetArgument implements ArgumentType<GristSet>
 		return set;
 	}
 	
-	public static GristSet getGristArgument(CommandContext<CommandSourceStack> context, String id)
+	public static MutableGristSet getGristArgument(CommandContext<CommandSourceStack> context, String id)
 	{
-		return context.getArgument(id, GristSet.class);
+		return context.getArgument(id, MutableGristSet.class);
 	}
 	
 	public static NonNegativeGristSet getNonNegativeGristArgument(CommandContext<CommandSourceStack> context, String id)
@@ -98,25 +98,25 @@ public class GristSetArgument implements ArgumentType<GristSet>
 		NON_NEGATIVE
 	}
 	
-	private static final class Serializer implements ArgumentSerializer<GristSetArgument>
+	public static final class Info implements ArgumentTypeInfo<GristSetArgument, Info.Template>
 	{
 		@Override
-		public void serializeToNetwork(GristSetArgument argument, FriendlyByteBuf buffer)
+		public void serializeToNetwork(Template template, FriendlyByteBuf buffer)
 		{
-			buffer.writeEnum(argument.mode);
+			buffer.writeEnum(template.mode);
 		}
 		
 		@Override
-		public GristSetArgument deserializeFromNetwork(FriendlyByteBuf buffer)
+		public Template deserializeFromNetwork(FriendlyByteBuf buffer)
 		{
 			Mode mode = buffer.readEnum(Mode.class);
-			return new GristSetArgument(mode);
+			return new Template(mode);
 		}
 		
 		@Override
-		public void serializeToJson(GristSetArgument argument, JsonObject json)
+		public void serializeToJson(Template template, JsonObject json)
 		{
-			switch (argument.mode) {
+			switch (template.mode) {
 				case NON_NEGATIVE:
 					json.addProperty("type", "non_negative");
 					break;
@@ -124,6 +124,34 @@ public class GristSetArgument implements ArgumentType<GristSet>
 				default:
 					json.addProperty("type", "standard");
 					break;
+			}
+		}
+		
+		@Override
+		public Template unpack(GristSetArgument argument)
+		{
+			return new Template(argument.mode);
+		}
+		
+		public class Template implements ArgumentTypeInfo.Template<GristSetArgument>
+		{
+			final Mode mode;
+			
+			public Template(Mode mode)
+			{
+				this.mode = mode;
+			}
+			
+			@Override
+			public GristSetArgument instantiate(CommandBuildContext context)
+			{
+				return new GristSetArgument(this.mode);
+			}
+			
+			@Override
+			public ArgumentTypeInfo<GristSetArgument, ?> type()
+			{
+				return Info.this;
 			}
 		}
 	}

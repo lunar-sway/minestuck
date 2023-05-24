@@ -1,8 +1,10 @@
 package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.client.gui.ComputerScreen;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -10,13 +12,14 @@ import java.util.Map.Entry;
 /**
  * The static interface will probably later be merged with DeployList,
  * GristStorage and other similar classes that store static data.
- * 
+ *
  * @author Kirderf1
  */
 public abstract class ComputerProgram
 { //This is overall a bad way of handling programs. Should be rewritten
 	
-	private static HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<Integer, Class<? extends ComputerProgram>>();
+	private static final HashMap<Integer, Class<? extends ComputerProgram>> programs = new HashMap<>();
+	public static final ResourceLocation INVALID_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/invalid.png");
 	
 	/**
 	 * Should only be used client-side
@@ -36,8 +39,8 @@ public abstract class ComputerProgram
 	{
 		try
 		{
-			return programs.get(id).newInstance();
-		} catch (Exception e)
+			return programs.get(id).getDeclaredConstructor().newInstance();
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -74,9 +77,10 @@ public abstract class ComputerProgram
 	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be);
 	
 	/**
-	 * Returns an unlocalized string of the name of the program. Used for the
-	 * program button.
+	 * @return desktop icon for this program.
 	 */
-	public abstract String getName();
-	
+	public ResourceLocation getIcon()
+	{
+		return INVALID_ICON;
+	}
 }

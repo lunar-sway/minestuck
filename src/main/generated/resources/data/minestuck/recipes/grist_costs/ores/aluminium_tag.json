@@ -1,12 +1,12 @@
 {
   "type": "minestuck:source_grist_cost",
-  "ingredient": {
-    "tag": "forge:ores/aluminium"
-  },
   "grist_cost": {
     "minestuck:build": 4
   },
+  "ingredient": {
+    "tag": "forge:ores/aluminium"
+  },
   "sources": [
-    "#forge:ingots/aluminium"
+    "#forge:raw_materials/aluminum"
   ]
 }

@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.lands.title;
 
 import com.mraof.minestuck.entity.MSEntityTypes;
-import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.LandBiomeType;
@@ -22,7 +21,6 @@ public class FrogsLandType extends TitleLandType
 	
 	public FrogsLandType()
 	{
-		super(EnumAspect.SPACE, false);
 	}
 	
 	@Override
@@ -43,12 +41,12 @@ public class FrogsLandType extends TitleLandType
 	{
 		if(type == LandBiomeType.NORMAL)
 		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 1, 0, 1));
+			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 3, 0, 2));
 		}
 		
 		if(type == LandBiomeType.ROUGH)
 		{
-			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 10, 1, 6));
+			builder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(MSEntityTypes.FROG.get(), 15, 1, 6));
 		}
 	}
 	

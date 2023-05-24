@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "input2": {
+    "item": "minecraft:lilac"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:magenta_mauler"
+  }
+}

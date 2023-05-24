@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 
 import java.util.List;
-import java.util.Random;
 
 public class NakagatorVillagePieces
 {
@@ -36,7 +36,7 @@ public class NakagatorVillagePieces
 	/**
 	 * Helper function for adding village pieces associated with nakagators.
 	 */
-	public static void addPieces(ILandType.PieceRegister register, Random random)
+	public static void addPieces(ILandType.PieceRegister register, RandomSource random)
 	{
 		register.add(HighNakHousing1::createPiece, 6, Mth.nextInt(random, 3, 5));
 		register.add(HighNakMarket1::createPiece, 10, Mth.nextInt(random, 1, 2));
@@ -45,7 +45,7 @@ public class NakagatorVillagePieces
 	
 	public static class RadioTowerCenter extends ConsortVillageCenter.VillageCenter
 	{
-		public RadioTowerCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, Random rand)
+		public RadioTowerCenter(List<ConsortVillagePieces.PieceWeight> pieceWeightList, int x, int z, RandomSource rand)
 		{
 			super(MSStructurePieces.RADIO_TOWER_CENTER.get(), pieceWeightList, 0, new BoundingBox(x, 64, z, x + 8 - 1, 90, z + 8 - 1), 0);
 			this.setOrientation(Direction.Plane.HORIZONTAL.getRandomDirection(rand));
@@ -57,7 +57,7 @@ public class NakagatorVillagePieces
 		}
 		
 		@Override
-		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, Random rand)
+		public void addChildren(StructurePiece componentIn, StructurePieceAccessor accessor, RandomSource rand)
 		{
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, accessor, rand, boundingBox.minX() + 3, boundingBox.minY(), boundingBox.maxZ() + 1, Direction.SOUTH);
 			ConsortVillagePieces.generateAndAddRoadPiece((ConsortVillageCenter.VillageCenter) componentIn, accessor, rand, boundingBox.minX() - 1, boundingBox.minY(), boundingBox.minZ() + 3, Direction.WEST);
@@ -66,7 +66,7 @@ public class NakagatorVillagePieces
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel worldIn, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel worldIn, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (this.averageGroundLvl < 0)
 			{
@@ -198,7 +198,7 @@ public class NakagatorVillagePieces
 	
 	public static class HighNakHousing1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public HighNakHousing1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.HIGH_NAK_HOUSING_1.get(), 0, boundingBox, 3);
 			setOrientation(facing);
@@ -209,14 +209,14 @@ public class NakagatorVillagePieces
 			super(MSStructurePieces.HIGH_NAK_HOUSING_1.get(), nbt, 3);
 		}
 		
-		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static HighNakHousing1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 8, 13, 9, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new HighNakHousing1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -320,7 +320,7 @@ public class NakagatorVillagePieces
 	
 	public static class HighNakMarket1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public HighNakMarket1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.HIGH_NAK_MARKET.get(), 0, boundingBox, 3);
 			setOrientation(facing);
@@ -331,14 +331,14 @@ public class NakagatorVillagePieces
 			super(MSStructurePieces.HIGH_NAK_MARKET.get(), nbt, 3);
 		}
 		
-		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static HighNakMarket1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 12, 14, 10, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new HighNakMarket1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (averageGroundLvl < 0)
 			{
@@ -446,7 +446,7 @@ public class NakagatorVillagePieces
 	
 	public static class HighNakInn1 extends ConsortVillagePieces.ConsortVillagePiece
 	{
-		public HighNakInn1(ConsortVillageCenter.VillageCenter start, Random rand, BoundingBox boundingBox, Direction facing)
+		public HighNakInn1(ConsortVillageCenter.VillageCenter start, RandomSource rand, BoundingBox boundingBox, Direction facing)
 		{
 			super(MSStructurePieces.HIGH_NAK_INN.get(), 0, boundingBox, 3);
 			setOrientation(facing);
@@ -457,14 +457,14 @@ public class NakagatorVillagePieces
 			super(MSStructurePieces.HIGH_NAK_INN.get(), nbt, 3);
 		}
 		
-		public static HighNakInn1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, Random rand, int x, int y, int z, Direction facing)
+		public static HighNakInn1 createPiece(ConsortVillageCenter.VillageCenter start, StructurePieceAccessor accessor, RandomSource rand, int x, int y, int z, Direction facing)
 		{
 			BoundingBox boundingBox = BoundingBox.orientBox(x, y, z, 0, 0, 0, 12, 20, 11, facing);
 			return accessor.findCollisionPiece(boundingBox) == null ? new HighNakInn1(start, rand, boundingBox, facing) : null;
 		}
 
 		@Override
-		public void postProcess(WorldGenLevel level, StructureFeatureManager manager, ChunkGenerator chunkGeneratorIn, Random randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
+		public void postProcess(WorldGenLevel level, StructureManager manager, ChunkGenerator chunkGeneratorIn, RandomSource randomIn, BoundingBox structureBoundingBoxIn, ChunkPos chunkPosIn, BlockPos pos)
 		{
 			if (averageGroundLvl < 0)
 			{

@@ -9,12 +9,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.TextureAtlasHolder;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -33,11 +33,9 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	}
 	
 	@SubscribeEvent
-	public static void initUploader(ParticleFactoryRegisterEvent event)
+	public static void initUploader(RegisterClientReloadListenersEvent event)
 	{
-		System.out.println("Creating land planet resource");
-		Minecraft mc = Minecraft.getInstance();
-		((ReloadableResourceManager) mc.getResourceManager()).registerReloadListener(INSTANCE = new LandSkySpriteUploader(mc.getTextureManager()));
+		event.registerReloadListener(INSTANCE = new LandSkySpriteUploader(Minecraft.getInstance().getTextureManager()));
 	}
 	
 	public LandSkySpriteUploader(TextureManager textureManagerIn)
@@ -78,11 +76,15 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	
 	public TextureAtlasSprite getPlanetSprite(TerrainLandType type, int index)
 	{
-		return getSprite(new ResourceLocation(type.getRegistryName().getNamespace(), "planets/planet_"+type.getRegistryName().getPath()+"_"+index));
+		ResourceLocation typeName = LandTypes.TERRAIN_REGISTRY.get().getKey(type);
+		Objects.requireNonNull(typeName);
+		return getSprite(new ResourceLocation(typeName.getNamespace(), "planets/planet_"+typeName.getPath()+"_"+index));
 	}
 	
 	public TextureAtlasSprite getOverlaySprite(TitleLandType type, int index)
 	{
-		return getSprite(new ResourceLocation(type.getRegistryName().getNamespace(), "overlays/overlay_"+type.getRegistryName().getPath()+"_"+index));
+		ResourceLocation typeName = LandTypes.TITLE_REGISTRY.get().getKey(type);
+		Objects.requireNonNull(typeName);
+		return getSprite(new ResourceLocation(typeName.getNamespace(), "overlays/overlay_"+typeName.getPath()+"_"+index));
 	}
 }

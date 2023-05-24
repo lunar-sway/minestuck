@@ -43,24 +43,13 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 		addSlot(new InputSlot(inventory, 0, INPUT_X, INPUT_Y, MSItems.RAW_CRUXITE.get()));
 		addSlot(new OutputSlot(inventory, 1, OUTPUT_X, OUTPUT_Y));
 		
-		bindPlayerInventory(playerInventory);
+		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
 	@Override
 	protected Block getValidBlock()
 	{
 		return MSBlocks.MINI_CRUXTRUDER.get();
-	}
-	
-	protected void bindPlayerInventory(Inventory playerInventory)
-	{
-		for (int i = 0; i < 3; i++)
-			for (int j = 0; j < 9; j++)
-				addSlot(new Slot(playerInventory, j + i * 9 + 9,
-						8 + j * 18, 84 + i * 18));
-		
-		for (int i = 0; i < 9; i++)
-			addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
 	}
 	
 	@Nonnull
@@ -85,7 +74,7 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 			} else
 			{
 				//if it's an inventory slot with valid contents
-				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE.get())
+				if(itemstackOrig.is(MSItems.RAW_CRUXITE.get()))
 				{
 					result = moveItemStackTo(itemstackOrig, 0, 1, false);
 				}
@@ -94,8 +83,8 @@ public class MiniCruxtruderMenu extends MachineContainerMenu
 			if(!result)
 				return ItemStack.EMPTY;
 			
-			if(!itemstackOrig.isEmpty())
-				slot.setChanged();
+			if(!ItemStack.matches(itemstackOrig, slot.getItem()))
+				slot.set(itemstackOrig);
 		}
 		
 		return itemstack;

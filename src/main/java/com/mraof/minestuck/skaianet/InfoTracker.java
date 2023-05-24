@@ -9,9 +9,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -52,7 +50,7 @@ public final class InfoTracker
 	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		if(event.getPlayer() instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			SkaianetHandler.get(player.server).infoTracker.onPlayerLoggedIn(player);
 		}
@@ -61,7 +59,7 @@ public final class InfoTracker
 	@SubscribeEvent
 	public static void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event)
 	{
-		if(event.getPlayer() instanceof ServerPlayer player)
+		if(event.getEntity() instanceof ServerPlayer player)
 		{
 			PlayerIdentifier identifier = Objects.requireNonNull(IdentifierHandler.encode(player));
 			SkaianetHandler.get(player.server).infoTracker.listenerMap.values().forEach(set -> set.removeIf(identifier::equals));
@@ -98,7 +96,7 @@ public final class InfoTracker
 		
 		if(cannotAccess(player, p1))
 		{
-			player.sendMessage(new TextComponent("[Minestuck] ").withStyle(ChatFormatting.RED).append(new TranslatableComponent(SkaianetHandler.PRIVATE_COMPUTER)), Util.NIL_UUID);
+			player.sendSystemMessage(Component.literal("[Minestuck] ").withStyle(ChatFormatting.RED).append(Component.translatable(SkaianetHandler.PRIVATE_COMPUTER)));
 			return;
 		}
 		if(!getSet(p1).add(p0))

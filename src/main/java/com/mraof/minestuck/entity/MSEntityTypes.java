@@ -19,10 +19,10 @@ import net.minecraftforge.registries.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MSEntityTypes
 {
-	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITIES, Minestuck.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Minestuck.MOD_ID);
 	
-	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 35, false, false, 128);
-	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 10, true, false, 128);
+	public static MobCategory UNDERLING = MobCategory.create("UNDERLING", "underling", 28, false, false, 128);
+	public static MobCategory CONSORT = MobCategory.create("CONSORT", "consort", 8, true, false, 128);
 	
 	public static final RegistryObject<EntityType<FrogEntity>> FROG = REGISTER.register("frog", () -> EntityType.Builder.<FrogEntity>of(FrogEntity::new, MobCategory.CREATURE).sized(0.51F, 0.51F).build(new ResourceLocation(Minestuck.MOD_ID, "frog").toString()));
 	public static final RegistryObject<EntityType<ConsortEntity>> SALAMANDER = REGISTER.register("salamander", () -> EntityType.Builder.of(EnumConsort.SALAMANDER::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "salamander").toString()));
@@ -30,11 +30,11 @@ public final class MSEntityTypes
 	public static final RegistryObject<EntityType<ConsortEntity>> NAKAGATOR = REGISTER.register("nakagator", () -> EntityType.Builder.of(EnumConsort.NAKAGATOR::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "nakagator").toString()));
 	public static final RegistryObject<EntityType<ConsortEntity>> IGUANA = REGISTER.register("iguana", () -> EntityType.Builder.of(EnumConsort.IGUANA::create, CONSORT).sized(0.52F, 1.2F).build(new ResourceLocation(Minestuck.MOD_ID, "iguana").toString()));
 	
-	public static final RegistryObject<EntityType<ImpEntity>> IMP = REGISTER.register("imp", () -> EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.5F).build(new ResourceLocation(Minestuck.MOD_ID, "imp").toString())); //TODO adjust hitboxes for all underlings
+	public static final RegistryObject<EntityType<ImpEntity>> IMP = REGISTER.register("imp", () -> EntityType.Builder.of(ImpEntity::new, UNDERLING).sized(0.7F, 1.5F).build(new ResourceLocation(Minestuck.MOD_ID, "imp").toString()));
 	public static final RegistryObject<EntityType<OgreEntity>> OGRE = REGISTER.register("ogre", () -> EntityType.Builder.of(OgreEntity::new, UNDERLING).sized(2F, 3.3F).build(new ResourceLocation(Minestuck.MOD_ID, "ogre").toString()));
-	public static final RegistryObject<EntityType<BasiliskEntity>> BASILISK = REGISTER.register("basilisk", () -> EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(2F, 2F).build(new ResourceLocation(Minestuck.MOD_ID, "basilisk").toString()));
-	public static final RegistryObject<EntityType<LichEntity>> LICH = REGISTER.register("lich", () -> EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.9F).build(new ResourceLocation(Minestuck.MOD_ID, "lich").toString()));
-	public static final RegistryObject<EntityType<GiclopsEntity>> GICLOPS = REGISTER.register("giclops", () -> EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(8.0F, 12.0F).build(new ResourceLocation(Minestuck.MOD_ID, "giclops").toString()));
+	public static final RegistryObject<EntityType<BasiliskEntity>> BASILISK = REGISTER.register("basilisk", () -> EntityType.Builder.of(BasiliskEntity::new, UNDERLING).sized(1.9F, 1.9F).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "basilisk").toString()));
+	public static final RegistryObject<EntityType<LichEntity>> LICH = REGISTER.register("lich", () -> EntityType.Builder.of(LichEntity::new, UNDERLING).sized(0.8F, 1.7F).build(new ResourceLocation(Minestuck.MOD_ID, "lich").toString()));
+	public static final RegistryObject<EntityType<GiclopsEntity>> GICLOPS = REGISTER.register("giclops", () -> EntityType.Builder.of(GiclopsEntity::new, UNDERLING).sized(5.0F, 6.0F).build(new ResourceLocation(Minestuck.MOD_ID, "giclops").toString()));
 	
 	public static final RegistryObject<EntityType<PawnEntity>> DERSITE_PAWN = REGISTER.register("dersite_pawn", () -> EntityType.Builder.of(PawnEntity::createDersite, MobCategory.MONSTER).sized(0.6F, 2.1F).build(new ResourceLocation(Minestuck.MOD_ID, "dersite_pawn").toString()));
 	public static final RegistryObject<EntityType<PawnEntity>> PROSPITIAN_PAWN = REGISTER.register("prospitian_pawn", () -> EntityType.Builder.of(PawnEntity::createProspitian, MobCategory.MONSTER).sized(0.6F, 2.1F).build(new ResourceLocation(Minestuck.MOD_ID, "prospitian_pawn").toString()));
@@ -46,6 +46,7 @@ public final class MSEntityTypes
 	public static final RegistryObject<EntityType<GristEntity>> GRIST = REGISTER.register("grist", () -> EntityType.Builder.<GristEntity>of(GristEntity::new, MobCategory.MISC).sized(1 / 3F, 1 / 3F).setTrackingRange(4).setUpdateInterval(20).build(new ResourceLocation(Minestuck.MOD_ID, "grist").toString()));
 	public static final RegistryObject<EntityType<VitalityGelEntity>> VITALITY_GEL = REGISTER.register("vitality_gel", () -> EntityType.Builder.<VitalityGelEntity>of(VitalityGelEntity::new, MobCategory.MISC).sized(1 / 4F, 1 / 4F).setTrackingRange(4).setUpdateInterval(20).build(new ResourceLocation(Minestuck.MOD_ID, "vitality_gel").toString()));
 	public static final RegistryObject<EntityType<DecoyEntity>> PLAYER_DECOY = REGISTER.register("player_decoy", () -> EntityType.Builder.<DecoyEntity>createNothing(MobCategory.MISC).setCustomClientFactory((spawnEntity, world) -> new DecoyEntity(world)).noSave().noSummon().build(new ResourceLocation(Minestuck.MOD_ID, "player_decoy").toString()));
+	public static final RegistryObject<EntityType<ServerCursorEntity>> SERVER_CURSOR = REGISTER.register("server_cursor", () -> EntityType.Builder.of(ServerCursorEntity::new, MobCategory.MISC).noSave().noSummon().sized(0.1F, 0.1F).setShouldReceiveVelocityUpdates(false).setTrackingRange(4).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "server_cursor").toString()));
 	
 	public static final RegistryObject<EntityType<MetalBoatEntity>> METAL_BOAT = REGISTER.register("metal_boat", () -> EntityType.Builder.<MetalBoatEntity>of(MetalBoatEntity::new, MobCategory.MISC).sized(1.375F, 0.5625F).build(new ResourceLocation(Minestuck.MOD_ID, "metal_boat").toString()));
 	public static final RegistryObject<EntityType<BarbasolBombEntity>> BARBASOL_BOMB = REGISTER.register("barbasol_bomb", () -> EntityType.Builder.<BarbasolBombEntity>of(BarbasolBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).setUpdateInterval(10).fireImmune().build(new ResourceLocation(Minestuck.MOD_ID, "barbasol_bomb").toString()));
@@ -109,5 +110,6 @@ public final class MSEntityTypes
 		event.put(PLAYER_DECOY.get(), Mob.createMobAttributes().build());
 		
 		event.put(LOTUS_FLOWER.get(), LivingEntity.createLivingAttributes().build());
+		event.put(SERVER_CURSOR.get(), LivingEntity.createLivingAttributes().build());
 	}
 }

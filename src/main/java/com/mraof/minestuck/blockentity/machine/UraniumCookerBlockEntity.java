@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,8 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
@@ -37,9 +36,8 @@ import java.util.stream.Stream;
 public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implements MenuProvider
 {
 	public static final String TITLE = "container.minestuck.uranium_cooker";
-	public static final RunType TYPE = RunType.BUTTON_OVERRIDE;
-	public static final int DEFAULT_MAX_PROGRESS = 0;
 	
+	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE_OR_LOOPING, 0, this::setChanged, this::contentsValid);
 	private final Container recipeInventory = new RecipeWrapper(itemHandler);
 	
 	private final DataSlot fuelHolder = new DataSlot()
@@ -63,7 +61,6 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	public UraniumCookerBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.URANIUM_COOKER.get(), pos, state);
-		maxProgress = DEFAULT_MAX_PROGRESS;
 	}
 	
 	@Override
@@ -87,13 +84,12 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	}
 	
 	@Override
-	public RunType getRunType()
+	protected void tick()
 	{
-		return TYPE;
+		this.progressTracker.tick(this::processContents);
 	}
 	
-	@Override
-	public boolean contentsValid()
+	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
 		{
@@ -121,8 +117,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
 	}
 	
-	@Override
-	public void processContents()
+	private void processContents()
 	{
 		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 		{    //Refill fuel
@@ -139,9 +134,9 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 			{
 				itemHandler.extractItem(2, -output.getCount(), false);
 			}
-			if(itemHandler.getStackInSlot(0).hasContainerItem())
+			if(itemHandler.getStackInSlot(0).hasCraftingRemainingItem())
 			{
-				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getContainerItem());
+				itemHandler.setStackInSlot(0, itemHandler.getStackInSlot(0).getCraftingRemainingItem());
 			} else
 			{
 				itemHandler.extractItem(0, 1, false);
@@ -170,7 +165,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side)
 	{
-		if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != null)
+		if(cap == ForgeCapabilities.ITEM_HANDLER && side != null)
 		{
 			return side == Direction.DOWN ? downHandler.cast() :
 					side == Direction.UP ? upHandler.cast() : sideHandler.cast();
@@ -182,13 +177,13 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, parameters, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new UraniumCookerMenu(windowId, playerInventory, itemHandler, this.progressTracker, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 	
 	@Override
 	public Component getDisplayName()
 	{
-		return new TranslatableComponent(TITLE);
+		return Component.translatable(TITLE);
 	}
 	
 	public boolean canBeRefueled()

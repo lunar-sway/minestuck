@@ -12,9 +12,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.util.CubicSpline;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.biome.TerrainShaper;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.*;
+
+import java.util.List;
 
 public final class LandGenSettings
 {
@@ -34,13 +35,13 @@ public final class LandGenSettings
 	 * A threshold that determines the split between rough and normal terrain.
 	 * When the terrain is inland, the terrain will be rough when erosion is below the threshold.
 	 * Thus, a higher threshold will result in more rough terrain.
-	 * At 0, there should be a rough split between normal and rough terrain occurring.
+	 * At 0, there should be a mostly equal chance of normal and rough terrain occurring.
 	 */
-	public float roughThreshold = -0.2F;
+	public float roughThreshold = 0.0F;
 	
 	public float oceanOffset = -0.12F;
-	public float inlandOffset = 0.05F;
-	public float inlandAngle = 0.1F;
+	public float inlandOffset = 0.15F;
+	public float inlandAngle = 0.2F;
 	
 	public float oceanFactor = 6;
 	public float normalFactor = 5;
@@ -82,17 +83,15 @@ public final class LandGenSettings
 	Holder<NoiseGeneratorSettings> createDimensionSettings(Registry<DensityFunction> densityFunctions)
 	{
 		//includes the y-range at which generation occurs, with the values used here set in resources/data/minestuck/dimension_type/land.json
-		NoiseSettings noiseSettings = NoiseSettings.create(-64, 384, new NoiseSamplingSettings(1, 1, 80, 160),
-				new NoiseSlider(-1, 2, 0), new NoiseSlider(1, 3, 0), 1, 2,
-				this.createTerrainShaper());
+		NoiseSettings noiseSettings = NoiseSettings.create(-64, 384, 1, 2);
 		
 		SurfaceRules.RuleSource bedrockFloor = SurfaceRules.ifTrue(SurfaceRules.verticalGradient("bedrock_floor", VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(5)), SurfaceRules.state(Blocks.BEDROCK.defaultBlockState()));
 		
 		SurfaceRules.RuleSource surfaceRule = SurfaceRules.sequence(bedrockFloor, landTypes.getTerrain().getSurfaceRule(blockRegistry));
 		
 		NoiseGeneratorSettings settings = new NoiseGeneratorSettings(noiseSettings, blockRegistry.getBlockState("ground"), blockRegistry.getBlockState("ocean"),
-				MSDensityFunctions.makeLandNoiseRouter(densityFunctions),
-				surfaceRule, 64, false, true, false, false);
+				makeLandNoiseRouter(densityFunctions),
+				surfaceRule, List.of(), 64, false, true, false, false);
 		
 		return Holder.direct(settings);
 	}
@@ -117,24 +116,47 @@ public final class LandGenSettings
 		return this.hasRoughTerrain() ? this.roughThreshold + offset : -1.0F;
 	}
 	
-	private TerrainShaper createTerrainShaper()
+	private NoiseRouter makeLandNoiseRouter(Registry<DensityFunction> registry)
 	{
-		CubicSpline.Builder<TerrainShaper.Point> offsetSpline = CubicSpline.builder(TerrainShaper.Point::continents);
-		if(this.hasOceanTerrain())
-			offsetSpline.addPoint(this.getOceanThreshold(-0.1F), this.oceanOffset, 0);
-		offsetSpline.addPoint(this.getOceanThreshold(0.1F), this.inlandOffset, this.inlandAngle);
+		DensityFunctions.Spline.Coordinate continents = new DensityFunctions.Spline.Coordinate(MSDensityFunctions.LAND_CONTINENTS.getHolder().orElseThrow());
+		DensityFunctions.Spline.Coordinate erosion = new DensityFunctions.Spline.Coordinate(MSDensityFunctions.LAND_EROSION.getHolder().orElseThrow());
 		
-		CubicSpline.Builder<TerrainShaper.Point> inlandFactorSpline = CubicSpline.builder(TerrainShaper.Point::erosion);
+		DensityFunction depth = MSDensityFunctions.depth(() -> offset(continents));
+		DensityFunction factor = factor(continents, erosion);
+		DensityFunction initialDensity = MSDensityFunctions.initialDensity(depth, factor);
+		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), 320);
+		
+		return new NoiseRouter(
+				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
+				DensityFunctions.zero(), DensityFunctions.zero(), MSDensityFunctions.from(registry, MSDensityFunctions.LAND_CONTINENTS), MSDensityFunctions.from(registry, MSDensityFunctions.LAND_EROSION), depth, DensityFunctions.zero(), // biome parameters
+				initialDensity, finalDensity,	// terrain and surface height
+				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
+	}
+	
+	private DensityFunction offset(DensityFunctions.Spline.Coordinate continents)
+	{
+		var builder = CubicSpline.builder(continents);
+		
+		if(this.hasOceanTerrain())
+			builder.addPoint(this.getOceanThreshold(-0.2F), this.oceanOffset, 0);
+		builder.addPoint(this.getOceanThreshold(0.2F), this.inlandOffset, this.inlandAngle);
+		
+		return DensityFunctions.add(DensityFunctions.constant(-0.50375), DensityFunctions.spline(builder.build()));
+	}
+	
+	private DensityFunction factor(DensityFunctions.Spline.Coordinate continents, DensityFunctions.Spline.Coordinate erosion)
+	{
+		var inlandBuilder = CubicSpline.builder(erosion);
 		if(this.hasRoughTerrain())
-			inlandFactorSpline.addPoint(this.getRoughThreshold(-0.05F), this.roughFactor, 0);
-		inlandFactorSpline.addPoint(this.getRoughThreshold(0.05F), this.normalFactor, 0);
+			inlandBuilder.addPoint(this.getRoughThreshold(-0.05F), this.roughFactor, 0);
+		inlandBuilder.addPoint(this.getRoughThreshold(0.05F), this.normalFactor, 0);
 		
-		CubicSpline.Builder<TerrainShaper.Point> factorSpline = CubicSpline.builder(TerrainShaper.Point::continents);
+		var builder = CubicSpline.builder(continents);
 		if(this.hasOceanTerrain())
-			factorSpline.addPoint(this.getOceanThreshold(-0.1F), this.oceanFactor, 0);
-		factorSpline.addPoint(this.getOceanThreshold(0.1F), inlandFactorSpline.build(), 0);
+			builder.addPoint(this.getOceanThreshold(-0.1F), this.oceanFactor, 0);
+		builder.addPoint(this.getOceanThreshold(0.1F), inlandBuilder.build());
 		
-		return new TerrainShaper(offsetSpline.build(), factorSpline.build(), CubicSpline.constant(0));
+		return DensityFunctions.spline(builder.build());
 	}
 	
 	public Climate.ParameterList<Holder<Biome>> createBiomeParameters(LandBiomeAccess biomes)

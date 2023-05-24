@@ -2,13 +2,14 @@ package com.mraof.minestuck.inventory;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
+import com.mraof.minestuck.inventory.musicplayer.CassetteContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.*;
 
 public class MSMenuTypes
 {
-	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.CONTAINERS, Minestuck.MOD_ID);
+	public static final DeferredRegister<MenuType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.MENU_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<MenuType<MiniCruxtruderMenu>> MINI_CRUXTRUDER = REGISTER.register("mini_cruxtruder", () -> new MenuType<>((IContainerFactory<MiniCruxtruderMenu>) MiniCruxtruderMenu::new));
 	public static final RegistryObject<MenuType<MiniTotemLatheMenu>> MINI_TOTEM_LATHE = REGISTER.register("mini_totem_lathe", () -> new MenuType<>((IContainerFactory<MiniTotemLatheMenu>) MiniTotemLatheMenu::new));
@@ -19,5 +20,7 @@ public class MSMenuTypes
 	public static final RegistryObject<MenuType<UraniumCookerMenu>> URANIUM_COOKER = REGISTER.register("uranium_cooker", () -> new MenuType<>((IContainerFactory<UraniumCookerMenu>) UraniumCookerMenu::new));
 	public static final RegistryObject<MenuType<CaptchaDeckMenu>> CAPTCHA_DECK = REGISTER.register("captcha_deck", () -> new MenuType<>(CaptchaDeckMenu::new));
 	public static final RegistryObject<MenuType<EditmodeMenu>> EDIT_MODE = REGISTER.register("edit_mode", () -> new MenuType<>(EditmodeMenu::new));
+	public static final RegistryObject<MenuType<AtheneumMenu>> ATHENEUM = REGISTER.register("atheneum", () -> new MenuType<>(AtheneumMenu::new));
 	public static final RegistryObject<MenuType<ConsortMerchantMenu>> CONSORT_MERCHANT = REGISTER.register("consort_merchant", () -> new MenuType<>((IContainerFactory<ConsortMerchantMenu>) ConsortMerchantMenu::load));
+	public static final RegistryObject<MenuType<CassetteContainerMenu>> CASSETTE_CONTAINER = REGISTER.register("cassette_container", () ->new MenuType<>(CassetteContainerMenu::new));
 }

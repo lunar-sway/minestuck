@@ -6,11 +6,12 @@ import com.mraof.minestuck.block.machine.TotemLatheBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.CombinationMode;
-import com.mraof.minestuck.alchemy.CombinationRecipe;
-import com.mraof.minestuck.alchemy.CombinerWrapper;
+import com.mraof.minestuck.alchemy.recipe.CombinationMode;
+import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
+import com.mraof.minestuck.alchemy.recipe.CombinerWrapper;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -31,8 +33,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class TotemLatheBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -122,6 +126,23 @@ public class TotemLatheBlockEntity extends BlockEntity
 		broken = true;
 	}
 	
+	public void dropItems()
+	{
+		Objects.requireNonNull(this.level);
+		BlockPos pos = this.getBlockPos();
+		
+		if(!this.card1.isEmpty())
+		{
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), this.card1);
+			this.card1 = ItemStack.EMPTY;
+		}
+		if(!this.card2.isEmpty())
+		{
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), this.card2);
+			this.card2 = ItemStack.EMPTY;
+		}
+	}
+	
 	public boolean setDowel(ItemStack dowelStack)
 	{
 		Objects.requireNonNull(this.level);
@@ -132,16 +153,9 @@ public class TotemLatheBlockEntity extends BlockEntity
 		BlockPos dowelPos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
 		BlockState oldState = level.getBlockState(dowelPos);
 		
-		//this check doesnt work with the geckolib changes, since the dowel block is that old state
-		//if(!oldState.isAir())
-		//	return false;	// Something is in the way that we shouldn't replace
-		
 		BlockState newState = MSBlocks.TOTEM_LATHE.DOWEL_ROD.get()
 				.defaultBlockState().setValue(TotemLatheBlock.FACING, facing)
 				.setValue(TotemLatheBlock.DowelRod.DOWEL, EnumDowelType.getForDowel(dowelStack));
-		
-		//level.setBlockAndUpdate(dowelPos, newState);
-		//setActiveRod(true);
 		
 		if(isValidDowelRod(oldState, facing))
 		{
@@ -200,22 +214,6 @@ public class TotemLatheBlockEntity extends BlockEntity
 			return false;
 	}
 	
-	/*private void setActiveRod(boolean active)
-	{
-		Objects.requireNonNull(this.level);
-		Direction facing = this.getFacing();
-		
-		BlockPos rodPos = MSBlocks.TOTEM_LATHE.getRodPos(getBlockPos(), getBlockState());
-		BlockState rodState = this.level.getBlockState(rodPos);
-		if(rodState.is(MSBlocks.TOTEM_LATHE.ROD.get()) && rodState.getValue(TotemLatheBlock.FACING) == facing)
-			this.level.setBlockAndUpdate(rodPos, rodState.setValue(TotemLatheBlock.Rod.ACTIVE, active));
-		
-		BlockPos wheelPos = MSBlocks.TOTEM_LATHE.getWheelPos(getBlockPos(), getBlockState());
-		BlockState wheelState = this.level.getBlockState(wheelPos);
-		if(wheelState.is(MSBlocks.TOTEM_LATHE.WHEEL.get()) && wheelState.getValue(TotemLatheBlock.FACING) == facing)
-			this.level.setBlockAndUpdate(wheelPos, wheelState.setValue(TotemLatheBlock.Rod.ACTIVE, active));
-	}*/
-	
 	public ItemStack getDowel()
 	{
 		BlockPos pos = MSBlocks.TOTEM_LATHE.getDowelPos(getBlockPos(), getBlockState());
@@ -258,6 +256,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			//carve the dowel.
 			if(working && !getDowel().isEmpty() && !AlchemyHelper.hasDecodedItem(getDowel()) && (!card1.isEmpty() || !card2.isEmpty()))
 			{
+				this.level.playSound(null, this.getBlockPos(), MSSoundEvents.TOTEM_LATHE_LATHE.get(), SoundSource.BLOCKS, 1F, 1F);
 				startingCarving = true;
 				isProcessing = true;
 				animationticks = 25;
@@ -377,30 +376,30 @@ public class TotemLatheBlockEntity extends BlockEntity
 		compound.putBoolean("isProcessing", isProcessing);
 	}
 	
-	public static void processContents(TotemLatheBlockEntity blockEntity, Level level)
+	private void processContents(Level level)
 	{
-		ItemStack dowel = blockEntity.getDowel();
+		ItemStack dowel = getDowel();
 		ItemStack output;
 		boolean success = false;
-		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!blockEntity.card1.isEmpty() || !blockEntity.card2.isEmpty()))
+		if(!dowel.isEmpty() && !AlchemyHelper.hasDecodedItem(dowel) && (!card1.isEmpty() || !card2.isEmpty()))
 		{
-			if(!blockEntity.card1.isEmpty() && !blockEntity.card2.isEmpty())
-				if(!AlchemyHelper.isPunchedCard(blockEntity.card1) || !AlchemyHelper.isPunchedCard(blockEntity.card2))
+			if(!card1.isEmpty() && !card2.isEmpty())
+				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = CombinationRecipe.findResult(new CombinerWrapper(blockEntity.card1, blockEntity.card2, CombinationMode.AND), level);
+				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
-				ItemStack input = blockEntity.card1.isEmpty() ? blockEntity.card2 : blockEntity.card1;
+				ItemStack input = card1.isEmpty() ? card2 : card1;
 				if(!AlchemyHelper.isPunchedCard(input))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
 				else output = AlchemyHelper.getDecodedItem(input);
 			}
 			
 			if(!output.isEmpty())
-				success = blockEntity.setCarvedItem(output);
+				success = setCarvedItem(output);
 		}
 		
-		//blockEntity.effects(success);
+		//effects(success);
 	}
 	
 	public static void tick(Level level, BlockPos pos, BlockState state, TotemLatheBlockEntity blockEntity)
@@ -410,7 +409,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			blockEntity.animationticks--;
 			if(blockEntity.animationticks <= 0)
 			{
-				processContents(blockEntity, level); //TODO in 1.16 there was the ITickableTileEntity, which had a nonstatic function. Now we use a static function and cannot handle processContents the same
+				blockEntity.processContents(level);
 			}
 		}
 	}

@@ -25,9 +25,12 @@ public record MobAnimation(Action action, int animationLength, boolean freezeMov
 		PANIC,
 		
 		//aggressive actions
-		PUNCH,
+		RIGHT_PUNCH,
+		LEFT_PUNCH,
 		CLAW,
 		BITE,
+		KICK,
+		SWING,
 		MELEE, //weapon
 		SLAM,
 		SHOOT, //projectile
