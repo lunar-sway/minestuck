@@ -7,16 +7,16 @@
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 5,
-				"visible_bounds_height": 1.5,
-				"visible_bounds_offset": [0, 0, 0]
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
 			},
 			"bones": [
 				{
 					"name": "leafbase",
-					"pivot": [8, 1.2, 8],
+					"pivot": [0, 0.6, 0],
 					"cubes": [
 						{
-							"origin": [-10, 0.6, -10],
+							"origin": [-18, 0.6, -18],
 							"size": [36, 0, 36],
 							"uv": {
 								"up": {"uv": [0, 34], "uv_size": [36, 36]}
@@ -26,21 +26,21 @@
 				},
 				{
 					"name": "root",
-					"pivot": [8, 1.2, 8]
+					"pivot": [0, 1.2, 0]
 				},
 				{
 					"name": "petalbase",
 					"parent": "root",
-					"pivot": [8, 1.2, 8]
+					"pivot": [0, 1.2, 0]
 				},
 				{
 					"name": "petal1",
 					"parent": "petalbase",
-					"pivot": [8, 1.2, 6],
+					"pivot": [0, 1.2, -2],
 					"rotation": [-55, 0, 0],
 					"cubes": [
 						{
-							"origin": [-2, 1.2, -12],
+							"origin": [-10, 1.2, -20],
 							"size": [20, 0, 18],
 							"uv": {
 								"up": {"uv": [16, 34], "uv_size": [-16, -16]}
@@ -51,11 +51,11 @@
 				{
 					"name": "petal2",
 					"parent": "petalbase",
-					"pivot": [6, 1.2, 8],
+					"pivot": [-2, 1.2, 0],
 					"rotation": [0, 0, 55],
 					"cubes": [
 						{
-							"origin": [-12, 1.2, -2],
+							"origin": [-20, 1.2, -10],
 							"size": [18, 0, 20],
 							"uv": {
 								"up": {"uv": [32, 18], "uv_size": [-16, 16]}
@@ -66,11 +66,11 @@
 				{
 					"name": "petal3",
 					"parent": "petalbase",
-					"pivot": [8, 1.2, 10],
+					"pivot": [0, 1.2, 2],
 					"rotation": [55, 0, 0],
 					"cubes": [
 						{
-							"origin": [-2, 1.2, 10],
+							"origin": [-10, 1.2, 2],
 							"size": [20, 0, 18],
 							"uv": {
 								"up": {"uv": [0, 18], "uv_size": [16, 16]}
@@ -81,11 +81,11 @@
 				{
 					"name": "petal4",
 					"parent": "petalbase",
-					"pivot": [10, 1.2, 8],
+					"pivot": [2, 1.2, -2],
 					"rotation": [0, 0, -55],
 					"cubes": [
 						{
-							"origin": [10, 1.2, -2],
+							"origin": [2, 1.2, -10],
 							"size": [18, 0, 20],
 							"uv": {
 								"up": {"uv": [16, 34], "uv_size": [16, -16]}
@@ -96,17 +96,17 @@
 				{
 					"name": "petalmid",
 					"parent": "root",
-					"pivot": [8, 11.2, 8],
+					"pivot": [0, 11.2, 0],
 					"rotation": [0, -45, 0]
 				},
 				{
 					"name": "petal5",
 					"parent": "petalmid",
-					"pivot": [8, 11.2, 0],
+					"pivot": [-0.02082, 11.2, -8.04289],
 					"rotation": [-107.5, 0, 0],
 					"cubes": [
 						{
-							"origin": [0, 11.2, -14],
+							"origin": [-8, 11.24091, -22.05579],
 							"size": [16, 0, 14],
 							"uv": {
 								"up": {"uv": [48, 34], "uv_size": [-16, -14]}
@@ -117,11 +117,11 @@
 				{
 					"name": "petal6",
 					"parent": "petalmid",
-					"pivot": [0, 11.2, 8],
+					"pivot": [-8.02082, 11.2, 0.70711],
 					"rotation": [0, 0, 107.5],
 					"cubes": [
 						{
-							"origin": [-14, 11.2, 0],
+							"origin": [-22.02707, 11.21985, -8],
 							"size": [14, 0, 16],
 							"uv": {
 								"up": {"uv": [62, 36], "uv_size": [-14, -16]}
@@ -132,11 +132,11 @@
 				{
 					"name": "petal7",
 					"parent": "petalmid",
-					"pivot": [8, 11.2, 16],
+					"pivot": [-0.02082, 11.2, 8.00711],
 					"rotation": [107.5, 0, 0],
 					"cubes": [
 						{
-							"origin": [0, 11.2, 16],
+							"origin": [-8, 11.20678, 8.00924],
 							"size": [16, 0, 14],
 							"uv": {
 								"up": {"uv": [32, 20], "uv_size": [16, 14]}
@@ -147,11 +147,11 @@
 				{
 					"name": "petal8",
 					"parent": "petalmid",
-					"pivot": [16, 11.2, 8],
+					"pivot": [7.97918, 11.2, 0.70711],
 					"rotation": [0, 0, -107.5],
 					"cubes": [
 						{
-							"origin": [16, 11.2, 0],
+							"origin": [7.97293, 11.18015, -8],
 							"size": [14, 0, 16],
 							"uv": {
 								"up": {"uv": [48, 20], "uv_size": [14, 16]}

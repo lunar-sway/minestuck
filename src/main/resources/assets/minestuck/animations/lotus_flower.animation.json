@@ -47,12 +47,10 @@
 							"vector": [0, 0, 0]
 						},
 						"2.0": {
-							"vector": [0, -180, 0],
-							"easing": "easeOutCubic"
+							"vector": [0, -180, 0]
 						},
 						"6.0": {
-							"vector": [0, -360, 0],
-							"easing": "easeInQuad"
+							"vector": [0, -360, 0]
 						}
 					},
 					"position": {
@@ -60,12 +58,10 @@
 							"vector": [0, 0, 0]
 						},
 						"1.0": {
-							"vector": [0, 0.5, 0],
-							"easing": "easeOutCubic"
+							"vector": [0, 0.5, 0]
 						},
 						"2.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeOutCubic"
+							"vector": [0, 0, 0]
 						}
 					}
 				},
@@ -245,14 +241,14 @@
 							"vector": [0, 0, 0]
 						},
 						"2.04": {
-							"vector": [0, -360, 0],
-							"easing": "easeInOutExpo"
+							"vector": [0, -360, 0]
 						}
 					}
 				}
 			}
 		},
 		"lotus.open.idle": {
+			"loop": true,
 			"animation_length": 4,
 			"bones": {
 				"root": {
@@ -265,8 +261,7 @@
 						}
 					},
 					"position": {
-						"vector": [0, 0, 0],
-						"easing": "easeOutCubic"
+						"vector": [0, 0, 0]
 					}
 				},
 				"petal1": {
@@ -338,9 +333,7 @@
 							"vector": [0, 0, 0]
 						},
 						"0.8": {
-							"vector": [0, -360, 0],
-							"easing": "easeInBack",
-							"easingArgs": [2]
+							"vector": [0, -360, 0]
 						}
 					},
 					"scale": {
@@ -348,9 +341,7 @@
 							"vector": [1, 1, 1]
 						},
 						"0.8": {
-							"vector": [0, 0, 0],
-							"easing": "easeInBack",
-							"easingArgs": [2]
+							"vector": [0, 0, 0]
 						}
 					}
 				},
@@ -483,14 +474,11 @@
 				"root": {
 					"scale": {
 						"0.0": {
-							"vector": [0.2, 0.2, 0.2],
-							"easing": "easeOutBack",
-							"easingArgs": [3]
+							"vector": [0.2, 0.2, 0.2]
 						},
 						"1.0": {
 							"vector": [1, 1, 1],
-							"easing": "easeInOutBack",
-							"easingArgs": [2]
+							"easing": "easeOutQuint"
 						}
 					}
 				}
