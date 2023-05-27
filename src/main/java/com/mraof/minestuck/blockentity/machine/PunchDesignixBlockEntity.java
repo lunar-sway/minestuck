@@ -122,7 +122,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 				ItemStack output = AlchemyHelper.getDecodedItem(heldStack);
 				if(output.is(MSTags.Items.UNREADABLE) && !AlchemyHelper.isReadableCard(heldStack))
 				{
-					player.displayClientMessage(Component.translatable(REJECT_CARD).withStyle(ChatFormatting.BOLD), true);
+					player.displayClientMessage(Component.translatable(REJECT_CARD), true);
 				return; //card unreadable
 				}
 				if(AlchemyHelper.isPunchedCard(getCard()))    //|| combination

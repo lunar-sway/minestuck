@@ -1747,6 +1747,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(PunchDesignixBlockEntity.REJECT_CARD, "On closer inspection, the code on the back seems to be almost unreadable");
 		add(IntellibeamLaserstationBlockEntity.DECODING_PROGRESS, "Decoding Progress: %s");
+		add(IntellibeamLaserstationBlockEntity.CAPTCHA_DECODED, "The captcha on the card is now readable");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(GoButton.GO, "GO");
@@ -2354,7 +2355,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");
 		addSubtitles("intellibeam_laserstation_remove_card", "Intellibeam ejects card");
-		addSubtitles("intellibeam_laserstation_exp_add", "Intellibeam absorbs experience");
+		addSubtitles("intellibeam_laserstation_exp_gather", "Intellibeam absorbs experience");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");

@@ -5,7 +5,6 @@ import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.util.CustomVoxelShape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -30,28 +29,13 @@ import java.util.Map;
 
 public class IntellibeamLaserstationBlock extends MachineBlock implements EntityBlock
 {
-	private Map<Direction, VoxelShape> shape = MSBlockShapes.INTELLIBEAM_LAZERSTATION.createRotatedShapes();
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.INTELLIBEAM_LAZERSTATION.createRotatedShapes();
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	public IntellibeamLaserstationBlock(Properties builder)
 	{
 		super(builder);
 		registerDefaultState(defaultBlockState().setValue(HAS_CARD, false));
-	}
-	
-	@Nullable
-	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
-	{
-		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.INTELLIBEAM_LASERSTATION.get(), IntellibeamLaserstationBlockEntity::serverTick) : null;
-	}
-	
-	
-	@Nullable
-	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-	{
-		return new IntellibeamLaserstationBlockEntity(pos, state);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -66,15 +50,43 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 		return InteractionResult.SUCCESS;
 	}
 	
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> placedType)
+	{
+		return !level.isClientSide ? BlockUtil.checkTypeForTicker(placedType, MSBlockEntityTypes.INTELLIBEAM_LASERSTATION.get(), IntellibeamLaserstationBlockEntity::serverTick) : null;
+	}
+	
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
+	{
+		return new IntellibeamLaserstationBlockEntity(pos, state);
+	}
+	
 	@Override
 	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
 	{
-		if(!level.isClientSide && level.getBlockEntity(pos) instanceof IntellibeamLaserstationBlockEntity intelibeamEntity)
+		if(!level.isClientSide && level.getBlockEntity(pos) instanceof IntellibeamLaserstationBlockEntity intellibeamEntity)
 		{
-			intelibeamEntity.dropCard(true, level, pos, intelibeamEntity.getCard());
+			intellibeamEntity.dropCard(true, level, pos, intellibeamEntity.getAnalyzedCard());
 		}
 		
 		super.playerWillDestroy(level, pos, state, player);
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	{
+		return SHAPE.get(state.getValue(FACING));
+	}
+	
+	@Override
+	@SuppressWarnings("deprecation")
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	{
+		return SHAPE.get(state.getValue(FACING));
 	}
 	
 	@Override
@@ -83,20 +95,4 @@ public class IntellibeamLaserstationBlock extends MachineBlock implements Entity
 		super.createBlockStateDefinition(builder);
 		builder.add(HAS_CARD);
 	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		return shape.get(state.getValue(FACING));
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		return shape.get(state.getValue(FACING));
-	}
-	
-	
 }
