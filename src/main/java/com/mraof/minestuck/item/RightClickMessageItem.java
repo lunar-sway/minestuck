@@ -40,14 +40,14 @@ public class RightClickMessageItem extends Item
 			{
 				Item offhandItem = playerIn.getItemInHand(InteractionHand.OFF_HAND).getItem();
 				Optional<ResourceKey<Item>> resourceKey = offhandItem.builtInRegistryHolder().unwrapKey();
-				resourceKey.ifPresent(key -> captchas.captchaFromItem(key.location().toString()));
+				resourceKey.ifPresent(key -> captchas.captchaFromItem(key.location().toString(), level));
 				
 			} else
 			{
 				for(ItemStack iteratedItem : playerIn.inventoryMenu.getItems())
 				{
 					Optional<ResourceKey<Item>> resourceKey = iteratedItem.getItem().builtInRegistryHolder().unwrapKey();
-					resourceKey.ifPresent(key -> captchas.captchaFromItem(key.location().toString()));
+					resourceKey.ifPresent(key -> captchas.captchaFromItem(key.location().toString(), level));
 				}
 			}
 		}
