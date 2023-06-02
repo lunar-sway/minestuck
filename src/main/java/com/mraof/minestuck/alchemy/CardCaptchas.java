@@ -2,33 +2,39 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
+/**
+ * Handles the creation of, and look up of, captcha codes for each registered item in the given world.
+ * The captcha is arrived at by hashing the registry name string, which gets some additional randomization via world seed.
+ * Two worlds with the same seed will produce the same captcha for a given registered item, expect in some rare instances where there was hash collision.
+ */
 public class CardCaptchas
 {
-	//TODO backupCaptchas are susceptible to changes on different world loads and modpack lists
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
 	
 	private static final Logger LOGGER = LogManager.getLogger();
+	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	
-	private static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
+	private static final BiMap<String, String> registryMap = HashBiMap.create();
 	
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
 	
-	private final BiMap<String, String> registryMap;
+	private final Random seedRandomizer;
 	
-	public CardCaptchas()
+	public CardCaptchas(ServerLevel level)
 	{
-		registryMap = HashBiMap.create();
+		this.seedRandomizer = new Random(level.getSeed());
 		generateBackupCaptchas();
 	}
 	
@@ -44,9 +50,9 @@ public class CardCaptchas
 			byte[] hashBytes = digest.digest(inputBytes); //Compute the hash
 			
 			// Convert the hash to a hexadecimal string
-			for(byte b : hashBytes)
+			for(byte bytes : hashBytes)
 			{
-				String hex = String.format("%02x", b);
+				String hex = String.format("%02x", bytes);
 				hexString.append(hex);
 			}
 		} catch(NoSuchAlgorithmException exception)
@@ -56,30 +62,38 @@ public class CardCaptchas
 		
 		return hexString.toString();
 	}
-	//world a ver 1, load 1-2
-	//minecraft:air=xVo5arco, minestuck:eightball=qZ4DnIGU, minestuck:telescopic_sassacrusher=JELSeFdI, minestuck:democratic_demolitioner=qWPmBvv4, minestuck:wrinklefucker=zU?Tci2r, minestuck:pogo_hammer=4NrROKEV, minestuck:blacksmith_hammer=RJm06mlh, minestuck:mailbox=deFnOSOI, minestuck:sledge_hammer=IxDjt1uX, minestuck:claw_hammer=M?R8DHVf, minestuck:horizontal_green_stone_bricks=BGcfLuiQ, minestuck:jar_of_bugs=an5JF2h7, minestuck:green_stone_bricks=mSqqKab!, minestuck:onion=LX!hbm6h, minestuck:green_stone_column=yEtYmPzD, minestuck:black_crown_stained_glass=ji?URhAC, minestuck:checkered_stained_glass=yrP11Wd?, minestuck:black_pawn_stained_glass=29U9H9nR, minestuck:white_crown_stained_glass=8y8fH57?, minestuck:wireless_redstone_receiver=wuJe3iRQ, geckolib3:geckoarmor_chest=ny92q4uK, geckolib3:geckoarmor_head=299O?bDk, minestuck:bright_dense_cloud=3LP!XDFe, minestuck:chocolate_beetle=xRS8q!66, minestuck:cone_of_flies=SymczBJF, minestuck:grasshopper=?YjJtH7l, minestuck:cicada=Ty?dkKwo, minestuck:bug_mac=uzazwoRg, minestuck:salad=dmXkszuR, geckolib3:fertilizer=?MgdrIoP, geckolib3:habitat=jFwWg1Pc, geckolib3:geckoarmor_leggings=kKtETPVb, minestuck:netherrack_coal_ore=stvfB1jo, minestuck:end_stone_redstone_ore=VJSNifAA, minestuck:coarse_stone_bricks=Dyt234QJ, minestuck:shade_column=dsmt0yib, minestuck:frost_bricks=GYqbrUZb
 	
-	//world b ver 1, load 1-2
+	public static String getCaptcha(String registryName)
+	{
+		return registryMap.getOrDefault(registryName, null);
+	}
+	
+	public void iterateThroughRegistry()
+	{
+		registryMap.clear();
+		
+		//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
+		for(Iterator<Map.Entry<ResourceKey<Item>, Item>> it = ForgeRegistries.ITEMS.getEntries().stream().iterator(); it.hasNext(); )
+		{
+			createItemsCaptcha(it.next().getKey().location().toString());
+		}
+		
+		LOGGER.debug("Captcha map: {}", registryMap);
+	}
 	
 	/**
 	 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
 	 * There is some simple collision detection and backup captchas for redundancy
 	 */
-	public void captchaFromItem(String registryName, Level level)
+	public void createItemsCaptcha(String registryName)
 	{
-		if(level.getServer() == null)
-			return;
-		
-		long worldSeed = level.getServer().overworld().getSeed();
-		Random seedRandom = new Random(worldSeed);
-		
-		//no need to run through the rest of the code if the registered item is already handled
+		//prevents reassignment of captcha to given item
 		if(registryMap.containsKey(registryName))
 			return;
 		
 		String fullHash = createHash(registryName);
 		
-		String shuffledHash = shuffleHash(seedRandom, fullHash);
+		String shuffledHash = shuffleHash(fullHash);
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
@@ -87,8 +101,6 @@ public class CardCaptchas
 			captcha = getBackupCaptcha();
 		
 		registryMap.put(registryName, captcha); //adding an entry
-		
-		LOGGER.debug("\nRegistry name: {}\nCaptcha: {}\nHash: {}\nMap: {}", registryName, captcha, fullHash, registryMap);
 	}
 	
 	/**
@@ -105,8 +117,6 @@ public class CardCaptchas
 			int decimalValue = Integer.parseInt(hashSegment, 16);
 			int charValue = decimalValue % 64;
 			
-			LOGGER.debug("{}, {}", hashSegment, charValue);
-			
 			captchaBuilder.append(AVAILABLE_CHARACTERS.charAt(charValue));
 		}
 		
@@ -116,14 +126,15 @@ public class CardCaptchas
 	/**
 	 * Turns the hash string into a char array in order to reorganize the contents based on the world seed
 	 */
-	private String shuffleHash(Random random, String fullHash)
+	private String shuffleHash(String fullHash)
 	{
 		char[] characters = fullHash.toCharArray();
 		
 		for(int currentIndex = 0; currentIndex < characters.length; currentIndex++)
 		{
-			int randIndex = random.nextInt(currentIndex + 1);
-			// Swap characters at indices currentIndex and randIndex
+			int randIndex = seedRandomizer.nextInt(currentIndex + 1);
+			
+			//swap characters at indices currentIndex and randIndex
 			char temp = characters[currentIndex];
 			characters[currentIndex] = characters[randIndex];
 			characters[randIndex] = temp;
@@ -142,12 +153,11 @@ public class CardCaptchas
 		for(int captchaIterate = 0; captchaIterate < 50; captchaIterate++)
 		{
 			StringBuilder captcha = new StringBuilder(8);
-			Random random = new Random();
 			
 			//randomly picks the first 7 characters
 			for(int i = 0; i < 7; i++)
 			{
-				int index = random.nextInt(AVAILABLE_CHARACTERS.length());
+				int index = seedRandomizer.nextInt(AVAILABLE_CHARACTERS.length());
 				char randomChar = AVAILABLE_CHARACTERS.charAt(index);
 				captcha.append(randomChar);
 			}

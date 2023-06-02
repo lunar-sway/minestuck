@@ -1,9 +1,11 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.CardCaptchas;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class CaptchaCardItem extends Item
 {
@@ -42,7 +45,8 @@ public class CaptchaCardItem extends Item
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
+	{
 		
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		
@@ -50,8 +54,7 @@ public class CaptchaCardItem extends Item
 		{
 			AlchemyHelper.removeItemFromCard(stack);
 			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
-		}
-		else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
+		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
 	}
 	
 	@Override
@@ -70,6 +73,18 @@ public class CaptchaCardItem extends Item
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
+				else if(AlchemyHelper.isReadableCard(stack))
+				{
+					Optional<ResourceKey<Item>> resourceKey = content.getItem().builtInRegistryHolder().unwrapKey();
+					
+					if(resourceKey.isPresent())
+					{
+						String captcha = CardCaptchas.getCaptcha(resourceKey.get().location().toString());
+						if(captcha != null)
+							tooltip.add(Component.literal(captcha));
+					}
+					//TODO use obfuscated characters for unreadable unpunched card
+				}
 			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
 			tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));

@@ -7,6 +7,7 @@ import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -85,9 +86,19 @@ public class AlchemyHelper
 		
 	}
 	
-	public static boolean isReadableCard(ItemStack readItem)
+	public static boolean isReadableCard(ItemStack card)
 	{
-		return isPunchedCard(readItem) || (readItem.is(MSItems.CAPTCHA_CARD.get()) && readItem.hasTag() && readItem.getTag().getBoolean("decoded"));
+		if(hasDecodedItem(card))
+			return false;
+		
+		if(card.is(MSItems.CAPTCHA_CARD.get()))
+		{
+			ItemStack decodedStack = getDecodedItem(card);
+			
+			//either has decoded nbt or isnt in UNREADABLE item tag to begin with
+			return (decodedStack.hasTag() && decodedStack.getTag().getBoolean("decoded")) || !decodedStack.is(MSTags.Items.UNREADABLE);
+		} else
+			return false;
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)
