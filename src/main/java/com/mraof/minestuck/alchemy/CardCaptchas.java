@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -23,8 +24,8 @@ public class CardCaptchas
 {
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
 	
-	private static final Logger LOGGER = LogManager.getLogger();
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
+	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
 	private static final BiMap<String, String> registryMap = HashBiMap.create();
 	
@@ -93,15 +94,14 @@ public class CardCaptchas
 	{
 		registryMap.clear();
 		
-		//TODO add generic cube code(treated as constant)
+		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
+		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 		
 		//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
 		for(Iterator<Map.Entry<ResourceKey<Item>, Item>> it = ForgeRegistries.ITEMS.getEntries().stream().iterator(); it.hasNext(); )
 		{
 			createItemsCaptcha(it.next().getKey().location().toString());
 		}
-		
-		LOGGER.debug("Captcha map: {}", registryMap);
 	}
 	
 	/**
@@ -124,6 +124,13 @@ public class CardCaptchas
 			captcha = getBackupCaptcha();
 		
 		registryMap.put(registryName, captcha); //adding an entry
+	}
+	
+	private void predetermineCaptcha(Item item, String captcha)
+	{
+		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
+		
+		resourceKey.ifPresent(itemResourceKey -> registryMap.put(itemResourceKey.location().toString(), captcha));
 	}
 	
 	/**

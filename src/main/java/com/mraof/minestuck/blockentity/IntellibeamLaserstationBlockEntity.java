@@ -179,6 +179,26 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		super.load(nbt);
 		setCard(ItemStack.of(nbt.getCompound("card")));
 		storedExperience = nbt.getInt("experience_level");
+		/*
+		if(nbt.contains("programs"))
+		{
+			if (nbt.contains("programs", Tag.TAG_INT_ARRAY))
+			{
+				for(int id : nbt.getIntArray("programs"))
+					installedPrograms.add(id);
+			}
+			else
+			{
+				CompoundTag programs = nbt.getCompound("programs");
+				for(String name : programs.getAllKeys())
+					installedPrograms.add(programs.getInt(name));
+			}
+		}
+		
+		latestmessage.clear();
+		for(int id : installedPrograms)
+			latestmessage.put(id, nbt.getString("text" + id));
+		 */
 	}
 	
 	@Override
@@ -187,6 +207,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		super.saveAdditional(compound);
 		compound.put("card", analyzedCard.save(new CompoundTag()));
 		compound.putInt("experience_level", storedExperience);
+		//compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
 	}
 	
 	private void updateState()

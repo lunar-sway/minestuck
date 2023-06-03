@@ -64,10 +64,13 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	public void setCaptcha(String captcha)
 	{
-		this.captcha = captcha;
-		BlockState state = level.getBlockState(worldPosition);
-		this.setChanged();
-		level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_CLIENTS);
+		if(level != null && !level.isClientSide)
+		{
+			this.captcha = captcha;
+			this.setChanged();
+			BlockState state = level.getBlockState(worldPosition);
+			level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+		}
 	}
 	
 	public void breakMachine()
@@ -149,6 +152,10 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			{
 				setCaptcha(CardCaptchas.getCaptchaFromItem(AlchemyHelper.getDecodedItem(heldStack).getItem()));
 				effects(false);
+			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.getDecodedItem(heldStack).isEmpty())
+			{
+				setCaptcha(CardCaptchas.EMPTY_CARD_CAPTCHA);
+				effects(false);
 			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && !AlchemyHelper.isReadableCard(heldStack))
 				player.displayClientMessage(Component.translatable(REJECT_CARD), true); //card unreadable
 		}
@@ -158,7 +165,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	{
 		Item itemFromCaptcha = CardCaptchas.getItemFromCaptcha(captcha);
 		
-		if(itemFromCaptcha != null)
+		if(itemFromCaptcha != null && !getCard().isEmpty())
 		{
 			ItemStack captchaItemStack = itemFromCaptcha.getDefaultInstance();
 			ItemStack storedStackInCard = AlchemyHelper.getDecodedItem(getCard());
@@ -227,7 +234,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		broken = nbt.getBoolean("broken");
 		setCard(ItemStack.of(nbt.getCompound("card")));
 		
-		if(nbt.contains(captcha))
+		//TODO it doesnt seem to save correctly
+		if(nbt.contains("captcha"))
 			setCaptcha(nbt.getString("captcha"));
 	}
 	
@@ -251,7 +259,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	@Override
 	public void handleUpdateTag(CompoundTag tag)
 	{
-		setCaptcha(tag.getString("captcha"));
+		if(tag.contains("captcha"))
+			setCaptcha(tag.getString("captcha"));
 	}
 	
 	@Override

@@ -72,18 +72,33 @@ public class CaptchaCardItem extends Item
 				if(AlchemyHelper.isPunchedCard(stack))
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
-					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
-				else if(AlchemyHelper.isReadableCard(stack))
 				{
-					String captcha = CardCaptchas.getCaptchaFromItem(content.getItem());
+					String captcha = getCaptcha(stack, content);
 					if(captcha != null)
 						tooltip.add(Component.literal(captcha));
 					
-					//TODO use obfuscated characters for unreadable unpunched card
+					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
+				} else
+				{
+					String captcha = getCaptcha(stack, content);
+					if(captcha != null)
+						tooltip.add(Component.literal(captcha));
 				}
 			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
+		{
+			tooltip.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
 			tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
+		}
+	}
+	
+	//TODO consider obfuscated characters for unreadable unpunched card
+	private String getCaptcha(ItemStack decodedStack, ItemStack content)
+	{
+		if(AlchemyHelper.isReadableCard(decodedStack))
+			return CardCaptchas.getCaptchaFromItem(content.getItem());
+		
+		return null;
 	}
 	
 	private Component makeTooltipInfo(Component info)

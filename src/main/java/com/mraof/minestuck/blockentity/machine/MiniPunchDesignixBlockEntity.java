@@ -74,7 +74,10 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	
 	private boolean contentsValid()
 	{
-		if (!itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty())
+		boolean bothHaveItems = !itemHandler.getStackInSlot(0).isEmpty() && !itemHandler.getStackInSlot(1).isEmpty();
+		boolean bothAreReadable = AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(0)) && (AlchemyHelper.isReadableCard(itemHandler.getStackInSlot(1)) || AlchemyHelper.getDecodedItem(itemHandler.getStackInSlot(1)).isEmpty());
+		
+		if(bothHaveItems && bothAreReadable)
 		{
 			ItemStack output = createResult();
 			if(output.isEmpty())
@@ -82,8 +85,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 			
 			ItemStack currentOutput = itemHandler.getStackInSlot(2);
 			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.tagMatches(currentOutput, output));
-		}
-		else
+		} else
 		{
 			return false;
 		}
@@ -146,7 +148,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 			public ItemStack extractItem(int slot, int amount, boolean simulate)
 			{
 				if(itemHandler.getStackInSlot(2).isEmpty())
-					return ItemStack.EMPTY;	//Only allow extraction from slot 0 from below when slot 2 isn't empty
+					return ItemStack.EMPTY;    //Only allow extraction from slot 0 from below when slot 2 isn't empty
 				return super.extractItem(slot, amount, simulate);
 			}
 		};
