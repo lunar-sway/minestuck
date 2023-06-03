@@ -1772,6 +1772,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
+		add(PunchDesignixScreen.ENTER_CAPTCHA_MESSAGE, "Enter captcha");
+		add(PunchDesignixScreen.PUNCH_MESSAGE, "PUNCH");
 		add(AreaEffectScreen.TITLE, "Area Effect Block");
 		add(AreaEffectScreen.MIN_POS_MESSAGE, "Min Pos Facing Offset");
 		add(AreaEffectScreen.MAX_POS_MESSAGE, "Max Pos Facing Offset");

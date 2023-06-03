@@ -88,7 +88,7 @@ public class AlchemyHelper
 	
 	public static boolean isReadableCard(ItemStack card)
 	{
-		if(hasDecodedItem(card))
+		if(!hasDecodedItem(card))
 			return false;
 		
 		if(card.is(MSItems.CAPTCHA_CARD.get()))
@@ -96,7 +96,7 @@ public class AlchemyHelper
 			ItemStack decodedStack = getDecodedItem(card);
 			
 			//either has decoded nbt or isnt in UNREADABLE item tag to begin with
-			return (decodedStack.hasTag() && decodedStack.getTag().getBoolean("decoded")) || !decodedStack.is(MSTags.Items.UNREADABLE);
+			return (card.hasTag() && card.getTag().getBoolean("decoded")) || !decodedStack.is(MSTags.Items.UNREADABLE);
 		} else
 			return false;
 	}

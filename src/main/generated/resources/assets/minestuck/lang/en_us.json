@@ -2070,6 +2070,8 @@
   "minestuck.program.server.server_active_message": "Server with your name exists",
   "minestuck.program.settings.theme": "Theme: %s",
   "minestuck.program.settings.title": "Sburb Settings",
+  "minestuck.punch_designix.enter_captcha": "Enter captcha",
+  "minestuck.punch_designix.punch": "PUNCH",
   "minestuck.receiver_now_auto_reset": "Receiver will now unpower itself automatically.",
   "minestuck.receiver_now_not_auto_reset": "Receiver will now store the highest input power indefinitely.",
   "minestuck.remote_observer": "Remote Observer",

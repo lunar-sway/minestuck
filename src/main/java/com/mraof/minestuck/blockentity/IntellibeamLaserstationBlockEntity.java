@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class IntellibeamLaserstationBlockEntity extends BlockEntity
 {
+	//TODO with decodeAndEjectCard(), create a Set of registry names for items that have been successfully read
 	private static final int EXP_LEVEL_CAPACITY = 10;
 	
 	private ItemStack analyzedCard = ItemStack.EMPTY;
@@ -59,6 +60,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			{
 				takeCard(player);
 				waitTimer = 10;
+			} else if(storedExperience >= EXP_LEVEL_CAPACITY)
+			{
+				decodeAndEjectCard(player);
+				player.displayClientMessage(Component.translatable(DECODING_PROGRESS, processExperienceGuage()), true);
 			} else if(AlchemyHelper.isReadableCard(analyzedCard))
 			{
 				this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
@@ -68,10 +73,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			{
 				setCard(heldItem.split(1));
 				waitTimer = 10;
-			} else if(storedExperience >= EXP_LEVEL_CAPACITY)
-			{
-				decodeAndEjectCard(player);
-				player.displayClientMessage(Component.translatable(DECODING_PROGRESS, processExperienceGuage()), true);
 			} else
 			{
 				addExperience(player);

@@ -7,7 +7,6 @@ import com.mraof.minestuck.util.MSRotationUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -53,11 +52,9 @@ public class PunchDesignixBlock extends MultiMachineBlock<PunchDesignixMultibloc
 	@SuppressWarnings("deprecation")
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
-		if (level.isClientSide)
-			return InteractionResult.SUCCESS;
 		BlockPos mainPos = getMainPos(state, pos);
 		if (level.getBlockEntity(mainPos) instanceof PunchDesignixBlockEntity designix)
-			designix.onRightClick((ServerPlayer) player, state);
+			designix.onRightClick(player, state);
 		return InteractionResult.SUCCESS;
 	}
 	

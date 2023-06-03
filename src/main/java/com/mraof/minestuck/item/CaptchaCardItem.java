@@ -75,14 +75,10 @@ public class CaptchaCardItem extends Item
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
 				else if(AlchemyHelper.isReadableCard(stack))
 				{
-					Optional<ResourceKey<Item>> resourceKey = content.getItem().builtInRegistryHolder().unwrapKey();
+					String captcha = CardCaptchas.getCaptchaFromItem(content.getItem());
+					if(captcha != null)
+						tooltip.add(Component.literal(captcha));
 					
-					if(resourceKey.isPresent())
-					{
-						String captcha = CardCaptchas.getCaptcha(resourceKey.get().location().toString());
-						if(captcha != null)
-							tooltip.add(Component.literal(captcha));
-					}
 					//TODO use obfuscated characters for unreadable unpunched card
 				}
 			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));

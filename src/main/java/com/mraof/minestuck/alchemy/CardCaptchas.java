@@ -3,6 +3,7 @@ package com.mraof.minestuck.alchemy;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -68,9 +69,31 @@ public class CardCaptchas
 		return registryMap.getOrDefault(registryName, null);
 	}
 	
+	/**
+	 * Gets the registry name of the item and then returns its captcha or else returns null
+	 */
+	public static String getCaptchaFromItem(Item item)
+	{
+		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
+		
+		return resourceKey.map(itemResourceKey -> CardCaptchas.getCaptcha(itemResourceKey.location().toString())).orElse(null);
+	}
+	
+	public static Item getItemFromCaptcha(String captcha)
+	{
+		String registryName = registryMap.inverse().get(captcha);
+		
+		if(registryName == null)
+			return null;
+		
+		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
+	}
+	
 	public void iterateThroughRegistry()
 	{
 		registryMap.clear();
+		
+		//TODO add generic cube code(treated as constant)
 		
 		//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
 		for(Iterator<Map.Entry<ResourceKey<Item>, Item>> it = ForgeRegistries.ITEMS.getEntries().stream().iterator(); it.hasNext(); )
