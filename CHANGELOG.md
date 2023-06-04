@@ -9,11 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Cinnamon Sword
-- Intellibeam Lazerstation
-- Unreadable tag
-- Decoded tag
+- Captcha codes for all registered items (put in tooltip if it is legible)
+- Intellibeam Laserstation and accompanying UNREADABLE Item Tag for gating certain item captcha codes via "legibility"
+- GUI for Punch Designix for manually inputting and punching captcha codes
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
+
+### Changed
+
+- Right-clicking a Punch Designix with a captchalogue card now sets the Designix's stored captcha code if the captcha code is, or has been made, legible
+- Mini Punch Designix now requires captcha cards whose codes are, or have been made, legible
 
 ### Fixed
 
@@ -21,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila
+- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 

@@ -1747,7 +1747,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
 		add(PunchDesignixBlockEntity.REJECT_CARD, "On closer inspection, the code on the back seems to be almost unreadable");
 		add(IntellibeamLaserstationBlockEntity.DECODING_PROGRESS, "Decoding Progress: %s");
-		add(IntellibeamLaserstationBlockEntity.CAPTCHA_DECODED, "The captcha on the card is now readable");
+		add(IntellibeamLaserstationBlockEntity.CAPTCHA_DECODED, "It seems like the card is readable now");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
 		add(GoButton.GO, "GO");

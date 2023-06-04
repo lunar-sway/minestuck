@@ -291,7 +291,7 @@
   "block.minestuck.hubtop": "Hubtop",
   "block.minestuck.instant_tnt": "Instant TNT",
   "block.minestuck.intellibeam_laserstation": "Intellibeam Laserstation",
-  "block.minestuck.intellibeam_laserstation.captcha_decoded": "The captcha on the card is now readable",
+  "block.minestuck.intellibeam_laserstation.captcha_decoded": "It seems like the card is readable now",
   "block.minestuck.intellibeam_laserstation.decoding_progress": "Decoding Progress: %s",
   "block.minestuck.item_magnet": "Item Magnet",
   "block.minestuck.item_magnet.additional_info": "- Length of area impacted by magnetism is proportional to power\n- Can be toggled to alternate pushing and pulling\n- Moves items/xp/grist entities by default\n- Can also lift and then move pushable blocks",
