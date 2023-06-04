@@ -64,7 +64,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	public void setCaptcha(String captcha)
 	{
-		if(level != null && !level.isClientSide)
+		//when there is a check to prevent client side changes here, it has issues
+		if(level != null)
 		{
 			this.captcha = captcha;
 			this.setChanged();

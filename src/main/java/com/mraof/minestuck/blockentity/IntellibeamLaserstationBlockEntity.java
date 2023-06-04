@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -8,6 +9,8 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -19,17 +22,20 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class IntellibeamLaserstationBlockEntity extends BlockEntity
 {
-	//TODO with decodeAndEjectCard(), create a Set of registry names for items that have been successfully read
-	private static final int EXP_LEVEL_CAPACITY = 10;
-	
-	private ItemStack analyzedCard = ItemStack.EMPTY;
-	private int storedExperience = 0;
-	private int waitTimer = 0;
-	
 	public static final String DECODING_PROGRESS = "block.minestuck.intellibeam_laserstation.decoding_progress";
 	public static final String CAPTCHA_DECODED = "block.minestuck.intellibeam_laserstation.captcha_decoded";
+	
+	private static final int EXP_LEVEL_CAPACITY = 10;
+	
+	private final Map<String, Integer> storedDecodings = new HashMap<>();
+	
+	private ItemStack analyzedCard = ItemStack.EMPTY;
+	private int waitTimer = 0;
 	
 	public IntellibeamLaserstationBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -60,10 +66,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			{
 				takeCard(player);
 				waitTimer = 10;
-			} else if(storedExperience >= EXP_LEVEL_CAPACITY)
-			{
-				decodeAndEjectCard(player);
-				player.displayClientMessage(Component.translatable(DECODING_PROGRESS, processExperienceGuage()), true);
 			} else if(AlchemyHelper.isReadableCard(analyzedCard))
 			{
 				this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
@@ -73,6 +75,9 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			{
 				setCard(heldItem.split(1));
 				waitTimer = 10;
+			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
+			{
+				decodeAndEjectCard(player);
 			} else
 			{
 				addExperience(player);
@@ -82,12 +87,21 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
+	private Integer getCardItemExperience()
+	{
+		return storedDecodings.getOrDefault(getCardItemName(), 0);
+	}
+	
+	private String getCardItemName()
+	{
+		return CardCaptchas.getRegistryNameFromItem(AlchemyHelper.getDecodedItem(analyzedCard).getItem());
+	}
+	
 	public void decodeAndEjectCard(Player player)
 	{
 		applyDecodedTag(analyzedCard);
 		takeCard(player);
 		
-		storedExperience = 0;
 		waitTimer = 10;
 	}
 	
@@ -99,7 +113,7 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		
 		for(int i = 0; i < numberOfBars; i++)
 		{
-			if(i < storedExperience)
+			if(i < getCardItemExperience())
 				stringChars[i] = '▮';
 			else
 				stringChars[i] = '▯';
@@ -161,7 +175,11 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		if(player.getMainHandItem().isEmpty() && !analyzedCard.isEmpty())
 		{
 			player.giveExperienceLevels(-1);
-			storedExperience += 1;
+
+			String analyzedCardName = getCardItemName();
+			int storedExperience = storedDecodings.getOrDefault(analyzedCardName, 0);
+			storedDecodings.put(analyzedCardName, storedExperience + 1);
+			
 			float soundScale = storedExperience / 10F;
 			
 			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_EXP_GATHER.get(), SoundSource.BLOCKS, 0.5F, 1F + soundScale);
@@ -178,27 +196,13 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	{
 		super.load(nbt);
 		setCard(ItemStack.of(nbt.getCompound("card")));
-		storedExperience = nbt.getInt("experience_level");
-		/*
-		if(nbt.contains("programs"))
-		{
-			if (nbt.contains("programs", Tag.TAG_INT_ARRAY))
-			{
-				for(int id : nbt.getIntArray("programs"))
-					installedPrograms.add(id);
-			}
-			else
-			{
-				CompoundTag programs = nbt.getCompound("programs");
-				for(String name : programs.getAllKeys())
-					installedPrograms.add(programs.getInt(name));
-			}
-		}
 		
-		latestmessage.clear();
-		for(int id : installedPrograms)
-			latestmessage.put(id, nbt.getString("text" + id));
-		 */
+		ListTag list = nbt.getList("storedDecodings", Tag.TAG_COMPOUND);
+		for(int i = 0; i < list.size(); i++)
+		{
+			CompoundTag itemProgress = list.getCompound(i);
+			storedDecodings.put(itemProgress.getString("registryName"), itemProgress.getInt("storedExperience"));
+		}
 	}
 	
 	@Override
@@ -206,8 +210,16 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	{
 		super.saveAdditional(compound);
 		compound.put("card", analyzedCard.save(new CompoundTag()));
-		compound.putInt("experience_level", storedExperience);
-		//compound.put("programs", new IntArrayTag(installedPrograms.stream().toList()));
+		
+		ListTag listTag = new ListTag();
+		for(Map.Entry<String, Integer> entry : storedDecodings.entrySet())
+		{
+			CompoundTag itemProgress = new CompoundTag();
+			itemProgress.putString("registryName", entry.getKey());
+			itemProgress.putInt("storedExperience", entry.getValue());
+			listTag.add(itemProgress);
+		}
+		compound.put("storedDecodings", listTag);
 	}
 	
 	private void updateState()

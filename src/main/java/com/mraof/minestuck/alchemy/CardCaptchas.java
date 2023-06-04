@@ -8,8 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -27,7 +25,7 @@ public class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static final BiMap<String, String> registryMap = HashBiMap.create();
+	private static final BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
 	
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
@@ -67,7 +65,7 @@ public class CardCaptchas
 	
 	public static String getCaptcha(String registryName)
 	{
-		return registryMap.getOrDefault(registryName, null);
+		return REGISTRY_MAP.getOrDefault(registryName, null);
 	}
 	
 	/**
@@ -75,14 +73,23 @@ public class CardCaptchas
 	 */
 	public static String getCaptchaFromItem(Item item)
 	{
+		String registryName = getRegistryNameFromItem(item);
+		if(registryName != null)
+			return CardCaptchas.getCaptcha(registryName);
+		else
+			return null;
+	}
+	
+	public static String getRegistryNameFromItem(Item item)
+	{
 		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
 		
-		return resourceKey.map(itemResourceKey -> CardCaptchas.getCaptcha(itemResourceKey.location().toString())).orElse(null);
+		return resourceKey.map(itemResourceKey -> itemResourceKey.location().toString()).orElse(null);
 	}
 	
 	public static Item getItemFromCaptcha(String captcha)
 	{
-		String registryName = registryMap.inverse().get(captcha);
+		String registryName = REGISTRY_MAP.inverse().get(captcha);
 		
 		if(registryName == null)
 			return null;
@@ -92,7 +99,7 @@ public class CardCaptchas
 	
 	public void iterateThroughRegistry()
 	{
-		registryMap.clear();
+		REGISTRY_MAP.clear();
 		
 		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
 		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
@@ -111,7 +118,7 @@ public class CardCaptchas
 	public void createItemsCaptcha(String registryName)
 	{
 		//prevents reassignment of captcha to given item
-		if(registryMap.containsKey(registryName))
+		if(REGISTRY_MAP.containsKey(registryName))
 			return;
 		
 		String fullHash = createHash(registryName);
@@ -120,17 +127,17 @@ public class CardCaptchas
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
-		if(registryMap.containsValue(captcha))
+		if(REGISTRY_MAP.containsValue(captcha))
 			captcha = getBackupCaptcha();
 		
-		registryMap.put(registryName, captcha); //adding an entry
+		REGISTRY_MAP.put(registryName, captcha); //adding an entry
 	}
 	
 	private void predetermineCaptcha(Item item, String captcha)
 	{
 		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
 		
-		resourceKey.ifPresent(itemResourceKey -> registryMap.put(itemResourceKey.location().toString(), captcha));
+		resourceKey.ifPresent(itemResourceKey -> REGISTRY_MAP.put(itemResourceKey.location().toString(), captcha));
 	}
 	
 	/**
