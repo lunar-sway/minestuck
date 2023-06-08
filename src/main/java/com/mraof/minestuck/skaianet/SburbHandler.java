@@ -228,7 +228,7 @@ public final class SburbHandler
 			//Title style message
 			player.connection.send(new ClientboundSetTitlesAnimationPacket(90, 150, 40)); //large fade in time and total length to offset lag
 			player.connection.send(new ClientboundSetTitleTextPacket(Component.empty())); //clears preexisting titles
-			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asComponent()));
+			player.connection.send(new ClientboundSetSubtitleTextPacket(landTypes.asLandFontComponent()));
 		}
 	}
 	
