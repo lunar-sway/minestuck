@@ -42,7 +42,6 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.furnace.FurnaceFuelBurnTimeEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -63,13 +62,6 @@ public class ServerEventHandler
 	{
 		ConsortDialogue.serverStarting();
 		lastDay = event.getServer().overworld().getGameTime() / 24000L;
-	}
-	
-	@SubscribeEvent
-	public static void serverStarted(ServerStartedEvent event)
-	{
-		CardCaptchas captchas = new CardCaptchas(event.getServer().overworld());
-		captchas.iterateThroughRegistry();
 	}
 	
 	@SubscribeEvent

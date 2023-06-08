@@ -2,11 +2,16 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.Item;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.security.MessageDigest;
@@ -18,6 +23,7 @@ import java.util.*;
  * The captcha is arrived at by hashing the registry name string, which gets some additional randomization via world seed.
  * Two worlds with the same seed will produce the same captcha for a given registered item, expect in some rare instances where there was hash collision.
  */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class CardCaptchas
 {
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
@@ -25,7 +31,7 @@ public class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static final BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
+	private static BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
 	
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
@@ -37,6 +43,20 @@ public class CardCaptchas
 		this.seedRandomizer = new Random(level.getSeed());
 		generateBackupCaptchas();
 	}
+	
+	@SubscribeEvent
+	public static void serverStarted(ServerStartedEvent event)
+	{
+		CardCaptchas captchas = new CardCaptchas(event.getServer().overworld());
+		captchas.iterateThroughRegistry();
+	}
+	
+	/*@SubscribeEvent
+	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
+	{
+		SendCaptchasPacket packet = SendCaptchasPacket.createPacket(REGISTRY_MAP); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
+		MSPacketHandler.sendToTracking(packet, event.getEntity());
+	}*/
 	
 	public String createHash(String registryName)
 	{

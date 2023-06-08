@@ -81,7 +81,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			} else
 			{
 				addExperience(player);
-				player.displayClientMessage(Component.translatable(DECODING_PROGRESS, processExperienceGuage()), true);
 				waitTimer = 10;
 			}
 		}
@@ -174,7 +173,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 		if(player.getMainHandItem().isEmpty() && !analyzedCard.isEmpty())
 		{
-			player.giveExperienceLevels(-1);
+			if(!player.isCreative())
+				player.giveExperienceLevels(-1);
 
 			String analyzedCardName = getCardItemName();
 			int storedExperience = storedDecodings.getOrDefault(analyzedCardName, 0);
@@ -183,6 +183,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 			float soundScale = storedExperience / 10F;
 			
 			this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_EXP_GATHER.get(), SoundSource.BLOCKS, 0.5F, 1F + soundScale);
+			
+			player.displayClientMessage(Component.translatable(DECODING_PROGRESS, processExperienceGuage()), true);
 		}
 	}
 	
