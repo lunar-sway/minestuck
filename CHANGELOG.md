@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cinnamon Sword
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
+- New in-game font called "Land of Copyleft and Freedom"
+
+### Changed
+
+- Font used for on-screen message when Entering is now "Land of Copyleft and Freedom"
 
 ### Fixed
 
@@ -19,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila
+- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
