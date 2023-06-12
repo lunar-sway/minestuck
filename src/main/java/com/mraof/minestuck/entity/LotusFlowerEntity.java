@@ -56,6 +56,9 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 	private static final int OPEN_IDLE_LENGTH = 240;    //4 sec idle animation * 3 loops * 20 ticks/sec = 240
 	private static final int VANISHING_LENGTH = 13;        //0.65 sec vanish animation * 20 ticks/sec = 13
 	
+	//because eventTimer can be of arbitrary length, the Idle and Growth animations occupy negative values
+	//Growth (-23 to -2) -> Idle (-1) -> Open (0 to 119) -> Open Idle (120 to 359) -> Vanish (360 to 372) -> Empty (373 to 6000 by default)
+	
 	// Animation start times
 	private static final int IDLE_TIME = -1;
 	private static final int GROWTH_STOP = IDLE_TIME - 1;
@@ -139,7 +142,7 @@ public class LotusFlowerEntity extends LivingEntity implements IAnimatable, IEnt
 			
 			if(eventTimer == OPEN_IDLE_START)
 				spawnLoot();
-			else if(eventTimer >= MinestuckConfig.SERVER.lotusRestorationTime.get() * 20) //600(default) seconds from animation start to flower restoration
+			else if(eventTimer >= MinestuckConfig.SERVER.lotusRestorationTime.get() * 20) //300(default) seconds from animation start to flower restoration
 				setEventTimer(GROWTH_START);
 			else if(eventTimer == GROWTH_STOP)
 				setEventTimer(IDLE_TIME);
