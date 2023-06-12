@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Minestuck-1.19.2-1.10.3.0] - 2023-06-12
+## [1.19.2-1.10.3.0] - 2023-06-12
 
 ### Added
 
