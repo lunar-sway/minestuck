@@ -11,6 +11,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cinnamon Sword
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
+- New growing animation for lotus flower
+
+### Changed
+
+- Lotus flowers now regrow after 5 minutes instead of 10 by default
+- Lotus flower has been remodeled and given changes to existing animations
 
 ### Fixed
 
