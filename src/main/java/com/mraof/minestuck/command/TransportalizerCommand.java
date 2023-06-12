@@ -33,12 +33,15 @@ public class TransportalizerCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("tpz").requires(commandSource -> commandSource.hasPermission(2))
-				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code").toUpperCase(Locale.ROOT)))
+				.then(Commands.argument("code", StringArgumentType.word()).executes(context -> teleport(context.getSource(), Collections.singleton(context.getSource().getEntityOrException()), StringArgumentType.getString(context, "code")))
 				.then(Commands.argument("targets", EntityArgument.entities()).executes(context -> teleport(context.getSource(), EntityArgument.getEntities(context, "targets"), StringArgumentType.getString(context, "code"))))));
 	}
 	
 	private static int teleport(CommandSourceStack source, Collection<? extends Entity> entities, String code) throws CommandSyntaxException
 	{
+		//TODO allow the command to accept special characters like "♥" which can be used as valid transportalizer codes
+		code = code.toUpperCase(Locale.ROOT); //prevents case sensitivity issues since actual transportalizer codes are caps only
+		
 		GlobalPos destination = TransportalizerSavedData.get(source.getServer()).get(code);
 		if(destination == null)
 			throw NOT_FOUND_EXCEPTION.create(code);
