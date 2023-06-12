@@ -138,7 +138,7 @@ public class MinestuckConfig
 			dialogueRenewalSpeed = builder.comment("Determines how quickly consort dialogue and store stocks are renewed.")
 					.defineInRange("dialogueRenewalSpeed", 2, 0, 1000);
 			lotusRestorationTime = builder.comment("Determines how many seconds it takes for the lotus blossom to regrow after the opening process has started.")
-					.defineInRange("lotusRestorationTime", 600, 30, Integer.MAX_VALUE);
+					.defineInRange("lotusRestorationTime", 300, 30, Integer.MAX_VALUE);
 			hardMode = builder.define("hardMode", false);
 			builder.pop();
 			
