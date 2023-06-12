@@ -11,15 +11,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Cinnamon Sword
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
+- New growing animation for lotus flower
+
+### Changed
+
+- Lotus flowers now regrow after 5 minutes instead of 10 by default
+- Lotus flower has been remodeled and given changes to existing animations
 
 ### Fixed
 
 - Basilisks can now despawn again
 - Clarity issues with gutter related items
+- /tpz command now works with TRANSportalizers
+- /tpz command code argument is no longer case sensitive
 
 ### Contributors for this release
 
-- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila
+- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akisephila, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
