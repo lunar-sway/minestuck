@@ -14,13 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
 - New growing animation for lotus flower
-- New in-game font called "Land of Copyleft and Freedom"
 
 ### Changed
 
 - Lotus flowers now regrow after 5 minutes instead of 10 by default
 - Lotus flower has been remodeled and given changes to existing animations
-- Font used for on-screen message when Entering is now "Land of Copyleft and Freedom"
+- Font used for on-screen message when Entering is now the newly created "Land of Copyleft and Freedom"
 
 ### Fixed
 
