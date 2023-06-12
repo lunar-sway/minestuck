@@ -7,6 +7,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -124,14 +125,14 @@ public final class LandTypePair
 			else return Component.translatable("land." +  loopingGet(landTypes.getTitle().getNames(), titleNameIndex));
 		}
 		
-		public Component asComponent()
+		public MutableComponent asComponent()
 		{
 			return Component.translatable(LandTypePair.FORMAT, landName(true), landName(false));
 		}
 		
-		public Component asLandFontComponent()
+		public Component asComponentWithLandFont()
 		{
-			return Component.translatable(LandTypePair.FORMAT, landName(true), landName(false)).withStyle(LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
+			return asComponent().withStyle(LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
 		}
 		
 		private static String loopingGet(String[] names, int index)
