@@ -15,4 +15,5 @@ public class MSParticleType
 	public static final DeferredRegister<ParticleType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<SimpleParticleType> TRANSPORTALIZER = REGISTER.register("transportalizer", () -> new SimpleParticleType(false));
+	public static final RegistryObject<SimpleParticleType> PLASMA = REGISTER.register("plasma", () -> new SimpleParticleType(false));
 }

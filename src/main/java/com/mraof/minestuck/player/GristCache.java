@@ -3,6 +3,7 @@ package com.mraof.minestuck.player;
 import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
+import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.GristCachePacket;
@@ -11,12 +12,13 @@ import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -30,6 +32,8 @@ import java.util.Objects;
  */
 public final class GristCache
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private final PlayerData data;
 	private final MinecraftServer mcServer;
 	private ImmutableGristSet gristSet;
@@ -38,7 +42,7 @@ public final class GristCache
 	{
 		this.data = data;
 		this.mcServer = mcServer;
-		this.gristSet = new ImmutableGristSet(GristTypes.BUILD, 20);
+		this.gristSet = new GristAmount(GristTypes.BUILD, 20);
 	}
 	
 	public static GristCache get(ServerPlayer player)
@@ -67,19 +71,21 @@ public final class GristCache
 		{
 			long amountInCache = this.getGristSet().getGrist(type);
 			if(amountInCache < capacity)
-				capacitySet.addGrist(type, capacity - amountInCache);
+				capacitySet.add(type, capacity - amountInCache);
 		}
 		return capacitySet;
 	}
 	
 	void read(CompoundTag nbt)
 	{
-		gristSet = NonNegativeGristSet.read(nbt.getList("grist_cache", Tag.TAG_COMPOUND)).asImmutable();
+		gristSet = ImmutableGristSet.NON_NEGATIVE_CODEC.parse(NbtOps.INSTANCE, nbt.get("grist_cache"))
+				.resultOrPartial(LOGGER::error).orElse(GristSet.EMPTY);
 	}
 	
 	void write(CompoundTag nbt)
 	{
-		nbt.put("grist_cache", gristSet.write(new ListTag()));
+		ImmutableGristSet.NON_NEGATIVE_CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet)
+				.resultOrPartial(LOGGER::error).ifPresent(tag -> nbt.put("grist_cache", tag));
 	}
 	
 	public ImmutableGristSet getGristSet()
@@ -94,17 +100,17 @@ public final class GristCache
 	
 	public boolean canAfford(GristSet cost)
 	{
-		return canAdd(cost.copy().scale(-1));
+		return canAdd(cost.mutableCopy().scale(-1));
 	}
 	
 	public boolean canAdd(GristSet addition)
 	{
-		return addWithinCapacity(this.gristSet.copy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
+		return addWithinCapacity(this.gristSet.mutableCopy(), addition, data.getEcheladder().getGristCapacity()).isEmpty();
 	}
 	
 	public static boolean canAfford(GristSet source, GristSet cost, long limit)
 	{
-		return addWithinCapacity(source.copy(), cost.copy().scale(-1), limit).isEmpty();
+		return addWithinCapacity(source.mutableCopy(), cost.mutableCopy().scale(-1), limit).isEmpty();
 	}
 	
 	/**
@@ -116,11 +122,11 @@ public final class GristCache
 	 */
 	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet change = cost.copy().scale(-1);
+		MutableGristSet change = cost.mutableCopy().scale(-1);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{
@@ -144,7 +150,7 @@ public final class GristCache
 	 */
 	public void addWithGutter(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
-		GristSet overflowedGrist = this.addWithinCapacity(set, source);
+		MutableGristSet overflowedGrist = this.addWithinCapacity(set, source);
 		
 		if(!overflowedGrist.isEmpty())
 		{
@@ -159,7 +165,7 @@ public final class GristCache
 			if(player != null && !overflowedGrist.isEmpty())
 			{
 				int gusherCount = player.getRandom().nextInt(6) > 0 ? 1 : 2;
-				overflowedGrist.spawnGristEntities(player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
+				GristEntity.spawnGristEntities(overflowedGrist, player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
 						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
 			}
 		}
@@ -172,19 +178,19 @@ public final class GristCache
 	 * @param source The source of this change. If not null, a grist toast will be displayed for this change and source.
 	 * @return any grist that did not fit in the cache.
 	 */
-	public GristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
+	public MutableGristSet addWithinCapacity(GristSet set, @Nullable GristHelper.EnumSource source)
 	{
 		Objects.requireNonNull(set);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		GristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
+		MutableGristSet excessGrist = addWithinCapacity(newCache, set, data.getEcheladder().getGristCapacity());
 		
 		if(!excessGrist.equalContent(set))
 		{
 			this.set(newCache);
 			if(source != null)
-				GristToastPacket.notify(mcServer, data.identifier, set.copy().addGrist(excessGrist.copy().scale(-1)), source);
+				GristToastPacket.notify(mcServer, data.identifier, set.mutableCopy().add(excessGrist.mutableCopy().scale(-1)), source);
 		}
 		
 		return excessGrist;
@@ -203,12 +209,11 @@ public final class GristCache
 	
 	void sendPacket(ServerPlayer player)
 	{
-		GristSet gristSet = this.getGristSet();
 		
 		//Send to the player
 		if(player != null)
 		{
-			GristCachePacket packet = new GristCachePacket(gristSet, false);
+			GristCachePacket packet = new GristCachePacket(this.getGristSet(), false);
 			MSPacketHandler.sendToPlayer(packet, player);
 		}
 		
@@ -229,31 +234,31 @@ public final class GristCache
 	 * This function should be able to handle a grist type already being out of bounds, for which it would behave as if it was right at the bound.
 	 * Returns any excess grist.
 	 */
-	private static GristSet addWithinCapacity(GristSet target, GristSet source, long capacity)
+	private static MutableGristSet addWithinCapacity(MutableGristSet target, GristSet source, long capacity)
 	{
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
-		GristSet remainder = new GristSet();
+		MutableGristSet remainder = new MutableGristSet();
 		
-		for(GristAmount amount : source.getAmounts())
+		for(GristAmount amount : source.asAmounts())
 		{
-			if(amount.getAmount() > 0)
+			if(amount.amount() > 0)
 			{
-				long toAdd = Mth.clamp(capacity - target.getGrist(amount.getType()), 0, amount.getAmount());
-				long remainingAmount = amount.getAmount() - toAdd;
+				long toAdd = Mth.clamp(capacity - target.getGrist(amount.type()), 0, amount.amount());
+				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.getType(), toAdd);
+					target.add(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.getType(), remainingAmount);
-			} else if(amount.getAmount() < 0)
+					remainder.add(amount.type(), remainingAmount);
+			} else if(amount.amount() < 0)
 			{
-				long toAdd = Mth.clamp(-target.getGrist(amount.getType()), amount.getAmount(), 0);
-				long remainingAmount = amount.getAmount() - toAdd;
+				long toAdd = Mth.clamp(-target.getGrist(amount.type()), amount.amount(), 0);
+				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
-					target.addGrist(amount.getType(), toAdd);
+					target.add(amount.type(), toAdd);
 				if(remainingAmount != 0)
-					remainder.addGrist(amount.getType(), remainingAmount);
+					remainder.add(amount.type(), remainingAmount);
 			}
 		}
 		

@@ -6,7 +6,6 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.blockentity.machine.GristCollectorBlockEntity;
-import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.GristCache;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

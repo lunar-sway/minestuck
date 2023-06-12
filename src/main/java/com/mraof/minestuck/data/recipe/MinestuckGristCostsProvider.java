@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristCost;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristType;

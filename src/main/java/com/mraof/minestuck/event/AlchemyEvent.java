@@ -1,9 +1,10 @@
 package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -15,7 +16,7 @@ public class AlchemyEvent extends Event
 	private final BlockEntity alchemiter;
 	private final ItemStack dowel;
 	private ItemStack result;
-	private final GristSet cost;
+	private final ImmutableGristSet cost;
 	
 	public AlchemyEvent(PlayerIdentifier player, BlockEntity alchemiter, ItemStack dowel, ItemStack result, GristSet cost)
 	{

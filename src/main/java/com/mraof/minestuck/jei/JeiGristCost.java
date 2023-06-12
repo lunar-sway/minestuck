@@ -1,6 +1,7 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.Objects;
@@ -29,9 +30,9 @@ public abstract class JeiGristCost
 	
 	public static class Set extends JeiGristCost
 	{
-		private final GristSet set;
+		private final ImmutableGristSet set;
 		
-		public Set(Ingredient ingredient, GristSet set)
+		public Set(Ingredient ingredient, ImmutableGristSet set)
 		{
 			super(ingredient);
 			this.set = Objects.requireNonNull(set);

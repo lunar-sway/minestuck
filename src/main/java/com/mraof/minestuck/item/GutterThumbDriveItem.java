@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.PlayerSavedData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class GutterThumbDriveItem extends Item
 {
+	public static final String GREATER_INCREASE = "message.gutter.increase";
 	public GutterThumbDriveItem(Properties properties)
 	{
 		super(properties);
@@ -43,6 +45,7 @@ public class GutterThumbDriveItem extends Item
 			level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BELL_RESONATE, SoundSource.PLAYERS, 0.5F, 0.3F);
 			level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_IRON, SoundSource.PLAYERS, 0.2F, 0.6F);
 			itemStack.shrink(1);
+			player.displayClientMessage(Component.translatable(GREATER_INCREASE).withStyle(ChatFormatting.BOLD), true);
 			
 			if(player instanceof ServerPlayer serverPlayer)
 			{

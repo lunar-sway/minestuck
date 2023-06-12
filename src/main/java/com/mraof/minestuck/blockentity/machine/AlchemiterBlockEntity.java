@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
@@ -12,13 +13,17 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSParticleType;
+import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -287,11 +292,17 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 			
 			while(quantity > 0)
 			{
+				ServerLevel blockLevel = (ServerLevel) this.level;
+				
 				ItemStack stack = newItem.copy();
 				stack.setCount(Math.min(stack.getMaxStackSize(), quantity));
 				quantity -= stack.getCount();
 				ItemEntity item = new ItemEntity(level, spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), stack);
 				level.addFreshEntity(item);
+				
+				if(blockLevel != null)
+					blockLevel.sendParticles(MSParticleType.PLASMA.get(), spawnPos.getX(), spawnPos.getY() + 0.5, spawnPos.getZ(), 1, 0, 0, 0, 0);
+				level.playSound(null, this.getBlockPos(), MSSoundEvents.ALCHEMITER_RESONATE.get(), SoundSource.BLOCKS, 1F, 1F);
 			}
 		}
 	}
@@ -299,16 +310,13 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	public GristSet getGristCost(int quantity)
 	{
 		ItemStack dowel = getDowel();
-		GristSet set;
 		ItemStack stack = getOutput();
 		if(dowel.isEmpty() || level == null)
 			return null;
 		
 		stack.setCount(quantity);
 		//get the grist cost of stack
-		set = GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
-		
-		return set;
+		return GristCostRecipe.findCostForItem(stack, getWildcardGrist(), false, level);
 	}
 	
 	public GristType getWildcardGrist()

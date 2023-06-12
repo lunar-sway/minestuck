@@ -2,7 +2,7 @@ package com.mraof.minestuck.entity.underling;
 
 import com.mojang.math.Vector3d;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.FireballShootGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
@@ -109,7 +109,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public GristSet getGristSpoils()
+	public MutableGristSet getGristSpoils()
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 6);
 	}
@@ -145,10 +145,6 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	public boolean canBeCollidedWith()
 	{
 		return true;
-	}
-	
-	public void checkDespawn()
-	{
 	}
 	
 	@Override

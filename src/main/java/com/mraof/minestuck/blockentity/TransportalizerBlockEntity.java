@@ -2,6 +2,7 @@ package com.mraof.minestuck.blockentity;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.util.MSParticleType;
+import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
@@ -15,6 +16,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Nameable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -186,6 +188,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 				
 				if(originLevel != null)
 					originLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), getBlockPos().getX() + 0.5, getBlockPos().getY() + 1, getBlockPos().getZ() + 0.5, 1, 0, 0, 0, 0);
+				this.level.playSound(null, this.getBlockPos(), MSSoundEvents.TRANSPORTALIZER_TELEPORT.get(), SoundSource.BLOCKS, 1F, 1F);
 				destinationLevel.sendParticles(MSParticleType.TRANSPORTALIZER.get(), destination.pos().getX() + 0.5, destination.pos().getY() + 1, destination.pos().getZ() + 0.5, 1, 0, 0, 0, 0);
 			}
 		}
