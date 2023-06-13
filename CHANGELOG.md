@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.10.3.0] - 2023-06-12
+
 ### Added
 
 - Cinnamon Sword
@@ -17,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Lotus flowers now regrow after 5 minutes instead of 10 by default
 - Lotus flower has been remodeled and given changes to existing animations
+- Font used for on-screen message when Entering is now the newly created "Land of Copyleft and Freedom"
 
 ### Fixed
 

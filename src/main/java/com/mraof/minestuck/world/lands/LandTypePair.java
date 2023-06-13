@@ -7,6 +7,8 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -25,6 +27,10 @@ public final class LandTypePair
 			TerrainLandType.CODEC.fieldOf("terrain").forGetter(LandTypePair::getTerrain),
 			TitleLandType.CODEC.fieldOf("title").forGetter(LandTypePair::getTitle)).apply(instance, LandTypePair::new));
 	
+	/**
+	 * Custom font made by Riotmode. Similar to Carima used for "Land of _ and _" in comic. Font size of 4 is smaller than default of 11
+	 */
+	public static final Style LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE = Style.EMPTY.withFont(new ResourceLocation("minestuck", "land_of_copyleft_and_freedom"));
 	public static final String FORMAT = "land.format";
 	
 	public LandTypePair(TerrainLandType terrainType, TitleLandType titleType)
@@ -119,9 +125,14 @@ public final class LandTypePair
 			else return Component.translatable("land." +  loopingGet(landTypes.getTitle().getNames(), titleNameIndex));
 		}
 		
-		public Component asComponent()
+		public MutableComponent asComponent()
 		{
 			return Component.translatable(LandTypePair.FORMAT, landName(true), landName(false));
+		}
+		
+		public Component asComponentWithLandFont()
+		{
+			return asComponent().withStyle(LAND_OF_COPYLEFT_AND_FREEDOM_FONT_STYLE);
 		}
 		
 		private static String loopingGet(String[] names, int index)
