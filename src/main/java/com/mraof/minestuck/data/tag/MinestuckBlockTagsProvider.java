@@ -97,8 +97,8 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		
 		needsWoodPickaxe(SANDSTONE_COLUMN.get(), CHISELED_SANDSTONE_COLUMN.get(), RED_SANDSTONE_COLUMN.get(), CHISELED_RED_SANDSTONE_COLUMN.get());
 		
-		tag(MINEABLE_WITH_AXE).add(UNCARVED_WOOD.get(), CHIPBOARD.get());
-		tag(NEEDS_STONE_TOOL).add(UNCARVED_WOOD.get(), CHIPBOARD.get());
+		tag(MINEABLE_WITH_AXE).add(UNCARVED_WOOD.get(), CHIPBOARD.get(), CARVED_HEAVY_PLANKS.get());
+		tag(NEEDS_STONE_TOOL).add(UNCARVED_WOOD.get(), CHIPBOARD.get(), CARVED_HEAVY_PLANKS.get());
 		tag(MINEABLE_WITH_SHOVEL).add(WOOD_SHAVINGS.get());
 		needsWoodPickaxe(SPIKES.get());
 		
