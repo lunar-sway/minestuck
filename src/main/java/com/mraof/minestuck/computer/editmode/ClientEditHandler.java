@@ -3,6 +3,7 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
@@ -100,7 +101,7 @@ public final class ClientEditHandler
 		
 	}
 	
-	protected static GristSet itemCost(ItemStack stack, Level level)
+	static GristSet itemCost(ItemStack stack, Level level)
 	{
 		ClientDeployList.Entry deployEntry = ClientDeployList.getEntry(stack);
 		if(deployEntry != null)
@@ -118,11 +119,11 @@ public final class ClientEditHandler
 			return;
 		}
 		
-		for(GristAmount amount : cost.getAmounts())
+		for(GristAmount amount : cost.asAmounts())
 		{
-			GristType grist = amount.getType();
-			ChatFormatting color = amount.getAmount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
-			toolTip.add(Component.literal(amount.getAmount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			GristType grist = amount.type();
+			ChatFormatting color = amount.amount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
+			toolTip.add(Component.literal(amount.amount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
 			toolTip.add(Component.translatable(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));

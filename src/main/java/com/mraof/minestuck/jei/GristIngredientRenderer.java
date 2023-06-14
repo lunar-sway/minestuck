@@ -24,7 +24,7 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 		RenderSystem.enableBlend();
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, ingredient.getType().getIcon());
+		RenderSystem.setShaderTexture(0, ingredient.type().getIcon());
 		
 		Matrix4f pose = matrixStack.last().pose();
 		BufferBuilder render = Tesselator.getInstance().getBuilder();
@@ -42,8 +42,8 @@ public class GristIngredientRenderer implements IIngredientRenderer<GristAmount>
 	public List<Component> getTooltip(GristAmount ingredient, TooltipFlag tooltipFlag)
 	{
 		List<Component> list = new ArrayList<>();
-		list.add(ingredient.getType().getDisplayName());
-		list.add(Component.literal(String.valueOf(ingredient.getType())).withStyle(ChatFormatting.DARK_GRAY));
+		list.add(ingredient.type().getDisplayName());
+		list.add(Component.literal(String.valueOf(ingredient.type())).withStyle(ChatFormatting.DARK_GRAY));
 		return list;
 	}
 }

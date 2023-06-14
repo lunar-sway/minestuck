@@ -6,13 +6,17 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -23,6 +27,8 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class GristGutter
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	public static final int GUTTER_CAPACITY = 10000;
 	
 	private final Session session;
@@ -36,22 +42,21 @@ public class GristGutter
 		this.gristTotal = 0;
 	}
 	
-	public GristGutter(Session session, ListTag listTag)
+	public GristGutter(Session session, Tag tag)
 	{
 		this.session = session;
-		this.gristSet = NonNegativeGristSet.read(listTag);
+		this.gristSet = NonNegativeGristSet.CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(LOGGER::error).orElse(new NonNegativeGristSet());
 		this.gristTotal = 0;
-		for(GristAmount amount : this.gristSet.getAmounts())
-			this.gristTotal += amount.getAmount();
+		for(GristAmount amount : this.gristSet.asAmounts())
+			this.gristTotal += amount.amount();
 	}
 	
-	public ListTag write()
+	public Tag write()
 	{
-		return this.gristSet.write(new ListTag());
+		return NonNegativeGristSet.CODEC.encodeStart(NbtOps.INSTANCE, this.gristSet).resultOrPartial(LOGGER::error).orElse(EndTag.INSTANCE);
 	}
 	
-	
-	public ImmutableGristSet getCache()
+	public GristSet getCache()
 	{
 		return gristSet.asImmutable();
 	}
@@ -78,30 +83,30 @@ public class GristGutter
 	 * Any grist that was added to the gutter will be removed from the given grist set,
 	 * and any grist that did not fit in the gutter will therefore remain in that grist set.
 	 */
-	public void addGristFrom(GristSet set)
+	public void addGristFrom(MutableGristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
+		for(GristAmount amount : set.asAmounts())
 		{
-			GristType type = amount.getType();
+			GristType type = amount.type();
 			long maximumAllowed = getRemainingCapacity();
 			
 			if(maximumAllowed <= 0)
 				return;
 			
-			long amountToAdd = Math.min(maximumAllowed, amount.getAmount());
-			set.addGrist(type, -amountToAdd);
+			long amountToAdd = Math.min(maximumAllowed, amount.amount());
+			set.add(type, -amountToAdd);
 			this.addGristInternal(type, amountToAdd);
 		}
 	}
 	
 	/**
 	 * Adds the grist to the gutter without checking the capacity. Should only be done if it is certain that the grist should fit within the capacity.
-	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(GristSet)}.
+	 * To add grist to the gutter with the capacity check, see {@link #addGristFrom(MutableGristSet)}.
 	 */
 	public void addGristUnchecked(GristSet set)
 	{
-		for(GristAmount amount : set.getAmounts())
-			this.addGristInternal(amount.getType(), amount.getAmount());
+		for(GristAmount amount : set.asAmounts())
+			this.addGristInternal(amount.type(), amount.amount());
 	}
 	
 	/**
@@ -110,25 +115,25 @@ public class GristGutter
 	 */
 	private void addGristInternal(GristType type, long amount)
 	{
-		this.gristSet.addGrist(type, amount);
+		this.gristSet.add(type, amount);
 		this.gristTotal += amount;
 	}
 	
-	public GristSet takeFraction(double fraction)
+	public MutableGristSet takeFraction(double fraction)
 	{
-		GristSet takenGrist = new GristSet();
+		MutableGristSet takenGrist = new MutableGristSet();
 		double extraGrist = 0;
 		
-		for(GristAmount gristAmount : this.gristSet.getAmounts())
+		for(GristAmount gristAmount : this.gristSet.asAmounts())
 		{
 			// add extraGrist to compensate for errors in the previous amounts
-			double takenAmount = extraGrist + fraction*gristAmount.getAmount();
+			double takenAmount = extraGrist + fraction*gristAmount.amount();
 			long actualAmount = Math.round(takenAmount);
 			// update extraGrist with the new error
 			extraGrist = takenAmount - actualAmount;
 			
-			takenGrist.addGrist(gristAmount.getType(), actualAmount);
-			this.addGristInternal(gristAmount.getType(), -actualAmount);
+			takenGrist.add(gristAmount.type(), actualAmount);
+			this.addGristInternal(gristAmount.type(), -actualAmount);
 		}
 		
 		return takenGrist;
@@ -166,8 +171,8 @@ public class GristGutter
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
 		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
-		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		MutableGristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
+		MutableGristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}
@@ -177,22 +182,22 @@ public class GristGutter
 		return 1D/20D;
 	}
 	
-	private GristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
+	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
 		long remaining = amount;
-		GristSet takenGrist = new GristSet();
-		List<GristAmount> amounts = new ArrayList<>(capacity.getAmounts());
+		MutableGristSet takenGrist = new MutableGristSet();
+		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
 		
 		for(GristAmount capacityAmount : amounts)
 		{
-			GristType type = capacityAmount.getType();
+			GristType type = capacityAmount.type();
 			long amountInGutter = this.gristSet.getGrist(type);
 			if(amountInGutter > 0)
 			{
-				long takenAmount = Math.min(remaining, Math.min(capacityAmount.getAmount(), amountInGutter));
+				long takenAmount = Math.min(remaining, Math.min(capacityAmount.amount(), amountInGutter));
 				this.addGristInternal(type, -takenAmount);
-				takenGrist.addGrist(type, takenAmount);
+				takenGrist.add(type, takenAmount);
 				remaining -= takenAmount;
 				if(remaining <= 0)
 					break;

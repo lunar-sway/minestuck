@@ -1,10 +1,10 @@
 package com.mraof.minestuck.item.crafting;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.generator.ContainerGristCost;
-import com.mraof.minestuck.alchemy.generator.SourceGristCost;
-import com.mraof.minestuck.alchemy.generator.recipe.RecipeGeneratedGristCost;
+import com.mraof.minestuck.alchemy.recipe.*;
+import com.mraof.minestuck.alchemy.recipe.generator.ContainerGristCost;
+import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
+import com.mraof.minestuck.alchemy.recipe.generator.recipe.RecipeGeneratedGristCost;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;

@@ -166,7 +166,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	//used when getting how much grist should be dropped on death
-	public abstract GristSet getGristSpoils();
+	public abstract MutableGristSet getGristSpoils();
 	
 	protected abstract int getVitalityGel();
 	
@@ -182,7 +182,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		super.remove(reason);
 		if(reason == RemovalReason.KILLED)
 		{
-			GristSet grist = this.getGristSpoils();
+			MutableGristSet grist = this.getGristSpoils();
 			if(grist == null)
 				return;
 			if(fromSpawner)
@@ -190,23 +190,23 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 			
 			if(!dropCandy)
 			{
-				for(GristAmount gristAmount : grist.getAmounts())
+				for(GristAmount gristAmount : grist.asAmounts())
 				{
-					if(gristAmount.getAmount() > 0)
+					if(gristAmount.amount() > 0)
 						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), gristAmount));
 				}
 			} else
 			{
-				for(GristAmount gristType : grist.getAmounts())
+				for(GristAmount gristType : grist.asAmounts())
 				{
-					int candy = (int) Math.min(64, (gristType.getAmount() + 2) / 4);
-					long gristAmount = gristType.getAmount() - candy * 2;
-					ItemStack candyItem = gristType.getType().getCandyItem();
+					int candy = (int) Math.min(64, (gristType.amount() + 2) / 4);
+					long gristAmount = gristType.amount() - candy * 2;
+					ItemStack candyItem = gristType.type().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
 						this.level.addFreshEntity(new ItemEntity(level, randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.getType(), gristAmount)));
+						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.type(), gristAmount)));
 				}
 			}
 			
