@@ -36,6 +36,7 @@ public class MSPacketHandler
 		registerMessage(EditmodeCacheLimitPacket.class, EditmodeCacheLimitPacket::decode);
 		registerMessage(TitleDataPacket.class, TitleDataPacket::decode);
 		registerMessage(LandTypesDataPacket.class, LandTypesDataPacket::decode);
+		registerMessage(ShareCaptchasPacket.class, ShareCaptchasPacket::decode);
 		
 		registerMessage(CaptchaDeckPacket.class, CaptchaDeckPacket::decode);
 		registerMessage(ColorSelectPacket.class, ColorSelectPacket::decode);

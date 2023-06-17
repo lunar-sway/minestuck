@@ -2,11 +2,17 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.ShareCaptchasPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
@@ -23,7 +29,7 @@ import java.util.*;
  * The captcha is arrived at by hashing the registry name string, which gets some additional randomization via world seed.
  * Two worlds with the same seed will produce the same captcha for a given registered item, expect in some rare instances where there was hash collision.
  */
-@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CardCaptchas
 {
 	//TODO use of the character "#" not canonically accurate and suggests there are more punch holes in a captchalogue card then there actually are
@@ -31,7 +37,7 @@ public class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
+	private static final BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
 	
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
@@ -51,12 +57,23 @@ public class CardCaptchas
 		captchas.iterateThroughRegistry();
 	}
 	
-	/*@SubscribeEvent
+	@SubscribeEvent
 	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
 	{
-		SendCaptchasPacket packet = SendCaptchasPacket.createPacket(REGISTRY_MAP); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
-		MSPacketHandler.sendToTracking(packet, event.getEntity());
-	}*/
+		Player player = event.getEntity();
+		MinecraftServer server = player.getServer();
+		if(server != null)
+			MSPacketHandler.sendToPlayer(createShareCaptchasPacket(), (ServerPlayer) player);
+	}
+	
+	private static ShareCaptchasPacket createShareCaptchasPacket()
+	{
+		ImmutableMap.Builder<String, String> builder = new ImmutableMap.Builder<>();
+		
+		builder.putAll(REGISTRY_MAP);
+		
+		return new ShareCaptchasPacket(builder.build());
+	}
 	
 	public String createHash(String registryName)
 	{
@@ -245,5 +262,11 @@ public class CardCaptchas
 		
 		backupCaptchas.remove(pickedCaptcha);
 		return pickedCaptcha;
+	}
+	
+	public static void receivePacket(ShareCaptchasPacket packet)
+	{
+		REGISTRY_MAP.clear();
+		REGISTRY_MAP.putAll(packet.getCaptchas());
 	}
 }
