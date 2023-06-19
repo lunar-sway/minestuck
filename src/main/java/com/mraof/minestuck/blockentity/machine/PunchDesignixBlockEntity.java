@@ -44,13 +44,14 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	private boolean broken = false;
 	private ItemStack card = ItemStack.EMPTY;
-	private String captcha = "";
+	private String captcha;
 	
 	public static final String REJECT_CARD = "block.minestuck.punch_designix.code_rejected";
 	
 	public PunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.PUNCH_DESIGNIX.get(), pos, state);
+		this.captcha = "CCCCCCCC";
 	}
 	
 	public void setCard(ItemStack card)
@@ -65,12 +66,14 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	public void setCaptcha(String captcha)
 	{
 		//when there is a check to prevent client side changes here, it has issues
-		if(level != null)
+		if(level != null/**/ && !level.isClientSide/**/)
 		{
 			this.captcha = captcha;
-			this.setChanged();
-			BlockState state = level.getBlockState(worldPosition);
-			level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
+			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
+			//this.setChanged();
+			//updateState();
+			//BlockState state = level.getBlockState(worldPosition);
+			//level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
 		}
 	}
 	
@@ -246,14 +249,26 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		super.saveAdditional(compound);
 		compound.putBoolean("broken", this.broken);
 		compound.put("card", getCard().save(new CompoundTag()));
-		compound.putString("captcha", Objects.requireNonNullElse(this.captcha, ""));
+		compound.putString("captcha", Objects.requireNonNullElse(this.captcha, "BBBBBBBB"));
 	}
 	
 	@Override
 	public CompoundTag getUpdateTag()
 	{
+		return this.saveWithoutMetadata();
+	}
+	
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket()
+	{
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+	
+	/*@Override
+	public CompoundTag getUpdateTag()
+	{
 		CompoundTag nbt = super.getUpdateTag();
-		nbt.putString("captcha", Objects.requireNonNullElse(this.captcha, ""));
+		nbt.putString("captcha", Objects.requireNonNullElse(this.captcha, "AAAAAAAA"));
 		return nbt;
 	}
 	
@@ -274,5 +289,5 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
 	{
 		handleUpdateTag(pkt.getTag());
-	}
+	}*/
 }
