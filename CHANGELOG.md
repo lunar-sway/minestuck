@@ -15,6 +15,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - kirderf1
 
+## [1.19.2-1.10.3.1] - 2023-06-19
+
+### Fixed
+
+- Grist costs did not scale with the item count when created with alchemiters or consumed with grist widgets
+
+### Contributors for this release
+
+- kirderf1
+
 ## [1.19.2-1.10.3.0] - 2023-06-12
 
 ### Added
