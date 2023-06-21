@@ -2,6 +2,7 @@ package com.mraof.minestuck.item.weapon;
 
 import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.effects.CreativeShockEffect;
+import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
@@ -171,6 +172,57 @@ public interface OnHitEffect
 					{
 						livingEntity.knockback(0.4F, Mth.sin(playerAttacker.getYRot() * ((float) Math.PI / 180F)), -Mth.cos(playerAttacker.getYRot() * ((float) Math.PI / 180F)));
 						livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
+					}
+				}
+				
+				playerAttacker.level.playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
+				playerAttacker.sweepAttack();
+			}
+		}
+	};
+	
+	//Very similar to Sweep, but it spreads enemies sideways
+	//Currently forcibly adding the "union bust" potion effect, until someone else wants to add this effect
+	OnHitEffect SPREAD_SWEEP = (stack, target, attacker) -> {
+		if(attacker instanceof Player playerAttacker)
+		{
+			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround())
+			{
+				float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+				float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+				
+				//Player's right direction and position
+				double pRightSin = Math.sin(playerAttacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
+				double pRightCos = Math.cos(playerAttacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
+				double pX = playerAttacker.getX(), pZ = playerAttacker.getZ();
+				
+				for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(
+						LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))
+				{
+					if(livingEntity != playerAttacker && livingEntity != target && !playerAttacker.isAlliedTo(livingEntity) && (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker()) && playerAttacker.distanceToSqr(livingEntity) < 9.0D)
+					{
+						//Other entity position
+						double eX = livingEntity.getX(), eZ = livingEntity.getZ();
+						//Direction vector player - entity
+						double dirToEntityX = eX - pX, dirToEntityZ = eZ - pZ;
+						double dirMagnitude = Math.sqrt((dirToEntityX * dirToEntityX + dirToEntityZ * dirToEntityZ));
+						dirToEntityX /= dirMagnitude;
+						dirToEntityZ /= dirMagnitude;
+						//Dot product of other entity direction and player's right
+						double dot = (pRightSin * dirToEntityX) + (pRightCos * dirToEntityZ);
+						double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
+						//Knockback direction vector
+						double knockbackX = -dirToEntityX + (pRightCos * Mth.sign(dot) * expDot);
+						double knockbackZ = -dirToEntityZ + (pRightSin * Mth.sign(dot) * expDot);
+						dirMagnitude = Math.sqrt((knockbackX * knockbackX + knockbackZ * knockbackZ));
+						knockbackX /= dirMagnitude;
+						knockbackZ /= dirMagnitude;
+						
+						livingEntity.knockback(1.5f, knockbackX, knockbackZ);
+						livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
+						livingEntity.addEffect(new MobEffectInstance(MSEffects.UNION_BUST.get(), 180, 1));
 					}
 				}
 				

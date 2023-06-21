@@ -14,4 +14,6 @@ public class MSEffects
 	public static final DeferredRegister<MobEffect> REGISTER = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<CreativeShockEffect> CREATIVE_SHOCK = REGISTER.register("creative_shock", CreativeShockEffect::new);
+	
+	public static final RegistryObject<UnionBustEffect> UNION_BUST = REGISTER.register("union_bust", UnionBustEffect::new);
 }
