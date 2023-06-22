@@ -1705,7 +1705,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
-		addEffect(MSEffects.UNION_BUST, "Union Busted");
+		addEffect(MSEffects.SUSPICION, "Suspicion");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");

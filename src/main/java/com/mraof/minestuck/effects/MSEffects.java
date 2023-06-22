@@ -15,5 +15,5 @@ public class MSEffects
 	
 	public static final RegistryObject<CreativeShockEffect> CREATIVE_SHOCK = REGISTER.register("creative_shock", CreativeShockEffect::new);
 	
-	public static final RegistryObject<UnionBustEffect> UNION_BUST = REGISTER.register("union_bust", UnionBustEffect::new);
+	public static final RegistryObject<SuspicionEffect> SUSPICION = REGISTER.register("suspicion", SuspicionEffect::new);
 }
