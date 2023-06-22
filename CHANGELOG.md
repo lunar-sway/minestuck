@@ -6,8 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-## [1.19.2-1.10.4.0] - 2023-06-22
-
 ### Added
 
 - Union Buster Sword
