@@ -49,7 +49,10 @@ public class SuspicionEffect extends MobEffect
 				
 				//Push is stronger the closest each entity is
 				double pushForce = 1 / (Math.max(pushMagnitude,1));
-				pLivingEntity.push(pushX * pushForce, 0, pushZ * pushForce);
+				pLivingEntity.setDeltaMovement(
+						pLivingEntity.getDeltaMovement().x + (pushX * pushForce),
+						pLivingEntity.getDeltaMovement().y,
+						pLivingEntity.getDeltaMovement().z + (pushZ * pushForce));
 			}
 		}
 	}

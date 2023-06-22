@@ -204,7 +204,7 @@ public interface OnHitEffect
 			knockbackX /= dirMagnitude;
 			knockbackZ /= dirMagnitude;
 			
-			target.knockback(1.5f, knockbackX, knockbackZ);
+			target.knockback(0.7f, knockbackX, knockbackZ);
 		}
 	};
 	
@@ -349,7 +349,8 @@ public interface OnHitEffect
 			{
 				boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
 				boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
-				if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround())
+				if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround()
+						&& playerAttacker.getAttackStrengthScale(0) >= 1)
 				{
 					float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 					float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
