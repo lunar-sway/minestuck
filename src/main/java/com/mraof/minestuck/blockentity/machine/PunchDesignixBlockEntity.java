@@ -15,7 +15,6 @@ import com.mraof.minestuck.util.WorldEventUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -51,7 +50,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	public PunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{
 		super(MSBlockEntityTypes.PUNCH_DESIGNIX.get(), pos, state);
-		this.captcha = "CCCCCCCC";
+		this.captcha = "";
 	}
 	
 	public void setCard(ItemStack card)
@@ -70,15 +69,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		
 		this.captcha = captcha; //update regardless of side
 		
-		//when there is a check to prevent client side changes here, it has issues
 		if(!level.isClientSide)
-		{
 			level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
-			//this.setChanged();
-			//updateState();
-			//BlockState state = level.getBlockState(worldPosition);
-			//level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_ALL);
-		}
 	}
 	
 	public void breakMachine()
@@ -242,9 +234,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		broken = nbt.getBoolean("broken");
 		setCard(ItemStack.of(nbt.getCompound("card")));
 		
-		//TODO it doesnt seem to save correctly
 		if(nbt.contains("captcha"))
-			setCaptcha(nbt.getString("captcha"));
+			this.captcha = nbt.getString("captcha");
 	}
 	
 	@Override
@@ -253,7 +244,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		super.saveAdditional(compound);
 		compound.putBoolean("broken", this.broken);
 		compound.put("card", getCard().save(new CompoundTag()));
-		compound.putString("captcha", Objects.requireNonNullElse(this.captcha, "BBBBBBBB"));
+		compound.putString("captcha", this.captcha);
 	}
 	
 	@Override
@@ -267,31 +258,4 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	{
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
-	
-	/*@Override
-	public CompoundTag getUpdateTag()
-	{
-		CompoundTag nbt = super.getUpdateTag();
-		nbt.putString("captcha", Objects.requireNonNullElse(this.captcha, "AAAAAAAA"));
-		return nbt;
-	}
-	
-	@Override
-	public void handleUpdateTag(CompoundTag tag)
-	{
-		if(tag.contains("captcha"))
-			setCaptcha(tag.getString("captcha"));
-	}
-	
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket()
-	{
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-	
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt)
-	{
-		handleUpdateTag(pkt.getTag());
-	}*/
 }
