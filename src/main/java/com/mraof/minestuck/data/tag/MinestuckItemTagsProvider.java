@@ -80,6 +80,17 @@ public class MinestuckItemTagsProvider extends ItemTagsProvider
 		copy(MSTags.Blocks.LAPIS_ORES, MSTags.Items.LAPIS_ORES);
 		copy(MSTags.Blocks.DIAMOND_ORES, MSTags.Items.DIAMOND_ORES);
 		copy(MSTags.Blocks.CRUXITE_STORAGE_BLOCKS, CRUXITE_STORAGE_BLOCKS);
+		
+		tag(Tags.Items.TOOLS_SWORDS).add(EMERALD_SWORD.get()); //TODO finish filling out
+		tag(Tags.Items.TOOLS_AXES).add(EMERALD_AXE.get());
+		tag(Tags.Items.TOOLS_PICKAXES).add(EMERALD_PICKAXE.get(), MINE_AND_GRIST.get(), PROSPECTING_PICKSCYTHE.get());
+		tag(Tags.Items.TOOLS_SHOVELS).add(EMERALD_SHOVEL.get(), WOODEN_SPOON.get(), SILVER_SPOON.get(), MELONBALLER.get(), TERRAIN_FLATENATOR.get(), NOSFERATU_SPOON.get(), THRONGLER.get(), CROCKER_SPOON.get());
+		tag(Tags.Items.TOOLS_HOES).add(EMERALD_HOE.get(), HELLBRINGERS_HOE_INACTIVE.get(), HELLBRINGERS_HOE_ACTIVE.get());
+		tag(Tags.Items.TOOLS_TRIDENTS).add(BIDENT.get(), MEATFORK.get(), DOUBLE_ENDED_TRIDENT.get());
+		tag(Tags.Items.ARMORS_HELMETS).add(PRISMARINE_HELMET.get(), IRON_LASS_GLASSES.get());
+		tag(Tags.Items.ARMORS_CHESTPLATES).add(PRISMARINE_CHESTPLATE.get(), IRON_LASS_CHESTPLATE.get());
+		tag(Tags.Items.ARMORS_LEGGINGS).add(PRISMARINE_LEGGINGS.get(), IRON_LASS_SKIRT.get());
+		tag(Tags.Items.ARMORS_BOOTS).add(PRISMARINE_BOOTS.get(), IRON_LASS_SHOES.get());
 
 		tag(ItemTags.MUSIC_DISCS).add(MUSIC_DISC_DANCE_STAB_DANCE.get(), MUSIC_DISC_EMISSARY_OF_DANCE.get(), MUSIC_DISC_RETRO_BATTLE.get());
 		tag(DUSTS).add(MSBlocks.GLOWYSTONE_DUST.get().asItem());
