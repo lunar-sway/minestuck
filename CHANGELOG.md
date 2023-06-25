@@ -9,8 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Union Buster Sword
-- Suspicion mob effect (keeps mobs away from other mobs with this effect)
-- "SPREADING KNOCKBACK" instance and "SweepMultiEffect" method in OnHitEffect.java
+- Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 
 ### Contributors for this release
 
