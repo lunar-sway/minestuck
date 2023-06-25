@@ -77,7 +77,9 @@ public class PunchDesignixScreen extends Screen
 	{
 		if(this.captchaTextField.getValue().length() == 8)
 		{
-			PunchDesignixPacket packet = new PunchDesignixPacket(be.getBlockPos(), captchaTextField.getValue());
+			String captcha = captchaTextField.getValue();
+			be.setCaptcha(captcha);
+			PunchDesignixPacket packet = new PunchDesignixPacket(be.getBlockPos(), captcha);
 			MSPacketHandler.sendToServer(packet);
 			this.minecraft.setScreen(null);
 		}
