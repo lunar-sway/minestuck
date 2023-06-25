@@ -1408,6 +1408,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
 
+		add("message.gutter.minor_increase", "Gutter Size Increased");
+		add("message.gutter.increase", "Gutter Size Increased Greatly");
+		
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");

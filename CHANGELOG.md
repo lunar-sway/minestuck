@@ -8,25 +8,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Cinnamon Sword
 - Captcha codes for all registered items (put in tooltip if it is legible)
 - Intellibeam Laserstation and accompanying UNREADABLE Item Tag for gating certain item captcha codes via "legibility"
 - GUI for Punch Designix for manually inputting and punching captcha codes
-- Alchemiter splash particles
-- Alchemiter, Transportalizer, Totem Lathe sound effects
 
 ### Changed
 
 - Right-clicking a Punch Designix with a captchalogue card now sets the Designix's stored captcha code if the captcha code is, or has been made, legible
 - Mini Punch Designix now requires captcha cards whose codes are, or have been made, legible
 
+### Contributors for this release
+
+- DORO, Dweblenod, rose_bushes_, blankMushroom
+
+## [1.19.2-1.10.3.1] - 2023-06-19
+
 ### Fixed
 
-- Basilisks can now despawn again
+- Grist costs did not scale with the item count when created with alchemiters or consumed with grist widgets
 
 ### Contributors for this release
 
-- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akiesphila, Dweblenod
+- kirderf1
+
+## [1.19.2-1.10.3.0] - 2023-06-12
+
+### Added
+
+- Cinnamon Sword
+- Alchemiter splash particles
+- Alchemiter, Transportalizer, Totem Lathe sound effects
+- New growing animation for lotus flower
+
+### Changed
+
+- Lotus flowers now regrow after 5 minutes instead of 10 by default
+- Lotus flower has been remodeled and given changes to existing animations
+- Font used for on-screen message when Entering is now the newly created "Land of Copyleft and Freedom"
+
+### Fixed
+
+- Basilisks can now despawn again
+- Clarity issues with gutter related items
+- /tpz command now works with TRANSportalizers
+- /tpz command code argument is no longer case sensitive
+
+### Contributors for this release
+
+- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akisephila, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 
