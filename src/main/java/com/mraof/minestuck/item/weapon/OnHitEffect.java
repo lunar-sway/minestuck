@@ -186,26 +186,24 @@ public interface OnHitEffect
 		double pRightCos = Math.cos(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
 		double pX = attacker.getX(), pZ = attacker.getZ();
 		
-		if(target.isOnGround()) {
-			//Other entity position
-			double eX = target.getX(), eZ = target.getZ();
-			//Direction vector player - entity
-			double dirToEntityX = eX - pX, dirToEntityZ = eZ - pZ;
-			double dirMagnitude = Math.sqrt((dirToEntityX * dirToEntityX + dirToEntityZ * dirToEntityZ));
-			dirToEntityX /= dirMagnitude;
-			dirToEntityZ /= dirMagnitude;
-			//Dot product of other entity direction and player's right
-			double dot = (pRightSin * dirToEntityX) + (pRightCos * dirToEntityZ);
-			double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
-			//Knockback direction vector
-			double knockbackX = -dirToEntityX + (pRightCos * Mth.sign(dot) * expDot);
-			double knockbackZ = -dirToEntityZ + (pRightSin * Mth.sign(dot) * expDot);
-			dirMagnitude = Math.sqrt((knockbackX * knockbackX + knockbackZ * knockbackZ));
-			knockbackX /= dirMagnitude;
-			knockbackZ /= dirMagnitude;
-			
-			target.knockback(0.7f, knockbackX, knockbackZ);
-		}
+		//Other entity position
+		double eX = target.getX(), eZ = target.getZ();
+		//Direction vector player - entity
+		double dirToEntityX = eX - pX, dirToEntityZ = eZ - pZ;
+		double dirMagnitude = Math.sqrt((dirToEntityX * dirToEntityX + dirToEntityZ * dirToEntityZ));
+		dirToEntityX /= dirMagnitude;
+		dirToEntityZ /= dirMagnitude;
+		//Dot product of other entity direction and player's right
+		double dot = (pRightSin * dirToEntityX) + (pRightCos * dirToEntityZ);
+		double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
+		//Knockback direction vector
+		double knockbackX = -dirToEntityX + (pRightCos * Mth.sign(dot) * expDot);
+		double knockbackZ = -dirToEntityZ + (pRightSin * Mth.sign(dot) * expDot);
+		dirMagnitude = Math.sqrt((knockbackX * knockbackX + knockbackZ * knockbackZ));
+		knockbackX /= dirMagnitude;
+		knockbackZ /= dirMagnitude;
+		
+		target.knockback(0.7f, knockbackX, knockbackZ);
 	};
 	
 	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
@@ -343,7 +341,8 @@ public interface OnHitEffect
 	}
 	
 	//Nearly identical to Sweep, but it applies an optional array of effects
-	static OnHitEffect SweepMultiEffect(OnHitEffect...effects) {
+	static OnHitEffect SweepMultiEffect(OnHitEffect... effects)
+	{
 		return (stack, target, attacker) -> {
 			if(attacker instanceof Player playerAttacker)
 			{
@@ -362,9 +361,9 @@ public interface OnHitEffect
 								&& (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker())
 								&& playerAttacker.distanceToSqr(livingEntity) < 9.0D)
 						{
-							if (livingEntity != target)
+							if(livingEntity != target)
 								livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
-							for (OnHitEffect effect : effects)
+							for(OnHitEffect effect : effects)
 								effect.onHit(stack, livingEntity, attacker);
 						}
 					}
