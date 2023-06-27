@@ -341,7 +341,7 @@ public interface OnHitEffect
 	}
 	
 	//Nearly identical to Sweep, but it applies an optional array of effects
-	static OnHitEffect SweepMultiEffect(OnHitEffect... effects)
+	static OnHitEffect sweepMultiEffect(OnHitEffect... effects)
 	{
 		return (stack, target, attacker) -> {
 			if(attacker instanceof Player playerAttacker)
