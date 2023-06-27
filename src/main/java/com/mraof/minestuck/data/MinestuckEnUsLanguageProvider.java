@@ -671,6 +671,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.CINNAMON_SWORD, "Cinnamon Sword");
+		addItem(MSItems.UNION_BUSTER, "Union Buster");
+		addItemTooltip(MSItems.UNION_BUSTER, "Does quite a lot of damage, both societal AND material!");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
 		addItem(MSItems.PIGLINS_PRIDE, "Piglin's Pride");
@@ -1364,8 +1366,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.GUTTER_BALL, "A hardened crystal in the shape of grist");
 		addItemExtra(MSItems.GUTTER_BALL, "press_shift", "Press §eSHIFT§r for more info");
 		addItemExtra(MSItems.GUTTER_BALL, "desc", "Carved from a common ore, it is believed by the natives to be a kind of food to the yet-born deities.");
-		addItem(MSItems.UNION_BUSTER, "Union Buster");
-		addItemTooltip(MSItems.UNION_BUSTER, "Does quite a lot of damage, both societal AND material!");
 		
 		add("message.horrorterror.machinations", "Your blood shall fuel our machinations.");
 		add("message.horrorterror.stir", "They stir in your subconscious.");
