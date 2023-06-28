@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
@@ -19,6 +18,7 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 
 public class TransportalizerCommand
 {
@@ -39,13 +39,16 @@ public class TransportalizerCommand
 	
 	private static int teleport(CommandSourceStack source, Collection<? extends Entity> entities, String code) throws CommandSyntaxException
 	{
+		//TODO allow the command to accept special characters like "♥" which can be used as valid transportalizer codes
+		code = code.toUpperCase(Locale.ROOT); //prevents case sensitivity issues since actual transportalizer codes are caps only
+		
 		GlobalPos destination = TransportalizerSavedData.get(source.getServer()).get(code);
 		if(destination == null)
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
 		ServerLevel level = source.getServer().getLevel(destination.dimension());
 		
-		if(level == null || level.getBlockState(destination.pos()).getBlock() != MSBlocks.TRANSPORTALIZER.get())
+		if(level == null || !(level.getBlockEntity(destination.pos()) instanceof TransportalizerBlockEntity))
 			throw NOT_FOUND_EXCEPTION.create(code);
 		
 		if(TransportalizerBlockEntity.isBlocked(level, destination.pos()))
