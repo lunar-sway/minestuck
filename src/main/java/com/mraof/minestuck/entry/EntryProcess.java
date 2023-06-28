@@ -134,6 +134,13 @@ public class EntryProcess
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
+	public static void EnterAtPos(ServerPlayer player, BlockPos pos)
+	{
+		LOGGER.debug(player);
+		LOGGER.debug(pos);
+		LOGGER.info("guh");
+	}
+	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
 	{
 		if(MinestuckConfig.SERVER.stopSecondEntry.get())
