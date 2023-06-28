@@ -27,5 +27,6 @@ public class MSCommands
 		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);
+		EntryCommand.register(dispatcher);
 	}
 }
