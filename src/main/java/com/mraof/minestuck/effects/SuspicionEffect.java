@@ -1,7 +1,6 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.commands.arguments.CompoundTagArgument;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -10,6 +9,8 @@ import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec2;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.ZombieEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -25,19 +26,21 @@ import org.jetbrains.annotations.NotNull;
 public class SuspicionEffect extends MobEffect
 {
 	/**
-	 * Used to fire some functionality in {@link #applyEffectTick(LivingEntity, int)} only once.
-	 */
-	private boolean hasInitialized = false;
-	/**
 	 * Used to enable the effect at all, blocking the {@link #applyEffectTick(LivingEntity, int)} and {@link #onMount(EntityMountEvent)} functions if false.
-	 * It is true if the afflicted entity is not an {@link net.minecraft.world.entity.decoration.ArmorStand} instance and doesn't have the "NoAI" NBT.
+	 * It is true if the afflicted entity is not an {@link net.minecraft.world.entity.decoration.ArmorStand}, doesn't have the "NoAI" NBT, or isn't a {@link net.minecraft.world.entity.player.Player}.
 	 */
-	private boolean isPushable = true;
+	private static boolean isPushable(Entity entity) {
+		return !((entity instanceof ArmorStand) ||
+				(entity.getPersistentData().contains("NoAI", 99)) ||
+				(entity instanceof Player)
+		);
+	}
 	/**
 	 * Used to enable the pushing effect on flying entities, as an alternative for the {@link LivingEntity#isOnGround()} check.
 	 */
-	private boolean isFlying = false;
-	
+	private static boolean isFlying(Entity entity) {
+		return ((entity instanceof FlyingMob) || (entity instanceof FlyingAnimal));
+	}
 	/**
 	 * Rescales the curve of the range's increase. It is also the value of the minimum range (range at level 1).
 	 */
@@ -64,45 +67,36 @@ public class SuspicionEffect extends MobEffect
 	{
 		super.applyEffectTick(pLivingEntity, pAmplifier);
 		
-		if(!hasInitialized)
-		{
-			isFlying = ((pLivingEntity instanceof FlyingMob) || (pLivingEntity instanceof FlyingAnimal));
-			isPushable = !((pLivingEntity instanceof ArmorStand) || (pLivingEntity.getPersistentData().contains("NoAI", 99)));
-			
-			hasInitialized = true;
-		}
-		
 		//If the entity can't be pushed (armor stand/NoAI), there's no point in continuing
-		if(!isPushable)
-		{
+		if(!isPushable(pLivingEntity))
 			return;
-		}
 		
-		if(pLivingEntity.getVehicle() != null || pLivingEntity.getPassengers().size() > 0)
-		{
-			pLivingEntity.ejectPassengers();
+		//Dismount everyone affected
+		if(pLivingEntity.getVehicle() != null)
 			pLivingEntity.dismountTo(pLivingEntity.getX(), pLivingEntity.getY(), pLivingEntity.getZ());
-		}
+		
+		if(pLivingEntity.getPassengers().size() > 0)
+			pLivingEntity.ejectPassengers();
+		
+		//The entity won't be pushed if not a flying entity and off the ground
+		if(!(pLivingEntity.isOnGround() || isFlying(pLivingEntity)))
+			return;
 		
 		double range = rangeScale * Math.pow(pAmplifier, 0.6);
 		
-		if(pLivingEntity.isOnGround() || isFlying)
+		for(LivingEntity otherEntity : pLivingEntity.level.getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
 		{
-			for(LivingEntity otherEntity : pLivingEntity.level.getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
+			if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
 			{
-				if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
-				{
-					//Push direction vector, from other to self
-					double pushX = pLivingEntity.getX() - otherEntity.getX();
-					double pushZ = pLivingEntity.getZ() - otherEntity.getZ();
-					double pushMagnitude = Math.sqrt((pushX * pushX + pushZ * pushZ));
-					pushX /= pushMagnitude;
-					pushZ /= pushMagnitude;
-					
-					//Push is stronger the closest each entity is
-					double pushForce = 1 / (Math.max(pushMagnitude, 1));
-					pLivingEntity.push((pushX * pushForce), 0, (pushZ * pushForce));
-				}
+				//Push direction vector, from other to self
+				Vec2 push = new Vec2(
+						(float) (pLivingEntity.getX() - otherEntity.getX()),
+						(float) (pLivingEntity.getZ() - otherEntity.getZ()));
+				Vec2 pushN = push.normalized();
+				
+				//Push is stronger the closest each entity is
+				double pushForce = 1 / (Math.max(push.length(), 1));
+				pLivingEntity.push((pushN.x * pushForce), 0, (pushN.y * pushForce));
 			}
 		}
 	}
@@ -111,16 +105,15 @@ public class SuspicionEffect extends MobEffect
 	 * Cancels out attempts to ride (or be ridden by) an affected entity
 	 */
 	@SubscribeEvent
-	public void onMount(EntityMountEvent event)
+	public static void onMount(EntityMountEvent event)
 	{
-		if(isPushable)
-		{
-			Entity entityBeingMounted = event.getEntityBeingMounted();
-			Entity mountEntity = event.getEntityMounting();
-			
-			if(((LivingEntity) entityBeingMounted).hasEffect(this) || ((LivingEntity) mountEntity).hasEffect(this))
-				event.setCanceled(true);
-		}
+		Entity mountEntity = event.getEntityMounting();
+		if(isPushable(mountEntity) && ((LivingEntity) mountEntity).hasEffect(MSEffects.SUSPICION.get()))
+			event.setCanceled(true);
+		
+		Entity entityBeingMounted = event.getEntityBeingMounted();
+		if(isPushable(entityBeingMounted) && ((LivingEntity) entityBeingMounted).hasEffect(MSEffects.SUSPICION.get()))
+			event.setCanceled(true);
 	}
 	
 	/**
@@ -128,9 +121,9 @@ public class SuspicionEffect extends MobEffect
 	 * Examples: {@link net.minecraft.world.entity.monster.Zombie#hurt(DamageSource, float)}, {@link net.minecraft.world.entity.monster.ZombifiedPiglin#hurt(DamageSource, float)})
 	 */
 	@SubscribeEvent
-	public void summonAttempt(ZombieEvent.SummonAidEvent event)
+	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
 	{
-		if(event.getEntity().hasEffect(this)) event.setCanceled(true);
+		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get())) event.setCanceled(true);
 	}
 	
 }

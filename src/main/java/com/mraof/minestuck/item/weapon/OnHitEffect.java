@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -180,30 +181,33 @@ public interface OnHitEffect
 		}
 	};
 	
+	/**
+	 * A knockback effect that does a right-vector (relative to the player's orientation) and direction to enemy dot calculation (relative to the player's orientation) to spread enemies horizontally via knockback.
+	 */
 	OnHitEffect SPREADING_KNOCKBACK = (stack, target, attacker) -> {
+		
 		//Attacker's right direction and position
 		double pRightSin = Math.sin(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
 		double pRightCos = Math.cos(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
 		double pX = attacker.getX(), pZ = attacker.getZ();
-		
 		//Other entity position
 		double eX = target.getX(), eZ = target.getZ();
-		//Direction vector player - entity
-		double dirToEntityX = eX - pX, dirToEntityZ = eZ - pZ;
-		double dirMagnitude = Math.sqrt((dirToEntityX * dirToEntityX + dirToEntityZ * dirToEntityZ));
-		dirToEntityX /= dirMagnitude;
-		dirToEntityZ /= dirMagnitude;
-		//Dot product of other entity direction and player's right
-		double dot = (pRightSin * dirToEntityX) + (pRightCos * dirToEntityZ);
-		double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
-		//Knockback direction vector
-		double knockbackX = -dirToEntityX + (pRightCos * Mth.sign(dot) * expDot);
-		double knockbackZ = -dirToEntityZ + (pRightSin * Mth.sign(dot) * expDot);
-		dirMagnitude = Math.sqrt((knockbackX * knockbackX + knockbackZ * knockbackZ));
-		knockbackX /= dirMagnitude;
-		knockbackZ /= dirMagnitude;
 		
-		target.knockback(0.7f, knockbackX, knockbackZ);
+		//Direction vector player -> entity
+		Vec2 dirToEntity = new Vec2((float) (eX - pX), (float) (eZ - pZ));
+		dirToEntity = dirToEntity.normalized();
+		
+		//Dot product of direction and player's right
+		double dot = (pRightSin * dirToEntity.x) + (pRightCos * dirToEntity.y);
+		double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
+		
+		//Knockback direction vector
+		Vec2 knockback = new Vec2(
+				(float) (-dirToEntity.x + (pRightCos * Mth.sign(dot) * expDot)),
+				(float) (-dirToEntity.y + (pRightSin * Mth.sign(dot) * expDot)));
+		knockback = knockback.normalized();
+		
+		target.knockback(0.7f, knockback.x, knockback.y);
 	};
 	
 	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
@@ -340,38 +344,41 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> target.addEffect(effect.get());
 	}
 	
-	//Nearly identical to Sweep, but it applies an optional array of effects
+	/**
+	 * A function that causes a sweep effect (code based off of {@link #SWEEP}) and applies an array of effects on the target.
+	 * @param effects A varargs value, essentially an optional array of hit effects to be applied.
+	 */
 	static OnHitEffect sweepMultiEffect(OnHitEffect... effects)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof Player playerAttacker)
+			if(!(attacker instanceof Player playerAttacker))
+				return;
+			
+			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			
+			if(!(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround() && playerAttacker.getAttackStrengthScale(0) >= 1))
+				return;
+			
+			float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+			float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+			
+			for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(
+					LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))
 			{
-				boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
-				boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
-				if(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround()
-						&& playerAttacker.getAttackStrengthScale(0) >= 1)
-				{
-					float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-					float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
-					
-					for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(
-							LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))
-					{
-						if(livingEntity != playerAttacker && !playerAttacker.isAlliedTo(livingEntity)
-								&& (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker())
-								&& playerAttacker.distanceToSqr(livingEntity) < 9.0D)
-						{
-							if(livingEntity != target)
-								livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
-							for(OnHitEffect effect : effects)
-								effect.onHit(stack, livingEntity, attacker);
-						}
-					}
-					
-					playerAttacker.level.playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
-					playerAttacker.sweepAttack();
-				}
+				if(!(livingEntity != playerAttacker
+						&& !playerAttacker.isAlliedTo(livingEntity)
+						&& (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker())
+						&& playerAttacker.distanceToSqr(livingEntity) < 9.0D))
+				continue;
+				
+				if(livingEntity != target)
+					livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
+				for(OnHitEffect effect : effects)
+					effect.onHit(stack, livingEntity, attacker);
 			}
+			playerAttacker.level.playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
+			playerAttacker.sweepAttack();
 		};
 	}
 	
