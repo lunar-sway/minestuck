@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The Suspicion effect causes mobs to forcibly move away from other entities.
+ *
  * @see #onMount(net.minecraftforge.event.entity.EntityMountEvent) Cancels out attempts to ride affected entities
  * @see #summonAttempt(ZombieEvent.SummonAidEvent) Cancels out attempts to spawn reinforcements
  */
@@ -26,29 +28,67 @@ import org.jetbrains.annotations.NotNull;
 public class SuspicionEffect extends MobEffect
 {
 	/**
-	 * Used to enable the effect at all, blocking the {@link #applyEffectTick(LivingEntity, int)} and {@link #onMount(EntityMountEvent)} functions if false.
-	 * It is true if the afflicted entity is not an {@link net.minecraft.world.entity.decoration.ArmorStand}, doesn't have the "NoAI" NBT, or isn't a {@link net.minecraft.world.entity.player.Player}.
-	 */
-	private static boolean isPushable(Entity entity) {
-		return !((entity instanceof ArmorStand) ||
-				(entity.getPersistentData().contains("NoAI", 99)) ||
-				(entity instanceof Player)
-		);
-	}
-	/**
-	 * Used to enable the pushing effect on flying entities, as an alternative for the {@link LivingEntity#isOnGround()} check.
-	 */
-	private static boolean isFlying(Entity entity) {
-		return ((entity instanceof FlyingMob) || (entity instanceof FlyingAnimal));
-	}
-	/**
 	 * Rescales the curve of the range's increase. It is also the value of the minimum range (range at level 1).
 	 */
-	private static final float rangeScale = 1.0f;
+	private static final float RANGE_SCALE = 1.0f;
 	
 	protected SuspicionEffect()
 	{
 		super(MobEffectCategory.HARMFUL, 0x2C0489);
+	}
+	
+	/**
+	 * Used to enable the effect at all, blocking the {@link #applyEffectTick(LivingEntity, int)} and {@link #onMount(EntityMountEvent)} functions if false.
+	 * It is true if the afflicted entity is not an {@link ArmorStand}, doesn't have the "NoAI" NBT ({@link Mob#isNoAi()}), or isn't a {@link Player}.
+	 */
+	private static boolean isPushable(Entity entity)
+	{
+		return !((entity instanceof Player)
+				|| (entity instanceof ArmorStand)
+				|| (entity instanceof Mob mob && mob.isNoAi()));
+	}
+	
+	/**
+	 * Used to enable the pushing effect on flying entities, as an alternative for the {@link LivingEntity#isOnGround()} check.
+	 */
+	private static boolean isFlying(Entity entity)
+	{
+		return ((entity instanceof FlyingMob) || (entity instanceof FlyingAnimal));
+	}
+	
+	/**
+	 * Used to check if an entity has the effect AND is pushable, to inflict code on the checked entity
+	 */
+	private static boolean hasEffect(Entity entity)
+	{
+		return (isPushable(entity)
+				&& (entity instanceof LivingEntity livingEntity
+				&& livingEntity.hasEffect(MSEffects.SUSPICION.get())));
+	}
+	
+	/**
+	 * Cancels out attempts to ride (or be ridden by) an affected entity
+	 */
+	@SubscribeEvent
+	public static void onMount(EntityMountEvent event)
+	{
+		Entity entityMounting = event.getEntityMounting();
+		if(hasEffect(entityMounting))
+			event.setCanceled(true);
+		
+		Entity entityBeingMounted = event.getEntityBeingMounted();
+		if(hasEffect(entityBeingMounted))
+			event.setCanceled(true);
+	}
+	
+	/**
+	 * Cancels out attempts to call for reinforcements.
+	 * Examples: {@link net.minecraft.world.entity.monster.Zombie#hurt(DamageSource, float)}, {@link net.minecraft.world.entity.monster.ZombifiedPiglin#hurt(DamageSource, float)})
+	 */
+	@SubscribeEvent
+	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
+	{
+		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get())) event.setCanceled(true);
 	}
 	
 	@Override
@@ -59,6 +99,7 @@ public class SuspicionEffect extends MobEffect
 	
 	/**
 	 * Every tick, eject the affected entity's vehicle/passengers and apply a repulsion force from all mobs with this effect within a calculated range.
+	 *
 	 * @param pLivingEntity the afflicted entity. It will be pushed away from any afflicted entity, and from its ride(r).
 	 * @param pAmplifier    the effect's strength. Used to calculate the repulsion range, is applied an exponentiation smaller than 1 to create a diminishing return.
 	 */
@@ -82,48 +123,25 @@ public class SuspicionEffect extends MobEffect
 		if(!(pLivingEntity.isOnGround() || isFlying(pLivingEntity)))
 			return;
 		
-		double range = rangeScale * Math.pow(pAmplifier, 0.6);
+		double range = RANGE_SCALE * Math.pow(pAmplifier, 0.6);
 		
 		for(LivingEntity otherEntity : pLivingEntity.level.getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
 		{
 			if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
 			{
-				//Push direction vector, from other to self
+				//Push direction vector (this entity <- other entity)
 				Vec2 push = new Vec2(
 						(float) (pLivingEntity.getX() - otherEntity.getX()),
 						(float) (pLivingEntity.getZ() - otherEntity.getZ()));
-				Vec2 pushN = push.normalized();
 				
 				//Push is stronger the closest each entity is
 				double pushForce = 1 / (Math.max(push.length(), 1));
-				pLivingEntity.push((pushN.x * pushForce), 0, (pushN.y * pushForce));
+				
+				//Apply directional force
+				push = push.normalized();
+				pLivingEntity.push((push.x * pushForce), 0, (push.y * pushForce));
 			}
 		}
-	}
-	
-	/**
-	 * Cancels out attempts to ride (or be ridden by) an affected entity
-	 */
-	@SubscribeEvent
-	public static void onMount(EntityMountEvent event)
-	{
-		Entity mountEntity = event.getEntityMounting();
-		if(isPushable(mountEntity) && ((LivingEntity) mountEntity).hasEffect(MSEffects.SUSPICION.get()))
-			event.setCanceled(true);
-		
-		Entity entityBeingMounted = event.getEntityBeingMounted();
-		if(isPushable(entityBeingMounted) && ((LivingEntity) entityBeingMounted).hasEffect(MSEffects.SUSPICION.get()))
-			event.setCanceled(true);
-	}
-	
-	/**
-	 * Cancels out attempts to call for reinforcements.
-	 * Examples: {@link net.minecraft.world.entity.monster.Zombie#hurt(DamageSource, float)}, {@link net.minecraft.world.entity.monster.ZombifiedPiglin#hurt(DamageSource, float)})
-	 */
-	@SubscribeEvent
-	public static void summonAttempt(ZombieEvent.SummonAidEvent event)
-	{
-		if(event.getEntity().hasEffect(MSEffects.SUSPICION.get())) event.setCanceled(true);
 	}
 	
 }

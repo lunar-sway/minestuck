@@ -37,7 +37,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -186,28 +186,31 @@ public interface OnHitEffect
 	 */
 	OnHitEffect SPREADING_KNOCKBACK = (stack, target, attacker) -> {
 		
-		//Attacker's right direction and position
-		double pRightSin = Math.sin(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
-		double pRightCos = Math.cos(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0);
-		double pX = attacker.getX(), pZ = attacker.getZ();
-		//Other entity position
-		double eX = target.getX(), eZ = target.getZ();
+		//Attacker's right direction (forward value rotated 90°)
+		Vec3 attackerRight = new Vec3(
+				(float) (Math.cos(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0)),
+				0,
+				(float) (Math.sin(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0))
+		);
 		
-		//Direction vector player -> entity
-		Vec2 dirToEntity = new Vec2((float) (eX - pX), (float) (eZ - pZ));
-		dirToEntity = dirToEntity.normalized();
+		//Direction vector (attacker -> target)
+		Vec3 dirToTarget = attacker.position().multiply(1,0,1)
+				.vectorTo(target.position().multiply(1,0,1));
+		dirToTarget = dirToTarget.normalize();
 		
-		//Dot product of direction and player's right
-		double dot = (pRightSin * dirToEntity.x) + (pRightCos * dirToEntity.y);
+		//Dot product of direction and attacker's right
+		double dot = attackerRight.dot(dirToTarget);
 		double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
 		
 		//Knockback direction vector
-		Vec2 knockback = new Vec2(
-				(float) (-dirToEntity.x + (pRightCos * Mth.sign(dot) * expDot)),
-				(float) (-dirToEntity.y + (pRightSin * Mth.sign(dot) * expDot)));
-		knockback = knockback.normalized();
+		Vec3 knockback = new Vec3(
+				(float) (-dirToTarget.x + (attackerRight.x * Mth.sign(dot) * expDot)),
+				0,
+				(float) (-dirToTarget.z + (attackerRight.z * Mth.sign(dot) * expDot)));
+		knockback = knockback.normalize();
 		
-		target.knockback(0.7f, knockback.x, knockback.y);
+		//Knockback application
+		target.knockback(0.7f, knockback.x, knockback.z);
 	};
 	
 	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
@@ -357,7 +360,10 @@ public interface OnHitEffect
 			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
 			
-			if(!(slowMoving && !lastHitWasCrit && playerAttacker.isOnGround() && playerAttacker.getAttackStrengthScale(0) >= 1))
+			if(!(slowMoving
+					&& !lastHitWasCrit
+					&& playerAttacker.isOnGround()
+					&& playerAttacker.getAttackStrengthScale(0) >= 1))
 				return;
 			
 			float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
@@ -370,7 +376,7 @@ public interface OnHitEffect
 						&& !playerAttacker.isAlliedTo(livingEntity)
 						&& (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker())
 						&& playerAttacker.distanceToSqr(livingEntity) < 9.0D))
-				continue;
+					continue;
 				
 				if(livingEntity != target)
 					livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);

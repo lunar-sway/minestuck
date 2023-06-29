@@ -1,10 +1,10 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:build": 672,
+    "minestuck:build": 268,
     "minestuck:diamond": 1,
-    "minestuck:gold": 800,
-    "minestuck:tar": 336
+    "minestuck:gold": 320,
+    "minestuck:tar": 133
   },
   "ingredient": {
     "item": "minestuck:union_buster"
