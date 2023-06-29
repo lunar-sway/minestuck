@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 10387312,
+    "separation": 5,
+    "spacing": 24
+  },
+  "structures": [
+    {
+      "structure": "minestuck:consort_village",
+      "weight": 1
+    }
+  ]
+}
