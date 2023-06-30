@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:land_gate",
+  "biomes": "#minestuck:has_structure/land_gate",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

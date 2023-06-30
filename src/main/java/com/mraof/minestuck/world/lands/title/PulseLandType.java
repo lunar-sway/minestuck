@@ -59,7 +59,7 @@ public class PulseLandType extends TitleLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		builder.addModified(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
+		builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, MSPlacedFeatures.COAGULATED_BLOOD_DISK,
 				FeatureModifier.withTargets(BlockPredicate.matchesBlocks(blocks.getBlockState("surface").getBlock(), blocks.getBlockState("upper").getBlock())), LandBiomeType.ROUGH);
 	}
 	
