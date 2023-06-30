@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.gen.structure;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -28,7 +27,7 @@ public class SmallRuinStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.SMALL_RUIN.get();
+		return MSStructureTypes.SMALL_RUIN.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

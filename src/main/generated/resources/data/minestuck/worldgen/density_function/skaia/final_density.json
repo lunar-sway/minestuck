@@ -1,0 +1,88 @@
+{
+  "type": "minecraft:squeeze",
+  "argument": {
+    "type": "minecraft:mul",
+    "argument1": 0.64,
+    "argument2": {
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:blend_density",
+        "argument": {
+          "type": "minecraft:add",
+          "argument1": -1.0,
+          "argument2": {
+            "type": "minecraft:mul",
+            "argument1": {
+              "type": "minecraft:y_clamped_gradient",
+              "from_value": 0.0,
+              "from_y": 256,
+              "to_value": 1.0,
+              "to_y": 240
+            },
+            "argument2": {
+              "type": "minecraft:add",
+              "argument1": 1.0,
+              "argument2": {
+                "type": "minecraft:add",
+                "argument1": 1.0,
+                "argument2": {
+                  "type": "minecraft:mul",
+                  "argument1": {
+                    "type": "minecraft:y_clamped_gradient",
+                    "from_value": 0.0,
+                    "from_y": -64,
+                    "to_value": 1.0,
+                    "to_y": -40
+                  },
+                  "argument2": {
+                    "type": "minecraft:add",
+                    "argument1": -1.0,
+                    "argument2": {
+                      "type": "minecraft:add",
+                      "argument1": {
+                        "type": "minecraft:old_blended_noise",
+                        "smear_scale_multiplier": 8.0,
+                        "xz_factor": 80.0,
+                        "xz_scale": 0.25,
+                        "y_factor": 160.0,
+                        "y_scale": 0.125
+                      },
+                      "argument2": {
+                        "type": "minecraft:mul",
+                        "argument1": 4.0,
+                        "argument2": {
+                          "type": "minecraft:quarter_negative",
+                          "argument": {
+                            "type": "minecraft:mul",
+                            "argument1": 5.0,
+                            "argument2": {
+                              "type": "minecraft:add",
+                              "argument1": "minestuck:skaia/depth",
+                              "argument2": {
+                                "type": "minecraft:mul",
+                                "argument1": 0.0,
+                                "argument2": {
+                                  "type": "minecraft:half_negative",
+                                  "argument": {
+                                    "type": "minecraft:noise",
+                                    "noise": "minecraft:jagged",
+                                    "xz_scale": 1500.0,
+                                    "y_scale": 0.0
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

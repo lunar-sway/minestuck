@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 41361201,
+    "separation": 92,
+    "spacing": 140
+  },
+  "structures": [
+    {
+      "structure": "minestuck:frog_temple",
+      "weight": 1
+    }
+  ]
+}
