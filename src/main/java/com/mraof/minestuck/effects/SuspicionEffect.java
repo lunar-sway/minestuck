@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.FlyingAnimal;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.ZombieEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -130,16 +130,14 @@ public class SuspicionEffect extends MobEffect
 			if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
 			{
 				//Push direction vector (this entity <- other entity)
-				Vec2 push = new Vec2(
-						(float) (pLivingEntity.getX() - otherEntity.getX()),
-						(float) (pLivingEntity.getZ() - otherEntity.getZ()));
+				Vec3 push = otherEntity.position().vectorTo(pLivingEntity.position()).multiply(1, 0, 1);
 				
 				//Push is stronger the closest each entity is
 				double pushForce = 1 / (Math.max(push.length(), 1));
 				
 				//Apply directional force
-				push = push.normalized();
-				pLivingEntity.push((push.x * pushForce), 0, (push.y * pushForce));
+				push = push.normalize().scale(pushForce);
+				pLivingEntity.push(push.x, 0, push.z);
 			}
 		}
 	}

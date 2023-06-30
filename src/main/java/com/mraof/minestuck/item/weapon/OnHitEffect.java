@@ -182,34 +182,24 @@ public interface OnHitEffect
 	};
 	
 	/**
-	 * A knockback effect that does a right-vector (relative to the player's orientation) and direction to enemy dot calculation (relative to the player's orientation) to spread enemies horizontally via knockback.
+	 * A knockback effect that does a right-vector (relative to the attacker's orientation)
+	 * and direction to target dot calculation to spread targets further horizontally.
 	 */
 	OnHitEffect SPREADING_KNOCKBACK = (stack, target, attacker) -> {
 		
-		//Attacker's right direction (forward value rotated 90°)
-		Vec3 attackerRight = new Vec3(
-				(float) (Math.cos(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0)),
-				0,
-				(float) (Math.sin(attacker.getYRot() * ((float) Math.PI / 180F) - Math.PI / 2.0))
-		);
+		//Attacker's right vector (forward value rotated 90°)
+		double attackerRadians = Math.toRadians(attacker.getYRot()) - (Math.PI / 2.0);
+		Vec3 attackerRight = new Vec3(Math.cos(attackerRadians), 0, Math.sin(attackerRadians));
 		
 		//Direction vector (attacker -> target)
-		Vec3 dirToTarget = attacker.position().multiply(1,0,1)
-				.vectorTo(target.position().multiply(1,0,1));
-		dirToTarget = dirToTarget.normalize();
+		Vec3 dirToTarget = attacker.position().vectorTo(target.position()).multiply(1, 0, 1).normalize();
 		
 		//Dot product of direction and attacker's right
 		double dot = attackerRight.dot(dirToTarget);
-		double expDot = 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
+		double dotFactor = Mth.sign(dot) * 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
 		
-		//Knockback direction vector
-		Vec3 knockback = new Vec3(
-				(float) (-dirToTarget.x + (attackerRight.x * Mth.sign(dot) * expDot)),
-				0,
-				(float) (-dirToTarget.z + (attackerRight.z * Mth.sign(dot) * expDot)));
-		knockback = knockback.normalize();
-		
-		//Knockback application
+		//Knockback direction vector and application
+		Vec3 knockback = dirToTarget.scale(-1).add(attackerRight.scale(dotFactor)).normalize();
 		target.knockback(0.7f, knockback.x, knockback.z);
 	};
 	
@@ -360,10 +350,10 @@ public interface OnHitEffect
 			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
 			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
 			
-			if(!(slowMoving
-					&& !lastHitWasCrit
-					&& playerAttacker.isOnGround()
-					&& playerAttacker.getAttackStrengthScale(0) >= 1))
+			if(!slowMoving
+					|| lastHitWasCrit
+					|| !playerAttacker.isOnGround()
+					|| playerAttacker.getAttackStrengthScale(0) < 1)
 				return;
 			
 			float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
@@ -372,10 +362,10 @@ public interface OnHitEffect
 			for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(
 					LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))
 			{
-				if(!(livingEntity != playerAttacker
-						&& !playerAttacker.isAlliedTo(livingEntity)
-						&& (!(livingEntity instanceof ArmorStand) || !((ArmorStand) livingEntity).isMarker())
-						&& playerAttacker.distanceToSqr(livingEntity) < 9.0D))
+				if(livingEntity == playerAttacker
+						|| playerAttacker.isAlliedTo(livingEntity)
+						|| playerAttacker.distanceToSqr(livingEntity) >= 9.0D
+						|| (livingEntity instanceof ArmorStand armorStand && armorStand.isMarker()))
 					continue;
 				
 				if(livingEntity != target)
