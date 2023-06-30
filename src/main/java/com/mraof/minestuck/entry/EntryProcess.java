@@ -64,9 +64,9 @@ public class EntryProcess
 	private final BlockPos origin;
 	private final boolean creative;
 	
-	private EntryProcess(ServerPlayer player, ServerLevel landLevel)
+	private EntryProcess(ServerPlayer player, ServerLevel landLevel, BlockPos pos)
 	{
-		this.origin = player.blockPosition();
+		this.origin = pos;
 		this.originLevel = (ServerLevel) player.level;
 		this.landLevel = landLevel;
 		
@@ -81,6 +81,11 @@ public class EntryProcess
 	
 	public static void onArtifactActivated(ServerPlayer player)
 	{
+		onArtifactActivated(player, new BlockPos(player.getX(), player.getY(), player.getZ()));
+	}
+	
+	public static void onArtifactActivated(ServerPlayer player, BlockPos pos)
+	{
 		long time = System.currentTimeMillis();
 		if(player.level.dimension() == Level.NETHER)
 		{
@@ -88,7 +93,7 @@ public class EntryProcess
 			return;
 		}
 		
-		if(!TitleSelectionHook.performEntryCheck(player))
+		if(!TitleSelectionHook.performEntryCheck(player, pos))
 			return;
 		if(waitingProcess != null)
 		{
@@ -119,8 +124,8 @@ public class EntryProcess
 			return;
 		}
 		
-		EntryProcess process = new EntryProcess(player, landLevel);
-		if(!process.canModifyEntryBlocks(player.level, player))
+		EntryProcess process = new EntryProcess(player, landLevel, pos);
+		if(!process.canModifyEntryBlocks(player, player.level, pos))
 		{
 			player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
 			return;
@@ -132,13 +137,6 @@ public class EntryProcess
 		startTime = player.level.getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
 		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level.dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
-	}
-	
-	public static void EnterAtPos(ServerPlayer player, BlockPos pos)
-	{
-		LOGGER.debug(player);
-		LOGGER.debug(pos);
-		LOGGER.info("guh");
 	}
 	
 	private static void secondEntryTeleport(ServerPlayer player, ResourceKey<Level> land)
@@ -423,16 +421,11 @@ public class EntryProcess
 		}
 	}
 	
-	private boolean canModifyEntryBlocks(Level level, Player player)
+	private boolean canModifyEntryBlocks(Player player, Level level, BlockPos pos)
 	{
-		int x = (int) player.getX();
-		if(player.getX() < 0) x--;
-		int y = (int) player.getY();
-		int z = (int) player.getZ();
-		if(player.getZ() < 0) z--;
-		for(BlockPos pos : EntryBlockIterator.getHorizontal(x, y, z, artifactRange))
+		for(BlockPos bp : EntryBlockIterator.getHorizontal(pos.getX(), pos.getY(), pos.getZ(), artifactRange))
 		{
-			if(!level.mayInteract(player, pos))
+			if(!level.mayInteract(player, bp))
 				return false;
 		}
 		

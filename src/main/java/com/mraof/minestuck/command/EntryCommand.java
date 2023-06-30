@@ -20,7 +20,7 @@ public class EntryCommand
 												Commands.argument("pos", BlockPosArgument.blockPos())
 														.executes(ctx -> {
 															// both player and position specified
-															EntryProcess.EnterAtPos(
+															EntryProcess.onArtifactActivated(
 																	EntityArgument.getPlayer(ctx, "player"),
 																	BlockPosArgument.getLoadedBlockPos(ctx, "pos")
 															);
@@ -37,7 +37,7 @@ public class EntryCommand
 								Commands.argument("pos", BlockPosArgument.blockPos())
 										.executes(ctx -> {
 											// position and self
-											EntryProcess.EnterAtPos(
+											EntryProcess.onArtifactActivated(
 													ctx.getSource().getPlayerOrException(),
 													BlockPosArgument.getLoadedBlockPos(ctx, "pos"));
 											return 0;
