@@ -1,7 +1,10 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
@@ -23,6 +26,7 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
+import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
@@ -1866,6 +1870,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
+		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension.");
+		add(EntryProcess.BUSY, "Someone else is already entering.");
+		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console.");
+		add(EntryProcess.DIMENSION_MISSING, "Unable to find land dimension. Something is not as it should be!");
+		add(EntryProcess.NOT_ALLOWED_HERE, "You are not allowed to enter here.");
 		
 		add(Theme.DEFAULT.getName(), "Default");
 		add(Theme.PESTERCHUM.getName(), "Pesterchum");

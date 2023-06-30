@@ -53,6 +53,12 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
+	public static final String WRONG_DIMENSION = "minestuck.entry.wrong_dimension";
+	public static final String BUSY = "minestuck.entry.busy";
+	public static final String CREATION_FAILED = "minestuck.entry.creation_failed";
+	public static final String DIMENSION_MISSING = "minestuck.entry.dimension_missing";
+	public static final String NOT_ALLOWED_HERE = "minestuck.entry.not_allowed_here";
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
@@ -89,7 +95,7 @@ public class EntryProcess
 		long time = System.currentTimeMillis();
 		if(player.level.dimension() == Level.NETHER)
 		{
-			player.sendSystemMessage(Component.literal("Entry not permitted from this dimension."));
+			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION));
 			return;
 		}
 		
@@ -97,7 +103,7 @@ public class EntryProcess
 			return;
 		if(waitingProcess != null)
 		{
-			player.sendSystemMessage(Component.literal("Someone else is already entering."));
+			player.sendSystemMessage(Component.translatable(BUSY));
 			return;
 		}
 		
@@ -113,21 +119,21 @@ public class EntryProcess
 		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
 		if(landDimension == null)
 		{
-			player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
+			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
 			return;
 		}
 		
 		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
 		if(landLevel == null)
 		{
-			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
+			player.sendSystemMessage(Component.translatable(DIMENSION_MISSING));
 			return;
 		}
 		
 		EntryProcess process = new EntryProcess(player, landLevel, pos);
 		if(!process.canModifyEntryBlocks(player, player.level, pos))
 		{
-			player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
+			player.sendSystemMessage(Component.translatable(NOT_ALLOWED_HERE));
 			return;
 		}
 		
