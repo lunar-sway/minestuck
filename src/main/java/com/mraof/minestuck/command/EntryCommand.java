@@ -6,8 +6,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
 
 public class EntryCommand
 {
@@ -16,23 +14,23 @@ public class EntryCommand
 		dispatcher.register(Commands.literal("enter").requires(c -> c.hasPermission(Commands.LEVEL_GAMEMASTERS))
 				.then(Commands.argument("player", EntityArgument.player())
 								.then(Commands.argument("pos", BlockPosArgument.blockPos())
-										.executes(ctx -> enter(EntityArgument.getPlayer(ctx, "player"), BlockPosArgument.getLoadedBlockPos(ctx, "pos"))))
-								.executes(ctx -> enter(EntityArgument.getPlayer(ctx, "player"))))
+										.executes(ctx -> {
+											EntryProcess.enter(EntityArgument.getPlayer(ctx, "player"), BlockPosArgument.getLoadedBlockPos(ctx, "pos"));
+											return 0;
+										}))
+								.executes(ctx -> {
+									EntryProcess.enter(EntityArgument.getPlayer(ctx, "player"));
+									return 0;
+								}))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos())
-						.executes(ctx -> enter(ctx.getSource().getPlayerOrException(), BlockPosArgument.getLoadedBlockPos(ctx, "pos"))))
-				.executes(ctx -> enter(ctx.getSource().getPlayerOrException()))
+						.executes(ctx -> {
+							EntryProcess.enter(ctx.getSource().getPlayerOrException(), BlockPosArgument.getLoadedBlockPos(ctx, "pos"));
+							return 0;
+						}))
+				.executes(ctx -> {
+					EntryProcess.enter(ctx.getSource().getPlayerOrException());
+					return 0;
+				})
 		);
-	}
-	
-	private static int enter(ServerPlayer player)
-	{
-		EntryProcess.onArtifactActivated(player);
-		return 0;
-	}
-	
-	private static int enter(ServerPlayer player, BlockPos pos)
-	{
-		EntryProcess.onArtifactActivated(player, pos);
-		return 0;
 	}
 }

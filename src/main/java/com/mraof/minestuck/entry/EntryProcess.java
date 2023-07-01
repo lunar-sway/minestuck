@@ -93,12 +93,12 @@ public class EntryProcess
 		creative = player.gameMode.isCreative();
 	}
 	
-	public static void onArtifactActivated(ServerPlayer player)
+	public static void enter(ServerPlayer player)
 	{
-		onArtifactActivated(player, new BlockPos(player.getX(), player.getY(), player.getZ()));
+		enter(player, new BlockPos(player.getX(), player.getY(), player.getZ()));
 	}
 	
-	public static void onArtifactActivated(ServerPlayer player, BlockPos pos)
+	public static void enter(ServerPlayer player, BlockPos pos)
 	{
 		long time = System.currentTimeMillis();
 		if(player.level.dimension() == Level.NETHER)

@@ -90,7 +90,7 @@ public class TitleSelectionHook
 		
 		BlockPos specifiedPos = both.getSecond();
 		
-		EntryProcess.onArtifactActivated(player, specifiedPos);
+		EntryProcess.enter(player, specifiedPos);
 		
 	}
 }
