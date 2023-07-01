@@ -16,20 +16,20 @@ public class EntryCommand
 								.then(Commands.argument("pos", BlockPosArgument.blockPos())
 										.executes(ctx -> {
 											EntryProcess.enter(EntityArgument.getPlayer(ctx, "player"), BlockPosArgument.getLoadedBlockPos(ctx, "pos"));
-											return 0;
+											return 1;
 										}))
 								.executes(ctx -> {
 									EntryProcess.enter(EntityArgument.getPlayer(ctx, "player"));
-									return 0;
+									return 1;
 								}))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos())
 						.executes(ctx -> {
 							EntryProcess.enter(ctx.getSource().getPlayerOrException(), BlockPosArgument.getLoadedBlockPos(ctx, "pos"));
-							return 0;
+							return 1;
 						}))
 				.executes(ctx -> {
 					EntryProcess.enter(ctx.getSource().getPlayerOrException());
-					return 0;
+					return 1;
 				})
 		);
 	}
