@@ -37,6 +37,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -180,6 +181,28 @@ public interface OnHitEffect
 		}
 	};
 	
+	/**
+	 * A knockback effect that does a right-vector (relative to the attacker's orientation)
+	 * and direction to target dot calculation to spread targets further horizontally.
+	 */
+	OnHitEffect SPREADING_KNOCKBACK = (stack, target, attacker) -> {
+		
+		//Attacker's right vector (forward value rotated 90°)
+		double attackerRadians = Math.toRadians(attacker.getYRot()) - (Math.PI / 2.0);
+		Vec3 attackerRight = new Vec3(Math.cos(attackerRadians), 0, Math.sin(attackerRadians));
+		
+		//Direction vector (attacker -> target)
+		Vec3 dirToTarget = attacker.position().vectorTo(target.position()).multiply(1, 0, 1).normalize();
+		
+		//Dot product of direction and attacker's right
+		double dot = attackerRight.dot(dirToTarget);
+		double dotFactor = Mth.sign(dot) * 1.5 * Math.pow(1 - (Math.abs(dot)), 0.3);
+		
+		//Knockback direction vector and application
+		Vec3 knockback = dirToTarget.scale(-1).add(attackerRight.scale(dotFactor)).normalize();
+		target.knockback(0.7f, knockback.x, knockback.z);
+	};
+	
 	OnHitEffect SPACE_TELEPORT = withoutCreativeShock(requireAspect(SPACE, onCrit((stack, target, attacker) -> {
 		double oldPosX = attacker.getX();
 		double oldPosY = attacker.getY();
@@ -312,6 +335,47 @@ public interface OnHitEffect
 	static OnHitEffect enemyPotionEffect(Supplier<MobEffectInstance> effect)
 	{
 		return (stack, target, attacker) -> target.addEffect(effect.get());
+	}
+	
+	/**
+	 * A function that causes a sweep effect (code based off of {@link #SWEEP}) and applies an array of effects on the target.
+	 * @param effects A varargs value, essentially an optional array of hit effects to be applied.
+	 */
+	static OnHitEffect sweepMultiEffect(OnHitEffect... effects)
+	{
+		return (stack, target, attacker) -> {
+			if(!(attacker instanceof Player playerAttacker))
+				return;
+			
+			boolean slowMoving = (double) (playerAttacker.walkDist - playerAttacker.walkDistO) < (double) playerAttacker.getSpeed();
+			boolean lastHitWasCrit = ServerEventHandler.wasLastHitCrit(playerAttacker);
+			
+			if(!slowMoving
+					|| lastHitWasCrit
+					|| !playerAttacker.isOnGround()
+					|| playerAttacker.getAttackStrengthScale(0) < 1)
+				return;
+			
+			float attackDamage = (float) playerAttacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+			float sweepEnchantMod = 1.0F + EnchantmentHelper.getSweepingDamageRatio(playerAttacker) * attackDamage;
+			
+			for(LivingEntity livingEntity : playerAttacker.level.getEntitiesOfClass(
+					LivingEntity.class, target.getBoundingBox().inflate(2.0D, 0.25D, 2.0D)))
+			{
+				if(livingEntity == playerAttacker
+						|| playerAttacker.isAlliedTo(livingEntity)
+						|| playerAttacker.distanceToSqr(livingEntity) >= 9.0D
+						|| (livingEntity instanceof ArmorStand armorStand && armorStand.isMarker()))
+					continue;
+				
+				if(livingEntity != target)
+					livingEntity.hurt(DamageSource.playerAttack(playerAttacker), sweepEnchantMod);
+				for(OnHitEffect effect : effects)
+					effect.onHit(stack, livingEntity, attacker);
+			}
+			playerAttacker.level.playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
+			playerAttacker.sweepAttack();
+		};
 	}
 	
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)

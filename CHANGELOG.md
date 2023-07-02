@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - New operator command that can make a player enter the medium without using an artifact
 - Translation keys/lang file entries for entry failure messages
+- Union Buster Sword
+- Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 
 ### Changed
 
@@ -22,7 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean
+- kirderf1, hadean, Estellairon, Riotmode
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
