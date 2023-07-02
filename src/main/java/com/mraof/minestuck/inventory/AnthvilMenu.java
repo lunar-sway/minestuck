@@ -18,39 +18,33 @@ import javax.annotation.Nonnull;
 
 public class AnthvilMenu extends MachineContainerMenu
 {
-	private static final int cruxiteInputX = 95;
-	private static final int cruxiteInputY = 54;
-	private static final int uraniumInputX = 145;
+	private static final int uraniumInputX = 143;
 	private static final int uraniumInputY = 54;
-	private static final int itemInputX = 15;
-	private static final int itemInputY = 50;
+	private static final int itemInputX = 81;
+	private static final int itemInputY = 35;
 	
 	private final DataSlot fuelHolder;
-	private final DataSlot cruxiteHolder;
 	
 	public AnthvilMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(3), new SimpleContainerData(3), DataSlot.standalone(), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, DataSlot cruxiteHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, parameters, fuelHolder, cruxiteHolder, access, machinePos);
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
 	}
 	
-	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, DataSlot cruxiteHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
 		super(type, windowId, parameters, access, machinePos);
 		
-		assertItemHandlerSize(inventory, 3);
+		assertItemHandlerSize(inventory, 2);
 		this.fuelHolder = fuelHolder;
-		this.cruxiteHolder = cruxiteHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
 		addSlot(new InputSlot(inventory, 1, uraniumInputX, uraniumInputY, MSItems.RAW_URANIUM.get()));
-		addSlot(new InputSlot(inventory, 2, cruxiteInputX, cruxiteInputY, MSItems.RAW_CRUXITE.get()));
 		addDataSlot(fuelHolder);
-		addDataSlot(cruxiteHolder);
 		
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
@@ -82,15 +76,9 @@ public class AnthvilMenu extends MachineContainerMenu
 			} else if(slotNumber == 1)    //Shift-clicking from the uranium input
 			{
 				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
-			} else if(slotNumber == 2)    //Shift-clicking from the cruxite input
-			{
-				result = moveItemStackTo(itemstackOrig, 3, allSlots, false);    //Send into the inventory
 			} else    //Shift-clicking from the inventory
 			{
-				if(itemstackOrig.getItem() == MSItems.RAW_CRUXITE.get())
-				{
-					result = moveItemStackTo(itemstackOrig, 2, 3, false);    //Send the cruxite to the cruxite input
-				} else if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
+				if(itemstackOrig.getItem() == MSItems.RAW_URANIUM.get())
 				{
 					result = moveItemStackTo(itemstackOrig, 1, 2, false);    //Send the uranium to the uranium input
 				} else
@@ -112,10 +100,5 @@ public class AnthvilMenu extends MachineContainerMenu
 	public int getFuel()
 	{
 		return fuelHolder.get();
-	}
-	
-	public int getCruxite()
-	{
-		return cruxiteHolder.get();
 	}
 }

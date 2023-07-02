@@ -1,11 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.GristCostRecipe;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.*;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +23,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RangedWrapper;
-import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,11 +31,9 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 {
 	public static final String TITLE = "container.minestuck.anthvil";
 	public static final short MAX_FUEL = 128;
-	public static final short MAX_CRUXITE = 128;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, 0, this::setChanged, this::contentsValid);
 	private short fuel = 0;
-	private short cruxite = 0;
 	
 	private final DataSlot fuelHolder = new DataSlot()
 	{
@@ -55,20 +50,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		}
 	};
 	
-	private final DataSlot cruxiteHolder = new DataSlot()
-	{
-		@Override
-		public int get()
-		{
-			return cruxite;
-		}
-		
-		@Override
-		public void set(int value)
-		{
-			cruxite = (short) value;
-		}
-	};
 	
 	public AnthvilBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -89,7 +70,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		this.progressTracker.load(compound);
 		
 		fuel = compound.getShort("fuel");
-		cruxite = compound.getShort("cruxite");
 	}
 	
 	@Override
@@ -100,13 +80,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		this.progressTracker.save(compound);
 		
 		compound.putShort("fuel", fuel);
-		compound.putShort("cruxite", cruxite);
 	}
 	
 	@Override
 	protected ItemStackHandler createItemHandler()
 	{
-		return new MachineProcessBlockEntity.CustomHandler(3, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS) || stack.is(MSItems.RAW_CRUXITE.get()));
+		return new MachineProcessBlockEntity.CustomHandler(2, (index, stack) -> index == 0 || stack.is(ExtraForgeTags.Items.URANIUM_CHUNKS));
 	}
 	
 	@Override
@@ -115,12 +94,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		this.progressTracker.tick(this::processContents);
 	}
 	
-	/*public void openScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn)
-	{
-		MSScreenFactories.displayAnthvilScreen(, inv, titleIn, this);
-		//NetworkHooks.openScreen(serverPlayer, menuProvider, pos);
-	}*/
-	
 	private boolean contentsValid()
 	{
 		if(level.hasNeighborSignal(this.getBlockPos()))
@@ -128,13 +101,11 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			return false;
 		}
 		
-		ItemStack cruxite = itemHandler.getStackInSlot(2);
 		ItemStack fuel = itemHandler.getStackInSlot(1);
 		ItemStack input = itemHandler.getStackInSlot(0);
 		
 		boolean goodOnFuel = canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS);
-		boolean goodOnCruxite = cruxiteCanBeRestocked() && cruxite.is(MSItems.RAW_CRUXITE.get());
-		return (goodOnFuel && goodOnCruxite) || !input.isEmpty();
+		return goodOnFuel || !input.isEmpty();
 	}
 	
 	/**
@@ -153,16 +124,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			}
 		}
 		
-		if(cruxiteCanBeRestocked())
-		{
-			//checks for a cruxite itemstack in the middle item slot, increases the cruxite value if some is found and then removes one count from the cruxite stack
-			if(itemHandler.getStackInSlot(2).is(MSItems.RAW_CRUXITE.get()))
-			{
-				//Refill cruxite
-				cruxite += 1;
-				itemHandler.extractItem(2, 1, false);
-			}
-		}
 		
 		if(canMend())
 		{
@@ -175,13 +136,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 				slotStack.setDamageValue(slotStack.getDamageValue() - 10);
 				
 				fuel = (short) (fuel - 1);
-				cruxite = (short) (cruxite - 1);
 			}
 		}
 	}
 	
 	/**
-	 * Checks that there is enough fuel energy/cruxite/grist for the machine to work and that there is something to mend
+	 * Checks that there is enough fuel energy/grist for the machine to work and that there is something to mend
 	 */
 	private boolean canMend()
 	{
@@ -191,7 +151,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		
 		boolean cacheHasEnough = false;
 		
-		return fuel > 0 && cruxite > 0 && !itemHandler.getStackInSlot(0).isEmpty() && hasGristCost && cacheHasEnough;
+		return fuel > 0 && !itemHandler.getStackInSlot(0).isEmpty() && hasGristCost && cacheHasEnough;
 	}
 	
 	/**
@@ -208,17 +168,14 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		fuel += fuelAmount;
 	}
 	
-	/**
-	 * Checks that cruxite can be added without any excess/wasted points being attributed
-	 */
-	public boolean cruxiteCanBeRestocked()
+	@Override
+	public boolean atMaxFuel()
 	{
-		return cruxite <= MAX_CRUXITE - 1;
+		return fuel >= MAX_FUEL;
 	}
 	
 	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //regenerating item slot
 	private final LazyOptional<IItemHandler> fuelHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 1, 2)); //uranium fuel slot
-	private final LazyOptional<IItemHandler> cruxiteHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 2, 3)); //cruxite slot
 	
 	@Nonnull
 	@Override
@@ -230,10 +187,8 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 				return inputHandler.cast();
 			else if(side == Direction.DOWN)
 				return LazyOptional.empty();
-			else if(side == Direction.SOUTH)
-				return cruxiteHandler.cast(); //will fill the anthvil with cruxite if fed from behind
 			else
-				return fuelHandler.cast(); //will fill the anthvil with fuel if fed from the sides (just not the back)
+				return fuelHandler.cast(); //will fill the anthvil with fuel if fed from the sides
 		}
 		return super.getCapability(cap, side);
 	}
@@ -243,7 +198,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
 		return new AnthvilMenu(windowId, playerInventory, itemHandler,
-				this.progressTracker, fuelHolder, cruxiteHolder,
-				ContainerLevelAccess.create(level, worldPosition), worldPosition);
+				this.progressTracker, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }

@@ -47,7 +47,7 @@ public class PowerHubBlockEntity extends BlockEntity
 		
 		if(blockEntity.power > 0)
 		{
-			if(level.getBlockEntity(pos.above()) instanceof UraniumPowered poweredBlockEntity)
+			if(level.getBlockEntity(pos.above()) instanceof UraniumPowered poweredBlockEntity && !poweredBlockEntity.atMaxFuel())
 			{
 				poweredBlockEntity.addFuel((short) 1);
 				blockEntity.power--;

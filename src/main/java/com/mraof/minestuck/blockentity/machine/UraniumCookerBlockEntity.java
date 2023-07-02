@@ -197,4 +197,10 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 	{
 		fuel += fuelAmount;
 	}
+	
+	@Override
+	public boolean atMaxFuel()
+	{
+		return fuel >= MAX_FUEL;
+	}
 }

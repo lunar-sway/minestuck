@@ -194,6 +194,12 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	}
 	
 	@Override
+	public boolean atMaxFuel()
+	{
+		return fuel >= MAX_FUEL;
+	}
+	
+	@Override
 	public void addFuel(short fuelAmount)
 	{
 		fuel += fuelAmount;
