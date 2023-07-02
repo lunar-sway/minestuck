@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- New operator command that can make a player enter the medium without using an artifact
+- Translation keys/lang file entries for entry failure messages
 - Union Buster Sword
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 
@@ -16,9 +18,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
 
+### Fixed
+
+- Fixed issue with sburb connections and /debuglands
+
 ### Contributors for this release
 
-- kirderf1, Estellairon, Riotmode
+- kirderf1, hadean, Estellairon, Riotmode
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
