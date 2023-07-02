@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -28,7 +27,7 @@ public class FrogTempleStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.FROG_TEMPLE.get();
+		return MSStructureTypes.FROG_TEMPLE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

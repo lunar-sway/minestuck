@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": {
+      "feature": "minestuck:small_cog",
+      "placement": []
+    },
+    "features": [
+      {
+        "chance": 0.1,
+        "feature": {
+          "feature": "minestuck:large_cog",
+          "placement": []
+        }
+      }
+    ]
+  }
+}

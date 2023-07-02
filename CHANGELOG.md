@@ -10,9 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Anthvil block
 
+### Changed
+
+- Some land worldgen features are now replacable by datapacks
+- Tree features for our saplings are now replacable by datapacks
+
 ### Contributors for this release
 
-- rose_bushes_, Dweblenod
+- kirderf1, rose_bushes_, Dweblenod
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 

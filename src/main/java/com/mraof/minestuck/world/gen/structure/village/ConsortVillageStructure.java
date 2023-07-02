@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.structure.village;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -31,7 +31,7 @@ public class ConsortVillageStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.CONSORT_VILLAGE.get();
+		return MSStructureTypes.CONSORT_VILLAGE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

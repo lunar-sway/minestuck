@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.structure.gate;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.gen.structure.MSConfiguredStructures;
+import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -65,7 +65,7 @@ public final class LandGatePlacement extends StructurePlacement
 			// but some registries also have separate dynamic registries that are world-specific
 			// We need a configured structure from the dynamic registry and not the builtin registry for getStartForFeature() to work
 			Structure landGate = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
-					.get(MSConfiguredStructures.LAND_GATE.getKey());
+					.get(MSStructures.LAND_GATE);
 			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
 			
 			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(level.getChunkSource().randomState());
