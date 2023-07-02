@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- New operator command that can make a player enter the medium without using an artifact
+- Translation keys/lang file entries for entry failure messages
+
 ### Changed
 
 - Some land worldgen features are now replacable by datapacks
@@ -13,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1
+- kirderf1, hadean
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
@@ -24,7 +29,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - kirderf1
-- hadean
 
 ## [1.19.2-1.10.3.0] - 2023-06-12
 
@@ -34,7 +38,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Alchemiter splash particles
 - Alchemiter, Transportalizer, Totem Lathe sound effects
 - New growing animation for lotus flower
-- New operator command that can make a player enter the medium without using an artifact
 
 ### Changed
 
