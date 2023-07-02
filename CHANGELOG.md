@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks).
+- Combinations for Uncarved Wood Variants.
+
+### Changed
+
+- Uncarved Wood Texture
+
+### Contributors for this release
+
+- Zepsun
+- Vinnelli
+- Riotmode
+- Vivian Zane
+- Dweblenod
+
 ## [1.19.2-1.10.3.0] - 2023-06-12
 
 ### Added
