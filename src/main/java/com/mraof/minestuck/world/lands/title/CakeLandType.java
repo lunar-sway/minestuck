@@ -42,7 +42,7 @@ public class CakeLandType extends TitleLandType
 	@Override
 	public void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandBiomeSetType biomeSet)
 	{
-		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, PlacementUtils.inlinePlaced(MSFeatures.CAKE.get(),
+		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.inline(MSFeatures.CAKE.get(),
 				new ProbabilityFeatureConfiguration(biomeSet.getTemperature() / 2),
 				CountPlacement.of(UniformInt.of(0, 1)), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome()),
 				LandBiomeType.any());

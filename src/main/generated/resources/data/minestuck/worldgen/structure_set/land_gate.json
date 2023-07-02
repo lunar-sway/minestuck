@@ -1,0 +1,12 @@
+{
+  "placement": {
+    "type": "minestuck:land_gate",
+    "salt": 0
+  },
+  "structures": [
+    {
+      "structure": "minestuck:land_gate",
+      "weight": 1
+    }
+  ]
+}
