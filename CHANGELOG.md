@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
 
+### Fixed
+
+- Fixed issue with sburb connections and /debuglands
+
 ### Contributors for this release
 
 - kirderf1, hadean

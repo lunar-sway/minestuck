@@ -81,7 +81,7 @@ public final class CommandActionHandler
 			{
 				Session session = skaianet.sessionHandler.prepareSessionFor(client, server);
 				SburbConnection newConnection = new SburbConnection(client, server, skaianet);
-				session.addConnection(newConnection);
+				session.connections.add(newConnection);
 				SburbHandler.onConnectionCreated(newConnection);
 				newConnection.setIsMain();
 			}
@@ -151,7 +151,7 @@ public final class CommandActionHandler
 			else
 			{
 				PlayerIdentifier lastIdentifier = identifier;
-				for(i = landTypes.size() - 1; i >= 0; i++)
+				for(i = landTypes.size() - 1; i >= 0; i--)
 				{
 					LandTypePair land = landTypes.get(i);
 					if(land == null)
@@ -181,7 +181,7 @@ public final class CommandActionHandler
 		c.setHasEntered();
 		
 		Session session = skaianet.sessionHandler.getSessionForConnecting(client, server);
-		session.addConnection(c);
+		session.connections.add(c);
 		SburbHandler.onConnectionCreated(c);
 		
 		//The land types used by generation is set during connection init above, so placing gates currently has to go after that
