@@ -47,6 +47,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+/**
+ * Stores a cruxite dowel and through use of interface can take a players grist and create new copies of the item the dowel encodes.
+ * When a new dowel is placed, animation plays where the arm "scans" the dowels code. Core Editmode deployable
+ */
 public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, IAnimatable
 {
 	private static final Logger LOGGER = LogManager.getLogger();

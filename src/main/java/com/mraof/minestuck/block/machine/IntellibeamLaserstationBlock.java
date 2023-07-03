@@ -3,7 +3,7 @@ package com.mraof.minestuck.block.machine;
 import com.mraof.minestuck.block.BlockUtil;
 import com.mraof.minestuck.block.MSBlockShapes;
 import com.mraof.minestuck.block.MSProperties;
-import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
+import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

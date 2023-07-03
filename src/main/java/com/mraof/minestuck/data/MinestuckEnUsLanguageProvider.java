@@ -9,7 +9,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
-import com.mraof.minestuck.blockentity.IntellibeamLaserstationBlockEntity;
+import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;

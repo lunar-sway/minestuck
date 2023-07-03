@@ -36,6 +36,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+/**
+ * Stores 1-2 punched captcha cards. Handles the triggering and logic of && combination recipes using those punched cards, the result of which is applied to a cruxite dowel.
+ * {@link TotemLatheDowelBlockEntity} handles the storage of the dowel that will be lathed. The Totem Lathe is a core Editmode deployable
+ */
 @ParametersAreNonnullByDefault
 public class TotemLatheBlockEntity extends BlockEntity
 {

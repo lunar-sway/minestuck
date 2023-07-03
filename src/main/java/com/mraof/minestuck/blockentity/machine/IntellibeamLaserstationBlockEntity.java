@@ -1,8 +1,9 @@
-package com.mraof.minestuck.blockentity;
+package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
+import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.util.MSTags;
@@ -25,6 +26,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Takes a captcha card and expends player experience to "decode" the captcha on the card if the item stored in said card is in the item tag UNREADABLE.
+ * Editmode deployable
+ */
 public class IntellibeamLaserstationBlockEntity extends BlockEntity
 {
 	public static final String DECODING_PROGRESS = "block.minestuck.intellibeam_laserstation.decoding_progress";

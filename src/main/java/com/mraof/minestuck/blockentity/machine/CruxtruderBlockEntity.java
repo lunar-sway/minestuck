@@ -24,6 +24,10 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+/**
+ * Stores raw cruxite and produces uncarved cruxite dowels.
+ * Core Editmode deployable
+ */
 @ParametersAreNonnullByDefault
 public class CruxtruderBlockEntity extends BlockEntity
 {

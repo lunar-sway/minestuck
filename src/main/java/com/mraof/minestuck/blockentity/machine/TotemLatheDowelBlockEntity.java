@@ -25,6 +25,11 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.awt.*;
 
+/**
+ * Stores a cruxite dowel. When && combination recipes are triggered, an animation will play that spins the dowel and carves it
+ * {@link TotemLatheBlockEntity} handles the storage of the punched cards and logic involved in making the totem from the uncarved dowel.
+ * The Totem Lathe is a core Editmode deployable
+ */
 public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements IAnimatable
 {
 	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);

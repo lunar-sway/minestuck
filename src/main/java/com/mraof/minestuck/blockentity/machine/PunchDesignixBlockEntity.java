@@ -33,10 +33,14 @@ import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 
-import java.util.Objects;
-
 import static com.mraof.minestuck.block.machine.MachineBlock.FACING;
 
+/**
+ * Stores a captchalogue card and stores an 8 character long captcha to be punched into the card.
+ * Handles the triggering and logic of || combination recipes using that card and typed code.
+ * Right clicking a card to the keyboard will copy its captcha code unless the card contains an item in the UNREADABLE tag and has not been decoded.
+ * Core Editmode deployable
+ */
 public class PunchDesignixBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();

@@ -2,7 +2,6 @@ package com.mraof.minestuck.event;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.CreativeShockEffect;
 import com.mraof.minestuck.effects.MSEffects;
