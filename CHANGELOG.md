@@ -15,8 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Changed textures for Rainbow Logs, Rainbow Leaves, Rainbow Planks, and Rainbow Saplings
+- Changed Rainbow Sapling to use a simpler growth process without using colored state properties
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
+
+### Removed
+
+- Removed color blockstates and models for the Rainbow Sapling
 
 ### Fixed
 
@@ -25,7 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
