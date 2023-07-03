@@ -10,6 +10,7 @@ import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
@@ -261,6 +262,12 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 			LOGGER.info("Generated {} grist conversions from recipes.", generatedCosts.size());
 		} else
 			throw new IllegalStateException("Tried to build recipe-generated costs, but did not have an ongoing process!");
+	}
+	
+	@Override
+	public void reportPreliminaryLookups(LookupTracker tracker)
+	{
+		this.process.reportPreliminaryLookups(tracker);
 	}
 	
 	/**
