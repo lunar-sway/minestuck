@@ -44,7 +44,7 @@ public final class LandBiomeSetType
 	public static Optional<RegistryBackedBiomeSet> getSet(ChunkGenerator generator)
 	{
 		if(generator instanceof LandChunkGenerator landGen)
-			return Optional.of(landGen.biomes.baseBiomes);
+			return Optional.of(landGen.biomeSet.baseBiomes);
 		else return Optional.empty();
 	}
 	

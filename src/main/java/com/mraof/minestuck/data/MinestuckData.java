@@ -9,6 +9,7 @@ import com.mraof.minestuck.data.recipe.MinestuckCombinationsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckGristCostsProvider;
 import com.mraof.minestuck.data.recipe.MinestuckRecipeProvider;
 import com.mraof.minestuck.data.tag.*;
+import com.mraof.minestuck.data.worldgen.*;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
@@ -19,16 +20,24 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class MinestuckData
+public final class MinestuckData
 {
 	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event)
 	{
 		DataGenerator gen = event.getGenerator();
 		ExistingFileHelper fileHelper = event.getExistingFileHelper();
-		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, RegistryAccess.builtinCopy());
+		RegistryAccess.Writable registryAccess = RegistryAccess.builtinCopy();
+		RegistryOps<JsonElement> registryOps = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
 		
-		gen.addProvider(event.includeServer(), new MinestuckBiomeProvider(gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSNoiseParametersProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSDensityFunctionProvider.create(registryAccess, gen, fileHelper));
+		
+		gen.addProvider(event.includeServer(), MSConfiguredFeatureProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSPlacedFeatureProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSBiomeProvider.create(registryOps, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureProvider.create(registryAccess, gen, fileHelper));
+		gen.addProvider(event.includeServer(), MSStructureSetProvider.create(registryAccess, gen, fileHelper));
 		gen.addProvider(event.includeServer(), BiomeModifierProvider.create(gen, fileHelper, registryOps));
 		
 		BlockTagsProvider blockTags = new MinestuckBlockTagsProvider(gen, fileHelper);

@@ -4,7 +4,7 @@
     "tag": "minecraft:logs"
   },
   "input2": {
-    "item": "minecraft:stone"
+    "item": "minecraft:smooth_stone"
   },
   "mode": "and",
   "output": {

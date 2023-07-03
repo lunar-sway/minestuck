@@ -202,6 +202,10 @@ public class MSBlockLootTables extends BlockLoot
 		add(UNCARVED_WOOD.get(), createSingleItemTableWithSilkTouch(UNCARVED_WOOD.get(), CHIPBOARD.get()));
 		dropSelf(CHIPBOARD.get());
 		dropSelf(WOOD_SHAVINGS.get());
+		dropSelf(CARVED_HEAVY_PLANKS.get());
+		dropSelf(CARVED_PLANKS.get());
+		dropSelf(POLISHED_UNCARVED_WOOD.get());
+		dropSelf(CARVED_KNOTTED_WOOD.get());
 		dropSelf(DENSE_CLOUD.get());
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());

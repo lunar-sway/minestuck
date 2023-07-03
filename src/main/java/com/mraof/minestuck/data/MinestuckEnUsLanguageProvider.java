@@ -1,7 +1,10 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
@@ -24,6 +27,7 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
+import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
@@ -216,6 +220,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
 		addBlock(MSBlocks.WOOD_SHAVINGS, "Wood Shavings");
+		addBlock(MSBlocks.CARVED_HEAVY_PLANKS, "Carved Heavy Planks");
+		addBlock(MSBlocks.CARVED_PLANKS, "Carved Planks");
+		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
+		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
@@ -673,6 +681,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
 		addItem(MSItems.CINNAMON_SWORD, "Cinnamon Sword");
+		addItem(MSItems.UNION_BUSTER, "Union Buster");
+		addItemTooltip(MSItems.UNION_BUSTER, "Does quite a lot of damage, both societal AND material!");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
 		addItem(MSItems.PIGLINS_PRIDE, "Piglin's Pride");
@@ -1705,6 +1715,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		addEffect(MSEffects.SUSPICION, "Suspicion");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -1873,6 +1884,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
+		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension.");
+		add(EntryProcess.BUSY, "Someone else is already entering.");
+		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console.");
+		add(EntryProcess.DIMENSION_MISSING, "Unable to find land dimension. Something is not as it should be!");
+		add(EntryProcess.NOT_ALLOWED_HERE, "You are not allowed to enter here.");
+		add(EntryProcess.NO_REENTRY, "You have already entered, and are not permitted to re-enter.");
+		add(EntryProcess.WRONG_DIMENSION_REENTRY, "You may not re-enter from this dimension.");
+		add(EntryProcess.TELEPORT_FAILED, "Entry failed. Unable to teleport you!");
+		add(EntryProcess.COMMAND_BLOCK_DENIED, "You are not allowed to move command blocks.");
+		add(EntryProcess.SKAIANET_DENIED, "Network error (413): Skaianet - failed to Enter user %s. Entry denial device used at global coordinates: %s");
+		add(EntryProcess.NOT_YOUR_COMPUTER, "You are not allowed to move other players' computers.");
+		add(EntryProcess.NEEDS_COMPUTER, "There is no computer in range.");
+		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		
 		add(Theme.DEFAULT.getName(), "Default");
 		add(Theme.PESTERCHUM.getName(), "Pesterchum");

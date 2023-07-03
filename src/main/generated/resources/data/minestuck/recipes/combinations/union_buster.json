@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:rockefellers_walking_bladecane"
+  },
+  "input2": {
+    "item": "minestuck:nightstick"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:union_buster"
+  }
+}

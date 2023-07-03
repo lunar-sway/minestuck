@@ -2,17 +2,19 @@ package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
 
-public class MSNoiseParameters
+public final class MSNoiseParameters
 {
-	public static final DeferredRegister<NormalNoise.NoiseParameters> REGISTER = DeferredRegister.create(Registry.NOISE_REGISTRY, Minestuck.MOD_ID);
+	public static final ResourceKey<NormalNoise.NoiseParameters> SKAIA_RIDGES = key("skaia/ridges");
 	
-	public static final RegistryObject<NormalNoise.NoiseParameters> SKAIA_RIDGES = REGISTER.register("skaia/ridges", () -> new NormalNoise.NoiseParameters(-8, 1, 1, 1, 1));
+	public static final ResourceKey<NormalNoise.NoiseParameters> LAND_CONTINENTS = key("land/continents");
+	public static final ResourceKey<NormalNoise.NoiseParameters> LAND_EROSION = key("land/erosion");
 	
-	public static final RegistryObject<NormalNoise.NoiseParameters> LAND_CONTINENTS = REGISTER.register("land/continents", () -> new NormalNoise.NoiseParameters(-6, 1, 1, 1, 1));
-	public static final RegistryObject<NormalNoise.NoiseParameters> LAND_EROSION = REGISTER.register("land/erosion", () -> new NormalNoise.NoiseParameters(-5, 1, 1, 1));
-	
+	private static ResourceKey<NormalNoise.NoiseParameters> key(String name)
+	{
+		return ResourceKey.create(Registry.NOISE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+	}
 }
