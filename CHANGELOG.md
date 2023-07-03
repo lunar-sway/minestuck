@@ -283,9 +283,9 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 
 - kirderf1, Dweblenod, Akisephila, rose_bushes_
 
-### [1.18.2-1.9.1.0] - 2023-02-19
+## [1.18.2-1.9.1.0] - 2023-02-19
 
-## Added
+### Added
 
 - Added moss carpet patches/rooted azalea trees/lush cave vegetation to Flora lands
 - Added carved caves/moss carpet patches/berry bush patches/mossy forest rocks/hanging roots and lush cave vegetation to cave ceilings/rooted dirt deposits to Forest lands
@@ -296,7 +296,7 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - Added vanilla monster dungeons to Monster Lands
 - Added mycelium cruxite and uranium ore blocks
 
-## Changed
+### Changed
 
 - Removed discs of leaves from Wood Lands
 - Other tweaks to generation of features in Lands
@@ -305,7 +305,7 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 - Updated ice shard texture
 - Updated pink stone coal ore texture
 
-## Fixed
+### Fixed
 
 - /debuglands now require permission level 2 to be used
 - Item capability data is no longer lost when the item is put in a card
@@ -316,3 +316,24 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 ### Contributors for this release
 
 - Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
+
+## [1.18.2-1.9.0.2] - 2023-01-09
+
+### Fixed
+
+- Fix crash with Mine and Grist
+- Fix and tweak some computer interactions
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.9.0.1] - 2022-12-28
+
+### Fixed
+
+- Fix crash on player death
+
+### Contributors for this release
+
+- kirderf1
