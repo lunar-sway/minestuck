@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.GristCache;
@@ -47,8 +48,8 @@ public class GristCommand
 	{
 		for(ServerPlayer player : players)
 		{
-			GristSet grist = GristCache.get(player).getGristSet();
-			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), grist.asTextComponent()), false);
+			Component gristComponent = GristCache.get(player).getGristSet().asTextComponent();
+			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), gristComponent), false);
 		}
 		return players.size();
 	}
@@ -60,7 +61,7 @@ public class GristCommand
 		{
 			try
 			{
-				GristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
+				MutableGristSet remainingGrist = GristCache.get(player).addWithinCapacity(grist, GristHelper.EnumSource.CONSOLE);
 				if(remainingGrist.equalContent(grist))
 				{
 					source.sendFailure(Component.translatable(NO_CAPACITY, player.getDisplayName()));

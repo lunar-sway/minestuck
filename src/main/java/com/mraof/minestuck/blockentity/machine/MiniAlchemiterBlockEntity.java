@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -205,7 +206,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
 			{
-				GristSet scale_cost;
+				MutableGristSet scale_cost;
 				for (int lvl = 1; lvl <= 17; lvl++)
 				{
 					// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
@@ -214,7 +215,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 						return 15;
 					}
 					// We need to make a copy to preserve the original grist amounts and avoid scaling values that have already been scaled. Keeps scaling linear as opposed to exponential.
-					scale_cost = cost.copy().scale(lvl);
+					scale_cost = cost.mutableCopy().scale(lvl);
 					if (!GristCache.get(level, owner).canAfford(scale_cost))
 					{
 						return lvl - 1;

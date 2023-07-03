@@ -1,0 +1,11 @@
+{
+    "providers": [
+        {
+            "type": "ttf",
+            "file": "minestuck:land_of_copyleft_and_freedom.ttf",
+            "shift": [0, 0],
+            "size": 4.0,
+            "oversample": 4.0
+        }
+    ]
+}

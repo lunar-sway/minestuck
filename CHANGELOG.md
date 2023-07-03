@@ -6,18 +6,68 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- New operator command that can make a player enter the medium without using an artifact
+- Translation keys/lang file entries for entry failure messages
+- Union Buster Sword
+- Suspicion mob effect (affected mobs will be forced away from other affected mobs)
+
 ### Changed
 
 - Changed textures for Rainbow Logs, Rainbow Leaves, Rainbow Planks, and Rainbow Saplings
 - Changed Rainbow Sapling to use a simpler growth process without using colored state properties
+- Some land worldgen features are now replacable by datapacks
+- Tree features for our saplings are now replacable by datapacks
 
 ### Removed
 
 - Removed color blockstates and models for the Rainbow Sapling
 
+### Fixed
+
+- Fixed issue with sburb connections and /debuglands
+- Grist cost generation optimisation
+
 ### Contributors for this release
 
-- Carnie, Akisephila, kirderf
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila
+
+## [1.19.2-1.10.3.1] - 2023-06-19
+
+### Fixed
+
+- Grist costs did not scale with the item count when created with alchemiters or consumed with grist widgets
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.19.2-1.10.3.0] - 2023-06-12
+
+### Added
+
+- Cinnamon Sword
+- Alchemiter splash particles
+- Alchemiter, Transportalizer, Totem Lathe sound effects
+- New growing animation for lotus flower
+
+### Changed
+
+- Lotus flowers now regrow after 5 minutes instead of 10 by default
+- Lotus flower has been remodeled and given changes to existing animations
+- Font used for on-screen message when Entering is now the newly created "Land of Copyleft and Freedom"
+
+### Fixed
+
+- Basilisks can now despawn again
+- Clarity issues with gutter related items
+- /tpz command now works with TRANSportalizers
+- /tpz command code argument is no longer case sensitive
+
+### Contributors for this release
+
+- Vivian-Zane, rose_bushes_, DORO, Riotmode(SpoiledMysterymeat), Akisephila, Dweblenod
 
 ## [1.19.2-1.10.2.0] - 2023-04-20
 

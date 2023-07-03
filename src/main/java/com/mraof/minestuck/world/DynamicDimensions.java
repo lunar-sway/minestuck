@@ -31,7 +31,7 @@ public class DynamicDimensions
 			long seed = random.nextLong();
 			
 			ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), server.registryAccess().registryOrThrow(Registry.DENSITY_FUNCTION_REGISTRY),
-					named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY));
+					named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY), server.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY));
 			return new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolderOrThrow(LAND_TYPE), chunkGenerator);
 		});
 		

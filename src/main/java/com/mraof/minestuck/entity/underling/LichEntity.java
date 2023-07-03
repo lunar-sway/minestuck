@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
@@ -76,7 +76,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public GristSet getGristSpoils()
+	public MutableGristSet getGristSpoils()
 	{
 		return GristHelper.generateUnderlingGristDrops(this, damageMap, 8);
 	}

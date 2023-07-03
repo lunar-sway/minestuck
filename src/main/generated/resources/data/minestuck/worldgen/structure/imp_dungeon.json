@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:imp_dungeon",
+  "biomes": "#minestuck:has_structure/imp_dungeon",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

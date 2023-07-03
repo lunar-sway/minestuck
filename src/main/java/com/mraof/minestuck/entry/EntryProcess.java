@@ -53,6 +53,20 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID)
 public class EntryProcess
 {
+	public static final String WRONG_DIMENSION = "minestuck.entry.wrong_dimension";
+	public static final String BUSY = "minestuck.entry.busy";
+	public static final String CREATION_FAILED = "minestuck.entry.creation_failed";
+	public static final String DIMENSION_MISSING = "minestuck.entry.dimension_missing";
+	public static final String NOT_ALLOWED_HERE = "minestuck.entry.not_allowed_here";
+	public static final String NO_REENTRY = "minestuck.entry.no_reentry";
+	public static final String WRONG_DIMENSION_REENTRY = "minestuck.entry.wrong_dimension_reentry";
+	public static final String TELEPORT_FAILED = "minestuck.entry.teleport_failed";
+	public static final String COMMAND_BLOCK_DENIED = "minestuck.entry.command_block_denied";
+	public static final String SKAIANET_DENIED = "minestuck.entry.skaianet_denied";
+	public static final String NOT_YOUR_COMPUTER = "minestuck.entry.not_your_computer";
+	public static final String NEEDS_COMPUTER = "minestuck.entry.needs_computer";
+	public static final String EXCEPTION = "minestuck.entry.exception";
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 	public static final TicketType<Unit> CHUNK_TICKET_TYPE = TicketType.create("entry", (_left, _right) -> 0);
 	
@@ -64,9 +78,9 @@ public class EntryProcess
 	private final BlockPos origin;
 	private final boolean creative;
 	
-	private EntryProcess(ServerPlayer player, ServerLevel landLevel)
+	private EntryProcess(ServerPlayer player, ServerLevel landLevel, BlockPos pos)
 	{
-		this.origin = player.blockPosition();
+		this.origin = pos;
 		this.originLevel = (ServerLevel) player.level;
 		this.landLevel = landLevel;
 		
@@ -79,20 +93,25 @@ public class EntryProcess
 		creative = player.gameMode.isCreative();
 	}
 	
-	public static void onArtifactActivated(ServerPlayer player)
+	public static void enter(ServerPlayer player)
+	{
+		enter(player, new BlockPos(player.getX(), player.getY(), player.getZ()));
+	}
+	
+	public static void enter(ServerPlayer player, BlockPos pos)
 	{
 		long time = System.currentTimeMillis();
 		if(player.level.dimension() == Level.NETHER)
 		{
-			player.sendSystemMessage(Component.literal("Entry not permitted from this dimension."));
+			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION));
 			return;
 		}
 		
-		if(!TitleSelectionHook.performEntryCheck(player))
+		if(!TitleSelectionHook.performEntryCheck(player, pos))
 			return;
 		if(waitingProcess != null)
 		{
-			player.sendSystemMessage(Component.literal("Someone else is already entering."));
+			player.sendSystemMessage(Component.translatable(BUSY));
 			return;
 		}
 		
@@ -108,21 +127,21 @@ public class EntryProcess
 		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
 		if(landDimension == null)
 		{
-			player.sendSystemMessage(Component.literal("Something went wrong while creating your Land. More details in the server console."));
+			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
 			return;
 		}
 		
 		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(landDimension);
 		if(landLevel == null)
 		{
-			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
+			player.sendSystemMessage(Component.translatable(DIMENSION_MISSING));
 			return;
 		}
 		
-		EntryProcess process = new EntryProcess(player, landLevel);
-		if(!process.canModifyEntryBlocks(player.level, player))
+		EntryProcess process = new EntryProcess(player, landLevel, pos);
+		if(!process.canModifyEntryBlocks(player, player.level, pos))
 		{
-			player.sendSystemMessage(Component.literal("You are not allowed to enter here."));    //TODO translation key
+			player.sendSystemMessage(Component.translatable(NOT_ALLOWED_HERE));
 			return;
 		}
 		
@@ -138,19 +157,19 @@ public class EntryProcess
 	{
 		if(MinestuckConfig.SERVER.stopSecondEntry.get())
 		{
-			player.sendSystemMessage(Component.literal("You have already entered, and are not permitted to re-enter."));
+			player.sendSystemMessage(Component.translatable(NO_REENTRY));
 			return;
 		}
 		if(MSDimensions.isLandDimension(player.server, player.level.dimension()))
 		{
-			player.sendSystemMessage(Component.literal("You may not re-enter from this dimension."));
+			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION_REENTRY));
 			return;
 		}
 		
 		ServerLevel landLevel = Objects.requireNonNull(player.getServer()).getLevel(land);
 		if(landLevel == null)
 		{
-			player.sendSystemMessage(Component.literal("Unable to find land dimension. Something is not as it should be!"));
+			player.sendSystemMessage(Component.translatable(DIMENSION_MISSING));
 			return;
 		}
 		
@@ -202,7 +221,7 @@ public class EntryProcess
 			
 			if(Teleport.teleportEntity(player, landLevel) == null)
 			{
-				player.sendSystemMessage(Component.literal("Entry failed. Unable to teleport you!"));
+				player.sendSystemMessage(Component.translatable(TELEPORT_FAILED));
 				return;
 			}
 			
@@ -213,7 +232,7 @@ public class EntryProcess
 		} catch(Exception e)
 		{
 			LOGGER.error("Exception when {} tried to enter their land.", player.getName().getString(), e);
-			player.sendSystemMessage(Component.literal("[Minestuck] Something went wrong during entry. " + (landLevel.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
+			player.sendSystemMessage(Component.translatable(EXCEPTION, (landLevel.getServer().isDedicatedServer() ? "Check the console for the error message." : "Notify the server owner about this.")).withStyle(ChatFormatting.RED));
 		}
 	}
 	
@@ -230,17 +249,17 @@ public class EntryProcess
 			
 			if(!creative && (block.is(Blocks.COMMAND_BLOCK) || block.is(Blocks.CHAIN_COMMAND_BLOCK) || block.is(Blocks.REPEATING_COMMAND_BLOCK)))
 			{
-				player.displayClientMessage(Component.literal("You are not allowed to move command blocks."), false);
+				player.displayClientMessage(Component.translatable(COMMAND_BLOCK_DENIED), false);
 				return true;
 			} else if(block.is(MSBlocks.SKAIANET_DENIER.get()))
 			{
-				player.displayClientMessage(Component.literal("Network error (413): Skaianet - failed to Enter user " + player.getDisplayName().getString() + ". Entry denial device used at global coordinates: " + pos.toShortString()), false);
+				player.displayClientMessage(Component.translatable(SKAIANET_DENIED, player.getDisplayName().getString(), pos.toShortString()), false);
 				return true;
 			} else if(be instanceof ComputerBlockEntity computer)
 			{
 				if(!computer.owner.appliesTo(player))
 				{
-					player.displayClientMessage(Component.literal("You are not allowed to move other players' computers."), false);
+					player.displayClientMessage(Component.translatable(NOT_YOUR_COMPUTER), false);
 					return true;
 				}
 				
@@ -250,7 +269,7 @@ public class EntryProcess
 		
 		if(!foundComputer && MinestuckConfig.SERVER.needComputer.get())
 		{
-			player.displayClientMessage(Component.literal("There is no computer in range."), false);
+			player.displayClientMessage(Component.translatable(NEEDS_COMPUTER), false);
 			return true;
 		}
 		
@@ -416,16 +435,11 @@ public class EntryProcess
 		}
 	}
 	
-	private boolean canModifyEntryBlocks(Level level, Player player)
+	private boolean canModifyEntryBlocks(Player player, Level level, BlockPos pos)
 	{
-		int x = (int) player.getX();
-		if(player.getX() < 0) x--;
-		int y = (int) player.getY();
-		int z = (int) player.getZ();
-		if(player.getZ() < 0) z--;
-		for(BlockPos pos : EntryBlockIterator.getHorizontal(x, y, z, artifactRange))
+		for(BlockPos bp : EntryBlockIterator.getHorizontal(pos.getX(), pos.getY(), pos.getZ(), artifactRange))
 		{
-			if(!level.mayInteract(player, pos))
+			if(!level.mayInteract(player, bp))
 				return false;
 		}
 		

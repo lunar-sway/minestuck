@@ -26,6 +26,7 @@ import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.consort.MessageType;
+import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSItemGroup;
@@ -673,6 +674,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SUBTRACTSHUMIDIRE_ZOMORRODNEGATIVE, "SUBTRACTSHUMIDIR-E ZOMORRODNEGATIVE");
 		addItem(MSItems.PILLOW_TALK, "Pillow Talk");
 		addItem(MSItems.KRAKENS_EYE, "Kraken's Eye");
+		addItem(MSItems.CINNAMON_SWORD, "Cinnamon Sword");
+		addItem(MSItems.UNION_BUSTER, "Union Buster");
+		addItemTooltip(MSItems.UNION_BUSTER, "Does quite a lot of damage, both societal AND material!");
 		addItem(MSItems.DAGGER, "Dagger");
 		addItem(MSItems.DIAMOND_DAGGER, "Diamond Dagger");
 		addItem(MSItems.PIGLINS_PRIDE, "Piglin's Pride");
@@ -1408,6 +1412,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
 
+		add("message.gutter.minor_increase", "Gutter Size Increased");
+		add("message.gutter.increase", "Gutter Size Increased Greatly");
+		
 		addStore(Items.PUMPKIN_PIE, "Tasty Pie");
 		addStoreTooltip(Items.PUMPKIN_PIE, "This pie appeared in storage a few days ago out of nowhere. No idea where it came from, but it sure is tasty!");
 		addStoreTooltip(Items.WHEAT_SEEDS, "You know what tastes even better than those plant grains? Their seeds, of course!");
@@ -1702,6 +1709,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(SburbHandler.CHAT_LAND_ENTRY, "Welcome to %s.");
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
+		addEffect(MSEffects.SUSPICION, "Suspicion");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
@@ -1865,6 +1873,19 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(MergeResult.BOTH_CUSTOM, "Can't merge two custom sessions");
 		add(MergeResult.GENERIC_FAIL, "Merge failed");
 		add(Generator.NO_AVAILABLE_TITLES, "No title was available to generate under current circumstances.");
+		add(EntryProcess.WRONG_DIMENSION, "Entry not permitted from this dimension.");
+		add(EntryProcess.BUSY, "Someone else is already entering.");
+		add(EntryProcess.CREATION_FAILED, "Something went wrong while creating your Land. More details in the server console.");
+		add(EntryProcess.DIMENSION_MISSING, "Unable to find land dimension. Something is not as it should be!");
+		add(EntryProcess.NOT_ALLOWED_HERE, "You are not allowed to enter here.");
+		add(EntryProcess.NO_REENTRY, "You have already entered, and are not permitted to re-enter.");
+		add(EntryProcess.WRONG_DIMENSION_REENTRY, "You may not re-enter from this dimension.");
+		add(EntryProcess.TELEPORT_FAILED, "Entry failed. Unable to teleport you!");
+		add(EntryProcess.COMMAND_BLOCK_DENIED, "You are not allowed to move command blocks.");
+		add(EntryProcess.SKAIANET_DENIED, "Network error (413): Skaianet - failed to Enter user %s. Entry denial device used at global coordinates: %s");
+		add(EntryProcess.NOT_YOUR_COMPUTER, "You are not allowed to move other players' computers.");
+		add(EntryProcess.NEEDS_COMPUTER, "There is no computer in range.");
+		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		
 		add(Theme.DEFAULT.getName(), "Default");
 		add(Theme.PESTERCHUM.getName(), "Pesterchum");
@@ -2348,6 +2369,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("projectile_bounce", "Projectile bounces");
 		addSubtitles("tool_revise", "Server uses Revise tool");
 		addSubtitles("tool_recycle", "Server recycles blocks");
+		addSubtitles("alchemiter_resonate", "Alchemize!");
+		addSubtitles("transportalizer_teleport", "Transportalize!");
+		addSubtitles("totem_lathe_lathe", "Latheify!");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");

@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.structure.gate;
 
 import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
-import com.mraof.minestuck.world.gen.structure.MSStructures;
+import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -32,7 +32,7 @@ public class GateStructure extends Structure
 	@Override
 	public StructureType<?> type()
 	{
-		return MSStructures.LAND_GATE.get();
+		return MSStructureTypes.LAND_GATE.get();
 	}
 	
 	private static void generatePieces(StructurePiecesBuilder builder, GenerationContext context)

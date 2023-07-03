@@ -1,16 +1,21 @@
 package com.mraof.minestuck.computer.editmode;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ClientDeployList
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	static void load(CompoundTag nbt)
 	{
 		if(entryList == null)
@@ -24,7 +29,7 @@ public final class ClientDeployList
 			entry.item = ItemStack.of(tag);
 			entry.index = tag.getInt("i");
 			
-			entry.cost = GristSet.read(tag.getList("cost", Tag.TAG_COMPOUND));
+			entry.cost = MutableGristSet.CODEC.parse(NbtOps.INSTANCE, tag.get("cost")).getOrThrow(false, LOGGER::error);
 			entry.category = DeployList.EntryLists.values()[tag.getInt("cat")];
 			
 			entryList.add(entry);
@@ -45,11 +50,11 @@ public final class ClientDeployList
 	public static class Entry
 	{
 		private ItemStack item;
-		private GristSet cost;
+		private MutableGristSet cost;
 		private int index;
 		private DeployList.EntryLists category;
 		
-		public GristSet getCost()
+		public MutableGristSet getCost()
 		{
 			return cost;
 		}

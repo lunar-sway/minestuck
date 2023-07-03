@@ -1,12 +1,11 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.network.ColorSelectPacket;
-import com.mraof.minestuck.network.data.EditmodeCacheLimitPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RGBColorSelectPacket;
 import com.mraof.minestuck.network.data.*;
@@ -33,8 +32,7 @@ public final class ClientPlayerData
 	private static float rungProgress;
 	private static long boondollars;
 	private static int consortReputation;
-	private static GristSet playerGrist;
-	private static GristSet targetGrist;
+	private static GristSet playerGrist, targetGrist;
 	private static long targetCacheLimit;
 	private static int playerColor;
 	private static boolean displaySelectionGui;
@@ -171,9 +169,10 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(GristCachePacket packet)
 	{
-		if(packet.isEditmode)
-			targetGrist = packet.gristCache;
-		else playerGrist = packet.gristCache;
+		if(packet.isEditmode())
+			targetGrist = packet.gristCache();
+		else
+			playerGrist = packet.gristCache();
 	}
 	
 	public static void handleDataPacket(EditmodeCacheLimitPacket packet)
