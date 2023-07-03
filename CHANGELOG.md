@@ -8,19 +8,42 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- New operator command that can make a player enter the medium without using an artifact
+- Translation keys/lang file entries for entry failure messages
+- Union Buster Sword
+- Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 - Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks).
 
 ### Changed
 
+- Changed textures for Rainbow Logs, Rainbow Leaves, Rainbow Planks, and Rainbow Saplings
+- Changed Rainbow Sapling to use a simpler growth process without using colored state properties
+- Some land worldgen features are now replacable by datapacks
+- Tree features for our saplings are now replacable by datapacks
 - Uncarved Wood Texture
+
+### Removed
+
+- Removed color blockstates and models for the Rainbow Sapling
+
+### Fixed
+
+- Fixed issue with sburb connections and /debuglands
+- Grist cost generation optimisation
 
 ### Contributors for this release
 
-- Zepsun
-- Vinnelli
-- Riotmode
-- Vivian Zane
-- Dweblenod
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
+
+## [1.19.2-1.10.3.1] - 2023-06-19
+
+### Fixed
+
+- Grist costs did not scale with the item count when created with alchemiters or consumed with grist widgets
+
+### Contributors for this release
+
+- kirderf1
 
 ## [1.19.2-1.10.3.0] - 2023-06-12
 

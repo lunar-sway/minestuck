@@ -164,7 +164,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 		if(cost == null)
 			return null;
 		
-		if(stack.getCount() == 1 || !stack.isDamaged())
+		if(stack.getCount() == 1 && !stack.isDamaged())
 			return cost;
 		
 		MutableGristSet mutableCost = cost.mutableCopy();

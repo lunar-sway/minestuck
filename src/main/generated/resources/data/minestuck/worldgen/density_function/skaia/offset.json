@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:add",
+  "argument1": -0.50375,
+  "argument2": {
+    "type": "minecraft:spline",
+    "spline": {
+      "coordinate": "minestuck:skaia/ridges",
+      "points": [
+        {
+          "derivative": 0.0,
+          "location": -1.5,
+          "value": -0.2
+        },
+        {
+          "derivative": 0.0,
+          "location": -0.5,
+          "value": 1.0
+        },
+        {
+          "derivative": 0.0,
+          "location": 0.5,
+          "value": -0.2
+        },
+        {
+          "derivative": 0.0,
+          "location": 1.5,
+          "value": 1.0
+        }
+      ]
+    }
+  }
+}

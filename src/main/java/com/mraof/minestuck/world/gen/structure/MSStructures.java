@@ -1,27 +1,29 @@
 package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.world.gen.structure.castle.CastleStructure;
-import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
-import com.mraof.minestuck.world.gen.structure.village.ConsortVillageStructure;
+import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.levelgen.structure.StructureType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
+@FieldsAreNonnullByDefault
 public final class MSStructures
 {
-	public static final DeferredRegister<StructureType<?>> REGISTER = DeferredRegister.create(Registry.STRUCTURE_TYPE_REGISTRY, Minestuck.MOD_ID);
-	
 	// Overworld
-	public static final RegistryObject<StructureType<FrogTempleStructure>> FROG_TEMPLE = REGISTER.register("frog_temple", () -> () -> FrogTempleStructure.CODEC);
+	public static final ResourceKey<Structure> FROG_TEMPLE = key("frog_temple");
 	
 	// Land
-	public static final RegistryObject<StructureType<GateStructure>> LAND_GATE = REGISTER.register("land_gate", () -> () -> GateStructure.CODEC);
-	public static final RegistryObject<StructureType<SmallRuinStructure>> SMALL_RUIN = REGISTER.register("small_ruin", () -> () -> SmallRuinStructure.CODEC);
-	public static final RegistryObject<StructureType<ImpDungeonStructure>> IMP_DUNGEON = REGISTER.register("imp_dungeon", () -> () -> ImpDungeonStructure.CODEC);
-	public static final RegistryObject<StructureType<ConsortVillageStructure>> CONSORT_VILLAGE = REGISTER.register("consort_village", () -> () -> ConsortVillageStructure.CODEC);
+	public static final ResourceKey<Structure> LAND_GATE = key("land_gate");
+	public static final ResourceKey<Structure> SMALL_RUIN = key("small_ruin");
+	public static final ResourceKey<Structure> IMP_DUNGEON = key("imp_dungeon");
+	public static final ResourceKey<Structure> CONSORT_VILLAGE = key("consort_village");
 	
 	// Skaia
-	public static final RegistryObject<StructureType<CastleStructure>> SKAIA_CASTLE = REGISTER.register("skaia_castle", () -> () -> CastleStructure.CODEC);
+	public static final ResourceKey<Structure> SKAIA_CASTLE = key("skaia_castle");
+	
+	private static ResourceKey<Structure> key(String name)
+	{
+		return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+	}
 }
