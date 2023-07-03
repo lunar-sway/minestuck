@@ -31,9 +31,7 @@
         "state": {
           "Name": "minestuck:rainbow_sapling",
           "Properties": {
-            "blue": "false",
-            "green": "false",
-            "red": "false"
+            "stage": "0"
           }
         }
       }

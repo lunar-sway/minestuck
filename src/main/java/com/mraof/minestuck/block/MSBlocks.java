@@ -10,7 +10,6 @@ import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.CustomVoxelShape;
-import com.mraof.minestuck.world.gen.feature.tree.RainbowTree;
 import com.mraof.minestuck.world.gen.feature.tree.ShadewoodTree;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
