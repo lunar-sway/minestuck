@@ -238,12 +238,14 @@ public class MSBlocks
 	public static final RegistryObject<Block> UNCARVED_WOOD = REGISTER.register("uncarved_wood", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CHIPBOARD = REGISTER.register("chipboard", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(1.0F).requiresCorrectToolForDrops().sound(SoundType.SCAFFOLDING)));
 	public static final RegistryObject<Block> WOOD_SHAVINGS = REGISTER.register("wood_shavings", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(0.4F).sound(SoundType.SAND)));
+	public static final RegistryObject<Block> CARVED_HEAVY_PLANKS = REGISTER.register("carved_heavy_planks", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> CARVED_PLANKS = REGISTER.register("carved_planks", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
+	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of(Material.WOOD, MaterialColor.WOOD).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	
 	public static final RegistryObject<Block> DENSE_CLOUD = REGISTER.register("dense_cloud", () -> new Block(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_YELLOW).strength(0.5F).sound(SoundType.SNOW)));
 	public static final RegistryObject<Block> BRIGHT_DENSE_CLOUD = REGISTER.register("bright_dense_cloud", () -> new Block(Block.Properties.of(Material.GLASS, MaterialColor.COLOR_LIGHT_GRAY).strength(0.5F).sound(SoundType.SNOW)));
 	public static final RegistryObject<Block> SUGAR_CUBE = REGISTER.register("sugar_cube", () -> new Block(Block.Properties.of(Material.SAND, MaterialColor.SNOW).strength(0.4F).sound(SoundType.SAND)));
-	
-	
 	
 	//Land Tree Blocks
 	public static final RegistryObject<Block> GLOWING_LOG = REGISTER.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of(Material.WOOD, MaterialColor.COLOR_LIGHT_BLUE).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));

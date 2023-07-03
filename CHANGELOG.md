@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Translation keys/lang file entries for entry failure messages
 - Union Buster Sword
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
+- Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks).
 
 ### Changed
 
@@ -19,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed Rainbow Sapling to use a simpler growth process without using colored state properties
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
+- Uncarved Wood Texture
 
 ### Removed
 
@@ -31,7 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
