@@ -19,7 +19,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -28,6 +30,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class MagicAttackRightClickEffect implements ItemRightClickEffect
@@ -49,7 +53,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
 	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
 	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
-	
+	public static final MagicAttackRightClickEffect WATER_MAGIC = new WaterMagicEffect(27, 10, null, null, 1.0F, MagicEffect.Type.WATER);
 	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 	{
 		this.distance = distance;
@@ -132,17 +136,24 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		LivingEntity closestTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
 		if(closestTarget != null)
 		{
-			int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
+			float talliedDamage = calculateDamage(player, closestTarget, damage, effect);
+			closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), talliedDamage);
 			
-			if(closestTarget instanceof UnderlingEntity)
-				closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), damage + playerRung / 5F); //damage increase from rung is higher against underlings
-			else
-				closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), damage + playerRung / 10F);
 			if(effect != null && player.getRandom().nextFloat() < .25F)
 				closestTarget.addEffect(effect.get());
 			
 			return true;
 		} else return false;
+	}
+	
+	protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage, Supplier<MobEffectInstance> effect)
+	{
+		int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
+		
+		if(closestTarget instanceof UnderlingEntity)
+			return damage + playerRung / 5F; //damage increase from rung is higher against underlings
+		else
+			return damage + playerRung / 10F;
 	}
 	
 	private static class SbahjMagicEffect extends MagicAttackRightClickEffect
@@ -174,6 +185,24 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AABB(playerEyePos).inflate(11));
 			if(closestVisibleTarget != null)
 				player.lookAt(EntityAnchorArgument.Anchor.EYES, closestVisibleTarget, EntityAnchorArgument.Anchor.EYES);
+		}
+	}
+	
+	private static class WaterMagicEffect extends MagicAttackRightClickEffect
+	{
+		WaterMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		{
+			super(distance, damage, effect, sound, pitch, type);
+		}
+		
+		@Override
+		protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage, Supplier<MobEffectInstance> effect)
+		{
+				if(closestTarget.isSensitiveToWater())
+			{
+				return super.calculateDamage(player, closestTarget, damage, effect) + 20.0F;
+			} else
+				return super.calculateDamage(player, closestTarget, damage, effect);
 		}
 	}
 }

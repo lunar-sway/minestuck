@@ -8,9 +8,25 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrownPotion;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
 import java.util.function.Supplier;
+
+import static net.minecraft.world.entity.projectile.ThrownPotion.WATER_SENSITIVE;
 
 public class MagicEffect
 {
@@ -21,8 +37,9 @@ public class MagicEffect
 		ENCHANT(() -> ParticleTypes.ENCHANT, false, true),
 		RED(() -> new DustParticleOptions(new Vector3f(20F, 0F, 0F), 2F), false, false),
 		INK(() -> ParticleTypes.SQUID_INK, true, false),
-		ZILLY(() -> new DustParticleOptions(new Vector3f(20F, 20F, 20F), 2F), true, false),
-		ECHIDNA(() -> ParticleTypes.END_ROD, true, false);
+		ZILLY(() -> new DustParticleOptions(new Vector3f(20F, 20, 20F), 2F), true, false),
+		ECHIDNA(() -> ParticleTypes.END_ROD, true, false),
+		WATER(() -> ParticleTypes.DRIPPING_WATER, false, true);
 		
 		private final Supplier<ParticleOptions> particle;
 		private final boolean explosiveFinish;

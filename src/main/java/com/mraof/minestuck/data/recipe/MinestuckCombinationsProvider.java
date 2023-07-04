@@ -417,6 +417,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.KRAKENS_EYE.get()).input(Items.HEART_OF_THE_SEA).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CINNAMON_SWORD.get()).input(Items.WOODEN_SWORD).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UNION_BUSTER.get()).input(MSItems.ROCKEFELLERS_WALKING_BLADECANE.get()).and().input(MSItems.NIGHTSTICK.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.WATER_STAFF.get()).input(Items.STICK).and().input(Items.HEART_OF_THE_SEA).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).input(MSItems.DAGGER.get()).and().input(Items.DIAMOND).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PIGLINS_PRIDE.get()).input(MSItems.DIAMOND_DAGGER.get()).and().input(Items.NETHERITE_INGOT).build(consumer);

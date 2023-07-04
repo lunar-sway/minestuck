@@ -105,6 +105,8 @@ public class MSItems
 	public static final RegistryObject<Item> CINNAMON_SWORD = REGISTER.register("cinnamon_sword", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 4, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> UNION_BUSTER = REGISTER.register("union_buster", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 9, -3.5F).efficiency(1.0f).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.sweepMultiEffect(OnHitEffect.SPREADING_KNOCKBACK, OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MSEffects.SUSPICION.get(), 1200, 3, false, false)))), new Item.Properties().defaultDurability(505).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	
+	
+	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
@@ -381,7 +383,7 @@ public class MSItems
 	public static final RegistryObject<Item> THORN_OF_OGLOGOTH = REGISTER.register("thorn_of_oglogoth", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.HORRORTERROR_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.HORRORTERROR).set(MagicAttackRightClickEffect.HORRORTERROR_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> THISTLE_OF_ZILLYWICH = REGISTER.register("thistle_of_zillywich", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ZILLY_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ZILLY_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> QUILL_OF_ECHIDNA = REGISTER.register("quill_of_echidna", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, -1, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.ECHIDNA_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
-	
+	public static final RegistryObject<Item> WATER_STAFF = REGISTER.register("water_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.DENIZEN_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAttackRightClickEffect.WATER_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	
 	
 	//Projectiles
