@@ -53,7 +53,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
 	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
 	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
-	public static final MagicAttackRightClickEffect WATER_MAGIC = new WaterMagicEffect(27, 10, null, null, 1.0F, MagicEffect.Type.WATER);
+	public static final MagicAttackRightClickEffect WATER_MAGIC = new WaterMagicEffect(27, 2, null, null, 1.0F, MagicEffect.Type.WATER);
+	public static final MagicAttackRightClickEffect FIRE_MAGIC = new FireMagicEffect(27, 3, null, null, 1.0F, MagicEffect.Type.FIRE);
 	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
 	{
 		this.distance = distance;
@@ -142,6 +143,8 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			if(effect != null && player.getRandom().nextFloat() < .25F)
 				closestTarget.addEffect(effect.get());
 			
+			extraEffectApplier(closestTarget);
+			
 			return true;
 		} else return false;
 	}
@@ -205,4 +208,24 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 				return super.calculateDamage(player, closestTarget, damage, effect);
 		}
 	}
+	
+	protected void extraEffectApplier(LivingEntity closestTarget)
+	{
+	}
+	
+	private static class FireMagicEffect extends MagicAttackRightClickEffect
+	{
+		FireMagicEffect (int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		{
+			super(distance, damage, effect, sound, pitch, type);
+		}
+		
+		@Override
+		protected void extraEffectApplier(LivingEntity closestTarget)
+		{
+			super.extraEffectApplier(closestTarget);
+			closestTarget.setSecondsOnFire(10);
+		}
+	}
 }
+

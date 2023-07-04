@@ -1025,7 +1025,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.THISTLE_OF_ZILLYWICH, "Flippety dippety doo bup bup shrubber double floppy mumblescurry noodlescoop pizzabubble pizzabubble mip mip mip mip mip mip.");
 		addItem(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
 		addItem(MSItems.WATER_STAFF, "Water Staff");
+		addItem(MSItems.FIRE_STAFF, "Fire Staff");
 		addItem(MSItems.RUBIKS_MACE, "Rubik's Mace");
+		addItem(MSItems.STAFF_HANDLE, "Staff Handle");
 		addItem(MSItems.SBAHJARANG, "SBaHJarang");
 		addItemTooltip(MSItems.SBAHJARANG, "Worst throwing weapon money can't buy");
 		addItem(MSItems.SHURIKEN, "Shuriken");

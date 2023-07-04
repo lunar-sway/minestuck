@@ -417,7 +417,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.KRAKENS_EYE.get()).input(Items.HEART_OF_THE_SEA).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CINNAMON_SWORD.get()).input(Items.WOODEN_SWORD).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.UNION_BUSTER.get()).input(MSItems.ROCKEFELLERS_WALKING_BLADECANE.get()).and().input(MSItems.NIGHTSTICK.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.WATER_STAFF.get()).input(Items.STICK).and().input(Items.HEART_OF_THE_SEA).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.WATER_STAFF.get()).input(MSItems.STAFF_HANDLE.get()).and().input(Items.HEART_OF_THE_SEA).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FIRE_STAFF.get()).input(MSItems.STAFF_HANDLE.get()).and().input(Items.MAGMA_CREAM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.RUBIKS_MACE.get()).input(Items.IRON_BLOCK).and().input(MSItems.WATER_COLORS_BUCKET.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).input(MSItems.DAGGER.get()).and().input(Items.DIAMOND).build(consumer);

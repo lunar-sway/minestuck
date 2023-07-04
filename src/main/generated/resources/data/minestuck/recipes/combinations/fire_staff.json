@@ -4,10 +4,10 @@
     "item": "minestuck:staff_handle"
   },
   "input2": {
-    "item": "minecraft:heart_of_the_sea"
+    "item": "minecraft:magma_cream"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:water_staff"
+    "item": "minestuck:fire_staff"
   }
 }

@@ -39,7 +39,8 @@ public class MagicEffect
 		INK(() -> ParticleTypes.SQUID_INK, true, false),
 		ZILLY(() -> new DustParticleOptions(new Vector3f(20F, 20, 20F), 2F), true, false),
 		ECHIDNA(() -> ParticleTypes.END_ROD, true, false),
-		WATER(() -> ParticleTypes.DRIPPING_WATER, false, true);
+		WATER(() -> ParticleTypes.DRIPPING_WATER, false, true),
+		FIRE(() -> ParticleTypes.DRIPPING_LAVA, false, true);
 		
 		private final Supplier<ParticleOptions> particle;
 		private final boolean explosiveFinish;

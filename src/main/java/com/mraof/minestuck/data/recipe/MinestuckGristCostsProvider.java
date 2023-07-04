@@ -580,12 +580,16 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.DESOLATOR_MACE.get()).grist(BUILD, 595).grist(RUST, 102).grist(TAR, 170).grist(MARBLE, 170).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BLAZING_GLORY.get()).grist(BUILD, 470).grist(SULFUR, 282).grist(GOLD, 5).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SPIKED_CLUB.get()).grist(BUILD, 40).grist(GARNET, 2).grist(IODINE, 3).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.RUBIKS_MACE.get()).grist(BUILD, 545).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.HORSE_HITCHER.get()).grist(BUILD, 1080).grist(QUARTZ, 48).grist(URANIUM, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CLUB_OF_FELONY.get()).grist(BUILD, 1080).grist(COBALT, 48).grist(URANIUM, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CUESTICK.get()).grist(BUILD, 1080).grist(MERCURY, 48).grist(URANIUM, 3).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.PRIME_STAFF.get()).grist(BUILD, 161973).grist(QUARTZ, 64789).grist(DIAMOND, 32395).grist(ARTIFACT, 311812).build(recipeSaver);
+		
+		GristCostRecipeBuilder.of(MSItems.WATER_STAFF.get()).grist(BUILD, 203532).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.FIRE_STAFF.get()).grist(BUILD, 203532).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK.get()).grist(IODINE, 6).grist(TAR, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BARBERS_BEST_FRIEND.get()).grist(SHALE, 5).grist(MERCURY, 12).build(recipeSaver);
@@ -831,6 +835,7 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CLOTHES_IRON.get()).grist(BUILD, 4).grist(SHALE, 4).grist(RUST, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CARVING_TOOL.get()).grist(BUILD, 10).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUMPLY_HAT.get()).grist(BUILD, 20).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.STAFF_HANDLE.get()).grist(BUILD, 28).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_FROG_STATUE.get()).grist(BUILD, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_WIZARD_STATUE.get()).grist(BUILD, 30).build(recipeSaver);
 		

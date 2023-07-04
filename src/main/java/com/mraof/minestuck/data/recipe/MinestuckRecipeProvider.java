@@ -143,6 +143,8 @@ public class MinestuckRecipeProvider extends RecipeProvider
 		ShapedRecipeBuilder.shaped(MSBlocks.SPIKES.get()).define('#', Items.IRON_INGOT).define('n', Items.IRON_NUGGET).pattern("n n").pattern("# #").pattern("###").unlockedBy("has_iron_ingot", has(Items.IRON_INGOT)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.RETRACTABLE_SPIKES.get()).define('#', Items.IRON_INGOT).define('p', Items.PISTON).define('s', MSBlocks.SPIKES.get()).define('w', ItemTags.WOODEN_PRESSURE_PLATES).pattern(" s ").pattern("#w#").pattern("#p#").unlockedBy("has_spikes", has(MSBlocks.SPIKES.get())).save(recipeBuilder);
 		
+		ShapelessRecipeBuilder.shapeless(MSItems.STAFF_HANDLE.get(), 4).requires(MSItems.UNCARVED_WOOD.get()).group("wood").requires(Items.DIAMOND).group("diamond").unlockedBy("has_log", has(Items.DIAMOND)).save(recipeBuilder);
+		
 		ShapedRecipeBuilder.shaped(MSBlocks.GLOWING_WOOD.get(), 3).define('#', MSBlocks.GLOWING_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapelessRecipeBuilder.shapeless(MSBlocks.GLOWING_PLANKS.get(), 4).requires(MSTags.Items.GLOWING_LOGS).group("planks").unlockedBy("has_log", has(MSTags.Items.GLOWING_LOGS)).save(recipeBuilder);
 		ShapedRecipeBuilder.shaped(MSBlocks.SHADEWOOD.get(), 3).define('#', MSBlocks.SHADEWOOD_LOG.get()).pattern("##").pattern("##").group("bark").unlockedBy("has_log", has(MSTags.Items.SHADEWOOD_LOGS)).save(recipeBuilder);

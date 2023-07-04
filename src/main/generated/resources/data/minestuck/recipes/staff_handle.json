@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "diamond",
+  "ingredients": [
+    {
+      "item": "minestuck:uncarved_wood"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "minestuck:staff_handle"
+  }
+}
