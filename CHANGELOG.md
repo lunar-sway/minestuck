@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Union Buster Sword
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 - Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks).
+- Water Staff Magic Weapon.
+- Rubik's Mace Weapon.
 
 ### Changed
 
@@ -34,6 +36,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
+
+### Fan Contributions
+
+- gummyYummy
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
