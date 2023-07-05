@@ -29,6 +29,7 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -188,32 +189,30 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	}
 	
 	/**
-	 * Takes the GristSet of the item stored in the mending slot of the anthvil, finds the most used grist type, then returns a GristSet composed of one value of said grist type
+	 * Takes the GristSet of the item stored in the mending slot of the anthvil, finds the most used grist type, then returns a GristSet composed of one value of said grist type.
 	 */
 	public static GristAmount getUsedGrist(GristSet fullSet)
 	{
 		List<GristAmount> gristAmounts = fullSet.asAmounts();
-		GristAmount pickedGrist = new GristAmount(GristTypes.BUILD.get(), 1);
+		GristAmount defaultGrist = new GristAmount(GristTypes.BUILD.get(), 1);
 		
-		if(gristAmounts.size() > 1) //establishes which GristAmount in the set has the highest impact and uses that
+		if(gristAmounts.size() > 1) //if theres more than one, establishes which GristAmount has the highest impact and uses that
 		{
-			for(GristAmount grist : fullSet.asAmounts())
-			{
-				double gristValue = grist.getValue();
-				if(grist.type() == GristTypes.BUILD.get())
-					gristValue /= 10; //reduces build grist value
-				
-				if(pickedGrist.getValue() < gristValue)
-					pickedGrist = grist;
-			}
-			
-			pickedGrist = new GristAmount(pickedGrist.type(), 1);
+			GristAmount pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).orElse(defaultGrist);
+			return new GristAmount(pickedGrist.type(), 1);
 		} else if(gristAmounts.get(0).type() != GristTypes.BUILD.get())
-		{
-			pickedGrist = new GristAmount(gristAmounts.get(0).type(), 1);
-		}
+			return new GristAmount(gristAmounts.get(0).type(), 1);
+		else
+			return defaultGrist;
+	}
+	
+	private static double getModifiedGristValue(GristAmount grist)
+	{
+		double gristValue = Math.abs(grist.getValue()); //negative grist values still count
+		if(grist.type() == GristTypes.BUILD.get())
+			gristValue /= 10; //weighted against build grist to promote higher type diversity
 		
-		return pickedGrist;
+		return gristValue;
 	}
 	
 	/**
