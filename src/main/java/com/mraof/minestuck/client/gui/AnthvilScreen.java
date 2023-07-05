@@ -8,7 +8,9 @@ import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.AnthvilMenu;
+import com.mraof.minestuck.network.AnthvilPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.MachinePacket;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -34,8 +36,6 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 	private static final int BUTTON_Y = 38;
 	private final AnthvilBlockEntity anthvilBE;
 	private final AnthvilMenu screenContainer;
-	//private ExtendedButton goButton;
-	
 	
 	AnthvilScreen(AnthvilMenu screenContainer, Inventory inv, Component titleIn)
 	{
@@ -53,13 +53,12 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 		//activates processContents() in AnthvilBlockEntity, no GoButton due to necessity of player data
 		addRenderableWidget(new ExtendedButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, Component.literal("MEND"), button -> mend()));
 		addRenderableWidget(new ExtendedButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y + 16, 30, 12, Component.literal("DONE"), button -> finish()));
-		//goButton = new GoButton(this.leftPos + BUTTON_X, this.topPos + BUTTON_Y, 30, 12, this.menu, true);
-		//addRenderableWidget(goButton);
 	}
 	
 	private void mend()
 	{
-		//MSPacketHandler.sendToServer(new AnthvilPacket());
+		MSPacketHandler.sendToServer(new MachinePacket.SetRunning(!this.menu.isRunning())); //handles refueling uranium using MachineScreen infrastructure
+		MSPacketHandler.sendToServer(new AnthvilPacket(anthvilBE.getBlockPos())); //sends a request to mend
 	}
 	
 	private void finish()
@@ -70,8 +69,6 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 	@Override
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
 	{
-		//goButton.active = true;
-		
 		this.renderBackground(poseStack);
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 		this.renderTooltip(poseStack, mouseX, mouseY);

@@ -400,7 +400,7 @@
   "block.minestuck.polished_pink_stone": "Polished Pink Stone",
   "block.minestuck.power_hub": "Power Hub",
   "block.minestuck.power_hub.power_prompt": "%s fuel stored",
-  "block.minestuck.power_hub.tooltip": "Slowly powers a uranium fueled device that directly above it.",
+  "block.minestuck.power_hub.tooltip": "Slowly generates powers. Will transfer power to a uranium fueled device that is directly above it.",
   "block.minestuck.primed_tnt": "Primed TNT",
   "block.minestuck.punch_designix_keyboard": "Punch Designix",
   "block.minestuck.punch_designix_left_leg": "Punch Designix",

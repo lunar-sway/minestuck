@@ -530,7 +530,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SKAIANET_DENIER, "Skaianet Denier");
 		addBlockTooltip(MSBlocks.SKAIANET_DENIER, "Constantly sends out signals preventing Entry from occurring while it is inside the radius.");
 		addBlock(MSBlocks.POWER_HUB, "Power Hub");
-		addBlockTooltip(MSBlocks.POWER_HUB, "Slowly powers a uranium fueled device that directly above it.");
+		addBlockTooltip(MSBlocks.POWER_HUB, "Slowly generates powers. Will transfer power to a uranium fueled device that is directly above it.");
 		addBlock(MSBlocks.CRUXITE_DOWEL, "Cruxite Dowel");
 		addBlockExtra(MSBlocks.CRUXITE_DOWEL, "invalid", "Invalid Data");
 		addBlock(MSBlocks.EMERGING_CRUXITE_DOWEL, "Cruxite Dowel");
