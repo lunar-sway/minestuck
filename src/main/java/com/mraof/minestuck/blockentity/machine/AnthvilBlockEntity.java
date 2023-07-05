@@ -117,19 +117,15 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	}
 	
 	/**
-	 * Only handles refreshing uranium
+	 * Checks for a uranium itemstack in the right item slot, increases the fuel value if some is found and then removes one count from the fuel stack.
+	 * Only handles fuel refilling
 	 */
 	private void processContents()
 	{
-		if(canBeRefueled())
+		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 		{
-			//checks for a uranium itemstack in the right item slot, increases the fuel value if some is found and then removes one count from the fuel stack
-			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
-			{
-				//Refill fuel
-				addFuel((short) FUEL_INCREASE);
-				itemHandler.extractItem(1, 1, false);
-			}
+			addFuel((short) FUEL_INCREASE);
+			itemHandler.extractItem(1, 1, false);
 		}
 	}
 	
@@ -139,9 +135,12 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		ItemStack slotStack = anthvil.itemHandler.getStackInSlot(0);
 		GristCache playerCache = GristCache.get(player);
 		
-		ImmutableGristSet pickedGrist = mendingGrist(anthvil, playerCache, level, slotStack);
+		if(level == null || !isMendableItem(slotStack) || !hasEnoughFuel(anthvil))
+			return;
 		
-		if(!GristAmount.EMPTY.equals(pickedGrist))
+		GristSet pickedGrist = mendingGrist(playerCache, level, slotStack);
+		
+		if(!pickedGrist.isEmpty())
 		{
 			if(slotStack.hasCraftingRemainingItem())
 			{
@@ -160,25 +159,32 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		}
 	}
 	
-	/**
-	 * Checks that there is enough fuel energy/grist for the machine to work and that there is something valid to mend, returns the appropriate grist amount if so
-	 */
-	private static ImmutableGristSet mendingGrist(AnthvilBlockEntity anthvil, GristCache playerCache, Level level, ItemStack slotStack)
+	private static boolean isMendableItem(ItemStack slotStack)
 	{
-		if(level != null && !slotStack.isEmpty() && slotStack.isRepairable() && slotStack.isDamageableItem() && slotStack.isDamaged())
+		return !slotStack.isEmpty() && slotStack.isRepairable() && slotStack.isDamageableItem() && slotStack.isDamaged();
+	}
+	
+	private static boolean hasEnoughFuel(AnthvilBlockEntity anthvil)
+	{
+		return anthvil.fuel >= MEND_FUEL_COST;
+	}
+	
+	/**
+	 * Checks a mend-able item's grist type and returns the grist if its valid and the player can afford to spend the amount
+	 */
+	private static ImmutableGristSet mendingGrist(GristCache playerCache, Level level, ItemStack slotStack)
+	{
+		GristSet fullSet = GristCostRecipe.findCostForItem(slotStack, null, false, level);
+		
+		if(fullSet != null && !fullSet.isEmpty())
 		{
-			GristSet fullSet = GristCostRecipe.findCostForItem(slotStack, null, false, level);
+			GristAmount pickedGrist = getUsedGrist(fullSet);
 			
-			if(fullSet != null && !fullSet.isEmpty())
-			{
-				GristAmount pickedGrist = getUsedGrist(fullSet);
-				
-				if(anthvil.fuel >= MEND_FUEL_COST && playerCache.canAfford(pickedGrist))
-					return pickedGrist;
-			}
+			if(playerCache.canAfford(pickedGrist))
+				return pickedGrist;
 		}
 		
-		return GristAmount.EMPTY;
+		return GristSet.EMPTY;
 	}
 	
 	/**

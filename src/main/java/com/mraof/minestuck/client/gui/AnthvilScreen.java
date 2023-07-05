@@ -20,7 +20,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class AnthvilScreen extends MachineScreen<AnthvilMenu>

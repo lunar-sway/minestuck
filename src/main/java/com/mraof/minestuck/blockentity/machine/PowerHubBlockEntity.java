@@ -50,7 +50,7 @@ public class PowerHubBlockEntity extends BlockEntity
 			if(level.getBlockEntity(pos.above()) instanceof UraniumPowered poweredBlockEntity && !poweredBlockEntity.atMaxFuel())
 			{
 				poweredBlockEntity.addFuel((short) 1);
-				blockEntity.power--;
+				blockEntity.changePower(false);
 			}
 		}
 	}
@@ -64,12 +64,22 @@ public class PowerHubBlockEntity extends BlockEntity
 	{
 		if(power < MAX_POWER)
 		{
-			power++;
+			changePower(true);
 		}
 	}
 	
 	public short getPower()
 	{
 		return power;
+	}
+	
+	private void changePower(boolean increasePower)
+	{
+		if(increasePower)
+			this.power++;
+		else
+			this.power--;
+		
+		this.setChanged();
 	}
 }
