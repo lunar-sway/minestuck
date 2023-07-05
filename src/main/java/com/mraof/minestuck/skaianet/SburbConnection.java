@@ -38,7 +38,6 @@ public final class SburbConnection
 	private PlayerIdentifier serverIdentifier;
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
-	private Session session;
 	
 	private boolean isActive;
 	private boolean isMain;
@@ -146,12 +145,7 @@ public final class SburbConnection
 	
 	public Session getSession()
 	{
-		return session;
-	}
-	
-	void setSession(Session session)
-	{
-		this.session = session;
+		return skaianet.sessionHandler.getPlayerSession(this.getClientIdentifier());
 	}
 	
 	void copyComputerReferences(SburbConnection connection)
@@ -179,7 +173,7 @@ public final class SburbConnection
 		client.connected(serverIdentifier, true);
 		server.connected(clientIdentifier, false);
 		
-		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(skaianet.mcServer, this, session, type));
+		MinecraftForge.EVENT_BUS.post(new ConnectionCreatedEvent(skaianet.mcServer, this, this.getSession(), type));
 	}
 	
 	void close()
@@ -209,6 +203,7 @@ public final class SburbConnection
 	
 	void removeServerPlayer()
 	{
+		Session session = this.getSession();
 		skaianet.infoTracker.markDirty(this);
 		serverIdentifier = IdentifierHandler.NULL_IDENTIFIER;
 		skaianet.sessionHandler.onConnectionChainBroken(session);

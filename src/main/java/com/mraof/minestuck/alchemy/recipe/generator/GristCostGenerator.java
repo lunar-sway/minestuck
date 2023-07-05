@@ -4,6 +4,8 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -50,6 +52,9 @@ public final class GristCostGenerator
 	
 	private static void run(RecipeManager recipes)
 	{
+		long startTime = System.currentTimeMillis();
+		LOGGER.debug("Starting grist cost generation");
+		
 		GeneratorProcess process = new GeneratorProcess();
 		
 		//Collect providers
@@ -63,12 +68,19 @@ public final class GristCostGenerator
 			});
 		}
 		
-		LOGGER.debug("Starting grist cost generation");
-		//Iterate through items
-		for(Item item : process.providersByItem.keySet())
+		Object2IntMap<Item> lookupCount = new Object2IntOpenHashMap<>();
+		
+		for(GeneratedCostProvider provider : process.providers)
 		{
-			lookupCost(process, new GenerationContext(item, (context1) -> lookupCost(process, context1)));
+			provider.reportPreliminaryLookups(item -> lookupCount.mergeInt(item, 1, Integer::sum));
 		}
+		
+		//Iterate through items
+		process.providersByItem.keySet().stream()
+				.sorted(Comparator.comparingInt(item -> -lookupCount.getInt(item)))
+				.forEach(item ->
+						lookupCost(process, new GenerationContext(item, (context1) -> lookupCost(process, context1)))
+				);
 		
 		for(GeneratedCostProvider provider : process.providers)
 		{
@@ -80,7 +92,8 @@ public final class GristCostGenerator
 				LOGGER.error("Got exception while building generated cost provider {}:", provider, e);
 			}
 		}
-		LOGGER.debug("Finished grist cost generation");
+		
+		LOGGER.debug("Finished grist cost generation in {}s", (System.currentTimeMillis() - startTime)/1000D);
 	}
 	
 	private static GristSet lookupCost(GeneratorProcess process, GenerationContext context)
