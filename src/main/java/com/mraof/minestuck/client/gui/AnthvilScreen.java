@@ -83,7 +83,7 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 				GristSet fullSet = GristCostRecipe.findCostForItem(stack, null, false, level);
 				if(fullSet != null && !fullSet.isEmpty())
 				{
-					GristAmount pickedGrist = getUsedGrist(fullSet);
+					GristAmount pickedGrist = AnthvilBlockEntity.getUsedGrist(fullSet);
 					
 					GuiUtil.drawGristBoard(poseStack, pickedGrist, GuiUtil.GristboardMode.ALCHEMITER, (width - this.leftPos) / 2 - 4, (height - this.topPos) / 2 - 48, font, 2);
 					//draw the grist
@@ -93,35 +93,6 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 				}
 			}
 		}
-	}
-	
-	/**
-	 * Takes the GristSet of the item stored in the mending slot of the anthvil, finds the most used grist type, then returns a GristSet composed of one value of said grist type
-	 */
-	public static GristAmount getUsedGrist(GristSet fullSet)
-	{
-		List<GristAmount> gristAmounts = fullSet.asAmounts();
-		GristAmount pickedGrist = new GristAmount(GristTypes.BUILD.get(), 1);
-		
-		if(gristAmounts.size() > 1) //establishes which GristAmount in the set has the highest impact and uses that
-		{
-			for(GristAmount grist : fullSet.asAmounts())
-			{
-				double gristValue = grist.getValue();
-				if(grist.type() == GristTypes.BUILD.get())
-					gristValue /= 10; //reduces build grist value
-				
-				if(pickedGrist.getValue() < gristValue)
-					pickedGrist = grist;
-			}
-			
-			pickedGrist = new GristAmount(pickedGrist.type(), 1);
-		} else if(gristAmounts.get(0).type() != GristTypes.BUILD.get())
-		{
-			pickedGrist = new GristAmount(gristAmounts.get(0).type(), 1);
-		}
-		
-		return pickedGrist;
 	}
 	
 	@Override

@@ -1,12 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.*;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
-import com.mraof.minestuck.client.gui.AnthvilScreen;
 import com.mraof.minestuck.inventory.*;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -33,11 +29,16 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
+/**
+ * Mends an item at the cost of uranium power and grist. The grist used is the one with the highest value impact (weighted against build grist)
+ */
 public class AnthvilBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
 {
 	public static final String TITLE = "container.minestuck.anthvil";
 	public static final short MAX_FUEL = 128;
+	public static final short MEND_FUEL_COST = 5;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, 0, this::setChanged, this::contentsValid);
 	private short fuel = 0;
@@ -151,17 +152,16 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 				int repairAmount = (int) (10 * pickedGrist.asAmounts().get(0).getValue());
 				slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
 				
-				if(!player.isCreative())
+				if(!player.isCreative() && playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT))
 				{
-					anthvil.fuel -= 5;
-					playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT);
+					anthvil.fuel -= MEND_FUEL_COST;
 				}
 			}
 		}
 	}
 	
 	/**
-	 * Checks that there is enough fuel energy/grist for the machine to work and that there is something to mend, returns that amount if so
+	 * Checks that there is enough fuel energy/grist for the machine to work and that there is something valid to mend, returns the appropriate grist amount if so
 	 */
 	private static ImmutableGristSet mendingGrist(AnthvilBlockEntity anthvil, GristCache playerCache, Level level, ItemStack slotStack)
 	{
@@ -171,14 +171,43 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			
 			if(fullSet != null && !fullSet.isEmpty())
 			{
-				GristAmount pickedGrist = AnthvilScreen.getUsedGrist(fullSet);
+				GristAmount pickedGrist = getUsedGrist(fullSet);
 				
-				if(anthvil.fuel >= 5 && playerCache.canAfford(pickedGrist))
+				if(anthvil.fuel >= MEND_FUEL_COST && playerCache.canAfford(pickedGrist))
 					return pickedGrist;
 			}
 		}
 		
 		return GristAmount.EMPTY;
+	}
+	
+	/**
+	 * Takes the GristSet of the item stored in the mending slot of the anthvil, finds the most used grist type, then returns a GristSet composed of one value of said grist type
+	 */
+	public static GristAmount getUsedGrist(GristSet fullSet)
+	{
+		List<GristAmount> gristAmounts = fullSet.asAmounts();
+		GristAmount pickedGrist = new GristAmount(GristTypes.BUILD.get(), 1);
+		
+		if(gristAmounts.size() > 1) //establishes which GristAmount in the set has the highest impact and uses that
+		{
+			for(GristAmount grist : fullSet.asAmounts())
+			{
+				double gristValue = grist.getValue();
+				if(grist.type() == GristTypes.BUILD.get())
+					gristValue /= 10; //reduces build grist value
+				
+				if(pickedGrist.getValue() < gristValue)
+					pickedGrist = grist;
+			}
+			
+			pickedGrist = new GristAmount(pickedGrist.type(), 1);
+		} else if(gristAmounts.get(0).type() != GristTypes.BUILD.get())
+		{
+			pickedGrist = new GristAmount(gristAmounts.get(0).type(), 1);
+		}
+		
+		return pickedGrist;
 	}
 	
 	/**
