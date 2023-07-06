@@ -9,7 +9,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -42,7 +41,7 @@ public class AnthvilMenu extends AbstractContainerMenu
 		
 		this.levelAccess = access;
 		
-		assertItemHandlerSize(inventory, 2);
+		MachineContainerMenu.assertItemHandlerSize(inventory, 2);
 		this.fuelHolder = fuelHolder;
 		
 		addSlot(new SlotItemHandler(inventory, 0, itemInputX, itemInputY));
@@ -50,12 +49,6 @@ public class AnthvilMenu extends AbstractContainerMenu
 		addDataSlot(fuelHolder);
 		
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
-	}
-	
-	protected static void assertItemHandlerSize(IItemHandler handler, int minSize)
-	{
-		if (handler.getSlots() < minSize)
-			throw new IllegalArgumentException("Container size " + handler.getSlots() + " is smaller than the expected " + minSize);
 	}
 	
 	@Nonnull

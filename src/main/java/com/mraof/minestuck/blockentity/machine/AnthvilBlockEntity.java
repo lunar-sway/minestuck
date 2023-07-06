@@ -30,7 +30,6 @@ import net.minecraftforge.items.wrapper.RangedWrapper;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
-import java.util.List;
 
 /**
  * Mends an item at the cost of uranium power and grist. The grist used is the one with the highest value impact (weighted against build grist)
@@ -104,7 +103,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		ItemStack slotStack = itemHandler.getStackInSlot(0);
 		GristCache playerCache = GristCache.get(player);
 		
-		if(level == null || !isMendableItem(slotStack) || !hasEnoughFuel(anthvil))
+		if(level == null || !isMendableItem(slotStack))
 			return;
 		
 		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
@@ -113,23 +112,23 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 			itemHandler.extractItem(1, 1, false);
 		}
 		
-		GristSet pickedGrist = mendingGrist(playerCache, level, slotStack);
+		GristSet pickedGrist = mendingGrist(level, slotStack);
 		
-		if(!pickedGrist.isEmpty())
+		if(pickedGrist.isEmpty() || !hasEnoughFuel(anthvil))
+			return;
+		
+		if(slotStack.hasCraftingRemainingItem())
 		{
-			if(slotStack.hasCraftingRemainingItem())
+			anthvil.itemHandler.setStackInSlot(0, slotStack.getCraftingRemainingItem());
+		} else
+		{
+			//amount of repair changes with the value of the grist, 10 at base
+			int repairAmount = (int) (10 * pickedGrist.asAmounts().get(0).getValue());
+			slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
+			
+			if(!player.isCreative() && playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT))
 			{
-				anthvil.itemHandler.setStackInSlot(0, slotStack.getCraftingRemainingItem());
-			} else
-			{
-				//amount of repair changes with the value of the grist, 10 at base
-				int repairAmount = (int) (10 * pickedGrist.asAmounts().get(0).getValue());
-				slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
-				
-				if(!player.isCreative() && playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT))
-				{
-					anthvil.fuel -= MEND_FUEL_COST;
-				}
+				anthvil.fuel -= MEND_FUEL_COST;
 			}
 		}
 	}
@@ -145,19 +144,14 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	}
 	
 	/**
-	 * Checks a mend-able item's grist type and returns the grist if its valid and the player can afford to spend the amount
+	 * Checks a mend-able item's grist type and returns the grist if its valid
 	 */
-	private static ImmutableGristSet mendingGrist(GristCache playerCache, Level level, ItemStack slotStack)
+	private static ImmutableGristSet mendingGrist(Level level, ItemStack slotStack)
 	{
 		GristSet fullSet = GristCostRecipe.findCostForItem(slotStack, null, false, level);
 		
 		if(fullSet != null && !fullSet.isEmpty())
-		{
-			GristAmount pickedGrist = getUsedGrist(fullSet);
-			
-			if(playerCache.canAfford(pickedGrist))
-				return pickedGrist;
-		}
+			return getUsedGrist(fullSet);
 		
 		return GristSet.EMPTY;
 	}
@@ -167,9 +161,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	 */
 	public static GristAmount getUsedGrist(GristSet fullSet)
 	{
-		List<GristAmount> gristAmounts = fullSet.asAmounts();
-		GristAmount defaultGrist = new GristAmount(GristTypes.BUILD.get(), 1);
-		
 		GristType pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).map(GristAmount::type).orElse(GristTypes.BUILD.get());
 		return new GristAmount(pickedGrist, 1);
 	}
