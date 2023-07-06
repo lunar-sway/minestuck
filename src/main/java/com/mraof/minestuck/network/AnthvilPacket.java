@@ -29,7 +29,7 @@ public class AnthvilPacket implements PlayToServerPacket
 				AnthvilBlockEntity blockEntity = (AnthvilBlockEntity) level.getBlockEntity(machinePos);
 				if(blockEntity != null)
 				{
-					AnthvilBlockEntity.attemptMend(blockEntity, player);
+					AnthvilBlockEntity.attemptMendAndRefuel(blockEntity, player);
 				}
 			});
 		}

@@ -16,7 +16,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class AnthvilMenu extends MachineContainerMenu
+public class AnthvilMenu extends AbstractContainerMenu
 {
 	private static final int uraniumInputX = 143;
 	private static final int uraniumInputY = 54;
@@ -24,20 +24,23 @@ public class AnthvilMenu extends MachineContainerMenu
 	private static final int itemInputY = 35;
 	
 	private final DataSlot fuelHolder;
+	private final ContainerLevelAccess levelAccess;
 	
 	public AnthvilMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(2), new SimpleContainerData(3), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(2), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
 	}
 	
-	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, parameters, fuelHolder, access, machinePos);
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, fuelHolder, access, machinePos);
 	}
 	
-	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, ContainerData parameters, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
 	{
-		super(type, windowId, parameters, access, machinePos);
+		super(type, windowId);
+		
+		this.levelAccess = access;
 		
 		assertItemHandlerSize(inventory, 2);
 		this.fuelHolder = fuelHolder;
@@ -49,10 +52,10 @@ public class AnthvilMenu extends MachineContainerMenu
 		ContainerHelper.addPlayerInventorySlots(this::addSlot, 8, 84, playerInventory);
 	}
 	
-	@Override
-	protected Block getValidBlock()
+	protected static void assertItemHandlerSize(IItemHandler handler, int minSize)
 	{
-		return MSBlocks.ANTHVIL.get();
+		if (handler.getSlots() < minSize)
+			throw new IllegalArgumentException("Container size " + handler.getSlots() + " is smaller than the expected " + minSize);
 	}
 	
 	@Nonnull
@@ -95,6 +98,17 @@ public class AnthvilMenu extends MachineContainerMenu
 		}
 		
 		return itemstack;
+	}
+	
+	@Override
+	public boolean stillValid(Player player)
+	{
+		return stillValid(levelAccess, player, MSBlocks.ANTHVIL.get());
+	}
+	
+	public ContainerLevelAccess getPosition()
+	{
+		return levelAccess;
 	}
 	
 	public int getFuel()

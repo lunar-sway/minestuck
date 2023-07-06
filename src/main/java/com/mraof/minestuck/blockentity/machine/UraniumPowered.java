@@ -7,7 +7,5 @@ public interface UraniumPowered
 {
 	void addFuel(short fuelAmount);
 	
-	boolean canBeRefueled();
-	
 	boolean atMaxFuel();
 }

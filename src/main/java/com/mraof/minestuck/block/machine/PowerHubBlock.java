@@ -38,7 +38,7 @@ public class PowerHubBlock extends HorizontalDirectionalBlock implements EntityB
 	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit)
 	{
 		BlockEntity blockEntity = level.getBlockEntity(pos);
-		if(blockEntity instanceof PowerHubBlockEntity powerHubBlockEntity)
+		if(blockEntity instanceof PowerHubBlockEntity powerHubBlockEntity && !level.isClientSide)
 		{
 			powerHubBlockEntity.createPrompt(player);
 		}

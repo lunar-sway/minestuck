@@ -41,7 +41,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public static final short MAX_FUEL = 128;
 	public static final short MEND_FUEL_COST = 5;
 	
-	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, 0, this::setChanged, this::contentsValid);
 	private short fuel = 0;
 	
 	private final DataSlot fuelHolder = new DataSlot()
@@ -76,8 +75,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	{
 		super.load(compound);
 		
-		this.progressTracker.load(compound);
-		
 		fuel = compound.getShort("fuel");
 	}
 	
@@ -85,8 +82,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public void saveAdditional(CompoundTag compound)
 	{
 		super.saveAdditional(compound);
-		
-		this.progressTracker.save(compound);
 		
 		compound.putShort("fuel", fuel);
 	}
@@ -100,44 +95,23 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	protected void tick()
 	{
-		this.progressTracker.tick(this::processContents);
 	}
 	
-	private boolean contentsValid()
-	{
-		if(level.hasNeighborSignal(this.getBlockPos()))
-		{
-			return false;
-		}
-		
-		ItemStack fuel = itemHandler.getStackInSlot(1);
-		ItemStack input = itemHandler.getStackInSlot(0);
-		
-		boolean goodOnFuel = canBeRefueled() && fuel.is(ExtraForgeTags.Items.URANIUM_CHUNKS);
-		return goodOnFuel || !input.isEmpty();
-	}
-	
-	/**
-	 * Checks for a uranium itemstack in the right item slot, increases the fuel value if some is found and then removes one count from the fuel stack.
-	 * Only handles fuel refilling
-	 */
-	private void processContents()
-	{
-		if(canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
-		{
-			addFuel((short) FUEL_INCREASE);
-			itemHandler.extractItem(1, 1, false);
-		}
-	}
-	
-	public static void attemptMend(AnthvilBlockEntity anthvil, ServerPlayer player)
+	public static void attemptMendAndRefuel(AnthvilBlockEntity anthvil, ServerPlayer player)
 	{
 		Level level = anthvil.level;
-		ItemStack slotStack = anthvil.itemHandler.getStackInSlot(0);
+		ItemStackHandler itemHandler = anthvil.itemHandler;
+		ItemStack slotStack = itemHandler.getStackInSlot(0);
 		GristCache playerCache = GristCache.get(player);
 		
 		if(level == null || !isMendableItem(slotStack) || !hasEnoughFuel(anthvil))
 			return;
+		
+		if(anthvil.canBeRefueled() && itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
+		{
+			anthvil.addFuel((short) FUEL_INCREASE);
+			itemHandler.extractItem(1, 1, false);
+		}
 		
 		GristSet pickedGrist = mendingGrist(playerCache, level, slotStack);
 		
@@ -258,7 +232,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new AnthvilMenu(windowId, playerInventory, itemHandler,
-				this.progressTracker, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new AnthvilMenu(windowId, playerInventory, itemHandler, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
 	}
 }
