@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Union Buster Sword
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 - Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks)
+- Expanded number of Minecraft/Forge item/block tags that Minestuck items/blocks are in
 - Anthvil block
 - Power hub block
 
@@ -33,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed issue with sburb connections and /debuglands
 - Grist cost generation optimisation
+- Shadewood planks are now in planks tag and can now be used for crafting
 
 ### Contributors for this release
 
