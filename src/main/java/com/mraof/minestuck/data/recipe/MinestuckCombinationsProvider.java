@@ -416,6 +416,7 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PILLOW_TALK.get()).input(MSItems.UNBREAKABLE_KATANA.get()).and().input(Items.BAMBOO).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KRAKENS_EYE.get()).input(Items.HEART_OF_THE_SEA).or().input(MSItems.CLAYMORE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CINNAMON_SWORD.get()).input(Items.WOODEN_SWORD).and().input(MSItems.CANDY_CORN.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.UNION_BUSTER.get()).input(MSItems.ROCKEFELLERS_WALKING_BLADECANE.get()).and().input(MSItems.NIGHTSTICK.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.DIAMOND_DAGGER.get()).input(MSItems.DAGGER.get()).and().input(Items.DIAMOND).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PIGLINS_PRIDE.get()).input(MSItems.DIAMOND_DAGGER.get()).and().input(Items.NETHERITE_INGOT).build(consumer);
@@ -816,7 +817,11 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSBlocks.PINK_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.PINK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.BROWN_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.BROWN_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.GREEN_STONE.get()).input(Tags.Items.STONE).and().namedInput(Items.GREEN_DYE).build(consumer);
-		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.UNCARVED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.SMOOTH_STONE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CARVED_HEAVY_PLANKS.get()).input(ItemTags.LOGS).and().input(Items.STONE_BRICKS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CARVED_KNOTTED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.CHISELED_STONE_BRICKS).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.POLISHED_UNCARVED_WOOD.get()).input(ItemTags.LOGS).and().input(Items.POLISHED_ANDESITE).build(consumer);
+		CombinationRecipeBuilder.of(MSBlocks.CARVED_PLANKS.get()).input(ItemTags.LOGS).and().input(Items.STONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.CHIPBOARD.get()).input(ItemTags.LOGS).and().input(Items.COBBLESTONE).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(Items.STONECUTTER).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.WOOD_SHAVINGS.get()).input(ItemTags.LOGS).or().namedInput(MSItems.CARVING_TOOL.get()).build(consumer);

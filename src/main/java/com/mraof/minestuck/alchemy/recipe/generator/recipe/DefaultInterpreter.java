@@ -5,6 +5,7 @@ import com.google.gson.JsonNull;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -44,6 +45,12 @@ public class DefaultInterpreter implements RecipeInterpreter
 		totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
+	}
+	
+	@Override
+	public void reportPreliminaryLookups(Recipe<?> recipe, LookupTracker tracker)
+	{
+		recipe.getIngredients().forEach(tracker::report);
 	}
 	
 	@Override

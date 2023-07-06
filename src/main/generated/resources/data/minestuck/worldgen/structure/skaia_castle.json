@@ -1,0 +1,6 @@
+{
+  "type": "minestuck:skaia_castle",
+  "biomes": "#minestuck:has_structure/skaia_castle",
+  "spawn_overrides": {},
+  "step": "surface_structures"
+}

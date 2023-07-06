@@ -24,4 +24,7 @@ public interface GeneratedCostProvider
 	 */
 	default void build()
 	{}
+	
+	default void reportPreliminaryLookups(LookupTracker tracker)
+	{}
 }

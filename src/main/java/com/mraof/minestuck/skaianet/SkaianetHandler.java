@@ -169,7 +169,7 @@ public final class SkaianetHandler extends SavedData
 		Session session = sessionHandler.getSessionForConnecting(client, server);
 		SburbConnection newConnection = new SburbConnection(client, server, this);
 		SburbHandler.onConnectionCreated(newConnection);
-		session.addConnection(newConnection);
+		session.connections.add(newConnection);
 		
 		return newConnection;
 	}
@@ -180,7 +180,7 @@ public final class SkaianetHandler extends SavedData
 		Session session = sessionHandler.getSessionForConnecting(client, server);
 		SburbConnection newConnection = new SburbConnection(client, server, this);
 		newConnection.copyFrom(connection);
-		session.addConnection(newConnection);
+		session.connections.add(newConnection);
 		
 		return newConnection;
 	}

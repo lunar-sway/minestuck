@@ -155,7 +155,6 @@ public final class DefaultSessionHandler extends SessionHandler
 		this.sessions.add(result);
 		if(result.isCustom())
 			sessionsByName.put(result.name, result);
-		result.finishMergeOrSplit();
 	}
 	
 	private void split(Session session)
@@ -163,7 +162,6 @@ public final class DefaultSessionHandler extends SessionHandler
 		List<Session> sessions = SessionMerger.splitSession(session);
 		sessions.forEach(Session::checkIfCompleted);
 		this.sessions.addAll(sessions);
-		sessions.forEach(Session::finishMergeOrSplit);
 		removeIfEmpty(session);
 	}
 	

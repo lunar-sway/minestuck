@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
+import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.apache.commons.lang3.tuple.Pair;
@@ -37,6 +38,17 @@ class RecipeGeneratedCostProcess
 	Set<Item> itemSet()
 	{
 		return lookupMap.keySet();
+	}
+	
+	void reportPreliminaryLookups(LookupTracker tracker)
+	{
+		for(List<Pair<Recipe<?>, RecipeInterpreter>> recipes : this.lookupMap.values())
+		{
+			for(Pair<Recipe<?>, RecipeInterpreter> recipe : recipes)
+			{
+				recipe.getValue().reportPreliminaryLookups(recipe.getKey(), tracker);
+			}
+		}
 	}
 	
 	GristCostResult generateCost(Item item, GristCostResult lastCost, GenerationContext context)
