@@ -170,14 +170,8 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		List<GristAmount> gristAmounts = fullSet.asAmounts();
 		GristAmount defaultGrist = new GristAmount(GristTypes.BUILD.get(), 1);
 		
-		if(gristAmounts.size() > 1) //if theres more than one, establishes which GristAmount has the highest impact and uses that
-		{
-			GristAmount pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).orElse(defaultGrist);
-			return new GristAmount(pickedGrist.type(), 1);
-		} else if(gristAmounts.get(0).type() != GristTypes.BUILD.get())
-			return new GristAmount(gristAmounts.get(0).type(), 1);
-		else
-			return defaultGrist;
+		GristType pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).map(GristAmount::type).orElse(GristTypes.BUILD.get());
+		return new GristAmount(pickedGrist, 1);
 	}
 	
 	private static double getModifiedGristValue(GristAmount grist)
