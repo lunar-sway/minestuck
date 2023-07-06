@@ -1,41 +1,37 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
-import net.minecraft.core.BlockPos;
+import com.mraof.minestuck.inventory.AnthvilMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 
 public class AnthvilPacket implements PlayToServerPacket
 {
-	private final BlockPos pos;
-	
-	public AnthvilPacket(BlockPos pos)
-	{
-		this.pos = pos;
-	}
-	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		buffer.writeBlockPos(pos);
+	
 	}
 	
 	public static AnthvilPacket decode(FriendlyByteBuf buffer)
 	{
-		BlockPos pos = buffer.readBlockPos();
-		
-		return new AnthvilPacket(pos);
+		return new AnthvilPacket();
 	}
 	
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
+		AbstractContainerMenu playerContainer = player.containerMenu;
+		if(playerContainer instanceof AnthvilMenu anthvilMenu)
 		{
-			if(player.level.getBlockEntity(pos) instanceof AnthvilBlockEntity anthvilBlockEntity)
-			{
-				AnthvilBlockEntity.attemptMend(anthvilBlockEntity, player);
-			}
+			anthvilMenu.getPosition().execute((level, machinePos) -> {
+				AnthvilBlockEntity blockEntity = (AnthvilBlockEntity) level.getBlockEntity(machinePos);
+				if(blockEntity != null)
+				{
+					AnthvilBlockEntity.attemptMend(blockEntity, player);
+				}
+			});
 		}
 	}
 }

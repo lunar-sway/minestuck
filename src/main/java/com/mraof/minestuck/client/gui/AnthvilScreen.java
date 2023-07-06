@@ -57,7 +57,7 @@ public class AnthvilScreen extends MachineScreen<AnthvilMenu>
 	private void mend()
 	{
 		MSPacketHandler.sendToServer(new MachinePacket.SetRunning(!this.menu.isRunning())); //handles refueling uranium using MachineScreen infrastructure
-		MSPacketHandler.sendToServer(new AnthvilPacket(anthvilBE.getBlockPos())); //sends a request to mend
+		MSPacketHandler.sendToServer(new AnthvilPacket()); //sends a request to mend
 	}
 	
 	private void finish()
