@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -42,17 +43,18 @@ public class CardCaptchas
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
 	
-	private final Random seedRandomizer;
+	private final RandomSource seedRandomizer;
 	
 	public CardCaptchas(ServerLevel level)
 	{
-		this.seedRandomizer = new Random(level.getSeed());
+		this.seedRandomizer = RandomSource.create(level.getSeed());
 		generateBackupCaptchas();
 	}
 	
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent event)
 	{
+		//TODO the second time a world loads, and every subsequent time after that, the captchas are different from the first time the world loads. Both before and after the change, server and client side are synced correctly
 		CardCaptchas captchas = new CardCaptchas(event.getServer().overworld());
 		captchas.iterateThroughRegistry();
 	}

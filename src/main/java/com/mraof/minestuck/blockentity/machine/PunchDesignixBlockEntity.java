@@ -144,9 +144,8 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		
 		if(player.level.isClientSide)
 		{
-			//Go to screen if no valid item in hand or crouching
-			//TODO if the player is holding a captcha card and is crouching, it wont open the screen
-			if(player.isShiftKeyDown() || heldStack.getItem() != MSItems.CAPTCHA_CARD.get())
+			//Go to screen if no valid item in hand
+			if(heldStack.getItem() != MSItems.CAPTCHA_CARD.get())
 			{
 				MSScreenFactories.displayPunchDesignixScreen(this);
 			}

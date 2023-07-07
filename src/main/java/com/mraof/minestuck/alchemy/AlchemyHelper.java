@@ -88,17 +88,11 @@ public class AlchemyHelper
 	
 	public static boolean isReadableCard(ItemStack card)
 	{
-		if(!hasDecodedItem(card))
+		if(!card.is(MSItems.CAPTCHA_CARD.get()) || !hasDecodedItem(card))
 			return false;
 		
-		if(card.is(MSItems.CAPTCHA_CARD.get()))
-		{
-			ItemStack decodedStack = getDecodedItem(card);
-			
-			//either has decoded nbt or isnt in UNREADABLE item tag to begin with
-			return (card.hasTag() && card.getTag().getBoolean("decoded")) || !decodedStack.is(MSTags.Items.UNREADABLE);
-		} else
-			return false;
+		//either has decoded nbt or isnt in UNREADABLE item tag to begin with
+		return (card.hasTag() && card.getTag().getBoolean("decoded")) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)
