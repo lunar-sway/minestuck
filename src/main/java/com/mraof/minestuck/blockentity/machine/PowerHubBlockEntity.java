@@ -55,7 +55,7 @@ public class PowerHubBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void createPrompt(Player player)
+	public void sendStatusMessage(Player player)
 	{
 		player.displayClientMessage(Component.translatable(POWER_PROMPT, getPower()), true);
 	}

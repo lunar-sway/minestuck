@@ -117,19 +117,14 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 		if(pickedGrist.isEmpty() || !hasEnoughFuel(anthvil))
 			return;
 		
-		if(slotStack.hasCraftingRemainingItem())
-		{
-			anthvil.itemHandler.setStackInSlot(0, slotStack.getCraftingRemainingItem());
-		} else
+		if(player.isCreative() || playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT))
 		{
 			//amount of repair changes with the value of the grist, 10 at base
 			int repairAmount = (int) (10 * pickedGrist.asAmounts().get(0).getValue());
 			slotStack.setDamageValue(slotStack.getDamageValue() - repairAmount);
 			
-			if(!player.isCreative() && playerCache.tryTake(pickedGrist, GristHelper.EnumSource.CLIENT))
-			{
+			if(!player.isCreative())
 				anthvil.fuel -= MEND_FUEL_COST;
-			}
 		}
 	}
 	
@@ -217,6 +212,6 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	@Override
 	public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player player)
 	{
-		return new AnthvilMenu(windowId, playerInventory, itemHandler, fuelHolder, ContainerLevelAccess.create(level, worldPosition), worldPosition);
+		return new AnthvilMenu(windowId, playerInventory, itemHandler, fuelHolder, ContainerLevelAccess.create(level, worldPosition));
 	}
 }

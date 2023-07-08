@@ -25,17 +25,17 @@ public class AnthvilMenu extends AbstractContainerMenu
 	private final DataSlot fuelHolder;
 	private final ContainerLevelAccess levelAccess;
 	
-	public AnthvilMenu(int windowId, Inventory playerInventory, FriendlyByteBuf buffer)
+	public AnthvilMenu(int windowId, Inventory playerInventory)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(2), DataSlot.standalone(), ContainerLevelAccess.NULL, buffer.readBlockPos());
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, new ItemStackHandler(2), DataSlot.standalone(), ContainerLevelAccess.NULL);
 	}
 	
-	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access)
 	{
-		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, fuelHolder, access, machinePos);
+		this(MSMenuTypes.ANTHVIL.get(), windowId, playerInventory, inventory, fuelHolder, access);
 	}
 	
-	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access, BlockPos machinePos)
+	public AnthvilMenu(MenuType<? extends AnthvilMenu> type, int windowId, Inventory playerInventory, IItemHandler inventory, DataSlot fuelHolder, ContainerLevelAccess access)
 	{
 		super(type, windowId);
 		

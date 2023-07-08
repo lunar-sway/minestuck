@@ -52,7 +52,7 @@ public class AnthvilBlock extends MachineProcessBlock implements EntityBlock
 			{
 				MenuProvider menuProvider = (MenuProvider) blockEntity;
 				
-				NetworkHooks.openScreen(serverPlayer, menuProvider, pos);
+				NetworkHooks.openScreen(serverPlayer, menuProvider);
 			}
 		}
 		return InteractionResult.sidedSuccess(level.isClientSide);

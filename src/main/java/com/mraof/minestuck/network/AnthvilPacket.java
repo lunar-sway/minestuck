@@ -26,10 +26,9 @@ public class AnthvilPacket implements PlayToServerPacket
 		if(playerContainer instanceof AnthvilMenu anthvilMenu)
 		{
 			anthvilMenu.getPosition().execute((level, machinePos) -> {
-				AnthvilBlockEntity blockEntity = (AnthvilBlockEntity) level.getBlockEntity(machinePos);
-				if(blockEntity != null)
+				if(level.getBlockEntity(machinePos) instanceof AnthvilBlockEntity anthvilBlockEntity)
 				{
-					AnthvilBlockEntity.attemptMendAndRefuel(blockEntity, player);
+					AnthvilBlockEntity.attemptMendAndRefuel(anthvilBlockEntity, player);
 				}
 			});
 		}
