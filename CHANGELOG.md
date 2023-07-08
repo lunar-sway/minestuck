@@ -38,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
 
-### Fan Contributions
+### Idea Contributions
 
 - gummyYummy
 

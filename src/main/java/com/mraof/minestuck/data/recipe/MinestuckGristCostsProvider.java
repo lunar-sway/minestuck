@@ -835,7 +835,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.CLOTHES_IRON.get()).grist(BUILD, 4).grist(SHALE, 4).grist(RUST, 4).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CARVING_TOOL.get()).grist(BUILD, 10).grist(RUST, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUMPLY_HAT.get()).grist(BUILD, 20).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.STAFF_HANDLE.get()).grist(BUILD, 28).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_FROG_STATUE.get()).grist(BUILD, 30).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.MINI_WIZARD_STATUE.get()).grist(BUILD, 30).build(recipeSaver);
 		

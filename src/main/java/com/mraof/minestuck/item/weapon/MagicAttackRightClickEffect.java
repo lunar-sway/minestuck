@@ -19,9 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathComputationType;
@@ -30,8 +28,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class MagicAttackRightClickEffect implements ItemRightClickEffect
@@ -159,6 +155,10 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			return damage + playerRung / 10F;
 	}
 	
+	protected void extraEffectApplier(LivingEntity closestTarget)
+	{
+	}
+	
 	private static class SbahjMagicEffect extends MagicAttackRightClickEffect
 	{
 		SbahjMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
@@ -207,10 +207,6 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			} else
 				return super.calculateDamage(player, closestTarget, damage, effect);
 		}
-	}
-	
-	protected void extraEffectApplier(LivingEntity closestTarget)
-	{
 	}
 	
 	private static class FireMagicEffect extends MagicAttackRightClickEffect

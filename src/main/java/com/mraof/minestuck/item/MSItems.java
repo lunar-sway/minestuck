@@ -106,7 +106,6 @@ public class MSItems
 	public static final RegistryObject<Item> UNION_BUSTER = REGISTER.register("union_buster", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 9, -3.5F).efficiency(1.0f).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.sweepMultiEffect(OnHitEffect.SPREADING_KNOCKBACK, OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MSEffects.SUSPICION.get(), 1200, 3, false, false)))), new Item.Properties().defaultDurability(505).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	
 	
-	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
