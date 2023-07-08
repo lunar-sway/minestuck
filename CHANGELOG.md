@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fire and Water Staffs
 - Staff Handle
 - Rubik's Mace Weapon
+- Anthvil block
+- Power hub block
 
 ### Changed
 
@@ -25,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
 - Uncarved Wood Texture
+- Hubtop combination recipe now uses power hub
 
 ### Removed
 
@@ -38,7 +41,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_
 
 ### Idea Contributions
 

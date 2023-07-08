@@ -1112,7 +1112,9 @@ public class MSItems
 	public static final RegistryObject<BlockItem> GRIST_WIDGET = registerBlockItem(MSBlocks.GRIST_WIDGET, new Item.Properties().tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON));
 	public static final RegistryObject<BlockItem> URANIUM_COOKER = registerBlockItem(MSBlocks.URANIUM_COOKER, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> GRIST_COLLECTOR = registerBlockItem(MSBlocks.GRIST_COLLECTOR, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> ANTHVIL = registerBlockItem(MSBlocks.ANTHVIL, MSItemGroup.MAIN);
 	public static final RegistryObject<BlockItem> SKAIANET_DENIER = registerBlockItem(MSBlocks.SKAIANET_DENIER, MSItemGroup.MAIN);
+	public static final RegistryObject<BlockItem> POWER_HUB = registerBlockItem(MSBlocks.POWER_HUB, MSItemGroup.MAIN);
 	
 	
 	

@@ -39,6 +39,7 @@ public class MSScreenFactories
 		MenuScreens.register(MSMenuTypes.SENDIFICATOR.get(), SendificatorScreen::new);
 		MenuScreens.register(MSMenuTypes.GRIST_WIDGET.get(), GristWidgetScreen::new);
 		MenuScreens.register(MSMenuTypes.URANIUM_COOKER.get(), UraniumCookerScreen::new);
+		MenuScreens.register(MSMenuTypes.ANTHVIL.get(), AnthvilScreen::new);
 		MenuScreens.register(MSMenuTypes.CONSORT_MERCHANT.get(), ConsortShopScreen::new);
 		MenuScreens.register(MSMenuTypes.CASSETTE_CONTAINER.get(), CassetteContainerScreen::new);
 		

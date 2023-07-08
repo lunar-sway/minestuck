@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:laptop"
+    "item": "minestuck:energy_core"
   },
   "input2": {
-    "item": "minestuck:power_hub"
+    "item": "minestuck:battery"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:hubtop"
+    "item": "minestuck:power_hub"
   }
 }
