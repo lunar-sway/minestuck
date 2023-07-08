@@ -73,6 +73,7 @@ public class MSPacketHandler
 		registerMessage(StructureCorePacket.class, StructureCorePacket::decode);
 		registerMessage(EffectTogglePacket.class, EffectTogglePacket::decode);
 		registerMessage(StoneTabletPacket.class, StoneTabletPacket::decode);
+		registerMessage(AnthvilPacket.class, AnthvilPacket::decode);
 		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);

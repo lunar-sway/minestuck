@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider
+public class SendificatorBlockEntity extends MachineProcessBlockEntity implements MenuProvider, UraniumPowered
 {
 	public static final String TITLE = "container.minestuck.sendificator";
 	public static final short MAX_FUEL = 128;
@@ -149,7 +149,7 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 			if(itemHandler.getStackInSlot(1).is(ExtraForgeTags.Items.URANIUM_CHUNKS))
 			{
 				//Refill fuel
-				fuel += FUEL_INCREASE;
+				addFuel((short) FUEL_INCREASE);
 				itemHandler.extractItem(1, 1, false);
 			}
 		}
@@ -191,6 +191,18 @@ public class SendificatorBlockEntity extends MachineProcessBlockEntity implement
 	public boolean canBeRefueled()
 	{
 		return fuel <= MAX_FUEL - FUEL_INCREASE;
+	}
+	
+	@Override
+	public boolean atMaxFuel()
+	{
+		return fuel >= MAX_FUEL;
+	}
+	
+	@Override
+	public void addFuel(short fuelAmount)
+	{
+		fuel += fuelAmount;
 	}
 	
 	private final LazyOptional<IItemHandler> inputHandler = LazyOptional.of(() -> new RangedWrapper(itemHandler, 0, 1)); //sendificated item slot
