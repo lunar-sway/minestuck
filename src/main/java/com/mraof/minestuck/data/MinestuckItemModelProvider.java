@@ -12,12 +12,16 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-public class MinestuckItemModelProvider extends ItemModelProvider {
-	public MinestuckItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-		super(generator, Minestuck.MOD_ID, existingFileHelper);}
+public class MinestuckItemModelProvider extends ItemModelProvider
+{
+	public MinestuckItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	{
+		super(generator, Minestuck.MOD_ID, existingFileHelper);
+	}
 	
 	@Override
-	protected void registerModels() {
+	protected void registerModels()
+	{
 		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
 		
@@ -26,23 +30,36 @@ public class MinestuckItemModelProvider extends ItemModelProvider {
 		
 	}
 	
-	private ItemModelBuilder simpleItem(RegistryObject<Item> item) {
+	private ItemModelBuilder simpleItem(RegistryObject<Item> item)
+	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));}
-	private ItemModelBuilder simpleItemTextureName(RegistryObject<Item> item, String textureName) {
+				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));
+	}
+	
+	private ItemModelBuilder simpleItemTextureName(RegistryObject<Item> item, String textureName)
+	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));}
-	private ItemModelBuilder handheldItem(RegistryObject<Item> item) {
+				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));
+	}
+	
+	private ItemModelBuilder handheldItem(RegistryObject<Item> item)
+	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));}
-	private ItemModelBuilder handheldItemTextureName(RegistryObject<Item> item, String textureName) {
+				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));
+	}
+	
+	private ItemModelBuilder handheldItemTextureName(RegistryObject<Item> item, String textureName)
+	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));}
-	private ItemModelBuilder blockItem(RegistryObject<Block> block) {
+				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));
+	}
+	
+	private ItemModelBuilder blockItem(RegistryObject<Block> block)
+	{
 		return withExistingParent(block.getId().getPath(),
 				new ResourceLocation("minestuck:block/" + block.getId().getPath()));
 	}
