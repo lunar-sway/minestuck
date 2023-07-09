@@ -34,28 +34,28 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));
+				new ResourceLocation(Minestuck.MOD_ID, "item/" + item.getId().getPath()));
 	}
 	
 	private ItemModelBuilder simpleItemTextureName(RegistryObject<Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));
+				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
 	}
 	
 	private ItemModelBuilder handheldItem(RegistryObject<Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + item.getId().getPath()));
+				new ResourceLocation(Minestuck.MOD_ID, "item/" + item.getId().getPath()));
 	}
 	
 	private ItemModelBuilder handheldItemTextureName(RegistryObject<Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID,"item/" + textureName));
+				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
 	}
 	
 	private ItemModelBuilder blockItem(RegistryObject<Block> block)

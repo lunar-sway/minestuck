@@ -18,7 +18,8 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	}
 	
 	@Override
-	protected void registerStatesAndModels() {
+	protected void registerStatesAndModels()
+	{
 		
 		simpleBlock(MSBlocks.UNCARVED_WOOD.get());
 		
