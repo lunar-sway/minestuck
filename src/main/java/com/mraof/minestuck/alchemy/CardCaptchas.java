@@ -102,11 +102,6 @@ public class CardCaptchas
 		return hexString.toString();
 	}
 	
-	public static String getCaptcha(String registryName)
-	{
-		return REGISTRY_MAP.getOrDefault(registryName, null);
-	}
-	
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
 	 */
@@ -117,6 +112,11 @@ public class CardCaptchas
 			return CardCaptchas.getCaptcha(registryName);
 		else
 			return null;
+	}
+	
+	public static String getCaptcha(String registryName)
+	{
+		return REGISTRY_MAP.getOrDefault(registryName, null);
 	}
 	
 	public static String getRegistryNameFromItem(Item item)

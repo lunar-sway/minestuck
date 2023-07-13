@@ -2,10 +2,10 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.alchemy.ClientCardCaptchas;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -17,7 +17,6 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Optional;
 
 public class CaptchaCardItem extends Item
 {
@@ -96,7 +95,7 @@ public class CaptchaCardItem extends Item
 	private String getCaptcha(ItemStack decodedStack, ItemStack content)
 	{
 		if(AlchemyHelper.isReadableCard(decodedStack))
-			return CardCaptchas.getCaptchaFromItem(content.getItem());
+			return ClientCardCaptchas.getCaptchaFromItem(content.getItem());
 		
 		return null;
 	}
