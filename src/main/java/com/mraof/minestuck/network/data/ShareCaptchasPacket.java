@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network.data;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.alchemy.CardCaptchas;
+import com.mraof.minestuck.alchemy.ClientCardCaptchas;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -32,7 +32,7 @@ public class ShareCaptchasPacket implements PlayToClientPacket
 		
 		while(buffer.isReadable())
 		{
-			builder.put(buffer.readUtf(128), buffer.readUtf(8));
+			builder.put(buffer.readUtf(256), buffer.readUtf(8));
 		}
 		
 		return new ShareCaptchasPacket(builder.build());
@@ -41,7 +41,7 @@ public class ShareCaptchasPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		CardCaptchas.receivePacket(this);
+		ClientCardCaptchas.receivePacket(this);
 	}
 	
 	public Map<String, String> getCaptchas()

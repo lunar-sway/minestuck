@@ -123,7 +123,7 @@ public class CardCaptchas
 	{
 		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
 		
-		return resourceKey.map(itemResourceKey -> itemResourceKey.location().toString()).orElse(null);
+		return resourceKey.map(itemResourceKey -> itemResourceKey.location().toString()).orElseThrow();
 	}
 	
 	public static Item getItemFromCaptcha(String captcha)
@@ -264,11 +264,5 @@ public class CardCaptchas
 		
 		backupCaptchas.remove(pickedCaptcha);
 		return pickedCaptcha;
-	}
-	
-	public static void receivePacket(ShareCaptchasPacket packet)
-	{
-		REGISTRY_MAP.clear();
-		REGISTRY_MAP.putAll(packet.getCaptchas());
 	}
 }

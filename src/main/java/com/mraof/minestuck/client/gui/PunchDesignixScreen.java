@@ -64,11 +64,12 @@ public class PunchDesignixScreen extends Screen
 		this.renderBackground(poseStack);
 		
 		int yOffset = (this.height / 2) - (guiHeight / 2);
+		int xOffset = (this.width / 2) - (guiWidth / 2);
 		
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.setShaderTexture(0, guiBackground);
-		this.blit(poseStack, (this.width / 2) - (guiWidth / 2), yOffset, 0, 0, guiWidth, guiHeight);
+		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		super.render(poseStack, mouseX, mouseY, partialTicks);
 	}
