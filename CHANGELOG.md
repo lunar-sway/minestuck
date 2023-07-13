@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 - Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks)
 - Expanded number of Minecraft/Forge item/block tags that Minestuck items/blocks are in
+- Anthvil block
+- Power hub block
 - Captcha codes for all registered items (put in tooltip if it is legible)
 - Intellibeam Laserstation and accompanying UNREADABLE Item Tag for gating certain item captcha codes via "legibility"
 - GUI for Punch Designix for manually inputting and punching captcha codes
@@ -25,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
 - Uncarved Wood Texture
+- Hubtop combination recipe now uses power hub
 - Right-clicking a Punch Designix with a captchalogue card now sets the Designix's stored captcha code if the captcha code is, or has been made, legible
 - Mini Punch Designix now requires captcha cards whose codes are, or have been made, legible
 
@@ -40,7 +43,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, DORO, rose_bushes_, blankMushroom
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_, DORO, blankMushroom
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 
