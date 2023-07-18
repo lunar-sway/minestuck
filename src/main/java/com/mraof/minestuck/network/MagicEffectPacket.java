@@ -7,12 +7,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class MagicEffectPacket implements PlayToClientPacket
 {
-	private final MagicEffect.Type type;
+	private final MagicEffect.RangedType type;
 	private final Vec3 pos, lookVec;
 	private final int length;
 	private final boolean collides;
 	
-	public MagicEffectPacket(MagicEffect.Type type, Vec3 pos, Vec3 lookVec, int length, boolean collides)
+	public MagicEffectPacket(MagicEffect.RangedType type, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		this.type = type;
 		this.pos = pos;
@@ -37,7 +37,7 @@ public class MagicEffectPacket implements PlayToClientPacket
 	
 	public static MagicEffectPacket decode(FriendlyByteBuf buffer)
 	{
-		MagicEffect.Type type = MagicEffect.Type.fromInt(buffer.readInt());
+		MagicEffect.RangedType type = MagicEffect.RangedType.fromInt(buffer.readInt());
 		Vec3 pos = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		Vec3 lookVec = new Vec3(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		int length = buffer.readInt();
@@ -48,6 +48,6 @@ public class MagicEffectPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		MagicEffect.particleEffect(type, Minecraft.getInstance().level, pos, lookVec, length, collides);
+		MagicEffect.rangedParticleEffect(type, Minecraft.getInstance().level, pos, lookVec, length, collides);
 	}
 }
