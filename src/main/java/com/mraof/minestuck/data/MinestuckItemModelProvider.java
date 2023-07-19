@@ -25,6 +25,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
 		
+		//Clubs
+		handheldItem(MSItems.M_ACE_OF_CLUBS);
+		handheldItem(MSItems.HOME_GROWN_MACE);
+		
 		//Blocks
 		blockItem(MSBlocks.UNCARVED_WOOD);
 		

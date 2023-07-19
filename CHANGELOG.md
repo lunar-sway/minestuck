@@ -16,7 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Expanded number of Minecraft/Forge item/block tags that Minestuck items/blocks are in
 - Fire and Water Staffs
 - Staff Handle
-- Rubik's Mace Weapon
+- Rubik's Mace, mACE of Clubs, and Home Grown Mace Weapons.
 - Anthvil block
 - Power hub block
 

@@ -906,6 +906,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		addItem(MSItems.MACE, "Mace");
 		addItem(MSItems.M_ACE, "mACE");
+		addItem(MSItems.M_ACE_OF_CLUBS, "mACE of Clubs");
+		addItem(MSItems.HOME_GROWN_MACE, "Home Grown Mace");
 		addItem(MSItems.DESOLATOR_MACE, "Desolator Mace");
 		addItemTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
 		addItem(MSItems.BLAZING_GLORY, "Blazing Glory");
