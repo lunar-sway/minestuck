@@ -1,13 +1,13 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:wizard_staff"
+    "item": "minestuck:mini_wizard_statue"
   },
   "input2": {
-    "item": "minecraft:magma_cream"
+    "item": "minestuck:cane"
   },
   "mode": "and",
   "output": {
-    "item": "minestuck:fire_staff"
+    "item": "minestuck:wizard_staff"
   }
 }

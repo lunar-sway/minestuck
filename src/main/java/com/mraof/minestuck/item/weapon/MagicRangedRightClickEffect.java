@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.MagicEffectPacket;
+import com.mraof.minestuck.network.MagicRangedEffectPacket;
 import com.mraof.minestuck.util.MSSoundEvents;
 import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -30,7 +30,7 @@ import net.minecraftforge.network.PacketDistributor;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class MagicAttackRightClickEffect implements ItemRightClickEffect
+public class MagicRangedRightClickEffect implements ItemRightClickEffect
 {
 	private final int distance;
 	private final int damage;
@@ -38,20 +38,19 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	private final Supplier<SoundEvent> sound;
 	private final float pitch;
 	@Nullable
-	private final MagicEffect.Type type;
+	private final MagicEffect.RangedType type;
 	
 	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();//.setLineOfSiteRequired(); TODO should something else be done with the predicate?
 	
-	public static final MagicAttackRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.Type.GREEN);
-	public static final MagicAttackRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.Type.CRIT);
-	public static final MagicAttackRightClickEffect STANDARD_MAGIC = new MagicAttackRightClickEffect(15, 3, null, null, 1.0F, MagicEffect.Type.ENCHANT);
-	public static final MagicAttackRightClickEffect POOL_CUE_MAGIC = new MagicAttackRightClickEffect(18, 4, null, null, 1.0F, MagicEffect.Type.RED);
-	public static final MagicAttackRightClickEffect HORRORTERROR_MAGIC = new MagicAttackRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.Type.INK);
-	public static final MagicAttackRightClickEffect ZILLY_MAGIC = new MagicAttackRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.Type.ZILLY);
-	public static final MagicAttackRightClickEffect ECHIDNA_MAGIC = new MagicAttackRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.Type.ECHIDNA);
-	public static final MagicAttackRightClickEffect WATER_MAGIC = new WaterMagicEffect(27, 2, null, null, 1.0F, MagicEffect.Type.WATER);
-	public static final MagicAttackRightClickEffect FIRE_MAGIC = new FireMagicEffect(27, 3, null, null, 1.0F, MagicEffect.Type.FIRE);
-	protected MagicAttackRightClickEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+	public static final MagicRangedRightClickEffect SBAHJ_AIMBOT_MAGIC = new SbahjMagicEffect(10, 1, null, null, 1.0F, MagicEffect.RangedType.GREEN);
+	public static final MagicRangedRightClickEffect AIMBOT_MAGIC = new AimbotMagicEffect(14, 2, null, null, 1.0F, MagicEffect.RangedType.CRIT);
+	public static final MagicRangedRightClickEffect STANDARD_MAGIC = new MagicRangedRightClickEffect(15, 3, null, null, 1.0F, MagicEffect.RangedType.ENCHANT);
+	public static final MagicRangedRightClickEffect POOL_CUE_MAGIC = new MagicRangedRightClickEffect(18, 4, null, null, 1.0F, MagicEffect.RangedType.RED);
+	public static final MagicRangedRightClickEffect HORRORTERROR_MAGIC = new MagicRangedRightClickEffect(20, 5, () -> new MobEffectInstance(MobEffects.WITHER, 100, 0), MSSoundEvents.ITEM_GRIMOIRE_USE, 1.2F, MagicEffect.RangedType.INK);
+	public static final MagicRangedRightClickEffect ZILLY_MAGIC = new MagicRangedRightClickEffect(30, 8, null, null, 1.0F, MagicEffect.RangedType.ZILLY);
+	public static final MagicRangedRightClickEffect ECHIDNA_MAGIC = new MagicRangedRightClickEffect(50, 9, null, null, 1.0F, MagicEffect.RangedType.ECHIDNA);
+	
+	protected MagicRangedRightClickEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.RangedType type)
 	{
 		this.distance = distance;
 		this.damage = damage;
@@ -111,7 +110,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	protected void sendEffectPacket(Level level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
 	{
 		if(type != null)
-			MSPacketHandler.sendToNear(new MagicEffectPacket(type, pos, lookVec, length, collides),
+			MSPacketHandler.sendToNear(new MagicRangedEffectPacket(type, pos, lookVec, length, collides),
 					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()));
 	}
 	
@@ -133,7 +132,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		LivingEntity closestTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
 		if(closestTarget != null)
 		{
-			float talliedDamage = calculateDamage(player, closestTarget, damage, effect);
+			float talliedDamage = calculateDamage(player, closestTarget, damage);
 			closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), talliedDamage);
 			
 			if(effect != null && player.getRandom().nextFloat() < .25F)
@@ -145,7 +144,7 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		} else return false;
 	}
 	
-	protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage, Supplier<MobEffectInstance> effect)
+	protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage)
 	{
 		int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
 		
@@ -159,9 +158,9 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 	{
 	}
 	
-	private static class SbahjMagicEffect extends MagicAttackRightClickEffect
+	private static class SbahjMagicEffect extends MagicRangedRightClickEffect
 	{
-		SbahjMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		SbahjMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.RangedType type)
 		{
 			super(distance, damage, effect, sound, pitch, type);
 		}
@@ -174,9 +173,9 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 		}
 	}
 	
-	private static class AimbotMagicEffect extends MagicAttackRightClickEffect
+	private static class AimbotMagicEffect extends MagicRangedRightClickEffect
 	{
-		AimbotMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
+		AimbotMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.RangedType type)
 		{
 			super(distance, damage, effect, sound, pitch, type);
 		}
@@ -188,39 +187,6 @@ public class MagicAttackRightClickEffect implements ItemRightClickEffect
 			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AABB(playerEyePos).inflate(11));
 			if(closestVisibleTarget != null)
 				player.lookAt(EntityAnchorArgument.Anchor.EYES, closestVisibleTarget, EntityAnchorArgument.Anchor.EYES);
-		}
-	}
-	
-	private static class WaterMagicEffect extends MagicAttackRightClickEffect
-	{
-		WaterMagicEffect(int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
-		{
-			super(distance, damage, effect, sound, pitch, type);
-		}
-		
-		@Override
-		protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage, Supplier<MobEffectInstance> effect)
-		{
-				if(closestTarget.isSensitiveToWater())
-			{
-				return super.calculateDamage(player, closestTarget, damage, effect) + 20.0F;
-			} else
-				return super.calculateDamage(player, closestTarget, damage, effect);
-		}
-	}
-	
-	private static class FireMagicEffect extends MagicAttackRightClickEffect
-	{
-		FireMagicEffect (int distance, int damage, Supplier<MobEffectInstance> effect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.Type type)
-		{
-			super(distance, damage, effect, sound, pitch, type);
-		}
-		
-		@Override
-		protected void extraEffectApplier(LivingEntity closestTarget)
-		{
-			super.extraEffectApplier(closestTarget);
-			closestTarget.setSecondsOnFire(10);
 		}
 	}
 }
