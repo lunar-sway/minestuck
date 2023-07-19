@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:wizard_staff"
+    "item": "minestuck:staff_handle"
   },
   "input2": {
     "item": "minecraft:magma_cream"
