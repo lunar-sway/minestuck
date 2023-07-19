@@ -55,8 +55,7 @@ public class CardCaptchas
 	public static void serverStarted(ServerStartedEvent event)
 	{
 		//TODO the second time a world loads, and every subsequent time after that, the captchas are different from the first time the world loads. Both before and after the change, server and client side are synced correctly
-		CardCaptchas captchas = new CardCaptchas(event.getServer().overworld());
-		captchas.iterateThroughRegistry();
+		iterateThroughRegistry(event.getServer());
 	}
 	
 	@SubscribeEvent
@@ -136,17 +135,18 @@ public class CardCaptchas
 		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
 	}
 	
-	public void iterateThroughRegistry()
+	public static void iterateThroughRegistry(MinecraftServer server)
 	{
 		REGISTRY_MAP.clear();
 		
-		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
-		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
+		CardCaptchas cardCaptchas = new CardCaptchas(server.overworld());
+		cardCaptchas.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
+		cardCaptchas.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 		
 		//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
 		for(Iterator<Map.Entry<ResourceKey<Item>, Item>> it = ForgeRegistries.ITEMS.getEntries().stream().iterator(); it.hasNext(); )
 		{
-			createItemsCaptcha(it.next().getKey().location().toString());
+			cardCaptchas.createItemsCaptcha(it.next().getKey().location().toString());
 		}
 	}
 	
