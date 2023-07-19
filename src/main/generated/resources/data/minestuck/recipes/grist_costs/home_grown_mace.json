@@ -2,7 +2,7 @@
   "type": "minestuck:grist_cost",
   "grist_cost": {
     "minestuck:build": 125,
-    "minestuck:rust": 10
+    "minestuck:iodine": 10
   },
   "ingredient": {
     "item": "minestuck:home_grown_mace"
