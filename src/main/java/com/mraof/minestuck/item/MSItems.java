@@ -105,7 +105,6 @@ public class MSItems
 	public static final RegistryObject<Item> CINNAMON_SWORD = REGISTER.register("cinnamon_sword", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 4, -2.4F).efficiency(1.0F).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.SWEEP).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> UNION_BUSTER = REGISTER.register("union_buster", () -> new WeaponItem(new WeaponItem.Builder(Tiers.GOLD, 9, -3.5F).efficiency(1.0f).set(MSItemTypes.SWORD_TOOL).add(OnHitEffect.sweepMultiEffect(OnHitEffect.SPREADING_KNOCKBACK, OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MSEffects.SUSPICION.get(), 1200, 3, false, false)))), new Item.Properties().defaultDurability(505).tab(MSItemGroup.WEAPONS).rarity(Rarity.UNCOMMON)));
 	
-	
 	//Knives
 	public static final RegistryObject<Item> DAGGER = REGISTER.register("dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
 	public static final RegistryObject<Item> DIAMOND_DAGGER = REGISTER.register("diamond_dagger", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 0, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().tab(MSItemGroup.WEAPONS)));
@@ -307,11 +306,11 @@ public class MSItems
 	
 	
 	//Staffs
+	public static final RegistryObject<Item> WATER_STAFF = REGISTER.register("water_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.8F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAOERightClickEffect.WATER_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
+	public static final RegistryObject<Item> FIRE_STAFF = REGISTER.register("fire_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 1, -2.8F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAOERightClickEffect.FIRE_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> WHITE_KINGS_SCEPTER = REGISTER.register("white_kings_scepter", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> BLACK_KINGS_SCEPTER = REGISTER.register("black_kings_scepter", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.REGI_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(ItemRightClickEffect.summonFireball()), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	public static final RegistryObject<Item> PRIME_STAFF = REGISTER.register("prime_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.WELSH_TIER, 8, -2.8F).efficiency(4.0F).set(MSItemTypes.MISC_TOOL).set(MagicRangedRightClickEffect.ZILLY_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).fireResistant().rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> WATER_STAFF = REGISTER.register("water_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAOERightClickEffect.STANDARD_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
-	public static final RegistryObject<Item> FIRE_STAFF = REGISTER.register("fire_staff", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.EMERALD_TIER, 0, -1.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).set(MagicAOERightClickEffect.FIRE_MAGIC), new Item.Properties().tab(MSItemGroup.WEAPONS).rarity(Rarity.EPIC)));
 	
 	
 	//Canes
@@ -555,6 +554,7 @@ public class MSItems
 	
 	//Alchemy Items
 	public static final RegistryObject<Item> DICE = REGISTER.register("dice", () -> new RightClickMessageItem(new Item.Properties().tab(MSItemGroup.MAIN), RightClickMessageItem.Type.DICE));
+	public static final RegistryObject<Item> STAFF_HANDLE = REGISTER.register("staff_handle", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> PLUTONIUM_CORE = REGISTER.register("plutonium_core", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<Item> GRIMOIRE = REGISTER.register("grimoire", () -> new GrimoireItem(new Item.Properties().stacksTo(1).tab(MSItemGroup.MAIN).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> BATTERY = REGISTER.register("battery", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
@@ -615,7 +615,6 @@ public class MSItems
 	public static final RegistryObject<Item> GOLD_BOAT = REGISTER.register("gold_boat", () -> new CustomBoatItem((stack, world, x, y, z) -> new MetalBoatEntity(world, x, y, z, MetalBoatEntity.Type.GOLD), new Item.Properties().tab(MSItemGroup.MAIN).stacksTo(1)));
 	public static final RegistryObject<Item> COCOA_WART = REGISTER.register("cocoa_wart", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	public static final RegistryObject<MultiblockItem> HORSE_CLOCK = REGISTER.register("horse_clock", () -> new MultiblockItem(MSBlocks.HORSE_CLOCK, new Item.Properties().tab(MSItemGroup.MAIN)));
-	public static final RegistryObject<Item> STAFF_HANDLE = REGISTER.register("staff_handle", () -> new Item(new Item.Properties().tab(MSItemGroup.MAIN)));
 	
 	
 	//Music Discs/Cassettes

@@ -1,7 +1,7 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:build": 28
+    "minestuck:build": 50
   },
   "ingredient": {
     "item": "minestuck:staff_handle"

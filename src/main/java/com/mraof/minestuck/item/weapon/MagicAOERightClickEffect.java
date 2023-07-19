@@ -3,7 +3,7 @@ package com.mraof.minestuck.item.weapon;
 import com.mraof.minestuck.client.util.MagicEffect;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.MagicEffectPacket;
+import com.mraof.minestuck.network.MagicAOEEffectPacket;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -36,20 +36,20 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	private final Supplier<SoundEvent> sound;
 	private final float pitch;
 	@Nullable
-	private final MagicEffect.RangedType type;
+	private final MagicEffect.AOEType type;
 	
 	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();
 	
-	public static final MagicAOERightClickEffect STANDARD_MAGIC = new MagicAOERightClickEffect(4, 3, MagicEffect.RangedType.ENCHANT);
-	public static final MagicAOERightClickEffect WATER_MAGIC = new WaterMagicEffect(6, 3, MagicEffect.RangedType.WATER);
-	public static final MagicAOERightClickEffect FIRE_MAGIC = new FireMagicEffect(6, 3, MagicEffect.RangedType.FIRE);
+	public static final MagicAOERightClickEffect STANDARD_MAGIC = new MagicAOERightClickEffect(3, 3, MagicEffect.AOEType.ENCHANT);
+	public static final MagicAOERightClickEffect WATER_MAGIC = new WaterMagicEffect(3.25F, 3, MagicEffect.AOEType.WATER);
+	public static final MagicAOERightClickEffect FIRE_MAGIC = new FireMagicEffect(3.25F, 3, MagicEffect.AOEType.FIRE);
 	
-	protected MagicAOERightClickEffect(float radius, int damage, @Nullable MagicEffect.RangedType type)
+	protected MagicAOERightClickEffect(float radius, int damage, @Nullable MagicEffect.AOEType type)
 	{
 		this(radius, damage, null, null, 1.0F, type);
 	}
 	
-	protected MagicAOERightClickEffect(float radius, int damage, Supplier<MobEffectInstance> mobEffect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.RangedType type)
+	protected MagicAOERightClickEffect(float radius, int damage, Supplier<MobEffectInstance> mobEffect, Supplier<SoundEvent> sound, float pitch, @Nullable MagicEffect.AOEType type)
 	{
 		this.radius = radius;
 		this.damage = damage;
@@ -91,9 +91,10 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 		attackerEffect(player);
 		
 		if(player.isInWall())
-			return; //TODO test
+			return;
 		
-		List<LivingEntity> targets = level.getNearbyEntities(LivingEntity.class, visiblePredicate, player, new AABB(playerPos).inflate(radius));
+		AABB aabb = new AABB(playerPos).inflate(radius);
+		List<LivingEntity> targets = level.getNearbyEntities(LivingEntity.class, visiblePredicate, player, aabb);
 		targets.remove(player);
 		
 		for(LivingEntity target : targets)
@@ -109,14 +110,20 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 			
 			extraTargetEffect(target);
 		}
+		
+		sendEffectPacket(level, aabb);
 	}
 	
 	// If you're an addon that want to use this class with your own effect, override this to use your own network packet
-	protected void sendEffectPacket(Level level, Vec3 pos, Vec3 lookVec, int length, boolean collides)
+	protected void sendEffectPacket(Level level, AABB aabb)
 	{
+		Vec3 centerPos = aabb.getCenter();
+		Vec3 minAOEBound = new Vec3(aabb.minX, aabb.minY, aabb.minZ);
+		Vec3 maxAOEBound = new Vec3(aabb.maxX, aabb.maxY, aabb.maxZ);
+		
 		if(type != null)
-			MSPacketHandler.sendToNear(new MagicEffectPacket(type, pos, lookVec, length, collides),
-					new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, 64, level.dimension()));
+			MSPacketHandler.sendToNear(new MagicAOEEffectPacket(type, minAOEBound, maxAOEBound),
+					new PacketDistributor.TargetPoint(centerPos.x, centerPos.y, centerPos.z, 64, level.dimension()));
 	}
 	
 	protected void attackerEffect(ServerPlayer player)
@@ -139,9 +146,9 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	
 	private static class WaterMagicEffect extends MagicAOERightClickEffect
 	{
-		WaterMagicEffect(int distance, int damage, @Nullable MagicEffect.RangedType type)
+		WaterMagicEffect(float radius, int damage, @Nullable MagicEffect.AOEType type)
 		{
-			super(distance, damage, type);
+			super(radius, damage, type);
 		}
 		
 		@Override
@@ -157,16 +164,16 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	
 	private static class FireMagicEffect extends MagicAOERightClickEffect
 	{
-		FireMagicEffect(int distance, int damage, @Nullable MagicEffect.RangedType type)
+		FireMagicEffect(float radius, int damage, @Nullable MagicEffect.AOEType type)
 		{
-			super(distance, damage, type);
+			super(radius, damage, type);
 		}
 		
 		@Override
 		protected void extraTargetEffect(LivingEntity target)
 		{
 			super.extraTargetEffect(target);
-			target.setSecondsOnFire(10);
+			target.setSecondsOnFire(5);
 		}
 	}
 }

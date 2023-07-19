@@ -52,10 +52,9 @@ public class MagicEffect
 	
 	public enum AOEType
 	{
-		CRIT(() -> ParticleTypes.ENCHANTED_HIT, false, false),
-		ENCHANT(() -> ParticleTypes.ENCHANT, false, true),
-		WATER(() -> ParticleTypes.DRIPPING_WATER, false, true),
-		FIRE(() -> ParticleTypes.DRIPPING_LAVA, false, true);
+		ENCHANT(() -> ParticleTypes.ENCHANT, true, false),
+		WATER(() -> ParticleTypes.SPLASH, true, true),
+		FIRE(() -> ParticleTypes.FLAME, true, true);
 		
 		private final Supplier<ParticleOptions> particle;
 		private final boolean perimeterParticles;
@@ -142,8 +141,60 @@ public class MagicEffect
 		}
 	}
 	
-	public static void AOEParticleEffect(ParticleOptions particle, boolean perimeterParticles, boolean extraParticles, ClientLevel level, Vec3 pos, int length, boolean collides)
+	public static void AOEParticleEffect(AOEType type, ClientLevel level, Vec3 minAOEBound, Vec3 maxAOEBound)
 	{
+		AOEParticleEffect(type.particle.get(), type.perimeterParticles, type.extraParticles, level, minAOEBound, maxAOEBound);
+	}
 	
+	public static void AOEParticleEffect(ParticleOptions particle, boolean perimeterParticles, boolean extraParticles, ClientLevel level, Vec3 minAOEBound, Vec3 maxAOEBound)
+	{
+		if(!perimeterParticles)
+			return;
+		
+		double minX = minAOEBound.x;
+		double minZ = minAOEBound.z;
+		double maxX = maxAOEBound.x;
+		double maxZ = maxAOEBound.z;
+		double y = (maxAOEBound.y + minAOEBound.y) / 2 + 4;
+		
+		for(double x = minX; x < maxX; x += 0.5D)
+		{
+			level.addParticle(particle, true, x, y + randomVariation(level), minZ, 0.0D, 0.0D, 0.0D);
+			level.addParticle(particle, true, x, y + randomVariation(level), maxZ, 0.0D, 0.0D, 0.0D);
+			
+			if(extraParticles)
+			{
+				extraParticles(particle, level, new Vec3(x, y, minZ));
+				extraParticles(particle, level, new Vec3(x, y, maxZ));
+			}
+		}
+		
+		for(double z = minZ; z < maxZ; z += 0.5D)
+		{
+			level.addParticle(particle, true, minX, y + randomVariation(level), z, 0.0D, 0.0D, 0.0D);
+			level.addParticle(particle, true, maxX, y + randomVariation(level), z, 0.0D, 0.0D, 0.0D);
+			
+			if(extraParticles)
+			{
+				extraParticles(particle, level, new Vec3(minX, y, z));
+				extraParticles(particle, level, new Vec3(maxX, y, z));
+			}
+		}
+	}
+	
+	private static void extraParticles(ParticleOptions particle, ClientLevel level, Vec3 vecPos)
+	{
+		for(float a = 0; a < 4; a++)
+		{
+			level.addParticle(particle, true, vecPos.x, vecPos.y + randomVariation(level), vecPos.z, 0.0D, 0.0D, 0.0D);
+		}
+	}
+	
+	/**
+	 * Returns a random float between -4 and 4 for use in position offsetting
+	 */
+	private static float randomVariation(ClientLevel level)
+	{
+		return level.random.nextFloat() - .5F * 8;
 	}
 }
