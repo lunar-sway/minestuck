@@ -909,6 +909,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.DESOLATOR_MACE, "Desolator Mace");
 		addItemTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
 		addItem(MSItems.BLAZING_GLORY, "Blazing Glory");
+		addItem(MSItems.RUBIKS_MACE, "Rubik's Mace");
 		addItem(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		addItem(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addItemStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -924,6 +925,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addItemStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
+		addItem(MSItems.WIZARD_STAFF, "Wizard Staff");
+		addItem(MSItems.WATER_STAFF, "Water Staff");
+		addItem(MSItems.FIRE_STAFF, "Fire Staff");
 		addItem(MSItems.WHITE_KINGS_SCEPTER, "Kings Scepter");
 		addItemTooltip(MSItems.WHITE_KINGS_SCEPTER, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
 		addItem(MSItems.BLACK_KINGS_SCEPTER, "Kings Scepter");
@@ -1028,10 +1032,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.THISTLE_OF_ZILLYWICH, "Thistle of Zillywich");
 		addItemTooltip(MSItems.THISTLE_OF_ZILLYWICH, "Flippety dippety doo bup bup shrubber double floppy mumblescurry noodlescoop pizzabubble pizzabubble mip mip mip mip mip mip.");
 		addItem(MSItems.QUILL_OF_ECHIDNA, "Quill of Echidna");
-		addItem(MSItems.WATER_STAFF, "Water Staff");
-		addItem(MSItems.FIRE_STAFF, "Fire Staff");
-		addItem(MSItems.RUBIKS_MACE, "Rubik's Mace");
-		addItem(MSItems.STAFF_HANDLE, "Staff Handle");
 		addItem(MSItems.SBAHJARANG, "SBaHJarang");
 		addItemTooltip(MSItems.SBAHJARANG, "Worst throwing weapon money can't buy");
 		addItem(MSItems.SHURIKEN, "Shuriken");

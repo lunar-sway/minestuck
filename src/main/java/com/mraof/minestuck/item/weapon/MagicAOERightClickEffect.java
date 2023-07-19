@@ -40,7 +40,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	
 	private static final TargetingConditions visiblePredicate = TargetingConditions.forCombat();
 	
-	public static final MagicAOERightClickEffect STANDARD_MAGIC = new MagicAOERightClickEffect(3, 3, MagicEffect.AOEType.ENCHANT);
+	public static final MagicAOERightClickEffect STANDARD_MAGIC = new MagicAOERightClickEffect(3, 2, MagicEffect.AOEType.ENCHANT);
 	public static final MagicAOERightClickEffect WATER_MAGIC = new WaterMagicEffect(3.25F, 3, MagicEffect.AOEType.WATER);
 	public static final MagicAOERightClickEffect FIRE_MAGIC = new FireMagicEffect(3.25F, 3, MagicEffect.AOEType.FIRE);
 	
