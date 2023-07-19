@@ -526,6 +526,8 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.DESOLATOR_MACE.get()).input(MSItems.MACE.get()).or().input(Items.FLINT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLAZING_GLORY.get()).input(MSItems.MACE.get()).and().namedInput(Items.BLAZE_POWDER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.RUBIKS_MACE.get()).input(MSItems.MACE.get()).and().input(MSItems.WATER_COLORS_BUCKET.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.M_ACE_OF_CLUBS.get()).input(MSItems.M_ACE.get()).and().input(MSItems.ACE_OF_CLUBS.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HOME_GROWN_MACE.get()).input(MSItems.MACE.get()).and().input(Items.BAMBOO).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER.get()).input(MSItems.CLAW_HAMMER.get()).and().namedInput(Items.BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER.get()).input(MSItems.CLAW_HAMMER.get()).and().namedInput(Items.COBBLESTONE).build(consumer);

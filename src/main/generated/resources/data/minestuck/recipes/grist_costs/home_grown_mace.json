@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 125
+  },
+  "ingredient": {
+    "item": "minestuck:home_grown_mace"
+  }
+}

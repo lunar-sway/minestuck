@@ -76,6 +76,7 @@ public class MSPacketHandler
 		registerMessage(AnthvilPacket.class, AnthvilPacket::decode);
 		registerMessage(MagicRangedEffectPacket.class, MagicRangedEffectPacket::decode);
 		registerMessage(MagicAOEEffectPacket.class, MagicAOEEffectPacket::decode);
+		registerMessage(MagicEffectPacket.class, MagicEffectPacket::decode);
 		registerMessage(LotusFlowerPacket.class, LotusFlowerPacket::decode);
 		registerMessage(ServerCursorPacket.class, ServerCursorPacket::decode);
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
