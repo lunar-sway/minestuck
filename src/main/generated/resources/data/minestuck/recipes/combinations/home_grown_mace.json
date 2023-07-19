@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:mace"
+  },
+  "input2": {
+    "item": "minecraft:bamboo"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:home_grown_mace"
+  }
+}

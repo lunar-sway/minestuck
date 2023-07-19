@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 425
+  },
+  "ingredient": {
+    "item": "minestuck:m_ace_of_clubs"
+  }
+}
