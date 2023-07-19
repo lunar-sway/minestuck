@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 46,
+    "minestuck:build": 46,
+    "minestuck:caulk": 46,
+    "minestuck:marble": 46
+  },
+  "ingredient": {
+    "item": "minestuck:wizard_staff"
+  }
+}

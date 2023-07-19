@@ -1,7 +1,7 @@
 {
   "type": "minestuck:combination",
   "input1": {
-    "item": "minestuck:staff_handle"
+    "item": "minestuck:wizard_staff"
   },
   "input2": {
     "item": "minecraft:heart_of_the_sea"
