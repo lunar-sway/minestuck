@@ -153,7 +153,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			if(AlchemyHelper.isReadableCard(heldStack))
 			{
-				setCaptcha(CardCaptchas.getCaptchaFromItem(AlchemyHelper.getDecodedItem(heldStack).getItem()));
+				setCaptcha(CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(heldStack).getItem()));
 				effects(false);
 			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.getDecodedItem(heldStack).isEmpty())
 			{

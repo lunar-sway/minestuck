@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ShareCaptchasPacket;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,7 +22,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Handles the creation of, and look up of, captcha codes for each registered item in the given world.
@@ -38,14 +40,14 @@ public class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static final BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
+	private static final BiMap<Item, String> REGISTRY_MAP = HashBiMap.create();
 	
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
 	
 	private final RandomSource seedRandomizer;
 	
-	public CardCaptchas(ServerLevel level)
+	private CardCaptchas(ServerLevel level)
 	{
 		this.seedRandomizer = RandomSource.create(level.getSeed());
 		generateBackupCaptchas();
@@ -69,14 +71,14 @@ public class CardCaptchas
 	
 	private static ShareCaptchasPacket createShareCaptchasPacket()
 	{
-		ImmutableMap.Builder<String, String> builder = new ImmutableMap.Builder<>();
+		ImmutableMap.Builder<Item, String> builder = new ImmutableMap.Builder<>();
 		
 		builder.putAll(REGISTRY_MAP);
 		
 		return new ShareCaptchasPacket(builder.build());
 	}
 	
-	public String createHash(String registryName)
+	private String createHash(String registryName)
 	{
 		StringBuilder hexString = new StringBuilder();
 		
@@ -104,20 +106,12 @@ public class CardCaptchas
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
 	 */
-	public static String getCaptchaFromItem(Item item)
+	public static String getCaptcha(Item item)
 	{
-		String registryName = getRegistryNameFromItem(item);
-		if(registryName != null)
-			return CardCaptchas.getCaptcha(registryName);
-		else
-			return null;
+		return REGISTRY_MAP.get(item);
 	}
 	
-	public static String getCaptcha(String registryName)
-	{
-		return REGISTRY_MAP.getOrDefault(registryName, null);
-	}
-	
+	@Deprecated
 	public static String getRegistryNameFromItem(Item item)
 	{
 		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
@@ -127,15 +121,10 @@ public class CardCaptchas
 	
 	public static Item getItemFromCaptcha(String captcha)
 	{
-		String registryName = REGISTRY_MAP.inverse().get(captcha);
-		
-		if(registryName == null)
-			return null;
-		
-		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
+		return REGISTRY_MAP.inverse().get(captcha);
 	}
 	
-	public static void iterateThroughRegistry(MinecraftServer server)
+	private static void iterateThroughRegistry(MinecraftServer server)
 	{
 		REGISTRY_MAP.clear();
 		
@@ -144,9 +133,9 @@ public class CardCaptchas
 		cardCaptchas.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 		
 		//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
-		for(Iterator<Map.Entry<ResourceKey<Item>, Item>> it = ForgeRegistries.ITEMS.getEntries().stream().iterator(); it.hasNext(); )
+		for(Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries())
 		{
-			cardCaptchas.createItemsCaptcha(it.next().getKey().location().toString());
+			cardCaptchas.createItemsCaptcha(entry.getValue(), entry.getKey());
 		}
 	}
 	
@@ -154,13 +143,13 @@ public class CardCaptchas
 	 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
 	 * There is some simple collision detection and backup captchas for redundancy
 	 */
-	public void createItemsCaptcha(String registryName)
+	private void createItemsCaptcha(Item item, ResourceKey<Item> key)
 	{
 		//prevents reassignment of captcha to given item
-		if(REGISTRY_MAP.containsKey(registryName))
+		if(REGISTRY_MAP.containsKey(item))
 			return;
 		
-		String fullHash = createHash(registryName);
+		String fullHash = createHash(key.location().toString());
 		
 		String shuffledHash = shuffleHash(fullHash);
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
@@ -169,14 +158,12 @@ public class CardCaptchas
 		if(REGISTRY_MAP.containsValue(captcha))
 			captcha = getBackupCaptcha();
 		
-		REGISTRY_MAP.put(registryName, captcha); //adding an entry
+		REGISTRY_MAP.put(item, captcha); //adding an entry
 	}
 	
 	private void predetermineCaptcha(Item item, String captcha)
 	{
-		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
-		
-		resourceKey.ifPresent(itemResourceKey -> REGISTRY_MAP.put(itemResourceKey.location().toString(), captcha));
+		REGISTRY_MAP.put(item, captcha);
 	}
 	
 	/**

@@ -7,28 +7,20 @@ import net.minecraft.world.item.Item;
 
 public class ClientCardCaptchas
 {
-	private static final BiMap<String, String> REGISTRY_MAP = HashBiMap.create();
+	private static final BiMap<Item, String> REGISTRY_MAP = HashBiMap.create();
 	
 	public static void receivePacket(ShareCaptchasPacket packet)
 	{
 		REGISTRY_MAP.clear();
-		REGISTRY_MAP.putAll(packet.getCaptchas());
+		REGISTRY_MAP.putAll(packet.captchas());
 	}
 	
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
 	 */
-	public static String getCaptchaFromItem(Item item)
+	public static String getCaptcha(Item item)
 	{
-		String registryName = CardCaptchas.getRegistryNameFromItem(item);
-		if(registryName != null)
-			return ClientCardCaptchas.getCaptcha(registryName);
-		else
-			return null;
+		return REGISTRY_MAP.getOrDefault(item, null);
 	}
 	
-	public static String getCaptcha(String registryName)
-	{
-		return REGISTRY_MAP.getOrDefault(registryName, null);
-	}
 }

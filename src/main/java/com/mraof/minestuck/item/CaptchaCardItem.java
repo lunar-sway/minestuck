@@ -95,7 +95,7 @@ public class CaptchaCardItem extends Item
 	private String getCaptcha(ItemStack decodedStack, ItemStack content)
 	{
 		if(AlchemyHelper.isReadableCard(decodedStack))
-			return ClientCardCaptchas.getCaptchaFromItem(content.getItem());
+			return ClientCardCaptchas.getCaptcha(content.getItem());
 		
 		return null;
 	}
