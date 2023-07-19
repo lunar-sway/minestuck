@@ -357,8 +357,6 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		
 		GristCostRecipeBuilder.of(MSBlocks.BLUE_DIRT.get()).grist(BUILD, 1).grist(SHALE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.THOUGHT_DIRT.get()).grist(BUILD, 1).grist(CAULK, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).grist(BUILD, 550).grist(GARNET, 55).grist(RUBY, 34).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSBlocks.GRIST_COLLECTOR.get()).grist(BUILD, 5000).grist(URANIUM, 300).grist(DIAMOND, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.GENERIC_OBJECT.get()).grist(BUILD, 2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSBlocks.CHESSBOARD.get()).grist(SHALE, 25).grist(MARBLE, 25).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.GRIMOIRE.get()).grist(BUILD, 120).grist(AMETHYST, 60).grist(GARNET, 33).build(recipeSaver);
@@ -372,6 +370,11 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 		GristCostRecipeBuilder.of(MSItems.SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(MSItems.COMPLETED_SBURB_CODE.get()).grist(CHALK, 16).grist(IODINE, 2).buildFor(recipeSaver, Minestuck.MOD_ID);
 		GristCostRecipeBuilder.of(MSItems.COMPUTER_PARTS.get()).grist(BUILD, 20).grist(RUST, 5).grist(GOLD, 1).build(recipeSaver);
+		
+		GristCostRecipeBuilder.of(MSBlocks.GRIST_WIDGET.get()).grist(BUILD, 550).grist(GARNET, 55).grist(RUBY, 34).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.GRIST_COLLECTOR.get()).grist(BUILD, 5000).grist(URANIUM, 300).grist(DIAMOND, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.ANTHVIL.get()).grist(BUILD, 500).grist(URANIUM, 400).grist(RUST, 300).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSBlocks.POWER_HUB.get()).grist(BUILD, 20).grist(URANIUM, 60).grist(QUARTZ, 5).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_APPLE.get()).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CRUXITE_POTION.get()).build(recipeSaver);

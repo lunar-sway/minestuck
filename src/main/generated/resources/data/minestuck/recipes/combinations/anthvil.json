@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:power_hub"
+  },
+  "input2": {
+    "item": "minecraft:anvil"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:anthvil"
+  }
+}

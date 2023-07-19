@@ -12,7 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Translation keys/lang file entries for entry failure messages
 - Union Buster Sword
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
-- Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks).
+- Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks)
+- Expanded number of Minecraft/Forge item/block tags that Minestuck items/blocks are in
+- Anthvil block
+- Power hub block
 - Fire and Water Staffs
 - Staff Handle
 - Rubik's Mace Weapon
@@ -24,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Some land worldgen features are now replacable by datapacks
 - Tree features for our saplings are now replacable by datapacks
 - Uncarved Wood Texture
+- Hubtop combination recipe now uses power hub
 
 ### Removed
 
@@ -33,10 +37,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed issue with sburb connections and /debuglands
 - Grist cost generation optimisation
+- Shadewood planks are now in planks tag and can now be used for crafting
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_
 
 ### Idea Contributions
 
@@ -282,3 +287,58 @@ For the overworld, these ores can now instead be disabled by overriding the new 
 ### Contributors for this release
 
 - kirderf1, Dweblenod, Akisephila, rose_bushes_
+
+## [1.18.2-1.9.1.0] - 2023-02-19
+
+### Added
+
+- Added moss carpet patches/rooted azalea trees/lush cave vegetation to Flora lands
+- Added carved caves/moss carpet patches/berry bush patches/mossy forest rocks/hanging roots and lush cave vegetation to cave ceilings/rooted dirt deposits to Forest lands
+- Added carved caves/iceburgs/pools of ice/ice spikes/more snow and ice deposits underground to Frost lands
+- Added nether fungus patches to Fungi lands
+- Added nether style carved caves/larger black stone deposits underground to Heat lands
+- Added dripstone features and various rock deposits to Rock Lands
+- Added vanilla monster dungeons to Monster Lands
+- Added mycelium cruxite and uranium ore blocks
+
+### Changed
+
+- Removed discs of leaves from Wood Lands
+- Other tweaks to generation of features in Lands
+- Extend computer block state properties to represent when a computer has disks inserted
+- Computer model updates for most computer variants
+- Updated ice shard texture
+- Updated pink stone coal ore texture
+
+### Fixed
+
+- /debuglands now require permission level 2 to be used
+- Item capability data is no longer lost when the item is put in a card
+- Skylight in lands is now determined as intended
+- Pumpkins(what pumpkins?) no longer generates overtop oceans in Silence Lands
+- Bucket structures no longer sometimes spawns with non-source fluid blocks
+
+### Contributors for this release
+
+- Riotmode, rose_bushes_, Dweblenod, kirderf1, Doro, Akisephila, blankMushroom
+
+## [1.18.2-1.9.0.2] - 2023-01-09
+
+### Fixed
+
+- Fix crash with Mine and Grist
+- Fix and tweak some computer interactions
+
+### Contributors for this release
+
+- kirderf1
+
+## [1.18.2-1.9.0.1] - 2022-12-28
+
+### Fixed
+
+- Fix crash on player death
+
+### Contributors for this release
+
+- kirderf1

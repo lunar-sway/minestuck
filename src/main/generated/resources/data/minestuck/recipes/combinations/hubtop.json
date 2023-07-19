@@ -4,7 +4,7 @@
     "item": "minestuck:laptop"
   },
   "input2": {
-    "item": "minestuck:uranium_block"
+    "item": "minestuck:power_hub"
   },
   "mode": "and",
   "output": {
