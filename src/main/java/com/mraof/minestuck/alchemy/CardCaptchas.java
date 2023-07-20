@@ -6,9 +6,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,11 +39,13 @@ public class CardCaptchas
 	private final Set<String> backupCaptchas = new HashSet<>();
 	private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
 	
-	private final RandomSource seedRandomizer;
+	private final PositionalRandomFactory itemRandomFactory;
+	private final RandomSource backupRandom;
 	
-	private CardCaptchas(ServerLevel level)
+	private CardCaptchas(long seed)
 	{
-		this.seedRandomizer = RandomSource.create(level.getSeed());
+		this.itemRandomFactory = RandomSource.create(seed).forkPositional().fromHashOf("minestuck:item_captchas").forkPositional();
+		this.backupRandom = RandomSource.create(seed).forkPositional().fromHashOf("minestuck:backup_captchas");
 		generateBackupCaptchas();
 	}
 	
@@ -97,7 +99,7 @@ public class CardCaptchas
 	{
 		REGISTRY_MAP.clear();
 		
-		CardCaptchas cardCaptchas = new CardCaptchas(server.overworld());
+		CardCaptchas cardCaptchas = new CardCaptchas(server.overworld().getSeed());
 		cardCaptchas.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
 		cardCaptchas.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 		
@@ -118,9 +120,10 @@ public class CardCaptchas
 		if(REGISTRY_MAP.containsKey(item))
 			return;
 		
+		RandomSource itemRandom = itemRandomFactory.fromHashOf(key.location());
 		String fullHash = createHash(key.location().toString());
 		
-		String shuffledHash = shuffleHash(fullHash);
+		String shuffledHash = shuffleHash(fullHash, itemRandom);
 		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 		String captcha = captchaFromHash(cutHash);
 		
@@ -158,13 +161,13 @@ public class CardCaptchas
 	/**
 	 * Turns the hash string into a char array in order to reorganize the contents based on the world seed
 	 */
-	private String shuffleHash(String fullHash)
+	private String shuffleHash(String fullHash, RandomSource itemRandom)
 	{
 		char[] characters = fullHash.toCharArray();
 		
 		for(int currentIndex = 0; currentIndex < characters.length; currentIndex++)
 		{
-			int randIndex = seedRandomizer.nextInt(currentIndex + 1);
+			int randIndex = itemRandom.nextInt(currentIndex + 1);
 			
 			//swap characters at indices currentIndex and randIndex
 			char temp = characters[currentIndex];
@@ -189,7 +192,7 @@ public class CardCaptchas
 			//randomly picks the first 7 characters
 			for(int i = 0; i < 7; i++)
 			{
-				int index = seedRandomizer.nextInt(AVAILABLE_CHARACTERS.length());
+				int index = this.backupRandom.nextInt(AVAILABLE_CHARACTERS.length());
 				char randomChar = AVAILABLE_CHARACTERS.charAt(index);
 				captcha.append(randomChar);
 			}
