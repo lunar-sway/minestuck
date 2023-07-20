@@ -19,7 +19,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -86,14 +85,6 @@ public class CardCaptchas
 	public static String getCaptcha(Item item)
 	{
 		return REGISTRY_MAP.get(item);
-	}
-	
-	@Deprecated
-	public static String getRegistryNameFromItem(Item item)
-	{
-		Optional<ResourceKey<Item>> resourceKey = item.builtInRegistryHolder().unwrapKey();
-		
-		return resourceKey.map(itemResourceKey -> itemResourceKey.location().toString()).orElseThrow();
 	}
 	
 	@Nullable
