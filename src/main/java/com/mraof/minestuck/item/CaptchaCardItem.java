@@ -2,9 +2,10 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
-import com.mraof.minestuck.alchemy.ClientCardCaptchas;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class CaptchaCardItem extends Item
 {
@@ -72,14 +74,14 @@ public class CaptchaCardItem extends Item
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
 				{
-					String captcha = getCaptcha(stack, content);
+					String captcha = getCaptcha(stack);
 					if(captcha != null)
 						tooltip.add(Component.literal(captcha));
 					
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
 				} else
 				{
-					String captcha = getCaptcha(stack, content);
+					String captcha = getCaptcha(stack);
 					if(captcha != null)
 						tooltip.add(Component.literal(captcha));
 				}
@@ -92,12 +94,27 @@ public class CaptchaCardItem extends Item
 	}
 	
 	//TODO consider obfuscated characters for unreadable unpunched card
-	private String getCaptcha(ItemStack decodedStack, ItemStack content)
+	private String getCaptcha(ItemStack stack)
 	{
-		if(AlchemyHelper.isReadableCard(decodedStack))
-			return ClientCardCaptchas.getCaptcha(content.getItem());
+		CompoundTag tag = stack.getTag();
+		if(tag != null && tag.contains("captcha_code", Tag.TAG_STRING))
+			return tag.getString("captcha_code");
 		
 		return null;
+	}
+	
+	@Override
+	@Nullable
+	public CompoundTag getShareTag(ItemStack stack)
+	{
+		if(AlchemyHelper.isReadableCard(stack))
+		{
+			CompoundTag tag = Objects.requireNonNull(stack.getTag()).copy();
+			String code = CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(stack).getItem());
+			tag.putString("captcha_code", code);
+			return tag;
+		} else
+			return super.getShareTag(stack);
 	}
 	
 	private Component makeTooltipInfo(Component info)

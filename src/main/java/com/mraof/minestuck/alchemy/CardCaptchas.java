@@ -2,19 +2,13 @@ package com.mraof.minestuck.alchemy;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.data.ShareCaptchasPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -59,24 +53,6 @@ public class CardCaptchas
 	{
 		//TODO the second time a world loads, and every subsequent time after that, the captchas are different from the first time the world loads. Both before and after the change, server and client side are synced correctly
 		iterateThroughRegistry(event.getServer());
-	}
-	
-	@SubscribeEvent
-	public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event)
-	{
-		Player player = event.getEntity();
-		MinecraftServer server = player.getServer();
-		if(server != null)
-			MSPacketHandler.sendToPlayer(createShareCaptchasPacket(), (ServerPlayer) player);
-	}
-	
-	private static ShareCaptchasPacket createShareCaptchasPacket()
-	{
-		ImmutableMap.Builder<Item, String> builder = new ImmutableMap.Builder<>();
-		
-		builder.putAll(REGISTRY_MAP);
-		
-		return new ShareCaptchasPacket(builder.build());
 	}
 	
 	private String createHash(String registryName)
