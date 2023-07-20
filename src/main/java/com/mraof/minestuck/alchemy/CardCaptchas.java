@@ -20,6 +20,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nullable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
@@ -119,6 +120,7 @@ public class CardCaptchas
 		return resourceKey.map(itemResourceKey -> itemResourceKey.location().toString()).orElseThrow();
 	}
 	
+	@Nullable
 	public static Item getItemFromCaptcha(String captcha)
 	{
 		return REGISTRY_MAP.inverse().get(captcha);
