@@ -138,24 +138,16 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 			if(effect != null && player.getRandom().nextFloat() < .25F)
 				closestTarget.addEffect(effect.get());
 			
-			extraEffectApplier(closestTarget);
-			
 			return true;
 		} else return false;
 	}
 	
-	protected float calculateDamage(ServerPlayer player, LivingEntity closestTarget, int damage)
+	protected float calculateDamage(ServerPlayer player, LivingEntity target, int damage)
 	{
 		int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
 		
-		if(closestTarget instanceof UnderlingEntity)
-			return damage + playerRung / 5F; //damage increase from rung is higher against underlings
-		else
-			return damage + playerRung / 10F;
-	}
-	
-	protected void extraEffectApplier(LivingEntity closestTarget)
-	{
+		//damage increase from rung is higher against underlings
+		return damage + (target instanceof UnderlingEntity ? playerRung / 5F : playerRung / 10F);
 	}
 	
 	private static class SbahjMagicEffect extends MagicRangedRightClickEffect
