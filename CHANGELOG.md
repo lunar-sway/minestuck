@@ -14,8 +14,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Suspicion mob effect (affected mobs will be forced away from other affected mobs)
 - Uncarved Wood Variants (Polished uncarved Wood, Carved Heavy Planks, Carved Knotted Wood, Carved Planks)
 - Expanded number of Minecraft/Forge item/block tags that Minestuck items/blocks are in
-- Anthvil block
 - Power hub block
+- Fire, Water, and Wizard Staffs
+- Rubik's Mace, mACE of Clubs, and Home Grown Mace Weapons.
+- Anthvil block
 
 ### Changed
 
@@ -39,6 +41,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_
+
+### Idea Contributions
+
+- gummyYummy
 
 ## [1.19.2-1.10.3.1] - 2023-06-19
 

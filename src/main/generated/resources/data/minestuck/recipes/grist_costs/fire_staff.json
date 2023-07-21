@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 116,
+    "minestuck:mercury": 116,
+    "minestuck:quartz": 5,
+    "minestuck:ruby": 116,
+    "minestuck:sulfur": 116
+  },
+  "ingredient": {
+    "item": "minestuck:fire_staff"
+  }
+}

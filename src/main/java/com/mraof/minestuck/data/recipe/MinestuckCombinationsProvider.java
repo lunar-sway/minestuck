@@ -525,6 +525,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.M_ACE.get()).input(MSItems.MACE.get()).and().input(MSItems.NONBINARY_CODE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DESOLATOR_MACE.get()).input(MSItems.MACE.get()).or().input(Items.FLINT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BLAZING_GLORY.get()).input(MSItems.MACE.get()).and().namedInput(Items.BLAZE_POWDER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.RUBIKS_MACE.get()).input(MSItems.MACE.get()).and().input(MSItems.WATER_COLORS_BUCKET.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.M_ACE_OF_CLUBS.get()).input(MSItems.M_ACE.get()).and().input(MSItems.ACE_OF_CLUBS.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.HOME_GROWN_MACE.get()).input(MSItems.MACE.get()).and().input(Items.BAMBOO).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER.get()).input(MSItems.CLAW_HAMMER.get()).and().namedInput(Items.BRICKS).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SLEDGE_HAMMER.get()).input(MSItems.CLAW_HAMMER.get()).and().namedInput(Items.COBBLESTONE).build(consumer);
@@ -544,6 +547,9 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.SCARLET_ZILLYHOO.get()).input(MSItems.ZILLYHOO_HAMMER.get()).and().input(MSItems.FROG.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.MWRTHWL.get()).input(MSItems.REGI_HAMMER.get()).or().input(MSItems.CUEBALL.get()).build(consumer);
 		
+		CombinationRecipeBuilder.of(MSItems.WIZARD_STAFF.get()).input(MSItems.MINI_WIZARD_STATUE.get()).and().input(MSItems.CANE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.WATER_STAFF.get()).input(MSItems.WIZARD_STAFF.get()).and().input(Items.HEART_OF_THE_SEA).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FIRE_STAFF.get()).input(MSItems.WIZARD_STAFF.get()).and().input(Items.MAGMA_CREAM).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PRIME_STAFF.get()).input(MSItems.BLACK_KINGS_SCEPTER.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.VAUDEVILLE_HOOK.get()).namedInput(MSItems.CANE.get()).and().input(Items.FISHING_ROD).build(consumer);
