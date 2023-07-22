@@ -4,7 +4,9 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -19,6 +21,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -34,26 +37,52 @@ public final class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static final BiMap<Item, String> REGISTRY_MAP = HashBiMap.create();
+	private static final BiMap<Item, String> CAPTCHAS_MAP = HashBiMap.create();
 	
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
 	 */
 	public static String getCaptcha(Item item)
 	{
-		return REGISTRY_MAP.get(item);
+		return CAPTCHAS_MAP.get(item);
 	}
 	
 	@Nullable
 	public static Item getItemFromCaptcha(String captcha)
 	{
-		return REGISTRY_MAP.inverse().get(captcha);
+		return CAPTCHAS_MAP.inverse().get(captcha);
 	}
 	
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent event)
 	{
 		CaptchaGenerator.iterateThroughRegistry(event.getServer());
+	}
+	
+	public static CompoundTag serialize()
+	{
+		CompoundTag tag = new CompoundTag();
+		for(Map.Entry<Item, String> entry : CAPTCHAS_MAP.entrySet())
+		{
+			String itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(entry.getKey())).toString();
+			tag.putString(itemName, entry.getValue());
+		}
+		return tag;
+	}
+	
+	public static void deserialize(CompoundTag tag)
+	{
+		CAPTCHAS_MAP.clear();
+		for(String itemName : tag.getAllKeys())
+		{
+			ResourceLocation itemId = ResourceLocation.tryParse(itemName);
+			if(itemId == null)
+				continue;
+			Item item = ForgeRegistries.ITEMS.getValue(itemId);
+			if(item == null)
+				continue;
+			CAPTCHAS_MAP.put(item, tag.getString(itemName));
+		}
 	}
 	
 	private static class CaptchaGenerator
@@ -73,7 +102,7 @@ public final class CardCaptchas
 		
 		private static void iterateThroughRegistry(MinecraftServer server)
 		{
-			REGISTRY_MAP.clear();
+			CAPTCHAS_MAP.clear();
 			
 			CaptchaGenerator generator = new CaptchaGenerator(server.overworld().getSeed());
 			generator.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
@@ -118,7 +147,7 @@ public final class CardCaptchas
 		private void createItemsCaptcha(Item item, ResourceKey<Item> key)
 		{
 			//prevents reassignment of captcha to given item
-			if(REGISTRY_MAP.containsKey(item))
+			if(CAPTCHAS_MAP.containsKey(item))
 				return;
 			
 			RandomSource itemRandom = itemRandomFactory.fromHashOf(key.location());
@@ -128,15 +157,15 @@ public final class CardCaptchas
 			String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
 			String captcha = captchaFromHash(cutHash);
 			
-			if(REGISTRY_MAP.containsValue(captcha))
+			if(CAPTCHAS_MAP.containsValue(captcha))
 				captcha = getBackupCaptcha();
 			
-			REGISTRY_MAP.put(item, captcha); //adding an entry
+			CAPTCHAS_MAP.put(item, captcha); //adding an entry
 		}
 		
 		private void predetermineCaptcha(Item item, String captcha)
 		{
-			REGISTRY_MAP.put(item, captcha);
+			CAPTCHAS_MAP.put(item, captcha);
 		}
 		
 		/**

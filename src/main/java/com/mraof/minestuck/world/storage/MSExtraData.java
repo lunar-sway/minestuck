@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.storage;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.entry.PostEntryTask;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * Stores any extra data that's not worth putting in their own data file. (Such as editmode recovery data and post entry tasks, which most of the time will be empty)
@@ -69,6 +69,9 @@ public class MSExtraData extends SavedData
 			data.postEntryTasks.add(new PostEntryTask(tag));
 		}
 		
+		if(nbt.contains("card_captchas", Tag.TAG_COMPOUND))
+			CardCaptchas.deserialize(nbt.getCompound("card_captchas"));
+		
 		return data;
 	}
 	
@@ -76,15 +79,17 @@ public class MSExtraData extends SavedData
 	public CompoundTag save(CompoundTag compound)
 	{
 		ListTag editRecoveryList = new ListTag();
-		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
-		editRecoveryList.addAll(activeEditData.stream().map(MSExtraData::writeRecovery).collect(Collectors.toList()));
+		editRecoveryList.addAll(editPlayerRecovery.entrySet().stream().map(MSExtraData::writeRecovery).toList());
+		editRecoveryList.addAll(activeEditData.stream().map(MSExtraData::writeRecovery).toList());
 		
 		compound.put("editmode_recovery", editRecoveryList);
 		
 		ListTag entryTaskList = new ListTag();
-		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).collect(Collectors.toList()));
+		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).toList());
 		
 		compound.put("entry_tasks", entryTaskList);
+		
+		compound.put("card_captchas", CardCaptchas.serialize());
 		
 		return compound;
 	}
