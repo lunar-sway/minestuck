@@ -145,7 +145,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		if(player.level.isClientSide)
 		{
 			//Go to screen if no valid item in hand
-			if(heldStack.getItem() != MSItems.CAPTCHA_CARD.get())
+			if(!heldStack.is(MSItems.CAPTCHA_CARD.get()))
 			{
 				MSScreenFactories.displayPunchDesignixScreen(this);
 			}
