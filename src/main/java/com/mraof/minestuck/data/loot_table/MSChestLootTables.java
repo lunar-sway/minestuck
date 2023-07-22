@@ -112,6 +112,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.FORK.get()).setWeight(4).setQuality(-1).apply(SetItemDamageFunction.setDamage(UniformGenerator.between(0.75F, 1.0F)))))
 				.withPool(LootPool.lootPool().name(SUPPLIES_POOL).setRolls(ConstantValue.exactly(3))
 						.add(LandTableLootEntry.builder(MSLootTables.BASIC_MEDIUM_CHEST).setPool(SUPPLIES_POOL))
+						.add(LootItem.lootTableItem(MSItems.CAPTCHA_CARD.get()).setWeight(20).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
 						.add(LootItem.lootTableItem(Items.ARROW).setWeight(15).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 16))))
 						.add(LootItem.lootTableItem(Items.BREAD).setWeight(20).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(Items.WHEAT).setWeight(15).setQuality(0).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4))))
