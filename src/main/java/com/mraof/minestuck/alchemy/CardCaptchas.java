@@ -19,10 +19,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Handles the creation of, and look up of, captcha codes for each registered item in the given world.
@@ -87,17 +85,11 @@ public final class CardCaptchas
 	
 	private static class CaptchaGenerator
 	{
-		private final Set<String> backupCaptchas = new HashSet<>();
-		private final Set<String> backupCaptchasMaster = new HashSet<>(); //entries are not removed from here
-		
 		private final PositionalRandomFactory itemRandomFactory;
-		private final RandomSource backupRandom;
 		
 		private CaptchaGenerator(long seed)
 		{
 			this.itemRandomFactory = RandomSource.create(seed).forkPositional().fromHashOf("minestuck:item_captchas").forkPositional();
-			this.backupRandom = RandomSource.create(seed).forkPositional().fromHashOf("minestuck:backup_captchas");
-			generateBackupCaptchas();
 		}
 		
 		private static void iterateThroughRegistry(MinecraftServer server)
@@ -105,8 +97,8 @@ public final class CardCaptchas
 			CAPTCHAS_MAP.clear();
 			
 			CaptchaGenerator generator = new CaptchaGenerator(server.overworld().getSeed());
-			generator.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
-			generator.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
+			CaptchaGenerator.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
+			CaptchaGenerator.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
 			
 			//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
 			for(Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries())
@@ -115,7 +107,7 @@ public final class CardCaptchas
 			}
 		}
 		
-		private String createHash(String registryName)
+		private static String createHash(String registryName)
 		{
 			StringBuilder hexString = new StringBuilder();
 			
@@ -158,12 +150,12 @@ public final class CardCaptchas
 			String captcha = captchaFromHash(cutHash);
 			
 			if(CAPTCHAS_MAP.containsValue(captcha))
-				captcha = getBackupCaptcha();
+				captcha = generateBackupCaptcha(itemRandom);
 			
 			CAPTCHAS_MAP.put(item, captcha); //adding an entry
 		}
 		
-		private void predetermineCaptcha(Item item, String captcha)
+		private static void predetermineCaptcha(Item item, String captcha)
 		{
 			CAPTCHAS_MAP.put(item, captcha);
 		}
@@ -172,7 +164,7 @@ public final class CardCaptchas
 		 * Takes 2 hexidecimal characters from the hash string to create an integer value between 0-255 and then performs modulo.
 		 * The result will be equivalent to one of the characters in AVAILABLE_CHARACTERS
 		 */
-		private String captchaFromHash(String cutHash)
+		private static String captchaFromHash(String cutHash)
 		{
 			StringBuilder captchaBuilder = new StringBuilder();
 			
@@ -191,7 +183,7 @@ public final class CardCaptchas
 		/**
 		 * Turns the hash string into a char array in order to reorganize the contents based on the world seed
 		 */
-		private String shuffleHash(String fullHash, RandomSource itemRandom)
+		private static String shuffleHash(String fullHash, RandomSource itemRandom)
 		{
 			char[] characters = fullHash.toCharArray();
 			
@@ -209,20 +201,19 @@ public final class CardCaptchas
 		}
 		
 		/**
-		 * Creates a Set of captchas that contain the character "#" which would not be possible to get naturally
+		 * Creates a captcha that contains the character "#" which would not be possible to get naturally
 		 */
-		private void generateBackupCaptchas()
+		private static String generateBackupCaptcha(RandomSource random)
 		{
-			//theres a chance that two iterations of the for loop could produce the same captcha. Meaning the actual amount of entries is possibly lower than 50.
-			//however if they run out, generateBackupCaptchas() gets run again
-			for(int captchaIterate = 0; captchaIterate < 50; captchaIterate++)
+			//shouldn't cause issues unless the number of registered items is in the trillions
+			while(true)
 			{
 				StringBuilder captcha = new StringBuilder(8);
 				
 				//randomly picks the first 7 characters
 				for(int i = 0; i < 7; i++)
 				{
-					int index = this.backupRandom.nextInt(AVAILABLE_CHARACTERS.length());
+					int index = random.nextInt(AVAILABLE_CHARACTERS.length());
 					char randomChar = AVAILABLE_CHARACTERS.charAt(index);
 					captcha.append(randomChar);
 				}
@@ -231,28 +222,12 @@ public final class CardCaptchas
 				
 				String captchaString = captcha.toString();
 				
-				//checks to make sure the captcha has not been created before and was deleted
-				if(!backupCaptchasMaster.contains(captchaString))
+				//checks to make sure the captcha has not been created before
+				if(!CAPTCHAS_MAP.containsValue(captchaString))
 				{
-					backupCaptchasMaster.add(captchaString);
-					backupCaptchas.add(captchaString);
+					return captchaString;
 				}
 			}
-		}
-		
-		/**
-		 * Returns a backup captcha from the Set and also removes it from the Set to prevent reuse
-		 */
-		private String getBackupCaptcha()
-		{
-			//shouldnt cause issues unless the number of registered items is in the trillions
-			if(backupCaptchas.isEmpty())
-				generateBackupCaptchas();
-			
-			String pickedCaptcha = backupCaptchas.stream().iterator().next();
-			
-			backupCaptchas.remove(pickedCaptcha);
-			return pickedCaptcha;
 		}
 	}
 }
