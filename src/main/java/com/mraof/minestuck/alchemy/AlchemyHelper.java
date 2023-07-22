@@ -91,8 +91,8 @@ public class AlchemyHelper
 		if(!card.is(MSItems.CAPTCHA_CARD.get()) || !hasDecodedItem(card))
 			return false;
 		
-		//either has decoded nbt or isnt in UNREADABLE item tag to begin with
-		return (card.hasTag() && card.getTag().getBoolean("decoded")) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
+		//either has an existing captcha code or isnt in UNREADABLE item tag to begin with
+		return (card.hasTag() && !card.getTag().getString("captcha_code").isBlank()) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)

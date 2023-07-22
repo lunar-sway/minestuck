@@ -53,8 +53,6 @@ public final class CardCaptchas
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent event)
 	{
-		//TODO the second time a world loads, and every subsequent time after that, the captchas are different from the first time the world loads. Both before and after the change, server and client side are synced correctly
-		// Is this still the case, or has a recent change fixed it?
 		CaptchaGenerator.iterateThroughRegistry(event.getServer());
 	}
 	

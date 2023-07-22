@@ -159,21 +159,21 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void applyReadableNBT(ItemStack taggedCard)
 	{
-		taggedCard.getOrCreateTag().putBoolean("decoded", true);
 		taggedCard.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem()));
 	}
 	
 	public void addExperience(Player player)
 	{
-		if(player.experienceLevel <= 0)
+		if(player.experienceLevel <= 0 && !player.isCreative())
 		{
 			return;
 		}
+		
 		if(player.getMainHandItem().isEmpty() && !analyzedCard.isEmpty())
 		{
 			if(!player.isCreative())
 				player.giveExperienceLevels(-1);
-
+			
 			Item analyzedItem = AlchemyHelper.getDecodedItem(analyzedCard).getItem();
 			int storedExperience = decodingProgress.getOrDefault(analyzedItem, 0);
 			decodingProgress.put(analyzedItem, storedExperience + 1);
