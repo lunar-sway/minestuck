@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.19.2-1.11.0.0] - 2023-07-22
+
 ### Added
 
 - New operator command that can make a player enter the medium without using an artifact
