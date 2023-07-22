@@ -92,7 +92,7 @@ public class AlchemyHelper
 			return false;
 		
 		//either has an existing captcha code or isnt in UNREADABLE item tag to begin with
-		return (card.hasTag() && !card.getTag().getString("captcha_code").isBlank()) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
+		return (card.hasTag() && card.getTag().contains("captcha_code", Tag.TAG_STRING)) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
 	}
 	
 	public static boolean isPunchedCard(ItemStack item)
