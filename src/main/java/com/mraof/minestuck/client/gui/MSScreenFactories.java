@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
+import com.mraof.minestuck.blockentity.machine.PunchDesignixBlockEntity;
 import com.mraof.minestuck.blockentity.redstone.*;
 import com.mraof.minestuck.client.gui.captchalouge.*;
 import com.mraof.minestuck.inventory.MSMenuTypes;
@@ -104,6 +105,11 @@ public class MSScreenFactories
 	public static void displayAlchemiterScreen(AlchemiterBlockEntity blockEntity)
 	{
 		Minecraft.getInstance().setScreen(new AlchemiterScreen(blockEntity));
+	}
+	
+	public static void displayPunchDesignixScreen(PunchDesignixBlockEntity blockEntity)
+	{
+		Minecraft.getInstance().setScreen(new PunchDesignixScreen(blockEntity));
 	}
 	
 	public static void displayStoneTabletScreen(Player playerIn, InteractionHand handIn, String text, boolean canEdit)

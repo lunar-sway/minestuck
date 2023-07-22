@@ -843,6 +843,20 @@
       "minestuck:random/horse_clock_chime"
     ]
   },
+  "block.intellibeam_laserstation.exp_gather": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.intellibeam_laserstation_exp_gather",
+    "sounds": [
+      "minestuck:random/intellibeam_exp_add"
+    ]
+  },
+  "block.intellibeam_laserstation.remove_card": {
+    "category": "block",
+    "subtitle": "subtitles.minestuck.intellibeam_laserstation_remove_card",
+    "sounds": [
+      "minestuck:random/intellibeam_remove_card"
+    ]
+  },
   "block.clock.tick": {
     "category": "block",
     "sounds": [

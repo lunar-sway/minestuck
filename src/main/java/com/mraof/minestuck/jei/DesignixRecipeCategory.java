@@ -58,6 +58,6 @@ public class DesignixRecipeCategory implements IRecipeCategory<JeiCombination>
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 1).addIngredients(recipe.getInput1());
 		builder.addSlot(RecipeIngredientRole.INPUT, 1, 25).addIngredients(recipe.getInput2());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 73, 12).addItemStack(recipe.getOutput())
-				.addItemStack(AlchemyHelper.createCard(recipe.getOutput(), true));
+				.addItemStack(AlchemyHelper.createPunchedCard(recipe.getOutput()));
 	}
 }

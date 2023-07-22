@@ -1,8 +1,11 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.CardCaptchas;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class CaptchaCardItem extends Item
 {
@@ -37,12 +41,13 @@ public class CaptchaCardItem extends Item
 		if(this.allowedIn(tab))
 		{
 			items.add(new ItemStack(this));
-			items.add(AlchemyHelper.createCard(new ItemStack(MSItems.CRUXITE_APPLE.get()), true));
+			items.add(AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CRUXITE_APPLE.get())));
 		}
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
+	{
 		
 		ItemStack stack = playerIn.getItemInHand(handIn);
 		
@@ -50,8 +55,7 @@ public class CaptchaCardItem extends Item
 		{
 			AlchemyHelper.removeItemFromCard(stack);
 			return InteractionResultHolder.success(new ItemStack(playerIn.getItemInHand(handIn).getItem(), playerIn.getItemInHand(handIn).getCount()));
-		}
-		else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
+		} else return InteractionResultHolder.pass(playerIn.getItemInHand(handIn));
 	}
 	
 	@Override
@@ -69,10 +73,34 @@ public class CaptchaCardItem extends Item
 				if(AlchemyHelper.isPunchedCard(stack))
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".punched")));
 				else if(AlchemyHelper.isGhostCard(stack))
+				{
+					String captcha = getCaptcha(stack);
+					if(captcha != null)
+						tooltip.add(Component.literal(captcha));
+					
 					tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".ghost")));
+				} else
+				{
+					String captcha = getCaptcha(stack);
+					if(captcha != null)
+						tooltip.add(Component.literal(captcha));
+				}
 			} else tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".invalid")));
 		} else
+		{
+			tooltip.add(Component.literal(CardCaptchas.EMPTY_CARD_CAPTCHA));
 			tooltip.add(makeTooltipInfo(Component.translatable(getDescriptionId() + ".empty")));
+		}
+	}
+	
+	//TODO consider obfuscated characters for unreadable unpunched card
+	private String getCaptcha(ItemStack stack)
+	{
+		CompoundTag tag = stack.getTag();
+		if(tag != null && tag.contains("captcha_code", Tag.TAG_STRING))
+			return tag.getString("captcha_code");
+		
+		return null;
 	}
 	
 	private Component makeTooltipInfo(Component info)

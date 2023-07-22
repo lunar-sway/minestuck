@@ -103,6 +103,8 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> ALCHEMITER_RESONATE = register("block.alchemiter.resonate");
 	public static final RegistryObject<SoundEvent> TRANSPORTALIZER_TELEPORT = register("block.transportalizer.teleport");
 	public static final RegistryObject<SoundEvent> TOTEM_LATHE_LATHE = register("block.totem_lathe.lathe");
+	public static final RegistryObject<SoundEvent> INTELLIBEAM_LASERSTATION_EXP_GATHER = register("block.intellibeam_laserstation.exp_gather");
+	public static final RegistryObject<SoundEvent> INTELLIBEAM_LASERSTATION_REMOVE_CARD = register("block.intellibeam_laserstation.remove_card");
 	public static final RegistryObject<SoundEvent> BLOCK_HORSE_CLOCK_CHIME = register("block.horse_clock.chime");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TICK = register("block.clock.tick");
 	public static final RegistryObject<SoundEvent> BLOCK_CLOCK_TOCK = register("block.clock.tock");

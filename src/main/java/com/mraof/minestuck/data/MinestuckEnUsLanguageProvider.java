@@ -9,6 +9,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
+import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -515,6 +516,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		MSBlocks.ALCHEMITER.forEachBlock(block -> add(block, "Alchemiter"));
 		MSBlocks.PUNCH_DESIGNIX.forEachBlock(block -> add(block, "Punch Designix"));
 		addBlock(MSBlocks.HOLOPAD, "Holopad");
+		addBlock(MSBlocks.INTELLIBEAM_LASERSTATION, "Intellibeam Laserstation");
 		addBlock(MSBlocks.MINI_CRUXTRUDER, "Miniature Cruxtruder");
 		addBlock(MSBlocks.MINI_TOTEM_LATHE, "Miniature Totem Lathe");
 		addBlock(MSBlocks.MINI_ALCHEMITER, "Miniature Alchemiter");
@@ -1768,6 +1770,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristWidgetBlockEntity.TITLE, "GristWidget 12000");
 		add(AnthvilBlockEntity.TITLE, "Anthvil");
 		add(RedstoneClockBlockEntity.TIME_CHANGE, "The clock now pulses every %s seconds");
+		add(PunchDesignixBlockEntity.REJECT_CARD, "On closer inspection, the code on the back seems to be almost unreadable");
+		add(IntellibeamLaserstationBlockEntity.DECODING_PROGRESS, "Decoding Progress: %s");
+		add(IntellibeamLaserstationBlockEntity.CAPTCHA_DECODED, "It seems like the card is readable now");
 		add(PowerHubBlockEntity.POWER_PROMPT, "%s fuel stored");
 		add(GuiUtil.NOT_ALCHEMIZABLE, "Not Alchemizable");
 		add(GuiUtil.FREE, "Free!");
@@ -1793,6 +1798,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
+		add(PunchDesignixScreen.ENTER_CAPTCHA_MESSAGE, "Enter captcha");
+		add(PunchDesignixScreen.PUNCH_MESSAGE, "PUNCH");
 		add(AreaEffectScreen.TITLE, "Area Effect Block");
 		add(AreaEffectScreen.MIN_POS_MESSAGE, "Min Pos Facing Offset");
 		add(AreaEffectScreen.MAX_POS_MESSAGE, "Max Pos Facing Offset");
@@ -2390,6 +2397,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("alchemiter_resonate", "Alchemize!");
 		addSubtitles("transportalizer_teleport", "Transportalize!");
 		addSubtitles("totem_lathe_lathe", "Latheify!");
+		addSubtitles("intellibeam_laserstation_remove_card", "Intellibeam ejects card");
+		addSubtitles("intellibeam_laserstation_exp_gather", "Intellibeam absorbs experience");
 		
 		addSubtitles("swoosh", "Air swooshes from attack");
 		addSubtitles("slam", "Something big hits the ground");

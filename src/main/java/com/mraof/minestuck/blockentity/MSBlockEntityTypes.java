@@ -31,6 +31,7 @@ public class MSBlockEntityTypes
 	public static final RegistryObject<BlockEntityType<GristCollectorBlockEntity>> GRIST_COLLECTOR = REGISTER.register("grist_collector", () -> BlockEntityType.Builder.of(GristCollectorBlockEntity::new, MSBlocks.GRIST_COLLECTOR.get()).build(null));
 	public static final RegistryObject<BlockEntityType<AnthvilBlockEntity>> ANTHVIL = REGISTER.register("anthvil", () -> BlockEntityType.Builder.of(AnthvilBlockEntity::new, MSBlocks.ANTHVIL.get()).build(null));
 	public static final RegistryObject<BlockEntityType<HolopadBlockEntity>> HOLOPAD = REGISTER.register("holopad", () -> BlockEntityType.Builder.of(HolopadBlockEntity::new, MSBlocks.HOLOPAD.get()).build(null));
+	public static final RegistryObject<BlockEntityType<IntellibeamLaserstationBlockEntity>> INTELLIBEAM_LASERSTATION = REGISTER.register("intellibeam_laserstation", () -> BlockEntityType.Builder.of(IntellibeamLaserstationBlockEntity::new, MSBlocks.INTELLIBEAM_LASERSTATION.get()).build(null));
 	public static final RegistryObject<BlockEntityType<PowerHubBlockEntity>> POWER_HUB = REGISTER.register("power_hub", () -> BlockEntityType.Builder.of(PowerHubBlockEntity::new, MSBlocks.POWER_HUB.get()).build(null));
 	
 	public static final RegistryObject<BlockEntityType<SkaiaPortalBlockEntity>> SKAIA_PORTAL = REGISTER.register("skaia_portal", () -> BlockEntityType.Builder.of(SkaiaPortalBlockEntity::new, MSBlocks.SKAIA_PORTAL.get()).build(null));

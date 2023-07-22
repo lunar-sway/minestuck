@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "facing=north,has_card=true": { "model": "minestuck:block/intellibeam_laserstation" },
+        "facing=east,has_card=true":  { "model": "minestuck:block/intellibeam_laserstation", "y": 90 },
+        "facing=south,has_card=true": { "model": "minestuck:block/intellibeam_laserstation", "y": 180 },
+        "facing=west,has_card=true":  { "model": "minestuck:block/intellibeam_laserstation", "y": 270 },
+        
+        "facing=north,has_card=false":  { "model": "minestuck:block/intellibeam_laserstation_cardless" },
+        "facing=east,has_card=false":   { "model": "minestuck:block/intellibeam_laserstation_cardless", "y": 90 },
+        "facing=south,has_card=false":  { "model": "minestuck:block/intellibeam_laserstation_cardless", "y": 180 },
+        "facing=west,has_card=false":   { "model": "minestuck:block/intellibeam_laserstation_cardless", "y": 270 }
+    }
+}

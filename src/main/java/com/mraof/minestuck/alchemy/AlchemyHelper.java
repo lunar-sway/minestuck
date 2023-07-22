@@ -7,9 +7,11 @@ import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;
 import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EcheladderBonusType;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -85,6 +87,15 @@ public class AlchemyHelper
 		
 	}
 	
+	public static boolean isReadableCard(ItemStack card)
+	{
+		if(!card.is(MSItems.CAPTCHA_CARD.get()) || !hasDecodedItem(card))
+			return false;
+		
+		//either has an existing captcha code or isnt in UNREADABLE item tag to begin with
+		return (card.hasTag() && card.getTag().contains("captcha_code", Tag.TAG_STRING)) || !getDecodedItem(card).is(MSTags.Items.UNREADABLE);
+	}
+	
 	public static boolean isPunchedCard(ItemStack item)
 	{
 		return item.getItem() == MSItems.CAPTCHA_CARD.get() && item.hasTag() && item.getTag().getBoolean("punched");
@@ -141,21 +152,30 @@ public class AlchemyHelper
 	}
 	
 	@Nonnull
-	public static ItemStack createCard(ItemStack item, boolean punched)
+	public static ItemStack createPunchedCard(ItemStack heldStack)
 	{
-		ItemStack stack = createEncodedItem(item, true);
-		stack.getOrCreateTag().putBoolean("punched", punched);
-		if(!punched)
-		{
-			if(item.hasTag())
-				stack.getOrCreateTag().put("contentTags", item.getTag());
-			CompoundTag capsData = item.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
-			if(!capsData.isEmpty())
-				stack.getOrCreateTag().put("contentCaps", capsData);
-			stack.getOrCreateTag().putInt("contentSize", item.getCount());
-		}
+		ItemStack card = createEncodedItem(heldStack, true);
+		card.getOrCreateTag().putBoolean("punched", true);
 		
-		return stack;
+		return card;
+	}
+	
+	@Nonnull
+	public static ItemStack createCard(ItemStack heldStack, MinecraftServer server)
+	{
+		ItemStack card = createEncodedItem(heldStack, true);
+		card.getOrCreateTag().putBoolean("punched", false);
+		if(heldStack.hasTag())
+			card.getOrCreateTag().put("contentTags", heldStack.getTag());
+		CompoundTag capsData = heldStack.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
+		if(!capsData.isEmpty())
+			card.getOrCreateTag().put("contentCaps", capsData);
+		card.getOrCreateTag().putInt("contentSize", heldStack.getCount());
+		
+		if(!heldStack.is(MSTags.Items.UNREADABLE))
+			card.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(heldStack.getItem(), server));
+		
+		return card;
 	}
 	
 	@Nonnull
@@ -174,5 +194,6 @@ public class AlchemyHelper
 		card.removeTagKey("contentTags");
 		card.removeTagKey("contentCaps");
 		card.removeTagKey("contentSize");
+		card.removeTagKey("captcha_code");
 	}
 }

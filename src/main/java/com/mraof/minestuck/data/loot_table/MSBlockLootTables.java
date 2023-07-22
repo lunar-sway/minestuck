@@ -455,6 +455,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(XNOR_GATE_BLOCK.get());
 		
 		dropSelf(HOLOPAD.get());
+		dropSelf(INTELLIBEAM_LASERSTATION.get());
 		dropSelf(CRUXTRUDER_LID.get());
 		add(MINI_CRUXTRUDER.get(), MSBlockLootTables::droppingWithColor);
 		dropSelf(MINI_TOTEM_LATHE.get());

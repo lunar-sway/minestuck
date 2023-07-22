@@ -62,6 +62,7 @@ public class MSPacketHandler
 		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
 		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);
+		registerMessage(PunchDesignixPacket.class, PunchDesignixPacket::decode);
 		registerMessage(GristWildcardPacket.class, GristWildcardPacket::decode);
 		registerMessage(SendificatorPacket.class, SendificatorPacket::decode);
 		registerMessage(TransportalizerPacket.class, TransportalizerPacket::decode);

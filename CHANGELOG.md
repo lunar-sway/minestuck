@@ -18,6 +18,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fire, Water, and Wizard Staffs
 - Rubik's Mace, mACE of Clubs, and Home Grown Mace Weapons.
 - Anthvil block
+- Captcha codes for all registered items (put in tooltip if it is legible)
+- Intellibeam Laserstation and accompanying UNREADABLE Item Tag for gating certain item captcha codes via "legibility"
+- GUI for Punch Designix for manually inputting and punching captcha codes
 
 ### Changed
 
@@ -27,6 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Tree features for our saplings are now replacable by datapacks
 - Uncarved Wood Texture
 - Hubtop combination recipe now uses power hub
+- Right-clicking a Punch Designix with a captchalogue card now sets the Designix's stored captcha code if the captcha code is, or has been made, legible
+- Mini Punch Designix now requires captcha cards whose codes are, or have been made, legible
 
 ### Removed
 
@@ -40,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_
+- kirderf1, hadean, Estellairon, Riotmode, Carnie, Akisephila, Zepsun, Vinnelli, Vivian Zane, Dweblenod, rose_bushes_, DORO, blankMushroom
 
 ### Idea Contributions
 
