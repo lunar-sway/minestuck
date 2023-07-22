@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class IntellibeamLaserstationBlock extends MachineBlock implements EntityBlock
 {
-	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.INTELLIBEAM_LAZERSTATION.createRotatedShapes();
+	public static final Map<Direction, VoxelShape> SHAPE = MSBlockShapes.INTELLIBEAM_LASERSTATION.createRotatedShapes();
 	public static final BooleanProperty HAS_CARD = MSProperties.HAS_CARD;
 	
 	public IntellibeamLaserstationBlock(Properties builder)
