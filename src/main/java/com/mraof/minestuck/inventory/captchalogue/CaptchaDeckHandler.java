@@ -309,7 +309,7 @@ public class CaptchaDeckHandler
 			if(!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack))
 				if(size > cardsToKeep && MinestuckConfig.SERVER.dropItemsInCards.get())
 				{
-					ItemStack card = AlchemyHelper.createCard(stack, false);
+					ItemStack card = AlchemyHelper.createCard(stack, player.server);
 					player.drop(card, true, false);
 					size--;
 				} else player.drop(stack, true, false);

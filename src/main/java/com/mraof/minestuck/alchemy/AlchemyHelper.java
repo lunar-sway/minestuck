@@ -11,6 +11,7 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -151,24 +152,30 @@ public class AlchemyHelper
 	}
 	
 	@Nonnull
-	public static ItemStack createCard(ItemStack item, boolean punched)
+	public static ItemStack createPunchedCard(ItemStack heldStack)
 	{
-		ItemStack stack = createEncodedItem(item, true);
-		stack.getOrCreateTag().putBoolean("punched", punched);
-		if(!punched)
-		{
-			if(item.hasTag())
-				stack.getOrCreateTag().put("contentTags", item.getTag());
-			CompoundTag capsData = item.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
-			if(!capsData.isEmpty())
-				stack.getOrCreateTag().put("contentCaps", capsData);
-			stack.getOrCreateTag().putInt("contentSize", item.getCount());
-			
-			if(!item.is(MSTags.Items.UNREADABLE))
-				stack.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(item.getItem()));
-		}
+		ItemStack card = createEncodedItem(heldStack, true);
+		card.getOrCreateTag().putBoolean("punched", true);
 		
-		return stack;
+		return card;
+	}
+	
+	@Nonnull
+	public static ItemStack createCard(ItemStack heldStack, MinecraftServer server)
+	{
+		ItemStack card = createEncodedItem(heldStack, true);
+		card.getOrCreateTag().putBoolean("punched", false);
+		if(heldStack.hasTag())
+			card.getOrCreateTag().put("contentTags", heldStack.getTag());
+		CompoundTag capsData = heldStack.save(new CompoundTag()).getCompound("ForgeCaps");	//TODO serialize the stack in full instead, so that this hack isn't needed
+		if(!capsData.isEmpty())
+			card.getOrCreateTag().put("contentCaps", capsData);
+		card.getOrCreateTag().putInt("contentSize", heldStack.getCount());
+		
+		if(!heldStack.is(MSTags.Items.UNREADABLE))
+			card.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(heldStack.getItem(), server));
+		
+		return card;
 	}
 	
 	@Nonnull

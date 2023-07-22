@@ -159,7 +159,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	
 	public void applyReadableNBT(ItemStack taggedCard)
 	{
-		taggedCard.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem()));
+		taggedCard.getOrCreateTag().putString("captcha_code",
+				CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem(), Objects.requireNonNull(level).getServer()));
 	}
 	
 	public void addExperience(Player player)

@@ -5,17 +5,16 @@ import com.google.common.collect.HashBiMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,9 +39,17 @@ public final class CardCaptchas
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
 	 */
-	public static String getCaptcha(Item item)
+	@Nonnull
+	public static String getCaptcha(Item item, MinecraftServer server)
 	{
-		return CAPTCHAS_MAP.get(item);
+		if(CAPTCHAS_MAP.containsKey(item))
+			return CAPTCHAS_MAP.get(item);
+		else
+		{
+			String captcha = CaptchaGenerator.createCaptchaForItem(item, server.overworld().getSeed());
+			CAPTCHAS_MAP.put(item, captcha);
+			return captcha;
+		}
 	}
 	
 	@Nullable
@@ -54,7 +61,7 @@ public final class CardCaptchas
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent event)
 	{
-		CaptchaGenerator.iterateThroughRegistry(event.getServer());
+		CaptchaGenerator.setup();
 	}
 	
 	public static CompoundTag serialize()
@@ -85,26 +92,40 @@ public final class CardCaptchas
 	
 	private static class CaptchaGenerator
 	{
-		private final PositionalRandomFactory itemRandomFactory;
-		
-		private CaptchaGenerator(long seed)
-		{
-			this.itemRandomFactory = RandomSource.create(seed).forkPositional().fromHashOf("minestuck:item_captchas").forkPositional();
-		}
-		
-		private static void iterateThroughRegistry(MinecraftServer server)
+		private static void setup()
 		{
 			CAPTCHAS_MAP.clear();
 			
-			CaptchaGenerator generator = new CaptchaGenerator(server.overworld().getSeed());
 			CaptchaGenerator.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
 			CaptchaGenerator.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
+		}
+		
+		/**
+		 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
+		 * There is some simple collision detection and backup captchas for redundancy
+		 */
+		private static String createCaptchaForItem(Item item, long seed)
+		{
+			ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
 			
-			//TODO consider a way of creating the captcha using the world seed and item id more directly to reduce resource requirements
-			for(Map.Entry<ResourceKey<Item>, Item> entry : ForgeRegistries.ITEMS.getEntries())
-			{
-				generator.createItemsCaptcha(entry.getValue(), entry.getKey());
-			}
+			RandomSource itemRandom = RandomSource.create(seed)
+					.forkPositional().fromHashOf("minestuck:item_captchas")
+					.forkPositional().fromHashOf(itemId);
+			String fullHash = createHash(itemId.toString());
+			
+			String shuffledHash = shuffleHash(fullHash, itemRandom);
+			String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
+			String captcha = captchaFromHash(cutHash);
+			
+			if(CAPTCHAS_MAP.containsValue(captcha))
+				return generateBackupCaptcha(itemRandom);
+			
+			return captcha;
+		}
+		
+		private static void predetermineCaptcha(Item item, String captcha)
+		{
+			CAPTCHAS_MAP.put(item, captcha);
 		}
 		
 		private static String createHash(String registryName)
@@ -130,34 +151,6 @@ public final class CardCaptchas
 			}
 			
 			return hexString.toString();
-		}
-		
-		/**
-		 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
-		 * There is some simple collision detection and backup captchas for redundancy
-		 */
-		private void createItemsCaptcha(Item item, ResourceKey<Item> key)
-		{
-			//prevents reassignment of captcha to given item
-			if(CAPTCHAS_MAP.containsKey(item))
-				return;
-			
-			RandomSource itemRandom = itemRandomFactory.fromHashOf(key.location());
-			String fullHash = createHash(key.location().toString());
-			
-			String shuffledHash = shuffleHash(fullHash, itemRandom);
-			String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
-			String captcha = captchaFromHash(cutHash);
-			
-			if(CAPTCHAS_MAP.containsValue(captcha))
-				captcha = generateBackupCaptcha(itemRandom);
-			
-			CAPTCHAS_MAP.put(item, captcha); //adding an entry
-		}
-		
-		private static void predetermineCaptcha(Item item, String captcha)
-		{
-			CAPTCHAS_MAP.put(item, captcha);
 		}
 		
 		/**

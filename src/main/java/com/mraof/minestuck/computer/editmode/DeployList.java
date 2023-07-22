@@ -63,7 +63,7 @@ public final class DeployList
 		registerItem("cruxtruder", new ItemStack(MSBlocks.CRUXTRUDER), new MutableGristSet(), new MutableGristSet(GristTypes.BUILD, 100), 0, EntryLists.DEPLOY);
 		registerItem("totem_lathe", new ItemStack(MSBlocks.TOTEM_LATHE), new MutableGristSet(), new MutableGristSet(GristTypes.BUILD, 100), 0, EntryLists.DEPLOY);
 		registerItem("artifact_card", new MutableGristSet(), null, 0, HAS_NOT_ENTERED,
-				(connection, level) -> AlchemyHelper.createCard(SburbHandler.getEntryItem(level, connection), true), EntryLists.DEPLOY);
+				(connection, level) -> AlchemyHelper.createPunchedCard(SburbHandler.getEntryItem(level, connection)), EntryLists.DEPLOY);
 		registerItem("alchemiter", new ItemStack(MSBlocks.ALCHEMITER), new MutableGristSet(), new MutableGristSet(GristTypes.BUILD, 100), 0, EntryLists.DEPLOY);
 		registerItem("punch_designix", 0, null, item(MSBlocks.PUNCH_DESIGNIX),
 				(isPrimary, connection) -> new MutableGristSet(connection.getBaseGrist(), 4), EntryLists.DEPLOY);
@@ -74,7 +74,7 @@ public final class DeployList
 		registerItem("portable_alchemiter", new MutableGristSet(GristTypes.BUILD, 300), 1, config(MinestuckConfig.SERVER.portableMachines), item(MSBlocks.MINI_ALCHEMITER.get()), EntryLists.DEPLOY);
 		registerItem("holopad", new ItemStack(MSBlocks.HOLOPAD.get()), new MutableGristSet(GristTypes.BUILD, 4000), 2, EntryLists.DEPLOY);
 		registerItem("intellibeam_laserstation", new ItemStack(MSBlocks.INTELLIBEAM_LASERSTATION.get()), new MutableGristSet(GristTypes.BUILD, 100000), 2, EntryLists.DEPLOY);
-		registerItem("card_punched_card", new MutableGristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createCard(new ItemStack(MSItems.CAPTCHA_CARD.get()), true), EntryLists.DEPLOY);
+		registerItem("card_punched_card", new MutableGristSet(GristTypes.BUILD, 25), null, 0, config(MinestuckConfig.SERVER.deployCard), (sburbConnection, world) -> AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CAPTCHA_CARD.get())), EntryLists.DEPLOY);
 		
 		//Atheneum
 		registerItem("cobblestone", new ItemStack(Blocks.COBBLESTONE), new MutableGristSet(GristTypes.BUILD, 1), 0, EntryLists.ATHENEUM);

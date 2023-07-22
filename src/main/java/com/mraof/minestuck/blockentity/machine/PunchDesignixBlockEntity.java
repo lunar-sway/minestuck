@@ -153,7 +153,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		{
 			if(AlchemyHelper.isReadableCard(heldStack))
 			{
-				setCaptcha(CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(heldStack).getItem()));
+				setCaptcha(CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(heldStack).getItem(), player.getServer()));
 				effects(false);
 			} else if(heldStack.is(MSItems.CAPTCHA_CARD.get()) && AlchemyHelper.getDecodedItem(heldStack).isEmpty())
 			{
@@ -176,14 +176,14 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinerWrapper(AlchemyHelper.createCard(captchaItemStack, false), getCard(), CombinationMode.OR), player.level);
+				output = CombinationRecipe.findResult(new CombinerWrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level);
 			} else
 				output = captchaItemStack;
 			
 			if(!output.isEmpty())
 			{
 				MSCriteriaTriggers.PUNCH_DESIGNIX.trigger(player, captchaItemStack, storedStackInCard, output);
-				setCard(AlchemyHelper.createCard(output, true));
+				setCard(AlchemyHelper.createPunchedCard(output));
 				effects(true);
 			}
 		}
