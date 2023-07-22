@@ -34,7 +34,7 @@ public class MSExtraData extends SavedData
 	private final Map<UUID, EditData.PlayerRecovery> editPlayerRecovery = new HashMap<>();
 	private final List<EditData.ConnectionRecovery> editConnectionRecovery = new ArrayList<>();
 	
-	
+	private final CardCaptchas cardCaptchas = new CardCaptchas();
 	private final List<PostEntryTask> postEntryTasks = new ArrayList<>();
 	
 	private MSExtraData()
@@ -70,7 +70,7 @@ public class MSExtraData extends SavedData
 		}
 		
 		if(nbt.contains("card_captchas", Tag.TAG_COMPOUND))
-			CardCaptchas.deserialize(nbt.getCompound("card_captchas"));
+			data.cardCaptchas.deserialize(nbt.getCompound("card_captchas"));
 		
 		return data;
 	}
@@ -89,7 +89,7 @@ public class MSExtraData extends SavedData
 		
 		compound.put("entry_tasks", entryTaskList);
 		
-		compound.put("card_captchas", CardCaptchas.serialize());
+		compound.put("card_captchas", cardCaptchas.serialize());
 		
 		return compound;
 	}
@@ -197,6 +197,11 @@ public class MSExtraData extends SavedData
 		
 		if(postEntryTasks.removeIf(PostEntryTask::isDone))
 			setDirty();
+	}
+	
+	public CardCaptchas getCardCaptchas()
+	{
+		return cardCaptchas;
 	}
 	
 	@Override

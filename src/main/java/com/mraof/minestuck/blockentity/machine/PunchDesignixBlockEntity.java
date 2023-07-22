@@ -166,7 +166,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	
 	public void punchCard(ServerPlayer player)
 	{
-		Item itemFromCaptcha = CardCaptchas.getItemFromCaptcha(captcha);
+		Item itemFromCaptcha = CardCaptchas.getItemFromCaptcha(captcha, player.server);
 		
 		if(itemFromCaptcha != null && !getCard().isEmpty())
 		{

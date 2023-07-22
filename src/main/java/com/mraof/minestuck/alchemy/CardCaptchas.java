@@ -4,13 +4,12 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -34,7 +33,12 @@ public final class CardCaptchas
 	public static final String AVAILABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!?";
 	public static final String EMPTY_CARD_CAPTCHA = "00000000";
 	
-	private static final BiMap<Item, String> CAPTCHAS_MAP = HashBiMap.create();
+	private final BiMap<Item, String> captchasMap = HashBiMap.create();
+	
+	public CardCaptchas()
+	{
+		this.setupPredeterminedCaptchas();
+	}
 	
 	/**
 	 * Gets the registry name of the item and then returns its captcha or else returns null
@@ -42,32 +46,30 @@ public final class CardCaptchas
 	@Nonnull
 	public static String getCaptcha(Item item, MinecraftServer server)
 	{
-		if(CAPTCHAS_MAP.containsKey(item))
-			return CAPTCHAS_MAP.get(item);
+		MSExtraData data = MSExtraData.get(server);
+		CardCaptchas captchas = data.getCardCaptchas();
+		
+		if(captchas.captchasMap.containsKey(item))
+			return captchas.captchasMap.get(item);
 		else
 		{
-			String captcha = CaptchaGenerator.createCaptchaForItem(item, server.overworld().getSeed());
-			CAPTCHAS_MAP.put(item, captcha);
+			String captcha = captchas.createCaptchaForItem(item, server.overworld().getSeed());
+			captchas.captchasMap.put(item, captcha);
+			data.setDirty();	//Make sure that the extra data gets saved when a new captcha has been generated
 			return captcha;
 		}
 	}
 	
 	@Nullable
-	public static Item getItemFromCaptcha(String captcha)
+	public static Item getItemFromCaptcha(String captcha, MinecraftServer server)
 	{
-		return CAPTCHAS_MAP.inverse().get(captcha);
+		return MSExtraData.get(server).getCardCaptchas().captchasMap.inverse().get(captcha);
 	}
 	
-	@SubscribeEvent
-	public static void serverStarted(ServerStartedEvent event)
-	{
-		CaptchaGenerator.setup();
-	}
-	
-	public static CompoundTag serialize()
+	public CompoundTag serialize()
 	{
 		CompoundTag tag = new CompoundTag();
-		for(Map.Entry<Item, String> entry : CAPTCHAS_MAP.entrySet())
+		for(Map.Entry<Item, String> entry : captchasMap.entrySet())
 		{
 			String itemName = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(entry.getKey())).toString();
 			tag.putString(itemName, entry.getValue());
@@ -75,9 +77,9 @@ public final class CardCaptchas
 		return tag;
 	}
 	
-	public static void deserialize(CompoundTag tag)
+	public void deserialize(CompoundTag tag)
 	{
-		CAPTCHAS_MAP.clear();
+		captchasMap.clear();
 		for(String itemName : tag.getAllKeys())
 		{
 			ResourceLocation itemId = ResourceLocation.tryParse(itemName);
@@ -86,140 +88,137 @@ public final class CardCaptchas
 			Item item = ForgeRegistries.ITEMS.getValue(itemId);
 			if(item == null)
 				continue;
-			CAPTCHAS_MAP.put(item, tag.getString(itemName));
+			captchasMap.put(item, tag.getString(itemName));
 		}
 	}
 	
-	private static class CaptchaGenerator
+	
+	
+	private void setupPredeterminedCaptchas()
 	{
-		private static void setup()
-		{
-			CAPTCHAS_MAP.clear();
-			
-			CaptchaGenerator.predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
-			CaptchaGenerator.predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
-		}
+		predetermineCaptcha(MSItems.GENERIC_OBJECT.get(), EMPTY_CARD_CAPTCHA);
+		predetermineCaptcha(MSItems.SORD.get(), "SUPRePIC");
+	}
+	
+	/**
+	 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
+	 * There is some simple collision detection and backup captchas for redundancy
+	 */
+	private String createCaptchaForItem(Item item, long seed)
+	{
+		ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
 		
-		/**
-		 * Creates a captcha from the registry name of the item and then adds it to a BiMap.
-		 * There is some simple collision detection and backup captchas for redundancy
-		 */
-		private static String createCaptchaForItem(Item item, long seed)
-		{
-			ResourceLocation itemId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item));
-			
-			RandomSource itemRandom = RandomSource.create(seed)
-					.forkPositional().fromHashOf("minestuck:item_captchas")
-					.forkPositional().fromHashOf(itemId);
-			String fullHash = createHash(itemId.toString());
-			
-			String shuffledHash = shuffleHash(fullHash, itemRandom);
-			String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
-			String captcha = captchaFromHash(cutHash);
-			
-			if(CAPTCHAS_MAP.containsValue(captcha))
-				return generateBackupCaptcha(itemRandom);
-			
-			return captcha;
-		}
+		RandomSource itemRandom = RandomSource.create(seed)
+				.forkPositional().fromHashOf("minestuck:item_captchas")
+				.forkPositional().fromHashOf(itemId);
+		String fullHash = createHash(itemId.toString());
 		
-		private static void predetermineCaptcha(Item item, String captcha)
-		{
-			CAPTCHAS_MAP.put(item, captcha);
-		}
+		String shuffledHash = shuffleHash(fullHash, itemRandom);
+		String cutHash = shuffledHash.substring(shuffledHash.length() - 16); //last 16 characters of hash
+		String captcha = captchaFromHash(cutHash);
 		
-		private static String createHash(String registryName)
+		if(captchasMap.containsValue(captcha))
+			return generateBackupCaptcha(itemRandom);
+		
+		return captcha;
+	}
+	
+	private void predetermineCaptcha(Item item, String captcha)
+	{
+		captchasMap.put(item, captcha);
+	}
+	
+	private static String createHash(String registryName)
+	{
+		StringBuilder hexString = new StringBuilder();
+		
+		try
 		{
-			StringBuilder hexString = new StringBuilder();
+			MessageDigest digest = MessageDigest.getInstance("SHA-256"); //SHA-256 hashing function
 			
-			try
+			byte[] inputBytes = registryName.getBytes(); //Convert the input string to bytes
+			byte[] hashBytes = digest.digest(inputBytes); //Compute the hash
+			
+			// Convert the hash to a hexadecimal string
+			for(byte bytes : hashBytes)
 			{
-				MessageDigest digest = MessageDigest.getInstance("SHA-256"); //SHA-256 hashing function
-				
-				byte[] inputBytes = registryName.getBytes(); //Convert the input string to bytes
-				byte[] hashBytes = digest.digest(inputBytes); //Compute the hash
-				
-				// Convert the hash to a hexadecimal string
-				for(byte bytes : hashBytes)
-				{
-					String hex = String.format("%02x", bytes);
-					hexString.append(hex);
-				}
-			} catch(NoSuchAlgorithmException exception)
+				String hex = String.format("%02x", bytes);
+				hexString.append(hex);
+			}
+		} catch(NoSuchAlgorithmException exception)
+		{
+			exception.printStackTrace();
+		}
+		
+		return hexString.toString();
+	}
+	
+	/**
+	 * Takes 2 hexidecimal characters from the hash string to create an integer value between 0-255 and then performs modulo.
+	 * The result will be equivalent to one of the characters in AVAILABLE_CHARACTERS
+	 */
+	private static String captchaFromHash(String cutHash)
+	{
+		StringBuilder captchaBuilder = new StringBuilder();
+		
+		for(int captchaElement = 0; captchaElement < 8; captchaElement++)
+		{
+			String hashSegment = cutHash.substring(captchaElement * 2, captchaElement * 2 + 2);
+			int decimalValue = Integer.parseInt(hashSegment, 16);
+			int charValue = decimalValue % 64;
+			
+			captchaBuilder.append(AVAILABLE_CHARACTERS.charAt(charValue));
+		}
+		
+		return captchaBuilder.toString();
+	}
+	
+	/**
+	 * Turns the hash string into a char array in order to reorganize the contents based on the world seed
+	 */
+	private static String shuffleHash(String fullHash, RandomSource itemRandom)
+	{
+		char[] characters = fullHash.toCharArray();
+		
+		for(int currentIndex = 0; currentIndex < characters.length; currentIndex++)
+		{
+			int randIndex = itemRandom.nextInt(currentIndex + 1);
+			
+			//swap characters at indices currentIndex and randIndex
+			char temp = characters[currentIndex];
+			characters[currentIndex] = characters[randIndex];
+			characters[randIndex] = temp;
+		}
+		
+		return new String(characters);
+	}
+	
+	/**
+	 * Creates a captcha that contains the character "#" which would not be possible to get naturally
+	 */
+	private String generateBackupCaptcha(RandomSource random)
+	{
+		//shouldn't cause issues unless the number of registered items is in the trillions
+		while(true)
+		{
+			StringBuilder captcha = new StringBuilder(8);
+			
+			//randomly picks the first 7 characters
+			for(int i = 0; i < 7; i++)
 			{
-				exception.printStackTrace();
+				int index = random.nextInt(AVAILABLE_CHARACTERS.length());
+				char randomChar = AVAILABLE_CHARACTERS.charAt(index);
+				captcha.append(randomChar);
 			}
 			
-			return hexString.toString();
-		}
-		
-		/**
-		 * Takes 2 hexidecimal characters from the hash string to create an integer value between 0-255 and then performs modulo.
-		 * The result will be equivalent to one of the characters in AVAILABLE_CHARACTERS
-		 */
-		private static String captchaFromHash(String cutHash)
-		{
-			StringBuilder captchaBuilder = new StringBuilder();
+			captcha.append("#"); //adds "#" as the last character
 			
-			for(int captchaElement = 0; captchaElement < 8; captchaElement++)
+			String captchaString = captcha.toString();
+			
+			//checks to make sure the captcha has not been created before
+			if(!captchasMap.containsValue(captchaString))
 			{
-				String hashSegment = cutHash.substring(captchaElement * 2, captchaElement * 2 + 2);
-				int decimalValue = Integer.parseInt(hashSegment, 16);
-				int charValue = decimalValue % 64;
-				
-				captchaBuilder.append(AVAILABLE_CHARACTERS.charAt(charValue));
-			}
-			
-			return captchaBuilder.toString();
-		}
-		
-		/**
-		 * Turns the hash string into a char array in order to reorganize the contents based on the world seed
-		 */
-		private static String shuffleHash(String fullHash, RandomSource itemRandom)
-		{
-			char[] characters = fullHash.toCharArray();
-			
-			for(int currentIndex = 0; currentIndex < characters.length; currentIndex++)
-			{
-				int randIndex = itemRandom.nextInt(currentIndex + 1);
-				
-				//swap characters at indices currentIndex and randIndex
-				char temp = characters[currentIndex];
-				characters[currentIndex] = characters[randIndex];
-				characters[randIndex] = temp;
-			}
-			
-			return new String(characters);
-		}
-		
-		/**
-		 * Creates a captcha that contains the character "#" which would not be possible to get naturally
-		 */
-		private static String generateBackupCaptcha(RandomSource random)
-		{
-			//shouldn't cause issues unless the number of registered items is in the trillions
-			while(true)
-			{
-				StringBuilder captcha = new StringBuilder(8);
-				
-				//randomly picks the first 7 characters
-				for(int i = 0; i < 7; i++)
-				{
-					int index = random.nextInt(AVAILABLE_CHARACTERS.length());
-					char randomChar = AVAILABLE_CHARACTERS.charAt(index);
-					captcha.append(randomChar);
-				}
-				
-				captcha.append("#"); //adds "#" as the last character
-				
-				String captchaString = captcha.toString();
-				
-				//checks to make sure the captcha has not been created before
-				if(!CAPTCHAS_MAP.containsValue(captchaString))
-				{
-					return captchaString;
-				}
+				return captchaString;
 			}
 		}
 	}
