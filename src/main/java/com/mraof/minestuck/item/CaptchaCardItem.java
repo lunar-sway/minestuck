@@ -103,20 +103,6 @@ public class CaptchaCardItem extends Item
 		return null;
 	}
 	
-	@Override
-	@Nullable
-	public CompoundTag getShareTag(ItemStack stack)
-	{
-		if(AlchemyHelper.isReadableCard(stack))
-		{
-			CompoundTag tag = Objects.requireNonNull(stack.getTag()).copy();
-			String code = CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(stack).getItem());
-			tag.putString("captcha_code", code);
-			return tag;
-		} else
-			return super.getShareTag(stack);
-	}
-	
 	private Component makeTooltipInfo(Component info)
 	{
 		return Component.literal("(").append(info).append(")").withStyle(ChatFormatting.GRAY);

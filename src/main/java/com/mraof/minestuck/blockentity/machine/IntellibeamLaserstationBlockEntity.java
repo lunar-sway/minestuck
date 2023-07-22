@@ -1,6 +1,7 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
@@ -85,7 +86,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{
-				decodeAndEjectCard(player);
+				applyReadableNBT(analyzedCard);
+				takeCard(player);
+				
+				waitTimer = 10;
 			} else
 			{
 				addExperience(player);
@@ -97,14 +101,6 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	private Integer getCardItemExperience()
 	{
 		return decodingProgress.getOrDefault(AlchemyHelper.getDecodedItem(analyzedCard).getItem(), 0);
-	}
-	
-	public void decodeAndEjectCard(Player player)
-	{
-		applyDecodedTag(analyzedCard);
-		takeCard(player);
-		
-		waitTimer = 10;
 	}
 	
 	public String processExperienceGuage()
@@ -161,9 +157,10 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 		}
 	}
 	
-	public void applyDecodedTag(ItemStack taggedCard)
+	public void applyReadableNBT(ItemStack taggedCard)
 	{
 		taggedCard.getOrCreateTag().putBoolean("decoded", true);
+		taggedCard.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(AlchemyHelper.getDecodedItem(taggedCard).getItem()));
 	}
 	
 	public void addExperience(Player player)

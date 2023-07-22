@@ -163,6 +163,9 @@ public class AlchemyHelper
 			if(!capsData.isEmpty())
 				stack.getOrCreateTag().put("contentCaps", capsData);
 			stack.getOrCreateTag().putInt("contentSize", item.getCount());
+			
+			if(!item.is(MSTags.Items.UNREADABLE))
+				stack.getOrCreateTag().putString("captcha_code", CardCaptchas.getCaptcha(item.getItem()));
 		}
 		
 		return stack;
@@ -184,5 +187,6 @@ public class AlchemyHelper
 		card.removeTagKey("contentTags");
 		card.removeTagKey("contentCaps");
 		card.removeTagKey("contentSize");
+		card.removeTagKey("captcha_code");
 	}
 }
