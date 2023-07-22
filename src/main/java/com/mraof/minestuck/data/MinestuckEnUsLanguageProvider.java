@@ -908,9 +908,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemTooltip(MSItems.SPIKED_CLUB, "About what it sounds like");
 		addItem(MSItems.MACE, "Mace");
 		addItem(MSItems.M_ACE, "mACE");
+		addItem(MSItems.M_ACE_OF_CLUBS, "mACE of Clubs");
+		addItem(MSItems.HOME_GROWN_MACE, "Home Grown Mace");
 		addItem(MSItems.DESOLATOR_MACE, "Desolator Mace");
 		addItemTooltip(MSItems.DESOLATOR_MACE, "Void your enemies existence. Is the damage really that low?");
 		addItem(MSItems.BLAZING_GLORY, "Blazing Glory");
+		addItem(MSItems.RUBIKS_MACE, "Rubik's Mace");
 		addItem(MSItems.HORSE_HITCHER, "Cast Iron Horse Hitcher");
 		addItem(MSItems.ACE_OF_SPADES, "Ace of Spades");
 		addItemStore(MSItems.ACE_OF_SPADES, "Shovel Sigil");
@@ -926,6 +929,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addItemStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");
+		addItem(MSItems.WIZARD_STAFF, "Wizard Staff");
+		addItem(MSItems.WATER_STAFF, "Water Staff");
+		addItem(MSItems.FIRE_STAFF, "Fire Staff");
 		addItem(MSItems.WHITE_KINGS_SCEPTER, "Kings Scepter");
 		addItemTooltip(MSItems.WHITE_KINGS_SCEPTER, "Starts the Reckoning in the capable hands of a carapacian. It would be hard to call YOU capable however...");
 		addItem(MSItems.BLACK_KINGS_SCEPTER, "Kings Scepter");

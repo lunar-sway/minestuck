@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:mini_wizard_statue"
+  },
+  "input2": {
+    "item": "minestuck:cane"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:wizard_staff"
+  }
+}

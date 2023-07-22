@@ -16,6 +16,7 @@
       <option name="SPACE_BEFORE_CATCH_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_SWITCH_PARENTHESES" value="false" />
       <option name="SPACE_BEFORE_SYNCHRONIZED_PARENTHESES" value="false" />
+      <option name="KEEP_SIMPLE_LAMBDAS_IN_ONE_LINE" value="true" />
       <indentOptions>
         <option name="USE_TAB_CHARACTER" value="true" />
         <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
