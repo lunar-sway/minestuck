@@ -62,8 +62,8 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 	{
 		if(level != null && !level.isClientSide)
 		{
-			ItemStack heldItem = player.getMainHandItem();
-			ItemStack cardWithItem = AlchemyHelper.getDecodedItem(heldItem);
+			ItemStack heldCard = player.getMainHandItem();
+			ItemStack itemInHeldCard = AlchemyHelper.getDecodedItem(heldCard);
 			
 			if(waitTimer > 0)
 			{
@@ -79,9 +79,9 @@ public class IntellibeamLaserstationBlockEntity extends BlockEntity
 				this.level.playSound(null, this.worldPosition, MSSoundEvents.INTELLIBEAM_LASERSTATION_REMOVE_CARD.get(), SoundSource.BLOCKS, 0.5F, 0.1F);
 				player.displayClientMessage(Component.translatable(CAPTCHA_DECODED), true);
 				waitTimer = 10;
-			} else if(analyzedCard.isEmpty() && !AlchemyHelper.isReadableCard(analyzedCard) && cardWithItem.is(MSTags.Items.UNREADABLE))
+			} else if(analyzedCard.isEmpty() && itemInHeldCard.is(MSTags.Items.UNREADABLE))
 			{
-				setCard(heldItem.split(1));
+				setCard(heldCard.split(1));
 				waitTimer = 10;
 			} else if(getCardItemExperience() >= EXP_LEVEL_CAPACITY)
 			{

@@ -49,7 +49,7 @@ public class PunchDesignixScreen extends Screen
 			this.captchaTextField.setValue(storedCaptcha);
 		
 		this.captchaTextField.setMaxLength(8);
-		this.captchaTextField.setFilter((text) -> Pattern.matches("^[0-9a-zA-Z!#?]+$", text) || text.isEmpty()); //"^[0-9a-zA-Z!#?]+$" indicates that it will only accept characters used to represent hex or the characters "!"/"#"/"?"
+		this.captchaTextField.setFilter((text) -> Pattern.matches("^[0-9a-zA-Z!#?]+$", text) || text.isEmpty()); //"^[0-9a-zA-Z!#?]+$" indicates that it will only accept alphanumeric characters or the characters "!"/"#"/"?"
 		captchaTextField.setResponder(s -> doneButton.active = s.length() == 8);
 		addRenderableWidget(captchaTextField);
 		setInitialFocus(captchaTextField);

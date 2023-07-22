@@ -38,8 +38,11 @@ public class PunchDesignixPacket implements PlayToServerPacket
 		{
 			if(player.level.getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix)
 			{
-				punchDesignix.setCaptcha(captcha);
-				punchDesignix.punchCard(player);
+				if(Math.sqrt(player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 8)
+				{
+					punchDesignix.setCaptcha(captcha);
+					punchDesignix.punchCard(player);
+				}
 			}
 		}
 	}
