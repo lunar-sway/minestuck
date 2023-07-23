@@ -4,10 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
+import com.mraof.minestuck.client.model.MSModelLayers;
 import com.mraof.minestuck.client.model.armor.*;
 import com.mraof.minestuck.client.model.entity.BishopModel;
 import com.mraof.minestuck.client.model.entity.RookModel;
-import com.mraof.minestuck.client.model.MSModelLayers;
+import com.mraof.minestuck.client.particles.ExhaustParticle;
 import com.mraof.minestuck.client.particles.PlasmaParticle;
 import com.mraof.minestuck.client.particles.TransportalizerParticle;
 import com.mraof.minestuck.client.renderer.blockentity.*;
@@ -153,8 +154,9 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void registerFactories(RegisterParticleProvidersEvent event)
 	{
-		event.registerSpriteSet(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
-		event.registerSpriteSet(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
+		event.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
+		event.register(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
+		event.register(MSParticleType.EXHAUST.get(), ExhaustParticle.Provider::new);
 	}
 	
 	/**
