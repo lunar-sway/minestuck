@@ -35,9 +35,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.HOME_GROWN_MACE);
 		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
 		
-		//Blocks
-		blockItem(MSBlocks.UNCARVED_WOOD);
-		
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<Item> item)
