@@ -27,7 +27,6 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	
 	private void simpleBlockWithItem(Block block)
 	{
-		simpleBlock(block, new ConfiguredModel(cubeAll(block)));
-		simpleBlockItem(block, cubeAll(block));
+		simpleBlockWithItem(block, cubeAll(block));
 	}
 }
