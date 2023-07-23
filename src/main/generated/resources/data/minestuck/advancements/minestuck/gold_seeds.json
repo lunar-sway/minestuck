@@ -3,7 +3,12 @@
   "criteria": {
     "plant_gold_seeds": {
       "conditions": {
-        "block": "minestuck:gold_seeds"
+        "location": [
+          {
+            "block": "minestuck:gold_seeds",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
       },
       "trigger": "minecraft:placed_block"
     }
@@ -27,5 +32,6 @@
     [
       "plant_gold_seeds"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

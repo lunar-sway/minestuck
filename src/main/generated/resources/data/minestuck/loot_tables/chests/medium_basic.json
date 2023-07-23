@@ -870,5 +870,6 @@
       "name": "boondollars",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:chests/medium_basic"
 }

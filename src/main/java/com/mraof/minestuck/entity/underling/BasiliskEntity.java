@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.underling;
 
-import com.mojang.math.Vector3d;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristType;
@@ -21,21 +20,28 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.PartEntity;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import org.joml.Vector3d;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class BasiliskEntity extends UnderlingEntity implements IAnimatable
+public class BasiliskEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation TAIL_SWING_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SWING, 12, true, false), 2, 4, 6);
-	public static final PhasedMobAnimation BITE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.BITE, 10, true, false), 2, 4, 5);
-	public static final PhasedMobAnimation SHOOT_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SHOOT, 14, true, true), 1, 4, 6);
+	public static final PhasedMobAnimation TAIL_SWING_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SWING, 12, true, false), 2, 4, 6);
+	public static final PhasedMobAnimation BITE_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.BITE, 10, true, false), 2, 4, 5);
+	public static final PhasedMobAnimation SHOOT_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SHOOT, 14, true, true), 1, 4, 6);
+	private static final RawAnimation RUN_ANIMATION = RawAnimation.begin().thenLoop("run");
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation BITE_ANIMATION = RawAnimation.begin().then("bite", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation TAIL_WHIP_ANIMATION = RawAnimation.begin().then("tail_whip", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation SHOOT_ANIMATION = RawAnimation.begin().then("shoot", Animation.LoopType.PLAY_ONCE);
 	
 	private final BasiliskPartEntity[] parts;
 	private final BasiliskPartEntity head;
@@ -84,9 +90,9 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, TAIL_SWING_ANIMATION, 0, 3.5F, 40, 180.0F, 90.0F));
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, BITE_ANIMATION, 1.0F, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 0, 40.0F));
-		this.goalSelector.addGoal(3, new FireballShootGoal<>(this, SHOOT_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 25, 180));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, TAIL_SWING_PROPERTIES, 0, 3.5F, 40, 180.0F, 90.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, BITE_PROPERTIES, 1.0F, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 0, 40.0F));
+		this.goalSelector.addGoal(3, new FireballShootGoal<>(this, SHOOT_PROPERTIES, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 25, 180));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -134,7 +140,7 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.die(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.level.isClientSide)
+		if(this.dead && !this.level().isClientSide)
 		{
 			computePlayerProgress((int) (30 + 2.4 * getGristType().getPower())); //most basilisks stop giving xp at rung 32
 			firstKillBonus(entity, EcheladderBonusType.BASILISK);
@@ -218,66 +224,66 @@ public class BasiliskEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, BasiliskEntity::idleAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, BasiliskEntity::attackAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, BasiliskEntity::idleAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, BasiliskEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, BasiliskEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, BasiliskEntity::attackAnimation));
 	}
 	
-	private static PlayState idleAnimation(AnimationEvent<BasiliskEntity> event)
+	private static PlayState idleAnimation(AnimationState<BasiliskEntity> state)
 	{
 		return PlayState.CONTINUE; //TODO make tounge & tail flick
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<BasiliskEntity> event)
+	private static PlayState walkAnimation(AnimationState<BasiliskEntity> state)
 	{
-		if(!event.isMoving())
+		if(!state.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(event.getAnimatable().isAggressive())
+		if(state.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("run", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(RUN_ANIMATION);
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<BasiliskEntity> event)
+	private static PlayState deathAnimation(AnimationState<BasiliskEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState attackAnimation(AnimationEvent<BasiliskEntity> event)
+	private static PlayState attackAnimation(AnimationState<BasiliskEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		
 		if(action == MobAnimation.Action.BITE)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("bite", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(BITE_ANIMATION);
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SWING)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("tail_whip", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(TAIL_WHIP_ANIMATION);
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SHOOT)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("shoot", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(SHOOT_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 }

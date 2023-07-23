@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.client.gui.captchalouge.SylladexScreen;
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckMenu;
@@ -12,9 +11,9 @@ import com.mraof.minestuck.item.CaptchaCardItem;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
 import net.minecraft.resources.ResourceLocation;
@@ -50,27 +49,25 @@ public class CaptchaDeckScreen extends PlayerStatsContainerScreen<CaptchaDeckMen
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY)
 	{
 		sylladexMap.active = ClientPlayerData.getModus() != null;
 		modusButton.active = !menu.getMenuItem().isEmpty();
 		
-		drawTabs(poseStack);
+		drawTabs(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiCaptchaDeck);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(guiCaptchaDeck, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		drawActiveTabAndIcons(poseStack);
+		drawActiveTabAndIcons(guiGraphics);
 		
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		String message = getTitle().getString();
-		font.draw(poseStack, message, (this.width / 2F) - font.width(message) / 2F - leftPos, yOffset + 12 - topPos, 0x404040);
+		guiGraphics.drawString(font, message, (this.width / 2F) - font.width(message) / 2F - leftPos, yOffset + 12 - topPos, 0x404040, false);
 		
 	}
 	

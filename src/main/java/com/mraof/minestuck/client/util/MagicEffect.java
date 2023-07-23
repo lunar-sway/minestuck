@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.util;
 
 
-import com.mojang.math.Vector3f;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -9,6 +8,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.function.Supplier;
 

@@ -3,14 +3,12 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -34,7 +32,7 @@ public class CaptchaCardItem extends Item
 			return 16;
 		else return 64;
 	}
-	
+	/*TODO
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
@@ -44,7 +42,7 @@ public class CaptchaCardItem extends Item
 			items.add(AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CRUXITE_APPLE.get())));
 		}
 	}
-	
+	*/
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{

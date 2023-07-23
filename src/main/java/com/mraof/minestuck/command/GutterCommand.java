@@ -43,7 +43,7 @@ public class GutterCommand
 		double multiplier = gutter.gutterMultiplierForSession();
 		long capacity = gutter.getRemainingCapacity();
 		Component gutterContentText = gutter.getCache().asTextComponent();
-		source.sendSuccess(Component.translatable("Gutter modifier: %s, remaining capacity: %s, grist contained: %s", multiplier, capacity, gutterContentText), false);
+		source.sendSuccess(() -> Component.literal("Gutter modifier: %s, remaining capacity: %s, grist contained: %s".formatted(multiplier, capacity, gutterContentText)), false);
 		
 		return 1;
 	}

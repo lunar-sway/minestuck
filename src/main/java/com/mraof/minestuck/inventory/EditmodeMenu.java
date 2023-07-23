@@ -104,7 +104,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 		for(int i = 0; i < Math.max(tools.size(), deployItems.size()); i++)
 		{
 			itemList.add(i >= tools.size() ? ItemStack.EMPTY : tools.get(i));
-			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.level));
+			itemList.add(i >= deployItems.size() ? ItemStack.EMPTY : deployItems.get(i).getItemStack(c, player.level()));
 		}
 		
 		boolean changed = false;
@@ -142,7 +142,7 @@ public class EditmodeMenu extends AbstractContainerMenu
 	
 	public void receiveUpdatePacket(EditmodeInventoryPacket packet)
 	{
-		if(!player.level.isClientSide)
+		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
 		for(int i = 0; i < packet.getInventory().size(); i++)
 		{

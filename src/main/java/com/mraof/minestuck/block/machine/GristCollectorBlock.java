@@ -1,6 +1,5 @@
 package com.mraof.minestuck.block.machine;
 
-import com.mojang.math.Vector3f;
 import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.block.BlockUtil;
@@ -31,6 +30,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.FakePlayer;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 

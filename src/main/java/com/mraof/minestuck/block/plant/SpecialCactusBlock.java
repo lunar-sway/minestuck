@@ -7,7 +7,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class SpecialCactusBlock extends CactusBlock
 {
@@ -22,15 +21,14 @@ public class SpecialCactusBlock extends CactusBlock
 		for(Direction direction : Direction.Plane.HORIZONTAL)
 		{
 			BlockState blockstate = level.getBlockState(pos.relative(direction));
-			Material material = blockstate.getMaterial();
-			if(material.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA))
+			if(blockstate.isSolid() || level.getFluidState(pos.relative(direction)).is(FluidTags.LAVA))
 			{
 				return false;
 			}
 		}
 		
 		BlockState soil = level.getBlockState(pos.below());
-		return isSustainableSoil(soil) && !level.getBlockState(pos.above()).getMaterial().isLiquid();
+		return isSustainableSoil(soil) && !level.getBlockState(pos.above()).liquid();
 	}
 	
 	protected boolean isSustainableSoil(BlockState soil)

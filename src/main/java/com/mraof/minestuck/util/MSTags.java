@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -140,7 +140,7 @@ public class MSTags
 		
 		private static TagKey<EntityType<?>> tag(String name)
 		{
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
@@ -165,7 +165,7 @@ public class MSTags
 		
 		private static TagKey<Biome> tag(String name)
 		{
-			return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.BIOME, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
@@ -175,7 +175,7 @@ public class MSTags
 		
 		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	

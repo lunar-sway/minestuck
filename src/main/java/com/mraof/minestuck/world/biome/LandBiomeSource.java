@@ -10,17 +10,25 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
 
+import java.util.stream.Stream;
+
 public final class LandBiomeSource extends BiomeSource
 {
 	public static final Codec<LandBiomeSource> CODEC = Codec.of(Encoder.error("LandBiomeProvider is not serializable."), Decoder.error("LandBiomeProvider is not serializable."));
 	
+	private final LandBiomeAccess biomes;
 	private final Climate.ParameterList<Holder<Biome>> parameters;
 	
 	public LandBiomeSource(LandBiomeAccess biomes, LandGenSettings settings)
 	{
-		super(biomes.getAll());
-		
+		this.biomes = biomes;
 		this.parameters = settings.createBiomeParameters(biomes);
+	}
+	
+	@Override
+	protected Stream<Holder<Biome>> collectPossibleBiomes()
+	{
+		return biomes.getAll().stream();
 	}
 	
 	@Override

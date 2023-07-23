@@ -88,7 +88,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 		
 		ItemStack currentOutput = itemHandler.getStackInSlot(3);
 		if(!output.isEmpty())
-			return currentOutput.isEmpty() || ItemStack.isSame(output, currentOutput) && ItemStack.tagMatches(output, currentOutput);
+			return currentOutput.isEmpty() || ItemStack.isSameItemSameTags(output, currentOutput);
 		else return false;
 	}
 	

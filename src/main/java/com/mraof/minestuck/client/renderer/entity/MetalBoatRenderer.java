@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.entity.item.MetalBoatEntity;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ListModel;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -18,17 +19,15 @@ public class MetalBoatRenderer extends BoatRenderer
 {
 	private final BoatModel model;
 	
-	public MetalBoatRenderer(EntityRendererProvider.Context context, boolean hasChest)
+	public MetalBoatRenderer(EntityRendererProvider.Context context)
 	{
-		super(context, hasChest);
+		super(context, false);
 		
-		this.model = new BoatModel(context.bakeLayer(hasChest
-				? ModelLayers.createChestBoatModelName(Boat.Type.OAK)
-				: ModelLayers.createBoatModelName(Boat.Type.OAK)), hasChest);
+		this.model = new BoatModel(context.bakeLayer(ModelLayers.createBoatModelName(Boat.Type.OAK)));
 	}
 	
 	@Override
-	public Pair<ResourceLocation, BoatModel> getModelWithLocation(Boat boat)
+	public Pair<ResourceLocation, ListModel<Boat>> getModelWithLocation(Boat boat)
 	{
 		MetalBoatEntity metalBoat = (MetalBoatEntity) boat;
 		

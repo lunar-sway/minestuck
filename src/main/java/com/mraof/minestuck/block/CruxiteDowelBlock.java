@@ -18,8 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -62,11 +61,11 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity stackEntity)
 			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC,
-					(context, consumer) -> consumer.accept(stackEntity.getStack()));
+					consumer -> consumer.accept(stackEntity.getStack()));
 		
 		return super.getDrops(state, builder);
 	}
@@ -113,13 +112,6 @@ public class CruxiteDowelBlock extends Block implements EntityBlock
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
 		builder.add(DOWEL_TYPE);
-	}
-	
-	@Override
-	@SuppressWarnings("deprecation")
-	public PushReaction getPistonPushReaction(BlockState state)
-	{
-		return PushReaction.DESTROY;
 	}
 	
 	public enum Type implements StringRepresentable

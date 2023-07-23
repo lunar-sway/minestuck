@@ -23,7 +23,7 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		String table = json.has("table") ? GsonHelper.getAsString(json, "table") : null;
 		ItemPredicate item = ItemPredicate.fromJson(json.get("item"));
@@ -42,7 +42,7 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 		private final ItemPredicate item;
 		private final EnumConsort.MerchantType type;
 		
-		public Instance(EntityPredicate.Composite predicate, String table, ItemPredicate item, EnumConsort.MerchantType type)
+		public Instance(ContextAwarePredicate predicate, String table, ItemPredicate item, EnumConsort.MerchantType type)
 		{
 			super(ID, predicate);
 			this.table = table;
@@ -52,7 +52,7 @@ public class ConsortItemTrigger extends SimpleCriterionTrigger<ConsortItemTrigge
 		
 		public static Instance forType(EnumConsort.MerchantType type)
 		{
-			return new Instance(EntityPredicate.Composite.ANY, null, ItemPredicate.ANY, type);
+			return new Instance(ContextAwarePredicate.ANY, null, ItemPredicate.ANY, type);
 		}
 		
 		public boolean test(String table, ItemStack item, EnumConsort.MerchantType type)

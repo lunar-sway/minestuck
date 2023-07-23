@@ -1,6 +1,5 @@
 package com.mraof.minestuck.entity.carapacian;
 
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -52,6 +51,6 @@ public class RookEntity extends CarapacianEntity implements Enemy
 	public boolean doHurtTarget(Entity entity)
 	{
 		float damage = this.getAttackStrength(entity);
-		return entity.hurt(DamageSource.mobAttack(this), damage);
+		return entity.hurt(this.damageSources().mobAttack(this), damage);
 	}
 }

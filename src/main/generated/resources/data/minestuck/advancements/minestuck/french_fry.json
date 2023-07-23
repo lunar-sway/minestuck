@@ -31,5 +31,6 @@
     [
       "has_french_fry"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

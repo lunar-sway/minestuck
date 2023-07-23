@@ -1,13 +1,11 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.network.GristWildcardPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -56,26 +54,24 @@ public class GristSelectorScreen extends MinestuckScreen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiGristcache);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 
 		String cacheMessage = I18n.get(SELECT_GRIST);
-		minecraft.font.draw(poseStack, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - minecraft.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.disableDepthTest();
 
-		this.drawGrist(poseStack, xOffset, yOffset, mouseX, mouseY, page);
+		this.drawGrist(guiGraphics, xOffset, yOffset, mouseX, mouseY, page);
 		
 /*		if (tooltip != -1)
 			if(tooltip % 2 == 0)

@@ -250,7 +250,7 @@ public class TreeModus extends Modus
 		
 		public void addNode(TreeNode node)
 		{
-			if(this.stack.getItem() == node.stack.getItem() && ItemStack.tagMatches(this.stack, node.stack)
+			if(ItemStack.isSameItemSameTags(this.stack, node.stack)
 				&& this.stack.getCount() + node.stack.getCount() <= this.stack.getMaxStackSize())
 			{
 				this.stack.grow(node.stack.getCount());

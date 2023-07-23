@@ -85,7 +85,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	private void magicAttack(ServerPlayer player)
 	{
 		BlockPos playerPos = player.blockPosition();
-		Level level = player.level;
+		Level level = player.level();
 		
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
@@ -102,7 +102,8 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 				continue;
 			
 			float talliedDamage = calculateDamage(player, target, damage);
-			target.hurt(DamageSource.playerAttack(player).setMagic(), talliedDamage);
+			DamageSource damageSource = level.damageSources().magic(); //TODO is this okay? Was originally "DamageSource.playerAttack(player).setMagic()"
+			target.hurt(damageSource, talliedDamage);
 			
 			this.targetEffect.accept(target);
 		}

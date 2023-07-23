@@ -2,7 +2,8 @@ package com.mraof.minestuck.world.gen;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.DensityFunction;
@@ -28,7 +29,7 @@ public final class MSDensityFunctions
 	
 	private static ResourceKey<DensityFunction> key(String name)
 	{
-		return ResourceKey.create(Registry.DENSITY_FUNCTION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.DENSITY_FUNCTION, new ResourceLocation(Minestuck.MOD_ID, name));
 	}
 	
 	public static DensityFunction depth(DensityFunction offset)
@@ -58,5 +59,10 @@ public final class MSDensityFunctions
 	{
 		DensityFunction lerpValue = DensityFunctions.yClampedGradient(y1, y2, 0, 1);
 		return DensityFunctions.lerp(lerpValue, fixedValue, density);
+	}
+	
+	public static DensityFunction get(HolderGetter<DensityFunction> registry, ResourceKey<DensityFunction> key)
+	{
+		return new DensityFunctions.HolderHolder(registry.getOrThrow(key));
 	}
 }

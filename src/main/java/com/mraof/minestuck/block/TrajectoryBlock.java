@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
@@ -42,7 +41,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		BlockState trajectoryState = level.getBlockState(pos);
 		if(trajectoryState.getValue(FACING) == Direction.UP && trajectoryState.getValue(POWER) >= UPWARDS_POWER_MIN)
 		{
-			entityIn.causeFallDamage(fallDistance, 0.0F, DamageSource.FALL); //reduces damage if the trajectory block faces up and is powered a reasonable amount
+			entityIn.causeFallDamage(fallDistance, 0.0F, level.damageSources().fall()); //reduces damage if the trajectory block faces up and is powered a reasonable amount
 		}
 		else
 			super.fallOn(level, state, pos, entityIn, fallDistance);
@@ -60,7 +59,7 @@ public class TrajectoryBlock extends MSDirectionalBlock
 		
 		if(power != 0 && !(blockState.getValue(FACING) == Direction.UP && power < UPWARDS_POWER_MIN))
 		{
-			if(entityIn.isOnGround())
+			if(entityIn.onGround())
 				entityIn.setOnGround(false);
 			entityIn.setDeltaMovement(entityIn.getDeltaMovement().x * 0.8 + blockState.getValue(FACING).getStepX() * powerMod, entityIn.getDeltaMovement().y * 0.8 + blockState.getValue(FACING).getStepY() * powerMod, entityIn.getDeltaMovement().z * 0.8 + blockState.getValue(FACING).getStepZ() * powerMod);
 		}

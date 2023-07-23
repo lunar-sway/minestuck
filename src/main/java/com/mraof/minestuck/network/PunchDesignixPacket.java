@@ -36,7 +36,7 @@ public class PunchDesignixPacket implements PlayToServerPacket
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			if(player.level.getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix)
+			if(player.level().getBlockEntity(pos) instanceof PunchDesignixBlockEntity punchDesignix)
 			{
 				if(Math.sqrt(player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5)) <= 8)
 				{

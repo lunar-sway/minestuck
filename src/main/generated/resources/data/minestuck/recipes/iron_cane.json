@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "c": {
       "item": "minestuck:cane"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "minestuck:iron_cane"
-  }
+  },
+  "show_notification": true
 }

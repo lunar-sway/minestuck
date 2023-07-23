@@ -5,7 +5,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -15,15 +14,9 @@ import java.util.Set;
 
 public class MSToolType
 {
-	private final Set<Material> harvestMaterials = new HashSet<>();
 	private final Set<Enchantment> enchantments = new HashSet<>();
 	private final Set<TagKey<Block>> miningEfficiencyTags = new HashSet<>();
 	private final Set<ToolAction> miningActions = new HashSet<>();
-	
-	public MSToolType(Material... materials)
-	{
-		harvestMaterials.addAll(Arrays.asList(materials));
-	}
 	
 	public MSToolType()
 	{
@@ -33,7 +26,6 @@ public class MSToolType
 	{
 		for(MSToolType cls : classCombo)
 		{
-			harvestMaterials.addAll(cls.harvestMaterials);
 			enchantments.addAll(cls.enchantments);
 			miningEfficiencyTags.addAll(cls.miningEfficiencyTags);
 			miningActions.addAll(cls.miningActions);
@@ -42,9 +34,6 @@ public class MSToolType
 	
 	public boolean canHarvest(BlockState state)
 	{
-		if(harvestMaterials.contains(state.getMaterial()))
-			return true;
-		
 		for(TagKey<Block> tag : miningEfficiencyTags)
 			if(state.is(tag))
 				return true;

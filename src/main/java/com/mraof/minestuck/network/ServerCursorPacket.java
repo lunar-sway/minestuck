@@ -8,14 +8,14 @@ import net.minecraft.world.entity.Entity;
 public class ServerCursorPacket implements PlayToClientPacket
 {
 	private final int entityID;
-	private final ServerCursorEntity.Animation animation;
+	private final ServerCursorEntity.AnimationType animation;
 	
-	public static ServerCursorPacket createPacket(ServerCursorEntity entity, ServerCursorEntity.Animation animation)
+	public static ServerCursorPacket createPacket(ServerCursorEntity entity, ServerCursorEntity.AnimationType animation)
 	{
 		return new ServerCursorPacket(entity.getId(), animation);
 	}
 	
-	private ServerCursorPacket(int entityID, ServerCursorEntity.Animation animation)
+	private ServerCursorPacket(int entityID, ServerCursorEntity.AnimationType animation)
 	{
 		this.entityID = entityID;
 		this.animation = animation;
@@ -31,7 +31,7 @@ public class ServerCursorPacket implements PlayToClientPacket
 	public static ServerCursorPacket decode(FriendlyByteBuf buffer)
 	{
 		int entityID = buffer.readInt(); //readInt spits out the values you gave to the PacketBuffer in encode in that order
-		ServerCursorEntity.Animation animation = ServerCursorEntity.Animation.values()[buffer.readInt()];
+		ServerCursorEntity.AnimationType animation = ServerCursorEntity.AnimationType.values()[buffer.readInt()];
 		
 		return new ServerCursorPacket(entityID, animation);
 	}

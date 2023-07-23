@@ -7,7 +7,7 @@ import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.storage.TransportalizerSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -198,7 +198,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 	{
 		BlockState block0 = level.getBlockState(pos.above());
 		BlockState block1 = level.getBlockState(pos.above(2));
-		return block0.getMaterial().blocksMotion() || block1.getMaterial().blocksMotion();
+		return block0.blocksMotion() || block1.blocksMotion();
 	}
 	
 	private static boolean isDimensionForbidden(Level level)
@@ -206,7 +206,7 @@ public class TransportalizerBlockEntity extends OnCollisionTeleporterBlockEntity
 		List<String> forbiddenWorlds = MinestuckConfig.SERVER.forbiddenWorldsTpz.get();
 		List<String> forbiddenDimTypes = MinestuckConfig.SERVER.forbiddenDimensionTypesTpz.get();
 		
-		Optional<ResourceKey<DimensionType>> typeKey = level.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getResourceKey(level.dimensionType());
+		Optional<ResourceKey<DimensionType>> typeKey = level.registryAccess().registryOrThrow(Registries.DIMENSION_TYPE).getResourceKey(level.dimensionType());
 		
 		return forbiddenWorlds.contains(String.valueOf(level.dimension().location()))
 				|| typeKey.isPresent() && forbiddenDimTypes.contains(String.valueOf(typeKey.get().location()));

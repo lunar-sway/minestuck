@@ -7,7 +7,7 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -40,7 +40,7 @@ public class LandTypesDataPacket implements PlayToClientPacket
 		
 		while (buffer.isReadable())
 		{
-			ResourceKey<Level> world = ResourceKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
+			ResourceKey<Level> world = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
 			TerrainLandType terrain = buffer.readRegistryIdSafe(TerrainLandType.class);
 			TitleLandType title = buffer.readRegistryIdSafe(TitleLandType.class);
 			builder.put(world, new LandTypePair(terrain, title));

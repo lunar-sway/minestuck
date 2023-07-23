@@ -112,6 +112,6 @@ public class MSSoundEvents
 	
 	private static RegistryObject<SoundEvent> register(String name)
 	{
-		return REGISTER.register(name.replace(".","_"), () -> new SoundEvent(new ResourceLocation(Minestuck.MOD_ID, name)));
+		return REGISTER.register(name.replace(".","_"), () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Minestuck.MOD_ID, name)));
 	}
 }

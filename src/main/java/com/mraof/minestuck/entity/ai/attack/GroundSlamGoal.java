@@ -4,7 +4,6 @@ import com.mraof.minestuck.entity.AttackingAnimatedEntity;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.Level;
@@ -41,7 +40,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	
 	private void applyGroupCooldown()
 	{
-		Level level = this.entity.getLevel();
+		Level level = this.entity.level();
 		AABB aabb = new AABB(this.entity.blockPosition()).inflate(8);
 		List<AttackingAnimatedEntity> entityList = level.getEntitiesOfClass(AttackingAnimatedEntity.class, aabb);
 		if(!entityList.isEmpty())
@@ -59,7 +58,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 	@Override
 	public void attemptToLandAttack(PathfinderMob attacker, LivingEntity target)
 	{
-		Level level = entity.getLevel();
+		Level level = entity.level();
 		level.playSound(null, this.entity.blockPosition(), MSSoundEvents.ENTITY_SLAM.get(), SoundSource.HOSTILE, 2.5F, 1);
 		
 		//flinging any nearby smaller mobs on the ground indiscriminately
@@ -71,7 +70,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 			{
 				boolean smallerThanAttacker = iteratedEntity.getBoundingBox().getSize() < attacker.getBoundingBox().getSize();
 				
-				if(iteratedEntity != attacker && iteratedEntity != target && iteratedEntity.isOnGround() && !iteratedEntity.noPhysics && smallerThanAttacker)
+				if(iteratedEntity != attacker && iteratedEntity != target && iteratedEntity.onGround() && !iteratedEntity.noPhysics && smallerThanAttacker)
 				{
 					fling(attacker, iteratedEntity, false);
 				}
@@ -79,7 +78,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 		}
 		
 		//flinging the target mob
-		if(target != null && targetCanBeHit(target) && target.isOnGround())
+		if(target != null && targetCanBeHit(target) && target.onGround())
 		{
 			//similar range check to indiscriminate mob fling check
 			boolean inMeleeRange = getStandardAttackReachSqr(target) >= entity.distanceToSqr(target);
@@ -100,7 +99,7 @@ public class GroundSlamGoal<T extends AttackingAnimatedEntity> extends AnimatedA
 			//after the clamp is applied: 10 damage at 1-2 blocks away, 3.4 damage at 5 blocks away, 1 damage at 10 blocks away, 0.2 damage at 15 blocks away
 			double distanceModified = (1.2 / (Math.sqrt(attacker.distanceToSqr(target)) * 0.05)) - 1.4;
 			float damage = Math.min(Math.max((float) distanceModified, 0.2F), 10F);
-			target.hurt(DamageSource.mobAttack(attacker), damage);
+			target.hurt(attacker.damageSources().mobAttack(attacker), damage);
 		}
 		
 		//non-target mobs don't need to be damaged, if they did then underlings would aggro on each other

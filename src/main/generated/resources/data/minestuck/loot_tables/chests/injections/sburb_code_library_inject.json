@@ -31,5 +31,6 @@
         "min": 0.0
       }
     }
-  ]
+  ],
+  "random_sequence": "minestuck:chests/injections/sburb_code_library_inject"
 }

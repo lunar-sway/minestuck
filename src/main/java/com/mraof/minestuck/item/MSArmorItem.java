@@ -20,14 +20,14 @@ public class MSArmorItem extends ArmorItem
 {
     private final String texture;
     
-    public MSArmorItem(ArmorMaterial material, EquipmentSlot slot, Properties properties)
+    public MSArmorItem(ArmorMaterial material, Type type, Properties properties)
     {
-        this("", material, slot, properties);
+        this("", material, type, properties);
     }
 
-    public MSArmorItem(String texture, ArmorMaterial material, EquipmentSlot slot, Properties properties)
+    public MSArmorItem(String texture, ArmorMaterial material, Type type, Properties properties)
     {
-        super(material, slot, properties);
+        super(material, type, properties);
         this.texture = texture;
     }
 	
@@ -39,20 +39,20 @@ public class MSArmorItem extends ArmorItem
 			@Override
 			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
-				if(equipmentSlot == slot)
+				if(equipmentSlot == type.getSlot())
 				{
 					HumanoidModel<?> model = ArmorModels.get(MSArmorItem.this);
 					if (model != null)
 					{
-						model.rightLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
-						model.leftLeg.visible = slot == EquipmentSlot.LEGS || slot == EquipmentSlot.FEET;
+						model.rightLeg.visible = type == Type.LEGGINGS || type == Type.BOOTS;
+						model.leftLeg.visible = type == Type.LEGGINGS || type == Type.BOOTS;
 						
-						model.body.visible = slot == EquipmentSlot.CHEST;
-						model.leftArm.visible = slot == EquipmentSlot.CHEST;
-						model.rightArm.visible = slot == EquipmentSlot.CHEST;
+						model.body.visible = type == Type.CHESTPLATE;
+						model.leftArm.visible = type == Type.CHESTPLATE;
+						model.rightArm.visible = type == Type.CHESTPLATE;
 						
-						model.head.visible = slot == EquipmentSlot.HEAD;
-						model.hat.visible = slot == EquipmentSlot.HEAD;
+						model.head.visible = type == Type.HELMET;
+						model.hat.visible = type == Type.HELMET;
 						
 						
 						model.crouching = original.crouching;

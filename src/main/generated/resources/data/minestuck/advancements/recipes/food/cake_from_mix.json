@@ -30,5 +30,6 @@
     "recipes": [
       "minestuck:cake_from_mix"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

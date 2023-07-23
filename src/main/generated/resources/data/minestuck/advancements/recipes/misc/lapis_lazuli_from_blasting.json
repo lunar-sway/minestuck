@@ -28,5 +28,6 @@
     "recipes": [
       "minestuck:lapis_lazuli_from_blasting"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

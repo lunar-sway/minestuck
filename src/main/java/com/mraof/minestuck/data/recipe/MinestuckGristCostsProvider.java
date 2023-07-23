@@ -1,15 +1,13 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -21,15 +19,9 @@ import java.util.function.Consumer;
 
 import static com.mraof.minestuck.alchemy.GristTypes.*;
 
-public class MinestuckGristCostsProvider extends RecipeProvider
+public final class MinestuckGristCostsProvider
 {
-	public MinestuckGristCostsProvider(DataGenerator generator)
-	{
-		super(generator);
-	}
-	
-	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> recipeSaver)
+	public static void buildRecipes(Consumer<FinishedRecipe> recipeSaver)
 	{
 		GeneratedGristCostBuilder.create().build(recipeSaver, new ResourceLocation(Minestuck.MOD_ID, "generated"));
 		
@@ -926,11 +918,5 @@ public class MinestuckGristCostsProvider extends RecipeProvider
 	public static void oreCost(TagKey<Item> ores, Item material, float multiplier, Consumer<FinishedRecipe> recipeSaver, String modId)
 	{
 		SourceGristCostBuilder.of(ores).source(material).multiplier(multiplier).grist(BUILD, 4).buildFor(recipeSaver, modId);
-	}
-	
-	@Override
-	public String getName()
-	{
-		return "Minestuck Grist Costs";
 	}
 }

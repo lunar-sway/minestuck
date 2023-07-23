@@ -98,7 +98,7 @@ public class HashMapModus extends Modus
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(otherItem.getItem() == item.getItem() && ItemStack.tagMatches(otherItem, item)
+			if(ItemStack.isSameItemSameTags(otherItem, item)
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());

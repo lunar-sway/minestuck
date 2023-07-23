@@ -110,7 +110,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 		validateMachine();
 		
 		Block part = clickedState.getBlock();
-		if(part instanceof PunchDesignixBlock.Slot && !player.level.isClientSide)
+		if(part instanceof PunchDesignixBlock.Slot && !player.level().isClientSide)
 		{
 			handleSlotClick(player);
 		} else if(isUsable(clickedState) && (part == MSBlocks.PUNCH_DESIGNIX.KEYBOARD.get() || part == MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG.get()))
@@ -142,7 +142,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 	{
 		ItemStack heldStack = player.getMainHandItem();
 		
-		if(player.level.isClientSide)
+		if(player.level().isClientSide)
 		{
 			//Go to screen if no valid item in hand
 			if(!heldStack.is(MSItems.CAPTCHA_CARD.get()))
@@ -176,7 +176,7 @@ public class PunchDesignixBlockEntity extends BlockEntity
 			
 			if(AlchemyHelper.isPunchedCard(getCard())) //|| combination. A temporary new captcha card containing captchaItemStack is made
 			{
-				output = CombinationRecipe.findResult(new CombinerWrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level);
+				output = CombinationRecipe.findResult(new CombinerWrapper(AlchemyHelper.createCard(captchaItemStack, player.server), getCard(), CombinationMode.OR), player.level());
 			} else
 				output = captchaItemStack;
 			

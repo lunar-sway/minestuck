@@ -3,12 +3,12 @@ package com.mraof.minestuck.client.renderer.blockentity;
 import com.mraof.minestuck.client.model.blockentity.AlchemiterModel;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
+import software.bernie.geckolib.renderer.GeoBlockRenderer;
 
 public class AlchemiterRenderer extends GeoBlockRenderer<AlchemiterBlockEntity>
 {
-	public AlchemiterRenderer(BlockEntityRendererProvider.Context context)
+	public AlchemiterRenderer(BlockEntityRendererProvider.Context ignored)
 	{
-		super(context, new AlchemiterModel());
+		super(new AlchemiterModel());
 	}
 }

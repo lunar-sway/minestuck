@@ -16,11 +16,12 @@ import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
-import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import net.minecraft.util.FastColor;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.core.object.Color;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.GeoRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,7 +35,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	{
 		// this renderer does two simple things :
 		super(context, new UnderlingModel<>()); // render the entity with the base layer merged with a grist texture
-		this.addLayer(new UnderlingDetailsLayer(this)); // render a second layer with details (eyes, mouth, etc)
+		this.addRenderLayer(new UnderlingDetailsLayer(this)); // render a second layer with details (eyes, mouth, etc)
 	}
 	
 	@Override
@@ -44,7 +45,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	}
 	
 	@Override
-	public Color getRenderColor(T animatable, float partialTicks, PoseStack stack, @org.jetbrains.annotations.Nullable MultiBufferSource renderTypeBuffer, @org.jetbrains.annotations.Nullable VertexConsumer vertexBuilder, int packedLightIn)
+	public Color getRenderColor(T animatable, float partialTick, int packedLight)
 	{
 		return Color.ofOpaque(animatable.getGristType().getColor());
 	}
@@ -85,7 +86,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		{
 			for(int j = 0; j < base.getHeight(); j++)
 			{
-				if(NativeImage.getA(base.getPixelRGBA(i, j)) == 0)
+				if(FastColor.ARGB32.alpha(base.getPixelRGBA(i, j)) == 0)
 				{
 					computed.setPixelRGBA(i, j, 0);
 				} else
@@ -112,7 +113,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		String textureName = entity.getGristType().getEffectiveName().getPath();
 		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
 		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
-			return this.modelProvider.getTextureResource(entity);
+			return this.model.getTextureResource(entity);
 		}
 		return textureLocation;
 	}
@@ -120,31 +121,31 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	/**
 	 * Detail layer for the underling
 	 */
-	public class UnderlingDetailsLayer extends GeoLayerRenderer<T>
+	public class UnderlingDetailsLayer extends GeoRenderLayer<T>
 	{
-		public UnderlingDetailsLayer(IGeoRenderer<T> entityRendererIn)
+		public UnderlingDetailsLayer(GeoRenderer<T> entityRendererIn)
 		{
 			super(entityRendererIn);
 		}
 		
 		@Override
-		public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, T entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
+		public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay)
 		{
-			RenderType renderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entityLivingBaseIn) + "_details.png"));
-			float color = getContrastModifier(entityLivingBaseIn);
-			matrixStackIn.pushPose();
+			RenderType layerRenderType = RenderType.armorCutoutNoCull(new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(animatable) + "_details.png"));
+			float color = getContrastModifier(animatable);
+			poseStack.pushPose();
 			
-			GeoModel model = modelProvider.getModel(modelProvider.getModelResource(entityLivingBaseIn));
-			this.getRenderer().render(model, entityLivingBaseIn, partialTicks, renderType, matrixStackIn, bufferIn, bufferIn.getBuffer(renderType), packedLightIn, OverlayTexture.NO_OVERLAY, color, color, color, 1);
+			this.getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, layerRenderType, bufferSource.getBuffer(layerRenderType),
+					partialTick, packedLight, OverlayTexture.NO_OVERLAY, color, color, color, 1);
 			
-			matrixStackIn.popPose();
+			poseStack.popPose();
 		}
 		
 		private float getContrastModifier(T entity)
 		{
 			int threshold = 170;
 			int color = entity.getGristType().getColor();
-			int avg = (NativeImage.getR(color) + NativeImage.getG(color) + NativeImage.getB(color)) / 3;
+			int avg = (FastColor.ABGR32.red(color) + FastColor.ABGR32.green(color) + FastColor.ABGR32.blue(color)) / 3;
 			//TODO replace with a light/dark texture to make it look better
 			return avg > threshold ? 0.3f : 1.0f;
 		}

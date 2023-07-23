@@ -81,10 +81,10 @@ public class EntryProcess
 	private EntryProcess(ServerPlayer player, ServerLevel landLevel, BlockPos pos)
 	{
 		this.origin = pos;
-		this.originLevel = (ServerLevel) player.level;
+		this.originLevel = (ServerLevel) player.level();
 		this.landLevel = landLevel;
 		
-		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.getLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
+		int topY = MinestuckConfig.SERVER.adaptEntryBlockHeight.get() ? getTopHeight(player.serverLevel(), origin.getX(), origin.getY(), origin.getZ()) : origin.getY() + artifactRange;
 		yDiff = 119 - topY; //the top block will end up being at y = 120 once in the land
 		xDiff = -origin.getX();
 		zDiff = -origin.getZ();
@@ -95,13 +95,13 @@ public class EntryProcess
 	
 	public static void enter(ServerPlayer player)
 	{
-		enter(player, new BlockPos(player.getX(), player.getY(), player.getZ()));
+		enter(player, BlockPos.containing(player.getX(), player.getY(), player.getZ()));
 	}
 	
 	public static void enter(ServerPlayer player, BlockPos pos)
 	{
 		long time = System.currentTimeMillis();
-		if(player.level.dimension() == Level.NETHER)
+		if(player.level().dimension() == Level.NETHER)
 		{
 			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION));
 			return;
@@ -116,7 +116,7 @@ public class EntryProcess
 		}
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Optional<SburbConnection> c = SkaianetHandler.get(player.level).getPrimaryConnection(identifier, true);
+		Optional<SburbConnection> c = SkaianetHandler.get(player.serverLevel()).getPrimaryConnection(identifier, true);
 		
 		if(c.isPresent() && c.get().hasEntered())
 		{
@@ -124,7 +124,7 @@ public class EntryProcess
 			return;
 		}
 		
-		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level).prepareEntry(identifier);
+		ResourceKey<Level> landDimension = SkaianetHandler.get(player.level()).prepareEntry(identifier);
 		if(landDimension == null)
 		{
 			player.sendSystemMessage(Component.translatable(CREATION_FAILED));
@@ -139,7 +139,7 @@ public class EntryProcess
 		}
 		
 		EntryProcess process = new EntryProcess(player, landLevel, pos);
-		if(!process.canModifyEntryBlocks(player, player.level, pos))
+		if(!process.canModifyEntryBlocks(player, player.level(), pos))
 		{
 			player.sendSystemMessage(Component.translatable(NOT_ALLOWED_HERE));
 			return;
@@ -148,8 +148,8 @@ public class EntryProcess
 		landLevel.getChunkSource().addRegionTicket(CHUNK_TICKET_TYPE, new ChunkPos(0, 0), 0, Unit.INSTANCE);
 		
 		waitingProcess = process;
-		startTime = player.level.getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
-		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level.dimension(), process.origin, process.artifactRange));
+		startTime = player.level().getGameTime() + MinestuckConfig.COMMON.entryDelay.get();
+		MSPacketHandler.sendToAll(new EntryEffectPackets.Effect(player.level().dimension(), process.origin, process.artifactRange));
 		LOGGER.info("Entry prep done in {}ms", System.currentTimeMillis() - time);
 	}
 	
@@ -160,7 +160,7 @@ public class EntryProcess
 			player.sendSystemMessage(Component.translatable(NO_REENTRY));
 			return;
 		}
-		if(MSDimensions.isLandDimension(player.server, player.level.dimension()))
+		if(MSDimensions.isLandDimension(player.server, player.level().dimension()))
 		{
 			player.sendSystemMessage(Component.translatable(WRONG_DIMENSION_REENTRY));
 			return;
@@ -217,7 +217,7 @@ public class EntryProcess
 			LOGGER.info("Entry starting");
 			copyBlocks(originLevel, landLevel);
 			
-			boolean wasInsideEntryArea = player.level == originLevel && player.distanceToSqr(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5) <= artifactRange * artifactRange;
+			boolean wasInsideEntryArea = player.level() == originLevel && player.distanceToSqr(origin.getX() + 0.5, origin.getY() + 0.5, origin.getZ() + 0.5) <= artifactRange * artifactRange;
 			
 			if(Teleport.teleportEntity(player, landLevel) == null)
 			{
@@ -226,7 +226,7 @@ public class EntryProcess
 			}
 			
 			finalizeEntry(player, originLevel, landLevel, wasInsideEntryArea);
-			SkaianetHandler.get(player.level).onEntry(playerId);
+			SkaianetHandler.get(player.level()).onEntry(playerId);
 			LOGGER.info("Entry finished in {}ms", System.currentTimeMillis() - time);
 			
 		} catch(Exception e)

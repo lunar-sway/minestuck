@@ -67,7 +67,11 @@ public class TransportalizerCommand
 		
 		if(count == 0)
 			throw RESULT_EXCEPTION.create();
-		else source.sendSuccess(Component.translatable(RESULT, count), true);
+		else
+		{
+			int finalCount = count;
+			source.sendSuccess(() -> Component.translatable(RESULT, finalCount), true);
+		}
 		
 		return count;
 	}

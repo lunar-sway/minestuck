@@ -30,7 +30,7 @@ import com.mraof.minestuck.entity.consort.MessageType;
 import com.mraof.minestuck.entry.EntryProcess;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
-import com.mraof.minestuck.item.MSItemGroup;
+import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
@@ -39,14 +39,13 @@ import com.mraof.minestuck.jei.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
-import com.mraof.minestuck.util.MSDamageSources;
 import com.mraof.minestuck.world.GateHandler;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.terrain.*;
 import com.mraof.minestuck.world.lands.title.*;
 import net.minecraft.ChatFormatting;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -54,9 +53,9 @@ import net.minecraft.world.item.alchemy.Potions;
 
 public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 {
-	MinestuckEnUsLanguageProvider(DataGenerator gen)
+	MinestuckEnUsLanguageProvider(PackOutput output)
 	{
-		super(gen, Minestuck.MOD_ID, "en_us");
+		super(output, Minestuck.MOD_ID, "en_us");
 	}
 	
 	@Override
@@ -1473,9 +1472,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addStoreTooltip(Items.CLAY_BALL, "A moldable substance with a plain, muted look, free of artificial colors!");
 		addStoreTooltip(Items.CACTUS, "It's the quenchiest!");
 		
-		add(MSItemGroup.MAIN, "Minestuck Main");
-		add(MSItemGroup.LANDS, "Minestuck Lands");
-		add(MSItemGroup.WEAPONS, "Minestuck Weapons");
+		add(MSCreativeTabs.MAIN_KEY, "Minestuck Main");
+		add(MSCreativeTabs.LANDS_KEY, "Minestuck Lands");
+		add(MSCreativeTabs.WEAPONS_KEY, "Minestuck Weapons");
 		
 		addEntityType(MSEntityTypes.FROG, "Frog");
 		addEntityType(MSEntityTypes.SALAMANDER, "Salamander");
@@ -1983,10 +1982,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MSLootEvents.FROG_TEMPLE_MAP, "Frog Temple");
 		
-		addDamageMessage(MSDamageSources.SPIKE, "%s was filled with too many holes from spikes");
-		addDamageMessageWithKiller(MSDamageSources.SPIKE, "%1$s was caught in a spike trap whilst trying to escape %2$s");
-		addDamageMessage(MSDamageSources.DECAPITATION, "%s had their head chopped off");
-		addDamageMessageWithKiller(MSDamageSources.DECAPITATION, "%1$s lost their head whilst engaged with %2$s");
+		addDamageMessage(MSDamageTypeProvider.SPIKE_MSG, "%s was filled with too many holes from spikes");
+		addDamageMessageWithKiller(MSDamageTypeProvider.SPIKE_MSG, "%1$s was caught in a spike trap whilst trying to escape %2$s");
+		addDamageMessage(MSDamageTypeProvider.DECAPITATION_MSG, "%s had their head chopped off");
+		addDamageMessageWithKiller(MSDamageTypeProvider.DECAPITATION_MSG, "%1$s lost their head whilst engaged with %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

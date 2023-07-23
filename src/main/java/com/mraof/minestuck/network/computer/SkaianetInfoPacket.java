@@ -6,7 +6,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -110,7 +110,7 @@ public class SkaianetInfoPacket implements PlayToBothPacket
 					String landName = buffer.readUtf(32767);
 					if(landName.isEmpty())
 						list.add(null);
-					else list.add(ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(landName)));
+					else list.add(ResourceKey.create(Registries.DIMENSION, new ResourceLocation(landName)));
 				}
 				packet.landChains.add(list);
 			}

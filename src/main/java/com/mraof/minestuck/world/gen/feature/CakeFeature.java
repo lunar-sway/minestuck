@@ -49,7 +49,7 @@ public class CakeFeature extends Feature<ProbabilityFeatureConfiguration>
 		
 		BlockState state = cake.defaultBlockState().setValue(CakeBlock.BITES, bites);
 		
-		if(state.canSurvive(level, pos) && !level.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(level, pos) && !level.getBlockState(pos).liquid())
 		{
 			setBlock(level, pos, state);
 			return true;

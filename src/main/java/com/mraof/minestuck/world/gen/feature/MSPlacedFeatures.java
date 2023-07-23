@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -135,7 +135,7 @@ public final class MSPlacedFeatures
 	
 	private static ResourceKey<PlacedFeature> key(String name)
 	{
-		return ResourceKey.create(Registry.PLACED_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(Minestuck.MOD_ID, name));
 	}
 	
 	public static <T extends FeatureConfiguration> PlacedFeature inline(Feature<T> feature, T config, PlacementModifier... placements)

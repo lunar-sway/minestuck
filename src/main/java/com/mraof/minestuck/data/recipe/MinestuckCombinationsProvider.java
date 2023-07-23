@@ -5,9 +5,7 @@ import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -22,15 +20,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class MinestuckCombinationsProvider extends RecipeProvider
+public final class MinestuckCombinationsProvider
 {
-	public MinestuckCombinationsProvider(DataGenerator generatorIn)
-	{
-		super(generatorIn);
-	}
-	
-	@Override
-	protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
+	public static void buildRecipes(Consumer<FinishedRecipe> consumer)
 	{
 		//Wood
 		final ItemLike[][] woodItems = {
@@ -1023,11 +1015,5 @@ public class MinestuckCombinationsProvider extends RecipeProvider
 		CombinationRecipeBuilder.of(MSItems.PEACH_FAYGO.get()).input(MSItems.CANDY_APPLE_FAYGO.get()).and().input(Items.PINK_DYE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REDPOP_FAYGO.get()).input(MSItems.ORANGE_FAYGO.get()).or().input(Items.TNT).build(consumer);
 		
-	}
-	
-	@Override
-	public String getName()
-	{
-		return "Minestuck combination recipes";
 	}
 }

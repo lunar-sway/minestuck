@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "S": {
       "tag": "forge:stone"
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "minestuck:fork"
-  }
+  },
+  "show_notification": true
 }

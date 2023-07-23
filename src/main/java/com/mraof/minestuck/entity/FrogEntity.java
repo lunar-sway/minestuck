@@ -80,7 +80,7 @@ public class FrogEntity extends PathfinderMob
 	{
 		ItemStack itemstack = player.getItemInHand(hand);
 		
-		if(player.distanceToSqr(this) < 9.0D && !this.level.isClientSide)
+		if(player.distanceToSqr(this) < 9.0D && !this.level().isClientSide)
 		{
 			if(itemstack.getItem() == MSItems.BUG_NET.get())
 			{
@@ -96,7 +96,7 @@ public class FrogEntity extends PathfinderMob
 			{
 				if(!player.isCreative()) itemstack.shrink(1);
 				
-				this.level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY() + (double) (this.getBbHeight() / 2.0F), this.getZ(), 0.0D, 0.0D, 0.0D);
+				this.level().addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY() + (double) (this.getBbHeight() / 2.0F), this.getZ(), 0.0D, 0.0D, 0.0D);
 				this.playSound(SoundEvents.ANVIL_HIT, this.getSoundVolume(), ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F) * 0.8F);
 				this.setType(5);
 			}
@@ -199,9 +199,9 @@ public class FrogEntity extends PathfinderMob
 			}
 		}
 		
-		if(!this.level.isClientSide)
+		if(!this.level().isClientSide)
 		{
-			this.level.broadcastEntityEvent(this, (byte) 1);
+			this.level().broadcastEntityEvent(this, (byte) 1);
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class FrogEntity extends PathfinderMob
 			--this.currentMoveTypeDuration;
 		}
 		
-		if(this.onGround)
+		if(this.onGround())
 		{
 			if(!this.wasOnGround)
 			{
@@ -285,7 +285,7 @@ public class FrogEntity extends PathfinderMob
 			}
 		}
 		
-		this.wasOnGround = this.onGround;
+		this.wasOnGround = this.onGround();
 	}
 	
 	private void calculateRotationYaw(double x, double z)
@@ -631,7 +631,7 @@ public class FrogEntity extends PathfinderMob
 		@Override
 		public void tick()
 		{
-			if(this.frog.onGround && !this.frog.jumping && !((JumpHelperController) this.frog.jumpControl).getIsJumping())
+			if(this.frog.onGround() && !this.frog.jumping && !((JumpHelperController) this.frog.jumpControl).getIsJumping())
 			{
 				this.frog.setMovementSpeed(0.0D);
 			} else if(this.hasWanted())

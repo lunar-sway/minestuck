@@ -8,13 +8,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
@@ -119,7 +119,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		this.zo = this.getZ();
 		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
 		
-		if(this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
+		if(this.isInLava())
 		{
 			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
@@ -131,7 +131,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		{
 			if(this.closestPlayer == null || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
-				this.closestPlayer = this.level.getNearestPlayer(this, d0);
+				this.closestPlayer = this.level().getNearestPlayer(this, d0);
 			}
 			
 			this.targetCycle = this.cycle;
@@ -154,15 +154,15 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		float f = 0.98F;
 		
-		if(this.onGround)
+		if(this.onGround())
 		{
 			BlockPos pos = new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getBoundingBox().minY) - 1, Mth.floor(this.getZ()));
-			f = this.level.getBlockState(pos).getFriction(level, pos, this) * 0.98F;
+			f = this.level().getBlockState(pos).getFriction(level(), pos, this) * 0.98F;
 		}
 		
 		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
 		
-		if(this.onGround)
+		if(this.onGround())
 		{
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
@@ -209,10 +209,10 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level.isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(player) != null)
+		if(this.level().isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(player) != null)
 			return;
 		
-		if(!this.level.isClientSide)
+		if(!this.level().isClientSide)
 		{
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 			player.heal(healAmount);
@@ -250,7 +250,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

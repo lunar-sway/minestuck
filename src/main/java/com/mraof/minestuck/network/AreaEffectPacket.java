@@ -62,9 +62,9 @@ public class AreaEffectPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(beBlockPos) instanceof AreaEffectBlockEntity areaEffect)
+			if(player.level().getBlockEntity(beBlockPos) instanceof AreaEffectBlockEntity areaEffect)
 			{
 				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
@@ -72,9 +72,9 @@ public class AreaEffectPacket implements PlayToServerPacket
 					areaEffect.setEffect(effect, effectAmp);
 					//Imitates the structure block to ensure that changes are sent client-side
 					areaEffect.setChanged();
-					player.level.setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
-					BlockState state = player.level.getBlockState(beBlockPos);
-					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
+					player.level().setBlock(beBlockPos, areaEffect.getBlockState().setValue(AreaEffectBlock.ALL_MOBS, isAllMobs), Block.UPDATE_ALL);
+					BlockState state = player.level().getBlockState(beBlockPos);
+					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

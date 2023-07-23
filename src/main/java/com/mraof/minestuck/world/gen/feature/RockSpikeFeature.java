@@ -34,7 +34,7 @@ public class RockSpikeFeature extends Feature<NoneFeatureConfiguration>
 		
 		int height = rand.nextInt(7) + 10;
 		
-		if(level.getBlockState(pos.above(height*2/3)).getMaterial().isLiquid())	//At least 1/3rd of the height should be above the liquid surface
+		if(level.getBlockState(pos.above(height*2/3)).liquid())	//At least 1/3rd of the height should be above the liquid surface
 			return false;
 		float plateauSize = 0.2F + rand.nextFloat()*(height/25F);
 		BlockState ground = StructureBlockRegistry.getOrDefault(context.chunkGenerator()).getBlockState("ground");

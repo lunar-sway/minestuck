@@ -29,5 +29,6 @@
     [
       "tree_root"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

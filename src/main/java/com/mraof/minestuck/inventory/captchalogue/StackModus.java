@@ -40,7 +40,7 @@ public class StackModus extends Modus
 					list.add(stack);
 		}
 		
-		if(player.level.isClientSide)
+		if(player.level().isClientSide)
 		{
 			items = NonNullList.create();
 			changed = prev != null;
@@ -84,7 +84,7 @@ public class StackModus extends Modus
 			return false;
 		
 		ItemStack firstItem = list.size() > 0 ? list.getFirst() : ItemStack.EMPTY;
-		if(firstItem.getItem() == item.getItem() && ItemStack.tagMatches(firstItem, item)
+		if(ItemStack.isSameItemSameTags(firstItem, item)
 				&& firstItem.getCount() + item.getCount() <= firstItem.getMaxStackSize())
 			firstItem.grow(item.getCount());
 		else if(list.size() < size)

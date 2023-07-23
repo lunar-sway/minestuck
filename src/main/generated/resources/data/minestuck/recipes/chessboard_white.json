@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "group": "chessboard",
   "key": {
     "B": {
@@ -16,5 +17,6 @@
   ],
   "result": {
     "item": "minestuck:chessboard"
-  }
+  },
+  "show_notification": true
 }

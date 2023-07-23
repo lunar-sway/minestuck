@@ -48,7 +48,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 		if(PlayerSavedData.getData(player).tryTakeBoondollars(amount))
 		{
 			PlayerSavedData.getData(target).addBoondollars(amount);
-			source.sendSuccess(Component.translatable(SEND, amount, target.getDisplayName()), true);
+			source.sendSuccess(() -> Component.translatable(SEND, amount, target.getDisplayName()), true);
 			target.sendSystemMessage(Component.translatable(RECEIVE, amount, player.getDisplayName()));
 			return 1;
 		} else throw NOT_ENOUGH.create();
@@ -68,7 +68,7 @@ public class PorkhollowCommand    //Much like /gristSend and /land, is a tempora
 					entity.setNoPickUpDelay();
 			}
 			
-			source.sendSuccess(Component.translatable(TAKE, amount), true);
+			source.sendSuccess(() -> Component.translatable(TAKE, amount), true);
 			return 1;
 		} else throw NOT_ENOUGH.create();
 	}

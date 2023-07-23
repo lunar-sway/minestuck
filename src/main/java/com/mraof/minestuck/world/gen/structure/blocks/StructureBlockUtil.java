@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 public class StructureBlockUtil
 {
 	
-	public static boolean placeSpawner(BlockPos pos, LevelAccessor level, BoundingBox bb, EntityType<?> entityType)
+	public static boolean placeSpawner(BlockPos pos, LevelAccessor level, BoundingBox bb, EntityType<?> entityType, RandomSource random)
 	{
 		if(bb.isInside(pos))
 		{
@@ -27,7 +27,7 @@ public class StructureBlockUtil
 			BlockEntity te = level.getBlockEntity(pos);
 			if(te instanceof SpawnerBlockEntity spawner)
 			{
-				spawner.getSpawner().setEntityId(entityType);
+				spawner.setEntityId(entityType, random);
 				
 				return true;
 			}

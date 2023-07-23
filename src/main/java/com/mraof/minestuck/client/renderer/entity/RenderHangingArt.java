@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.entity.item.HangingArtEntity;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,6 +13,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRenderer<T>
 {
@@ -28,7 +28,7 @@ public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRende
 
 	public void render(T entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn) {
 		poseStack.pushPose();
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F - entityYaw));
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - entityYaw));
 		HangingArtEntity.IArt art = entityIn.getArt();
 		poseStack.scale(0.0625F, 0.0625F, 0.0625F);
 		VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.entitySolid(this.getTextureLocation(entityIn)));
@@ -61,7 +61,7 @@ public class RenderHangingArt<T extends HangingArtEntity<?>> extends EntityRende
 				int x = Mth.floor(painting.getX());
 				int y = Mth.floor(painting.getY() + (double)((upperV + lowerV) / 2.0F / 16.0F));
 				int z = Mth.floor(painting.getZ());
-				int light = LevelRenderer.getLightColor(painting.level, new BlockPos(x, y, z));
+				int light = LevelRenderer.getLightColor(painting.level(), new BlockPos(x, y, z));
 				float f19 = (float) (textureU + width - blockU * 16) / 256.0F;
 				float f20 = (float) (textureU + width - (blockU + 1) * 16) / 256.0F;
 				float f21 = (float) (textureV + height - blockV * 16) / 256.0F;

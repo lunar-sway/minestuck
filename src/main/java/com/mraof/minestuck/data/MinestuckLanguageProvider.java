@@ -5,9 +5,8 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.skaianet.MergeResult;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -26,9 +25,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 {
 	private final String modid;
 	
-	public MinestuckLanguageProvider(DataGenerator gen, String modid, String locale)
+	public MinestuckLanguageProvider(PackOutput output, String modid, String locale)
 	{
-		super(gen, modid, locale);
+		super(output, modid, locale);
 		this.modid = modid;
 	}
 	
@@ -165,12 +164,12 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(result.translationKey(), value);
 	}
-	protected void addDamageMessage(DamageSource key, String value)
+	protected void addDamageMessage(String key, String value)
 	{
-		add("death.attack." + key.getMsgId(), value);
+		add("death.attack." + key, value);
 	}
-	protected void addDamageMessageWithKiller(DamageSource key, String value)
+	protected void addDamageMessageWithKiller(String key, String value)
 	{
-		add("death.attack." + key.getMsgId() + ".player", value);
+		add("death.attack." + key + ".player", value);
 	}
 }

@@ -4,7 +4,9 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import commoble.infiniverse.api.InfiniverseAPI;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -17,22 +19,23 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 
 public class DynamicDimensions
 {
-	private static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "land"));
+	private static final ResourceKey<DimensionType> LAND_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE, new ResourceLocation(Minestuck.MOD_ID, "land"));
 	
 	public static ResourceKey<Level> createLand(MinecraftServer server, ResourceLocation baseName, LandTypePair landTypes)
 	{
 		ResourceKey<Level> worldKey = findUnusedWorldKey(server, baseName);
 		
 		InfiniverseAPI.get().getOrCreateLevel(server, worldKey, () -> {
-			RandomSource random = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(server.getWorldData().worldGenSettings().seed())
+			RandomSource random = WorldgenRandom.Algorithm.XOROSHIRO.newInstance(server.getWorldData().worldGenOptions().seed())
 					.forkPositional().fromHashOf(worldKey.location());
 			
 			LandTypePair.Named named = landTypes.createNamedRandomly(random.fork());
-			long seed = random.nextLong();
 			
-			ChunkGenerator chunkGenerator = LandChunkGenerator.create(server.registryAccess().registryOrThrow(Registry.STRUCTURE_SET_REGISTRY), server.registryAccess().registryOrThrow(Registry.NOISE_REGISTRY), server.registryAccess().registryOrThrow(Registry.DENSITY_FUNCTION_REGISTRY),
-					named, server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY), server.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY));
-			return new LevelStem(server.registryAccess().registryOrThrow(Registry.DIMENSION_TYPE_REGISTRY).getOrCreateHolderOrThrow(LAND_TYPE), chunkGenerator);
+			RegistryAccess registryAccess = server.registryAccess();
+			ChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION),
+					named, registryAccess.lookupOrThrow(Registries.BIOME), registryAccess.lookupOrThrow(Registries.PLACED_FEATURE), registryAccess.lookupOrThrow(Registries.CONFIGURED_CARVER));
+			Holder<DimensionType> dimensionType = registryAccess.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(LAND_TYPE);
+			return new LevelStem(dimensionType, chunkGenerator);
 		});
 		
 		return worldKey;
@@ -40,11 +43,11 @@ public class DynamicDimensions
 	
 	private static ResourceKey<Level> findUnusedWorldKey(MinecraftServer server, ResourceLocation baseName)
 	{
-		ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, baseName);
+		ResourceKey<Level> key = ResourceKey.create(Registries.DIMENSION, baseName);
 		
 		for(int i = 0; server.getLevel(key) != null; i++)
 		{
-			key = ResourceKey.create(Registry.DIMENSION_REGISTRY,
+			key = ResourceKey.create(Registries.DIMENSION,
 					new ResourceLocation(baseName.getNamespace(), baseName.getPath() + "_" + i));
 		}
 		

@@ -21,7 +21,7 @@ public enum EnumAspect	//TODO This could potentially be changed to a registry. H
 	BLOOD,BREATH,DOOM,HEART,HOPE,LIFE,LIGHT,MIND,RAGE,SPACE,TIME,VOID;
 	
 	public static final Codec<EnumAspect> CODEC = Codec.STRING.comapFlatMap(
-			str -> Optional.ofNullable(fromString(str)).map(DataResult::success).orElseGet(() -> DataResult.error("Couldn't parse aspect: " + str)),
+			str -> Optional.ofNullable(fromString(str)).map(DataResult::success).orElseGet(() -> DataResult.error(() -> "Couldn't parse aspect: " + str)),
 			EnumAspect::toString);
 	
 	/**

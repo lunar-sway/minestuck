@@ -3,6 +3,7 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.item.IncompleteSburbCodeItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -12,12 +13,11 @@ import net.minecraft.world.level.storage.loot.functions.SetNbtFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
-public class MSMiscLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>
+public class MSMiscLootTables implements LootTableSubProvider
 {
 	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(MSLootTables.KUNDLER_SUPRISES, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("computer").setRolls(ConstantValue.exactly(1)) //has only one item generate, with equal chance for each

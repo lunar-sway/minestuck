@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
@@ -136,7 +135,7 @@ public final class ClientEditHandler
 		{
 			Player player = event.player;
 			
-			double range = ClientDimensionData.isLand(player.level.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
 			ServerEditHandler.updatePosition(player, range, centerX, centerZ);
 		}
@@ -145,7 +144,7 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().level.isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
 		{
 			Inventory inventory = event.getPlayer().getInventory();
 			ItemStack stack = event.getEntity().getItem();
@@ -168,7 +167,7 @@ public final class ClientEditHandler
 	
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().level.isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
+		if(event.getEntity().level().isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
@@ -177,7 +176,7 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
+			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;
@@ -213,14 +212,14 @@ public final class ClientEditHandler
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 		{
-			if(!event.getEntity().canInteractWith(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
+			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
 			{
 				event.setCanceled(true);
 				return;
 			}
 			
 			BlockState block = event.getLevel().getBlockState(event.getPos());
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.getMaterial() == Material.PORTAL)
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*|| block.getMaterial() == Material.PORTAL TODO make use of a forbid tag instead?*/)
 			{
 				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
 				event.setCanceled(true);
@@ -245,21 +244,21 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(event.getEntity().level.isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
 			event.setCanceled(true);
 	}
 	

@@ -9,31 +9,35 @@ import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.IOException;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GeneratedGristCostConfigProvider implements DataProvider
 {
 	private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-	private final DataGenerator generator;
+	private final PackOutput output;
 	private final String modid;
 	private final List<JsonObject> entries = new ArrayList<>();
 	
-	public GeneratedGristCostConfigProvider(DataGenerator generator, String modid)
+	public GeneratedGristCostConfigProvider(PackOutput output, String modid)
 	{
-		this.generator = generator;
+		this.output = output;
 		this.modid = modid;
 	}
 	
@@ -43,22 +47,21 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		serializer(RecipeSerializer.SHAPELESS_RECIPE);
 		serializer(MSRecipeTypes.NON_MIRRORED.get());
 		type(RecipeType.STONECUTTING);
-		type(RecipeType.SMITHING, SmithingInterpreter.INSTANCE);
+		serializer(RecipeSerializer.SMITHING_TRANSFORM, SmithingInterpreter.INSTANCE);
 		type(RecipeType.SMELTING, new CookingCostInterpreter(new GristAmount(GristTypes.TAR, 1)));
 		type(MSRecipeTypes.IRRADIATING_TYPE.get(), new CookingCostInterpreter(new GristAmount(GristTypes.URANIUM, 1)));
 	}
 	
 	@Override
-	public final void run(CachedOutput cache) throws IOException
+	public final CompletableFuture<?> run(CachedOutput cache)
 	{
 		addEntries();
 		
-		Path outputFolder = generator.getOutputFolder();
-		
-		Path jsonPath = outputFolder.resolve("data/" + modid + "/" + RecipeGeneratedCostHandler.PATH);
+		Path jsonPath = this.output.getOutputFolder(PackOutput.Target.DATA_PACK)
+				.resolve(modid).resolve(RecipeGeneratedCostHandler.PATH);
 		
 		JsonElement json = serialize();
-		DataProvider.saveStable(cache, json, jsonPath);
+		return DataProvider.saveStable(cache, json, jsonPath);
 	}
 	
 	private JsonElement serialize()
@@ -94,7 +97,8 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 	{
 		JsonObject entry = new JsonObject();
 		entry.addProperty("source_type", "recipe_serializer");
-		entry.addProperty("source", ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer).toString());
+		ResourceLocation serializerId = Objects.requireNonNull(ForgeRegistries.RECIPE_SERIALIZERS.getKey(serializer));
+		entry.addProperty("source", serializerId.toString());
 		addEntry(entry, interpreter);
 	}
 	

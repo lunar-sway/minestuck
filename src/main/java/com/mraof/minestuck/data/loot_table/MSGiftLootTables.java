@@ -3,11 +3,12 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.consort.EnumConsort;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.MSTags;
-import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.item.loot.LandTableLootEntry;
 import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.item.loot.conditions.ConsortLootCondition;
+import com.mraof.minestuck.util.MSTags;
+import com.mraof.minestuck.world.lands.LandTypes;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -27,12 +28,11 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static com.mraof.minestuck.data.loot_table.MSChestLootTables.locationForTerrain;
 import static com.mraof.minestuck.data.loot_table.MSChestLootTables.locationForTitle;
 
-public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>
+public class MSGiftLootTables implements LootTableSubProvider
 {
 	private static final ResourceLocation COLD_CAKE = new ResourceLocation("minestuck", "gameplay/special/cold_cake");
 	private static final ResourceLocation HOT_CAKE = new ResourceLocation("minestuck", "gameplay/special/hot_cake");
@@ -42,7 +42,7 @@ public class MSGiftLootTables implements Consumer<BiConsumer<ResourceLocation, L
 	public static final String MAIN_POOL = "main", SPECIAL_POOL = "special";
 	
 	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(COLD_CAKE, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("blue_cake").setRolls(ConstantValue.exactly(1))

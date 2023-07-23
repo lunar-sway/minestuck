@@ -33,5 +33,6 @@
       "name": "code",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/lotus_flower_default"
 }

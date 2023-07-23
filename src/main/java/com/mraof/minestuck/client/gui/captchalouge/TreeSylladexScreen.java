@@ -1,12 +1,12 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus;
 import com.mraof.minestuck.inventory.captchalogue.TreeModus.TreeNode;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -37,14 +37,14 @@ public class TreeSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float f)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float f)
 	{
-		guiButton.x = (width - GUI_WIDTH)/2 + 15;
-		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
+		guiButton.setX((width - GUI_WIDTH)/2 + 15);
+		guiButton.setY((height - GUI_HEIGHT)/2 + 175);
 		boolean autobalance = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.autoBalance : MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(autobalance ? AUTOBALANCE_ON : AUTOBALANCE_OFF));
 		guiButton.active = MinestuckConfig.SERVER.treeModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(poseStack, mouseX, mouseY, f);
+		super.render(guiGraphics, mouseX, mouseY, f);
 	}
 	
 	@Override
@@ -85,11 +85,11 @@ public class TreeSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(PoseStack poseStack, int mouseX, int mouseY)
+	public void drawGuiMap(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		super.drawGuiMap(poseStack, mouseX, mouseY);
+		super.drawGuiMap(guiGraphics, mouseX, mouseY);
 		if(guiIndexList[0] != null)
-			drawNodeLines(poseStack, 0, 0);
+			drawNodeLines(guiGraphics, 0, 0);
 	}
 	
 	private void changeSetting()
@@ -101,7 +101,7 @@ public class TreeSylladexScreen extends SylladexScreen
 		}
 	}
 	
-	protected void drawNodeLines(PoseStack poseStack, int index, int depth)
+	protected void drawNodeLines(GuiGraphics guiGraphics, int index, int depth)
 	{
 		if(depth >= maxDepth)
 			return;
@@ -113,15 +113,15 @@ public class TreeSylladexScreen extends SylladexScreen
 			GuiCard other = guiIndexList[index*2 + 1];
 			
 			if(mapX < card.xPos + 10 && mapX + mapWidth > card.xPos + 9 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT)
-				fill(poseStack, card.xPos + 9 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 10 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				guiGraphics.fill(card.xPos + 9 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 10 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < card.xPos + 10 && mapX + mapWidth > other.xPos + 10 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(poseStack, Math.max(0, other.xPos - mapX + 10), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, card.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				guiGraphics.fill(Math.max(0, other.xPos - mapX + 10), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, card.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 11 && mapX + mapWidth > other.xPos + 10 && mapY < other.yPos && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(poseStack, other.xPos + 10 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 11 - mapX, other.yPos - mapY, 0xFF000000);
+				guiGraphics.fill( other.xPos + 10 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 11 - mapX, other.yPos - mapY, 0xFF000000);
 			
-			drawNodeLines(poseStack, index*2 + 1, depth + 1);
+			drawNodeLines(guiGraphics, index*2 + 1, depth + 1);
 		}
 		
 		if(guiIndexList[index*2 + 2] != null)
@@ -129,19 +129,19 @@ public class TreeSylladexScreen extends SylladexScreen
 			GuiCard other = guiIndexList[index*2 + 2];
 			
 			if(mapX < card.xPos + 12 && mapX + mapWidth > card.xPos + 11 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT)
-				fill(poseStack, card.xPos + 11 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 12 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				guiGraphics.fill(card.xPos + 11 - mapX, card.yPos + CARD_HEIGHT - mapY, card.xPos + 12 - mapX, card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 10 && mapX + mapWidth > card.xPos + 11 && mapY < card.yPos + CARD_HEIGHT + 6 && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(poseStack, Math.max(0, card.xPos + 11 - mapX), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, other.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
+				guiGraphics.fill(Math.max(0, card.xPos + 11 - mapX), card.yPos + CARD_HEIGHT - mapY + 5, Math.min(mapWidth, other.xPos + 10 - mapX), card.yPos + CARD_HEIGHT - mapY + 6, 0xFF000000);
 			
 			if(mapX < other.xPos + 10 && mapX + mapWidth > other.xPos + 9 && mapY < other.yPos && mapY + mapHeight > card.yPos + CARD_HEIGHT + 5)
-				fill(poseStack, other.xPos + 9 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 10 - mapX, other.yPos - mapY, 0xFF000000);
+				guiGraphics.fill(other.xPos + 9 - mapX, card.yPos + CARD_HEIGHT + 5 - mapY, other.xPos + 10 - mapX, other.yPos - mapY, 0xFF000000);
 			
-			drawNodeLines(poseStack, index*2 + 1, depth + 1);
+			drawNodeLines(guiGraphics, index*2 + 1, depth + 1);
 		}
 		
 		if(guiIndexList[index*2 + 2] != null)
-			drawNodeLines(poseStack, index*2 + 2, depth + 1);
+			drawNodeLines(guiGraphics, index*2 + 2, depth + 1);
 		
 	}
 	

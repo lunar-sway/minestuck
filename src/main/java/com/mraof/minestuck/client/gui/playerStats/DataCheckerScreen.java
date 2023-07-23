@@ -2,20 +2,19 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.network.DataCheckerPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -69,8 +68,8 @@ public class DataCheckerScreen extends Screen
 			final int id = i;
 			contentButtons[id] = addRenderableWidget(new ExtendedButton(xOffset + 5, yOffset + LIST_Y + i*22, 180, 20, Component.empty(), button -> contentButton(id)));
 		}
-		returnButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 25, yOffset + 5, 18, 18, Component.empty(), button -> goBack()));
-		refreshButton = addRenderableWidget(new Button(xOffset + GUI_WIDTH - 45, yOffset + 5, 18, 18, Component.empty(), button -> refresh()));
+		returnButton = addRenderableWidget(Button.builder(Component.empty(), button -> goBack()).pos(xOffset + GUI_WIDTH - 25, yOffset + 5).size(18, 18).build());
+		refreshButton = addRenderableWidget(Button.builder(Component.empty(), button -> refresh()).pos(xOffset + GUI_WIDTH - 45, yOffset + 5).size(18, 18).build());
 		
 		if(activeComponent == null)
 			MSPacketHandler.sendToServer(DataCheckerPacket.request());
@@ -79,7 +78,7 @@ public class DataCheckerScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
@@ -97,50 +96,42 @@ public class DataCheckerScreen extends Screen
 			}
 		}
 		
-		renderBackground(poseStack);
+		renderBackground(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
-		blit(poseStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, icons);
 		if(this.returnButton.active)
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
-		blit(poseStack, xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
+		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 24, yOffset + 6, 240, 0, 16, 16);
 		
 		if(this.refreshButton.active)
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 		else RenderSystem.setShaderColor(.5F, .5F, .5F, 1);
-		blit(poseStack, xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
+		guiGraphics.blit(icons, xOffset + GUI_WIDTH - 44, yOffset + 6, 224, 0, 16, 16);
 		
 		if(guiComponent != null)
 		{
 			List<IDataComponent> list = guiComponent.getComponentList();
 			for(int i = 0; i < 5; i++)
 			{
-				font.draw(poseStack, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight/2, 0);
+				guiGraphics.drawString(font, guiComponent.getName(), xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
 				IDataComponent component = i + index < list.size() ? list.get(i + index) : null;
 				if(component != null && !component.isButton())
 				{
-					RenderSystem.setShader(GameRenderer::getPositionTexShader);
 					RenderSystem.setShaderColor(1, 1, 1, 1);
-					RenderSystem.setShaderTexture(0, guiBackground);
-					blit(poseStack, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
-					font.draw(poseStack, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight/2 + i*22, 0);
+					guiGraphics.blit(guiBackground, xOffset + 5, yOffset + LIST_Y + i*22, 0, 236, 180, 20);
+					guiGraphics.drawString(font, component.getName(), xOffset + 9, yOffset + LIST_Y + 10 - font.lineHeight/2 + i*22, 0, false);
 				}
 			}
-		} else font.draw(poseStack, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight/2, 0);
+		} else guiGraphics.drawString(font, "Retrieving data from server...", xOffset + 9, yOffset + 15 - font.lineHeight/2, 0, false);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
 		int textureIndex = canScroll ? 232 : 244;
-		blit(poseStack, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
+		guiGraphics.blit(guiBackground, (width - GUI_WIDTH)/2 + 190, (height - GUI_HEIGHT)/2 + LIST_Y + 1 + (int) displayIndex*91, textureIndex, 0, 12, 15);
 	}
 	
 	@Override

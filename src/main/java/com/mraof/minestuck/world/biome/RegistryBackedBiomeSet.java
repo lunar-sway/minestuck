@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.biome;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.List;
@@ -16,13 +16,13 @@ import java.util.List;
  */
 public final class RegistryBackedBiomeSet implements LandBiomeAccess
 {
-	public final Holder<Biome> NORMAL, ROUGH, OCEAN;
+	public final Holder.Reference<Biome> NORMAL, ROUGH, OCEAN;
 	
-	public RegistryBackedBiomeSet(LandBiomeSetType biomes, Registry<Biome> registry)
+	public RegistryBackedBiomeSet(LandBiomeSetType biomes, HolderGetter<Biome> registry)
 	{
-		NORMAL = registry.getOrCreateHolderOrThrow(biomes.NORMAL);
-		ROUGH = registry.getOrCreateHolderOrThrow(biomes.ROUGH);
-		OCEAN = registry.getOrCreateHolderOrThrow(biomes.OCEAN);
+		NORMAL = registry.getOrThrow(biomes.NORMAL);
+		ROUGH = registry.getOrThrow(biomes.ROUGH);
+		OCEAN = registry.getOrThrow(biomes.OCEAN);
 	}
 	
 	@Override

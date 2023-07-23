@@ -4,22 +4,35 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristType.SpawnCategory;
 import com.mraof.minestuck.alchemy.GristTypes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
+import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeRegistryTagsProvider;
 import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.alchemy.GristTypes.*;
 
-public final class MSGristTypeTagsProvider extends ForgeRegistryTagsProvider<GristType>
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public final class MSGristTypeTagsProvider extends IntrinsicHolderTagsProvider<GristType>
 {
-	public MSGristTypeTagsProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public MSGristTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(pGenerator, GristTypes.getRegistry(), Minestuck.MOD_ID, existingFileHelper);
+		super(output, GRIST_KEY, lookupProvider, MSGristTypeTagsProvider::keyForGristType, Minestuck.MOD_ID, existingFileHelper);
+	}
+	
+	private static ResourceKey<GristType> keyForGristType(GristType gristType)
+	{
+		return GristTypes.getRegistry().getResourceKey(gristType).orElseThrow();
 	}
 	
 	@Override
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider provider)
 	{
 		tag(SpawnCategory.COMMON.getTagKey())
 				.add(AMBER.get(), CAULK.get(), CHALK.get(), IODINE.get(), SHALE.get(), TAR.get())

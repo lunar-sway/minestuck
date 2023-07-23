@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "minestuck:pink_stone_brick_slab"
@@ -11,5 +12,6 @@
   ],
   "result": {
     "item": "minestuck:chiseled_pink_stone_bricks"
-  }
+  },
+  "show_notification": true
 }

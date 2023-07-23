@@ -153,7 +153,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 		int y = 0;
 		
 		float f = (3 - z) * 0.25F;
-		if(this.getBlock(level, x, y, z, boundingBox).getMaterial().isSolid())
+		if(this.getBlock(level, x, y, z, boundingBox).isSolid())
 			f -= 0.25F;
 		boolean b = true;
 		do
@@ -169,7 +169,7 @@ public class SmallRuinPiece extends ScatteredFeaturePiece
 			}
 			
 			y--;
-		} while(this.boundingBox.minY() + y >= 0 && !this.getBlock(level, x, y, z, boundingBox).getMaterial().isSolid());
+		} while(this.boundingBox.minY() + y >= 0 && !this.getBlock(level, x, y, z, boundingBox).isSolid());
 		
 		return b;
 	}

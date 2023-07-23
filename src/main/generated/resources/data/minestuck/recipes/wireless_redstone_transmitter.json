@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "c": {
       "item": "minecraft:comparator"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "minestuck:wireless_redstone_transmitter"
-  }
+  },
+  "show_notification": true
 }

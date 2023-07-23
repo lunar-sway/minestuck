@@ -54,5 +54,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:blocks/pink_stone_lapis_ore"
 }

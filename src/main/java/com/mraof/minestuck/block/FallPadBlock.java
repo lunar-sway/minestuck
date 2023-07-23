@@ -1,7 +1,6 @@
 package com.mraof.minestuck.block;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,7 +24,7 @@ public class FallPadBlock extends Block
 			super.fallOn(level, state, pos, entityIn, fallDistance);
 		} else
 		{
-			entityIn.causeFallDamage(fallDistance, 0.0F, DamageSource.FALL);
+			entityIn.causeFallDamage(fallDistance, 0.0F, level.damageSources().fall());
 		}
 	}
 }

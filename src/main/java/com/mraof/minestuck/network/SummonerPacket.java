@@ -55,9 +55,9 @@ public class SummonerPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner)
+			if(player.level().getBlockEntity(beBlockPos) instanceof SummonerBlockEntity summoner)
 			{
 				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
@@ -66,9 +66,9 @@ public class SummonerPacket implements PlayToServerPacket
 					summoner.setSummonRange(summonRange);
 					//Imitates the structure block to ensure that changes are sent client-side
 					summoner.setChanged();
-					player.level.setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
-					BlockState state = player.level.getBlockState(beBlockPos);
-					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
+					player.level().setBlock(beBlockPos, summoner.getBlockState().setValue(SummonerBlock.UNTRIGGERABLE, isUntriggerable), Block.UPDATE_ALL);
+					BlockState state = player.level().getBlockState(beBlockPos);
+					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

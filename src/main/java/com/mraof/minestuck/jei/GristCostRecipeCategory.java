@@ -1,11 +1,10 @@
 package com.mraof.minestuck.jei;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import mezz.jei.api.constants.VanillaTypes;
@@ -18,6 +17,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -80,12 +80,12 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	}
 	
 	@Override
-	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, PoseStack poseStack, double mouseX, double mouseY)
+	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY)
 	{
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			GuiUtil.drawGristBoard(poseStack, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(guiGraphics, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			GuiUtil.drawGristBoard(poseStack, new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(guiGraphics, new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
 	}
 	
 	

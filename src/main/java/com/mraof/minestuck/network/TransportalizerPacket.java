@@ -36,7 +36,7 @@ public class TransportalizerPacket implements PlayToServerPacket
 	{
 		if(player.getCommandSenderWorld().isAreaLoaded(pos, 0))
 		{
-			if(player.level.getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
+			if(player.level().getBlockEntity(pos) instanceof TransportalizerBlockEntity transportalizer)
 			{
 				transportalizer.setDestId(destId);
 			}

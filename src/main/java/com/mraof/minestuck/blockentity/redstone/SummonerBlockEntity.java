@@ -60,10 +60,10 @@ public class SummonerBlockEntity extends BlockEntity
 				double newPosY = summonerBlockPos.getY() + (level.random.nextDouble() - 0.5D) * summonRange;
 				double newPosZ = summonerBlockPos.getZ() + (level.random.nextDouble() - 0.5D) * summonRange;
 				if(level.noCollision(type.getAABB(newPosX, newPosY, newPosZ)) && //checks that entity wont suffocate
-						SpawnPlacements.Type.ON_GROUND.canSpawnAt(level, new BlockPos(newPosX, newPosY, newPosZ), type)) //helps spawn entity on a valid floor
+						SpawnPlacements.Type.ON_GROUND.canSpawnAt(level, BlockPos.containing(newPosX, newPosY, newPosZ), type)) //helps spawn entity on a valid floor
 				{
-					BlockPos newBlockPos = new BlockPos(newPosX, newPosY, newPosZ);
-					type.spawn(level, null, null, null, newBlockPos, MobSpawnType.MOB_SUMMONED, true, true);
+					BlockPos newBlockPos = BlockPos.containing(newPosX, newPosY, newPosZ);
+					type.spawn(level, (CompoundTag) null, null, newBlockPos, MobSpawnType.MOB_SUMMONED, true, true);
 					
 					if(playParticles)
 					{

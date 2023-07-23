@@ -12,7 +12,7 @@ import net.minecraft.SharedConstants;
 import net.minecraft.Util;
 import net.minecraft.client.GameNarrator;
 import net.minecraft.client.StringSplitter;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.font.TextFieldHelper;
 import net.minecraft.client.gui.screens.Screen;
@@ -74,54 +74,43 @@ public class StoneTabletScreen extends Screen
 	}
 	
 	@Override
-	public void removed()
-	{
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(false);
-	}
-	
-	@Override
 	protected void init()
 	{
-		this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-		
-		
 		if(canEdit)
 		{
-			this.buttonDone = this.addRenderableWidget(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 98, 20, Component.translatable("gui.done"), (button) ->
+			this.buttonDone = this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), (button) ->
 			{
 				this.minecraft.setScreen(null);
 				this.sendTabletToServer();
-			}));
-			this.buttonCancel = this.addRenderableWidget(new Button(this.width / 2 + 2, GUI_HEIGHT + 4, 98, 20, Component.translatable("gui.cancel"), (button) ->
+			}).pos(this.width / 2 - 100, GUI_HEIGHT + 4).size(98, 20).build());
+			this.buttonCancel = this.addRenderableWidget(Button.builder(Component.translatable("gui.cancel"), (button) ->
 			{
 				minecraft.setScreen(null);
-			}));
+			}).pos(this.width / 2 + 2, GUI_HEIGHT + 4).size(98, 20).build());
 		} else
 		{
-			this.addRenderableWidget(new Button(this.width / 2 - 100, GUI_HEIGHT + 4, 200, 20, Component.translatable("gui.done"), button -> {
+			this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> {
 				this.minecraft.setScreen(null);
-			}));
+			}).pos(this.width / 2 - 100, GUI_HEIGHT + 4).size(200, 20).build());
 		}
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		this.setFocused(null);
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, TABLET_TEXTURES);
-		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(TABLET_TEXTURES, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		{
 			
 			MutableInt lineY = new MutableInt();
 			font.getSplitter().splitLines(text, TEXT_WIDTH, Style.EMPTY, false, (style, start, end) -> {
 				Component line = Component.literal(text.substring(start, end)).setStyle(style);
-				font.draw(poseStack, line, (this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF);
+				guiGraphics.drawString(font, line, (this.width - GUI_WIDTH) / 2 + TEXT_OFFSET_X, lineY.intValue() + TEXT_OFFSET_Y, 0xFFFFFF, false);
 				lineY.add(font.lineHeight);
 			});
 			
@@ -137,13 +126,13 @@ public class StoneTabletScreen extends Screen
 				
 				StoneTabletUtils.pointerToPrecise(point, width);
 				if(pageEditor.getCursorPos() < text.length())
-					GuiComponent.fill(poseStack, point.x, point.y - 1, point.x + 1, point.y + font.lineHeight, 0xFFFFFF);
+					guiGraphics.fill(point.x, point.y - 1, point.x + 1, point.y + font.lineHeight, 0xFFFFFF);
 				else
-					this.font.draw(poseStack, "_", (float) point.x, (float) point.y, 0);
+					guiGraphics.drawString(font, "_", (float) point.x, (float) point.y, 0, false);
 			}
 		}
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
@@ -190,7 +179,6 @@ public class StoneTabletScreen extends Screen
 		
 		StoneTabletUtils.pointerToPrecise(point, width);
 		StoneTabletUtils.pointerToPrecise(point1, width);
-		RenderSystem.disableTexture();
 		RenderSystem.enableColorLogicOp();
 		RenderSystem.logicOp(GlStateManager.LogicOp.OR_REVERSE);
 		
@@ -207,7 +195,6 @@ public class StoneTabletScreen extends Screen
 		tesselator.end();
 		
 		RenderSystem.disableColorLogicOp();
-		RenderSystem.enableTexture();
 	}
 	
 	@Override

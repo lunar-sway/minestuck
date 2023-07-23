@@ -37,25 +37,23 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Stores a cruxite dowel and through use of interface can take a players grist and create new copies of the item the dowel encodes.
  * When a new dowel is placed, animation plays where the arm "scans" the dowels code. Core Editmode deployable
  */
-public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, IAnimatable
+public class AlchemiterBlockEntity extends BlockEntity implements IColored, GristWildcardHolder, GeoBlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	private static final RawAnimation SCAN_ANIMATION = RawAnimation.begin().then("scan", Animation.LoopType.PLAY_ONCE);
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	
 	private GristType wildcardGrist = GristTypes.BUILD.get();
 	protected boolean broken = false;
@@ -347,25 +345,25 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return factory;
+		return cache;
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(new AnimationController<>(this, "scanAnimation", 0, this::scanAnimation));
+		controllers.add(new AnimationController<>(this, "scanAnimation", 0, this::scanAnimation));
 	}
 	
-	private <E extends BlockEntity & IAnimatable> PlayState scanAnimation(AnimationEvent<E> event)
+	private <E extends BlockEntity & GeoAnimatable> PlayState scanAnimation(AnimationState<E> state)
 	{
 		if(!this.dowel.isEmpty())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("scan", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(SCAN_ANIMATION);
 			return PlayState.CONTINUE;
 		}
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 }

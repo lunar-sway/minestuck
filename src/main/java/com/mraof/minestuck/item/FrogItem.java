@@ -3,7 +3,6 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.entity.FrogEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -13,7 +12,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -31,7 +29,7 @@ public class FrogItem extends Item
 	{
 		super(properties);
 	}
-	
+	/*TODO
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
@@ -49,7 +47,7 @@ public class FrogItem extends Item
 			}
 		}
 	}
-	
+	*/
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
@@ -165,7 +163,7 @@ public class FrogItem extends Item
 			frog.moveTo(x, y, z, Mth.wrapDegrees(level.random.nextFloat() * 360.0F), 0.0F);
 			frog.yHeadRot = frog.getYRot();
 			frog.yBodyRot = frog.getYRot();
-			frog.finalizeSpawn(level, level.getCurrentDifficultyAt(new BlockPos(x,y,z)), null, null, null);
+			frog.finalizeSpawn(level, level.getCurrentDifficultyAt(BlockPos.containing(x,y,z)), null, null, null);
 
 			frog.playAmbientSound();
 

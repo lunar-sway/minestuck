@@ -26,5 +26,6 @@
     [
       "use_artifact"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

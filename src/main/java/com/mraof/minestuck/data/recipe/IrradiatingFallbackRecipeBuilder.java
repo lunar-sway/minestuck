@@ -2,14 +2,15 @@ package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import net.minecraft.core.Registry;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class IrradiatingFallbackRecipeBuilder
@@ -45,7 +46,8 @@ public class IrradiatingFallbackRecipeBuilder
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			jsonObject.addProperty("fallback_type", Registry.RECIPE_TYPE.getKey(fallbackType).toString());
+			ResourceLocation typeLocation = Objects.requireNonNull(ForgeRegistries.RECIPE_TYPES.getKey(fallbackType));
+			jsonObject.addProperty("fallback_type", typeLocation.toString());
 		}
 		
 		@Override

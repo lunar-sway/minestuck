@@ -112,12 +112,12 @@ public class TowerFeature extends Feature<NoneFeatureConfiguration>
 		for(StructureTemplate.StructureBlockInfo blockInfo : template.filterBlocks(structurePos, settings, Blocks.STRUCTURE_BLOCK))
 		{
 			//noinspection ConstantConditions
-			if(blockInfo.nbt != null)
+			if(blockInfo.nbt() != null)
 			{
-				StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt.getString("mode"));
+				StructureMode structuremode = StructureMode.valueOf(blockInfo.nbt().getString("mode"));
 				if (structuremode == StructureMode.DATA)
 				{
-					handleDataMarker(level, rand, blockInfo.pos, blockInfo.nbt.getString("metadata"));
+					handleDataMarker(level, rand, blockInfo.pos(), blockInfo.nbt().getString("metadata"));
 				}
 			}
 		}

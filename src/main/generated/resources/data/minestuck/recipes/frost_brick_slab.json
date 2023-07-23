@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "minestuck:frost_bricks"
@@ -11,5 +12,6 @@
   "result": {
     "count": 6,
     "item": "minestuck:frost_brick_slab"
-  }
+  },
+  "show_notification": true
 }

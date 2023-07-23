@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "minestuck:strawberry_chunk"
@@ -11,5 +12,6 @@
   ],
   "result": {
     "item": "minestuck:strawberry"
-  }
+  },
+  "show_notification": true
 }

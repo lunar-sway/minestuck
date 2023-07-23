@@ -29,7 +29,7 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 	{
 		if(entity instanceof ServerPlayer player)
 		{
-			ChunkPos chunkpos = new ChunkPos(new BlockPos(x, y, z));
+			ChunkPos chunkpos = new ChunkPos(BlockPos.containing(x, y, z));
 			level.getChunkSource().addRegionTicket(TicketType.POST_TELEPORT, chunkpos, 1, player.getId());
 			player.stopRiding();
 			if(player.isSleeping())
@@ -37,9 +37,9 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 				player.stopSleeping();
 			}
 			
-			boolean toNewDim = player.level != level;
+			boolean toNewDim = player.level() != level;
 			player.teleportTo(level, x, y, z, yaw, pitch);
-			if(toNewDim && player.level != level)	//Was teleporting to a new dimension, but the teleportation did not go through
+			if(toNewDim && player.level() != level)	//Was teleporting to a new dimension, but the teleportation did not go through
 				return null;
 			
 			player.isChangingDimension = true;
@@ -53,7 +53,7 @@ public class Teleport	//TODO there might still be things that vanilla does that 
 			yaw = Mth.wrapDegrees(yaw);	//I think we can trust the function input enough to not need this, but better safe then sorry?
 			pitch = Mth.wrapDegrees(pitch);
 			pitch = Mth.clamp(pitch, -90.0F, 90.0F);
-			if(level == entity.level)
+			if(level == entity.level())
 			{
 				entity.moveTo(x, y, z, yaw, pitch);
 				entity.setYHeadRot(yaw);

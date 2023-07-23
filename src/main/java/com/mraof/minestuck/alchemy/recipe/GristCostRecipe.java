@@ -12,6 +12,7 @@ import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -69,7 +70,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	@Override
-	public ItemStack assemble(Container inv)
+	public ItemStack assemble(Container inv, RegistryAccess registryAccess)
 	{
 		return inv.getItem(0);
 	}
@@ -87,7 +88,7 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	}
 	
 	@Override
-	public ItemStack getResultItem()
+	public ItemStack getResultItem(RegistryAccess registryAccess)
 	{
 		return ItemStack.EMPTY;
 	}

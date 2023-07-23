@@ -337,5 +337,6 @@
       "name": "block",
       "rolls": 2.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/consort_general"
 }

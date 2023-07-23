@@ -53,9 +53,9 @@ public class ItemMagnetBlock extends DirectionalCustomShapeBlock implements Enti
 		{
 			level.setBlock(pos, state.cycle(REVERSE_POLARITY), Block.UPDATE_ALL);
 			if(state.getValue(REVERSE_POLARITY))
-				level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1.5F);
+				level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1.5F);
 			else
-				level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 0.5F);
+				level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 0.5F);
 			return InteractionResult.sidedSuccess(level.isClientSide);
 		}
 		

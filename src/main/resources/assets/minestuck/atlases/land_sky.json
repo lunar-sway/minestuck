@@ -1,0 +1,19 @@
+{
+    "sources": [
+        {
+            "type": "single",
+            "resource": "minestuck:environment/skaia",
+            "sprite": "minestuck:skaia"
+        },
+        {
+            "type": "directory",
+            "source": "environment/planets",
+            "prefix": "planets/"
+        },
+        {
+            "type": "directory",
+            "source": "environment/overlays",
+            "prefix": "overlays/"
+        }
+    ]
+}

@@ -31,7 +31,7 @@ public class SetRungCommand
 			PlayerSavedData.getData(player).getEcheladder().setByCommand(rung, progress);
 		}
 		
-		source.sendSuccess(Component.translatable(SUCCESS, players.size(), rung, progress), true);
+		source.sendSuccess(() -> Component.translatable(SUCCESS, players.size(), rung, progress), true);
 		return players.size();
 	}
 }

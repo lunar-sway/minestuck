@@ -147,7 +147,7 @@ public class EditData
 		
 		private PlayerRecovery(DecoyEntity decoy)
 		{
-			dimension = decoy.level.dimension();
+			dimension = decoy.level().dimension();
 			posX = decoy.getX();
 			posY = decoy.getY();
 			posZ = decoy.getZ();
@@ -206,7 +206,7 @@ public class EditData
 				dim = Level.OVERWORLD;
 			}
 			ServerLevel world = player.server.getLevel(dim);
-			if(player.level.dimension() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
+			if(player.level().dimension() != dim && (world == null || Teleport.teleportEntity(player, world) == null))
 			{
 				if(throwException)
 					throw new IllegalStateException("Unable to teleport editmode player "+player.getGameProfile().getName()+" to their original dimension with world: " + world);

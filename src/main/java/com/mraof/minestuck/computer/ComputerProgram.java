@@ -1,9 +1,9 @@
 package com.mraof.minestuck.computer;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public abstract class ComputerProgram
 	 * Called when the gui is painted. This may not be a good way of doing this,
 	 * but I do not know since I do not know very much about minecraft graphics.
 	 */
-	public abstract void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be);
+	public abstract void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be);
 	
 	/**
 	 * @return desktop icon for this program.

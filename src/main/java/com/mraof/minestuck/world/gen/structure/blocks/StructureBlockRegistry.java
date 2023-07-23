@@ -3,7 +3,7 @@ package com.mraof.minestuck.world.gen.structure.blocks;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.core.Direction;
-import net.minecraft.data.worldgen.features.OreFeatures;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockStateMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -156,7 +157,7 @@ public final class StructureBlockRegistry
 	
 	//Nonstatic stuff
 	private final Map<String, BlockState> blockRegistry = new HashMap<>();
-	private RuleTest groundType = OreFeatures.NATURAL_STONE;
+	private RuleTest groundType = new TagMatchTest(BlockTags.BASE_STONE_OVERWORLD);
 	
 	public void setBlock(String name, Supplier<? extends Block> block)
 	{

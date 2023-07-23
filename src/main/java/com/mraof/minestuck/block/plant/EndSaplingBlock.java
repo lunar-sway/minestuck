@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.plant;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.feature.tree.EndTree;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -19,6 +20,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 {
 	public static final BooleanProperty ALPHA = MSProperties.ALPHA;
@@ -41,7 +46,7 @@ public class EndSaplingBlock extends BushBlock implements BonemealableBlock
 	}
 	
 	@Override
-	public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient)
+	public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state, boolean isClient)
 	{
 		return true;
 	}

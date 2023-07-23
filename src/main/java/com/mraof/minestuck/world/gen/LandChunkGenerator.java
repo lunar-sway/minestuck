@@ -13,76 +13,65 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedRandomList;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.RandomState;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
-	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> commonCodec(instance).and(instance.group(
-					RegistryOps.retrieveRegistry(Registry.NOISE_REGISTRY).forGetter(generator -> generator.noises),
-					RegistryOps.retrieveRegistry(Registry.DENSITY_FUNCTION_REGISTRY).forGetter(generator -> generator.densityFunctions),
-					LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
-					RegistryOps.retrieveRegistry(Registry.BIOME_REGISTRY).forGetter(generator -> generator.biomes),
-					RegistryOps.retrieveRegistry(Registry.PLACED_FEATURE_REGISTRY).forGetter(generator -> generator.features)
-			)).apply(instance, instance.stable(LandChunkGenerator::create)));
+	public static final Codec<LandChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			RegistryOps.retrieveGetter(Registries.NOISE),
+			RegistryOps.retrieveGetter(Registries.DENSITY_FUNCTION),
+			LandTypePair.Named.CODEC.fieldOf("named_land_types").forGetter(generator -> generator.namedTypes),
+			RegistryOps.retrieveGetter(Registries.BIOME),
+			RegistryOps.retrieveGetter(Registries.PLACED_FEATURE),
+			RegistryOps.retrieveGetter(Registries.CONFIGURED_CARVER)
+	).apply(instance, instance.stable(LandChunkGenerator::create)));
 	
 	public final LandTypePair.Named namedTypes;
 	public final StructureBlockRegistry blockRegistry;
 	public final WorldGenBiomeSet biomeSet;
 	public final GateStructure.PieceFactory gatePiece;
-	private final Registry<Biome> biomes;
-	private final Registry<PlacedFeature> features;
 	
-	private ChunkPos landGatePosition;
-	protected final Registry<DensityFunction> densityFunctions;
-	
-	public static LandChunkGenerator create(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, Registry<Biome> biomes, Registry<PlacedFeature> features)
+	public static LandChunkGenerator create(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes,
+											HolderGetter<Biome> biomes, HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
 		RegistryBackedBiomeSet biomeSetWrapper = new RegistryBackedBiomeSet(namedTypes.landTypes().getTerrain().getBiomeSet(), biomes);
 		LandGenSettings genSettings = new LandGenSettings(namedTypes.landTypes());
 		
-		WorldGenBiomeSet biomeHolder = new WorldGenBiomeSet(biomeSetWrapper, genSettings, features);
+		WorldGenBiomeSet biomeHolder = new WorldGenBiomeSet(biomeSetWrapper, genSettings, features, carvers);
 		
-		return new LandChunkGenerator(structureSets, noises, densityFunctions, namedTypes, biomeHolder, biomes, features, genSettings);
+		return new LandChunkGenerator(noises, densityFunctions, namedTypes, biomeHolder, genSettings);
 	}
 	
-	private LandChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, WorldGenBiomeSet biomeSet, Registry<Biome> biomes, Registry<PlacedFeature> features, LandGenSettings genSettings)
+	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, WorldGenBiomeSet biomes, LandGenSettings genSettings)
 	{
-		super(structureSets, noises, new LandBiomeSource(biomeSet.baseBiomes, genSettings), biome -> biomeSet.getBiomeFromBase(biome).get().getGenerationSettings(),
+		super(new LandBiomeSource(biomes.baseBiomes, genSettings), biome -> biomes.getBiomeFromBase(biome).get().getGenerationSettings(),
 				genSettings.createDimensionSettings(noises, densityFunctions));
 		
-		this.densityFunctions = densityFunctions;
-		this.biomeSet = biomeSet;
-		this.biomes = biomes;
+		this.biomeSet = biomes;
 		this.namedTypes = namedTypes;
-		this.features = features;
 		this.blockRegistry = genSettings.getBlockRegistry();
 		this.gatePiece = genSettings.getGatePiece();
 	}
@@ -91,6 +80,19 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	protected Codec<? extends LandChunkGenerator> codec()
 	{
 		return CODEC;
+	}
+	
+	@Override
+	public ChunkGeneratorStructureState createState(HolderLookup<StructureSet> structureSetLookup, RandomState randomState, long seed)
+	{
+		List<Holder<StructureSet>> list = structureSetLookup.listElements().filter(structureSet -> hasStructureSet(structureSet.value()))
+				.<Holder<StructureSet>>map(holder -> holder).toList();
+		return new LandStructureState(randomState, biomeSource, seed, list);
+	}
+	
+	private boolean hasStructureSet(StructureSet structureSet)
+	{
+		return structureSet.structures().stream().flatMap(entry -> entry.structure().value().biomes().stream()).anyMatch(biomeSource.possibleBiomes()::contains);
 	}
 	
 	@Override
@@ -105,15 +107,16 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	@Override
 	public Pair<BlockPos, Holder<Structure>> findNearestMapStructure(ServerLevel level, HolderSet<Structure> structureSet, BlockPos pos, int searchRadius, boolean skipKnownStructures)
 	{
+		var state = level.getChunkSource().getGeneratorState();
 		var result = super.findNearestMapStructure(level, structureSet, pos, searchRadius, skipKnownStructures);
 		
-		Optional<Holder<Structure>> optionalGateStructure = this.possibleStructureSets().map(Holder::value)
-				.filter(set -> set.placement().type() == MSStructurePlacements.LAND_GATE.get())
-				.flatMap(set -> set.structures().stream().filter(entry -> structureSet.contains(entry.structure())))
-				.findAny().map(StructureSet.StructureSelectionEntry::structure);
+		if(!(level.getChunkSource().getGeneratorState() instanceof LandStructureState landStructureState))
+			return result;
+		
+		Optional<Holder<Structure>> optionalGateStructure = structureSet.stream().filter(structure -> hasGatePlacement(state, structure)).findAny();
 		
 		return optionalGateStructure.map(gateStructure -> {
-			BlockPos gatePos = getOrFindLandGatePosition(level.getChunkSource().randomState()).getBlockAt(8, 64, 8);
+			BlockPos gatePos = landStructureState.getOrFindLandGatePosition().getBlockAt(8, 64, 8);
 			if(result != null && pos.distSqr(result.getFirst()) < pos.distSqr(gatePos))
 				return result;
 			else
@@ -121,44 +124,8 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 		}).orElse(result);
 	}
 	
-	public ChunkPos getOrFindLandGatePosition(RandomState state)
+	private static boolean hasGatePlacement(ChunkGeneratorStructureState state, Holder<Structure> structure)
 	{
-		if (landGatePosition != null)
-			return landGatePosition;
-		
-		RandomSource worldRand = RandomSource.create(state.legacyLevelSeed());
-		
-		double angle = 2 * Math.PI * worldRand.nextDouble();
-		int radius = 38 + worldRand.nextInt(12);
-		
-		Holder<Biome> normalBiome = biomeSet.baseBiomes.NORMAL;
-		
-		for(; radius < 65; radius += 6)
-		{
-			int posX = (int) Math.round(Math.cos(angle) * radius);
-			int posZ = (int) Math.round(Math.sin(angle) * radius);
-			
-			//TODO Could there be a better way to search for a position? (Look for possible positions with the "surrounded by normal biomes" property rather than pick a random one and then check if it has this property)
-			Pair<BlockPos, Holder<Biome>> result = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0,(posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, state.sampler());
-			
-			if(result != null)
-			{
-				BlockPos pos = result.getFirst();
-				if(getBiomeSource().getBiomesWithin(pos.getX(), 0, pos.getZ(), 16, state.sampler()).stream().allMatch(biome -> biome == normalBiome))
-					return new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
-			}
-		}
-		
-		int posX = (int) Math.round(Math.cos(angle) * radius);
-		int posZ = (int) Math.round(Math.sin(angle) * radius);
-		LOGGER.warn("Did not come across a decent location for land gates. Placing it without regard to any biomes.");
-		
-		Pair<BlockPos, Holder<Biome>> result = getBiomeSource().findBiomeHorizontal((posX << 4) + 8, 0, (posZ << 4) + 8, 96, biome -> biome == normalBiome, worldRand, state.sampler());
-		
-		if(result != null)
-			landGatePosition = new ChunkPos(result.getFirst());
-		else landGatePosition = new ChunkPos(posX, posZ);
-		
-		return landGatePosition;
+		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructurePlacements.LAND_GATE.get());
 	}
 }

@@ -20,21 +20,25 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
-
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.UUID;
 
 @ParametersAreNonnullByDefault
-public class LichEntity extends UnderlingEntity implements IAnimatable
+public class LichEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 10, false, false), 5, 6, 7);
+	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+	private static final RawAnimation CLAW_LEGS_ANIMATION = RawAnimation.begin().then("claw_legs", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation CLAW_ARMS_ANIMATION = RawAnimation.begin().then("claw_arms", Animation.LoopType.PLAY_ONCE);
 	
 	public LichEntity(EntityType<? extends LichEntity> type, Level level)
 	{
@@ -53,7 +57,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		this.goalSelector.addGoal(1, new AttackResistanceGoal());
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, AnimatedAttackWhenInRangeGoal.NO_COOLDOWN, 0, 45.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_PROPERTIES, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, AnimatedAttackWhenInRangeGoal.NO_COOLDOWN, 0, 45.0F));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -100,9 +104,9 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	protected void tickDeath()
 	{
 		this.deathTime++;
-		if (this.deathTime == 90 && !this.level.isClientSide())
+		if (this.deathTime == 90 && !this.level().isClientSide())
 		{
-			this.level.broadcastEntityEvent(this, (byte) 60);
+			this.level().broadcastEntityEvent(this, (byte) 60);
 			this.remove(Entity.RemovalReason.KILLED);
 		}
 	}
@@ -112,7 +116,7 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.die(cause);
 		Entity killer = cause.getEntity();
-		if(this.dead && !this.level.isClientSide)
+		if(this.dead && !this.level().isClientSide)
 		{
 			computePlayerProgress((int) (50 + 2.6 * getGristType().getPower())); //still give xp up to top rung
 			firstKillBonus(killer, EcheladderBonusType.LICH);
@@ -127,61 +131,61 @@ public class LichEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controller)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2.25, LichEntity::attackAnimation));
+		controller.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, LichEntity::idleAnimation));
+		controller.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, LichEntity::walkAnimation));
+		controller.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, LichEntity::deathAnimation));
+		controller.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2.25, LichEntity::attackAnimation));
 	}
 	
-	private static PlayState idleAnimation(AnimationEvent<LichEntity> event)
+	private static PlayState idleAnimation(AnimationState<LichEntity> state)
 	{
-		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		if(state.isMoving() || state.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
+		state.getController().setAnimation(IDLE_ANIMATION);
 		return PlayState.CONTINUE;
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<LichEntity> event)
+	private static PlayState walkAnimation(AnimationState<LichEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		
 		if(action == MobAnimation.Action.CLAW)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_legs", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(CLAW_LEGS_ANIMATION);
 			return PlayState.CONTINUE;
-		} else if(!event.isMoving())
+		} else if(!state.isMoving())
 		{
 			return PlayState.STOP;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<LichEntity> event)
+	private static PlayState deathAnimation(AnimationState<LichEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState attackAnimation(AnimationEvent<LichEntity> event)
+	private static PlayState attackAnimation(AnimationState<LichEntity> state)
 	{
-		if(event.getAnimatable().isActive())
+		if(state.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("claw_arms", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(CLAW_ARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		}
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 	

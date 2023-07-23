@@ -1,9 +1,9 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.attack.AnimatedAttackWhenInRangeGoal;
+import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
-import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.AnimationControllerUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -30,26 +29,30 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, IAnimatable, PhasedMobAnimation.Phases.Holder
+public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Enemy, GeoEntity, PhasedMobAnimation.Phases.Holder
 {
 	private static final EntityDataAccessor<Integer> CURRENT_ACTION = SynchedEntityData.defineId(PawnEntity.class, EntityDataSerializers.INT);
 	
 	public static final PhasedMobAnimation MELEE_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.MELEE, 18, true, false), 3, 6, 7);
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	private static final RawAnimation ARMS_WALKING_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
+	private static final RawAnimation PUNCH_ANIMATION_1 = RawAnimation.begin().then("punch1", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private final RangedAttackGoal aiArrowAttack = new RangedAttackGoal(this, 5 / 4F, 20, 10.0F);
 	private final MeleeAttackGoal aiMeleeAttack = new MeleeAttackGoal(this, 2F, false);
 	
@@ -77,9 +80,9 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return this.factory;
+		return this.cache;
 	}
 	
 	@Override
@@ -120,7 +123,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	@Override
 	public void performRangedAttack(LivingEntity target, float distanceFactor)
 	{
-		Arrow arrow = new Arrow(this.level, this);
+		Arrow arrow = new Arrow(this.level(), this);
 		double d0 = target.getX() - this.getX();
 		double d1 = target.getBoundingBox().minY + (double) (target.getBbHeight() / 3.0F) - arrow.getY();
 		double d2 = target.getZ() - this.getZ();
@@ -150,7 +153,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		//		pawn.initCreature();
 		//		this.worldObj.spawnEntityInWorld(pawn);	
 		//I was just messing around to see if I could make an EntityLiving spawn more EntityLiving, it can
-		this.level.addFreshEntity(arrow);
+		this.level().addFreshEntity(arrow);
 	}
 	
 	/**
@@ -182,12 +185,12 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 		if(knockback > 0)
 			par1Entity.push(-Mth.sin(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (Mth.cos(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
 		
-		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
+		return par1Entity.hurt(this.damageSources().mobAttack(this), damage);
 	}
 	
 	private void setCombatTask()
 	{
-		if(this.level != null && !this.level.isClientSide)
+		if(this.level() != null && !this.level().isClientSide)
 		{
 			this.goalSelector.removeGoal(this.aiArrowAttack);
 			this.goalSelector.removeGoal(this.aiMeleeAttack);
@@ -213,7 +216,7 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	{
 		super.setItemSlot(slotIn, stack);
 		
-		if(!this.level.isClientSide)
+		if(!this.level().isClientSide)
 		{
 			this.setCombatTask();
 		}
@@ -233,52 +236,52 @@ public class PawnEntity extends CarapacianEntity implements RangedAttackMob, Ene
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, PawnEntity::walkArmsAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, PawnEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, PawnEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "swingAnimation", 2, PawnEntity::swingAnimation));
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<PawnEntity> event)
+	private static PlayState walkAnimation(AnimationState<PawnEntity> state)
 	{
-		if(event.isMoving())
+		if(state.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState walkArmsAnimation(AnimationEvent<PawnEntity> event)
+	private static PlayState walkArmsAnimation(AnimationState<PawnEntity> state)
 	{
-		if(event.isMoving() && !event.getAnimatable().isActive())
+		if(state.isMoving() && !state.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(ARMS_WALKING_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<PawnEntity> event)
+	private static PlayState deathAnimation(AnimationState<PawnEntity> event)
 	{
 		if(event.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			event.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState swingAnimation(AnimationEvent<PawnEntity> event)
+	private static PlayState swingAnimation(AnimationState<PawnEntity> event)
 	{
 		if(event.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("punch1", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			event.getController().setAnimation(PUNCH_ANIMATION_1);
 			return PlayState.CONTINUE;
 		}
-		event.getController().markNeedsReload();
+		event.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 }

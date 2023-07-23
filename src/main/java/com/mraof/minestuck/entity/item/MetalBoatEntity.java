@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -109,7 +110,7 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public void setType(Boat.Type pBoatType)
+	public void setVariant(Boat.Type pBoatType)
 	{
 		throw new UnsupportedOperationException();
 	}
@@ -139,7 +140,7 @@ public class MetalBoatEntity extends Boat implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

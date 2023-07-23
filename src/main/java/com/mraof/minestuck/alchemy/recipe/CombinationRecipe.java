@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiCombination;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -21,7 +22,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 {
 	public static ItemStack findResult(ItemCombiner combiner, Level level) {
 		return level.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE.get(), combiner, level)
-				.map(recipe -> recipe.assemble(combiner)).orElse(ItemStack.EMPTY);
+				.map(recipe -> recipe.assemble(combiner, level.registryAccess())).orElse(ItemStack.EMPTY);
 	}
 	
 	private final Ingredient input1, input2;
@@ -45,7 +46,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
-	public ItemStack assemble(ItemCombiner inv)
+	public ItemStack assemble(ItemCombiner inv, RegistryAccess registryAccess)
 	{
 		return output;
 	}
@@ -57,7 +58,7 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
-	public ItemStack getResultItem()
+	public ItemStack getResultItem(RegistryAccess registryAccess)
 	{
 		return ItemStack.EMPTY;
 	}

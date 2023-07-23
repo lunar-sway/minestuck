@@ -21,7 +21,7 @@ public class GrimoireItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		playerIn.level.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE.get(), SoundSource.AMBIENT, 0.5F, 0.8F);
+		playerIn.level().playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_GRIMOIRE_USE.get(), SoundSource.AMBIENT, 0.5F, 0.8F);
 		if(level.isClientSide)
 			playerIn.sendSystemMessage(Component.translatable(getDescriptionId() + ".message"));
 		return super.use(level, playerIn, handIn);

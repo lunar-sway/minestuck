@@ -30,5 +30,6 @@
     "recipes": [
       "minestuck:charcoal_from_wooden_cactus"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

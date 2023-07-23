@@ -16,5 +16,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:blocks/one_second_interval_timed_solid_switch"
 }

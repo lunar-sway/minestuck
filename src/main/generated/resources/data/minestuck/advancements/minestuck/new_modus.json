@@ -25,5 +25,6 @@
     [
       "change_modus_type"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

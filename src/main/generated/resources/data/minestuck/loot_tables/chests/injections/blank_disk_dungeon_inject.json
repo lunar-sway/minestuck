@@ -28,5 +28,6 @@
         "min": 0.0
       }
     }
-  ]
+  ],
+  "random_sequence": "minestuck:chests/injections/blank_disk_dungeon_inject"
 }

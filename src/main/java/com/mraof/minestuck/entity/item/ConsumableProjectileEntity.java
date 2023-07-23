@@ -4,9 +4,9 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.weapon.projectiles.ProjectileDamaging;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -51,26 +51,26 @@ public class ConsumableProjectileEntity extends ThrowableItemProjectile
 		{
 			Entity entity = ((EntityHitResult) result).getEntity();
 			if(entity instanceof UnderlingEntity)
-				entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
+				entity.hurt(this.damageSources().thrown(this, getOwner()), damage * 1.5F);
 			else
-				entity.hurt(DamageSource.thrown(this, getOwner()), damage);
+				entity.hurt(this.damageSources().thrown(this, getOwner()), damage);
 		}
 		if(isNonCreativePlayer(getOwner()))
 		{
 			if(random.nextFloat() < 0.99F)
 			{
-				ItemEntity itemEntity = new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemFromItemStack());
-				level.addFreshEntity(itemEntity);
+				ItemEntity itemEntity = new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItemFromItemStack());
+				level().addFreshEntity(itemEntity);
 			} else
 			{
-				this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_BREAK, SoundSource.NEUTRAL, 0.8F, 1.5F);
+				this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_BREAK, SoundSource.NEUTRAL, 0.8F, 1.5F);
 			}
 		}
 		this.discard();
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

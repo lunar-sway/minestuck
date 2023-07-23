@@ -3,16 +3,16 @@ package com.mraof.minestuck.data.loot_table;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItemTypes;
 import com.mraof.minestuck.item.loot.GristLootModifier;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.CanToolPerformAction;
 
 public class MSLootModifiers extends GlobalLootModifierProvider
 {
-	public MSLootModifiers(DataGenerator gen)
+	public MSLootModifiers(PackOutput output)
 	{
-		super(gen, Minestuck.MOD_ID);
+		super(output, Minestuck.MOD_ID);
 	}
 	
 	@Override

@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -165,7 +164,7 @@ public final class GristCache
 			if(player != null && !overflowedGrist.isEmpty())
 			{
 				int gusherCount = player.getRandom().nextInt(6) > 0 ? 1 : 2;
-				GristEntity.spawnGristEntities(overflowedGrist, player.getLevel(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
+				GristEntity.spawnGristEntities(overflowedGrist, player.level(), player.getX(), player.getY(), player.getZ(), player.getRandom(),
 						entity -> entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.5, 0.5, 1.5)), 90, gusherCount);
 			}
 		}
@@ -245,7 +244,7 @@ public final class GristCache
 		{
 			if(amount.amount() > 0)
 			{
-				long toAdd = Mth.clamp(capacity - target.getGrist(amount.type()), 0, amount.amount());
+				long toAdd = Math.max(0, Math.min(capacity - target.getGrist(amount.type()), amount.amount()));
 				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
 					target.add(amount.type(), toAdd);
@@ -253,7 +252,7 @@ public final class GristCache
 					remainder.add(amount.type(), remainingAmount);
 			} else if(amount.amount() < 0)
 			{
-				long toAdd = Mth.clamp(-target.getGrist(amount.type()), amount.amount(), 0);
+				long toAdd = Math.max(amount.amount(), Math.min(-target.getGrist(amount.type()), 0));
 				long remainingAmount = amount.amount() - toAdd;
 				if(toAdd != 0)
 					target.add(amount.type(), toAdd);

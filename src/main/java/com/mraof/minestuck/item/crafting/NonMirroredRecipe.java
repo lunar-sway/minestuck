@@ -6,6 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -13,9 +14,9 @@ import net.minecraft.world.level.Level;
 
 public class NonMirroredRecipe extends ShapedRecipe
 {
-    public NonMirroredRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
+    public NonMirroredRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result)
     {
-        super(id, group, width, height, ingredients, result);
+        super(id, group, category, width, height, ingredients, result);
     }
     public RecipeSerializer<?> getSerializer() {
         return MSRecipeTypes.NON_MIRRORED.get();
@@ -58,12 +59,12 @@ public class NonMirroredRecipe extends ShapedRecipe
         public NonMirroredRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromJson(recipeId, json);
             
-            return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
+            return new NonMirroredRecipe(recipe.getId(), recipe.getGroup(), recipe.category(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem(null));
         }
         @Override
         public NonMirroredRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             ShapedRecipe recipe = RecipeSerializer.SHAPED_RECIPE.fromNetwork(recipeId, buffer);
-            return new NonMirroredRecipe(recipe.getId() , recipe.getGroup(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem());
+            return new NonMirroredRecipe(recipe.getId() , recipe.getGroup(), recipe.category(), recipe.getRecipeWidth(), recipe.getRecipeHeight(), recipe.getIngredients(), recipe.getResultItem(null));
         }
         @Override
         public void toNetwork(FriendlyByteBuf buffer, NonMirroredRecipe recipe) {

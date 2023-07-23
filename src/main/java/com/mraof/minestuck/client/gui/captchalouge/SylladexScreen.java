@@ -8,10 +8,10 @@ import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -67,15 +67,15 @@ public abstract class SylladexScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int xcor, int ycor, float f)
+	public void render(GuiGraphics guiGraphics, int xcor, int ycor, float f)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		
 		int xOffset = (width - GUI_WIDTH)/2;
 		int yOffset = (height - GUI_HEIGHT)/2;
 		
-		emptySylladex.x = xOffset + 140;
-		emptySylladex.y = yOffset + 175;
+		emptySylladex.setX(xOffset + 140);
+		emptySylladex.setY(yOffset + 175);
 		
 		if(mousePressed)
 		{
@@ -103,35 +103,33 @@ public abstract class SylladexScreen extends Screen
 		modelPoseStack.scale(1 / this.scroll, 1 / this.scroll, 1);
 		RenderSystem.applyModelViewMatrix();
 		
-		drawGuiMap(poseStack, xcor, ycor);
+		drawGuiMap(guiGraphics, xcor, ycor);
 		
 		ArrayList<GuiCard> visibleCards = new ArrayList<>();
 		for(GuiCard card : cards)
-			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth 
+			if(card.xPos + CARD_WIDTH > mapX && card.xPos < mapX + mapWidth
 					&& card.yPos + CARD_HEIGHT > mapY && card.yPos < mapY + mapHeight)
 				visibleCards.add(card);
 		
 		for(GuiCard card : visibleCards)
-			card.drawItemBackground(poseStack);
+			card.drawItemBackground(guiGraphics);
 
 		for(GuiCard card : visibleCards)
-			card.drawItem(poseStack);
+			card.drawItem(guiGraphics);
 		
 		modelPoseStack.popPose();
 		RenderSystem.applyModelViewMatrix();
 		RenderSystem.disableDepthTest();
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, sylladexFrame);
-		blit(poseStack, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(sylladexFrame, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
-		font.draw(poseStack, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040);
+		guiGraphics.drawString(font, getTitle().getString(), xOffset + 15, yOffset + 5, 0x404040, false);
 		
 		String str = ClientPlayerData.getModus().getName().getString();
-		font.draw(poseStack, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040);
+		guiGraphics.drawString(font, str, xOffset + GUI_WIDTH - font.width(str) - 16, yOffset + 5, 0x404040, false);
 		
-		super.render(poseStack, xcor, ycor, f);
+		super.render(guiGraphics, xcor, ycor, f);
 		
 		if(isMouseInContainer(xcor, ycor))
 		{
@@ -141,7 +139,7 @@ public abstract class SylladexScreen extends Screen
 				if(translX >= card.xPos + 2 - mapX && translX < card.xPos + 18 - mapX &&
 						translY >= card.yPos + 7 - mapY && translY < card.yPos + 23 - mapY)
 				{
-					card.drawTooltip(poseStack, xcor, ycor);
+					card.drawTooltip(guiGraphics, xcor, ycor);
 					break;
 				}
 		}
@@ -265,9 +263,9 @@ public abstract class SylladexScreen extends Screen
 		return false;
 	}
 	
-	public void drawGuiMap(PoseStack poseStack, int mouseX, int mouseY)
+	public void drawGuiMap(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		fill(poseStack, 0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
+		guiGraphics.fill(0, 0, mapWidth, mapHeight, 0xFF8B8B8B);
 	}
 	
 	private boolean isMouseInContainer(double xcor, double ycor)
@@ -341,11 +339,9 @@ public abstract class SylladexScreen extends Screen
 			}
 		}
 
-		protected void drawItemBackground(PoseStack poseStack)
+		protected void drawItemBackground(GuiGraphics guiGraphics)
 		{
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
-			RenderSystem.setShaderTexture(0, gui.getCardTexture(this));
 			int minX = 0, maxX = CARD_WIDTH, minY = 0, maxY = CARD_HEIGHT;
 			if(this.xPos + minX < gui.mapX)
 				minX += gui.mapX - (this.xPos + minX);
@@ -355,12 +351,12 @@ public abstract class SylladexScreen extends Screen
 				minY += gui.mapY - (this.yPos + minY);
 			else if(this.yPos + maxY > gui.mapY + gui.mapHeight)
 				maxY -= (this.yPos + maxY) - (gui.mapY + gui.mapHeight);
-			gui.blit(poseStack, this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
+			guiGraphics.blit(gui.getCardTexture(this), this.xPos + minX - gui.mapX, this.yPos + minY - gui.mapY,	//Gui pos
 					gui.getCardTextureX(this) + minX, gui.getCardTextureY(this) + minY,	//Texture pos
 					maxX - minX, maxY - minY);	//Size
 		}
 		
-		protected void drawItem(PoseStack poseStack)
+		protected void drawItem(GuiGraphics guiGraphics)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(!this.item.isEmpty())
@@ -369,15 +365,15 @@ public abstract class SylladexScreen extends Screen
 				int y = this.yPos +7 - gui.mapY;
 				if(x >= gui.mapWidth || y >= gui.mapHeight || x + 16 < 0 || y + 16 < 0)
 					return;
-				gui.minecraft.getItemRenderer().renderAndDecorateItem(item, x, y);
-				gui.minecraft.getItemRenderer().renderGuiItemDecorations(gui.font, item, x, y, null);
+				guiGraphics.renderItem(item, x, y);
+				guiGraphics.renderItemDecorations(gui.font, item, x, y);
 			}
 		}
 		
-		protected void drawTooltip(PoseStack poseStack, int mouseX, int mouseY)
+		protected void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY)
 		{
 			if(!item.isEmpty())
-				gui.renderTooltip(poseStack, item, mouseX, mouseY);
+				guiGraphics.renderTooltip(gui.font, item, mouseX, mouseY);
 		}
 		
 	}
@@ -396,10 +392,10 @@ public abstract class SylladexScreen extends Screen
 		}
 		
 		@Override
-		protected void drawTooltip(PoseStack poseStack, int mouseX, int mouseY) {}
+		protected void drawTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {}
 		
 		@Override
-		protected void drawItem(PoseStack poseStack)
+		protected void drawItem(GuiGraphics guiGraphics)
 		{
 			RenderSystem.setShaderColor(1, 1, 1, 1);
 			if(size > 1)
@@ -411,7 +407,7 @@ public abstract class SylladexScreen extends Screen
 					return;
 				RenderSystem.disableDepthTest();
 				RenderSystem.disableBlend();
-				gui.font.drawShadow(poseStack, stackSize, x, y, 0xC6C6C6);
+				guiGraphics.drawString(gui.font, stackSize, x, y, 0xC6C6C6);
 				RenderSystem.enableDepthTest();
 				RenderSystem.enableBlend();
 			}

@@ -2,14 +2,15 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.LandTableLootEntry;
+import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
 import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.item.loot.LandTableLootEntry;
-import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -24,18 +25,16 @@ import net.minecraftforge.common.Tags;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>
+public class MSChestLootTables implements LootTableSubProvider
 {
 	//Pools in basic medium chest
 	public static final String WEAPONS_POOL = "weapons", SUPPLIES_POOL = "supplies", MISC_POOL = "misc", RARE_POOL = "rare";
 	
-	
 	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))

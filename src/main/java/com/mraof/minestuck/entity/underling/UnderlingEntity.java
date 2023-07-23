@@ -40,22 +40,22 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, IAnimatable
+public abstract class UnderlingEntity extends AttackingAnimatedEntity implements Enemy, GeoEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public static final UUID GRIST_MODIFIER_ID = UUID.fromString("08B6DEFC-E3F4-11EA-87D0-0242AC130003");
 	private static final EntityDataAccessor<String> GRIST_TYPE = SynchedEntityData.defineId(UnderlingEntity.class, EntityDataSerializers.STRING);
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	protected final EntityListFilter attackEntitySelector = new EntityListFilter(new ArrayList<>());    //TODO this filter isn't being saved. F1X PLZ
 	protected boolean fromSpawner;
 	public boolean dropCandy;
@@ -87,9 +87,9 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return this.factory;
+		return this.cache;
 	}
 	
 	protected boolean isAppropriateTarget(LivingEntity entity)
@@ -173,7 +173,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	@Override
 	public boolean doHurtTarget(Entity entityIn)
 	{
-		return entityIn.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+		return entityIn.hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
 	}
 	
 	@Override
@@ -193,7 +193,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 				for(GristAmount gristAmount : grist.asAmounts())
 				{
 					if(gristAmount.amount() > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), gristAmount));
+						this.level().addFreshEntity(new GristEntity(level(), randX(), this.getY(), randZ(), gristAmount));
 				}
 			} else
 			{
@@ -204,14 +204,14 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 					ItemStack candyItem = gristType.type().getCandyItem();
 					candyItem.setCount(candy);
 					if(candy > 0)
-						this.level.addFreshEntity(new ItemEntity(level, randX(), this.getY(), randZ(), candyItem));
+						this.level().addFreshEntity(new ItemEntity(level(), randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level.addFreshEntity(new GristEntity(level, randX(), this.getY(), randZ(), new GristAmount(gristType.type(), gristAmount)));
+						this.level().addFreshEntity(new GristEntity(level(), randX(), this.getY(), randZ(), new GristAmount(gristType.type(), gristAmount)));
 				}
 			}
 			
 			if(this.random.nextInt(3) == 0)
-				this.level.addFreshEntity(new VitalityGelEntity(level, randX(), this.getY(), randZ(), this.getVitalityGel()));
+				this.level().addFreshEntity(new VitalityGelEntity(level(), randX(), this.getY(), randZ(), this.getVitalityGel()));
 		}
 	}
 	
@@ -220,7 +220,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		LivingEntity entity = this.getKillCredit();
 		if(entity instanceof ServerPlayer player && (!(player instanceof FakePlayer)))
-			PlayerSavedData.getData(player).addConsortReputation(consortRep, level.dimension());
+			PlayerSavedData.getData(player).addConsortReputation(consortRep, level().dimension());
 		
 		super.die(cause);
 	}
@@ -364,10 +364,10 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 		
 		if(totalModifier > maxSharedProgress)
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (maxProgress * modifiers[i] / totalModifier));
+				Echeladder.increaseProgress(playerList[i], level(), (int) (maxProgress * modifiers[i] / totalModifier));
 		else
 			for(int i = 0; i < playerList.length; i++)
-				Echeladder.increaseProgress(playerList[i], level, (int) (progress * modifiers[i]));
+				Echeladder.increaseProgress(playerList[i], level(), (int) (progress * modifiers[i]));
 	}
 	
 	protected static void firstKillBonus(Entity killer, EcheladderBonusType type)

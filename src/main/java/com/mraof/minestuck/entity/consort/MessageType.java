@@ -8,7 +8,6 @@ import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.ClickEvent;
@@ -22,7 +21,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.network.NetworkHooks;
@@ -934,10 +933,10 @@ public abstract class MessageType
 				if(!repeat)
 					nbt.putBoolean(nbtName, true);
 				
-				LootContext.Builder contextBuilder = new LootContext.Builder((ServerLevel) consort.level).withRandom(consort.level.random)
+				LootParams.Builder builder = new LootParams.Builder((ServerLevel) consort.level())
 						.withParameter(LootContextParams.THIS_ENTITY, consort).withParameter(LootContextParams.ORIGIN, consort.position());
-				List<ItemStack> loot = consort.getServer().getLootTables().get(lootTableId)
-						.getRandomItems(contextBuilder.create(LootContextParamSets.GIFT));
+				List<ItemStack> loot = consort.getServer().getLootData().getLootTable(lootTableId)
+						.getRandomItems(builder.create(LootContextParamSets.GIFT));
 				
 				if(loot.isEmpty())
 					LOGGER.warn("Tried to generate loot from {}, but no items were generated!", lootTableId);
@@ -1049,16 +1048,16 @@ public abstract class MessageType
 				}
 				else
 				{
-					int index = consort.level.random.nextInt(stackListFromTag.size());
+					int index = consort.level().random.nextInt(stackListFromTag.size());
 					ItemStack randomStack = stackListFromTag.get(index);
 					nbtString = String.valueOf(ForgeRegistries.ITEMS.getKey(randomStack.getItem()));
 					nbt.putString(this.getString(), nbtString);
 				}
 				
-				Optional<Item> optionalItem = Registry.ITEM.getOptional(new ResourceLocation(nbtString));
-				if(optionalItem.isPresent())
+				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(nbtString));
+				if(item != null)
 				{
-					ItemStack stack = new ItemStack(optionalItem.get());
+					ItemStack stack = new ItemStack(item);
 					nbt.put(this.getString() + ".item", stack.save(new CompoundTag()));
 					
 					hasItem = lookFor(stack, player);
@@ -1068,7 +1067,7 @@ public abstract class MessageType
 				List<ItemStack> list = new ArrayList<>(stackListFromTag);
 				while (!list.isEmpty())
 				{
-					ItemStack stack = list.remove(consort.level.random.nextInt(list.size()));
+					ItemStack stack = list.remove(consort.level().random.nextInt(list.size()));
 					if(lookFor(stack, player))
 					{
 						nbt.putString(this.getString(), String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem())));
@@ -1113,7 +1112,7 @@ public abstract class MessageType
 		{
 			for(ItemStack held : player.getHandSlots()) //prioritizes items in hands before items from the rest of the inventory
 			{
-				if(ItemStack.isSame(held, stack))
+				if(ItemStack.isSameItem(held, stack))
 				{
 					return true;
 				}
@@ -1123,7 +1122,7 @@ public abstract class MessageType
 			{
 				for(ItemStack held : player.getInventory().items)
 				{
-					if(ItemStack.isSame(held, stack))
+					if(ItemStack.isSameItem(held, stack))
 					{
 						return true;
 					}
@@ -1182,7 +1181,7 @@ public abstract class MessageType
 			for(InteractionHand hand : InteractionHand.values())
 			{
 				ItemStack heldItem = player.getItemInHand(hand);
-				if(ItemStack.isSame(heldItem, stack))
+				if(ItemStack.isSameItem(heldItem, stack))
 				{
 					foundItem = true;
 					heldItem.shrink(1);
@@ -1192,7 +1191,7 @@ public abstract class MessageType
 			
 			for(ItemStack invItem : player.getInventory().items)
 			{
-				if(ItemStack.isSame(invItem, stack))
+				if(ItemStack.isSameItem(invItem, stack))
 				{
 					foundItem = true;
 					invItem.shrink(1);
@@ -1262,7 +1261,7 @@ public abstract class MessageType
 		{
 			if(consort.stocks == null)
 			{
-				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level.random));
+				consort.stocks = new ConsortMerchantInventory(consort, ConsortRewardHandler.generateStock(lootTable, consort, consort.level().random));
 			}
 			
 			NetworkHooks.openScreen(player, new SimpleMenuProvider(consort, Component.literal("Consort shop")), consort::writeShopMenuBuffer);

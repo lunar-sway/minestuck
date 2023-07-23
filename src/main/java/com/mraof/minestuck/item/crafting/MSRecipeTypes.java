@@ -5,7 +5,6 @@ import com.mraof.minestuck.alchemy.recipe.*;
 import com.mraof.minestuck.alchemy.recipe.generator.ContainerGristCost;
 import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.RecipeGeneratedGristCost;
-import net.minecraft.core.Registry;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -16,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MSRecipeTypes
 {
-	public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTER = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, Minestuck.MOD_ID);
+	public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE_REGISTER = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<RecipeType<IrradiatingRecipe>> IRRADIATING_TYPE = recipeType("irradiating");
 	public static final RegistryObject<RecipeType<GristCostRecipe>> GRIST_COST_TYPE = recipeType("grist_cost");

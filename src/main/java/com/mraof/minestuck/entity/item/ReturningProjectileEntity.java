@@ -8,8 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -57,15 +57,15 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 		if(result.getType() == HitResult.Type.ENTITY)
 		{
 			this.setDeltaMovement(getDeltaMovement().scale(-1.05));
-			if(!level.isClientSide)
+			if(!level().isClientSide)
 			{
 				++bounce;
 				Entity entity = ((EntityHitResult) result).getEntity();
 				
 				if(entity instanceof UnderlingEntity)
-					entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
+					entity.hurt(this.damageSources().thrown(this, getOwner()), damage * 1.5F);
 				else if(entity != getOwner())
-					entity.hurt(DamageSource.thrown(this, getOwner()), damage);
+					entity.hurt(this.damageSources().thrown(this, getOwner()), damage);
 				else
 				{
 					resetThrower();
@@ -76,17 +76,17 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 			BlockHitResult blockResult = (BlockHitResult) result;
 			Direction blockFace = blockResult.getDirection();
 			BlockPos blockPos = blockResult.getBlockPos();
-			if(Block.canSupportCenter(level, blockPos, blockFace))
+			if(Block.canSupportCenter(level(), blockPos, blockFace))
 			{
 				this.setDeltaMovement(getDeltaMovement().scale(-1.05));
-				if(!level.isClientSide)
+				if(!level().isClientSide)
 				{
 					++bounce;
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
+					this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
 				}
 			}
 			
-			if(Block.canSupportCenter(level, blockPos, blockFace) && blockResult.isInside())
+			if(Block.canSupportCenter(level(), blockPos, blockFace) && blockResult.isInside())
 			{
 				++inBlockTicks;
 			}
@@ -149,7 +149,7 @@ public class ReturningProjectileEntity extends ThrowableItemProjectile
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

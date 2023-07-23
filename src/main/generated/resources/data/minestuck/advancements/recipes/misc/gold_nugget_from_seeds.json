@@ -30,5 +30,6 @@
     "recipes": [
       "minestuck:gold_nugget_from_seeds"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -42,7 +42,7 @@ public class HurtByTargetAlliedGoal extends TargetGoal
 		this.revengeTimer = this.mob.getLastHurtByMobTimestamp();
 		
 		double d0 = this.getFollowDistance();
-		List<Mob> list = this.mob.level.getEntitiesOfClass(Mob.class, new AABB(this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.mob.getX() + 1.0D, this.mob.getY() + 1.0D, this.mob.getZ() + 1.0D).inflate(d0, 10.0D, d0), alliedPredicate);
+		List<Mob> list = this.mob.level().getEntitiesOfClass(Mob.class, new AABB(this.mob.getX(), this.mob.getY(), this.mob.getZ(), this.mob.getX() + 1.0D, this.mob.getY() + 1.0D, this.mob.getZ() + 1.0D).inflate(d0, 10.0D, d0), alliedPredicate);
 		
 		for(Mob creature : list)
 		{

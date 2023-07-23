@@ -19,7 +19,7 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		String message = json.has("message") ? GsonHelper.getAsString(json, "message") : null;
 		return new Instance(predicate, message);
@@ -33,7 +33,7 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final String message;
-		public Instance(EntityPredicate.Composite predicate, String message)
+		public Instance(ContextAwarePredicate predicate, String message)
 		{
 			super(ID, predicate);
 			this.message = message;
@@ -46,7 +46,7 @@ public class ConsortTalkTrigger extends SimpleCriterionTrigger<ConsortTalkTrigge
 		
 		public static Instance forMessage(String message)
 		{
-			return new Instance(EntityPredicate.Composite.ANY, message);
+			return new Instance(ContextAwarePredicate.ANY, message);
 		}
 		
 		public boolean test(String message)

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "i": {
       "item": "minecraft:iron_ingot"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "minestuck:block_pressure_plate"
-  }
+  },
+  "show_notification": true
 }

@@ -4,8 +4,7 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.world.lands.LandProperties;
@@ -21,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.Random;
@@ -38,7 +38,6 @@ public final class LandSkyRenderer
 		starBrightness += (0.5 - starBrightness)*heightModifier;
 		float skaiaBrightness = 0.5F +0.5F*skyClearness*heightModifier;
 		
-		RenderSystem.disableTexture();
 		Vec3 skyColor = getSkyColor(mc, level, partialTicks);
 		float r = (float)skyColor.x*heightModifierDiminish;
 		float g = (float)skyColor.y*heightModifierDiminish;
@@ -69,7 +68,6 @@ public final class LandSkyRenderer
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		
-		RenderSystem.enableTexture();
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, skaiaBrightness);
 		
@@ -79,10 +77,9 @@ public final class LandSkyRenderer
 		
 		if(starBrightness > 0)
 		{
-			RenderSystem.disableTexture();
 			RenderSystem.setShaderColor(starBrightness, starBrightness, starBrightness, starBrightness);
 			poseStack.pushPose();
-			poseStack.mulPose(Vector3f.ZP.rotationDegrees(calculateVeilAngle(level) * 360.0F));
+			poseStack.mulPose(Axis.ZP.rotationDegrees(calculateVeilAngle(level) * 360.0F));
 			drawVeil(poseStack.last().pose(), partialTicks, level);
 			poseStack.popPose();
 			
@@ -92,7 +89,6 @@ public final class LandSkyRenderer
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		RenderSystem.disableBlend();
-		RenderSystem.disableTexture();
 		RenderSystem.setShaderColor(0, 0, 0, 1);
 		double d3 = mc.player.getEyePosition(partialTicks).y - level.getLevelData().getHorizonHeight(level);
 		
@@ -115,7 +111,7 @@ public final class LandSkyRenderer
 		}
 		tesselator.end();
 		poseStack.popPose();
-		RenderSystem.enableTexture();
+		RenderSystem.setShaderColor(1, 1, 1, 1);
 		RenderSystem.depthMask(true);
 	}
 	
@@ -195,7 +191,6 @@ public final class LandSkyRenderer
 		if(list == null)
 			return;
 		int index = list.indexOf(dim);
-		RenderSystem.enableTexture();
 		for(int i = 1; i < list.size(); i++)
 		{
 			ResourceKey<Level> landName = list.get((index + i)%list.size());
@@ -208,7 +203,6 @@ public final class LandSkyRenderer
 				else drawLand(poseStack, landTypes, (i / (float) list.size()), random);
 			}
 		}
-		RenderSystem.disableTexture();
 	}
 	
 	private static void drawLand(PoseStack poseStack, LandTypePair aspects, float pos, Random random)
@@ -223,8 +217,8 @@ public final class LandSkyRenderer
 		
 		BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 		poseStack.pushPose();
-		poseStack.mulPose(Vector3f.ZP.rotation(v));
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(90*random.nextInt(4)));
+		poseStack.mulPose(Axis.ZP.rotation(v));
+		poseStack.mulPose(Axis.YP.rotationDegrees(90*random.nextInt(4)));
 		Matrix4f matrix = poseStack.last().pose();
 		
 		float planetSize = 4.0F*scale;
@@ -236,7 +230,7 @@ public final class LandSkyRenderer
 	
 	private static void drawSprite(BufferBuilder buffer, Matrix4f matrix, float size, TextureAtlasSprite sprite)
 	{
-		RenderSystem.setShaderTexture(0, sprite.atlas().location());
+		RenderSystem.setShaderTexture(0, sprite.atlasLocation());
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		buffer.vertex(matrix, -size, 100, -size).uv(sprite.getU0(), sprite.getV0()).endVertex();

@@ -2,26 +2,27 @@ package com.mraof.minestuck.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class SpecialButtonBlock extends ButtonBlock
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public final boolean explosive, wooden;
+	public final boolean explosive;
 	
-	public SpecialButtonBlock(Properties builder, boolean explosive, boolean wooden)
+	public SpecialButtonBlock(Properties properties, boolean explosive, BlockSetType type, int ticksToStayPressed, boolean arrowsCanPress)
 	{
-		super(wooden, builder);
+		super(properties, type, ticksToStayPressed, arrowsCanPress);
 		this.explosive = explosive;
-		this.wooden = wooden;
 	}
 	
 	@Override
@@ -38,23 +39,7 @@ public class SpecialButtonBlock extends ButtonBlock
 		if(explosive && b && !b1)
 		{
 			level.removeBlock(pos, false);
-			level.explode(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 1.5F, Explosion.BlockInteraction.DESTROY);
-		}
-	}
-	
-	@Override
-	protected SoundEvent getSound(boolean clickOn)
-	{
-		if(clickOn)
-		{
-			if(wooden)
-				return SoundEvents.WOODEN_BUTTON_CLICK_ON;
-			else return SoundEvents.STONE_BUTTON_CLICK_ON;
-		} else
-		{
-			if(wooden)
-				return SoundEvents.WOODEN_BUTTON_CLICK_OFF;
-			else return SoundEvents.STONE_BUTTON_CLICK_OFF;
+			level.explode(null, (double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, 1.5F, Level.ExplosionInteraction.BLOCK);
 		}
 	}
 }

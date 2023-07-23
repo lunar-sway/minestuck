@@ -3,12 +3,12 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -137,7 +137,7 @@ public class SourceGristCost extends GeneratedGristCost
 		
 		private TagSource(ResourceLocation name)
 		{
-			this.tag = TagKey.create(Registry.ITEM_REGISTRY, name);
+			this.tag = TagKey.create(Registries.ITEM, name);
 		}
 		
 		@Override

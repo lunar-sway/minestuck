@@ -37,7 +37,7 @@ public final class EditmodeDragPacket
 	
 	private static boolean editModePlaceCheck(EditData data, Player player, GristSet cost, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
-		if(!player.level.getBlockState(pos).getMaterial().isReplaceable())
+		if(!player.level().getBlockState(pos).canBeReplaced())
 			return false;
 		
 		if(!data.getGristCache().canAfford(cost))
@@ -51,9 +51,9 @@ public final class EditmodeDragPacket
 	
 	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<MutableGristSet> missingGristTracker)
 	{
-		BlockState block = player.level.getBlockState(pos);
-		ItemStack stack = block.getCloneItemStack(null, player.level, pos, player);
-		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level, DeployList.EntryLists.ATHENEUM);
+		BlockState block = player.level().getBlockState(pos);
+		ItemStack stack = block.getCloneItemStack(null, player.level(), pos, player);
+		DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level(), DeployList.EntryLists.ATHENEUM);
 		
 		if(block.isAir())
 			return false;
@@ -116,8 +116,8 @@ public final class EditmodeDragPacket
 			if(stack.isEmpty() || !(stack.getItem() instanceof BlockItem))
 				return;
 			
-			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level);
-			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level);
+			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level());
+			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level());
 			
 			MutableGristSet missingCost = new MutableGristSet();
 			boolean anyBlockPlaced = false;
@@ -133,7 +133,7 @@ public final class EditmodeDragPacket
 					
 					//broadcasts the block-place sounds to other players.
 					SoundType soundType = ((BlockItem) stack.getItem()).getBlock().defaultBlockState().getSoundType();
-					player.getLevel().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
+					player.level().playSound(player, pos, soundType.getPlaceSound(), SoundSource.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F);
 					
 					anyBlockPlaced = true;
 				}
@@ -142,7 +142,7 @@ public final class EditmodeDragPacket
 			if(anyBlockPlaced)
 			{
 				//broadcasts edit sound to other players.
-				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
+				player.level().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get(), SoundSource.AMBIENT, 1.0f, 1.0f);
 				player.swing(hand);
 			}
 			
@@ -196,7 +196,7 @@ public final class EditmodeDragPacket
 			boolean anyBlockDestroyed = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{
-				BlockState block = player.getLevel().getBlockState(pos);
+				BlockState block = player.level().getBlockState(pos);
 				
 				Consumer<MutableGristSet> missingCostTracker = missingCost::add; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
 				if(editModeDestroyCheck(data, player, pos, missingCostTracker))
@@ -204,8 +204,8 @@ public final class EditmodeDragPacket
 					player.gameMode.destroyAndAck(pos, 3, "creative destroy");
 					
 					//broadcasts block-break particles and sounds to other players.
-					player.level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(block));
-					player.level.gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, block));
+					player.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(block));
+					player.level().gameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Context.of(player, block));
 					
 					anyBlockDestroyed = true;
 				}
@@ -214,7 +214,7 @@ public final class EditmodeDragPacket
 			if(anyBlockDestroyed)
 			{
 				//broadcasts edit sound to other players.
-				player.getLevel().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
+				player.level().playSound(player, positionEnd, MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, 0.85f);
 				player.swing(InteractionHand.MAIN_HAND);
 			}
 			
@@ -246,7 +246,7 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(!player.getLevel().isClientSide() && ServerEditHandler.getData(player) != null)
+			if(!player.level().isClientSide() && ServerEditHandler.getData(player) != null)
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				
@@ -273,7 +273,7 @@ public final class EditmodeDragPacket
 		@Override
 		public void execute(ServerPlayer player)
 		{
-			if(!player.getLevel().isClientSide())
+			if(!player.level().isClientSide())
 			{
 				IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY).orElseThrow(() -> LOGGER.throwing(new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on server-side (during packet execution)!")));
 				

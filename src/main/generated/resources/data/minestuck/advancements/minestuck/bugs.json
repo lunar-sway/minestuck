@@ -75,5 +75,6 @@
       "grasshopper",
       "jar_of_bugs"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

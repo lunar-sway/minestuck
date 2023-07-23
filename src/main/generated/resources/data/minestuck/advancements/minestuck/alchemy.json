@@ -25,5 +25,6 @@
     [
       "use_punch_designix"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

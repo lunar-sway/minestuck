@@ -1,5 +1,6 @@
 {
   "type": "minestuck:irradiating",
+  "category": "misc",
   "cookingtime": 20,
   "experience": 0.35,
   "ingredient": {

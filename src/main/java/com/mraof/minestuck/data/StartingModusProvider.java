@@ -4,22 +4,26 @@ import com.google.gson.JsonArray;
 import com.mraof.minestuck.inventory.captchalogue.ModusType;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
 import com.mraof.minestuck.inventory.captchalogue.StartingModusManager;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 
-import java.io.IOException;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class StartingModusProvider implements DataProvider
 {
-	private final DataGenerator generator;
+	private final PackOutput output;
 	private final String modid;
 	
-	public StartingModusProvider(DataGenerator generator, String modid)
+	public StartingModusProvider(PackOutput output, String modid)
 	{
-		this.generator = generator;
+		this.output = output;
 		this.modid = modid;
 	}
 	
@@ -29,14 +33,15 @@ public class StartingModusProvider implements DataProvider
 	}
 	
 	@Override
-	public final void run(CachedOutput cache) throws IOException
+	public final CompletableFuture<?> run(CachedOutput cache)
 	{
-		Path path = this.generator.getOutputFolder().resolve("data/" + modid + "/" + StartingModusManager.PATH);
+		Path path = this.output.getOutputFolder(PackOutput.Target.DATA_PACK).resolve(modid).resolve(StartingModusManager.PATH);
 		List<ModusType<?>> modusTypes = createDefaultModusTypes();
 		
 		JsonArray jsonList = new JsonArray(modusTypes.size());
 		modusTypes.forEach(modusType -> jsonList.add(String.valueOf(ModusTypes.REGISTRY.get().getKey(modusType))));
-		DataProvider.saveStable(cache, jsonList, path);
+		
+		return DataProvider.saveStable(cache, jsonList, path);
 	}
 	
 	@Override

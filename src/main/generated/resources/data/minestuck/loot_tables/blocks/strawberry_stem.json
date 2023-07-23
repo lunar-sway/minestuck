@@ -162,5 +162,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:blocks/strawberry_stem"
 }

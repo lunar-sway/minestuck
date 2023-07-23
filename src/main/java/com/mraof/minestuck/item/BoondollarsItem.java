@@ -1,7 +1,6 @@
 package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.player.PlayerSavedData;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -9,7 +8,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -34,7 +32,7 @@ public class BoondollarsItem extends Item
 		}
 		return InteractionResultHolder.success(ItemStack.EMPTY);
 	}
-	
+	/* TODO
 	@Override
 	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
 	{
@@ -47,7 +45,7 @@ public class BoondollarsItem extends Item
 			items.add(setCount(new ItemStack(this), 10000));
 		}
 	}
-	
+	*/
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{

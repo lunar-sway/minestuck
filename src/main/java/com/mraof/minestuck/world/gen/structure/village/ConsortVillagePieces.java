@@ -275,7 +275,7 @@ public class ConsortVillagePieces
 				{
 					BlockState state = level.getBlockState(blockpos);
 					
-					if (state.getMaterial().isLiquid() || state.canOcclude())
+					if (state.liquid() || state.canOcclude())
 					{
 						level.setBlock(blockpos, pathBlock, Block.UPDATE_CLIENTS);
 						break;

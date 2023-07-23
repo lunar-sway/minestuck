@@ -50,7 +50,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 	
 	private void applyGroupCooldown()
 	{
-		Level level = this.entity.getLevel();
+		Level level = this.entity.level();
 		AABB aabb = new AABB(this.entity.blockPosition()).inflate(8);
 		List<AttackingAnimatedEntity> entityList = level.getEntitiesOfClass(AttackingAnimatedEntity.class, aabb);
 		if(!entityList.isEmpty())
@@ -68,7 +68,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 	@Override
 	public void attemptToLandAttack(PathfinderMob attacker, LivingEntity target)
 	{
-		Level level = entity.getLevel();
+		Level level = entity.level();
 		level.playSound(null, this.entity.blockPosition(), SoundEvents.FIRECHARGE_USE, SoundSource.HOSTILE, 1, 1);
 		
 		//fireball is shot towards the initial target position
@@ -108,7 +108,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 			Vec3 eyePos = this.entity.getEyePosition(1F);
 			Vec3 vecPos = eyePos.add(targetFacingVec.scale(step));
 			
-			List<LivingEntity> livingEntityList = entityWithinAABB(this.entity.level, vecPos, step + 1 == distanceBetweenPos);
+			List<LivingEntity> livingEntityList = entityWithinAABB(this.entity.level(), vecPos, step + 1 == distanceBetweenPos);
 			
 			for(LivingEntity livingEntityIterate : livingEntityList)
 			{
@@ -127,7 +127,7 @@ public class FireballShootGoal<T extends AttackingAnimatedEntity> extends Animat
 	 */
 	private List<LivingEntity> entityWithinAABB(Level level, Vec3 vecPos, boolean lastStep)
 	{
-		AABB axisAlignedBB = new AABB(new BlockPos(vecPos)).inflate(lastStep ? 4 : 0.75);
+		AABB axisAlignedBB = new AABB(BlockPos.containing(vecPos)).inflate(lastStep ? 4 : 0.75);
 		return level.getEntitiesOfClass(LivingEntity.class, axisAlignedBB);
 	}
 }

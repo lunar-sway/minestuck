@@ -6,7 +6,8 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
@@ -28,10 +29,11 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
+import java.util.Set;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 
-public class MSBlockLootTables extends BlockLoot
+public final class MSBlockLootTables extends BlockLootSubProvider
 {
 	private static final LootItemCondition.Builder SILK_TOUCH_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
 	private static final LootItemCondition.Builder SHEAR_CONDITION = MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS));
@@ -39,8 +41,13 @@ public class MSBlockLootTables extends BlockLoot
 	private static final LootItemCondition.Builder NO_SILK_OR_SHEAR_CONDITION = SILK_AND_SHEAR_CONDITION.invert();
 	private static final float[] SAPLING_CHANCES = new float[]{0.05F, 0.0625F, 0.083333336F, 0.1F};
 	
+	MSBlockLootTables()
+	{
+		super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+	}
+	
 	@Override
-	protected void addTables()
+	protected void generate()
 	{
 		dropSelf(BLACK_CHESS_DIRT.get());
 		dropSelf(WHITE_CHESS_DIRT.get());
@@ -65,41 +72,41 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(WHITE_CROWN_STAINED_GLASS.get());
 		dropSelf(WHITE_PAWN_STAINED_GLASS.get());
 		
-		add(STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(COBBLESTONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(SANDSTONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(RED_SANDSTONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(NETHERRACK_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(END_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(SHADE_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(PINK_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(MYCELIUM_STONE_CRUXITE_ORE.get(), MSBlockLootTables::cruxiteOreDrop);
-		add(STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(DEEPSLATE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(COBBLESTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(RED_SANDSTONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(NETHERRACK_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(END_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(SHADE_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(PINK_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
-		add(MYCELIUM_STONE_URANIUM_ORE.get(), MSBlockLootTables::uraniumOreDrop);
+		add(STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(COBBLESTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(SANDSTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(RED_SANDSTONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(NETHERRACK_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(END_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(SHADE_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(COBBLESTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(SANDSTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(RED_SANDSTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(NETHERRACK_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(END_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(SHADE_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
-		add(NETHERRACK_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
-		add(SHADE_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
-		add(PINK_STONE_COAL_ORE.get(), MSBlockLootTables::coalOreDrop);
+		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
+		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);
+		add(PINK_STONE_COAL_ORE.get(), this::coalOreDrop);
 		
-		add(SANDSTONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
-		add(RED_SANDSTONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
-		add(END_STONE_IRON_ORE.get(), MSBlockLootTables::ironOreDrop);
-		add(SANDSTONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
-		add(RED_SANDSTONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
-		add(SHADE_STONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
-		add(PINK_STONE_GOLD_ORE.get(), MSBlockLootTables::goldOreDrop);
-		add(END_STONE_REDSTONE_ORE.get(), MSBlockLootTables::redstoneOreDrop);
-		add(STONE_QUARTZ_ORE.get(), MSBlockLootTables::quartzOreDrop);
-		add(PINK_STONE_LAPIS_ORE.get(), MSBlockLootTables::lapisOreDrop);
-		add(PINK_STONE_DIAMOND_ORE.get(), MSBlockLootTables::diamondOreDrop);
+		add(SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
+		add(RED_SANDSTONE_IRON_ORE.get(), this::ironOreDrop);
+		add(END_STONE_IRON_ORE.get(), this::ironOreDrop);
+		add(SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(RED_SANDSTONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(SHADE_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(PINK_STONE_GOLD_ORE.get(), this::goldOreDrop);
+		add(END_STONE_REDSTONE_ORE.get(), this::redstoneOreDrop);
+		add(STONE_QUARTZ_ORE.get(), this::quartzOreDrop);
+		add(PINK_STONE_LAPIS_ORE.get(), this::lapisOreDrop);
+		add(PINK_STONE_DIAMOND_ORE.get(), this::diamondOreDrop);
 		
 		dropSelf(CRUXITE_BLOCK.get());
 		dropSelf(URANIUM_BLOCK.get());
@@ -156,7 +163,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MOSSY_DECREPIT_STONE_BRICKS.get());
 		dropSelf(FLOWERY_MOSSY_STONE_BRICKS.get());
 		dropSelf(COARSE_END_STONE.get());
-		add(END_GRASS.get(), MSBlockLootTables::endGrassDrop);
+		add(END_GRASS.get(), this::endGrassDrop);
 		dropSelf(CHALK.get());
 		dropSelf(POLISHED_CHALK.get());
 		dropSelf(CHALK_BRICKS.get());
@@ -246,11 +253,11 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(END_PLANKS.get());
 		dropSelf(DEAD_PLANKS.get());
 		dropSelf(TREATED_PLANKS.get());
-		add(FROST_LEAVES.get(), MSBlockLootTables::frostLeavesDrop);
-		add(RAINBOW_LEAVES.get(), MSBlockLootTables::rainbowLeavesDrop);
-		add(SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
-		add(SHROOMY_SHADEWOOD_LEAVES.get(), MSBlockLootTables::shadewoodLeavesDrop);
-		add(END_LEAVES.get(), MSBlockLootTables::endLeavesDrop);
+		add(FROST_LEAVES.get(), this::frostLeavesDrop);
+		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
+		add(SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
+		add(SHROOMY_SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);
+		add(END_LEAVES.get(), this::endLeavesDrop);
 		dropSelf(RAINBOW_SAPLING.get());
 		dropSelf(END_SAPLING.get());
 		dropSelf(SHADEWOOD_SAPLING.get());
@@ -279,18 +286,18 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SPACE_ASPECT_PLANKS.get());
 		dropSelf(TIME_ASPECT_PLANKS.get());
 		dropSelf(VOID_ASPECT_PLANKS.get());
-		add(BLOOD_ASPECT_LEAVES.get(), MSBlockLootTables::bloodAspectLeavesDrop);
-		add(BREATH_ASPECT_LEAVES.get(), MSBlockLootTables::breathAspectLeavesDrop);
-		add(DOOM_ASPECT_LEAVES.get(), MSBlockLootTables::doomAspectLeavesDrop);
-		add(HEART_ASPECT_LEAVES.get(), MSBlockLootTables::heartAspectLeavesDrop);
-		add(HOPE_ASPECT_LEAVES.get(), MSBlockLootTables::hopeAspectLeavesDrop);
-		add(LIFE_ASPECT_LEAVES.get(), MSBlockLootTables::lifeAspectLeavesDrop);
-		add(LIGHT_ASPECT_LEAVES.get(), MSBlockLootTables::lightAspectLeavesDrop);
-		add(MIND_ASPECT_LEAVES.get(), MSBlockLootTables::mindAspectLeavesDrop);
-		add(RAGE_ASPECT_LEAVES.get(), MSBlockLootTables::rageAspectLeavesDrop);
-		add(SPACE_ASPECT_LEAVES.get(), MSBlockLootTables::spaceAspectLeavesDrop);
-		add(TIME_ASPECT_LEAVES.get(), MSBlockLootTables::timeAspectLeavesDrop);
-		add(VOID_ASPECT_LEAVES.get(), MSBlockLootTables::voidAspectLeavesDrop);
+		add(BLOOD_ASPECT_LEAVES.get(), this::bloodAspectLeavesDrop);
+		add(BREATH_ASPECT_LEAVES.get(), this::breathAspectLeavesDrop);
+		add(DOOM_ASPECT_LEAVES.get(), this::doomAspectLeavesDrop);
+		add(HEART_ASPECT_LEAVES.get(), this::heartAspectLeavesDrop);
+		add(HOPE_ASPECT_LEAVES.get(), this::hopeAspectLeavesDrop);
+		add(LIFE_ASPECT_LEAVES.get(), this::lifeAspectLeavesDrop);
+		add(LIGHT_ASPECT_LEAVES.get(), this::lightAspectLeavesDrop);
+		add(MIND_ASPECT_LEAVES.get(), this::mindAspectLeavesDrop);
+		add(RAGE_ASPECT_LEAVES.get(), this::rageAspectLeavesDrop);
+		add(SPACE_ASPECT_LEAVES.get(), this::spaceAspectLeavesDrop);
+		add(TIME_ASPECT_LEAVES.get(), this::timeAspectLeavesDrop);
+		add(VOID_ASPECT_LEAVES.get(), this::voidAspectLeavesDrop);
 		dropSelf(BLOOD_ASPECT_SAPLING.get());
 		dropSelf(BREATH_ASPECT_SAPLING.get());
 		dropSelf(DOOM_ASPECT_SAPLING.get());
@@ -304,25 +311,25 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TIME_ASPECT_SAPLING.get());
 		dropSelf(VOID_ASPECT_SAPLING.get());
 		
-		add(BLOOD_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(BREATH_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(DOOM_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(HEART_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(HOPE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(LIFE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(LIGHT_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(MIND_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(RAGE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(SPACE_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(TIME_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(VOID_ASPECT_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(BLOOD_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(BREATH_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(DOOM_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(HEART_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(HOPE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(LIFE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(LIGHT_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(MIND_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(RAGE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(SPACE_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(TIME_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
+		add(VOID_ASPECT_BOOKSHELF.get(), this::bookshelfDrop);
 		
-		add(GLOWING_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(FROST_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(RAINBOW_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(END_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(DEAD_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
-		add(TREATED_BOOKSHELF.get(), MSBlockLootTables::bookshelfDrop);
+		add(GLOWING_BOOKSHELF.get(), this::bookshelfDrop);
+		add(FROST_BOOKSHELF.get(), this::bookshelfDrop);
+		add(RAINBOW_BOOKSHELF.get(), this::bookshelfDrop);
+		add(END_BOOKSHELF.get(), this::bookshelfDrop);
+		add(DEAD_BOOKSHELF.get(), this::bookshelfDrop);
+		add(TREATED_BOOKSHELF.get(), this::bookshelfDrop);
 		
 		dropSelf(BLOOD_ASPECT_LADDER.get());
 		dropSelf(BREATH_ASPECT_LADDER.get());
@@ -344,7 +351,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(TREATED_LADDER.get());
 		
 		dropSelf(GLOWING_MUSHROOM.get());
-		add(DESERT_BUSH.get(), MSBlockLootTables::desertBushDrop);
+		add(DESERT_BUSH.get(), this::desertBushDrop);
 		dropSelf(BLOOMING_CACTUS.get());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
@@ -361,7 +368,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(PIPE_INTERSECTION.get());
 		dropSelf(PARCEL_PYXIS.get());
 		dropSelf(PYXIS_LID.get());
-		add(STONE_TABLET.get(), MSBlockLootTables::droppingWithTEItem);
+		add(STONE_TABLET.get(), this::droppingWithTEItem);
 		dropSelf(NAKAGATOR_STATUE.get());
 		
 		dropSelf(BLACK_CHESS_BRICK_STAIRS.get());
@@ -457,7 +464,7 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(HOLOPAD.get());
 		dropSelf(INTELLIBEAM_LASERSTATION.get());
 		dropSelf(CRUXTRUDER_LID.get());
-		add(MINI_CRUXTRUDER.get(), MSBlockLootTables::droppingWithColor);
+		add(MINI_CRUXTRUDER.get(), this::droppingWithColor);
 		dropSelf(MINI_TOTEM_LATHE.get());
 		dropSelf(MINI_ALCHEMITER.get());
 		dropSelf(MINI_PUNCH_DESIGNIX.get());
@@ -478,8 +485,8 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(SKAIANET_DENIER.get());
 		dropSelf(POWER_HUB.get());
 		
-		add(CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
-		add(EMERGING_CRUXITE_DOWEL.get(), MSBlockLootTables::droppingWithTEItem);
+		add(CRUXITE_DOWEL.get(), this::droppingWithTEItem);
+		add(EMERGING_CRUXITE_DOWEL.get(), this::droppingWithTEItem);
 		
 		dropSelf(GOLD_SEEDS.get());
 		dropSelf(WOODEN_CACTUS.get());
@@ -513,127 +520,127 @@ public class MSBlockLootTables extends BlockLoot
 		dropSelf(MIRROR.get());
 	}
 	
-	private static LootTable.Builder cruxiteOreDrop(Block block)
+	private LootTable.Builder cruxiteOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.RAW_CRUXITE.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
-	private static LootTable.Builder uraniumOreDrop(Block block)
+	private LootTable.Builder uraniumOreDrop(Block block)
 	{
 		return createOreDrop(block, MSItems.RAW_URANIUM.get());
 	}
-	private static LootTable.Builder coalOreDrop(Block block)
+	private LootTable.Builder coalOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.COAL);
 	}
-	private static LootTable.Builder goldOreDrop(Block block)
+	private LootTable.Builder goldOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.RAW_GOLD);
 	}
-	private static LootTable.Builder ironOreDrop(Block block)
+	private LootTable.Builder ironOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.RAW_IRON);
 	}
-	private static LootTable.Builder redstoneOreDrop(Block block)
+	private LootTable.Builder redstoneOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.REDSTONE).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 5.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
-	private static LootTable.Builder quartzOreDrop(Block block)
+	private LootTable.Builder quartzOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.QUARTZ);
 	}
-	private static LootTable.Builder lapisOreDrop(Block block)
+	private LootTable.Builder lapisOreDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(Items.LAPIS_LAZULI).apply(SetItemCountFunction.setCount(UniformGenerator.between(4.0F, 9.0F))).apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
-	private static LootTable.Builder diamondOreDrop(Block block)
+	private LootTable.Builder diamondOreDrop(Block block)
 	{
 		return createOreDrop(block, Items.DIAMOND);
 	}
-	private static LootTable.Builder endGrassDrop(Block block)
+	private LootTable.Builder endGrassDrop(Block block)
 	{
 		return createSingleItemTableWithSilkTouch(block, Blocks.END_STONE);
 	}
-	private static LootTable.Builder frostLeavesDrop(Block block)
+	private LootTable.Builder frostLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, Blocks.AIR, SAPLING_CHANCES);
 	}
-	private static LootTable.Builder rainbowLeavesDrop(Block block)
+	private LootTable.Builder rainbowLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, RAINBOW_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder endLeavesDrop(Block block)
+	private LootTable.Builder endLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, END_SAPLING.get(), SAPLING_CHANCES).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1)).when(NO_SILK_OR_SHEAR_CONDITION).add(applyExplosionCondition(block, LootItem.lootTableItem(Items.CHORUS_FRUIT)).when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE, 0.005F, 0.0055555557F, 0.00625F, 0.008333334F, 0.025F))));
 	}
-	private static LootTable.Builder shadewoodLeavesDrop(Block block)
+	private LootTable.Builder shadewoodLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, SHADEWOOD_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder bloodAspectLeavesDrop(Block block)
+	private LootTable.Builder bloodAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, BLOOD_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder breathAspectLeavesDrop(Block block)
+	private LootTable.Builder breathAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, BREATH_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder doomAspectLeavesDrop(Block block)
+	private LootTable.Builder doomAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, DOOM_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder heartAspectLeavesDrop(Block block)
+	private LootTable.Builder heartAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, HEART_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder hopeAspectLeavesDrop(Block block)
+	private LootTable.Builder hopeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, HOPE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder lifeAspectLeavesDrop(Block block)
+	private LootTable.Builder lifeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, LIFE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder lightAspectLeavesDrop(Block block)
+	private LootTable.Builder lightAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, LIGHT_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder mindAspectLeavesDrop(Block block)
+	private LootTable.Builder mindAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, MIND_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder rageAspectLeavesDrop(Block block)
+	private LootTable.Builder rageAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, RAGE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder spaceAspectLeavesDrop(Block block)
+	private LootTable.Builder spaceAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, SPACE_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder timeAspectLeavesDrop(Block block)
+	private LootTable.Builder timeAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, TIME_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder voidAspectLeavesDrop(Block block)
+	private LootTable.Builder voidAspectLeavesDrop(Block block)
 	{
 		return createLeavesDrops(block, VOID_ASPECT_SAPLING.get(), SAPLING_CHANCES);
 	}
-	private static LootTable.Builder bookshelfDrop(Block block)
+	private LootTable.Builder bookshelfDrop(Block block)
 	{
 		return createSingleItemTableWithSilkTouch(block, Items.BOOK, ConstantValue.exactly(3.0F));
 	}
-	private static LootTable.Builder desertBushDrop(Block block)
+	private LootTable.Builder desertBushDrop(Block block)
 	{
 		return createSilkTouchDispatchTable(block, applyExplosionDecay(block, LootItem.lootTableItem(MSItems.DESERT_FRUIT.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(3.0F, 6.0F))).apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))));
 	}
-	protected static LootTable.Builder droppingWithColor(Block block)
+	private LootTable.Builder droppingWithColor(Block block)
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(block).apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("color", "color")))));
 	}
-	protected static LootTable.Builder droppingWithTEItem(Block block)
+	private LootTable.Builder droppingWithTEItem(Block block)
 	{
 		return LootTable.lootTable().withPool(applyExplosionCondition(block, LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(DynamicLoot.dynamicEntry(ItemStackBlockEntity.ITEM_DYNAMIC))));
 	}
-	protected static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
+	private static LootTable.Builder droppingWithNameOnSilkTouch(Block block)
 	{
 		return createSelfDropDispatchTable(block, SILK_TOUCH_CONDITION.invert(), LootItem.lootTableItem(block).apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY)));
 	}

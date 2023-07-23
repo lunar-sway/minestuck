@@ -25,5 +25,6 @@
     [
       "touch_return_node"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

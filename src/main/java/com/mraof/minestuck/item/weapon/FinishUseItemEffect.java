@@ -18,7 +18,7 @@ public interface FinishUseItemEffect
 	
 	
 	FinishUseItemEffect SPAWN_BREADCRUMBS = (stack, level, entityIn) -> {
-		if(!entityIn.level.isClientSide && entityIn instanceof Player player)
+		if(!entityIn.level().isClientSide && entityIn instanceof Player player)
 		{
 			int num = entityIn.getRandom().nextInt(10);
 			ItemStack crumbs = new ItemStack(MSItems.BREADCRUMBS.get(), num);
@@ -29,7 +29,7 @@ public interface FinishUseItemEffect
 	};
 	
 	FinishUseItemEffect SHARPEN_CANDY_CANE = (stack, worldIn, entityIn) -> {
-		if(entityIn instanceof Player player && !entityIn.level.isClientSide)
+		if(entityIn instanceof Player player && !entityIn.level().isClientSide)
 		{
 			player.addItem(new ItemStack(MSItems.SHARP_CANDY_CANE.get(), 1));
 		}

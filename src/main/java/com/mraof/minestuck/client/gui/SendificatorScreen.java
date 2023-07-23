@@ -1,15 +1,14 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.SendificatorBlockEntity;
 import com.mraof.minestuck.inventory.SendificatorMenu;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.SendificatorPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -84,41 +83,38 @@ public class SendificatorScreen extends MachineScreen<SendificatorMenu>
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		goButton.active = this.menu.hasDestination();
 		// Make the update button clickable only when there is a parsed position and it is different from the original
 		updateButton.active = parsedPos != null && !parsedPos.equals(this.menu.getDestination());
 		
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		//draws the name of the BE
-		font.draw(poseStack, this.title, 8, 6, 0x404040);
+		guiGraphics.drawString(font, this.title, 8, 6, 0x404040, false);
 		
 		//draws "Inventory" or your regional equivalent
-		font.draw(poseStack, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040);
+		guiGraphics.drawString(font, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040, false);
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
+	protected void renderBg(GuiGraphics guiGraphics, float par1, int par2, int par3)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		//draw background
-		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(BACKGROUND_TEXTURE, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 		
 		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
 		int height = getScaledValue(menu.getFuel(), SendificatorBlockEntity.MAX_FUEL, PROGRESS_BAR_HEIGHT);
-		blit(poseStack, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height,
+		guiGraphics.blit(PROGRESS_BAR_TEXTURE, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height,
 				0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 	

@@ -30,5 +30,6 @@
     "recipes": [
       "minestuck:oak_planks_from_treated_planks"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

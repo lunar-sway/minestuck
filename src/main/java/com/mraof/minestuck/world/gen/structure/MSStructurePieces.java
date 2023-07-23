@@ -5,14 +5,14 @@ import com.mraof.minestuck.world.gen.structure.castle.*;
 import com.mraof.minestuck.world.gen.structure.gate.GateMushroomPiece;
 import com.mraof.minestuck.world.gen.structure.gate.GatePillarPiece;
 import com.mraof.minestuck.world.gen.structure.village.*;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MSStructurePieces
 {
-	public static final DeferredRegister<StructurePieceType> REGISTER = DeferredRegister.create(Registry.STRUCTURE_PIECE_REGISTRY, Minestuck.MOD_ID);
+	public static final DeferredRegister<StructurePieceType> REGISTER = DeferredRegister.create(Registries.STRUCTURE_PIECE, Minestuck.MOD_ID);
 	
 	public static final RegistryObject<StructurePieceType.ContextlessType> FROG_TEMPLE = REGISTER.register("frog_temple", () -> FrogTemplePiece::new);
 	public static final RegistryObject<StructurePieceType.ContextlessType> FROG_TEMPLE_PILLAR = REGISTER.register("frog_temple_pillar", () -> FrogTemplePillarPiece::new);

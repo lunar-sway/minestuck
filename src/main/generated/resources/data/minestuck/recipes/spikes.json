@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "#": {
       "item": "minecraft:iron_ingot"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "minestuck:spikes"
-  }
+  },
+  "show_notification": true
 }

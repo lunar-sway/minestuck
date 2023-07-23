@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.world.biome.LandBiomeAccess;
 import com.mraof.minestuck.world.biome.LandBiomeType;
-import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
+import com.mraof.minestuck.world.gen.structure.gate.GateStructure;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.util.CubicSpline;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
@@ -81,7 +81,7 @@ public final class LandGenSettings
 		return gatePiece;
 	}
 	
-	Holder<NoiseGeneratorSettings> createDimensionSettings(Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> densityFunctions)
+	Holder<NoiseGeneratorSettings> createDimensionSettings(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions)
 	{
 		//includes the y-range at which generation occurs, with the values used here set in resources/data/minestuck/dimension_type/land.json
 		NoiseSettings noiseSettings = NoiseSettings.create(-64, 384, 1, 2);
@@ -117,19 +117,19 @@ public final class LandGenSettings
 		return this.hasRoughTerrain() ? this.roughThreshold + offset : -1.0F;
 	}
 	
-	private NoiseRouter makeLandNoiseRouter(Registry<NormalNoise.NoiseParameters> noises, Registry<DensityFunction> registry)
+	private NoiseRouter makeLandNoiseRouter(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions)
 	{
-		DensityFunctions.Spline.Coordinate continents = new DensityFunctions.Spline.Coordinate(registry.getHolderOrThrow(MSDensityFunctions.LAND_CONTINENTS));
-		DensityFunctions.Spline.Coordinate erosion = new DensityFunctions.Spline.Coordinate(registry.getHolderOrThrow(MSDensityFunctions.LAND_EROSION));
+		DensityFunctions.Spline.Coordinate continents = new DensityFunctions.Spline.Coordinate(densityFunctions.getOrThrow(MSDensityFunctions.LAND_CONTINENTS));
+		DensityFunctions.Spline.Coordinate erosion = new DensityFunctions.Spline.Coordinate(densityFunctions.getOrThrow(MSDensityFunctions.LAND_EROSION));
 		
 		DensityFunction depth = MSDensityFunctions.depth(offset(continents));
 		DensityFunction factor = factor(continents, erosion);
 		DensityFunction initialDensity = MSDensityFunctions.initialDensity(depth, factor);
-		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getHolderOrThrow(Noises.JAGGED), 320);
+		DensityFunction finalDensity = MSDensityFunctions.finalDensity(depth, factor, DensityFunctions.zero(), noises.getOrThrow(Noises.JAGGED), 320);
 		
 		return new NoiseRouter(
 				DensityFunctions.zero(), DensityFunctions.constant(-1), DensityFunctions.zero(), DensityFunctions.zero(),	// aquifer info
-				DensityFunctions.zero(), DensityFunctions.zero(), registry.getOrThrow(MSDensityFunctions.LAND_CONTINENTS), registry.getOrThrow(MSDensityFunctions.LAND_EROSION), depth, DensityFunctions.zero(), // biome parameters
+				DensityFunctions.zero(), DensityFunctions.zero(), MSDensityFunctions.get(densityFunctions, MSDensityFunctions.LAND_CONTINENTS), MSDensityFunctions.get(densityFunctions, MSDensityFunctions.LAND_EROSION), depth, DensityFunctions.zero(), // biome parameters
 				initialDensity, finalDensity,	// terrain and surface height
 				DensityFunctions.zero(), DensityFunctions.zero(), DensityFunctions.zero());	// ore vein info
 	}

@@ -1,17 +1,17 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.blockentity.machine.AnthvilBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.AnthvilMenu;
 import com.mraof.minestuck.network.AnthvilPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -62,11 +62,11 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		this.renderBackground(graphics);
+		super.render(graphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(graphics, mouseX, mouseY);
 		
 		if(minecraft != null && minecraft.level != null)
 		{
@@ -76,39 +76,36 @@ public class AnthvilScreen extends AbstractContainerScreen<AnthvilMenu>
 			{
 				GristAmount pickedGrist = AnthvilBlockEntity.getUsedGrist(fullSet);
 				
-				GuiUtil.drawGristBoard(poseStack, pickedGrist, GuiUtil.GristboardMode.ALCHEMITER, (width - this.leftPos) / 2 - 4, (height - this.topPos) / 2 - 48, font, 2);
+				GuiUtil.drawGristBoard(graphics, pickedGrist, GuiUtil.GristboardMode.ALCHEMITER, (width - this.leftPos) / 2 - 4, (height - this.topPos) / 2 - 48, font, 2);
 				//draw the grist
 				Component tooltip = GuiUtil.getGristboardTooltip(pickedGrist, GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, (width - this.leftPos) / 2 - 4, (height - this.topPos) / 2 - 48, font, 2);
 				if(tooltip != null)
-					this.renderTooltip(poseStack, tooltip, mouseX, mouseY);
+					graphics.renderTooltip(font, tooltip, mouseX, mouseY);
 			}
 		}
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY)
 	{
 		//draws the name of the BE
-		font.draw(poseStack, this.title, 8, 6, 0x404040);
+		graphics.drawString(font, this.title, 8, 6, 0x404040, false);
 		
 		//draws "Inventory" or your regional equivalent
-		font.draw(poseStack, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040);
+		graphics.drawString(font, this.playerInventoryTitle, 8, imageHeight - 96 + 2, 0x404040, false);
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
+	protected void renderBg(GuiGraphics graphics, float par1, int par2, int par3)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
 		//draw background
-		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		graphics.blit(BACKGROUND_TEXTURE, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 		
 		//draw fuel bar
-		RenderSystem.setShaderTexture(0, FUEL_STATUS);
 		int fuelHeight = MachineScreen.getScaledValue(menu.getFuel(), AnthvilBlockEntity.MAX_FUEL, STATUS_HEIGHT);
-		blit(poseStack, this.leftPos + FUEL_STATUS_X, this.topPos + FUEL_STATUS_Y + STATUS_HEIGHT - fuelHeight,
+		graphics.blit(FUEL_STATUS, this.leftPos + FUEL_STATUS_X, this.topPos + FUEL_STATUS_Y + STATUS_HEIGHT - fuelHeight,
 				0, STATUS_HEIGHT - fuelHeight, STATUS_WIDTH, fuelHeight, STATUS_WIDTH, STATUS_HEIGHT);
 	}
 }

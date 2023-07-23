@@ -99,7 +99,7 @@ public class TogglerBlock extends MSDirectionalBlock
 			level.setBlock(facingPos, facingState.cycle(MSProperties.MACHINE_TOGGLE), Block.UPDATE_ALL);
 			
 			if(!level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).is(BlockTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-				level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
+				level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, facingState.getValue(MSProperties.MACHINE_TOGGLE) ? 1.5F : 0.5F);
 		}
 	}
 	
@@ -129,7 +129,7 @@ public class TogglerBlock extends MSDirectionalBlock
 		}
 		
 		if(updated && !level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())).is(BlockTags.WOOL)) //wont make a toggle sound if the toggler is "muted" by a wool block
-			level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 0.5F);
+			level.playSound(null, facingPos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 0.5F);
 	}
 	
 	@Override

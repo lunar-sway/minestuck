@@ -116,5 +116,6 @@
       "name": "block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/consort_general/terrain/minestuck/sandstone"
 }

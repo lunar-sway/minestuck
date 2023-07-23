@@ -10,8 +10,8 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
-import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.AnimationControllerUtil;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -39,20 +39,19 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.util.FakePlayer;
 import org.slf4j.Logger;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -61,14 +60,21 @@ import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, IAnimatable
+public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider, GeoEntity
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final MobAnimation TALK_ANIMATION = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
-	public static final MobAnimation PANIC_ANIMATION = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
+	private static final MobAnimation TALK_PROPERTIES = new MobAnimation(MobAnimation.Action.TALK, 80, true, false); //TODO adjust as needed - 4 secs for now
+	private static final MobAnimation PANIC_PROPERTIES = new MobAnimation(MobAnimation.Action.PANIC, MobAnimation.LOOPING_ANIMATION, false, false);
+	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	private static final RawAnimation ARMS_WALKING_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
+	private static final RawAnimation JUMP_ANIMATION = RawAnimation.begin().then("jump", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation PANIC_ANIMATION = RawAnimation.begin().thenLoop("panicrun");
+	private static final RawAnimation TALK_ANIMATION = RawAnimation.begin().thenLoop("talk");
+	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private final EnumConsort consortType;
 	private boolean hasHadMessage = false;
 	ConsortDialogue.DialogueWrapper message;
@@ -99,7 +105,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	protected void registerGoals()
 	{
 		goalSelector.addGoal(0, new FloatGoal(this));
-		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D, PANIC_ANIMATION));
+		goalSelector.addGoal(1, new AnimatedPanicGoal(this, 1.4D, PANIC_PROPERTIES));
 		goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1F));
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -107,9 +113,9 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return this.factory;
+		return this.cache;
 	}
 	
 	private boolean shouldFleeFrom(LivingEntity entity)
@@ -126,7 +132,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	public boolean isWithinRestriction()
 	{
-		return homeDimension != this.level.dimension() || super.isWithinRestriction();
+		return homeDimension != this.level().dimension() || super.isWithinRestriction();
 	}
 	
 	@Override
@@ -134,7 +140,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			if(!level.isClientSide && player instanceof ServerPlayer serverPlayer && PlayerSavedData.getData(serverPlayer).getConsortReputation(homeDimension) > -1000)
+			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer && PlayerSavedData.getData(serverPlayer).getConsortReputation(homeDimension) > -1000)
 			{
 				if(message == null)
 				{
@@ -150,7 +156,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 					if(text != null)
 						player.sendSystemMessage(text);
 					handleConsortRepFromTalking(serverPlayer);
-					setCurrentAnimation(TALK_ANIMATION);
+					setCurrentAnimation(TALK_PROPERTIES);
 					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
 				} catch(Exception e)
 				{
@@ -168,7 +174,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(messageData == null)
 		{
 			messageData = new CompoundTag();
-			messageTicksLeft = 24000 + level.random.nextInt(24000);
+			messageTicksLeft = 24000 + level().random.nextInt(24000);
 		}
 	}
 	
@@ -202,7 +208,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	public void aiStep()
 	{
 		super.aiStep();
-		if(level.isClientSide)
+		if(level().isClientSide)
 			return;
 		
 		if(messageTicksLeft > 0)
@@ -217,7 +223,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(updatingMessage != null)
 			updatingMessage.onTickUpdate(this);
 		
-		if(MSDimensions.isSkaia(level.dimension()))
+		if(MSDimensions.isSkaia(level().dimension()))
 			visitedSkaia = true;
 		
 		if(eventTimer > 0)
@@ -228,12 +234,11 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	private void explode()
 	{
-		if(!this.level.isClientSide)
+		if(!this.level().isClientSide)
 		{
-			boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.level, this);
 			this.dead = true;
 			float explosionRadius = 2.0f;
-			this.level.explode(this, this.getX(), this.getY(), this.getZ(), explosionRadius, flag ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
+			this.level().explode(this, this.getX(), this.getY(), this.getZ(), explosionRadius, Level.ExplosionInteraction.MOB);
 			this.discard();
 		}
 	}
@@ -306,7 +311,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(compound.contains("HomeDim", Tag.TAG_STRING))
 			homeDimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, compound.get("HomeDim")).resultOrPartial(LOGGER::error).orElse(null);
 		if(homeDimension == null)
-			homeDimension = this.level.dimension();
+			homeDimension = this.level().dimension();
 		
 		if(merchantType != EnumConsort.MerchantType.NONE && compound.contains("Stock", Tag.TAG_LIST))
 		{
@@ -336,7 +341,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 				restrictTo(getRestrictCenter(), (int) (getRestrictRadius() * 0.4F));
 		}
 		
-		homeDimension = level.dimension();
+		homeDimension = level().dimension();
 		visitedSkaia = random.nextFloat() < 0.1F;
 		
 		applyAdditionalAITasks();
@@ -374,7 +379,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	
 	public void commandReply(ServerPlayer player, String chain)
 	{
-		if(this.isAlive() && !level.isClientSide && message != null)
+		if(this.isAlive() && !level().isClientSide && message != null)
 		{
 			Component text = message.getFromChain(this, player, chain);
 			if(text != null)
@@ -440,31 +445,31 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ConsortEntity::idleAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, ConsortEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "armsAnimation", 1, ConsortEntity::armsAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, ConsortEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "actionAnimation", 1, ConsortEntity::actionAnimation));
 	}
 	
-	private static PlayState idleAnimation(AnimationEvent<ConsortEntity> event)
+	private static PlayState idleAnimation(AnimationState<ConsortEntity> state)
 	{
-		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		if(state.isMoving() || state.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
+		state.getController().setAnimation(IDLE_ANIMATION);
 		return PlayState.CONTINUE;
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<ConsortEntity> event)
+	private static PlayState walkAnimation(AnimationState<ConsortEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		
-		if(!event.isMoving())
+		if(!state.isMoving())
 		{
 			return PlayState.STOP;
 		}
@@ -472,49 +477,49 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 		if(action == MobAnimation.Action.PANIC)
 		{
 			//TODO add a system for the panic animation intended to precede this
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("panicrun", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(PANIC_ANIMATION);
 			return PlayState.CONTINUE;
 		} else if(action != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
-		} else if(event.getAnimatable().jumping)
+		} else if(state.getAnimatable().jumping)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("jump", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(JUMP_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		else {
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 	}
 	
-	private static PlayState armsAnimation(AnimationEvent<ConsortEntity> event)
+	private static PlayState armsAnimation(AnimationState<ConsortEntity> state)
 	{
-		if(!event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		if(!state.isMoving() || state.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
+		state.getController().setAnimation(ARMS_WALKING_ANIMATION);
 		return PlayState.CONTINUE;
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<ConsortEntity> event)
+	private static PlayState deathAnimation(AnimationState<ConsortEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState actionAnimation(AnimationEvent<ConsortEntity> event)
+	private static PlayState actionAnimation(AnimationState<ConsortEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		if(action == MobAnimation.Action.TALK)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("talk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(TALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		

@@ -33,5 +33,6 @@
     [
       "possess_code"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

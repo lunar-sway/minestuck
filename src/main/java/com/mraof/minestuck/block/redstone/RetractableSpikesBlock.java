@@ -10,7 +10,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -27,11 +26,13 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 /**
  * Acts similar to spike blocks, except the damage is dependent on whether the spikes are extended or not. Spikes will extend if the block is powered or if the block is in Pressure Sensitive mode and a mob has stepped on it.
  */
+@ParametersAreNonnullByDefault
 public class RetractableSpikesBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -48,7 +49,7 @@ public class RetractableSpikesBlock extends Block
 	{
 		if(state.getValue(POWERED) && fallDistance > 3)
 		{
-			entityIn.causeFallDamage(fallDistance, 3, DamageSource.FALL);
+			entityIn.causeFallDamage(fallDistance, 3, level.damageSources().fall());
 		} else
 			super.fallOn(level, state, pos, entityIn, fallDistance);
 	}
@@ -66,7 +67,7 @@ public class RetractableSpikesBlock extends Block
 				double distanceZ = Math.abs(entityIn.getZ() - entityIn.zOld);
 				if(distanceX >= (double) 0.003F || distanceZ >= (double) 0.003F)
 				{
-					entityIn.hurt(MSDamageSources.SPIKE, 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
+					entityIn.hurt(MSDamageSources.spike(level.registryAccess()), 1.0F); //TODO only activates for players when they take a running jump onto the block, works fine for other mobs
 				}
 			}
 		}
@@ -86,7 +87,7 @@ public class RetractableSpikesBlock extends Block
 			{
 				for(LivingEntity livingEntity : list)
 				{
-					entityStandingOnBlock = (livingEntity.isOnGround() && !livingEntity.isCrouching());
+					entityStandingOnBlock = (livingEntity.onGround() && !livingEntity.isCrouching());
 				}
 			}
 			
@@ -109,7 +110,7 @@ public class RetractableSpikesBlock extends Block
 		{
 			level.setBlock(pos, state.cycle(PRESSURE_SENSITIVE), Block.UPDATE_ALL);
 			float pitch = state.getValue(PRESSURE_SENSITIVE) ? 1.5F : 0.5F;
-			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, pitch);
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, pitch);
 			
 			return InteractionResult.SUCCESS;
 		}
@@ -147,7 +148,7 @@ public class RetractableSpikesBlock extends Block
 			{
 				for(LivingEntity livingEntity : list)
 				{
-					livingEntity.hurt(MSDamageSources.SPIKE, 4.0F);
+					livingEntity.hurt(MSDamageSources.spike(level.registryAccess()), 4.0F);
 				}
 			}
 			

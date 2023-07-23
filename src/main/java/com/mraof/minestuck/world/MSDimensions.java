@@ -5,7 +5,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.LandTypesDataPacket;
 import com.mraof.minestuck.world.lands.LandTypePair;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -19,7 +19,7 @@ import java.util.Objects;
 public class MSDimensions
 {
 	
-	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
+	public static ResourceKey<Level> SKAIA = ResourceKey.create(Registries.DIMENSION, new ResourceLocation(Minestuck.MOD_ID, "skaia"));
 	public static final ResourceLocation LAND_EFFECTS = new ResourceLocation(Minestuck.MOD_ID, "land");
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
@@ -45,7 +45,7 @@ public class MSDimensions
 	
 	public static void sendDimensionData(ServerPlayer player)
 	{
-		MSPacketHandler.sendToPlayer(createLandTypesPacket(player.getLevel().getServer()), player);
+		MSPacketHandler.sendToPlayer(createLandTypesPacket(player.getServer()), player);
 	}
 	
 	private static LandTypesDataPacket createLandTypesPacket(MinecraftServer server)

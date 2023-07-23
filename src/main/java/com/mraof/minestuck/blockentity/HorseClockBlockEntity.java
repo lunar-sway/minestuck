@@ -11,23 +11,25 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Block entity present in the bottom of the horse block multiblock. Keeps track of the time and lets off a tick sound each second, which makes the blocks give off a redstone signal.
  * Chimes at the beginning of the day. It will not give off a redstone If daytime does not advance, it will not give off redstone signals after the chime. It is Geckolib animated.
  */
-public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
+public class HorseClockBlockEntity extends BlockEntity implements GeoBlockEntity
 {
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private static final RawAnimation TICK_ANIMATION = RawAnimation.begin().thenLoop("ticktockontheclock");
+	
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean hasChimed = false; //prevents the sound from getting stacked if the day time is frozen
 	
 	public HorseClockBlockEntity(BlockPos pos, BlockState state)
@@ -121,20 +123,20 @@ public class HorseClockBlockEntity extends BlockEntity implements IAnimatable
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return factory;
+		return cache;
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(new AnimationController<>(this, "pendulum", 0, this::pendulumAnimation));
+		controllers.add(new AnimationController<>(this, "pendulum", 0, this::pendulumAnimation));
 	}
 	
-	private <E extends BlockEntity & IAnimatable> PlayState pendulumAnimation(AnimationEvent<E> event)
+	private <E extends BlockEntity & GeoAnimatable> PlayState pendulumAnimation(AnimationState<E> state)
 	{
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("ticktockontheclock", ILoopType.EDefaultLoopTypes.LOOP));
+		state.getController().setAnimation(TICK_ANIMATION);
 		return PlayState.CONTINUE;
 	}
 }

@@ -78,7 +78,7 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		double reachDistance = playerEntity.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, playerEntity));
 	}
@@ -86,7 +86,7 @@ public class PogoEffect implements ItemRightClickEffect, OnHitEffect
 	private static void hitEntity(ItemStack stack, LivingEntity target, LivingEntity player, double pogoMotion)
 	{
 		pogoMotion = addEfficiencyModifier(pogoMotion, stack);
-		if(player.fallDistance > 0.0F && !player.isOnGround() && !player.onClimbable() && !player.isInWater() && !player.isPassenger())
+		if(player.fallDistance > 0.0F && !player.onGround() && !player.onClimbable() && !player.isInWater() && !player.isPassenger())
 		{
 			double knockbackModifier = 1D - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
 			double targetMotionY = Math.max(target.getDeltaMovement().y, knockbackModifier * Math.min(pogoMotion * 2, Math.abs(player.getDeltaMovement().y) + target.getDeltaMovement().y + pogoMotion));

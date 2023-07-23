@@ -331,7 +331,7 @@ public final class PlayerData
 		if(startingTypes.isEmpty())
 			return;
 		
-		ModusType<?> type = startingTypes.get(player.level.random.nextInt(startingTypes.size()));
+		ModusType<?> type = startingTypes.get(player.level().random.nextInt(startingTypes.size()));
 		if(type == null)
 		{
 			setGivenModus();
@@ -393,7 +393,7 @@ public final class PlayerData
 	{
 		if(player == null)
 			return;
-		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.level.dimension()));
+		ConsortReputationDataPacket packet = ConsortReputationDataPacket.create(getConsortReputation(player.level().dimension()));
 		//MSPacketHandler.sendToPlayer(packet, player);
 	}
 	

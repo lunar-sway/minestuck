@@ -40,7 +40,7 @@ public class TitleSelectionHook
 			return true;
 		
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
-		Session s = SessionHandler.get(player.level).getPlayerSession(identifier);
+		Session s = SessionHandler.get(player.level()).getPlayerSession(identifier);
 		
 		if(s != null && s.predefinedPlayers.containsKey(identifier) && s.predefinedPlayers.get(identifier).getTitle() != null
 				|| PlayerSavedData.getData(identifier, player.server).getTitle() != null)
@@ -68,7 +68,7 @@ public class TitleSelectionHook
 		PlayerIdentifier identifier = IdentifierHandler.encode(player);
 		
 		if(title == null)
-			SburbHandler.generateAndSetTitle(player.level, identifier);
+			SburbHandler.generateAndSetTitle(player.level(), identifier);
 		else
 		{
 			Session s = SessionHandler.get(player.server).getPlayerSession(identifier);

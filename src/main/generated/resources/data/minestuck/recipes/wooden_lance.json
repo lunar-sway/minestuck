@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -18,5 +19,6 @@
   ],
   "result": {
     "item": "minestuck:wooden_lance"
-  }
+  },
+  "show_notification": true
 }

@@ -63,5 +63,6 @@
       "name": "computer",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/kundler_suprises"
 }

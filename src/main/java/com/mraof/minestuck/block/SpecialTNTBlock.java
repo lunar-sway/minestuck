@@ -64,7 +64,7 @@ public class SpecialTNTBlock extends TntBlock
 	{
 		if(!level.isClientSide)
 		{
-			PrimedTnt entity = new PrimedTnt(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getSourceMob());
+			PrimedTnt entity = new PrimedTnt(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, explosionIn.getIndirectSourceEntity());
 			entity.setFuse(level.random.nextInt(entity.getFuse() / 4) + entity.getFuse() / 8);
 			if(instant)
 				entity.setFuse(entity.getFuse() / 2);

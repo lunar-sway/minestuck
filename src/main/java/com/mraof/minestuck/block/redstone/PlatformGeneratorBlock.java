@@ -56,7 +56,7 @@ public class PlatformGeneratorBlock extends MSDirectionalBlock implements Entity
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			level.setBlock(pos, state.cycle(INVISIBLE_MODE), Block.UPDATE_ALL);
-			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, state.getValue(INVISIBLE_MODE) ? 1.5F : 0.5F);
 			
 			return InteractionResult.SUCCESS;
 		}

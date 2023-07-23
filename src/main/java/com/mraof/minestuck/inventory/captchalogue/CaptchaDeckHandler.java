@@ -43,7 +43,7 @@ public class CaptchaDeckHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
+		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
 		{
 			dropSylladex(player);
 		}
@@ -76,10 +76,10 @@ public class CaptchaDeckHandler
 	
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
-		ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY()+1, player.getZ(), item);
-		entity.setDeltaMovement(player.level.random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level.random.nextDouble() - 0.5);
+		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
+		entity.setDeltaMovement(player.level().random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level().random.nextDouble() - 0.5);
 		entity.setDefaultPickUpDelay();
-		player.level.addFreshEntity(entity);
+		player.level().addFreshEntity(entity);
 	}
 	
 	public static void useItem(ServerPlayer player)
@@ -382,7 +382,7 @@ public class CaptchaDeckHandler
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return stack1.getItem() == stack2.getItem() && ItemStack.tagMatches(stack1, stack2)
+		return ItemStack.isSameItemSameTags(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	

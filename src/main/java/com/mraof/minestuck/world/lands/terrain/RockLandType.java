@@ -10,8 +10,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.gen.structure.village.ConsortVillageCenter;
 import com.mraof.minestuck.world.gen.structure.village.NakagatorVillagePieces;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.worldgen.Carvers;
 import net.minecraft.data.worldgen.placement.CavePlacements;
 import net.minecraft.data.worldgen.placement.OrePlacements;
@@ -181,10 +180,10 @@ public class RockLandType extends TerrainLandType
 				LandBiomeType.any());
 		
 		//cave carver that creates more cavernous sections, may end up as just a placeholder for noise based cave generation
-		builder.addCarver(GenerationStep.Carving.AIR, Holder.direct(WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
+		builder.addCarver(GenerationStep.Carving.AIR, WorldCarver.CAVE.configured(new CaveCarverConfiguration(0.08F,
 						UniformHeight.of(VerticalAnchor.aboveBottom(8), VerticalAnchor.absolute(180)),
-						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), Registry.BLOCK.getOrCreateTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES),
-						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F)))),
+						UniformFloat.of(0.1F, 0.9F), VerticalAnchor.aboveBottom(8), BuiltInRegistries.BLOCK.getOrCreateTag(BlockTags.OVERWORLD_CARVER_REPLACEABLES),
+						UniformFloat.of(0.7F, 4.4F), UniformFloat.of(0.8F, 4.3F), UniformFloat.of(-1.0F, -0.4F))),
 				LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE, LandBiomeType.any());
 		builder.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND, LandBiomeType.any());

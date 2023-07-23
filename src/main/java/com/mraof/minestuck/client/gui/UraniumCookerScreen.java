@@ -1,11 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.inventory.UraniumCookerMenu;
 import com.mraof.minestuck.blockentity.machine.UraniumCookerBlockEntity;
-import net.minecraft.client.renderer.GameRenderer;
+import com.mraof.minestuck.inventory.UraniumCookerMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -30,25 +29,22 @@ public final class UraniumCookerScreen extends MachineScreen<UraniumCookerMenu>
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float par1, int par2, int par3)
+	protected void renderBg(GuiGraphics guiGraphics, float par1, int par2, int par3)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(BACKGROUND_TEXTURE, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 		
-		RenderSystem.setShaderTexture(0, FUEL_BAR_TEXTURE);
 		int height = getScaledValue(menu.getFuel(), UraniumCookerBlockEntity.MAX_FUEL, FUEL_BAR_HEIGHT);
-		blit(poseStack, this.leftPos + FUEL_BAR_X, this.topPos + FUEL_BAR_Y + FUEL_BAR_HEIGHT - height,
+		guiGraphics.blit(FUEL_BAR_TEXTURE, this.leftPos + FUEL_BAR_X, this.topPos + FUEL_BAR_Y + FUEL_BAR_HEIGHT - height,
 				0, FUEL_BAR_HEIGHT - height, FUEL_BAR_WIDTH, height, FUEL_BAR_WIDTH, FUEL_BAR_HEIGHT);
 	}
 	

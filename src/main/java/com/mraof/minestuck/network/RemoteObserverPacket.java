@@ -52,9 +52,9 @@ public class RemoteObserverPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(beBlockPos, 0))
+		if(player.level().isAreaLoaded(beBlockPos, 0))
 		{
-			if(player.level.getBlockEntity(beBlockPos) instanceof RemoteObserverBlockEntity observerBE)
+			if(player.level().getBlockEntity(beBlockPos) instanceof RemoteObserverBlockEntity observerBE)
 			{
 				if(Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 				{
@@ -64,8 +64,8 @@ public class RemoteObserverPacket implements PlayToServerPacket
 					observerBE.setObservingRange(observingRange);
 					//Imitates the structure block to ensure that changes are sent client-side
 					observerBE.setChanged();
-					BlockState state = player.level.getBlockState(beBlockPos);
-					player.level.sendBlockUpdated(beBlockPos, state, state, 3);
+					BlockState state = player.level().getBlockState(beBlockPos);
+					player.level().sendBlockUpdated(beBlockPos, state, state, 3);
 				}
 			}
 		}

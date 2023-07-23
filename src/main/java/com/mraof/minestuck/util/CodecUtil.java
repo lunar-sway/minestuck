@@ -14,7 +14,7 @@ public class CodecUtil
 		return ResourceLocation.CODEC.comapFlatMap(name -> {
 			if(registry.get().containsKey(name))
 				return DataResult.success(registry.get().getValue(name));
-			else return DataResult.error("Unknown registry key: " + name);
+			else return DataResult.error(() -> "Unknown registry key: " + name);
 		}, t -> registry.get().getKey(t));
 	}
 }

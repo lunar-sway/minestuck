@@ -10,7 +10,7 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -18,7 +18,6 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
@@ -41,14 +40,15 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	public final RegistryBackedBiomeSet baseBiomes;
 	
 	@SuppressWarnings("ConstantConditions")
-	public WorldGenBiomeSet(RegistryBackedBiomeSet biomes, LandGenSettings settings, Registry<PlacedFeature> features)
+	public WorldGenBiomeSet(RegistryBackedBiomeSet biomes, LandGenSettings settings,
+							HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
 		
 		baseBiomes = biomes;
 		
-		GenerationBuilder generationBuilder = new GenerationBuilder(features);
+		GenerationBuilder generationBuilder = new GenerationBuilder(features, carvers);
 		addBiomeGeneration(generationBuilder, blocks, landTypes);
 		
 		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).build());
@@ -81,8 +81,8 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	private static Biome.BiomeBuilder createBiomeBase(RegistryBackedBiomeSet baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
 	{
 		Biome base = baseBiomes.fromType(type).value();
-		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().precipitation(base.getPrecipitation())
-				.temperature(base.getBaseTemperature()).downfall(base.getDownfall()).specialEffects(base.getSpecialEffects());
+		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().hasPrecipitation(base.hasPrecipitation())
+				.temperature(base.getBaseTemperature()).downfall(0.5F).specialEffects(base.getSpecialEffects());
 		
 		MobSpawnSettings spawnInfo = createMobSpawnInfo(landTypes, type);
 		
@@ -121,14 +121,14 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 	
 	private static class GenerationBuilder implements LandBiomeGenBuilder
 	{
-		private final Registry<PlacedFeature> features;
+		private final HolderGetter<PlacedFeature> features;
 		private final Map<LandBiomeType, BiomeGenerationSettings.Builder> settings = new EnumMap<>(LandBiomeType.class);
 		
-		private GenerationBuilder(Registry<PlacedFeature> features)
+		private GenerationBuilder(HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 		{
 			this.features = features;
 			for(LandBiomeType type : LandBiomeType.values())
-				settings.put(type, new BiomeGenerationSettings.Builder());
+				settings.put(type, new BiomeGenerationSettings.Builder(features, carvers));
 		}
 		
 		@Override
@@ -141,7 +141,7 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		@Override
 		public void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 		{
-			Holder<PlacedFeature> featureHolder = features.getHolderOrThrow(feature);
+			Holder<PlacedFeature> featureHolder = features.getOrThrow(feature);
 			if(modifier != null)
 				featureHolder = modifier.map(featureHolder);
 			
@@ -150,10 +150,18 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		}
 		
 		@Override
-		public void addCarver(GenerationStep.Carving step, Holder<? extends ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
+		public void addCarver(GenerationStep.Carving step, ResourceKey<ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
 		{
 			for(LandBiomeType type : types)
 				settings.get(type).addCarver(step, carver);
+		}
+		
+		@Override
+		public void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types)
+		{
+			Holder<ConfiguredWorldCarver<?>> holder = Holder.direct(carver);
+			for(LandBiomeType type : types)
+				settings.get(type).addCarver(step, holder);
 		}
 	}
 }

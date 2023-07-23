@@ -49,7 +49,7 @@ public class GristCommand
 		for(ServerPlayer player : players)
 		{
 			Component gristComponent = GristCache.get(player).getGristSet().asTextComponent();
-			source.sendSuccess(Component.translatable(GET, player.getDisplayName(), gristComponent), false);
+			source.sendSuccess(() -> Component.translatable(GET, player.getDisplayName(), gristComponent), false);
 		}
 		return players.size();
 	}
@@ -69,9 +69,9 @@ public class GristCommand
 				{
 					i++;
 					if(remainingGrist.isEmpty())
-						source.sendSuccess(Component.translatable(SUCCESS, player.getDisplayName()), true);
+						source.sendSuccess(() -> Component.translatable(SUCCESS, player.getDisplayName()), true);
 					else
-						source.sendSuccess(Component.translatable(PARTIAL_SUCCESS, player.getDisplayName(), remainingGrist.asTextComponent()), true);
+						source.sendSuccess(() -> Component.translatable(PARTIAL_SUCCESS, player.getDisplayName(), remainingGrist.asTextComponent()), true);
 				}
 			} catch(IllegalArgumentException e)
 			{
@@ -80,7 +80,10 @@ public class GristCommand
 			}
 		}
 		if(players.size() > 1)
-			source.sendSuccess(Component.translatable(ADD, i), true);
+		{
+			int successCount = i;
+			source.sendSuccess(() -> Component.translatable(ADD, successCount), true);
+		}
 		return i;
 	}
 	
@@ -90,7 +93,7 @@ public class GristCommand
 		{
 			GristCache.get(player).set(grist);
 		}
-		source.sendSuccess(Component.translatable(SET, players.size(), grist.asTextComponent()), true);
+		source.sendSuccess(() -> Component.translatable(SET, players.size(), grist.asTextComponent()), true);
 		return players.size();
 	}
 }

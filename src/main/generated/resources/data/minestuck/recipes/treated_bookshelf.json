@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "group": "bookshelf",
   "key": {
     "b": {
@@ -16,5 +17,6 @@
   ],
   "result": {
     "item": "minestuck:treated_bookshelf"
-  }
+  },
+  "show_notification": true
 }
