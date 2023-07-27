@@ -23,18 +23,28 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	protected void registerModels()
 	{
 		
+		//Clubs
+		handheldItem(MSItems.M_ACE_OF_CLUBS);
+		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
+		handheldItem(MSItems.HOME_GROWN_MACE);
+		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
-
+		
 		//Staffs
 		handheldItemTextureName(MSItems.WIZARD_STAFF, "wizard_staff");
 		handheldItemTextureName(MSItems.WATER_STAFF, "water_staff");
 		handheldItemTextureName(MSItems.FIRE_STAFF, "fire_staff");
-
-		//Clubs
-		handheldItem(MSItems.M_ACE_OF_CLUBS);
-		handheldItem(MSItems.HOME_GROWN_MACE);
-		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
 		
+		simpleItem(MSItems.SCALEMATE_APPLESCAB);
+		simpleItem(MSItems.SCALEMATE_BERRYBREATH);
+		simpleItem(MSItems.SCALEMATE_CINNAMONWHIFF);
+		simpleItem(MSItems.SCALEMATE_HONEYTONGUE);
+		simpleItem(MSItems.SCALEMATE_LEMONSNOUT);
+		simpleItem(MSItems.SCALEMATE_PINESNORT);
+		simpleItem(MSItems.SCALEMATE_PUCEFOOT);
+		simpleItem(MSItems.SCALEMATE_PUMPKINSNUFFLE);
+		simpleItem(MSItems.SCALEMATE_PYRALSPITE);
+		simpleItem(MSItems.SCALEMATE_WITNESS);
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<Item> item)
