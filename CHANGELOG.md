@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- New textures and slightly shorter models for transportalizers
+
+### Contributors for this release
+
+- Vinnelli, hadean
+
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added
