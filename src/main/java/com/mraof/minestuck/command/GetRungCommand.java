@@ -17,10 +17,10 @@ public class GetRungCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(Commands.literal("getrung").then(Commands.argument("target", EntityArgument.player())
-				.executes(GetRungCommand::getRungCommand)));
+				.executes(GetRungCommand::executeGetRung)));
 	}
 	
-	private static int getRungCommand(CommandContext<CommandSourceStack> context)
+	public static int executeGetRung(CommandContext<CommandSourceStack> context)
 	{
 		ServerPlayer player = context.getSource().getPlayer();
 		String playerName = player.getScoreboardName();
