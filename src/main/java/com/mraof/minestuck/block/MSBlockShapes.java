@@ -101,7 +101,7 @@ public class MSBlockShapes
 	
 	//Misc Machines
 	public static CustomVoxelShape INTELLIBEAM_LASERSTATION = new CustomVoxelShape(new double[]{1,6,0,6,12,4}, new double[]{1,0,1,6,7,6}, new double[]{4,0,12,11,7,16}, new double[]{0,0,6,8,8,12}, new double[]{8,0,4,15,8,12}, new double[]{-1,7,7,16,10,11}, new double[]{6,7,12,11,16,16}, new double[]{6,15,11,11,21,15}, new double[]{4,20,8,14,26,14}, new double[]{-1,20,7,4,27,15}, new double[]{5,19,5,12,22,10}, new double[]{6,22,6,11,24,8});
-	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,6,16}, new double[]{1,6,1,15,8,15});
+	public static CustomVoxelShape TRANSPORTALIZER = new CustomVoxelShape(new double[]{0,0,0,16,5,16}, new double[]{1,5,1,15,7,15});
 	public static CustomVoxelShape SENDIFICATOR = new CustomVoxelShape(new double[]{0,0,0,16,1,16},new double[]{0,16,0,16,15,16},new double[]{0,1,0,1,15,16},new double[]{16,1,0,15,15,16},new double[]{1,1,15,15,15,16});
 	public static CustomVoxelShape GRIST_WIDGET = new CustomVoxelShape(new double[]{6,0,5,10,1.5,11.7}, new double[]{2.5,1,5.3,13.5,2.1,11.15}, new double[]{10,0,5,14,1.75,12}, new double[]{11,0.3,11.2,13,1.3,12.2}, new double[]{2,0,5,6,1.75,11}, new double[]{6,0,5,4,1.75,7}).rotate(Direction.SOUTH);
 	public static CustomVoxelShape ANTHVIL = new CustomVoxelShape(new double[]{2,0,6,14,4,10},new double[]{4,4,7,12,7,9},new double[]{0,7,4,16,14,12});
