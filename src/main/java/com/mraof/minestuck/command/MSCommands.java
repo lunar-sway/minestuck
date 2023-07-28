@@ -24,6 +24,7 @@ public class MSCommands
 		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);
 		SetRungCommand.register(dispatcher);
+		GetRungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);
