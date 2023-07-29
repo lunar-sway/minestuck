@@ -9,6 +9,7 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -240,7 +241,6 @@ public interface OnHitEffect
 			
 			if(attacker instanceof ServerPlayer serverPlayer)
 			{
-				source = target.damageSources().playerAttack(serverPlayer);
 				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
 				
 				if(target instanceof UnderlingEntity)
@@ -256,13 +256,9 @@ public interface OnHitEffect
 					if(title == null || title.getHeroAspect() != aspect)
 						damage = damage / 1.2F;
 				}
-			} else
-			{
-				source = attacker.damageSources().mobAttack(attacker);
 			}
 			
-			//source = source.bypassArmor(); TODO should we make our own damage type for this?
-			target.hurt(source, damage);
+			target.hurt(MSDamageSources.armorPierce(attacker.level().registryAccess()), damage);
 		};
 	}
 	

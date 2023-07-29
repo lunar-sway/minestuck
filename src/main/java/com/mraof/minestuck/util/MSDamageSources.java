@@ -12,8 +12,8 @@ import net.minecraft.world.damagesource.DamageType;
 public class MSDamageSources
 {
 	public static final ResourceKey<DamageType> SPIKE = key("spike");
-	
 	public static final ResourceKey<DamageType> DECAPITATION = key("decapitation");
+	public static final ResourceKey<DamageType> ARMOR_PIERCE = key("armor_pierce");
 	
 	private static ResourceKey<DamageType> key(String name)
 	{
@@ -28,6 +28,11 @@ public class MSDamageSources
 	public static DamageSource decapitation(RegistryAccess registryAccess)
 	{
 		return new DamageSource(getType(registryAccess, DECAPITATION));
+	}
+	
+	public static DamageSource armorPierce(RegistryAccess registryAccess)
+	{
+		return new DamageSource(getType(registryAccess, ARMOR_PIERCE));
 	}
 	
 	private static Holder<DamageType> getType(RegistryAccess registryAccess, ResourceKey<DamageType> key)
