@@ -133,7 +133,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 		if(closestTarget != null)
 		{
 			float talliedDamage = calculateDamage(player, closestTarget, damage);
-			DamageSource damageSource = level.damageSources().magic(); //TODO is this okay? Was originally "DamageSource.playerAttack(player).setMagic()"
+			DamageSource damageSource = level.damageSources().magic();
 			closestTarget.hurt(damageSource, talliedDamage);
 			
 			if(effect != null && player.getRandom().nextFloat() < .25F)

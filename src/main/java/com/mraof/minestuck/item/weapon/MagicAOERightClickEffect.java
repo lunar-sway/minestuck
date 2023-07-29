@@ -102,7 +102,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 				continue;
 			
 			float talliedDamage = calculateDamage(player, target, damage);
-			DamageSource damageSource = level.damageSources().magic(); //TODO is this okay? Was originally "DamageSource.playerAttack(player).setMagic()"
+			DamageSource damageSource = level.damageSources().magic();
 			target.hurt(damageSource, talliedDamage);
 			
 			this.targetEffect.accept(target);
