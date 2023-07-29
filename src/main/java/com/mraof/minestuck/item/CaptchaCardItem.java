@@ -15,9 +15,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class CaptchaCardItem extends Item
 {
 	public CaptchaCardItem(Properties properties)
@@ -32,17 +33,7 @@ public class CaptchaCardItem extends Item
 			return 16;
 		else return 64;
 	}
-	/*TODO
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-	{
-		if(this.allowedIn(tab))
-		{
-			items.add(new ItemStack(this));
-			items.add(AlchemyHelper.createPunchedCard(new ItemStack(MSItems.CRUXITE_APPLE.get())));
-		}
-	}
-	*/
+	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{

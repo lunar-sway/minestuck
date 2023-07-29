@@ -20,34 +20,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class FrogItem extends Item
 {
 	public FrogItem(Properties properties)
 	{
 		super(properties);
 	}
-	/*TODO
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-	{
-		if(this.allowedIn(tab))
-		{
-			items.add(new ItemStack(this));
-			for (int i = 1; i <= FrogEntity.maxTypes(); ++i)
-			{
-				if(i != 3 && i != 4)
-				{
-					ItemStack item = new ItemStack(this);
-					item.getOrCreateTag().putInt("Type", i);
-					items.add(item);
-				}
-			}
-		}
-	}
-	*/
+	
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
