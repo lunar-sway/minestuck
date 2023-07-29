@@ -236,7 +236,6 @@ public interface OnHitEffect
 	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
 	{
 		return (stack, target, attacker) -> {
-			DamageSource source;
 			float damage = additionalDamage * 3.3F;
 			
 			if(attacker instanceof ServerPlayer serverPlayer)
