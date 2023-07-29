@@ -14,8 +14,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class BoondollarsItem extends Item
 {
 	public BoondollarsItem(Properties properties)
@@ -32,20 +34,7 @@ public class BoondollarsItem extends Item
 		}
 		return InteractionResultHolder.success(ItemStack.EMPTY);
 	}
-	/* TODO
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-	{
-		if(allowedIn(tab))
-		{
-			items.add(new ItemStack(this));
-			items.add(setCount(new ItemStack(this), 10));
-			items.add(setCount(new ItemStack(this), 100));
-			items.add(setCount(new ItemStack(this), 1000));
-			items.add(setCount(new ItemStack(this), 10000));
-		}
-	}
-	*/
+	
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flagIn)
 	{
