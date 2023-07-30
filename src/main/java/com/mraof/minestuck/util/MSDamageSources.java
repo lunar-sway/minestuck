@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
 
 public class MSDamageSources
 {
@@ -30,9 +31,9 @@ public class MSDamageSources
 		return new DamageSource(getType(registryAccess, DECAPITATION));
 	}
 	
-	public static DamageSource armorPierce(RegistryAccess registryAccess)
+	public static DamageSource armorPierce(RegistryAccess registryAccess, Entity causingEntity)
 	{
-		return new DamageSource(getType(registryAccess, ARMOR_PIERCE));
+		return new DamageSource(getType(registryAccess, ARMOR_PIERCE), causingEntity);
 	}
 	
 	private static Holder<DamageType> getType(RegistryAccess registryAccess, ResourceKey<DamageType> key)

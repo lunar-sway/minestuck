@@ -983,8 +983,6 @@
   "container.minestuck.mini_totem_lathe": "Miniature Totem Lathe",
   "container.minestuck.sendificator": "Sendificator",
   "container.minestuck.uranium_cooker": "Cookalyzer",
-  "death.attack.minestuck.armor_pierce": "%s suffered a direct strike to their body",
-  "death.attack.minestuck.armor_pierce.player": "%1$s was struck hard whilst fighting %2$s",
   "death.attack.minestuck.decapitation": "%s had their head chopped off",
   "death.attack.minestuck.decapitation.player": "%1$s lost their head whilst engaged with %2$s",
   "death.attack.minestuck.spike": "%s was filled with too many holes from spikes",

@@ -18,13 +18,12 @@ public class MSDamageTypeProvider
 {
 	public static final String SPIKE_MSG = "minestuck.spike";
 	public static final String DECAPITATION_MSG = "minestuck.decapitation";
-	public static final String ARMOR_PIERCE_MSG = "minestuck.armor_pierce";
 	
 	public static void register(BootstapContext<DamageType> context)
 	{
 		context.register(MSDamageSources.SPIKE, new DamageType(SPIKE_MSG, DamageScaling.ALWAYS, 0.1F));
 		context.register(MSDamageSources.DECAPITATION, new DamageType(DECAPITATION_MSG, 0));
-		context.register(MSDamageSources.ARMOR_PIERCE, new DamageType(ARMOR_PIERCE_MSG, 0.1F));
+		context.register(MSDamageSources.ARMOR_PIERCE, new DamageType("player", 0.1F));
 	}
 	
 	public static class Tags extends DamageTypeTagsProvider

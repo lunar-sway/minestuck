@@ -1986,8 +1986,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 				"%1$s was caught in a spike trap whilst trying to escape %2$s");
 		addSimpleDeathMessage(MSDamageTypeProvider.DECAPITATION_MSG, "%s had their head chopped off",
 				"%1$s lost their head whilst engaged with %2$s");
-		addSimpleDeathMessage(MSDamageTypeProvider.ARMOR_PIERCE_MSG, "%s suffered a direct strike to their body",
-				"%1$s was struck hard whilst fighting %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

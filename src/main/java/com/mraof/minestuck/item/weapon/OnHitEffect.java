@@ -45,6 +45,7 @@ import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
 
+@SuppressWarnings("resource")
 public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
@@ -257,7 +258,7 @@ public interface OnHitEffect
 				}
 			}
 			
-			target.hurt(MSDamageSources.armorPierce(attacker.level().registryAccess()), damage);
+			target.hurt(MSDamageSources.armorPierce(attacker.level().registryAccess(), attacker), damage);
 		};
 	}
 	
