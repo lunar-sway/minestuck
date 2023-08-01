@@ -130,7 +130,7 @@ public class CaptchaDeckHandler
 		}
 		
 		setModus(player, newModus);
-		MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(newModus)), player);
+		MSPacketHandler.sendToPlayer(ModusDataPacket.create(newModus), player);
 		
 		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
 		
@@ -324,8 +324,7 @@ public class CaptchaDeckHandler
 			setModus(player, null);
 		} else modus.initModus(null, player, null, size);
 		
-		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(getModus(player)));
-		MSPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(ModusDataPacket.create(getModus(player)), player);
 	}
 	
 	public static CompoundTag writeToNBT(Modus modus)
