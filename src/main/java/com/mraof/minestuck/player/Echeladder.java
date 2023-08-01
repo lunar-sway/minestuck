@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -68,15 +69,15 @@ public class Echeladder
 			event.getEntity().heal(event.getEntity().getMaxHealth());
 	}
 	
-	private final PlayerSavedData savedData;
+	private final MinecraftServer mcServer;
 	private final PlayerIdentifier identifier;
 	private int rung;
 	private int progress;
 	private final EnumSet<EcheladderBonusType> usedBonuses = EnumSet.noneOf(EcheladderBonusType.class);
 	
-	public Echeladder(PlayerSavedData savedData, PlayerIdentifier identifier)
+	public Echeladder(MinecraftServer mcServer, PlayerIdentifier identifier)
 	{
-		this.savedData = savedData;
+		this.mcServer = mcServer;
 		this.identifier = identifier;
 	}
 	
@@ -89,7 +90,7 @@ public class Echeladder
 	{
 		//for each rung, the experience is divided and approaches 0(at infinity). That means there is a certain rung for each experience amount where it becomes less than one and no longer capable of contributing
 		exp = (int) ((exp / (rung + 1) * 2) + .5D);
-		Optional<SburbConnection> c = SkaianetHandler.get(savedData.mcServer).getPrimaryConnection(identifier, true);
+		Optional<SburbConnection> c = SkaianetHandler.get(mcServer).getPrimaryConnection(identifier, true);
 		int topRung = c.map(SburbConnection::hasEntered).orElse(false) ? RUNG_COUNT - 1 : MinestuckConfig.SERVER.preEntryRungLimit.get();
 		int expReq = getRungProgressReq();
 		
@@ -124,10 +125,10 @@ public class Echeladder
 				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
 		}
 		
-		savedData.getData(identifier).addBoondollars(boondollarsGained);
+		PlayerSavedData.getData(identifier, mcServer).addBoondollars(boondollarsGained);
 		
 		LOGGER.debug("Finished echeladder climbing for {} at {} with progress {}", identifier.getUsername(), rung, progress);
-		ServerPlayer player = identifier.getPlayer(savedData.mcServer);
+		ServerPlayer player = identifier.getPlayer(mcServer);
 		if(player != null)
 		{
 			sendDataPacket(player, true);
@@ -140,7 +141,7 @@ public class Echeladder
 		
 		if(rung != prevRung)
 		{
-			EditData data = ServerEditHandler.getData(this.savedData.mcServer, this.identifier);
+			EditData data = ServerEditHandler.getData(this.mcServer, this.identifier);
 			if(data != null)
 				data.sendCacheLimitToEditor();
 		}
@@ -268,7 +269,7 @@ public class Echeladder
 		
 		if(prevProgress != this.progress || prevRung != this.rung)
 		{
-			ServerPlayer player = identifier.getPlayer(savedData.mcServer);
+			ServerPlayer player = identifier.getPlayer(mcServer);
 			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{
 				sendDataPacket(player, false);

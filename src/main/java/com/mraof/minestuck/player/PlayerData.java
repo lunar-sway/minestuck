@@ -13,6 +13,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
@@ -58,7 +59,7 @@ public final class PlayerData
 	@Nonnull
 	final PlayerIdentifier identifier;
 	
-	private final PlayerSavedData savedData;
+	private final MinecraftServer mcServer;
 	private final Echeladder echeladder;
 	private int color = ColorHandler.DEFAULT_COLOR;
 	
@@ -75,21 +76,21 @@ public final class PlayerData
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, @Nonnull PlayerIdentifier player)
+	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
 	{
-		this.savedData = savedData;
+		this.mcServer = mcServer;
 		this.identifier = player;
-		echeladder = new Echeladder(savedData, player);
-		gristCache = new GristCache(this, savedData.mcServer);
+		echeladder = new Echeladder(mcServer, player);
+		gristCache = new GristCache(this, mcServer);
 		hasLoggedIn = false;
 	}
 	
-	PlayerData(PlayerSavedData savedData, CompoundTag nbt)
+	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
 	{
-		this.savedData = savedData;
+		this.mcServer = mcServer;
 		this.identifier = IdentifierHandler.load(nbt, "player");
 		
-		echeladder = new Echeladder(savedData, identifier);
+		echeladder = new Echeladder(mcServer, identifier);
 		echeladder.loadEcheladder(nbt);
 		if (nbt.contains("color"))
 			this.color = nbt.getInt("color");
@@ -102,7 +103,7 @@ public final class PlayerData
 		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
 		
-		gristCache = new GristCache(this, savedData.mcServer);
+		gristCache = new GristCache(this, mcServer);
 		gristCache.read(nbt);
 		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
@@ -162,7 +163,7 @@ public final class PlayerData
 	
 	public void trySetColor(int color)
 	{
-		if(SburbHandler.canSelectColor(identifier, savedData.mcServer) && this.color != color)
+		if(SburbHandler.canSelectColor(identifier, mcServer) && this.color != color)
 		{
 			this.color = color;
 			
@@ -389,6 +390,6 @@ public final class PlayerData
 	@Nullable
 	ServerPlayer getPlayer()
 	{
-		return identifier.getPlayer(savedData.mcServer);
+		return identifier.getPlayer(mcServer);
 	}
 }

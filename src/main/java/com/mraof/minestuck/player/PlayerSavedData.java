@@ -73,7 +73,7 @@ public final class PlayerSavedData extends SavedData
 			CompoundTag dataCompound = list.getCompound(i);
 			try
 			{
-				PlayerData data = new PlayerData(savedData, dataCompound);
+				PlayerData data = new PlayerData(server, dataCompound);
 				savedData.dataMap.put(data.identifier, data);
 			} catch(Exception e)
 			{
@@ -103,7 +103,7 @@ public final class PlayerSavedData extends SavedData
 		Objects.requireNonNull(player);
 		if (!dataMap.containsKey(player))
 		{
-			PlayerData data = new PlayerData(this, player);
+			PlayerData data = new PlayerData(this.mcServer, player);
 			dataMap.put(player, data);
 		}
 		return dataMap.get(player);
