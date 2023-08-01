@@ -8,13 +8,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public record ModusDataPacket(CompoundTag nbt) implements PlayToClientPacket
+public record ModusDataPacket(@Nullable CompoundTag nbt) implements PlayToClientPacket
 {
-	public static ModusDataPacket create(Modus modus)
+	public static ModusDataPacket create(@Nullable Modus modus)
 	{
 		return new ModusDataPacket(CaptchaDeckHandler.writeToNBT(modus));
 	}
