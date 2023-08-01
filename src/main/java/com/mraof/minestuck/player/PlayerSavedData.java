@@ -105,8 +105,15 @@ public final class PlayerSavedData extends SavedData
 		{
 			PlayerData data = new PlayerData(this, player);
 			dataMap.put(player, data);
-			setDirty();
 		}
 		return dataMap.get(player);
+	}
+	
+	@Override
+	public boolean isDirty()
+	{
+		// Always save player data. The number of subcomponents (such as the modus, echeladder, grist cache etc)
+		// makes this preferable to marking the data dirty every time something changes in any of these subcomponents.
+		return true;
 	}
 }

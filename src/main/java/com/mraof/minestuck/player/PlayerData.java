@@ -18,6 +18,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -95,7 +96,7 @@ public final class PlayerData
 		
 		if (nbt.contains("modus"))
 		{
-			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
+			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER);
 			givenModus = true;
 		}
 		else givenModus = nbt.getBoolean("given_modus");
@@ -149,11 +150,6 @@ public final class PlayerData
 		return nbt;
 	}
 	
-	void markDirty()
-	{
-		savedData.setDirty();
-	}
-	
 	public Echeladder getEcheladder()
 	{
 		return echeladder;
@@ -169,7 +165,6 @@ public final class PlayerData
 		if(SburbHandler.canSelectColor(identifier, savedData.mcServer) && this.color != color)
 		{
 			this.color = color;
-			markDirty();
 			
 			sendColor(getPlayer(), false);
 		}
@@ -187,7 +182,6 @@ public final class PlayerData
 			this.modus = modus;
 			if(modus != null)
 				setGivenModus();
-			markDirty();
 			ServerPlayer player = this.getPlayer();
 			if(player != null)
 				MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
@@ -201,11 +195,7 @@ public final class PlayerData
 	
 	private void setGivenModus()
 	{
-		if(!givenModus)
-		{
-			givenModus = true;
-			markDirty();
-		}
+		givenModus = true;
 	}
 	public double getGutterMultipler()
 	{
@@ -216,7 +206,6 @@ public final class PlayerData
 		if(amount < 0)
 			throw new IllegalArgumentException("Multiplier amount may not be negative.");
 		gutterMultiplier += amount;
-		markDirty();
 	}
 	
 	
@@ -232,7 +221,6 @@ public final class PlayerData
 		else if(amount > 0)
 		{
 			boondollars += amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -247,7 +235,6 @@ public final class PlayerData
 				throw new IllegalStateException("Can't go to negative boondollars");
 			
 			boondollars -= amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -270,7 +257,6 @@ public final class PlayerData
 		else if(amount != boondollars)
 		{
 			boondollars = amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -288,7 +274,6 @@ public final class PlayerData
 		if(newRep != oldRep)
 		{
 			consortReputation.put(dim.location(), newRep);
-			markDirty();
 			sendConsortReputation(getPlayer());
 		}
 	}
@@ -308,7 +293,6 @@ public final class PlayerData
 		if(title == null)
 		{
 			title = Objects.requireNonNull(newTitle);
-			markDirty();
 			sendTitle(getPlayer());
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
 	}
@@ -320,11 +304,7 @@ public final class PlayerData
 	
 	public void effectToggle(boolean toggle)
 	{
-		if(effectToggle != toggle)
-		{
-			effectToggle = toggle;
-			markDirty();
-		}
+		effectToggle = toggle;
 	}
 	
 	private void tryGiveStartingModus(ServerPlayer player)
@@ -341,7 +321,7 @@ public final class PlayerData
 			return;
 		}
 		
-		Modus modus = type.createServerSide(savedData);
+		Modus modus = type.createServerSide();
 		if(modus != null)
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());

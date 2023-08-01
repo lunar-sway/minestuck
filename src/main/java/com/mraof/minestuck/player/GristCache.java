@@ -202,7 +202,6 @@ public final class GristCache
 	public void set(NonNegativeGristSet cache)
 	{
 		gristSet = cache.asImmutable();
-		data.markDirty();
 		data.gristCache.sendPacket(data.getPlayer());
 	}
 	

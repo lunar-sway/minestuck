@@ -109,7 +109,6 @@ public class Echeladder
 				boondollarsGained += BOONDOLLARS[Math.min(rung, BOONDOLLARS.length - 1)];
 				exp -= (expReq - progress);
 				progress = 0;
-				savedData.setDirty();
 				expReq = getRungProgressReq();
 				if(rung >= topRung)
 					break increment;
@@ -120,7 +119,6 @@ public class Echeladder
 			if(exp >= 1)
 			{
 				progress += exp;
-				savedData.setDirty();
 				LOGGER.debug("Added remainder exp to progress, which is now at {}", progress);
 			} else
 				LOGGER.debug("Remaining exp {} is below 1, and will therefore be ignored", exp);
@@ -158,7 +156,6 @@ public class Echeladder
 		if(!usedBonuses.contains(type))
 		{
 			usedBonuses.add(type);
-			savedData.setDirty();
 			increaseProgress(type.getBonus());
 		}
 	}
@@ -271,7 +268,6 @@ public class Echeladder
 		
 		if(prevProgress != this.progress || prevRung != this.rung)
 		{
-			savedData.setDirty();
 			ServerPlayer player = identifier.getPlayer(savedData.mcServer);
 			if(player != null && (MinestuckConfig.SERVER.echeladderProgress.get() || prevRung != this.rung))
 			{
