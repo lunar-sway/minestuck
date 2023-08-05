@@ -109,7 +109,7 @@ public class GuiUtil
 				guiGraphics.drawString(font, haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color, false);
 				
 				
-				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.getDummyIcon() : type.getIcon();
+				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.DUMMY_ICON_LOCATION : type.getIcon();
 				if(icon != null)
 				{
 					RenderSystem.setShaderColor(1, 1, 1, 1);

@@ -19,18 +19,19 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 public final class GristType implements Comparable<GristType>
 {
-	static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
-	private static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
+	public static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
+	public static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
 	
 	public static final String FORMAT = "grist.format";
 	
 	private final float rarity;
 	private final float value;
-	private final int color;
-	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
 	@Nullable
+	private final UnderlingData underlingData;
+	@Nullable
 	private final ResourceLocation textureOverrideId;
+	
 	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
 	private final LazyInstance<ResourceLocation> icon = new LazyInstance<>(() -> makeIconPath(GristType.this.getTextureId()));
 	
@@ -38,9 +39,8 @@ public final class GristType implements Comparable<GristType>
 	{
 		rarity = properties.rarity;
 		value = properties.value;
-		color = properties.color;
-		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
+		underlingData = properties.underlingData;
 		textureOverrideId = properties.textureOverrideId;
 	}
 	
@@ -79,11 +79,11 @@ public final class GristType implements Comparable<GristType>
 	}
 	
 	/**
-	 * Returns the power level of a underling of a grist's type. Don't call this with grists like Zillium or Build.
+	 * Returns a modifier used for the power of underlings of the grist's type.
 	 */
 	public float getPower()
 	{
-		return rarity != 0 ? 1 / rarity : 100;
+		return underlingData != null ? underlingData.power : 0;
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public final class GristType implements Comparable<GristType>
 	
 	public boolean isUnderlingType()
 	{
-		return underlingType;
+		return underlingData != null;
 	}
 	
 	public ResourceLocation getIcon()
@@ -128,13 +128,54 @@ public final class GristType implements Comparable<GristType>
 		return GristTypes.GRIST_TYPES.createTagKey(this.getIdOrThrow().withPrefix("secondary/"));
 	}
 	
-	/**
-	 * Returns the resource location to the dummy grist icon texture
-	 * The actual field is private as to not get caught by the ObjectHolder on the class (because it checks all public static final fields).
-	 */
-	public static ResourceLocation getDummyIcon()
+	public int getColor()
 	{
-		return DUMMY_ICON_LOCATION;
+		return underlingData != null ? underlingData.color : 0xFFFFFF;
+	}
+	
+	public static class Properties
+	{
+		private final float rarity, value;
+		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
+		@Nullable
+		private UnderlingData underlingData = null;
+		@Nullable
+		private ResourceLocation textureOverrideId = null;
+		
+		public Properties(float rarity, float value)
+		{
+			this.rarity = rarity;
+			this.value = value;
+		}
+		
+		public Properties candy(Supplier<Item> item)
+		{
+			Objects.requireNonNull(item);
+			return candyStack(() -> new ItemStack(item.get()));
+		}
+		
+		public Properties candyStack(Supplier<ItemStack> stack)
+		{
+			candyItem = Objects.requireNonNull(stack);
+			return this;
+		}
+		
+		public Properties underlingType(int color)
+		{
+			return this.underlingType(1 / this.rarity, color);
+		}
+		
+		public Properties underlingType(float power, int color)
+		{
+			this.underlingData = new UnderlingData(color, power);
+			return this;
+		}
+		
+		public Properties textureOverride(ResourceLocation textureOverrideId)
+		{
+			this.textureOverrideId = textureOverrideId;
+			return this;
+		}
 	}
 	
 	@Override
@@ -154,64 +195,11 @@ public final class GristType implements Comparable<GristType>
 					.compareTo(gristType.getIdOrThrow().getPath());
 	}
 	
-	public int getColor()
-	{
-		return color;
-	}
-	
-	public static class Properties
-	{
-		private final float rarity, value;
-		private int color;
-		private boolean isUnderlingType = true;
-		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
-		@Nullable
-		private ResourceLocation textureOverrideId = null;
-		
-		public Properties(float rarity)
-		{
-			this(rarity, 2);
-		}
-		
-		public Properties(float rarity, float value)
-		{
-			this.rarity = rarity;
-			this.value = value;
-		}
-		
-		public Properties notUnderlingType()
-		{
-			isUnderlingType = false;
-			return this;
-		}
-		
-		public Properties candy(Supplier<Item> item)
-		{
-			Objects.requireNonNull(item);
-			return candyStack(() -> new ItemStack(item.get()));
-		}
-		
-		public Properties candyStack(Supplier<ItemStack> stack)
-		{
-			candyItem = Objects.requireNonNull(stack);
-			return this;
-		}
-		
-		public Properties color(int color)
-		{
-			this.color = color;
-			return this;
-		}
-		
-		public Properties textureOverride(ResourceLocation textureOverrideId)
-		{
-			this.textureOverrideId = textureOverrideId;
-			return this;
-		}
-	}
-	
 	private static ResourceLocation makeIconPath(ResourceLocation textureId)
 	{
 		return textureId.withPath("textures/grist/%s.png"::formatted);
 	}
+	
+	private record UnderlingData(int color, float power)
+	{}
 }
