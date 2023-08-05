@@ -59,7 +59,7 @@ public class GristTypes
 		@Override
 		public GristType createMissing(ResourceLocation key, boolean isNetwork)
 		{
-			return new GristType.DummyType();
+			return new GristType(new GristType.Properties(0.3F, 3).textureOverride(GristType.DUMMY_ID));
 		}
 	}
 }

@@ -13,14 +13,18 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class GristType implements Comparable<GristType>
+@ParametersAreNonnullByDefault
+public final class GristType implements Comparable<GristType>
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final ResourceLocation DUMMY_ICON_LOCATION = new ResourceLocation(Minestuck.MOD_ID, "textures/grist/dummy.png");
+	static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
+	private static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
 	
 	public static final String FORMAT = "grist.format";
 	
@@ -31,6 +35,8 @@ public class GristType implements Comparable<GristType>
 	private final Supplier<ItemStack> candyItem;
 	private String translationKey;
 	private ResourceLocation icon;
+	@Nullable
+	private final ResourceLocation textureOverrideId;
 	
 	public GristType(Properties properties)
 	{
@@ -39,6 +45,7 @@ public class GristType implements Comparable<GristType>
 		color = properties.color;
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
+		textureOverrideId = properties.textureOverrideId;
 	}
 	
 	public Component getNameWithSuffix()
@@ -96,13 +103,16 @@ public class GristType implements Comparable<GristType>
 	public ResourceLocation getIcon()
 	{
 		if(icon == null)
-			icon = makeIconPath(getEffectiveName());
+			icon = makeIconPath(getTextureId());
 		
 		return icon;
 	}
 	
-	public ResourceLocation getEffectiveName()
+	public ResourceLocation getTextureId()
 	{
+		if(this.textureOverrideId != null)
+			return this.textureOverrideId;
+		
 		ResourceLocation name = GristTypes.getRegistry().getKey(this);
 		if(name == null)
 			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
@@ -138,9 +148,7 @@ public class GristType implements Comparable<GristType>
 	
 	private static ResourceLocation makeIconPath(ResourceLocation entry)
 	{
-		if(entry == null)
-			return DUMMY_ICON_LOCATION;
-		else return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
+		return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
 	}
 	
 	@Override
@@ -160,7 +168,7 @@ public class GristType implements Comparable<GristType>
 					.compareTo(Objects.requireNonNull(GristTypes.getRegistry().getKey(gristType)).getPath());
 	}
 	
-	public final void write(CompoundTag nbt, String key)
+	public void write(CompoundTag nbt, String key)
 	{
 		ResourceLocation name = GristTypes.getRegistry().getKey(this);
 		if(name == null)
@@ -192,32 +200,14 @@ public class GristType implements Comparable<GristType>
 		return color;
 	}
 	
-	static class DummyType extends GristType
-	{
-		DummyType()
-		{
-			super(new Properties(0.3F, 3));
-		}
-		
-		@Override
-		public ResourceLocation getIcon()
-		{
-			return DUMMY_ICON_LOCATION;
-		}
-		
-		@Override
-		public ResourceLocation getEffectiveName()
-		{
-			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
-		}
-	}
-	
 	public static class Properties
 	{
 		private final float rarity, value;
 		private int color;
 		private boolean isUnderlingType = true;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
+		@Nullable
+		private ResourceLocation textureOverrideId = null;
 		
 		public Properties(float rarity)
 		{
@@ -251,6 +241,12 @@ public class GristType implements Comparable<GristType>
 		public Properties color(int color)
 		{
 			this.color = color;
+			return this;
+		}
+		
+		public Properties textureOverride(ResourceLocation textureOverrideId)
+		{
+			this.textureOverrideId = textureOverrideId;
 			return this;
 		}
 	}
