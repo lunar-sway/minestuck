@@ -1,17 +1,13 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.Util;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -22,7 +18,6 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 public final class GristType implements Comparable<GristType>
 {
-	private static final Logger LOGGER = LogManager.getLogger();
 	static final ResourceLocation DUMMY_ID = new ResourceLocation(Minestuck.MOD_ID, "dummy");
 	private static final ResourceLocation DUMMY_ICON_LOCATION = makeIconPath(DUMMY_ID);
 	
@@ -166,33 +161,6 @@ public final class GristType implements Comparable<GristType>
 			return 1;
 		else return Objects.requireNonNull(GristTypes.getRegistry().getKey(this)).getPath()
 					.compareTo(Objects.requireNonNull(GristTypes.getRegistry().getKey(gristType)).getPath());
-	}
-	
-	public void write(CompoundTag nbt, String key)
-	{
-		ResourceLocation name = GristTypes.getRegistry().getKey(this);
-		if(name == null)
-			LOGGER.error("Trying to save grist type {} that is lacking a registry name!", this);
-		else MSNBTUtil.writeResourceLocation(nbt, key, name);
-	}
-	
-	public static GristType read(CompoundTag nbt, String key)
-	{
-		return read(nbt, key, GristTypes.BUILD);
-	}
-	
-	public static GristType read(CompoundTag nbt, String key, Supplier<GristType> fallback)
-	{
-		ResourceLocation name = MSNBTUtil.tryReadResourceLocation(nbt, key);
-		if(name != null)
-		{
-			GristType type = GristTypes.getRegistry().getValue(name);
-			if(type != null)
-				return type;
-			else
-				LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
-		}
-		return fallback.get();
 	}
 	
 	public int getColor()

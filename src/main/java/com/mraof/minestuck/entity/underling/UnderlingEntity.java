@@ -8,6 +8,7 @@ import com.mraof.minestuck.entity.item.GristEntity;
 import com.mraof.minestuck.entity.item.VitalityGelEntity;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.UnderlingController;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -265,7 +266,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		getGristType().write(compound, "Type");
+		MSNBTUtil.writeGristType(getGristType(), compound, "Type");
 		compound.putBoolean("Spawned", fromSpawner);
 		if(hasRestriction())
 		{
@@ -284,7 +285,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		//Note: grist type should be read and applied before reading health due to the modifiers to max health
 		if(compound.contains("Type", Tag.TAG_STRING))
-			applyGristType(GristType.read(compound, "Type", GristTypes.ARTIFACT));
+			applyGristType(MSNBTUtil.readGristType(compound, "Type", GristTypes.ARTIFACT));
 		else applyGristType(GristHelper.getPrimaryGrist(this.getRandom()));
 		
 		super.readAdditionalSaveData(compound);

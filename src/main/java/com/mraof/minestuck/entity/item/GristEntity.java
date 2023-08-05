@@ -11,6 +11,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -306,7 +307,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(compound.contains("Value", Tag.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Tag.TAG_STRING))
-			this.gristType = GristType.read(compound, "Type");
+			this.gristType = MSNBTUtil.readGristType(compound, "Type");
 	}
 	
 	/**

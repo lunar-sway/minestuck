@@ -13,6 +13,7 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -176,7 +177,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.load(nbt);
 		
-		wildcardGrist = GristType.read(nbt, "gristType");
+		wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
 		/*
 		this.upgraded = compound.getBoolean("upgraded");

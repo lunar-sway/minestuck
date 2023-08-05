@@ -1,5 +1,7 @@
 package com.mraof.minestuck.util;
 
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypes;
 import net.minecraft.nbt.*;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +17,7 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -130,5 +133,32 @@ public class MSNBTUtil
 			} else
 				return false;
 		}
+	}
+	
+	public static void writeGristType(GristType gristType, CompoundTag nbt, String key)
+	{
+		ResourceLocation name = GristTypes.getRegistry().getKey(gristType);
+		if(name == null)
+			LOGGER.error("Trying to save grist type {} that is lacking a registry name!", gristType);
+		else writeResourceLocation(nbt, key, name);
+	}
+	
+	public static GristType readGristType(CompoundTag nbt, String key)
+	{
+		return readGristType(nbt, key, GristTypes.BUILD);
+	}
+	
+	public static GristType readGristType(CompoundTag nbt, String key, Supplier<GristType> fallback)
+	{
+		ResourceLocation name = tryReadResourceLocation(nbt, key);
+		if(name != null)
+		{
+			GristType type = GristTypes.getRegistry().getValue(name);
+			if(type != null)
+				return type;
+			else
+				LOGGER.warn("Couldn't find grist type by name {}  while reading from nbt. Will fall back to {} instead.", name, fallback);
+		}
+		return fallback.get();
 	}
 }

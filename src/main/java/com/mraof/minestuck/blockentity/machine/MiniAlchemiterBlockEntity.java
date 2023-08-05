@@ -9,6 +9,7 @@ import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -145,7 +146,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.load(nbt);
 		
-		this.wildcardGrist = GristType.read(nbt, "gristType");
+		this.wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
 			owner = IdentifierHandler.load(nbt, "owner");
