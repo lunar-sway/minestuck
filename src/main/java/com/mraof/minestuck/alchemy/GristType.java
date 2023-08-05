@@ -15,7 +15,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 public final class GristType implements Comparable<GristType>
@@ -208,31 +207,6 @@ public final class GristType implements Comparable<GristType>
 		{
 			this.textureOverrideId = textureOverrideId;
 			return this;
-		}
-	}
-	
-	public enum SpawnCategory    //Which categories can a certain grist type appear under (for spawning underlings)
-	{
-		COMMON("common"),
-		UNCOMMON("uncommon"),
-		ANY("any");
-		
-		private final TagKey<GristType> tagKey;
-		
-		SpawnCategory(String name)
-		{
-			this.tagKey = GristTypes.GRIST_TYPES.createTagKey("spawnable_" + name);
-		}
-		
-		public TagKey<GristType> getTagKey()
-		{
-			return this.tagKey;
-		}
-		
-		public Stream<GristType> gristTypes()
-		{
-			return Objects.requireNonNull(GristTypes.getRegistry().tags()).getTag(this.tagKey).stream()
-					.filter(GristType::isUnderlingType);
 		}
 	}
 	

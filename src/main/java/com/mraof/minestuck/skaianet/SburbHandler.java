@@ -2,6 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
+import com.mraof.minestuck.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.computer.editmode.DeployList;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristType;
@@ -257,7 +258,7 @@ public final class SburbHandler
 	
 	static GristType generateGristType(Random rand)
 	{
-		List<GristType> types = GristType.SpawnCategory.COMMON.gristTypes().toList();
+		List<GristType> types = GristTypeSpawnCategory.COMMON.gristTypes().toList();
 		return types.get(rand.nextInt(types.size()));
 	}
 	

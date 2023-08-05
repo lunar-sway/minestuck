@@ -30,7 +30,7 @@ public class GristHelper
 	 */
 	public static GristType getPrimaryGrist(RandomSource random)
 	{
-		List<WeightedEntry.Wrapper<GristType>> typeList = GristType.SpawnCategory.ANY.gristTypes()
+		List<WeightedEntry.Wrapper<GristType>> typeList = GristTypeSpawnCategory.ANY.gristTypes()
 				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
 		
 		return WeightedRandom.getRandomItem(random, typeList).orElseThrow().getData();

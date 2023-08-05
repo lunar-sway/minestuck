@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.GristTypeSpawnCategory;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
@@ -21,7 +22,7 @@ public class GristTypeLayer
 	private final NormalNoise xShift, zShift;
 	private final PositionalRandomFactory selectionRandom;
 	
-	private GristTypeLayer(GristType.SpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
+	private GristTypeLayer(GristTypeSpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
 		this.gristTypes = category.gristTypes()
 				.map(type -> WeightedEntry.wrap(type, Math.round(type.getRarity() * 100))).toList();
@@ -35,7 +36,7 @@ public class GristTypeLayer
 		this.selectionRandom = randomFactory.fromHashOf("minestuck:grist_layer_" + index).forkPositional();
 	}
 	
-	public static GristTypeLayer createLayer(GristType.SpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
+	public static GristTypeLayer createLayer(GristTypeSpawnCategory category, int index, long seed, int zoomLevel, @Nullable GristType baseType)
 	{
 		return new GristTypeLayer(category, index, seed, zoomLevel, baseType);
 	}
