@@ -1,7 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;

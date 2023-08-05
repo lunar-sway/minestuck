@@ -1,9 +1,9 @@
 package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypeSpawnCategory;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
 
-import static com.mraof.minestuck.alchemy.GristTypes.*;
+import static com.mraof.minestuck.api.alchemy.GristTypes.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

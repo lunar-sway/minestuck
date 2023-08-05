@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.api.alchemy.GristType;
 
 import java.util.List;
 

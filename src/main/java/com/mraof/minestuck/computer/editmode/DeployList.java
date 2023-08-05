@@ -2,7 +2,7 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;

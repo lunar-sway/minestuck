@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;

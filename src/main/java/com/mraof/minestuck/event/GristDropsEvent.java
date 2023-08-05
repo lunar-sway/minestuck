@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.event.entity.living.LivingEvent;

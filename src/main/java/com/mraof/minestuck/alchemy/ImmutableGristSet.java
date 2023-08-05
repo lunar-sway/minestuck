@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 
 /**
  * A version of {@link GristSet}, but with the extra guarantee that this set cannot be changed.
