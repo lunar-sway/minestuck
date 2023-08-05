@@ -159,7 +159,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.save(compound);
 		
-		compound.putString("gristType", String.valueOf(GristTypes.getRegistry().getKey(wildcardGrist)));
+		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");

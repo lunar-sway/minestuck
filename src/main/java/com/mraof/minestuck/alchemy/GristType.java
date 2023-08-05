@@ -32,7 +32,7 @@ public final class GristType implements Comparable<GristType>
 	private final Supplier<ItemStack> candyItem;
 	@Nullable
 	private final ResourceLocation textureOverrideId;
-	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristTypes.getRegistry().getKey(GristType.this)));
+	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristType.this.getId()));
 	private final LazyInstance<ResourceLocation> icon = new LazyInstance<>(() -> makeIconPath(GristType.this.getTextureId()));
 	
 	public GristType(Properties properties)
@@ -43,6 +43,17 @@ public final class GristType implements Comparable<GristType>
 		underlingType = properties.isUnderlingType;
 		candyItem = properties.candyItem;
 		textureOverrideId = properties.textureOverrideId;
+	}
+	
+	@Nullable
+	public ResourceLocation getId()
+	{
+		return GristTypes.getRegistry().getKey(this);
+	}
+	
+	public ResourceLocation getIdOrThrow()
+	{
+		return Objects.requireNonNull(this.getId());
 	}
 	
 	public Component getNameWithSuffix()
@@ -99,8 +110,7 @@ public final class GristType implements Comparable<GristType>
 		if(this.textureOverrideId != null)
 			return this.textureOverrideId;
 		
-		ResourceLocation name = GristTypes.getRegistry().getKey(this);
-		return Objects.requireNonNullElse(name, DUMMY_ID);
+		return Objects.requireNonNullElse(this.getId(), DUMMY_ID);
 	}
 	
 	public ItemStack getCandyItem()
@@ -116,9 +126,7 @@ public final class GristType implements Comparable<GristType>
 	
 	public TagKey<GristType> getSecondaryTypesTag()
 	{
-		ResourceLocation name = GristTypes.getRegistry().getKey(this);
-		Objects.requireNonNull(name);
-		return GristTypes.GRIST_TYPES.createTagKey(new ResourceLocation(name.getNamespace(), "secondary/" + name.getPath()));
+		return GristTypes.GRIST_TYPES.createTagKey(this.getIdOrThrow().withPrefix("secondary/"));
 	}
 	
 	/**
@@ -133,7 +141,7 @@ public final class GristType implements Comparable<GristType>
 	@Override
 	public String toString()
 	{
-		return String.valueOf(GristTypes.getRegistry().getKey(this));
+		return String.valueOf(this.getId());
 	}
 	
 	@Override
@@ -143,8 +151,8 @@ public final class GristType implements Comparable<GristType>
 			return -1;
 		else if(this.rarity < gristType.rarity)
 			return 1;
-		else return Objects.requireNonNull(GristTypes.getRegistry().getKey(this)).getPath()
-					.compareTo(Objects.requireNonNull(GristTypes.getRegistry().getKey(gristType)).getPath());
+		else return this.getIdOrThrow().getPath()
+					.compareTo(gristType.getIdOrThrow().getPath());
 	}
 	
 	public int getColor()
@@ -228,8 +236,8 @@ public final class GristType implements Comparable<GristType>
 		}
 	}
 	
-	private static ResourceLocation makeIconPath(ResourceLocation entry)
+	private static ResourceLocation makeIconPath(ResourceLocation textureId)
 	{
-		return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
+		return textureId.withPath("textures/grist/%s.png"::formatted);
 	}
 }

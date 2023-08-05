@@ -135,12 +135,12 @@ public class MSNBTUtil
 		}
 	}
 	
-	public static void writeGristType(GristType gristType, CompoundTag nbt, String key)
+	public static void writeGristType(CompoundTag nbt, String key, GristType gristType)
 	{
-		ResourceLocation name = GristTypes.getRegistry().getKey(gristType);
-		if(name == null)
-			LOGGER.error("Trying to save grist type {} that is lacking a registry name!", gristType);
-		else writeResourceLocation(nbt, key, name);
+		ResourceLocation id = gristType.getId();
+		if(id == null)
+			LOGGER.error("Trying to save grist type {} that is lacking a registry id!", gristType);
+		else writeResourceLocation(nbt, key, id);
 	}
 	
 	public static GristType readGristType(CompoundTag nbt, String key)

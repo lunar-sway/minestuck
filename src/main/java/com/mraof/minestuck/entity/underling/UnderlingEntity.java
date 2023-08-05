@@ -128,7 +128,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	{
 		if(!type.isUnderlingType())    //Utility grist type
 			throw new IllegalArgumentException("Can't set underling grist type to " + type);
-		entityData.set(GRIST_TYPE, String.valueOf(GristTypes.getRegistry().getKey(type)));
+		entityData.set(GRIST_TYPE, String.valueOf(type.getIdOrThrow()));
 		
 		onGristTypeUpdated(type);
 		setHealth(getMaxHealth());
@@ -266,7 +266,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 	public void addAdditionalSaveData(CompoundTag compound)
 	{
 		super.addAdditionalSaveData(compound);
-		MSNBTUtil.writeGristType(getGristType(), compound, "Type");
+		MSNBTUtil.writeGristType(compound, "Type", getGristType());
 		compound.putBoolean("Spawned", fromSpawner);
 		if(hasRestriction())
 		{

@@ -207,7 +207,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.saveAdditional(compound);
 
-		compound.putString("gristType", GristTypes.getRegistry().getKey(wildcardGrist).toString());
+		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)

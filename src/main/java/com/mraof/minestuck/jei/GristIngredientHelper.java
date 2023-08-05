@@ -50,7 +50,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public ResourceLocation getResourceLocation(GristAmount ingredient)
 	{
-		return GristTypes.getRegistry().getKey(ingredient.type());
+		return ingredient.type().getIdOrThrow();
 	}
 	
 	@Override

@@ -140,7 +140,7 @@ public final class SburbConnection
 		}
 		
 		nbt.putInt("artifact", artifactType);
-		MSNBTUtil.writeGristType(baseGrist, nbt, "base_grist");
+		MSNBTUtil.writeGristType(nbt, "base_grist", baseGrist);
 		return nbt;
 	}
 	

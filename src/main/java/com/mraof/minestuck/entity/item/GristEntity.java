@@ -296,7 +296,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		compound.putString("Type", String.valueOf(GristTypes.getRegistry().getKey(gristType)));
+		MSNBTUtil.writeGristType(compound, "Type", gristType);
 	}
 	
 	@Override
