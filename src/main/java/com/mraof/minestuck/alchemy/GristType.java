@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.LazyInstance;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -11,7 +12,8 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -28,10 +30,10 @@ public final class GristType implements Comparable<GristType>
 	private final int color;
 	private final boolean underlingType;
 	private final Supplier<ItemStack> candyItem;
-	private String translationKey;
-	private ResourceLocation icon;
 	@Nullable
 	private final ResourceLocation textureOverrideId;
+	private final LazyInstance<String> translationKey = new LazyInstance<>(() -> Util.makeDescriptionId("grist", GristTypes.getRegistry().getKey(GristType.this)));
+	private final LazyInstance<ResourceLocation> icon = new LazyInstance<>(() -> makeIconPath(GristType.this.getTextureId()));
 	
 	public GristType(Properties properties)
 	{
@@ -53,21 +55,13 @@ public final class GristType implements Comparable<GristType>
 		return Component.translatable(getTranslationKey());
 	}
 	
-	/**
-	 * Returns the grist's translation key
-	 */
 	public String getTranslationKey()
 	{
-		if(translationKey == null)
-			translationKey = Util.makeDescriptionId("grist", GristTypes.getRegistry().getKey(this));
-		
-		return translationKey;
+		return translationKey.get();
 	}
 	
 	/**
 	 * Returns the grist's rarity. Is a number from 0.0 to 1.0.
-	 *
-	 * @return the rarity
 	 */
 	public float getRarity()
 	{
@@ -97,10 +91,7 @@ public final class GristType implements Comparable<GristType>
 	
 	public ResourceLocation getIcon()
 	{
-		if(icon == null)
-			icon = makeIconPath(getTextureId());
-		
-		return icon;
+		return icon.get();
 	}
 	
 	public ResourceLocation getTextureId()
@@ -109,9 +100,7 @@ public final class GristType implements Comparable<GristType>
 			return this.textureOverrideId;
 		
 		ResourceLocation name = GristTypes.getRegistry().getKey(this);
-		if(name == null)
-			return new ResourceLocation(Minestuck.MOD_ID, "dummy");
-		else return name;
+		return Objects.requireNonNullElse(name, DUMMY_ID);
 	}
 	
 	public ItemStack getCandyItem()
@@ -139,11 +128,6 @@ public final class GristType implements Comparable<GristType>
 	public static ResourceLocation getDummyIcon()
 	{
 		return DUMMY_ICON_LOCATION;
-	}
-	
-	private static ResourceLocation makeIconPath(ResourceLocation entry)
-	{
-		return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
 	}
 	
 	@Override
@@ -242,5 +226,10 @@ public final class GristType implements Comparable<GristType>
 			return Objects.requireNonNull(GristTypes.getRegistry().tags()).getTag(this.tagKey).stream()
 					.filter(GristType::isUnderlingType);
 		}
+	}
+	
+	private static ResourceLocation makeIconPath(ResourceLocation entry)
+	{
+		return new ResourceLocation(entry.getNamespace(), "textures/grist/" + entry.getPath() + ".png");
 	}
 }
