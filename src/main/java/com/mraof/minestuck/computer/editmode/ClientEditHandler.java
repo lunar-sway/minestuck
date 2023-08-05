@@ -48,11 +48,9 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
-	static boolean activated;
-	
-	static int centerX, centerZ;
-	
 	public static String client;
+	static boolean activated;
+	static int centerX, centerZ;
 	
 	/**
 	 * Used to tell if the client is in edit mode or not.
