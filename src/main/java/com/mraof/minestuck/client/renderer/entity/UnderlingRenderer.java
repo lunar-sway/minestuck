@@ -58,10 +58,10 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public ResourceLocation getTextureLocation(T entity)
 	{
-		String textureName = entity.getGristType().getTextureId().getPath();
-		ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
+		String underlingName = UnderlingModel.getName(entity);
+		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(underlingName, gristName));
 		
-		// the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
+		// the texture manager will cache the computed textures so they're effectively computed once (at least in theory)
 		SimpleTexture nullTexture = new SimpleTexture(resource);
 		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
 		{
