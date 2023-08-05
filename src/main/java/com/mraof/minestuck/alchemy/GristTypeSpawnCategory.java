@@ -1,5 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
+import com.mraof.minestuck.Minestuck;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 
 import java.util.Objects;
@@ -15,7 +17,7 @@ public enum GristTypeSpawnCategory    //Which categories can a certain grist typ
 	
 	GristTypeSpawnCategory(String name)
 	{
-		this.tagKey = GristTypes.GRIST_TYPES.createTagKey("spawnable_" + name);
+		this.tagKey = TagKey.create(GristTypes.REGISTRY_KEY, new ResourceLocation(Minestuck.MOD_ID, "spawnable_" + name));
 	}
 	
 	public TagKey<GristType> getTagKey()

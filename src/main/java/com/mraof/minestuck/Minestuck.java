@@ -71,7 +71,7 @@ public class Minestuck
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
-		GristTypes.GRIST_TYPES.register(eventBus);
+		GristTypes.register();
 		MSEffects.REGISTER.register(eventBus);
 		MSParticleType.REGISTER.register(eventBus);
 		MSSoundEvents.REGISTER.register(eventBus);

@@ -23,7 +23,7 @@ public final class MSGristTypeTagsProvider extends IntrinsicHolderTagsProvider<G
 {
 	public MSGristTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(output, GRIST_KEY, lookupProvider, MSGristTypeTagsProvider::keyForGristType, Minestuck.MOD_ID, existingFileHelper);
+		super(output, REGISTRY_KEY, lookupProvider, MSGristTypeTagsProvider::keyForGristType, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	private static ResourceKey<GristType> keyForGristType(GristType gristType)

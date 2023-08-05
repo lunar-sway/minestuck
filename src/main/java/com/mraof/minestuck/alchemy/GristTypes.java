@@ -5,18 +5,20 @@ import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Collection;
 import java.util.function.Supplier;
 
-public class GristTypes
+public final class GristTypes
 {
-	public static final ResourceKey<Registry<GristType>> GRIST_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "grist"));
-	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(GRIST_KEY, Minestuck.MOD_ID);
+	public static final ResourceKey<Registry<GristType>> REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "grist"));
+	private static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(REGISTRY_KEY, Minestuck.MOD_ID);
 	
 	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry(() -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE).hasTags());
 	
@@ -50,6 +52,12 @@ public class GristTypes
 	public static Collection<GristType> values()
 	{
 		return getRegistry().getValues();
+	}
+	
+	@ApiStatus.Internal
+	public static void register()
+	{
+		GRIST_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 	}
 	
 	private static class DummyFactory implements IForgeRegistry.MissingFactory<GristType>

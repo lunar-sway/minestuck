@@ -125,7 +125,7 @@ public final class GristType implements Comparable<GristType>
 	
 	public TagKey<GristType> getSecondaryTypesTag()
 	{
-		return GristTypes.GRIST_TYPES.createTagKey(this.getIdOrThrow().withPrefix("secondary/"));
+		return TagKey.create(GristTypes.REGISTRY_KEY, this.getIdOrThrow().withPrefix("secondary/"));
 	}
 	
 	public int getColor()
