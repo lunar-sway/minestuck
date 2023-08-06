@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;

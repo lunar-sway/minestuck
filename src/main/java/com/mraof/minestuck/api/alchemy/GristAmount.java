@@ -1,10 +1,8 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 

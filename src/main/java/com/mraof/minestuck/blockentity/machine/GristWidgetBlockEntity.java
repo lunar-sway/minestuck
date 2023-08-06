@@ -2,7 +2,7 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.GristWidgetBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;

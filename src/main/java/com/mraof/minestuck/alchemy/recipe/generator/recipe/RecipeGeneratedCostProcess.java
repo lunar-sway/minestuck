@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;

@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.alchemy.DefaultImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.DefaultImmutableGristSet;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;

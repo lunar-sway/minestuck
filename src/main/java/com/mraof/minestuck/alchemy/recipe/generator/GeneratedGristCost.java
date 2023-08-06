@@ -1,8 +1,8 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;

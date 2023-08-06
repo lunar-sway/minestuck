@@ -1,7 +1,7 @@
 package com.mraof.minestuck.entity.underling;
 
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.entity.ai.attack.FireballShootGoal;
 import com.mraof.minestuck.entity.ai.attack.MoveToTargetGoal;

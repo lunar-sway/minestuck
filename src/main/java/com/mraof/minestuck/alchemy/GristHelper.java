@@ -3,6 +3,7 @@ package com.mraof.minestuck.alchemy;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.GristDropsEvent;
 import com.mraof.minestuck.player.PlayerIdentifier;

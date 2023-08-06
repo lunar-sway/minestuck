@@ -1,6 +1,6 @@
 package com.mraof.minestuck.jei;
 
-import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;

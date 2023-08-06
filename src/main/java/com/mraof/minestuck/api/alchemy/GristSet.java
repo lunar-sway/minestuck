@@ -1,8 +1,6 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 

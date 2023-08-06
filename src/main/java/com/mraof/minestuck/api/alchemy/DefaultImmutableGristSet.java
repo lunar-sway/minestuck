@@ -1,7 +1,6 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.api.alchemy.GristType;
 
 import java.util.List;
 import java.util.Map;

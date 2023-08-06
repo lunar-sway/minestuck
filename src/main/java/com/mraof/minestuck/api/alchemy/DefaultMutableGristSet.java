@@ -1,6 +1,4 @@
-package com.mraof.minestuck.alchemy;
-
-import com.mraof.minestuck.api.alchemy.GristType;
+package com.mraof.minestuck.api.alchemy;
 
 import java.util.*;
 

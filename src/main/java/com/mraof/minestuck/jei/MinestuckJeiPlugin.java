@@ -6,7 +6,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.recipe.CombinationMode;
 import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
-import com.mraof.minestuck.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;

@@ -1,8 +1,8 @@
 package com.mraof.minestuck.event;
 
 import com.google.common.collect.ImmutableMap;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.player.PlayerIdentifier;

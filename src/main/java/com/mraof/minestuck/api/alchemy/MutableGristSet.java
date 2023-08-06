@@ -1,7 +1,6 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.mojang.serialization.Codec;
-import com.mraof.minestuck.api.alchemy.GristType;
 
 import java.util.function.Supplier;
 

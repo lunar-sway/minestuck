@@ -1,6 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;

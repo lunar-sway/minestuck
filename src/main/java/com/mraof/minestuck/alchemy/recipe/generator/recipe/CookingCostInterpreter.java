@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
