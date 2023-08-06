@@ -1919,6 +1919,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Theme.CETUS.getName(), "Cetus");
 		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
 		add(Theme.ECHIDNA.getName(), "Echidna");
+		add(Theme.JOY.getName(), "Joy");
+		add(Theme.SBURB_95.getName(), "SBURB 95");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
