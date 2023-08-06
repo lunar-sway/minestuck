@@ -20,6 +20,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -441,7 +442,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*TODO || block.getMaterial() == Material.PORTAL*/
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST)
 				|| (!data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
 				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			{
@@ -474,7 +475,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getPlayer().level(), DeployList.EntryLists.ATHENEUM);
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*TODO || block.getMaterial() == Material.PORTAL*/)
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
 				event.setCanceled(true);
 				return;
