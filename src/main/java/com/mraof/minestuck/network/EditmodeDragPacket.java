@@ -6,6 +6,7 @@ import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.*;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -147,7 +148,7 @@ public final class EditmodeDragPacket
 			}
 			
 			if(!missingCost.isEmpty())
-				player.sendSystemMessage(missingCost.createMissingMessage(), true);
+				player.sendSystemMessage(GristCache.createMissingMessage(missingCost), true);
 			
 			ServerEditHandler.removeCursorEntity(player, !anyBlockPlaced);
 		}
@@ -219,7 +220,7 @@ public final class EditmodeDragPacket
 			}
 			
 			if(!missingCost.isEmpty())
-				player.sendSystemMessage(missingCost.createMissingMessage(), true);
+				player.sendSystemMessage(GristCache.createMissingMessage(missingCost), true);
 			
 			ServerEditHandler.removeCursorEntity(player, !anyBlockDestroyed);
 		}

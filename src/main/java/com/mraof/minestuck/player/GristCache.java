@@ -15,6 +15,7 @@ import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -33,6 +34,7 @@ import java.util.Objects;
  */
 public final class GristCache
 {
+	public static final String MISSING_MESSAGE = "grist.missing";
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final PlayerData data;
@@ -59,6 +61,11 @@ public final class GristCache
 	public static GristCache get(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		return PlayerSavedData.getData(player, mcServer).getGristCache();
+	}
+	
+	public static Component createMissingMessage(GristSet gristSet)
+	{
+		return Component.translatable(MISSING_MESSAGE, gristSet.asTextComponent());
 	}
 	
 	/**

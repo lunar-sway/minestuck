@@ -11,6 +11,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -200,7 +201,7 @@ public final class ClientEditHandler
 			{
 				if(cost != null)
 				{
-					event.getEntity().sendSystemMessage(cost.createMissingMessage());
+					event.getEntity().sendSystemMessage(GristCache.createMissingMessage(cost));
 				}
 				event.setCanceled(true);
 			}
@@ -228,7 +229,7 @@ public final class ClientEditHandler
 			}
 			else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
 			{
-				event.getEntity().sendSystemMessage(ServerEditHandler.blockBreakCost().createMissingMessage());
+				event.getEntity().sendSystemMessage(GristCache.createMissingMessage(ServerEditHandler.blockBreakCost()));
 				event.setCanceled(true);
 			}
 		}

@@ -17,7 +17,6 @@ import java.util.function.Supplier;
  */
 public interface GristSet
 {
-	String MISSING_MESSAGE = "grist.missing";
 	String GRIST_COMMA = "grist.comma";
 	
 	default long getGrist(GristType type)
@@ -83,11 +82,6 @@ public interface GristSet
 		if(component != null)
 			return component;
 		else return Component.empty();
-	}
-	
-	default Component createMissingMessage()
-	{
-		return Component.translatable(MISSING_MESSAGE, asTextComponent());
 	}
 	
 	ImmutableGristSet EMPTY = Collections::emptyMap;

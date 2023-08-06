@@ -407,7 +407,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
-						event.getEntity().sendSystemMessage(cost.createMissingMessage());
+						event.getEntity().sendSystemMessage(GristCache.createMissingMessage(cost));
 					event.setCanceled(true);
 				}
 			}

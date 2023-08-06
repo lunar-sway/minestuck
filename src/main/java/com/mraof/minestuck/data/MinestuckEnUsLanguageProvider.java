@@ -1543,7 +1543,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addGristType(GristTypes.ARTIFACT, "Artifact");
 		addGristType(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
-		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
+		add(GristCache.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
 		add(GristSet.GRIST_COMMA, "%s, %s");
 		add(GristAmount.GRIST_AMOUNT, "%s %s");
 		
