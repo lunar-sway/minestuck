@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,12 +32,12 @@ public class SmithingInterpreter implements RecipeInterpreter
 	}
 	
 	@Override
-	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
+	public GristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
 	{
 		// UpgradeRecipes don't list their ingredients as ingredients so use this as workaround
 		try
 		{
-			MutableGristSet totalCost = new MutableGristSet();
+			MutableGristSet totalCost = MutableGristSet.newDefault();
 			
 			Ingredient template = (Ingredient)templateField.get(recipe);
 			GristSet templateCost = context.costForIngredient(template, true);

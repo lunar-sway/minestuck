@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.alchemy.recipe.GristCost;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.util.MSCapabilities;
@@ -119,7 +119,7 @@ public final class EditmodeDragPacket
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level());
 			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level());
 			
-			MutableGristSet missingCost = new MutableGristSet();
+			MutableGristSet missingCost = MutableGristSet.newDefault();
 			boolean anyBlockPlaced = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{
@@ -192,7 +192,7 @@ public final class EditmodeDragPacket
 			cap.setEditPos2(positionEnd);
 			cap.setEditTrace(hitVector, side);
 			
-			MutableGristSet missingCost = new MutableGristSet();
+			MutableGristSet missingCost = MutableGristSet.newDefault();
 			boolean anyBlockDestroyed = false;
 			for(BlockPos pos : BlockPos.betweenClosed(positionStart, positionEnd))
 			{

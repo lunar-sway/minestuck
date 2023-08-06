@@ -56,7 +56,7 @@ public class SourceGristCost extends GeneratedGristCost
 	@Override
 	protected GristSet generateCost(GenerationContext context)
 	{
-		MutableGristSet costSum = new MutableGristSet();
+		MutableGristSet costSum = MutableGristSet.newDefault();
 		for(Source source : sources)
 		{
 			GristSet sourceCost = source.getCostFor(context);

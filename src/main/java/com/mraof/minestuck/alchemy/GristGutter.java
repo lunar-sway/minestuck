@@ -122,7 +122,7 @@ public class GristGutter
 	
 	public MutableGristSet takeFraction(double fraction)
 	{
-		MutableGristSet takenGrist = new MutableGristSet();
+		MutableGristSet takenGrist = MutableGristSet.newDefault();
 		double extraGrist = 0;
 		
 		for(GristAmount gristAmount : this.gristSet.asAmounts())
@@ -186,7 +186,7 @@ public class GristGutter
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
 		long remaining = amount;
-		MutableGristSet takenGrist = new MutableGristSet();
+		MutableGristSet takenGrist = MutableGristSet.newDefault();
 		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
 		

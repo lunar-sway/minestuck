@@ -2,9 +2,9 @@ package com.mraof.minestuck.event;
 
 import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -32,7 +32,7 @@ public class GristDropsEvent extends LivingEvent
 		this.primaryType = primaryType;
 		this.bonusType = bonusType;
 		originalMultiplier = multiplier;
-		newDrops = new MutableGristSet(originalDrops);
+		newDrops = originalDrops.mutableCopy();
 	}
 	
 	public UnderlingEntity getUnderling()
@@ -75,8 +75,8 @@ public class GristDropsEvent extends LivingEvent
 		return newDrops;
 	}
 	
-	public void setNewDrops(MutableGristSet newDrops)
+	public void setNewDrops(GristSet newDrops)
 	{
-		this.newDrops = newDrops;
+		this.newDrops = newDrops.mutableCopy();
 	}
 }

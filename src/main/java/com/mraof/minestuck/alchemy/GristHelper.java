@@ -60,7 +60,7 @@ public class GristHelper
 		GristType primary = entity.getGristType();
 		GristType secondary = getSecondaryGrist(random, primary);
 		
-		MutableGristSet set = new MutableGristSet();
+		MutableGristSet set = MutableGristSet.newDefault();
 		set.add(GristTypes.BUILD, (int) (2 * multiplier + random.nextDouble() * 18 * multiplier));
 		set.add(primary, (int) (1 * multiplier + random.nextDouble() * 9 * multiplier));
 		set.add(secondary, (int) (0.5 * multiplier + random.nextDouble() * 4 * multiplier));

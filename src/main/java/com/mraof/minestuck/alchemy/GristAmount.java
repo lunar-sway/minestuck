@@ -67,6 +67,12 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	}
 	
 	@Override
+	public boolean hasType(GristType type)
+	{
+		return this.type == type;
+	}
+	
+	@Override
 	public boolean isEmpty()
 	{
 		return amount == 0;

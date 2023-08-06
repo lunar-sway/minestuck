@@ -2,8 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
@@ -33,7 +33,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 		if(recipe.isSpecial())
 			return null;
 
-		MutableGristSet totalCost = new MutableGristSet();
+		MutableGristSet totalCost = MutableGristSet.newDefault();
 		for(Ingredient ingredient : recipe.getIngredients())
 		{
 			GristSet ingredientCost = context.costForIngredient(ingredient, true);

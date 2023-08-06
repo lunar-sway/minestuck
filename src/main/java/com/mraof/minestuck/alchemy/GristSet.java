@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 /**
  * An interface for anything that might contain grist.
- * For an implementation that can be modified, see {@link MutableGristSet}.
+ * For an implementation that can be modified, see {@link DefaultMutableGristSet}.
  * For an implementation that cannot be modified, see {@link DefaultImmutableGristSet}.
  * There's also an immutable version of the interface: {@link ImmutableGristSet}.
  */
@@ -33,6 +33,11 @@ public interface GristSet
 		return sum;
 	}
 	
+	default boolean hasType(GristType type)
+	{
+		return this.asMap().containsKey(type);
+	}
+	
 	List<GristAmount> asAmounts();
 	
 	Map<GristType, Long> asMap();
@@ -51,7 +56,7 @@ public interface GristSet
 	
 	default MutableGristSet mutableCopy()
 	{
-		return new MutableGristSet(this);
+		return new DefaultMutableGristSet(this);
 	}
 	
 	default Component asTextComponent()

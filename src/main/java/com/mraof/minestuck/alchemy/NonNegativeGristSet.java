@@ -4,14 +4,17 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.api.alchemy.GristType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * A version of {@link MutableGristSet}, which ensures that the grist set never reaches negative amounts
+ * A {@link MutableGristSet}, which ensures that the grist set never reaches negative amounts
  * and instead throws an exception when an operation is made that would otherwise set a negative amount.
  */
-public class NonNegativeGristSet extends MutableGristSet
+public final class NonNegativeGristSet implements MutableGristSet
 {
 	public static Codec<NonNegativeGristSet> CODEC = GristAmount.NON_NEGATIVE_LIST_CODEC.xmap(NonNegativeGristSet::new, NonNegativeGristSet::asAmounts);
+	
+	private final DefaultMutableGristSet wrappedSet = new DefaultMutableGristSet();
 	
 	public NonNegativeGristSet()
 	{
@@ -32,28 +35,35 @@ public class NonNegativeGristSet extends MutableGristSet
 	}
 	
 	@Override
-	public MutableGristSet setGrist(GristType type, long amount)
+	public long getGrist(GristType type)
+	{
+		return wrappedSet.getGrist(type);
+	}
+	
+	@Override
+	public List<GristAmount> asAmounts()
+	{
+		return wrappedSet.asAmounts();
+	}
+	
+	@Override
+	public Map<GristType, Long> asMap()
+	{
+		return wrappedSet.asMap();
+	}
+	
+	@Override
+	public boolean isEmpty()
+	{
+		return wrappedSet.isEmpty();
+	}
+	
+	@Override
+	public NonNegativeGristSet set(GristType type, long amount)
 	{
 		if(amount < 0)
-			throw new IllegalArgumentException("Negative values not allowed!");
-		return super.setGrist(type, amount);
-	}
-	
-	@Override
-	public MutableGristSet add(GristType type, long amount)
-	{
-		if(getGrist(type) + amount < 0)
-		{
-			throw new IllegalArgumentException("Grist count may not go below 0" + " Type " + type.getDisplayName().toString() + " has " + getGrist(type) + " and adding " + amount);
-		}
-		return super.add(type, amount);
-	}
-	
-	@Override
-	public MutableGristSet scale(float scale, boolean roundDown)
-	{
-		if(scale < 0)
-			throw new IllegalArgumentException("Negative values not allowed!");
-		return super.scale(scale, roundDown);
+			throw new IllegalArgumentException("Negative grist amounts not allowed!");
+		wrappedSet.set(type, amount);
+		return this;
 	}
 }

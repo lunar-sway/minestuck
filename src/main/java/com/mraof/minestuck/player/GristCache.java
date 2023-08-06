@@ -240,7 +240,7 @@ public final class GristCache
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
-		MutableGristSet remainder = new MutableGristSet();
+		MutableGristSet remainder = MutableGristSet.newDefault();
 		
 		for(GristAmount amount : source.asAmounts())
 		{
