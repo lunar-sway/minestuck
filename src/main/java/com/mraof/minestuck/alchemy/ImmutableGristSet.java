@@ -16,6 +16,7 @@ public interface ImmutableGristSet extends GristSet
 	 * Perhaps we should prefer this format for nbt-serialization as well? Something worth considering for the future.
 	 */
 	Codec<ImmutableGristSet> MAP_CODEC = Codec.unboundedMap(GristTypes.getRegistry().getCodec(), Codec.LONG).xmap(DefaultImmutableGristSet::new, ImmutableGristSet::asMap);
+	Codec<ImmutableGristSet> LIST_CODEC = GristAmount.LIST_CODEC.xmap(DefaultImmutableGristSet::create, ImmutableGristSet::asAmounts);
 	
 	@Override
 	default ImmutableGristSet asImmutable()

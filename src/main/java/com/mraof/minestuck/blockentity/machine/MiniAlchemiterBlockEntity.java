@@ -209,7 +209,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
 			{
-				MutableGristSet scale_cost;
+				GristSet scale_cost;
 				for (int lvl = 1; lvl <= 17; lvl++)
 				{
 					// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.

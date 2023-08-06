@@ -1,8 +1,8 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -85,7 +85,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
 			GuiUtil.drawGristBoard(guiGraphics, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			GuiUtil.drawGristBoard(guiGraphics, new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(guiGraphics, GristSet.of(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
 	}
 	
 	
@@ -96,7 +96,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
 			text = GuiUtil.getGristboardTooltip(recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			text = GuiUtil.getGristboardTooltip(new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
+			text = GuiUtil.getGristboardTooltip(GristSet.of(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		
 		if(text != null)
 			return Collections.singletonList(text);

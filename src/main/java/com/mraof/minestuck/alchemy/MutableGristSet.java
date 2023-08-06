@@ -21,26 +21,7 @@ public class MutableGristSet implements GristSet
 	 */
 	public MutableGristSet()
 	{
-		this(new TreeMap<>());
-	}
-	
-	protected MutableGristSet(Map<GristType, Long> map)
-	{
-		this.gristTypes = map;
-	}
-	
-	public MutableGristSet(Supplier<GristType> type, long amount)
-	{
-		this(type.get(), amount);
-	}
-	
-	/**
-	 * Creates a set of grist values with one grist/amount pair. used in setting up the Grist Registry.
-	 */
-	public MutableGristSet(GristType type, long amount)
-	{
-		this();
-		this.gristTypes.put(type, amount);
+		this.gristTypes = new TreeMap<>();
 	}
 	
 	public MutableGristSet(GristSet set)
@@ -198,11 +179,5 @@ public class MutableGristSet implements GristSet
 
 		build.append(']');
 		return build.toString();
-	}
-	
-	@Override
-	public MutableGristSet mutableCopy()
-	{
-		return new MutableGristSet(new TreeMap<>(gristTypes));
 	}
 }

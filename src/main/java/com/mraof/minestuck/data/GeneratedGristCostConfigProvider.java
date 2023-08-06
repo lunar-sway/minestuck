@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.*;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -48,8 +48,8 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		serializer(MSRecipeTypes.NON_MIRRORED.get());
 		type(RecipeType.STONECUTTING);
 		serializer(RecipeSerializer.SMITHING_TRANSFORM, SmithingInterpreter.INSTANCE);
-		type(RecipeType.SMELTING, new CookingCostInterpreter(new GristAmount(GristTypes.TAR, 1)));
-		type(MSRecipeTypes.IRRADIATING_TYPE.get(), new CookingCostInterpreter(new GristAmount(GristTypes.URANIUM, 1)));
+		type(RecipeType.SMELTING, new CookingCostInterpreter(GristSet.of(GristTypes.TAR, 1)));
+		type(MSRecipeTypes.IRRADIATING_TYPE.get(), new CookingCostInterpreter(GristSet.of(GristTypes.URANIUM, 1)));
 	}
 	
 	@Override

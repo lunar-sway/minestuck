@@ -5,7 +5,6 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristAmount;
 import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -66,7 +65,7 @@ public class GuiUtil
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = getGristColor(mode, cache.canAfford(new MutableGristSet(amount)));
+				int color = getGristColor(mode, cache.canAfford(amount));
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)

@@ -1,11 +1,13 @@
 package com.mraof.minestuck.alchemy;
 
+import com.google.common.collect.ImmutableMap;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * An interface for anything that might contain grist.
@@ -94,6 +96,31 @@ public interface GristSet
 			return true;
 		}
 	};
+	
+	static ImmutableGristSet of(GristType type, long amount)
+	{
+		return new GristAmount(type, amount);
+	}
+	
+	static ImmutableGristSet of(Supplier<GristType> type, long amount)
+	{
+		return new GristAmount(type, amount);
+	}
+	
+	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2)
+	{
+		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2));
+	}
+	
+	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2, Supplier<GristType> type3, long amount3)
+	{
+		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2).put(type3.get(), amount3));
+	}
+	
+	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2, Supplier<GristType> type3, long amount3, Supplier<GristType> type4, long amount4)
+	{
+		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2).put(type3.get(), amount3).put(type4.get(), amount4));
+	}
 	
 	static void write(GristSet gristSet, FriendlyByteBuf buffer)
 	{

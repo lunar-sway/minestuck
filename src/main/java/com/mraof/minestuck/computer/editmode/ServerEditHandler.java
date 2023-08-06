@@ -334,7 +334,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level(), DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				MutableGristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.connection.setHasGivenItem(entry);
@@ -402,7 +402,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
-				MutableGristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
@@ -422,7 +422,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	static GristSet blockBreakCost()
 	{
-		return new GristAmount(GristTypes.BUILD, 1);
+		return GristSet.of(GristTypes.BUILD, 1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -516,7 +516,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level());
 			if(entry != null)
 			{
-				MutableGristSet cost = entry.getCurrentCost(c);
+				GristSet cost = entry.getCurrentCost(c);
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
 					c.setHasGivenItem(entry);

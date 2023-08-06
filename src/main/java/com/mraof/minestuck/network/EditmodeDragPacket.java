@@ -49,7 +49,7 @@ public final class EditmodeDragPacket
 		return true;
 	}
 	
-	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<MutableGristSet> missingGristTracker)
+	private static boolean editModeDestroyCheck(EditData data, Player player, BlockPos pos, Consumer<GristSet> missingGristTracker)
 	{
 		BlockState block = player.level().getBlockState(pos);
 		ItemStack stack = block.getCloneItemStack(null, player.level(), pos, player);
@@ -59,7 +59,7 @@ public final class EditmodeDragPacket
 			return false;
 		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
-			MutableGristSet cost = new MutableGristSet(GristTypes.BUILD,1);
+			GristSet cost = GristSet.of(GristTypes.BUILD, 1);
 			if(!data.getGristCache().canAfford(cost))
 			{
 				missingGristTracker.accept(cost);
@@ -198,7 +198,7 @@ public final class EditmodeDragPacket
 			{
 				BlockState block = player.level().getBlockState(pos);
 				
-				Consumer<MutableGristSet> missingCostTracker = missingCost::add; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
+				Consumer<GristSet> missingCostTracker = missingCost::add; //Will add the block's grist cost to the running tally of how much more grist you need, if you cannot afford it in editModeDestroyCheck().
 				if(editModeDestroyCheck(data, player, pos, missingCostTracker))
 				{
 					player.gameMode.destroyAndAck(pos, 3, "creative destroy");

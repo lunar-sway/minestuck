@@ -43,7 +43,7 @@ public final class GristCache
 	{
 		this.data = data;
 		this.mcServer = mcServer;
-		this.gristSet = new GristAmount(GristTypes.BUILD, 20);
+		this.gristSet = GristSet.of(GristTypes.BUILD, 20);
 	}
 	
 	public static GristCache get(ServerPlayer player)
@@ -123,11 +123,11 @@ public final class GristCache
 	 */
 	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
 	{
-		MutableGristSet change = cost.mutableCopy().scale(-1);
+		GristSet change = cost.mutableCopy().scale(-1);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		MutableGristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{

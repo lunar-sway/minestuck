@@ -172,8 +172,8 @@ public class GristGutter
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
 		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
-		MutableGristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		MutableGristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
+		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}
