@@ -20,7 +20,28 @@ public interface GristSet
 	String MISSING_MESSAGE = "grist.missing";
 	String GRIST_COMMA = "grist.comma";
 	
-	long getGrist(GristType type);
+	default long getGrist(GristType type)
+	{
+		return this.asMap().getOrDefault(type, 0L);
+	}
+	
+	default boolean hasType(GristType type)
+	{
+		return this.asMap().containsKey(type);
+	}
+	
+	default boolean isEmpty()
+	{
+		return this.asMap().values().stream().allMatch(amount -> amount == 0);
+	}
+	
+	default boolean equalContent(GristSet other)
+	{
+		for(GristType type : GristTypes.values())
+			if(this.getGrist(type) != other.getGrist(type))
+				return false;
+		return true;
+	}
 	
 	/**
 	 * @return a value estimate for this grist set
@@ -33,30 +54,21 @@ public interface GristSet
 		return sum;
 	}
 	
-	default boolean hasType(GristType type)
-	{
-		return this.asMap().containsKey(type);
-	}
-	
-	List<GristAmount> asAmounts();
-	
+	/**
+	 * @return an unmodifiable map with all grist types and amounts contained in this grist set.
+	 */
 	Map<GristType, Long> asMap();
-	
-	boolean isEmpty();
-	
-	default boolean equalContent(GristSet other)
-	{
-		for(GristType type : GristTypes.values())
-			if(this.getGrist(type) != other.getGrist(type))
-				return false;
-		return true;
-	}
 	
 	ImmutableGristSet asImmutable();
 	
 	default MutableGristSet mutableCopy()
 	{
 		return new DefaultMutableGristSet(this);
+	}
+	
+	default List<GristAmount> asAmounts()
+	{
+		return this.asMap().entrySet().stream().map(entry -> new GristAmount(entry.getKey(), entry.getValue())).toList();
 	}
 	
 	default Component asTextComponent()
@@ -78,29 +90,7 @@ public interface GristSet
 		return Component.translatable(MISSING_MESSAGE, asTextComponent());
 	}
 	
-	ImmutableGristSet EMPTY = new ImmutableGristSet()
-	{
-		@Override
-		public long getGrist(GristType type)
-		{
-			return 0;
-		}
-		@Override
-		public List<GristAmount> asAmounts()
-		{
-			return Collections.emptyList();
-		}
-		@Override
-		public Map<GristType, Long> asMap()
-		{
-			return Collections.emptyMap();
-		}
-		@Override
-		public boolean isEmpty()
-		{
-			return true;
-		}
-	};
+	ImmutableGristSet EMPTY = Collections::emptyMap;
 	
 	static ImmutableGristSet of(GristType type, long amount)
 	{

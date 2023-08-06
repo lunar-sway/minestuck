@@ -14,13 +14,13 @@ public interface MutableGristSet extends GristSet
 		return new DefaultMutableGristSet();
 	}
 	
-	MutableGristSet set(GristType type, long amount);
-	
 	@Override
 	default ImmutableGristSet asImmutable()
 	{
 		return new DefaultImmutableGristSet(this);
 	}
+	
+	MutableGristSet set(GristType type, long amount);
 	
 	default MutableGristSet add(GristType type, long amount)
 	{

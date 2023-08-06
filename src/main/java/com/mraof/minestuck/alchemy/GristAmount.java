@@ -49,21 +49,9 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	}
 	
 	@Override
-	public double getValue()
+	public boolean isEmpty()
 	{
-		return type.getValue() * amount;
-	}
-	
-	@Override
-	public List<GristAmount> asAmounts()
-	{
-		return Collections.singletonList(this);
-	}
-	
-	@Override
-	public Map<GristType, Long> asMap()
-	{
-		return Map.of(type, amount);
+		return amount == 0;
 	}
 	
 	@Override
@@ -73,9 +61,27 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	}
 	
 	@Override
-	public boolean isEmpty()
+	public double getValue()
 	{
-		return amount == 0;
+		return type.getValue() * amount;
+	}
+	
+	@Override
+	public Map<GristType, Long> asMap()
+	{
+		return Map.of(type, amount);
+	}
+	
+	@Override
+	public List<GristAmount> asAmounts()
+	{
+		return Collections.singletonList(this);
+	}
+	
+	@Override
+	public Component asTextComponent()
+	{
+		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 	
 	public void write(FriendlyByteBuf buffer)
@@ -89,11 +95,5 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 		GristType type = buffer.readRegistryIdSafe(GristType.class);
 		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
-	}
-	
-	@Override
-	public Component asTextComponent()
-	{
-		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 }

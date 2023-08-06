@@ -38,27 +38,8 @@ public final class DefaultImmutableGristSet implements ImmutableGristSet
 	}
 	
 	@Override
-	public long getGrist(GristType type)
-	{
-		//noinspection DataFlowIssue
-		return this.map.getOrDefault(type, 0L);
-	}
-	
-	@Override
-	public List<GristAmount> asAmounts()
-	{
-		return this.map.entrySet().stream().map(entry -> new GristAmount(entry.getKey(), entry.getValue())).toList();
-	}
-	
-	@Override
 	public Map<GristType, Long> asMap()
 	{
 		return this.map;
-	}
-	
-	@Override
-	public boolean isEmpty()
-	{
-		return this.map.values().stream().allMatch(amount -> amount == 0);
 	}
 }

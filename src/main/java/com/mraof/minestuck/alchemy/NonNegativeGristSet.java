@@ -17,9 +17,7 @@ public final class NonNegativeGristSet implements MutableGristSet
 	private final DefaultMutableGristSet wrappedSet = new DefaultMutableGristSet();
 	
 	public NonNegativeGristSet()
-	{
-	
-	}
+	{}
 	
 	public NonNegativeGristSet(GristSet set)
 	{
@@ -29,21 +27,7 @@ public final class NonNegativeGristSet implements MutableGristSet
 	public NonNegativeGristSet(List<GristAmount> amounts)
 	{
 		for(GristAmount amount : amounts)
-			if(amount.amount() < 0)
-				throw new IllegalArgumentException("Can't create a non-negative grist set with negative "+amount.type());
-			else add(amount);
-	}
-	
-	@Override
-	public long getGrist(GristType type)
-	{
-		return wrappedSet.getGrist(type);
-	}
-	
-	@Override
-	public List<GristAmount> asAmounts()
-	{
-		return wrappedSet.asAmounts();
+			this.set(amount.type(), amount.amount());
 	}
 	
 	@Override
@@ -53,16 +37,11 @@ public final class NonNegativeGristSet implements MutableGristSet
 	}
 	
 	@Override
-	public boolean isEmpty()
-	{
-		return wrappedSet.isEmpty();
-	}
-	
-	@Override
 	public NonNegativeGristSet set(GristType type, long amount)
 	{
 		if(amount < 0)
 			throw new IllegalArgumentException("Negative grist amounts not allowed!");
+		
 		wrappedSet.set(type, amount);
 		return this;
 	}
