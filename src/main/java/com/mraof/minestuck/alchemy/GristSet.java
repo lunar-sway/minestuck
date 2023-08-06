@@ -11,9 +11,17 @@ import java.util.function.Supplier;
 
 /**
  * An interface for anything that might contain grist.
- * For an implementation that can be modified, see {@link DefaultMutableGristSet}.
- * For an implementation that cannot be modified, see {@link DefaultImmutableGristSet}.
- * There's also an immutable version of the interface: {@link ImmutableGristSet}.
+ * There are several different implementations of this interface with different properties.
+ * <p>
+ * If you want to limit yourself to a set that doesn't change after creation, check out {@link ImmutableGristSet}.
+ * You can create an immutable grist set using {@link GristSet#of(GristType, long)} and its overrides,
+ * or you can create an instance of {@link DefaultImmutableGristSet} directly.
+ * You can convert any grist set into an immutable grist set using {@link GristSet#asImmutable()}.
+ * <p>
+ * If you want a grist set that you can modify after creation, check out {@link MutableGristSet}.
+ * You can create a normal mutable grist set using {@link MutableGristSet#newDefault()}.
+ * You can also create a mutable copy of any grist set using {@link GristSet#mutableCopy()}.
+ * There's also {@link NonNegativeGristSet}, which is a mutable grist set that throws an exception if any amount goes below zero.
  */
 public interface GristSet
 {

@@ -5,6 +5,12 @@ import com.mraof.minestuck.api.alchemy.GristType;
 
 import java.util.function.Supplier;
 
+/**
+ * A version of {@link GristSet} that can be modified after creation.
+ * To get a new empty instance, use {@link MutableGristSet#newDefault()}.
+ * A mutable copy can be made from any grist set using {@link GristSet#mutableCopy()}.
+ * See also {@link NonNegativeGristSet}.
+ */
 public interface MutableGristSet extends GristSet
 {
 	Codec<MutableGristSet> CODEC = GristAmount.LIST_CODEC.xmap(DefaultMutableGristSet::new, MutableGristSet::asAmounts);
