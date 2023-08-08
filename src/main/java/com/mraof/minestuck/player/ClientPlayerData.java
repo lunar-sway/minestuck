@@ -140,7 +140,7 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(ModusDataPacket packet)
 	{
-		modus = CaptchaDeckHandler.readFromNBT(packet.getNBT(), null);
+		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), null);
 		if(modus != null)
 			MSScreenFactories.updateSylladexScreen();
 		else LOGGER.debug("Player lost their modus after update packet");

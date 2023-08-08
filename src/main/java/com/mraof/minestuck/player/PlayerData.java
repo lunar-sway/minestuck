@@ -180,7 +180,7 @@ public final class PlayerData
 		return modus;
 	}
 	
-	public void setModus(Modus modus)
+	public void setModus(@Nullable Modus modus)
 	{
 		if(this.modus != modus)
 		{
@@ -188,6 +188,9 @@ public final class PlayerData
 			if(modus != null)
 				setGivenModus();
 			markDirty();
+			ServerPlayer player = this.getPlayer();
+			if(player != null)
+				MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
 		}
 	}
 	
@@ -350,14 +353,11 @@ public final class PlayerData
 	{
 		getEcheladder().updateEcheladderBonuses(player);
 		
+		if(getModus() != null)
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(getModus()), player);
+		
 		if(getModus() == null && !hasGivenModus())
 			tryGiveStartingModus(player);
-		
-		if(getModus() != null)
-		{
-			Modus modus = getModus();
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
-		}
 		
 		echeladder.sendInitialPacket(player);
 		sendColor(player, !hasLoggedIn);

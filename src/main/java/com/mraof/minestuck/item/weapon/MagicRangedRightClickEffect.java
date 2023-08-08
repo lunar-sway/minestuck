@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -133,8 +132,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 		if(closestTarget != null)
 		{
 			float talliedDamage = calculateDamage(player, closestTarget, damage);
-			DamageSource damageSource = level.damageSources().magic(); //TODO is this okay? Was originally "DamageSource.playerAttack(player).setMagic()"
-			closestTarget.hurt(damageSource, talliedDamage);
+			closestTarget.hurt(level.damageSources().indirectMagic(player, player), talliedDamage);
 			
 			if(effect != null && player.getRandom().nextFloat() < .25F)
 				closestTarget.addEffect(effect.get());

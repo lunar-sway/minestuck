@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CaptchaDeckHandler
+public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -129,8 +129,7 @@ public class CaptchaDeckHandler
 			}
 		}
 		
-		setModus(player, newModus);
-		MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(newModus)), player);
+		PlayerSavedData.getData(player).setModus(newModus);
 		
 		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
 		
@@ -321,14 +320,16 @@ public class CaptchaDeckHandler
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
 			player.drop(modus.getModusItem(), true, false);
-			setModus(player, null);
-		} else modus.initModus(null, player, null, size);
-		
-		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(getModus(player)));
-		MSPacketHandler.sendToPlayer(packet, player);
+			PlayerSavedData.getData(player).setModus(null);
+		} else
+		{
+			modus.initModus(null, player, null, size);
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
+		}
 	}
 	
-	public static CompoundTag writeToNBT(Modus modus)
+	@Nullable
+	public static CompoundTag writeToNBT(@Nullable Modus modus)
 	{
 		if(modus == null)
 			return null;
@@ -373,11 +374,6 @@ public class CaptchaDeckHandler
 	public static Modus getModus(ServerPlayer player)
 	{
 		return PlayerSavedData.getData(player).getModus();
-	}
-	
-	public static void setModus(ServerPlayer player, Modus modus)
-	{
-		PlayerSavedData.getData(player).setModus(modus);
 	}
 	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)

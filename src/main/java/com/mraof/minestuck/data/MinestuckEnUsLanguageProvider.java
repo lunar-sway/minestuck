@@ -1919,6 +1919,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Theme.CETUS.getName(), "Cetus");
 		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
 		add(Theme.ECHIDNA.getName(), "Echidna");
+		add(Theme.JOY.getName(), "Joy");
+		add(Theme.SBURB_95.getName(), "SBURB 95");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
@@ -1982,10 +1984,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		add(MSLootEvents.FROG_TEMPLE_MAP, "Frog Temple");
 		
-		addDamageMessage(MSDamageTypeProvider.SPIKE_MSG, "%s was filled with too many holes from spikes");
-		addDamageMessageWithKiller(MSDamageTypeProvider.SPIKE_MSG, "%1$s was caught in a spike trap whilst trying to escape %2$s");
-		addDamageMessage(MSDamageTypeProvider.DECAPITATION_MSG, "%s had their head chopped off");
-		addDamageMessageWithKiller(MSDamageTypeProvider.DECAPITATION_MSG, "%1$s lost their head whilst engaged with %2$s");
+		addSimpleDeathMessage(MSDamageTypeProvider.SPIKE_MSG, "%s was filled with too many holes from spikes",
+				"%1$s was caught in a spike trap whilst trying to escape %2$s");
+		addSimpleDeathMessage(MSDamageTypeProvider.DECAPITATION_MSG, "%s had their head chopped off",
+				"%1$s lost their head whilst engaged with %2$s");
 		
 		add(ConsortMerchantInventory.CANT_AFFORD, "You don't have enough boondollars for that!");
 		add(MessageType.MISSING_ITEM, "You need a %s for that!");

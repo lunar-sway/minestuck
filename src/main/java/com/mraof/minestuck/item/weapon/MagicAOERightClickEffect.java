@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -102,8 +101,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 				continue;
 			
 			float talliedDamage = calculateDamage(player, target, damage);
-			DamageSource damageSource = level.damageSources().magic(); //TODO is this okay? Was originally "DamageSource.playerAttack(player).setMagic()"
-			target.hurt(damageSource, talliedDamage);
+			target.hurt(level.damageSources().indirectMagic(player, player), talliedDamage);
 			
 			this.targetEffect.accept(target);
 		}
