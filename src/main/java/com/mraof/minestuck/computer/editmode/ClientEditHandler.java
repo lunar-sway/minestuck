@@ -10,6 +10,7 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -217,7 +218,7 @@ public final class ClientEditHandler
 			}
 			
 			BlockState block = event.getLevel().getBlockState(event.getPos());
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*|| block.getMaterial() == Material.PORTAL TODO make use of a forbid tag instead?*/)
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
 				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
 				event.setCanceled(true);

@@ -6,13 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Two new computer Themes: Joy and SBURB 95
+
 ### Changed
 
 - New textures and slightly shorter models for transportalizers
+- Old Computer now starts with SBURB 95 Theme
+- Updated textures of bookshelves and ladders
 
 ### Contributors for this release
 
-- Vinnelli, hadean
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 

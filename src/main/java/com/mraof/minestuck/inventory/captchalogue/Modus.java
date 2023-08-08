@@ -90,8 +90,7 @@ public abstract class Modus
 	{
 		if(needResend)
 		{
-			ModusDataPacket packet = ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(this));
-			MSPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(this), player);
 			needResend = false;
 		}
 	}
