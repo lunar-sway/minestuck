@@ -10,8 +10,10 @@ import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -32,6 +34,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.swing.text.html.HTMLDocument;
 import java.util.Map;
 
 public class ComputerBlock extends MachineBlock implements EntityBlock
@@ -138,6 +141,8 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
 			{
+				MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos);
+				
 				stackInHand.shrink(1);
 				blockEntity.closeAll();
 				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
@@ -149,6 +154,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
+				if(id == 0)
+					MSExtraData.get(level).addEditmodeLocations(player.getUUID(), level.dimension(), pos);
+				
 				stackInHand.shrink(1);
 				blockEntity.installedPrograms.add(id);
 				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
@@ -172,6 +180,17 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
+		if(!level.isClientSide && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
+		{
+			if(computer.owner != null)
+			{
+				ServerPlayer player = computer.owner.getPlayer(level.getServer());
+				
+				if(player != null)
+					MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos);
+			}
+		}
+		
 		if(!newState.is(state.getBlock()))
 			dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
 		super.onRemove(state, level, pos, newState, isMoving);

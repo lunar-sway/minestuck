@@ -23,7 +23,6 @@ import java.util.*;
 public class EditmodeLocations
 {
 	//TODO prevent going to non Medium dimensions post Entry, delete maps to the Overworld
-	//TODO switch to using ResourceKey<Level>
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -50,6 +49,14 @@ public class EditmodeLocations
 		
 		//TODO validate the entry
 		locations.put(level, pos);
+	}
+	
+	public void removeEntry(ResourceKey<Level> level, BlockPos pos)
+	{
+		if(level == null || pos == null)
+			return;
+		
+		locations.remove(level, pos);
 	}
 	
 	public static CompoundTag write(Multimap<ResourceKey<Level>, BlockPos> locations, CompoundTag nbt)
@@ -118,11 +125,15 @@ public class EditmodeLocations
 		double editPosX = editPos.getX();
 		double editPosZ = editPos.getZ();
 		
-		if(!locations.containsKey(editLevel))
+		//temp for testing
+		locations.put(editLevel.dimension(), new BlockPos(18,71,-36));
+		
+		if(!locations.containsKey(editLevel.dimension()))
 			return false;
 		
 		//TODO Not a major deal but players who Enter in another persons Land are given more freedom of movement
 		int range = MSDimensions.isLandDimension(editPlayer.server, editLevel.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		range -= 6; //temp for testing
 		
 		Collection<BlockPos> allLevelPos = locations.get(editLevel.dimension());
 		
@@ -143,6 +154,6 @@ public class EditmodeLocations
 				return true;
 		}
 		
-		return true;
+		return false;
 	}
 }

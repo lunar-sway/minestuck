@@ -5,9 +5,11 @@ import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entry.PostEntryTask;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -205,6 +207,41 @@ public class MSExtraData extends SavedData
 			editConnectionRecovery.clear();
 			setDirty();
 		}
+	}
+	
+	/**
+	 * Gets the places the editmode server player can be for their client
+	 */
+	public EditmodeLocations getEditmodeLocations(UUID playerID)
+	{
+		return editmodeLocations.get(playerID);
+	}
+	
+	public void addEditmodeLocations(UUID playerID, ResourceKey<Level> level, BlockPos pos)
+	{
+		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
+		if(playerLocations == null)
+		{
+			playerLocations = new EditmodeLocations(level, pos);
+			editmodeLocations.put(playerID, playerLocations);
+		} else
+		{
+			playerLocations.addEntry(level, pos);
+			editmodeLocations.replace(playerID, playerLocations);
+		}
+		
+		setDirty();
+	}
+	
+	public void removeEditmodeLocation(UUID playerID, ResourceKey<Level> level, BlockPos pos)
+	{
+		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
+		if(playerLocations != null)
+		{
+			playerLocations.removeEntry(level, pos);
+		}
+		
+		setDirty();
 	}
 	
 	public void addPostEntryTask(PostEntryTask task)
