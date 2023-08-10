@@ -22,7 +22,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class WildcardGristCost extends GristCostRecipe
+public class WildcardGristCost extends SimpleGristCost
 {
 	private final long wildcardCost;
 	

@@ -17,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class UnavailableGristCost extends GristCostRecipe
+public class UnavailableGristCost extends SimpleGristCost
 {
 	public UnavailableGristCost(ResourceLocation id, Ingredient ingredient, Integer priority)
 	{

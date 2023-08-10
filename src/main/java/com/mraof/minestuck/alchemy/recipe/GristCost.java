@@ -24,7 +24,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GristCost extends GristCostRecipe
+public class GristCost extends SimpleGristCost
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	

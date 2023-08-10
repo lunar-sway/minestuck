@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
+import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
@@ -22,7 +23,7 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class GeneratedGristCost extends GristCostRecipe implements GeneratedCostProvider
+public abstract class GeneratedGristCost extends SimpleGristCost implements GeneratedCostProvider
 {
 	@Nullable
 	private ImmutableGristSet cachedCost = null;
