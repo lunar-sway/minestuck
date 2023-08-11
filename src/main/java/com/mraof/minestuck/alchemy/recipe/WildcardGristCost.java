@@ -35,7 +35,7 @@ public class WildcardGristCost extends SimpleGristCost
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
-		return wildcardType != null ? scaleToCountAndDurability(new GristAmount(wildcardType, wildcardCost), input, shouldRoundDown) : null;
+		return wildcardType != null ? GristCostRecipe.scaleToCountAndDurability(new GristAmount(wildcardType, wildcardCost), input, shouldRoundDown) : null;
 	}
 	
 	@Override

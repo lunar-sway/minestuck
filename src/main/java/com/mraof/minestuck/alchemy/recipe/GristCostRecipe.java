@@ -8,7 +8,6 @@ import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.Item;
@@ -29,73 +28,61 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class GristCostRecipe implements Recipe<Container>
+public interface GristCostRecipe extends Recipe<Container>
 {
 	@Nullable
-	public static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
+	static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
 		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
 	}
 	
-	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level)
+	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level)
 	{
 		return findRecipeForItem(input, level, level.getRecipeManager());
 	}
 	
-	public static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
+	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
 	{
 		return recipeManager.getRecipesFor(MSRecipeTypes.GRIST_COST_TYPE.get(), new SimpleContainer(input), level).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
 	}
 	
-	public final ResourceLocation id;
-	
-	public GristCostRecipe(ResourceLocation id)
-	{
-		this.id = id;
-	}
-	
 	@Override
-	public ItemStack assemble(Container inv, RegistryAccess registryAccess)
+	default ItemStack assemble(Container inv, RegistryAccess registryAccess)
 	{
 		return inv.getItem(0);
 	}
 	
 	@Override
-	public boolean canCraftInDimensions(int width, int height)
+	default boolean canCraftInDimensions(int width, int height)
 	{
 		return true;
 	}
 	
 	@Override
-	public boolean isSpecial()	//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
+	default boolean isSpecial()
 	{
+		//Makes sure that the recipe is not unlockable (because recipe book categories are hardcoded to vanilla categories)
 		return true;
 	}
 	
 	@Override
-	public ItemStack getResultItem(RegistryAccess registryAccess)
+	default ItemStack getResultItem(RegistryAccess registryAccess)
 	{
 		return ItemStack.EMPTY;
 	}
 	
 	@Override
-	public ResourceLocation getId()
-	{
-		return id;
-	}
-	
-	@Override
-	public RecipeType<?> getType()
+	default RecipeType<GristCostRecipe> getType()
 	{
 		return MSRecipeTypes.GRIST_COST_TYPE.get();
 	}
 	
-	public abstract int getPriority();
+	int getPriority();
 	
 	@Nullable
-	public abstract GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
+	GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
 	
-	public boolean canPickWildcard()
+	default boolean canPickWildcard()
 	{
 		return false;
 	}
@@ -104,20 +91,20 @@ public abstract class GristCostRecipe implements Recipe<Container>
 	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
 	 * which then get used during grist cost generation.
 	 */
-	public abstract void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer);
+	void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer);
 	
-	public List<JeiGristCost> getJeiCosts(Level level)
+	default List<JeiGristCost> getJeiCosts(Level level)
 	{
 		return Collections.emptyList();
 	}
 	
-	protected static int priorityFromIngredient(Ingredient ingredient)
+	static int defaultPriority(Ingredient ingredient)
 	{
 		return 100 - (ingredient.getItems().length - 1)*10;
 	}
 	
 	@Nullable
-	public static GristSet scaleToCountAndDurability(@Nullable GristSet cost, ItemStack stack, boolean shouldRoundDown)
+	static GristSet scaleToCountAndDurability(@Nullable GristSet cost, ItemStack stack, boolean shouldRoundDown)
 	{
 		if(cost == null)
 			return null;

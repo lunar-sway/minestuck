@@ -24,15 +24,22 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RecipeGeneratedGristCost extends GristCostRecipe
+public final class RecipeGeneratedGristCost implements GristCostRecipe
 {
+	private final ResourceLocation id;
 	@Nullable
 	private RecipeGeneratedCostHandler handler;
 	
 	private RecipeGeneratedGristCost(ResourceLocation id, @Nullable RecipeGeneratedCostHandler handler)
 	{
-		super(id);
+		this.id = id;
 		this.handler = handler;
+	}
+	
+	@Override
+	public ResourceLocation getId()
+	{
+		return this.id;
 	}
 	
 	void setHandler(RecipeGeneratedCostHandler handler)
@@ -43,7 +50,7 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
-		return scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
+		return GristCostRecipe.scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
 	}
 	
 	@Override

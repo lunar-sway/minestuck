@@ -44,7 +44,7 @@ public abstract class GeneratedGristCost extends SimpleGristCost implements Gene
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
-		return scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
+		return GristCostRecipe.scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
 	}
 	
 	@Override

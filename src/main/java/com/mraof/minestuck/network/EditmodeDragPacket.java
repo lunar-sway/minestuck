@@ -1,6 +1,7 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCost;
@@ -118,7 +119,7 @@ public final class EditmodeDragPacket
 				return;
 			
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.getConnection(), player.level());
-			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCost.findCostForItem(stack, null, false, player.level());
+			GristSet cost = entry != null ? entry.getCurrentCost(data.getConnection()) : GristCostRecipe.findCostForItem(stack, null, false, player.level());
 			
 			MutableGristSet missingCost = MutableGristSet.newDefault();
 			boolean anyBlockPlaced = false;

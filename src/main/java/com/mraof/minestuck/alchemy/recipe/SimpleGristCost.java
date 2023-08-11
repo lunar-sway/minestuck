@@ -22,17 +22,24 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class SimpleGristCost extends GristCostRecipe
+public abstract class SimpleGristCost implements GristCostRecipe
 {
+	public final ResourceLocation id;
 	protected final Ingredient ingredient;
 	@Nullable
 	protected final Integer priority;
 	
 	public SimpleGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
-		super(id);
+		this.id = id;
 		this.ingredient = ingredient;
 		this.priority = priority;
+	}
+	
+	@Override
+	public ResourceLocation getId()
+	{
+		return this.id;
 	}
 	
 	@Override
@@ -45,7 +52,7 @@ public abstract class SimpleGristCost extends GristCostRecipe
 	public int getPriority()
 	{
 		if(priority == null)
-			return priorityFromIngredient(ingredient);
+			return GristCostRecipe.defaultPriority(ingredient);
 		else return priority;
 	}
 	
