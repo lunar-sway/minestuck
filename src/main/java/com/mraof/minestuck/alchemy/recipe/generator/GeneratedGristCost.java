@@ -1,5 +1,6 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
+import com.mraof.minestuck.alchemy.recipe.GeneratedGristCostCache;
 import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristSet;
@@ -23,77 +24,51 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class GeneratedGristCost extends SimpleGristCost implements GeneratedCostProvider
+public abstract class GeneratedGristCost extends SimpleGristCost
 {
-	@Nullable
-	private ImmutableGristSet cachedCost = null;
-	private boolean hasGeneratedCost = false;
+	protected final GeneratedGristCostCache cache;
 	
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
+		this.cache = GeneratedGristCostCache.empty(this::generateCost);
 	}
 	
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
 	{
 		super(id, ingredient, priority);
-		cachedCost = cost;
-		hasGeneratedCost = true;
+		this.cache = GeneratedGristCostCache.of(cost);
 	}
 	
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
-		return GristCostRecipe.scaleToCountAndDurability(cachedCost, input, shouldRoundDown);
+		return GristCostRecipe.scaleToCountAndDurability(cache.getCachedCost(), input, shouldRoundDown);
 	}
 	
 	@Override
 	public boolean matches(Container inv, Level level)
 	{
-		return cachedCost != null && super.matches(inv, level);
+		return cache.getCachedCost() != null && super.matches(inv, level);
 	}
 	
 	@Override
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
 		for(ItemStack stack : ingredient.getItems())
-			consumer.accept(stack.getItem(), this);
+			consumer.accept(stack.getItem(), this.cache);
 	}
 	
 	@Override
 	public List<JeiGristCost> getJeiCosts(Level level)
 	{
-		if(cachedCost != null)
-			return Collections.singletonList(new JeiGristCost.Set(ingredient, cachedCost));
+		if(cache.getCachedCost() != null)
+			return Collections.singletonList(new JeiGristCost.Set(ingredient, cache.getCachedCost()));
 		else return Collections.emptyList();
-	}
-	
-	@Override
-	public final GristCostResult generate(Item item, GenerationContext context)
-	{
-		if(context.shouldUseCache() && hasGeneratedCost)
-			return GristCostResult.ofOrNull(cachedCost);
-		else
-		{
-			GristSet cost = generateCost(context);
-			if(context.isPrimary())
-			{
-				hasGeneratedCost = true;
-				if(cost != null)
-					cachedCost = cost.asImmutable();
-			}
-			return GristCostResult.ofOrNull(cost);
-		}
 	}
 	
 	@Nullable
 	protected abstract GristSet generateCost(GenerationContext context);
-	
-	@Nullable
-	protected final GristSet getCachedCost()
-	{
-		return cachedCost;
-	}
 	
 	public static abstract class GeneratedCostSerializer<T extends GeneratedGristCost> extends AbstractSerializer<T>
 	{
@@ -110,10 +85,10 @@ public abstract class GeneratedGristCost extends SimpleGristCost implements Gene
 		public void toNetwork(FriendlyByteBuf buffer, T recipe)
 		{
 			super.toNetwork(buffer, recipe);
-			if(recipe.getCachedCost() != null)
+			if(recipe.cache.getCachedCost() != null)
 			{
 				buffer.writeBoolean(true);
-				GristSet.write(recipe.getCachedCost(), buffer);
+				GristSet.write(recipe.cache.getCachedCost(), buffer);
 			} else buffer.writeBoolean(false);
 		}
 		
