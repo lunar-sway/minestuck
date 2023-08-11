@@ -72,7 +72,7 @@ public abstract class SimpleGristCost implements GristCostRecipe
 		{
 			if(lastCost == null && ingredient.test(new ItemStack(item)))
 				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
-			else return null;
+			else return lastCost;
 		}
 	}
 	
