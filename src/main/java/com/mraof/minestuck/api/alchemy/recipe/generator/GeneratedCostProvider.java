@@ -1,5 +1,6 @@
-package com.mraof.minestuck.alchemy.recipe.generator;
+package com.mraof.minestuck.api.alchemy.recipe.generator;
 
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.jei;
+package com.mraof.minestuck.api.alchemy.recipe;
 
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import net.minecraft.world.item.crafting.Ingredient;

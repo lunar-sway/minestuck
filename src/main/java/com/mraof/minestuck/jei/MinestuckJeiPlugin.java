@@ -1,13 +1,14 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.recipe.CombinationMode;
 import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
 import com.mraof.minestuck.api.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;

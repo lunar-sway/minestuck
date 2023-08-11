@@ -2,6 +2,8 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 
