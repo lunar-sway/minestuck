@@ -57,7 +57,7 @@ public final class UnavailableGristCost implements GristCostRecipe
 	
 	@Nullable
 	@Override
-	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
 		return null;
 	}

@@ -67,7 +67,7 @@ public final class GristCost implements GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
 		return GristCostRecipe.scaleToCountAndDurability(cost, input, shouldRoundDown);
 	}

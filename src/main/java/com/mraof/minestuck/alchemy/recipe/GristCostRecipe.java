@@ -19,6 +19,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,10 +33,12 @@ import java.util.function.BiConsumer;
 @MethodsReturnNonnullByDefault
 public interface GristCostRecipe extends Recipe<Container>
 {
+	RegistryObject<RecipeType<GristCostRecipe>> RECIPE_TYPE = MSRecipeTypes.GRIST_COST_TYPE;
+	
 	@Nullable
 	static GristSet findCostForItem(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, Level level)
 	{
-		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown, level)).orElse(null);
+		return findRecipeForItem(input, level).map(recipe -> recipe.getGristCost(input, wildcardType, shouldRoundDown)).orElse(null);
 	}
 	
 	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level)
@@ -45,13 +48,43 @@ public interface GristCostRecipe extends Recipe<Container>
 	
 	static Optional<GristCostRecipe> findRecipeForItem(ItemStack input, Level level, RecipeManager recipeManager)
 	{
-		return recipeManager.getRecipesFor(MSRecipeTypes.GRIST_COST_TYPE.get(), new SimpleContainer(input), level).stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+		return recipeManager.getRecipesFor(GristCostRecipe.RECIPE_TYPE.get(), new SimpleContainer(input), level)
+				.stream().max(Comparator.comparingInt(GristCostRecipe::getPriority));
+	}
+	
+	int getPriority();
+	
+	@Nullable
+	GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown);
+	
+	default boolean canPickWildcard()
+	{
+		return false;
+	}
+	
+	/**
+	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
+	 * which then get used during grist cost generation.
+	 */
+	void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer);
+	
+	default List<JeiGristCost> getJeiCosts(Level level)
+	{
+		return Collections.emptyList();
+	}
+	
+	///////////////////
+	
+	@Override
+	default RecipeType<GristCostRecipe> getType()
+	{
+		return GristCostRecipe.RECIPE_TYPE.get();
 	}
 	
 	@Override
 	default ItemStack assemble(Container inv, RegistryAccess registryAccess)
 	{
-		return inv.getItem(0);
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
@@ -73,32 +106,7 @@ public interface GristCostRecipe extends Recipe<Container>
 		return ItemStack.EMPTY;
 	}
 	
-	@Override
-	default RecipeType<GristCostRecipe> getType()
-	{
-		return MSRecipeTypes.GRIST_COST_TYPE.get();
-	}
-	
-	int getPriority();
-	
-	@Nullable
-	GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level);
-	
-	default boolean canPickWildcard()
-	{
-		return false;
-	}
-	
-	/**
-	 * Adds grist cost providers for all items which this recipe might potentially provide a grist cost for,
-	 * which then get used during grist cost generation.
-	 */
-	void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer);
-	
-	default List<JeiGristCost> getJeiCosts(Level level)
-	{
-		return Collections.emptyList();
-	}
+	///////////////// Helper functions for implementing a grist cost recipe
 	
 	static int defaultPriority(Ingredient ingredient)
 	{
@@ -108,7 +116,7 @@ public interface GristCostRecipe extends Recipe<Container>
 	static void addSimpleCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, GristCostRecipe recipe, Ingredient ingredient)
 	{
 		addCostProviderForIngredient(consumer, ingredient, (item, context) ->
-				new GristCostResult(recipe.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null)));
+				new GristCostResult(recipe.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false)));
 	}
 	
 	static void addCostProviderForIngredient(BiConsumer<Item, GeneratedCostProvider> consumer, Ingredient ingredient, GeneratedCostProvider provider)
