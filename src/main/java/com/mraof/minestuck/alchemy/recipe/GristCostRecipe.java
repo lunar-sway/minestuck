@@ -107,7 +107,12 @@ public interface GristCostRecipe extends Recipe<Container>
 	
 	static void addSimpleCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, GristCostRecipe recipe, Ingredient ingredient)
 	{
-		GeneratedCostProvider provider = (item, context) -> new GristCostResult(recipe.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
+		addCostProviderForIngredient(consumer, ingredient, (item, context) ->
+				new GristCostResult(recipe.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null)));
+	}
+	
+	static void addCostProviderForIngredient(BiConsumer<Item, GeneratedCostProvider> consumer, Ingredient ingredient, GeneratedCostProvider provider)
+	{
 		for(ItemStack stack : ingredient.getItems())
 			consumer.accept(stack.getItem(), provider);
 	}

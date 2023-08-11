@@ -3,20 +3,26 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import com.mraof.minestuck.alchemy.recipe.GeneratedGristCostCache;
+import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
 import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,38 +30,33 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SourceGristCost extends GeneratedGristCost
+public final class SourceGristCost extends SimpleGristCost
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final List<Source> sources;
-	private final float multiplier;
-	private final ImmutableGristSet addedCost;
+	private final GeneratedGristCostCache cache;
 	
 	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
-		this.sources = sources;
-		this.multiplier = multiplier;
-		this.addedCost = addedCost;
+		this.cache = new GeneratedGristCostCache(context -> generateCost(context, sources, multiplier, addedCost));
 	}
 	
 	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
 	{
-		super(id, ingredient, priority, cache);
-		this.sources = null;
-		this.multiplier = 0;
-		this.addedCost = null;
+		super(id, ingredient, priority);
+		this.cache = cache;
 	}
 	
 	@Nullable
-	@Override
-	protected GristSet generateCost(GenerationContext context)
+	private GristSet generateCost(GenerationContext context, List<Source> sources, float multiplier, ImmutableGristSet addedCost)
 	{
 		MutableGristSet costSum = MutableGristSet.newDefault();
 		for(Source source : sources)
@@ -75,7 +76,33 @@ public class SourceGristCost extends GeneratedGristCost
 		return MSRecipeTypes.SOURCE_GRIST_COST.get();
 	}
 	
-	public static class Serializer extends GeneratedCostSerializer<SourceGristCost>
+	@Override
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	{
+		return GristCostRecipe.scaleToCountAndDurability(cache.getCachedCost(), input, shouldRoundDown);
+	}
+	
+	@Override
+	public boolean matches(Container inv, Level level)
+	{
+		return cache.getCachedCost() != null && super.matches(inv, level);
+	}
+	
+	@Override
+	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
+	{
+		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient, this.cache);
+	}
+	
+	@Override
+	public List<JeiGristCost> getJeiCosts(Level level)
+	{
+		if(cache.getCachedCost() != null)
+			return Collections.singletonList(new JeiGristCost.Set(ingredient, cache.getCachedCost()));
+		else return Collections.emptyList();
+	}
+	
+	public static class Serializer extends AbstractSerializer<SourceGristCost>
 	{
 		@Override
 		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
@@ -92,9 +119,18 @@ public class SourceGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected SourceGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GeneratedGristCostCache cache)
+		protected SourceGristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
+			GeneratedGristCostCache cache = GeneratedGristCostCache.read(buffer);
+			
 			return new SourceGristCost(recipeId, ingredient, priority, cache);
+		}
+		
+		@Override
+		public void toNetwork(FriendlyByteBuf buffer, SourceGristCost recipe)
+		{
+			super.toNetwork(buffer, recipe);
+			recipe.cache.write(buffer);
 		}
 	}
 	
