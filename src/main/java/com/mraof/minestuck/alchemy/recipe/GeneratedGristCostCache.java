@@ -5,6 +5,7 @@ import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
@@ -26,17 +27,25 @@ public final class GeneratedGristCostCache implements GeneratedCostProvider
 		this.costProvider = costProvider;
 	}
 	
-	public static GeneratedGristCostCache empty(Function<GenerationContext, GristSet> costProvider)
-	{
-		return new GeneratedGristCostCache(costProvider);
-	}
-	
-	public static GeneratedGristCostCache of(@Nullable ImmutableGristSet cost)
+	public static GeneratedGristCostCache read(FriendlyByteBuf buffer)
 	{
 		GeneratedGristCostCache cache = new GeneratedGristCostCache(INVALID_PROVIDER);
-		cache.cachedCost = cost;
 		cache.hasGeneratedCost = true;
+		if(buffer.readBoolean())
+			cache.cachedCost = GristSet.read(buffer);
+		else
+			cache.cachedCost = null;
 		return cache;
+	}
+	
+	public void write(FriendlyByteBuf buffer)
+	{
+		if(this.cachedCost != null)
+		{
+			buffer.writeBoolean(true);
+			GristSet.write(this.cachedCost, buffer);
+		} else
+			buffer.writeBoolean(false);
 	}
 	
 	@Nullable

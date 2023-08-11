@@ -1,11 +1,10 @@
 package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.alchemy.recipe.GeneratedGristCostCache;
-import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
-import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.api.alchemy.GristSet;
-import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.jei.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
@@ -31,13 +30,13 @@ public abstract class GeneratedGristCost extends SimpleGristCost
 	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority)
 	{
 		super(id, ingredient, priority);
-		this.cache = GeneratedGristCostCache.empty(this::generateCost);
+		this.cache = new GeneratedGristCostCache(this::generateCost);
 	}
 	
-	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
+	protected GeneratedGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
 	{
 		super(id, ingredient, priority);
-		this.cache = GeneratedGristCostCache.of(cost);
+		this.cache = cache;
 	}
 	
 	@Override
@@ -75,23 +74,18 @@ public abstract class GeneratedGristCost extends SimpleGristCost
 		@Override
 		protected T read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
 		{
-			boolean hasCost = buffer.readBoolean();
-			ImmutableGristSet cost = hasCost ? GristSet.read(buffer) : null;
+			GeneratedGristCostCache cache = GeneratedGristCostCache.read(buffer);
 			
-			return create(recipeId, buffer, ingredient, priority, cost);
+			return create(recipeId, buffer, ingredient, priority, cache);
 		}
 		
 		@Override
 		public void toNetwork(FriendlyByteBuf buffer, T recipe)
 		{
 			super.toNetwork(buffer, recipe);
-			if(recipe.cache.getCachedCost() != null)
-			{
-				buffer.writeBoolean(true);
-				GristSet.write(recipe.cache.getCachedCost(), buffer);
-			} else buffer.writeBoolean(false);
+			recipe.cache.write(buffer);
 		}
 		
-		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost);
+		protected abstract T create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GeneratedGristCostCache cache);
 	}
 }

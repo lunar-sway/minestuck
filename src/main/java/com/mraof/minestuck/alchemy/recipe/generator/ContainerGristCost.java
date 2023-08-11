@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+import com.mraof.minestuck.alchemy.recipe.GeneratedGristCostCache;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
@@ -33,9 +34,9 @@ public class ContainerGristCost extends GeneratedGristCost
 		this.addedCost = addedCost;
 	}
 	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, @Nullable ImmutableGristSet cost)
+	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
 	{
-		super(id, ingredient, priority, cost);
+		super(id, ingredient, priority, cache);
 		this.addedCost = null;
 	}
 	
@@ -81,9 +82,9 @@ public class ContainerGristCost extends GeneratedGristCost
 		}
 		
 		@Override
-		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, @Nullable ImmutableGristSet cost)
+		protected ContainerGristCost create(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority, GeneratedGristCostCache cache)
 		{
-			return new ContainerGristCost(recipeId, ingredient, priority, cost);
+			return new ContainerGristCost(recipeId, ingredient, priority, cache);
 		}
 	}
 }
