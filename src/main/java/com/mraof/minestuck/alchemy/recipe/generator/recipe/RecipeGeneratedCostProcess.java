@@ -51,14 +51,9 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	GristCostResult generateCost(Item item, GristCostResult lastCost, GenerationContext context)
+	GristCostResult generateCost(Item item, GenerationContext context)
 	{
-		if(lastCost != null)
-		{
-			if(context.isPrimary())
-				checkRecipeLogging(item, lastCost.getCost(), context);
-			return lastCost;
-		} else if(generatedCosts.containsKey(item))
+		if(generatedCosts.containsKey(item))
 		{
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
@@ -70,6 +65,12 @@ class RecipeGeneratedCostProcess
 				generatedCosts.put(item, result == null ? null : result.asImmutable());
 			return GristCostResult.ofOrNull(result);
 		}
+	}
+	
+	void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GenerationContext context)
+	{
+		if(context.isPrimary())
+			checkRecipeLogging(item, lastCost.getCost(), context);
 	}
 	
 	private GristSet costFromRecipes(Item item, GenerationContext context)

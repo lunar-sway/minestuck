@@ -105,7 +105,10 @@ public final class GristCostGenerator
 		{
 			try
 			{
-				cost = provider.generate(item, cost, context);
+				if(cost == null)
+					cost = provider.generate(item, context);
+				else
+					provider.onCostFromOtherRecipe(item, cost, context);
 			} catch(Exception e)
 			{
 				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);

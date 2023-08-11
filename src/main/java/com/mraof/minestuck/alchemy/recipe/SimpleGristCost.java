@@ -68,11 +68,9 @@ public abstract class SimpleGristCost implements GristCostRecipe
 	{
 		@Nullable
 		@Override
-		public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
+		public GristCostResult generate(Item item, GenerationContext context)
 		{
-			if(lastCost == null && ingredient.test(new ItemStack(item)))
-				return new GristCostResult(getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
-			else return lastCost;
+			return new GristCostResult(SimpleGristCost.this.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
 		}
 	}
 	

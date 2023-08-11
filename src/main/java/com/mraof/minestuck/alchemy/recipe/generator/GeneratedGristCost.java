@@ -69,11 +69,9 @@ public abstract class GeneratedGristCost extends SimpleGristCost implements Gene
 	}
 	
 	@Override
-	public final GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
+	public final GristCostResult generate(Item item, GenerationContext context)
 	{
-		if(lastCost != null)
-			return lastCost;
-		else if(context.shouldUseCache() && hasGeneratedCost)
+		if(context.shouldUseCache() && hasGeneratedCost)
 			return GristCostResult.ofOrNull(cachedCost);
 		else
 		{

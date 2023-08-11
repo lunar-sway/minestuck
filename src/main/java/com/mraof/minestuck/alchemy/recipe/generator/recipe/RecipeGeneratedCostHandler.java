@@ -247,9 +247,15 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
+	public GristCostResult generate(Item item, GenerationContext context)
 	{
-		return process.generateCost(item, lastCost, context);
+		return process.generateCost(item, context);
+	}
+	
+	@Override
+	public void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GenerationContext context)
+	{
+		this.process.onCostFromOtherRecipe(item, lastCost, context);
 	}
 	
 	@Override
