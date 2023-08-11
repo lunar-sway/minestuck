@@ -24,7 +24,7 @@ public final class GeneratedGristCostCache implements GeneratedCostProvider
 		this.costProvider = costProvider;
 	}
 	
-	public static GeneratedGristCostCache read(FriendlyByteBuf buffer)
+	public static GeneratedGristCostCache fromNetwork(FriendlyByteBuf buffer)
 	{
 		GeneratedGristCostCache cache = new GeneratedGristCostCache(INVALID_PROVIDER);
 		cache.hasGeneratedCost = true;
@@ -35,7 +35,7 @@ public final class GeneratedGristCostCache implements GeneratedCostProvider
 		return cache;
 	}
 	
-	public void write(FriendlyByteBuf buffer)
+	public void toNetwork(FriendlyByteBuf buffer)
 	{
 		if(this.cachedCost != null)
 		{

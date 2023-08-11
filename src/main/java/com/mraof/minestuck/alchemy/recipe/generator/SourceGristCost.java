@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.alchemy.recipe.SimpleGristCost;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
@@ -37,22 +36,48 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public final class SourceGristCost extends SimpleGristCost
+public final class SourceGristCost implements GristCostRecipe
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
+	private final ResourceLocation id;
+	private final Ingredient ingredient;
+	@Nullable
+	private final Integer priority;
 	private final GeneratedGristCostCache cache;
 	
 	private SourceGristCost(ResourceLocation id, Ingredient ingredient, List<Source> sources, float multiplier, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
-		super(id, ingredient, priority);
+		this.id = id;
+		this.ingredient = ingredient;
+		this.priority = priority;
 		this.cache = new GeneratedGristCostCache(context -> generateCost(context, sources, multiplier, addedCost));
 	}
 	
 	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
 	{
-		super(id, ingredient, priority);
+		this.id = id;
+		this.ingredient = ingredient;
+		this.priority = priority;
 		this.cache = cache;
+	}
+	
+	@Override
+	public ResourceLocation getId()
+	{
+		return this.id;
+	}
+	
+	@Override
+	public boolean matches(Container inv, Level level)
+	{
+		return cache.getCachedCost() != null && ingredient.test(inv.getItem(0));
+	}
+	
+	@Override
+	public int getPriority()
+	{
+		return Objects.requireNonNullElseGet(this.priority, () -> GristCostRecipe.defaultPriority(this.ingredient));
 	}
 	
 	@Nullable
@@ -71,21 +96,9 @@ public final class SourceGristCost extends SimpleGristCost
 	}
 	
 	@Override
-	public RecipeSerializer<?> getSerializer()
-	{
-		return MSRecipeTypes.SOURCE_GRIST_COST.get();
-	}
-	
-	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
 	{
 		return GristCostRecipe.scaleToCountAndDurability(cache.getCachedCost(), input, shouldRoundDown);
-	}
-	
-	@Override
-	public boolean matches(Container inv, Level level)
-	{
-		return cache.getCachedCost() != null && super.matches(inv, level);
 	}
 	
 	@Override
@@ -102,15 +115,23 @@ public final class SourceGristCost extends SimpleGristCost
 		else return Collections.emptyList();
 	}
 	
-	public static class Serializer extends AbstractSerializer<SourceGristCost>
+	@Override
+	public RecipeSerializer<?> getSerializer()
+	{
+		return MSRecipeTypes.SOURCE_GRIST_COST.get();
+	}
+	
+	public static class Serializer implements RecipeSerializer<SourceGristCost>
 	{
 		@Override
-		protected SourceGristCost read(ResourceLocation recipeId, JsonObject json, Ingredient ingredient, @Nullable Integer priority)
+		public SourceGristCost fromJson(ResourceLocation recipeId, JsonObject json)
 		{
+			Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
+			Integer priority = json.has("priority") ? GsonHelper.getAsInt(json, "priority") : null;
+			
 			ImmutableGristSet cost = ImmutableGristSet.MAP_CODEC.parse(JsonOps.INSTANCE, GsonHelper.getAsJsonObject(json, "grist_cost"))
 					.getOrThrow(false, LOGGER::error);
 			float multiplier = json.has("multiplier") ? GsonHelper.getAsFloat(json, "multiplier") : 1;
-			
 			JsonArray jsonList = GsonHelper.getAsJsonArray(json, "sources");
 			List<Source> sources = new ArrayList<>();
 			jsonList.forEach(element -> sources.add(parseSource(GsonHelper.convertToString(element, "source"))));
@@ -119,18 +140,22 @@ public final class SourceGristCost extends SimpleGristCost
 		}
 		
 		@Override
-		protected SourceGristCost read(ResourceLocation recipeId, FriendlyByteBuf buffer, Ingredient ingredient, int priority)
-		{
-			GeneratedGristCostCache cache = GeneratedGristCostCache.read(buffer);
-			
-			return new SourceGristCost(recipeId, ingredient, priority, cache);
-		}
-		
-		@Override
 		public void toNetwork(FriendlyByteBuf buffer, SourceGristCost recipe)
 		{
-			super.toNetwork(buffer, recipe);
-			recipe.cache.write(buffer);
+			recipe.ingredient.toNetwork(buffer);
+			buffer.writeInt(recipe.getPriority());
+			recipe.cache.toNetwork(buffer);
+		}
+		
+		@Nullable
+		@Override
+		public SourceGristCost fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		{
+			Ingredient ingredient = Ingredient.fromNetwork(buffer);
+			int priority = buffer.readInt();
+			GeneratedGristCostCache cache = GeneratedGristCostCache.fromNetwork(buffer);
+			
+			return new SourceGristCost(recipeId, ingredient, priority, cache);
 		}
 	}
 	
