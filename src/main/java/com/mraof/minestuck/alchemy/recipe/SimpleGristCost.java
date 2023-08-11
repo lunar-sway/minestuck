@@ -2,16 +2,12 @@ package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
-import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
-import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -59,19 +55,7 @@ public abstract class SimpleGristCost implements GristCostRecipe
 	@Override
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
-		GeneratedCostProvider provider = new DefaultProvider();
-		for(ItemStack stack : ingredient.getItems())
-			consumer.accept(stack.getItem(), provider);
-	}
-	
-	private class DefaultProvider implements GeneratedCostProvider
-	{
-		@Nullable
-		@Override
-		public GristCostResult generate(Item item, GenerationContext context)
-		{
-			return new GristCostResult(SimpleGristCost.this.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
-		}
+		GristCostRecipe.addSimpleCostProvider(consumer, this, this.ingredient);
 	}
 	
 	//Helper class for implementing serializer classes

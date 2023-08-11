@@ -1,8 +1,10 @@
 package com.mraof.minestuck.alchemy.recipe;
 
 import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.jei.JeiGristCost;
@@ -101,6 +103,13 @@ public interface GristCostRecipe extends Recipe<Container>
 	static int defaultPriority(Ingredient ingredient)
 	{
 		return 100 - (ingredient.getItems().length - 1)*10;
+	}
+	
+	static void addSimpleCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer, GristCostRecipe recipe, Ingredient ingredient)
+	{
+		GeneratedCostProvider provider = (item, context) -> new GristCostResult(recipe.getGristCost(new ItemStack(item), GristTypes.BUILD.get(), false, null));
+		for(ItemStack stack : ingredient.getItems())
+			consumer.accept(stack.getItem(), provider);
 	}
 	
 	@Nullable
