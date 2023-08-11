@@ -70,7 +70,7 @@ class RecipeGeneratedCostProcess
 	void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GenerationContext context)
 	{
 		if(context.isPrimary())
-			checkRecipeLogging(item, lastCost.getCost(), context);
+			checkRecipeLogging(item, lastCost.cost(), context);
 	}
 	
 	private GristSet costFromRecipes(Item item, GenerationContext context)

@@ -118,7 +118,7 @@ public final class GristCostGenerator
 		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
 			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", ForgeRegistries.ITEMS.getKey(item));
 		
-		return cost != null ? cost.getCost() : null;
+		return cost != null ? cost.cost() : null;
 	}
 	
 	private static class GeneratorProcess
