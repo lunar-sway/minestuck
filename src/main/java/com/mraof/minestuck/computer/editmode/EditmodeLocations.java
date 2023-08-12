@@ -1,6 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.google.common.collect.*;
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -24,53 +25,72 @@ public class EditmodeLocations
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private final Multimap<ResourceKey<Level>, BlockPos> locations = ArrayListMultimap.create();
+	private final Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations = ArrayListMultimap.create();
 	
-	public EditmodeLocations(ResourceKey<Level> level, BlockPos pos)
+	public enum Source
 	{
-		addEntry(level, pos);
+		BLOCK,
+		ENTITY,
+		ENTRY;
+		
+		public static Source fromInt(int ordinal) //converts int back into enum
+		{
+			if(0 <= ordinal && ordinal < Source.values().length)
+				return Source.values()[ordinal];
+			else
+				throw new IllegalArgumentException("Invalid ordinal of " + ordinal + " for EditmodeLocations Source!");
+		}
+	}
+	
+	public EditmodeLocations(ResourceKey<Level> level, BlockPos pos, Source source)
+	{
+		addEntry(level, pos, source);
 	}
 	
 	public EditmodeLocations()
 	{
 	}
 	
-	public Multimap<ResourceKey<Level>, BlockPos> getLocations()
+	public Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> getLocations()
 	{
 		return locations;
 	}
 	
-	public void addEntry(ResourceKey<Level> level, BlockPos pos)
+	public void addEntry(ResourceKey<Level> level, BlockPos pos, Source source)
 	{
 		if(level == null || pos == null)
 			return;
 		
 		//TODO validate
-		locations.put(level, pos);
+		locations.put(level, Pair.of(pos, source));
 	}
 	
-	public void removeEntry(ResourceKey<Level> level, BlockPos pos)
+	public void removeEntry(ResourceKey<Level> level, BlockPos pos, Source source)
 	{
 		if(level == null || pos == null)
 			return;
 		
-		locations.remove(level, pos);
+		//dont try to remove ENTRY Sources as they are only added once
+		if(source != Source.ENTRY)
+			locations.remove(level, Pair.of(pos, source));
 	}
 	
-	public static ListTag write(Multimap<ResourceKey<Level>, BlockPos> locations, ListTag listTag)
+	public static ListTag write(Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations, ListTag listTag)
 	{
-		for(Map.Entry<ResourceKey<Level>, BlockPos> entry : locations.entries())
+		for(Map.Entry<ResourceKey<Level>, Pair<BlockPos, Source>> entry : locations.entries())
 		{
 			CompoundTag nbt = new CompoundTag();
 			
 			ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, entry.getKey().location()).resultOrPartial(LOGGER::error)
 					.ifPresent(tag -> nbt.put("dim", tag));
 			
-			BlockPos pos = entry.getValue();
+			BlockPos pos = entry.getValue().getFirst();
 			
 			nbt.putInt("x", pos.getX());
 			nbt.putInt("y", pos.getY());
 			nbt.putInt("z", pos.getZ());
+			
+			nbt.putInt("source", entry.getValue().getSecond().ordinal());
 			
 			listTag.add(nbt);
 		}
@@ -86,15 +106,25 @@ public class EditmodeLocations
 		int posY = nbt.getInt("y");
 		int posZ = nbt.getInt("z");
 		
-		return new EditmodeLocations(dimension, new BlockPos(posX, posY, posZ));
+		int sourceOrdinal = nbt.getInt("source");
+		
+		return new EditmodeLocations(dimension, new BlockPos(posX, posY, posZ), Source.fromInt(sourceOrdinal));
 	}
 	
-	private boolean isValidSource(Level level, BlockPos pos)
+	private boolean isValidSource(Level level, BlockPos pos, Source source)
 	{
-		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
+		if(source == Source.BLOCK)
 		{
-			return !computerBlockEntity.isBroken() && computerBlockEntity.hasProgram(0);
-		}
+			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
+			{
+				return !computerBlockEntity.isBroken() && computerBlockEntity.hasProgram(0);
+			}
+		} else if(source == Source.ENTITY)
+		{
+			return false; //There is no conditions for a valid Source of type ENTITY yet
+		} else
+			return true; //Sources of type ENTRY should always be considered valid, unless we need to determine whether the dimension was set correctly
+		
 		
 		return false;
 	}
@@ -113,17 +143,28 @@ public class EditmodeLocations
 		double editPosZ = editPlayer.getZ();
 		
 		//temp for testing
-		if(!locations.containsValue(new BlockPos(18,71,-36)))
-			locations.put(editLevel.dimension(), new BlockPos(18,71,-36));
-		if(!locations.containsValue(new BlockPos(10,71,-36)))
-			locations.put(editLevel.dimension(), new BlockPos(10,71,-36));
-		if(!locations.containsValue(new BlockPos(10,80,-32)))
-			locations.put(editLevel.dimension(), new BlockPos(10,80,-32));
+		List<BlockPos> allBlockPos = new ArrayList<>();
+		for(Map.Entry<ResourceKey<Level>, Pair<BlockPos, Source>> location : locations.entries())
+		{
+			allBlockPos.add(location.getValue().getFirst());
+		}
+		
+		if(!allBlockPos.contains(new BlockPos(18, 71, -36)))
+			locations.put(editLevel.dimension(), Pair.of(new BlockPos(18, 71, -36), Source.BLOCK));
+		if(!allBlockPos.contains(new BlockPos(10, 71, -36)))
+			locations.put(editLevel.dimension(), Pair.of(new BlockPos(10, 71, -36), Source.BLOCK));
+		if(!allBlockPos.contains(new BlockPos(10, 80, -32)))
+			locations.put(editLevel.dimension(), Pair.of(new BlockPos(10, 80, -32), Source.BLOCK));
 		
 		if(!locations.containsKey(editLevel.dimension()))
 			return false;
 		
-		Collection<BlockPos> allLevelPos = locations.get(editLevel.dimension());
+		
+		List<BlockPos> allLevelPos = new ArrayList<>();
+		for(Pair<BlockPos, Source> valuePair : locations.get(editLevel.dimension()).stream().toList())
+		{
+			allLevelPos.add(valuePair.getFirst());
+		}
 		
 		boolean xMatches = false;
 		boolean yMatches = false;

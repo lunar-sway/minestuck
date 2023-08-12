@@ -219,28 +219,30 @@ public class MSExtraData extends SavedData
 		return editmodeLocations.get(playerID);
 	}
 	
-	public void addEditmodeLocations(UUID playerID, ResourceKey<Level> level, BlockPos pos)
+	public void addEditmodeLocations(UUID playerID, ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
 		if(playerLocations == null)
 		{
-			playerLocations = new EditmodeLocations(level, pos);
+			playerLocations = new EditmodeLocations(level, pos, source);
 			editmodeLocations.put(playerID, playerLocations);
 		} else
 		{
-			playerLocations.addEntry(level, pos);
+			playerLocations.addEntry(level, pos, source);
 			editmodeLocations.replace(playerID, playerLocations);
 		}
+		
+		LOGGER.debug("Added to editmode locations for player UUID: " + playerID + "\n" + editmodeLocations);
 		
 		setDirty();
 	}
 	
-	public void removeEditmodeLocation(UUID playerID, ResourceKey<Level> level, BlockPos pos)
+	public void removeEditmodeLocation(UUID playerID, ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
 		if(playerLocations != null)
 		{
-			playerLocations.removeEntry(level, pos);
+			playerLocations.removeEntry(level, pos, source);
 		}
 		
 		setDirty();

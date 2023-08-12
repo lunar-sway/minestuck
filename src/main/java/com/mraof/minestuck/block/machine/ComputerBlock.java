@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.Theme;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -141,7 +142,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
 			{
-				MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos);
+				MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
 				
 				stackInHand.shrink(1);
 				blockEntity.closeAll();
@@ -154,8 +155,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
+				//TODO player who inserts disk is not necessarily the computer owner
 				if(id == 0)
-					MSExtraData.get(level).addEditmodeLocations(player.getUUID(), level.dimension(), pos);
+					MSExtraData.get(level).addEditmodeLocations(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
 				
 				stackInHand.shrink(1);
 				blockEntity.installedPrograms.add(id);
@@ -187,7 +189,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				ServerPlayer player = computer.owner.getPlayer(level.getServer());
 				
 				if(player != null)
-					MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos);
+					MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
 			}
 		}
 		

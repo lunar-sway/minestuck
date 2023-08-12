@@ -3,6 +3,7 @@ package com.mraof.minestuck.skaianet;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
 import com.mraof.minestuck.computer.editmode.DeployList;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.*;
@@ -222,7 +223,7 @@ public final class SburbHandler
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			MSExtraData.get(player.serverLevel()).addEditmodeLocations(player.getUUID(), player.level().dimension(), new BlockPos(0,100,0));
+			MSExtraData.get(player.serverLevel()).addEditmodeLocations(player.getUUID(), player.level().dimension(), new BlockPos(0,100,0), EditmodeLocations.Source.ENTRY);
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			
