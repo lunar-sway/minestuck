@@ -136,7 +136,9 @@ public final class ClientEditHandler
 			
 			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
-			ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+			EditmodeLocations locations = new EditmodeLocations(); //cannot get ExtraData client side, so find a different method of updating this list
+			
+			locations.isValidLocation(player, range);
 		}
 	}
 	

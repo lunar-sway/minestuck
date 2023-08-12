@@ -1,16 +1,14 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.google.common.collect.*;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.world.MSDimensions;
+import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +45,7 @@ public class EditmodeLocations
 		if(level == null || pos == null)
 			return;
 		
-		//TODO validate the entry
+		//TODO validate
 		locations.put(level, pos);
 	}
 	
@@ -59,10 +57,12 @@ public class EditmodeLocations
 		locations.remove(level, pos);
 	}
 	
-	public static CompoundTag write(Multimap<ResourceKey<Level>, BlockPos> locations, CompoundTag nbt)
+	public static ListTag write(Multimap<ResourceKey<Level>, BlockPos> locations, ListTag listTag)
 	{
 		for(Map.Entry<ResourceKey<Level>, BlockPos> entry : locations.entries())
 		{
+			CompoundTag nbt = new CompoundTag();
+			
 			ResourceLocation.CODEC.encodeStart(NbtOps.INSTANCE, entry.getKey().location()).resultOrPartial(LOGGER::error)
 					.ifPresent(tag -> nbt.put("dim", tag));
 			
@@ -71,46 +71,33 @@ public class EditmodeLocations
 			nbt.putInt("x", pos.getX());
 			nbt.putInt("y", pos.getY());
 			nbt.putInt("z", pos.getZ());
+			
+			listTag.add(nbt);
 		}
 		
-		return nbt;
+		return listTag;
 	}
 	
 	public static EditmodeLocations read(CompoundTag nbt)
 	{
-		EditmodeLocations editmodeLocations = new EditmodeLocations();
+		ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
 		
-		ListTag locationsTag = nbt.getList("editmode_location", Tag.TAG_COMPOUND);
-		for(int i = 0; i < locationsTag.size(); i++)
-		{
-			CompoundTag dataTag = locationsTag.getCompound(i);
-			
-			ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, dataTag.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
-			
-			int posX = dataTag.getInt("x");
-			int posY = dataTag.getInt("y");
-			int posZ = dataTag.getInt("z");
-			
-			editmodeLocations.addEntry(dimension, new BlockPos(posX, posY, posZ));
-		}
+		int posX = nbt.getInt("x");
+		int posY = nbt.getInt("y");
+		int posZ = nbt.getInt("z");
 		
-		return editmodeLocations;
+		return new EditmodeLocations(dimension, new BlockPos(posX, posY, posZ));
 	}
 	
-	/*private boolean validateSource(Level level, BlockPos pos)
+	private boolean isValidSource(Level level, BlockPos pos)
 	{
-		BlockState blockState = level.getBlockState(pos);
-		
-		if(blockState.getBlock() instanceof ComputerBlock computerBlock)
+		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
 		{
-			//
+			return !computerBlockEntity.isBroken() && computerBlockEntity.hasProgram(0);
 		}
 		
-		boolean isComputer = blockState.getBlock() instanceof ComputerBlock computerBlock && ComputerBlock.;
-		if( !=)
-		
-		return ;
-	}*/
+		return false;
+	}
 	
 	/**
 	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces
@@ -118,40 +105,74 @@ public class EditmodeLocations
 	 * @param editPlayer Player in editmode
 	 * @return Whether the player is standing in a supported region
 	 */
-	public boolean isValidLocation(ServerPlayer editPlayer)
+	public boolean isValidLocation(Player editPlayer, double range)
 	{
 		Level editLevel = editPlayer.level();
-		BlockPos editPos = editPlayer.blockPosition();
-		double editPosX = editPos.getX();
-		double editPosZ = editPos.getZ();
+		double editPosX = editPlayer.getX();
+		double editPosY = editPlayer.getY();
+		double editPosZ = editPlayer.getZ();
 		
 		//temp for testing
-		locations.put(editLevel.dimension(), new BlockPos(18,71,-36));
+		if(!locations.containsValue(new BlockPos(18,71,-36)))
+			locations.put(editLevel.dimension(), new BlockPos(18,71,-36));
+		if(!locations.containsValue(new BlockPos(10,71,-36)))
+			locations.put(editLevel.dimension(), new BlockPos(10,71,-36));
+		if(!locations.containsValue(new BlockPos(10,80,-32)))
+			locations.put(editLevel.dimension(), new BlockPos(10,80,-32));
 		
 		if(!locations.containsKey(editLevel.dimension()))
 			return false;
 		
-		//TODO Not a major deal but players who Enter in another persons Land are given more freedom of movement
-		int range = MSDimensions.isLandDimension(editPlayer.server, editLevel.dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-		range -= 6; //temp for testing
-		
 		Collection<BlockPos> allLevelPos = locations.get(editLevel.dimension());
+		
+		boolean xMatches = false;
+		boolean yMatches = false;
+		boolean zMatches = false;
+		boolean allMatch = false;
 		
 		for(BlockPos iteratePos : allLevelPos)
 		{
 			int centerX = iteratePos.getX();
+			int centerY = iteratePos.getY();
 			int centerZ = iteratePos.getZ();
 			
 			//if the range is 1 and the player pos isnt an exact match, dont bother
-			if(range == 1 && editPos != iteratePos)
-				continue;
+			//if(range == 1 && editPos != iteratePos)
+			//	continue;
+			
+			boolean localXMatches = editPosX >= centerX - range && editPosX <= centerX + range;
+			boolean localYMatches = editPosY >= centerY - range && editPosY <= centerY + range;
+			boolean localZMatches = editPosZ >= centerZ - range && editPosZ <= centerZ + range;
 			
 			//TODO does not factor in player offset such as in ServerEditHandler
-			boolean xMatches = editPosX >= centerX - range && editPosX <= centerX + range;
-			boolean zMatches = editPosZ >= centerZ - range && editPosZ <= centerZ + range;
+			if(localXMatches)
+				xMatches = true;
 			
-			if(xMatches && zMatches)
-				return true;
+			if(localYMatches)
+				yMatches = true;
+			
+			if(localZMatches)
+				zMatches = true;
+			
+			if(localXMatches && localYMatches && localZMatches)
+				allMatch = true;
+		}
+		
+		if(!xMatches && !allMatch)
+			editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(0, 1, 1));
+		
+		if(!yMatches && !allMatch)
+			editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(1, 0, 1));
+		
+		if(!zMatches && !allMatch)
+			editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(1, 1, 0));
+		
+		if(!allMatch)
+		{
+			//TODO do not use "old" pos, player "sticks" to the edge of the zone
+			if(editPlayer.level().isClientSide)
+				editPlayer.setPos(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
+			else editPlayer.teleportTo(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
 		}
 		
 		return false;

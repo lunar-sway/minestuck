@@ -75,7 +75,7 @@ public class MSExtraData extends SavedData
 		{
 			CompoundTag dataTag = editmodeLocationList.getCompound(i);
 			UUID playerID = dataTag.getUUID("player");
-			EditmodeLocations locations = EditmodeLocations.read(dataTag.getCompound("editmode_location"));
+			EditmodeLocations locations = EditmodeLocations.read(dataTag.getCompound("editmode_locations"));
 			data.editmodeLocations.put(playerID, locations);
 		}
 		
@@ -131,7 +131,9 @@ public class MSExtraData extends SavedData
 	
 	private static CompoundTag writeEditmodeLocations(Map.Entry<UUID, EditmodeLocations> data)
 	{
-		CompoundTag nbt = EditmodeLocations.write(data.getValue().getLocations(), new CompoundTag());
+		CompoundTag nbt = new CompoundTag();
+		ListTag listTag = EditmodeLocations.write(data.getValue().getLocations(), new ListTag());
+		nbt.put("editmode_locations", listTag);
 		nbt.putUUID("player", data.getKey());
 		return nbt;
 	}
