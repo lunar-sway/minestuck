@@ -130,7 +130,8 @@ public class EditmodeLocations
 	}
 	
 	/**
-	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces
+	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces.
+	 * Used both server side and client side
 	 *
 	 * @param editPlayer Player in editmode
 	 * @return Whether the player is standing in a supported region
@@ -142,26 +143,13 @@ public class EditmodeLocations
 		double editPosY = editPlayer.getY();
 		double editPosZ = editPlayer.getZ();
 		
-		//temp for testing
-		List<BlockPos> allBlockPos = new ArrayList<>();
-		for(Map.Entry<ResourceKey<Level>, Pair<BlockPos, Source>> location : locations.entries())
-		{
-			allBlockPos.add(location.getValue().getFirst());
-		}
+		Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = addTestingLocations(editLevel.dimension(), locations);
 		
-		if(!allBlockPos.contains(new BlockPos(18, 71, -36)))
-			locations.put(editLevel.dimension(), Pair.of(new BlockPos(18, 71, -36), Source.BLOCK));
-		if(!allBlockPos.contains(new BlockPos(10, 71, -36)))
-			locations.put(editLevel.dimension(), Pair.of(new BlockPos(10, 71, -36), Source.BLOCK));
-		if(!allBlockPos.contains(new BlockPos(10, 80, -32)))
-			locations.put(editLevel.dimension(), Pair.of(new BlockPos(10, 80, -32), Source.BLOCK));
-		
-		if(!locations.containsKey(editLevel.dimension()))
+		if(!updatedLocations.containsKey(editLevel.dimension()))
 			return false;
 		
-		
 		List<BlockPos> allLevelPos = new ArrayList<>();
-		for(Pair<BlockPos, Source> valuePair : locations.get(editLevel.dimension()).stream().toList())
+		for(Pair<BlockPos, Source> valuePair : updatedLocations.get(editLevel.dimension()).stream().toList())
 		{
 			allLevelPos.add(valuePair.getFirst());
 		}
@@ -217,5 +205,60 @@ public class EditmodeLocations
 		}
 		
 		return false;
+	}
+	
+	//TODO only works in one dimension
+	public static BlockPos getClosestPosInDimension(Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations, Player player)
+	{
+		BlockPos playerPos = player.blockPosition();
+		ResourceKey<Level> editLevel = player.level().dimension();
+		BlockPos pickedPos = null;
+		double pickedPosDistance = Integer.MAX_VALUE;
+		
+		for(Pair<BlockPos, Source> valuePair : locations.get(editLevel).stream().toList())
+		{
+			BlockPos iteratedPos = valuePair.getFirst();
+			
+			if(pickedPos == null)
+				pickedPos = iteratedPos;
+			else
+			{
+				double iteratedPosDistance = Math.sqrt(iteratedPos.distSqr(playerPos));
+				
+				if(iteratedPosDistance < pickedPosDistance)
+				{
+					pickedPos = iteratedPos;
+					pickedPosDistance = iteratedPosDistance;
+				}
+			}
+		}
+		
+		return pickedPos;
+	}
+	
+	public static Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> addTestingLocations(ResourceKey<Level> editLevel, Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations)
+	{
+		//temp for testing
+		List<BlockPos> allBlockPos = new ArrayList<>();
+		for(Map.Entry<ResourceKey<Level>, Pair<BlockPos, Source>> location : locations.entries())
+		{
+			allBlockPos.add(location.getValue().getFirst());
+		}
+		
+		if(!allBlockPos.contains(new BlockPos(18, 71, -36)))
+			locations.put(editLevel, Pair.of(new BlockPos(18, 71, -36), Source.BLOCK));
+		if(!allBlockPos.contains(new BlockPos(10, 71, -36)))
+			locations.put(editLevel, Pair.of(new BlockPos(10, 71, -36), Source.BLOCK));
+		if(!allBlockPos.contains(new BlockPos(10, 80, -32)))
+			locations.put(editLevel, Pair.of(new BlockPos(10, 80, -32), Source.BLOCK));
+		
+		if(!allBlockPos.contains(new BlockPos(0, 100, 0)))
+			locations.put(editLevel, Pair.of(new BlockPos(0, 100, 0), Source.ENTRY));
+		if(!allBlockPos.contains(new BlockPos(0, 120, 0)))
+			locations.put(editLevel, Pair.of(new BlockPos(0, 120, 0), Source.ENTRY));
+		if(!allBlockPos.contains(new BlockPos(0, 140, 0)))
+			locations.put(editLevel, Pair.of(new BlockPos(0, 140, 0), Source.ENTRY));
+		
+		return locations;
 	}
 }

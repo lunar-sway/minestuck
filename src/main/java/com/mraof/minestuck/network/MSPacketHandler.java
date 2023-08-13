@@ -59,6 +59,7 @@ public class MSPacketHandler
 		registerMessage(EditmodeDragPacket.Cursor.class, EditmodeDragPacket.Cursor::decode);
 		registerMessage(EditmodeDragPacket.Reset.class, EditmodeDragPacket.Reset::decode);
 		registerMessage(EditmodeInventoryPacket.class, EditmodeInventoryPacket::decode);
+		registerMessage(EditmodeTeleportPacket.class, EditmodeTeleportPacket::decode);
 		registerMessage(MachinePacket.SetRunning.class, MachinePacket.SetRunning::decode);
 		registerMessage(MachinePacket.SetLooping.class, MachinePacket.SetLooping::decode);
 		registerMessage(AlchemiterPacket.class, AlchemiterPacket::decode);

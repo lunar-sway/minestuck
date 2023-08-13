@@ -664,49 +664,6 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		cap.resetDragTools();
 	}
 	
-	/**
-	 * Used on both server and client side.
-	 */
-	public static void updatePosition(Player player, double range, int centerX, int centerZ)
-	{
-		double y = player.getY();
-		if(y < player.level().getMinBuildHeight())
-		{
-			y = player.level().getMinBuildHeight();
-			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 0, 1));
-			player.getAbilities().flying = true;
-		}
-		
-		double newX = player.getX();
-		double newZ = player.getZ();
-		double offset = player.getBoundingBox().maxX - player.getX();
-		
-		if(range >= 1)
-		{
-			if(player.getX() > centerX + range - offset)
-				newX = centerX + range - offset;
-			else if(player.getX() < centerX - range + offset)
-				newX = centerX - range + offset;
-			if(player.getZ() > centerZ + range - offset)
-				newZ = centerZ + range - offset;
-			else if(player.getZ() < centerZ - range + offset)
-				newZ = centerZ - range + offset;
-		}
-		
-		if(newX != player.getX())
-			player.setDeltaMovement(player.getDeltaMovement().multiply(0, 1, 1));
-		
-		if(newZ != player.getZ())
-			player.setDeltaMovement(player.getDeltaMovement().multiply(1, 1, 0));
-		
-		if(newX != player.getX() || newZ != player.getZ() || y != player.getY())
-		{
-			if(player.level().isClientSide)
-				player.setPos(newX, y, newZ);
-			else player.teleportTo(newX, y, newZ);
-		}
-	}
-	
 	public static void updateInventory(ServerPlayer player, SburbConnection connection)
 	{
 		List<DeployEntry> deployList = DeployList.getItemList(player.getServer(), connection);

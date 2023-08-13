@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
+import com.mraof.minestuck.network.EditmodeTeleportPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -11,6 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -46,11 +48,19 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
 		
-		guiGraphics.blit(GUI_BACKGROUND, xOffset+ LEFT_ARROW_X, yOffset+ ARROW_Y, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		guiGraphics.blit(GUI_BACKGROUND, xOffset+ RIGHT_ARROW_X, yOffset+ ARROW_Y, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset + LEFT_ARROW_X, yOffset + ARROW_Y, guiWidth + (b2 ? 36 : 0), (less ? 0 : 18) + (b1 ? 36 : 0), 18, 18);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset + RIGHT_ARROW_X, yOffset + ARROW_Y, guiWidth + 18 + (b2 ? 36 : 0), (more ? 0 : 18) + (b1 ? 36 : 0), 18, 18);
 		
 		drawActiveTabAndIcons(guiGraphics);
 		
+		//TODO add more options (potentially work with icons) and/or center this
+		addRenderableWidget(new ExtendedButton(xOffset + LEFT_ARROW_X + 32, yOffset + ARROW_Y + 32, 100, 16, Component.literal("TELEPORT CLOSEST"), button -> teleport()));
+	}
+	
+	private void teleport()
+	{
+		EditmodeTeleportPacket packet = new EditmodeTeleportPacket();
+		MSPacketHandler.sendToServer(packet);
 	}
 	
 	@Override
@@ -69,8 +79,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
-			}
-			else if(more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + 18)
+			} else if(more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + 18)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);
