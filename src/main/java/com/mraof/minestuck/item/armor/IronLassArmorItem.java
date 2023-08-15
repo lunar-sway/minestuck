@@ -17,7 +17,7 @@ public class IronLassArmorItem extends ArmorItem
 {
 	public static final Logger LOGGER = LogUtils.getLogger();
 	
-	public IronLassArmorItem(ArmorMaterial mat, EquipmentSlot slot, Properties props)
+	public IronLassArmorItem(ArmorMaterial mat, ArmorItem.Type slot, Properties props)
 	{
 		super(mat, slot, props);
 	}
@@ -33,9 +33,9 @@ public class IronLassArmorItem extends ArmorItem
 	{
 		if (entity instanceof Player player) {
 			if (player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof IronLassArmorItem && player.isShiftKeyDown()) {
-				player.level.playSound(player, player.blockPosition(), SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, 1, 0);
+				player.level().playSound(player, player.blockPosition(), SoundEvents.LAVA_EXTINGUISH, SoundSource.PLAYERS, 1, 0);
 				
-				player.level.addParticle(MSParticleType.EXHAUST.get(), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
+				player.level().addParticle(MSParticleType.EXHAUST.get(), player.getX(), player.getY(), player.getZ(), 0, 0, 0);
 				
 				Vec3 look = player.getLookAngle();
 				Vec3 movement = player.getDeltaMovement();
@@ -46,7 +46,7 @@ public class IronLassArmorItem extends ArmorItem
 			}
 			
 			// damage gear
-			if (!player.level.isClientSide && (player.getFallFlyingTicks() + 1) % 20 == 0) {
+			if (!player.level().isClientSide && (player.getFallFlyingTicks() + 1) % 20 == 0) {
 				stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.CHEST));
 				if (player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof IronLassArmorItem)
 					player.getItemBySlot(EquipmentSlot.FEET).hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.FEET));
