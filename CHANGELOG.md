@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Changed /setrung command to /rung, which now outputs the players current rung if no input is provided to set the rung.
+
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added

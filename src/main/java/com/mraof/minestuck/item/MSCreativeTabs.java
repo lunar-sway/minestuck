@@ -38,6 +38,7 @@ public final class MSCreativeTabs
 	private static void buildWeaponsTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output)
 	{
 		output.accept(MSItems.ZILLYHOO_HAMMER.get());
+		output.accept(MSItems.CHEESE_KNIFE.get());
 		//TODO
 	}
 }

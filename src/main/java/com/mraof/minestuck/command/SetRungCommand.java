@@ -19,7 +19,7 @@ public class SetRungCommand
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
-		dispatcher.register(Commands.literal("setrung").requires(source -> source.hasPermission(2)).then(Commands.argument("target", EntityArgument.players())
+		dispatcher.register(Commands.literal("rung").requires(source -> source.hasPermission(2)).then(Commands.argument("target", EntityArgument.players())
 				.then(Commands.argument("rung", IntegerArgumentType.integer(0, Echeladder.RUNG_COUNT - 1)).executes(context -> setRung(context.getSource(), EntityArgument.getPlayers(context, "target"), IntegerArgumentType.getInteger(context, "rung"), 0))
 				.then(Commands.argument("progress", DoubleArgumentType.doubleArg(0, 1)).executes(context -> setRung(context.getSource(), EntityArgument.getPlayers(context, "target"), IntegerArgumentType.getInteger(context, "rung"), DoubleArgumentType.getDouble(context, "progress")))))));
 	}

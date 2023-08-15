@@ -118,6 +118,7 @@ public class MSItems
 	public static final RegistryObject<Item> TOOTHRIPPER = REGISTER.register("toothripper", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 3, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)), new Item.Properties().defaultDurability(1200)));
 	public static final RegistryObject<Item> SHADOWRAZOR = REGISTER.register("shadowrazor", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 4, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().defaultDurability(1500)));
 	public static final RegistryObject<Item> PRINCESS_PERIL = REGISTER.register("princess_peril", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.ORGANIC_TIER, 5, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(4)).add(OnHitEffect.onCrit(OnHitEffect.enemyPotionEffect(() -> new MobEffectInstance(MobEffects.POISON, 100, 0)))), new Item.Properties().defaultDurability(1650)));
+	public static final RegistryObject<Item> CHEESE_KNIFE = REGISTER.register("cheese_knife", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 2, -2.0F).efficiency(1.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.backstab(3)), new Item.Properties()));
 	
 	
 	//Keys

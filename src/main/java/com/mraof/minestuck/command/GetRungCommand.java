@@ -14,9 +14,11 @@ import static org.stringtemplate.v4.compiler.STLexer.str;
 
 public class GetRungCommand
 {
+	public static final String SUCCESS = "commands.minestuck.get_rung";
+	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
-		dispatcher.register(Commands.literal("getrung").then(Commands.argument("target", EntityArgument.player())
+		dispatcher.register(Commands.literal("rung").then(Commands.argument("target", EntityArgument.player())
 				.executes(GetRungCommand::executeGetRung)));
 	}
 	
@@ -26,7 +28,7 @@ public class GetRungCommand
 		String playerName = player.getScoreboardName();
 		Integer rungInt = PlayerSavedData.getData(player).getEcheladder().getRung();
 		
-		context.getSource().sendSuccess(() -> Component.literal(playerName + "'s Current Echeladder Rung is " + rungInt.toString()), false);
+		context.getSource().sendSuccess(() -> Component.translatable(SUCCESS, playerName, rungInt.toString()), false);
 		return rungInt;
 	}
 }
