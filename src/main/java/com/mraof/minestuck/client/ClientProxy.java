@@ -154,9 +154,9 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void registerFactories(RegisterParticleProvidersEvent event)
 	{
-		event.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
-		event.register(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
-		event.register(MSParticleType.EXHAUST.get(), ExhaustParticle.Provider::new);
+		event.registerSpriteSet(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
+		event.registerSpriteSet(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
+		event.registerSpriteSet(MSParticleType.EXHAUST.get(), ExhaustParticle.Provider::new);
 	}
 	
 	/**
