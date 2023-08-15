@@ -2,11 +2,9 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.ModusDataPacket;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
@@ -15,15 +13,13 @@ import java.util.Objects;
 
 public abstract class Modus
 {
-	private final PlayerSavedData savedData;
 	private final ModusType<?> type;
 	public final LogicalSide side;
 	private boolean needResend;
 	
-	public Modus(ModusType<?> type, PlayerSavedData savedData, LogicalSide side)
+	public Modus(ModusType<?> type, LogicalSide side)
 	{
 		this.type = Objects.requireNonNull(type);
-		this.savedData = side == LogicalSide.SERVER ? Objects.requireNonNull(savedData) : null;
 		this.side = Objects.requireNonNull(side);
 	}
 	
@@ -81,8 +77,6 @@ public abstract class Modus
 	 */
 	public void markDirty()
 	{
-		if(savedData != null)
-			savedData.setDirty();
 		needResend = true;
 	}
 	
@@ -93,10 +87,5 @@ public abstract class Modus
 			MSPacketHandler.sendToPlayer(ModusDataPacket.create(this), player);
 			needResend = false;
 		}
-	}
-	
-	protected MinecraftServer getServer()
-	{
-		return savedData != null ? savedData.mcServer : null;
 	}
 }
