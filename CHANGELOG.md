@@ -15,10 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New textures and slightly shorter models for transportalizers
 - Old Computer now starts with SBURB 95 Theme
 - Updated textures of bookshelves and ladders
+- Retextured green stone blocks
 
 ### Contributors for this release
 
-- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma"
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
