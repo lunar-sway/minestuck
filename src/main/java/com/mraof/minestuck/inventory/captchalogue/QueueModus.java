@@ -1,8 +1,7 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -13,9 +12,9 @@ import java.util.Iterator;
 public class QueueModus extends StackModus
 {
 	
-	public QueueModus(ModusType<? extends QueueModus> type, PlayerSavedData savedData, LogicalSide side)
+	public QueueModus(ModusType<? extends QueueModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override

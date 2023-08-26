@@ -26,6 +26,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,10 +56,10 @@ public final class CaptchaDeckHandler
 		return type != null ? type.createClientSide() : null;
 	}
 	
-	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
+	public static Modus createServerModus(ResourceLocation name)
 	{
 		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
-		return type != null ? type.createServerSide(savedData) : null;
+		return type != null ? type.createServerSide() : null;
 	}
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
@@ -106,7 +107,7 @@ public final class CaptchaDeckHandler
 	
 	private static ItemStack changeModus(ServerPlayer player, ItemStack modusItem, @Nullable Modus oldModus, ModusType<?> newType)
 	{
-		final Modus newModus = newType.createServerSide(PlayerSavedData.get(player.server));
+		final Modus newModus = newType.createServerSide();
 		
 		if(oldModus == null)
 		{
@@ -343,19 +344,18 @@ public final class CaptchaDeckHandler
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundTag nbt, PlayerSavedData savedData)
+	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side)
 	{
-		boolean clientSide = savedData == null;
 		if(nbt == null)
 			return null;
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
+		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
 		else
 		{
-			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
+			modus = side.isClient() ? createClientModus(name) : createServerModus(name);
 			if(modus == null)
 			{
 				LOGGER.warn("Failed to load modus from nbt with the name \"{}\"", name.toString());

@@ -1,6 +1,5 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.LogicalSide;
 
@@ -20,12 +19,12 @@ public final class ModusType<T extends Modus>
 	
 	public T createClientSide()
 	{
-		return factory.create(this, null, LogicalSide.CLIENT);
+		return factory.create(this, LogicalSide.CLIENT);
 	}
 	
-	public T createServerSide(PlayerSavedData savedData)
+	public T createServerSide()
 	{
-		return factory.create(this, savedData, LogicalSide.SERVER);
+		return factory.create(this, LogicalSide.SERVER);
 	}
 	
 	public Item getItem()
@@ -35,6 +34,6 @@ public final class ModusType<T extends Modus>
 	
 	public interface ModusFactory<T extends Modus>
 	{
-		T create(ModusType<T> type, PlayerSavedData savedData, LogicalSide side);
+		T create(ModusType<T> type, LogicalSide side);
 	}
 }
