@@ -1,9 +1,15 @@
 package com.mraof.minestuck.network;
 
+import com.google.common.collect.Multimap;
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,9 +17,8 @@ import java.io.IOException;
 
 public class ServerEditPacket implements PlayToClientPacket
 {
-	
+	Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations;
 	String target;
-	int centerX, centerZ;
 	CompoundTag deployTags;
 	
 	public static ServerEditPacket exit()
@@ -28,12 +33,11 @@ public class ServerEditPacket implements PlayToClientPacket
 		return packet;
 	}
 	
-	public static ServerEditPacket activate(String target, int centerX, int centerZ, CompoundTag deployTags)
+	//TODO add proper locations retrieval
+	public static ServerEditPacket activate(String target, CompoundTag deployTags, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;
-		packet.centerX = centerX;
-		packet.centerZ = centerZ;
 		packet.deployTags = deployTags;
 		return packet;
 	}
@@ -45,8 +49,6 @@ public class ServerEditPacket implements PlayToClientPacket
 		{
 			buffer.writeBoolean(true);
 			buffer.writeUtf(target, 16);
-			buffer.writeInt(centerX);
-			buffer.writeInt(centerZ);
 		} else if(deployTags != null)
 			buffer.writeBoolean(false);
 		else return;
@@ -73,8 +75,6 @@ public class ServerEditPacket implements PlayToClientPacket
 			if(buffer.readBoolean())
 			{
 				packet.target = buffer.readUtf(16);
-				packet.centerX = buffer.readInt();
-				packet.centerZ = buffer.readInt();
 			}
 			
 			if(buffer.readableBytes() > 0)
@@ -97,6 +97,6 @@ public class ServerEditPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.onClientPackage(target, centerX, centerZ, deployTags);
+		ClientEditHandler.onClientPackage(target, deployTags, locations);
 	}
 }

@@ -1,5 +1,7 @@
 package com.mraof.minestuck.computer.editmode;
 
+import com.google.common.collect.Multimap;
+import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -15,8 +17,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -51,12 +55,13 @@ public final class ClientEditHandler
 {
 	public static String client;
 	static boolean activated;
-	static int centerX, centerZ;
+	public static Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations;
 	
 	/**
 	 * Used to tell if the client is in edit mode or not.
 	 */
-	public static boolean isActive() {
+	public static boolean isActive()
+	{
 		return activated;
 	}
 	
@@ -66,17 +71,16 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, CompoundTag deployList)
+	//TODO add proper locations retrieval
+	public static void onClientPackage(String target, CompoundTag deployList, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
-		if(target != null) {	//Enable edit mode
+		if(target != null)
+		{    //Enable edit mode
 			activated = true;
-			centerX = posX;
-			centerZ = posZ;
 			client = target;
-		}
-		else if(deployList == null)	//Disable edit mode
+		} else if(deployList == null)    //Disable edit mode
 		{
 			player.fallDistance = 0;
 			activated = false;
@@ -121,7 +125,7 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.type();
 			ChatFormatting color = amount.amount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
-			toolTip.add(Component.literal(amount.amount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			toolTip.add(Component.literal(amount.amount() + " ").append(grist.getDisplayName()).append(" (" + have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
 			toolTip.add(Component.translatable(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
@@ -134,11 +138,12 @@ public final class ClientEditHandler
 		{
 			Player player = event.player;
 			
+			//disabled for now until a proper client side method is developed
 			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
-			EditmodeLocations locations = new EditmodeLocations(); //cannot get ExtraData client side, so find a different method of updating this list
+			//ClientEditmodeLocations locations = new ClientEditmodeLocations(player.level(), player); //cannot get ExtraData client side, so find a different method of updating this list
 			
-			locations.isValidLocation(player, range);
+			///EditmodeLocations.isValidLocation(player, range, locations.getLocations());
 		}
 	}
 	
@@ -167,7 +172,8 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void onItemPickupEvent(EntityItemPickupEvent event) {
+	public static void onItemPickupEvent(EntityItemPickupEvent event)
+	{
 		if(event.getEntity().level().isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
@@ -208,7 +214,7 @@ public final class ClientEditHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
@@ -224,8 +230,7 @@ public final class ClientEditHandler
 			{
 				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
 				event.setCanceled(true);
-			}
-			else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
+			} else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
 			{
 				event.getEntity().sendSystemMessage(ServerEditHandler.blockBreakCost().createMissingMessage());
 				event.setCanceled(true);
@@ -233,7 +238,7 @@ public final class ClientEditHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
 		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
@@ -270,14 +275,14 @@ public final class ClientEditHandler
 			activated = false;
 	}
 	
-	@SubscribeEvent(priority=EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onScreenOpened(ScreenEvent.Opening event)
 	{
 		if(isActive() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
 		{
-				event.setCanceled(true);
-				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
-				PlayerStatsScreen.openGui(true);
+			event.setCanceled(true);
+			PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
+			PlayerStatsScreen.openGui(true);
 		}
 	}
 	

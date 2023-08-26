@@ -10,11 +10,11 @@ import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
-import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +35,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
-import javax.swing.text.html.HTMLDocument;
 import java.util.Map;
 
 public class ComputerBlock extends MachineBlock implements EntityBlock
@@ -94,6 +93,16 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				return InteractionResult.SUCCESS;
 			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 			
+			if(!level.isClientSide && blockEntity.hasProgram(0))
+			{
+				SburbConnection c = SkaianetHandler.get(level).getClientConnection(blockEntity);
+				//TODO doesnt seem to work
+				if(c != null)
+				{
+					c.addClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+				}
+			}
+			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
 				MSScreenFactories.displayComputerScreen(blockEntity);
 			
@@ -142,7 +151,11 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
 			{
-				MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+				SburbConnection c = SkaianetHandler.get(level).getClientConnection(blockEntity);
+				if(c != null)
+				{
+					c.removeClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+				}
 				
 				stackInHand.shrink(1);
 				blockEntity.closeAll();
@@ -155,10 +168,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
-				//TODO player who inserts disk is not necessarily the computer owner
-				if(id == 0)
-					MSExtraData.get(level).addEditmodeLocations(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
-				
 				stackInHand.shrink(1);
 				blockEntity.installedPrograms.add(id);
 				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
@@ -184,12 +193,10 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	{
 		if(!level.isClientSide && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
 		{
-			if(computer.owner != null)
+			SburbConnection c = SkaianetHandler.get(level).getClientConnection(computer);
+			if(c != null)
 			{
-				ServerPlayer player = computer.owner.getPlayer(level.getServer());
-				
-				if(player != null)
-					MSExtraData.get(level).removeEditmodeLocation(player.getUUID(), level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+				c.removeClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
 			}
 		}
 		

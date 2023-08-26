@@ -3,13 +3,10 @@ package com.mraof.minestuck.world.storage;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.CardCaptchas;
 import com.mraof.minestuck.computer.editmode.EditData;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.entry.PostEntryTask;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -24,21 +21,18 @@ import java.util.function.Predicate;
 
 /**
  * Stores any extra data that's not worth putting in their own data file. (Such as editmode recovery data and post entry tasks, which most of the time will be empty)
- *
  * @author kirderf1
  */
 public class MSExtraData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private static final String DATA_NAME = Minestuck.MOD_ID + "_extra";
+	private static final String DATA_NAME = Minestuck.MOD_ID+"_extra";
 	
 	private final List<EditData> activeEditData = new ArrayList<>();
 	
 	private final Map<UUID, EditData.PlayerRecovery> editPlayerRecovery = new HashMap<>();
 	private final List<EditData.ConnectionRecovery> editConnectionRecovery = new ArrayList<>();
-	
-	private final Map<UUID, EditmodeLocations> editmodeLocations = new HashMap<>();
 	
 	private final CardCaptchas cardCaptchas = new CardCaptchas();
 	private final List<PostEntryTask> postEntryTasks = new ArrayList<>();
@@ -54,8 +48,6 @@ public class MSExtraData extends SavedData
 		data.activeEditData.clear();
 		data.editPlayerRecovery.clear();
 		data.editConnectionRecovery.clear();
-		//dont have to clear?
-		//data.editmodeLocations.clear();
 		
 		data.postEntryTasks.clear();
 		
@@ -68,15 +60,6 @@ public class MSExtraData extends SavedData
 			EditData.ConnectionRecovery recovery = EditData.readExtraRecovery(dataTag);
 			if(recovery != null)
 				data.editConnectionRecovery.add(recovery);
-		}
-		
-		ListTag editmodeLocationList = nbt.getList("player_editmode_locations", Tag.TAG_COMPOUND);
-		for(int i = 0; i < editmodeLocationList.size(); i++)
-		{
-			CompoundTag dataTag = editmodeLocationList.getCompound(i);
-			UUID playerID = dataTag.getUUID("player");
-			EditmodeLocations locations = EditmodeLocations.read(dataTag.getCompound("editmode_locations"));
-			data.editmodeLocations.put(playerID, locations);
 		}
 		
 		ListTag entryTaskList = nbt.getList("entry_tasks", Tag.TAG_COMPOUND);
@@ -101,10 +84,6 @@ public class MSExtraData extends SavedData
 		
 		compound.put("editmode_recovery", editRecoveryList);
 		
-		ListTag editmodeLocationList = new ListTag();
-		editmodeLocationList.addAll(editmodeLocations.entrySet().stream().map(MSExtraData::writeEditmodeLocations).toList());
-		compound.put("player_editmode_locations", editmodeLocationList);
-		
 		ListTag entryTaskList = new ListTag();
 		entryTaskList.addAll(postEntryTasks.stream().map(PostEntryTask::write).toList());
 		
@@ -125,15 +104,6 @@ public class MSExtraData extends SavedData
 	private static CompoundTag writeRecovery(Map.Entry<UUID, EditData.PlayerRecovery> data)
 	{
 		CompoundTag nbt = data.getValue().write(new CompoundTag());
-		nbt.putUUID("player", data.getKey());
-		return nbt;
-	}
-	
-	private static CompoundTag writeEditmodeLocations(Map.Entry<UUID, EditmodeLocations> data)
-	{
-		CompoundTag nbt = new CompoundTag();
-		ListTag listTag = EditmodeLocations.write(data.getValue().getLocations(), new ListTag());
-		nbt.put("editmode_locations", listTag);
 		nbt.putUUID("player", data.getKey());
 		return nbt;
 	}
@@ -209,43 +179,6 @@ public class MSExtraData extends SavedData
 			editConnectionRecovery.clear();
 			setDirty();
 		}
-	}
-	
-	/**
-	 * Gets the places the editmode server player can be for their client
-	 */
-	public EditmodeLocations getEditmodeLocations(UUID playerID)
-	{
-		return editmodeLocations.get(playerID);
-	}
-	
-	public void addEditmodeLocations(UUID playerID, ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
-	{
-		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
-		if(playerLocations == null)
-		{
-			playerLocations = new EditmodeLocations(level, pos, source);
-			editmodeLocations.put(playerID, playerLocations);
-		} else
-		{
-			playerLocations.addEntry(level, pos, source);
-			editmodeLocations.replace(playerID, playerLocations);
-		}
-		
-		LOGGER.debug("Added to editmode locations for player UUID: " + playerID + "\n" + editmodeLocations);
-		
-		setDirty();
-	}
-	
-	public void removeEditmodeLocation(UUID playerID, ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
-	{
-		EditmodeLocations playerLocations = getEditmodeLocations(playerID);
-		if(playerLocations != null)
-		{
-			playerLocations.removeEntry(level, pos, source);
-		}
-		
-		setDirty();
 	}
 	
 	public void addPostEntryTask(PostEntryTask task)

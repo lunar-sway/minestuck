@@ -2,8 +2,7 @@ package com.mraof.minestuck.skaianet;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.computer.editmode.DeployList;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.computer.editmode.*;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.player.*;
@@ -14,7 +13,6 @@ import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetSubtitleTextPacket;
@@ -223,7 +221,7 @@ public final class SburbHandler
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			MSExtraData.get(player.serverLevel()).addEditmodeLocations(player.getUUID(), player.level().dimension(), new BlockPos(0,100,0), EditmodeLocations.Source.ENTRY);
+			c.addClientEditmodeLocations(player.level().dimension(), new BlockPos(0,100,0), EditmodeLocations.Source.BLOCK);
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			

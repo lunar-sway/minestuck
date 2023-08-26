@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network;
 
-import com.google.common.collect.Multimap;
-import com.mojang.datafixers.util.Pair;
+import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
@@ -29,15 +28,21 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		//TODO "player" refers to the player in editmode but the UUID needs to be that of their client
-		EditmodeLocations editmodeLocations = MSExtraData.get(player.level()).getEditmodeLocations(player.getUUID());
-		Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations = EditmodeLocations.addTestingLocations(player.level().dimension(), editmodeLocations.getLocations());
+		EditData editData = MSExtraData.get(player.serverLevel()).findEditData(data -> data.getEditor() == player);
 		
-		BlockPos teleportPos = EditmodeLocations.getClosestPosInDimension(locations, player);
-		
-		if(teleportPos != null)
+		if(editData != null)
 		{
-			player.teleportTo(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
+			EditmodeLocations locations = editData.getConnection().getClientEditmodeLocations();
+			
+			if(locations != null)
+			{
+				BlockPos teleportPos = EditmodeLocations.getClosestPosInDimension(locations.getLocations(), player);
+				
+				if(teleportPos != null)
+				{
+					player.teleportTo(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
+				}
+			}
 		}
 	}
 }

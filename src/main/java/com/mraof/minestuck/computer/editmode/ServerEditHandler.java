@@ -215,10 +215,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			decoy.level().addFreshEntity(decoy);
 			MSExtraData.get(player.level()).addEditData(data);
 			
-			BlockPos center = getEditmodeCenter(c);
+			data.getConnection().addTestClientEditmodeLocations(player.level().dimension());
 			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(player.getServer(), c));
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), data.getConnection().getClientEditmodeLocations().getLocations());
 			MSPacketHandler.sendToPlayer(packet, player);
+			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
 		}
@@ -267,9 +268,11 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			BlockPos center = getEditmodeCenter(data.connection);
-			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), center.getX(), center.getZ(), DeployList.getDeployListTag(editor.getServer(), data.connection));
+			data.getConnection().addTestClientEditmodeLocations(editor.level().dimension());
+			
+			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), data.connection), data.getConnection().getClientEditmodeLocations().getLocations());
 			MSPacketHandler.sendToPlayer(packet, editor);
+			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
 		} else
@@ -323,20 +326,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		SburbConnection c = data.connection;
 		int range = MSDimensions.isLandDimension(player.server, player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
-		/*Level level = player.level();
-		ServerPlayer client = c.getClientIdentifier().getPlayer(player.server);
-		if(client != null)
-		{
-			UUID clientUUID = client.getUUID();
-			
-			EditmodeLocations locations = MSExtraData.get(level).getEditmodeLocations(clientUUID);
-			
-			//if(player.level().getGameTime() % 100 == 0)
-			//	LOGGER.debug(locations.isValidLocation(player, range));
-		}*/
-		
-		EditmodeLocations locations = new EditmodeLocations();
-		locations.isValidLocation(player, range);
+		EditmodeLocations editmodeLocations = c.getClientEditmodeLocations();
+		if(editmodeLocations != null)
+			EditmodeLocations.isValidLocation(player, range, editmodeLocations.getLocations());
 		
 		updateInventory(player, c);
 		

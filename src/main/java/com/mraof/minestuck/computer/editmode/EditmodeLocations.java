@@ -61,8 +61,19 @@ public class EditmodeLocations
 		if(level == null || pos == null)
 			return;
 		
-		//TODO validate
-		locations.put(level, Pair.of(pos, source));
+		Pair<BlockPos, Source> locationPairIn = Pair.of(pos, source);
+		
+		//TODO consider validating the pos and source
+		if(locations.containsKey(level))
+		{
+			for(Pair<BlockPos, Source> locationPair : locations.get(level))
+			{
+				if(locationPair.getFirst().equals(pos) && locationPair.getSecond().equals(source))
+					return; //prevent duplicates
+			}
+		}
+		
+		locations.put(level, locationPairIn);
 	}
 	
 	public void removeEntry(ResourceKey<Level> level, BlockPos pos, Source source)
@@ -75,8 +86,11 @@ public class EditmodeLocations
 			locations.remove(level, Pair.of(pos, source));
 	}
 	
-	public static ListTag write(Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations, ListTag listTag)
+	//TODO switch to non-static
+	public static ListTag write(Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations)
 	{
+		ListTag listTag = new ListTag();
+		
 		for(Map.Entry<ResourceKey<Level>, Pair<BlockPos, Source>> entry : locations.entries())
 		{
 			CompoundTag nbt = new CompoundTag();
@@ -111,6 +125,28 @@ public class EditmodeLocations
 		return new EditmodeLocations(dimension, new BlockPos(posX, posY, posZ), Source.fromInt(sourceOrdinal));
 	}
 	
+	public static EditmodeLocations readNew(ListTag locationsTag)
+	{
+		EditmodeLocations locations = new EditmodeLocations();
+		
+		for(int i = 0; i < locationsTag.size(); i++)
+		{
+			CompoundTag nbt = locationsTag.getCompound(i);
+			
+			ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
+			
+			int posX = nbt.getInt("x");
+			int posY = nbt.getInt("y");
+			int posZ = nbt.getInt("z");
+			
+			int sourceOrdinal = nbt.getInt("source");
+			
+			locations.addEntry(dimension, new BlockPos(posX, posY, posZ), Source.fromInt(sourceOrdinal));
+		}
+		
+		return locations;
+	}
+	
 	private boolean isValidSource(Level level, BlockPos pos, Source source)
 	{
 		if(source == Source.BLOCK)
@@ -136,14 +172,15 @@ public class EditmodeLocations
 	 * @param editPlayer Player in editmode
 	 * @return Whether the player is standing in a supported region
 	 */
-	public boolean isValidLocation(Player editPlayer, double range)
+	public static boolean isValidLocation(Player editPlayer, double range, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
 	{
 		Level editLevel = editPlayer.level();
 		double editPosX = editPlayer.getX();
 		double editPosY = editPlayer.getY();
 		double editPosZ = editPlayer.getZ();
 		
-		Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = addTestingLocations(editLevel.dimension(), locations);
+		//Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = addTestingLocations(editLevel.dimension(), locations);
+		Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = locations;
 		
 		if(!updatedLocations.containsKey(editLevel.dimension()))
 			return false;
@@ -196,15 +233,18 @@ public class EditmodeLocations
 		if(!zMatches && !allMatch)
 			editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(1, 1, 0));
 		
-		if(!allMatch)
+		if(allMatch)
+		{
+			return true;
+		} else
 		{
 			//TODO do not use "old" pos, player "sticks" to the edge of the zone
 			if(editPlayer.level().isClientSide)
 				editPlayer.setPos(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
 			else editPlayer.teleportTo(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
+			
+			return false;
 		}
-		
-		return false;
 	}
 	
 	//TODO only works in one dimension
