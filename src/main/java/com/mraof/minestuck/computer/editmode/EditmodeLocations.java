@@ -112,20 +112,7 @@ public class EditmodeLocations
 		return listTag;
 	}
 	
-	public static EditmodeLocations read(CompoundTag nbt)
-	{
-		ResourceKey<Level> dimension = Level.RESOURCE_KEY_CODEC.parse(NbtOps.INSTANCE, nbt.get("dim")).resultOrPartial(LOGGER::error).orElse(null);
-		
-		int posX = nbt.getInt("x");
-		int posY = nbt.getInt("y");
-		int posZ = nbt.getInt("z");
-		
-		int sourceOrdinal = nbt.getInt("source");
-		
-		return new EditmodeLocations(dimension, new BlockPos(posX, posY, posZ), Source.fromInt(sourceOrdinal));
-	}
-	
-	public static EditmodeLocations readNew(ListTag locationsTag)
+	public static EditmodeLocations read(ListTag locationsTag)
 	{
 		EditmodeLocations locations = new EditmodeLocations();
 		
@@ -172,21 +159,18 @@ public class EditmodeLocations
 	 * @param editPlayer Player in editmode
 	 * @return Whether the player is standing in a supported region
 	 */
-	public static boolean isValidLocation(Player editPlayer, double range, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
+	public boolean isValidLocation(Player editPlayer, double range)
 	{
 		Level editLevel = editPlayer.level();
 		double editPosX = editPlayer.getX();
 		double editPosY = editPlayer.getY();
 		double editPosZ = editPlayer.getZ();
 		
-		//Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = addTestingLocations(editLevel.dimension(), locations);
-		Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> updatedLocations = locations;
-		
-		if(!updatedLocations.containsKey(editLevel.dimension()))
+		if(!locations.containsKey(editLevel.dimension()))
 			return false;
 		
 		List<BlockPos> allLevelPos = new ArrayList<>();
-		for(Pair<BlockPos, Source> valuePair : updatedLocations.get(editLevel.dimension()).stream().toList())
+		for(Pair<BlockPos, Source> valuePair : locations.get(editLevel.dimension()).stream().toList())
 		{
 			allLevelPos.add(valuePair.getFirst());
 		}

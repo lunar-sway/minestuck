@@ -217,7 +217,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			data.getConnection().addTestClientEditmodeLocations(player.level().dimension());
 			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), data.getConnection().getClientEditmodeLocations().getLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), data.getConnection().getClientEditmodeLocations());
 			MSPacketHandler.sendToPlayer(packet, player);
 			
 			data.sendGristCacheToEditor();
@@ -270,7 +270,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		{
 			data.getConnection().addTestClientEditmodeLocations(editor.level().dimension());
 			
-			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), data.connection), data.getConnection().getClientEditmodeLocations().getLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), data.connection), data.getConnection().getClientEditmodeLocations());
 			MSPacketHandler.sendToPlayer(packet, editor);
 			
 			data.sendGristCacheToEditor();
@@ -328,7 +328,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		EditmodeLocations editmodeLocations = c.getClientEditmodeLocations();
 		if(editmodeLocations != null)
-			EditmodeLocations.isValidLocation(player, range, editmodeLocations.getLocations());
+			editmodeLocations.isValidLocation(player, range);
 		
 		updateInventory(player, c);
 		

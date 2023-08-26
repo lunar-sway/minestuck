@@ -1,7 +1,5 @@
 package com.mraof.minestuck.computer.editmode;
 
-import com.google.common.collect.Multimap;
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
@@ -17,10 +15,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -55,7 +51,7 @@ public final class ClientEditHandler
 {
 	public static String client;
 	static boolean activated;
-	public static Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations;
+	public static EditmodeLocations locations;
 	
 	/**
 	 * Used to tell if the client is in edit mode or not.
@@ -71,8 +67,7 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	//TODO add proper locations retrieval
-	public static void onClientPackage(String target, CompoundTag deployList, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
+	public static void onClientPackage(String target, CompoundTag deployList, EditmodeLocations locationsIn)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
@@ -88,6 +83,10 @@ public final class ClientEditHandler
 		if(deployList != null)
 		{
 			ClientDeployList.load(deployList);
+		}
+		if(locationsIn != null)
+		{
+			locations = locationsIn;
 		}
 	}
 	
@@ -138,12 +137,10 @@ public final class ClientEditHandler
 		{
 			Player player = event.player;
 			
-			//disabled for now until a proper client side method is developed
 			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
-			//ClientEditmodeLocations locations = new ClientEditmodeLocations(player.level(), player); //cannot get ExtraData client side, so find a different method of updating this list
-			
-			///EditmodeLocations.isValidLocation(player, range, locations.getLocations());
+			if(locations != null)
+				locations.isValidLocation(player, range);
 		}
 	}
 	

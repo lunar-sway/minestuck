@@ -96,10 +96,10 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			if(!level.isClientSide && blockEntity.hasProgram(0))
 			{
 				SburbConnection c = SkaianetHandler.get(level).getClientConnection(blockEntity);
-				//TODO doesnt seem to work
+				//TODO may only be working with the primary computer
 				if(c != null)
 				{
-					c.addClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+					c.addClientEditmodeLocation(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
 				}
 			}
 			

@@ -1,15 +1,9 @@
 package com.mraof.minestuck.network;
 
-import com.google.common.collect.Multimap;
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,7 +11,7 @@ import java.io.IOException;
 
 public class ServerEditPacket implements PlayToClientPacket
 {
-	Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations;
+	EditmodeLocations locations;
 	String target;
 	CompoundTag deployTags;
 	
@@ -33,12 +27,12 @@ public class ServerEditPacket implements PlayToClientPacket
 		return packet;
 	}
 	
-	//TODO add proper locations retrieval
-	public static ServerEditPacket activate(String target, CompoundTag deployTags, Multimap<ResourceKey<Level>, Pair<BlockPos, EditmodeLocations.Source>> locations)
+	public static ServerEditPacket activate(String target, CompoundTag deployTags, EditmodeLocations locations)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;
 		packet.deployTags = deployTags;
+		packet.locations = locations;
 		return packet;
 	}
 	
@@ -53,17 +47,27 @@ public class ServerEditPacket implements PlayToClientPacket
 			buffer.writeBoolean(false);
 		else return;
 		
+		CompoundTag combinedTags = new CompoundTag();
+		
 		if(deployTags != null)
 		{
-			try
-			{
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				NbtIo.writeCompressed(deployTags, bytes);
-				buffer.writeBytes(bytes.toByteArray());
-			} catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			combinedTags.put("deploy_tags", deployTags);
+		}
+		
+		if(locations != null)
+		{
+			ListTag listTag = EditmodeLocations.write(locations.getLocations());
+			combinedTags.put("editmode_locations", listTag);
+		}
+		
+		try
+		{
+			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			NbtIo.writeCompressed(combinedTags, bytes);
+			buffer.writeBytes(bytes.toByteArray());
+		} catch(IOException e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -83,7 +87,17 @@ public class ServerEditPacket implements PlayToClientPacket
 				buffer.readBytes(bytes);
 				try
 				{
-					packet.deployTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
+					CompoundTag combinedTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
+					
+					if(combinedTags.contains("deploy_tags"))
+					{
+						packet.deployTags = combinedTags.getCompound("deploy_tags");
+					}
+					
+					if(combinedTags.contains("editmode_locations"))
+					{
+						packet.locations = EditmodeLocations.read(combinedTags.getList("editmode_locations", Tag.TAG_COMPOUND));
+					}
 				} catch(IOException e)
 				{
 					e.printStackTrace();

@@ -111,7 +111,7 @@ public final class SburbConnection
 		
 		if(nbt.contains("editmode_locations"))
 		{
-			clientEditmodeLocations = EditmodeLocations.readNew(nbt.getList("editmode_locations", Tag.TAG_COMPOUND));
+			clientEditmodeLocations = EditmodeLocations.read(nbt.getList("editmode_locations", Tag.TAG_COMPOUND));
 		}
 		
 		artifactType = nbt.getInt("artifact");
@@ -400,7 +400,7 @@ public final class SburbConnection
 		return clientEditmodeLocations;
 	}
 	
-	public void addClientEditmodeLocations(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
+	public void addClientEditmodeLocation(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		if(clientEditmodeLocations == null)
 			clientEditmodeLocations = new EditmodeLocations();

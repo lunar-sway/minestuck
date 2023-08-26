@@ -5,9 +5,7 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
 
 public class EditmodeTeleportPacket implements PlayToServerPacket
 {
@@ -40,7 +38,7 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 				
 				if(teleportPos != null)
 				{
-					player.teleportTo(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
+					player.teleportTo(teleportPos.getX() + 0.5D, teleportPos.getY() + 1.0D, teleportPos.getZ() + 0.5D);
 				}
 			}
 		}

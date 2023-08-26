@@ -53,8 +53,8 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		
 		drawActiveTabAndIcons(guiGraphics);
 		
-		//TODO add more options (potentially work with icons) and/or center this
-		addRenderableWidget(new ExtendedButton(xOffset + LEFT_ARROW_X + 32, yOffset + ARROW_Y + 32, 100, 16, Component.literal("TELEPORT CLOSEST"), button -> teleport()));
+		//TODO add more options (potentially work with icons)
+		addRenderableWidget(new ExtendedButton(xOffset + LEFT_ARROW_X + 31, yOffset + ARROW_Y + 31, 100, 16, Component.literal("TELEPORT CLOSEST"), button -> teleport()));
 	}
 	
 	private void teleport()
