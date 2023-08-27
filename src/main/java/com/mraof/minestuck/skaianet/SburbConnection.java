@@ -408,17 +408,6 @@ public final class SburbConnection
 		clientEditmodeLocations.addEntry(level, pos, source);
 	}
 	
-	public void addTestClientEditmodeLocations(ResourceKey<Level> level)
-	{
-		clientEditmodeLocations.addEntry(level, new BlockPos(18, 71, -36), EditmodeLocations.Source.BLOCK);
-		clientEditmodeLocations.addEntry(level, new BlockPos(10, 71, -36), EditmodeLocations.Source.BLOCK);
-		clientEditmodeLocations.addEntry(level, new BlockPos(10, 80, -32), EditmodeLocations.Source.BLOCK);
-		
-		clientEditmodeLocations.addEntry(level, new BlockPos(1, 100, 1), EditmodeLocations.Source.ENTRY);
-		clientEditmodeLocations.addEntry(level, new BlockPos(1, 120, 1), EditmodeLocations.Source.ENTRY);
-		clientEditmodeLocations.addEntry(level, new BlockPos(1, 140, 1), EditmodeLocations.Source.ENTRY);
-	}
-	
 	public void removeClientEditmodeLocations(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		clientEditmodeLocations.removeEntry(level, pos, source);

@@ -2,6 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -34,7 +35,7 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 			
 			if(locations != null)
 			{
-				BlockPos teleportPos = EditmodeLocations.getClosestPosInDimension(locations.getLocations(), player);
+				BlockPos teleportPos = locations.getClosestPosInDimension(player);
 				
 				if(teleportPos != null)
 				{

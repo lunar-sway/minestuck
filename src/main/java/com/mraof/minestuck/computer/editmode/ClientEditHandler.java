@@ -140,7 +140,7 @@ public final class ClientEditHandler
 			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 			
 			if(locations != null)
-				locations.isValidLocation(player, range);
+				locations.canMoveAtPosition(player, range);
 		}
 	}
 	

@@ -215,9 +215,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			decoy.level().addFreshEntity(decoy);
 			MSExtraData.get(player.level()).addEditData(data);
 			
-			data.getConnection().addTestClientEditmodeLocations(player.level().dimension());
+			c.getClientEditmodeLocations().validateNearbySources(player, c);
 			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), data.getConnection().getClientEditmodeLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), c.getClientEditmodeLocations());
 			MSPacketHandler.sendToPlayer(packet, player);
 			
 			data.sendGristCacheToEditor();
@@ -268,9 +268,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		EditData data = getData(editor);
 		if(data != null)
 		{
-			data.getConnection().addTestClientEditmodeLocations(editor.level().dimension());
+			SburbConnection connection = data.connection;
 			
-			ServerEditPacket packet = ServerEditPacket.activate(data.connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), data.connection), data.getConnection().getClientEditmodeLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection), connection.getClientEditmodeLocations());
 			MSPacketHandler.sendToPlayer(packet, editor);
 			
 			data.sendGristCacheToEditor();
@@ -324,11 +324,21 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			return;
 		
 		SburbConnection c = data.connection;
+		EditmodeLocations editmodeLocations = c.getClientEditmodeLocations();
+		
+		//every 10 seconds, revalidate locations
+		if(player.level().getGameTime() % 200 == 0)
+		{
+			if(editmodeLocations != null)
+				c.getClientEditmodeLocations().validateNearbySources(player, c);
+			
+			editmodeLocations = c.getClientEditmodeLocations(); //refresh editmodeLocations after validation
+		}
+		
 		int range = MSDimensions.isLandDimension(player.server, player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
-		EditmodeLocations editmodeLocations = c.getClientEditmodeLocations();
 		if(editmodeLocations != null)
-			editmodeLocations.isValidLocation(player, range);
+			editmodeLocations.canMoveAtPosition(player, range);
 		
 		updateInventory(player, c);
 		

@@ -221,15 +221,7 @@ public final class SburbHandler
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,80,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,120,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,160,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,200,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,240,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,280,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,320,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,360,0), EditmodeLocations.Source.ENTRY);
-			c.addClientEditmodeLocation(player.level().dimension(), new BlockPos(0,400,0), EditmodeLocations.Source.ENTRY);
+			c.getClientEditmodeLocations().addEntryLocations(player.level().dimension(), c);
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			
