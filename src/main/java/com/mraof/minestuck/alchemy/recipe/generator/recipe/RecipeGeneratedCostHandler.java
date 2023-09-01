@@ -9,6 +9,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
@@ -247,15 +248,15 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, GenerationContext context)
+	public GristCostResult generate(Item item, GeneratorCallback callback)
 	{
-		return process.generateCost(item, context);
+		return process.generateCost(item, callback);
 	}
 	
 	@Override
-	public void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GenerationContext context)
+	public void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GeneratorCallback callback)
 	{
-		this.process.onCostFromOtherRecipe(item, lastCost, context);
+		this.process.onCostFromOtherRecipe(item, lastCost, callback);
 	}
 	
 	@Override

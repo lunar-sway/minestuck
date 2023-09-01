@@ -2,6 +2,7 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 /**
  * Acts as a pipeline and state holder for any {@link GeneratedCostProvider} back to {@link GristCostGenerator}.
  */
-public class GenerationContext
+public final class GenerationContext implements GeneratorCallback
 {
 	private final GenerationContext parent;
 	private final Item itemGeneratedFor;
@@ -63,17 +64,20 @@ public class GenerationContext
 		return itemGeneratedFor;
 	}
 	
-	public boolean isPrimary()
+	@Override
+	public boolean shouldSaveResult()
 	{
 		return primary;
 	}
 	
-	public boolean shouldUseCache()
+	@Override
+	public boolean shouldUseSavedResult()
 	{
 		return shouldUseCache;
 	}
 	
-	public GristSet costForIngredient(Ingredient ingredient, boolean removeContainerCost)
+	@Override
+	public GristSet lookupCostFor(Ingredient ingredient)
 	{
 		if(ingredient.test(ItemStack.EMPTY))
 			return GristSet.EMPTY;
@@ -86,10 +90,7 @@ public class GenerationContext
 		{
 			if(ingredient.test(new ItemStack(stack.getItem())))
 			{
-				GristSet cost;
-				if(removeContainerCost)
-					cost = costWithoutContainer(stack);
-				else cost = lookupCostFor(stack);
+				GristSet cost = costWithoutContainer(stack);
 				
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
@@ -98,11 +99,7 @@ public class GenerationContext
 		return minCost;
 	}
 	
-	public GristSet lookupCostFor(ItemStack stack)
-	{
-		return lookupCostFor(stack.getItem());
-	}
-	
+	@Override
 	public GristSet lookupCostFor(Item item)
 	{
 		if(!localCache.containsKey(item))

@@ -3,6 +3,7 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
@@ -12,16 +13,16 @@ import java.util.function.Function;
 
 public final class GeneratedGristCostCache implements GeneratedCostProvider
 {
-	private static final Function<GenerationContext, GristSet> INVALID_PROVIDER = context -> {
+	private static final Function<GeneratorCallback, GristSet> INVALID_PROVIDER = _callback -> {
 		throw new UnsupportedOperationException();
 	};
 	
 	@Nullable
 	private ImmutableGristSet cachedCost = null;
 	private boolean hasGeneratedCost = false;
-	private final Function<GenerationContext, GristSet> costProvider;
+	private final Function<GeneratorCallback, GristSet> costProvider;
 	
-	public GeneratedGristCostCache(Function<GenerationContext, GristSet> costProvider)
+	public GeneratedGristCostCache(Function<GeneratorCallback, GristSet> costProvider)
 	{
 		this.costProvider = costProvider;
 	}
@@ -55,13 +56,13 @@ public final class GeneratedGristCostCache implements GeneratedCostProvider
 	
 	@Nullable
 	@Override
-	public GristCostResult generate(Item item, GenerationContext context)
+	public GristCostResult generate(Item item, GeneratorCallback callback)
 	{
-		if(context.shouldUseCache() && this.hasGeneratedCost)
+		if(callback.shouldUseSavedResult() && this.hasGeneratedCost)
 			return GristCostResult.ofOrNull(this.cachedCost);
 		
-		GristSet cost = this.costProvider.apply(context);
-		if(context.isPrimary())
+		GristSet cost = this.costProvider.apply(callback);
+		if(callback.shouldSaveResult())
 		{
 			this.hasGeneratedCost = true;
 			if(cost != null)

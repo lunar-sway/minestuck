@@ -9,6 +9,7 @@ import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -52,7 +53,7 @@ public final class SourceGristCost implements GristCostRecipe
 		this.id = id;
 		this.ingredient = ingredient;
 		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(context -> generateCost(context, sources, multiplier, addedCost));
+		this.cache = new GeneratedGristCostCache(callback -> generateCost(callback, sources, multiplier, addedCost));
 	}
 	
 	private SourceGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
@@ -82,12 +83,12 @@ public final class SourceGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GenerationContext context, List<Source> sources, float multiplier, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, List<Source> sources, float multiplier, ImmutableGristSet addedCost)
 	{
 		MutableGristSet costSum = MutableGristSet.newDefault();
 		for(Source source : sources)
 		{
-			GristSet sourceCost = source.getCostFor(context);
+			GristSet sourceCost = source.getCostFor(callback);
 			if(sourceCost != null)
 				costSum.add(sourceCost);
 			else return null;
@@ -170,7 +171,7 @@ public final class SourceGristCost implements GristCostRecipe
 	private interface Source
 	{
 		@Nullable
-		GristSet getCostFor(GenerationContext context);
+		GristSet getCostFor(GeneratorCallback callback);
 	}
 	
 	private static class ItemSource implements Source
@@ -183,9 +184,9 @@ public final class SourceGristCost implements GristCostRecipe
 		}
 		
 		@Override
-		public GristSet getCostFor(GenerationContext context)
+		public GristSet getCostFor(GeneratorCallback callback)
 		{
-			return context.lookupCostFor(item);
+			return callback.lookupCostFor(item);
 		}
 	}
 	
@@ -204,12 +205,12 @@ public final class SourceGristCost implements GristCostRecipe
 		}
 		
 		@Override
-		public GristSet getCostFor(GenerationContext context)
+		public GristSet getCostFor(GeneratorCallback callback)
 		{
 			GristSet maxCost = null;
 			for(Item item : Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(this.tag))
 			{
-				GristSet cost = context.lookupCostFor(item);
+				GristSet cost = callback.lookupCostFor(item);
 				
 				if(cost != null && (maxCost == null || cost.getValue() > maxCost.getValue()))
 					maxCost = cost;

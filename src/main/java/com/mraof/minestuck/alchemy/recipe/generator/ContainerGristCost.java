@@ -7,6 +7,7 @@ import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -47,7 +48,7 @@ public final class ContainerGristCost implements GristCostRecipe
 		this.id = id;
 		this.ingredient = ingredient;
 		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(context -> this.generateCost(context, addedCost));
+		this.cache = new GeneratedGristCostCache(callback -> this.generateCost(callback, addedCost));
 	}
 	
 	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
@@ -59,23 +60,23 @@ public final class ContainerGristCost implements GristCostRecipe
 	}
 	
 	@Nullable
-	private GristSet generateCost(GenerationContext context, ImmutableGristSet addedCost)
+	private GristSet generateCost(GeneratorCallback callback, ImmutableGristSet addedCost)
 	{
 		ItemStack container = ingredient.getItems().length > 0 ? ingredient.getItems()[0].getCraftingRemainingItem() : ItemStack.EMPTY;
 		if(!container.isEmpty())
 		{
-			GristSet cost = context.lookupCostFor(container);
+			GristSet cost = callback.lookupCostFor(container);
 			if(cost != null)
 			{
 				return cost.mutableCopy().add(addedCost);
 			} else
 			{
-				if(context.isPrimary())
+				if(callback.shouldSaveResult())
 					LOGGER.warn("Got null grist cost when looking up container item {} for container grist cost {}. No grist cost is set for this recipe.", ForgeRegistries.ITEMS.getKey(container.getItem()), id);
 			}
 		} else
 		{
-			if(context.isPrimary())
+			if(callback.shouldSaveResult())
 				LOGGER.warn("No container item found for ingredient to container grist cost {}. Assuming that the container cost is zero.", id);
 			return addedCost;
 		}

@@ -5,6 +5,7 @@ import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
 import net.minecraft.world.item.Item;
@@ -51,29 +52,29 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	GristCostResult generateCost(Item item, GenerationContext context)
+	GristCostResult generateCost(Item item, GeneratorCallback callback)
 	{
 		if(generatedCosts.containsKey(item))
 		{
 			return GristCostResult.ofOrNull(generatedCosts.get(item));
 		} else
 		{
-			GristSet result = costFromRecipes(item, context);
+			GristSet result = costFromRecipes(item, callback);
 			//TODO Clean cost of entries with 0, set it to null if it is empty (no free cookies for you). Also log these events so that the costs of base ingredients can be modified accordingly
 			
-			if(context.isPrimary())
+			if(callback.shouldSaveResult())
 				generatedCosts.put(item, result == null ? null : result.asImmutable());
 			return GristCostResult.ofOrNull(result);
 		}
 	}
 	
-	void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GenerationContext context)
+	void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GeneratorCallback callback)
 	{
-		if(context.isPrimary())
-			checkRecipeLogging(item, lastCost.cost(), context);
+		if(callback.shouldSaveResult())
+			checkRecipeLogging(item, lastCost.cost(), (GenerationContext) callback);
 	}
 	
-	private GristSet costFromRecipes(Item item, GenerationContext context)
+	private GristSet costFromRecipes(Item item, GeneratorCallback callback)
 	{
 		List<Pair<Recipe<?>, RecipeInterpreter>> recipes = lookupMap.getOrDefault(item, Collections.emptyList());
 		
@@ -82,7 +83,7 @@ class RecipeGeneratedCostProcess
 			GristSet minCost = null;
 			for(Pair<Recipe<?>, RecipeInterpreter> recipePair : recipes)
 			{
-				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, context);
+				GristSet cost = costForRecipe(recipePair.getLeft(), recipePair.getRight(), item, callback);
 				if(cost != null && (minCost == null || cost.getValue() < minCost.getValue()))
 					minCost = cost;
 			}
@@ -93,11 +94,11 @@ class RecipeGeneratedCostProcess
 		}
 	}
 	
-	private GristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GenerationContext context)
+	private GristSet costForRecipe(Recipe<?> recipe, RecipeInterpreter interpreter, Item item, GeneratorCallback callback)
 	{
 		try
 		{
-			return interpreter.generateCost(recipe, item, context);
+			return interpreter.generateCost(recipe, item, callback);
 		} catch(Exception e)
 		{
 			LOGGER.error("Got exception while getting cost for recipe {}", recipe.getId(), e);

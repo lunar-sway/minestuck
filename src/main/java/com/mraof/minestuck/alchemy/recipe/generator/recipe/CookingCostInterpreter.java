@@ -4,7 +4,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.api.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -24,9 +24,9 @@ public class CookingCostInterpreter extends DefaultInterpreter
 	}
 	
 	@Override
-	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GenerationContext context)
+	public MutableGristSet generateCost(Recipe<?> recipe, Item output, GeneratorCallback callback)
 	{
-		MutableGristSet cost = super.generateCost(recipe, output, context);
+		MutableGristSet cost = super.generateCost(recipe, output, callback);
 		
 		if(cost != null && recipe instanceof AbstractCookingRecipe)
 		{
