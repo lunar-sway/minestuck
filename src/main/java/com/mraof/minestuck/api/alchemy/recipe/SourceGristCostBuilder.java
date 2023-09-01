@@ -50,8 +50,7 @@ public final class SourceGristCostBuilder
 	
 	public static SourceGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = tag.location();
-		return new SourceGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
+		return new SourceGristCostBuilder(tag.location().withSuffix("_tag"), Ingredient.of(tag));
 	}
 	
 	public static SourceGristCostBuilder of(ItemLike item)

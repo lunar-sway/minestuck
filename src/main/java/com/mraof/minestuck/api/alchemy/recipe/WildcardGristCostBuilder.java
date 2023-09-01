@@ -35,8 +35,7 @@ public final class WildcardGristCostBuilder
 	
 	public static WildcardGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = tag.location();
-		return new WildcardGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
+		return new WildcardGristCostBuilder(tag.location().withSuffix("_tag"), Ingredient.of(tag));
 	}
 	
 	public static WildcardGristCostBuilder of(ItemLike item)
@@ -83,7 +82,7 @@ public final class WildcardGristCostBuilder
 	{
 		if(this.cost == 0)
 			throw new IllegalStateException("Must set the wildcard cost before building!");
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, cost, priority));
+		recipeSaver.accept(new Result(id.withPrefix("grist_costs/"), ingredient, cost, priority));
 	}
 	
 	private record Result(ResourceLocation id, Ingredient ingredient, long cost, @Nullable Integer priority) implements AdvancementFreeRecipe

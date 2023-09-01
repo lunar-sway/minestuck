@@ -34,8 +34,7 @@ public final class UnavailableGristCostBuilder
 	
 	public static UnavailableGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = tag.location();
-		return new UnavailableGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
+		return new UnavailableGristCostBuilder(tag.location().withSuffix("_tag"), Ingredient.of(tag));
 	}
 	
 	public static UnavailableGristCostBuilder of(ItemLike item)
@@ -74,7 +73,7 @@ public final class UnavailableGristCostBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, priority));
+		recipeSaver.accept(new Result(id.withPrefix("grist_costs/"), ingredient, priority));
 	}
 	
 	private record Result(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority) implements AdvancementFreeRecipe
