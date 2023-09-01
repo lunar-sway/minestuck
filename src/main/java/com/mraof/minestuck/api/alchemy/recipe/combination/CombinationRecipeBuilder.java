@@ -1,7 +1,7 @@
-package com.mraof.minestuck.data.recipe;
+package com.mraof.minestuck.api.alchemy.recipe.combination;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.alchemy.recipe.CombinationMode;
+import com.mraof.minestuck.data.recipe.AdvancementFreeRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -14,12 +14,17 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * Used to datagen a regular combination recipe.
+ */
+@ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CombinationRecipeBuilder
+public final class CombinationRecipeBuilder
 {
 	private final ItemStack output;
 	private Ingredient input1, input2;
@@ -118,25 +123,11 @@ public class CombinationRecipeBuilder
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "combinations/"+id.getPath()), output, input1, input2, mode));
+		recipeSaver.accept(new Result(id.withPrefix("combinations/"), output, input1, input2, mode));
 	}
 	
-	public static class Result implements AdvancementFreeRecipe
+	private record Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationMode mode) implements AdvancementFreeRecipe
 	{
-		private final ResourceLocation id;
-		private final ItemStack output;
-		private final Ingredient input1, input2;
-		private final CombinationMode mode;
-		
-		public Result(ResourceLocation id, ItemStack output, Ingredient input1, Ingredient input2, CombinationMode mode)
-		{
-			this.id = Objects.requireNonNull(id);
-			this.output = Objects.requireNonNull(output);
-			this.input1 = Objects.requireNonNull(input1, "Both input items must be set");
-			this.input2 = Objects.requireNonNull(input2, "Both input items must be set");
-			this.mode = Objects.requireNonNull(mode, "Combination mode must be set");
-		}
-		
 		@Override
 		public void serializeRecipeData(JsonObject json)
 		{
@@ -144,7 +135,8 @@ public class CombinationRecipeBuilder
 			json.add("input2", input2.toJson());
 			json.addProperty("mode", mode.asString());
 			JsonObject outputJson = new JsonObject();
-			outputJson.addProperty("item", ForgeRegistries.ITEMS.getKey(output.getItem()).toString());
+			ResourceLocation outputId = Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(output.getItem()));
+			outputJson.addProperty("item", outputId.toString());
 			if(output.getCount() > 1)
 			{
 				outputJson.addProperty("count", output.getCount());

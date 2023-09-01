@@ -1,14 +1,15 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.alchemy.recipe.CombinationMode;
-import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
-import com.mraof.minestuck.api.alchemy.GristAmount;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -86,9 +87,9 @@ public class MinestuckJeiPlugin implements IModPlugin
 				.flatMap(recipe -> ((GristCostRecipe) recipe).getJeiCosts(level).stream()).toList());
 		registration.addRecipes(LATHE, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
 				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
-				.filter(combination -> combination.getMode() == CombinationMode.AND).toList());
+				.filter(combination -> combination.mode() == CombinationMode.AND).toList());
 		registration.addRecipes(DESIGNIX, recipes.stream().filter(recipe -> recipe.getType() == MSRecipeTypes.COMBINATION_TYPE.get())
 				.flatMap(recipe -> ((CombinationRecipe) recipe).getJeiCombinations().stream())
-				.filter(combination -> combination.getMode() == CombinationMode.OR).toList());
+				.filter(combination -> combination.mode() == CombinationMode.OR).toList());
 	}
 }
