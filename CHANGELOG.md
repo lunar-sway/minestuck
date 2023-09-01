@@ -8,6 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Temple Scanner now displays direction on the item itself, rather than printing coordinates in the chatbox.
+
+### Contributors for this release
+
+- Vivian Zane, Dweblenod, kirderf1
+
+## [Unreleased]
+
+### Changed
+
 - New textures and slightly shorter models for transportalizers
 
 ### Contributors for this release
