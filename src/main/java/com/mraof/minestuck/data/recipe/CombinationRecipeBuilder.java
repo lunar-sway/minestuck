@@ -1,8 +1,9 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.alchemy.recipe.CombinationMode;
+import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,11 +14,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@MethodsReturnNonnullByDefault
 public class CombinationRecipeBuilder
 {
 	private final ItemStack output;
@@ -120,7 +121,7 @@ public class CombinationRecipeBuilder
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "combinations/"+id.getPath()), output, input1, input2, mode));
 	}
 	
-	public static class Result implements FinishedRecipe
+	public static class Result implements AdvancementFreeRecipe
 	{
 		private final ResourceLocation id;
 		private final ItemStack output;
@@ -161,20 +162,6 @@ public class CombinationRecipeBuilder
 		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.COMBINATION.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return null;
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return null;
 		}
 	}
 }

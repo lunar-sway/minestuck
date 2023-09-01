@@ -1,10 +1,14 @@
-package com.mraof.minestuck.data.recipe;
+package com.mraof.minestuck.api.alchemy.recipe;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.data.recipe.AdvancementFreeRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.DefaultImmutableGristSet;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,57 +17,65 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ContainerGristCostBuilder
+/**
+ * Used to datagen a regular grist cost.
+ */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public final class GristCostRecipeBuilder
 {
+	private static final Logger LOGGER = LogManager.getLogger();
+	
+	@Nullable
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private final ImmutableMap.Builder<GristType, Long> costBuilder = ImmutableMap.builder();
+	@Nullable
 	private Integer priority = null;
 	
-	public static ContainerGristCostBuilder of(TagKey<Item> tag)
+	public static GristCostRecipeBuilder of(TagKey<Item> tag)
 	{
 		ResourceLocation tagId = tag.location();
-		return new ContainerGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
+		return new GristCostRecipeBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
 	}
 	
-	public static ContainerGristCostBuilder of(ItemLike item)
+	public static GristCostRecipeBuilder of(ItemLike item)
 	{
-		return new ContainerGristCostBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
+		return new GristCostRecipeBuilder(ForgeRegistries.ITEMS.getKey(item.asItem()), Ingredient.of(item));
 	}
 	
-	public static ContainerGristCostBuilder of(Ingredient ingredient)
+	public static GristCostRecipeBuilder of(Ingredient ingredient)
 	{
-		return new ContainerGristCostBuilder(ingredient);
+		return new GristCostRecipeBuilder(null, ingredient);
 	}
 	
-	protected ContainerGristCostBuilder(Ingredient ingredient)
-	{
-		this(null, ingredient);
-	}
-	
-	protected ContainerGristCostBuilder(ResourceLocation defaultName, Ingredient ingredient)
+	private GristCostRecipeBuilder(@Nullable ResourceLocation defaultName, Ingredient ingredient)
 	{
 		this.defaultName = defaultName;
 		this.ingredient = ingredient;
 	}
 	
-	public ContainerGristCostBuilder grist(Supplier<GristType> type, long amount)
+	public GristCostRecipeBuilder grist(Supplier<GristType> type, long amount)
 	{
 		return grist(type.get(), amount);
 	}
 	
-	public ContainerGristCostBuilder grist(GristType type, long amount)
+	public GristCostRecipeBuilder grist(GristType type, long amount)
 	{
 		costBuilder.put(type, amount);
 		return this;
 	}
 	
-	public ContainerGristCostBuilder priority(int priority)
+	public GristCostRecipeBuilder priority(int priority)
 	{
 		this.priority = priority;
 		return this;
@@ -86,17 +98,27 @@ public class ContainerGristCostBuilder
 		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, new DefaultImmutableGristSet(costBuilder), priority));
 	}
 	
-	public static class Result extends GristCostRecipeBuilder.Result
+	private record Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, @Nullable Integer priority) implements AdvancementFreeRecipe
 	{
-		public Result(ResourceLocation id, Ingredient ingredient, ImmutableGristSet cost, Integer priority)
+		@Override
+		public void serializeRecipeData(JsonObject jsonObject)
 		{
-			super(id, ingredient, cost, priority);
+			jsonObject.add("ingredient", ingredient.toJson());
+			jsonObject.add("grist_cost", ImmutableGristSet.MAP_CODEC.encodeStart(JsonOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
+			if(priority != null)
+				jsonObject.addProperty("priority", priority);
+		}
+		
+		@Override
+		public ResourceLocation getId()
+		{
+			return id;
 		}
 		
 		@Override
 		public RecipeSerializer<?> getType()
 		{
-			return MSRecipeTypes.CONTAINER_GRIST_COST.get();
+			return MSRecipeTypes.GRIST_COST.get();
 		}
 	}
 }

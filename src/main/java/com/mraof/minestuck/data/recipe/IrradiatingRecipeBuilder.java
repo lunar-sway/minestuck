@@ -64,7 +64,7 @@ public final class IrradiatingRecipeBuilder implements RecipeBuilder
 		finishedRecipeConsumer.accept(new Result(recipeId, this.ingredient, this.result, this.experience, this.cookingTime));
 	}
 	
-	private record Result(ResourceLocation id, Ingredient ingredient, Item result, float experience, int cookingTime) implements FinishedRecipe
+	private record Result(ResourceLocation id, Ingredient ingredient, Item result, float experience, int cookingTime) implements AdvancementFreeRecipe
 	{
 		@Override
 		public void serializeRecipeData(JsonObject json)
@@ -86,20 +86,6 @@ public final class IrradiatingRecipeBuilder implements RecipeBuilder
 		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.IRRADIATING.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return null;
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return null;
 		}
 	}
 }
