@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New textures and slightly shorter models for transportalizers
 - Old Computer now starts with SBURB 95 Theme
 - Updated textures of bookshelves and ladders
+- Retextured green stone blocks
 - Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
 - New texture for wizard staff
 
@@ -29,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Scarab Oasis, rose_bushes_, Dweblenod
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
