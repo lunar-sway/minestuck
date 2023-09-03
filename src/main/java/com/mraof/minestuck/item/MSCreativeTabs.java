@@ -149,7 +149,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PLUSH_NAKAGATOR.get());
 		output.accept(MSItems.PLUSH_IGUANA.get());
 		output.accept(MSItems.PLUSH_TURTLE.get());
-		output.accept(MSItems.PLUSH_MUTINI.get());
+		output.accept(MSItems.PLUSH_MUTATED_CAT.get());
 		output.accept(MSItems.URANIUM_POWERED_STICK.get());
 		output.accept(MSItems.IRON_BOAT.get());
 		output.accept(MSItems.GOLD_BOAT.get());

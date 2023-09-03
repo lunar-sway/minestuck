@@ -885,7 +885,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.PLUSH_IGUANA.get()).grist(URANIUM, 6).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PLUSH_TURTLE.get()).grist(CHALK, 6).build(recipeSaver);
 		
-		GristCostRecipeBuilder.of(MSItems.PLUSH_MUTINI.get()).grist(BUILD, 4).grist(URANIUM,  1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.PLUSH_MUTATED_CAT.get()).grist(BUILD, 4).grist(URANIUM,  1).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.PARTICLE_ACCELERATOR.get()).grist(BUILD, 14).grist(URANIUM, 3).build(recipeSaver);
 		

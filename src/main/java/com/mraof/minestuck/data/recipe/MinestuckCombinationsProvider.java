@@ -585,8 +585,8 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.UPPER_CRUST_CRUST_CANE.get()).input(MSItems.PRIM_AND_PROPER_WALKING_POLE.get()).or().namedInput(Items.BREAD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KISSY_CUTIE_HEART_HITTER.get()).input(MSItems.IRON_CANE.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KISSY_CUTIE_HEART_SPLITTER.get()).input(MSItems.SCYTHE.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.MUTANT_CUTIE_CELL_PUTTER.get()).input(MSItems.KISSY_CUTIE_HEART_HITTER.get()).and().input(MSItems.PLUSH_MUTINI.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.MUTANT_CUTIE_CELL_CUTTER.get()).input(MSItems.KISSY_CUTIE_HEART_SPLITTER.get()).and().input(MSItems.PLUSH_MUTINI.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MUTANT_CUTIE_CELL_PUTTER.get()).input(MSItems.KISSY_CUTIE_HEART_HITTER.get()).and().input(MSItems.PLUSH_MUTATED_CAT.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.MUTANT_CUTIE_CELL_CUTTER.get()).input(MSItems.KISSY_CUTIE_HEART_SPLITTER.get()).and().input(MSItems.PLUSH_MUTATED_CAT.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ZEPHYR_CANE.get()).namedInput(MSItems.IRON_CANE.get()).or().namedInput(Items.FEATHER).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ZEPHYR_CANE.get()).namedInput(MSItems.IRON_CANE.get()).or().namedInput(Items.PHANTOM_MEMBRANE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SPEAR_CANE.get()).input(MSItems.CANE.get()).or().namedInput(Items.IRON_SWORD).build(consumer);

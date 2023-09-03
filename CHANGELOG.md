@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Native sulfur block for use in Heat lands
 - Particle Accelerator item
 - Boss Mob entity tag
+- Consort plushes
+- Mutini plush
 
 ### Changed
 

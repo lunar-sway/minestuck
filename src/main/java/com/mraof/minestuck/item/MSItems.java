@@ -649,7 +649,7 @@ public class MSItems
 	public static final RegistryObject<Item> PLUSH_IGUANA = REGISTER.register("plush_iguana", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> PLUSH_TURTLE = REGISTER.register("plush_turtle", () -> new Item(new Item.Properties()));
 	
-	public static final RegistryObject<Item> PLUSH_MUTINI = REGISTER.register("plush_mutini", () -> new Item(new Item.Properties()));
+	public static final RegistryObject<Item> PLUSH_MUTATED_CAT = REGISTER.register("plush_mutated_cat", () -> new Item(new Item.Properties()));
 	
 	//Incredibly Useful Items
 	public static final RegistryObject<Item> URANIUM_POWERED_STICK = REGISTER.register("uranium_powered_stick", () -> new Item(new Item.Properties().stacksTo(1)));
