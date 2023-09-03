@@ -105,6 +105,10 @@ public class BoondollarPricingProvider implements DataProvider
 		add(MUSIC_DISC_DANCE_STAB_DANCE.get(), 1000);
 		add(MUSIC_DISC_RETRO_BATTLE.get(), 1000);
 		add(CRUMPLY_HAT.get(), 80, 100);
+		add(PLUSH_IGUANA.get(), 40, 100);
+		add(PLUSH_NAKAGATOR.get(), 40, 100);
+		add(PLUSH_SALAMANDER.get(), 40, 100);
+		add(PLUSH_TURTLE.get(), 40, 100);
 		add(BATTERY.get(), 10, 100);
 		add(GRIMOIRE.get(), 666);
 		add(ACE_OF_SPADES.get(), 3000, 5000);

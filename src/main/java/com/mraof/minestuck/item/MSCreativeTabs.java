@@ -131,6 +131,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.ELECTRIC_AUTOHARP.get());
 		output.accept(MSItems.CARDBOARD_TUBE.get());
 		output.accept(MSItems.CRYPTID_PHOTO.get());
+		output.accept(MSItems.PARTICLE_ACCELERATOR.get());
 		
 		output.accept(MSItems.CAPTCHAROID_CAMERA.get());
 		output.accept(MSItems.LONG_FORGOTTEN_WARHORN.get());
@@ -144,6 +145,11 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TEMPLE_SCANNER.get());
 		
 		output.accept(MSItems.SCALEMATE_APPLESCAB.get());
+		output.accept(MSItems.PLUSH_SALAMANDER.get());
+		output.accept(MSItems.PLUSH_NAKAGATOR.get());
+		output.accept(MSItems.PLUSH_IGUANA.get());
+		output.accept(MSItems.PLUSH_TURTLE.get());
+		output.accept(MSItems.PLUSH_MUTATED_CAT.get());
 		output.accept(MSItems.URANIUM_POWERED_STICK.get());
 		output.accept(MSItems.IRON_BOAT.get());
 		output.accept(MSItems.GOLD_BOAT.get());
@@ -471,6 +477,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.DENSE_CLOUD.get());
 		output.accept(MSItems.BRIGHT_DENSE_CLOUD.get());
 		output.accept(MSItems.SUGAR_CUBE.get());
+		output.accept(MSItems.NATIVE_SULFUR.get());
 		
 		output.accept(MSItems.GLOWING_LOG.get());
 		output.accept(MSItems.SHADEWOOD_LOG.get());
@@ -621,6 +628,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.WRINKLEFUCKER.get());
 		output.accept(MSItems.TELESCOPIC_SASSACRUSHER.get());
 		output.accept(MSItems.DEMOCRATIC_DEMOLITIONER.get());
+		output.accept(MSItems.BOOMBOX_BEATER.get());
 		output.accept(MSItems.REGI_HAMMER.get());
 		output.accept(MSItems.FEAR_NO_ANVIL.get());
 		output.accept(MSItems.MELT_MASHER.get());
@@ -665,6 +673,9 @@ public final class MSCreativeTabs
 		output.accept(MSItems.KRAKENS_EYE.get());
 		output.accept(MSItems.CINNAMON_SWORD.get());
 		output.accept(MSItems.UNION_BUSTER.get());
+		output.accept(MSItems.CHAINSAW_KATANA.get());
+		output.accept(MSItems.THORN_IN_YOUR_SIDE.get());
+		output.accept(MSItems.ROSE_PROTOCOL.get());
 		
 		output.accept(MSItems.DAGGER.get());
 		output.accept(MSItems.DIAMOND_DAGGER.get());
@@ -685,7 +696,12 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CANDY_KEY.get());
 		output.accept(MSItems.LOCKSOFTENER.get());
 		output.accept(MSItems.BISEKEYAL.get());
+		output.accept(MSItems.LATCHMELTER.get());
 		output.accept(MSItems.KEY_TO_THE_MACHINE.get());
+		output.accept(MSItems.KEY_TO_THE_CITY.get());
+		output.accept(MSItems.INNER_HEART.get());
+		output.accept(MSItems.CRIMSON_LEAP.get());
+		output.accept(MSItems.LOCH_PICK.get());
 		output.accept(MSItems.DRAGON_KEY.get());
 		output.accept(MSItems.TRUE_BLUE.get());
 		output.accept(MSItems.BLUE_BEAMS.get());
@@ -694,6 +710,18 @@ public final class MSCreativeTabs
 		output.accept(MSItems.REGIKEY.get());
 		output.accept(MSItems.CLOCKKEEPER.get());
 		output.accept(MSItems.HOME_BY_MIDNIGHT.get());
+		output.accept(MSItems.NO_TIME_FOR_FLIES.get());
+		output.accept(MSItems.NATURES_HEART.get());
+		output.accept(MSItems.YALDABAOTHS_KEYTON.get());
+		output.accept(MSItems.KEYTAR.get());
+		output.accept(MSItems.ALLWEDDOL.get());
+		
+		output.accept(MSItems.CONDUCTORS_BATON.get());
+		output.accept(MSItems.SHARP_NOTE.get());
+		output.accept(MSItems.URANIUM_BATON.get());
+		output.accept(MSItems.WIND_WAKER.get());
+		output.accept(MSItems.CELESTIAL_FULCRUM.get());
+		output.accept(MSItems.HYMN_FOR_HORRORTERRORS.get());
 		
 		output.accept(MSItems.BATLEACKS.get());
 		output.accept(MSItems.COPSE_CRUSHER.get());
@@ -735,6 +763,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CAKESAW.get());
 		output.accept(MSItems.MAGENTA_MAULER.get());
 		output.accept(MSItems.THISTLEBLOWER.get());
+		output.accept(MSItems.HAND_CRANKED_VAMPIRE_ERASER.get());
 		output.accept(MSItems.EMERALD_IMMOLATOR.get());
 		output.accept(MSItems.OBSIDIATOR.get());
 		output.accept(MSItems.DEVILS_DELIGHT.get());
@@ -784,6 +813,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SCYTHE.get());
 		output.accept(MSItems.MARASCHINO_CHERRY_SCYTHE.get());
 		output.accept(MSItems.KISSY_CUTIE_HEART_SPLITTER.get());
+		output.accept(MSItems.MUTANT_CUTIE_CELL_CUTTER.get());
 		output.accept(MSItems.PROSPECTING_PICKSCYTHE.get());
 		output.accept(MSItems.EIGHTBALL_SCYTHE.get());
 		output.accept(MSItems.TIME_FLAYER.get());
@@ -816,12 +846,20 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SPIKED_CLUB.get());
 		output.accept(MSItems.RUBIKS_MACE.get());
 		output.accept(MSItems.HOME_GROWN_MACE.get());
+		output.accept(MSItems.CARNIE_CLUB.get());
+		output.accept(MSItems.TOFFEE_CLUB.get());
 		
 		output.accept(MSItems.HORSE_HITCHER.get());
 		output.accept(MSItems.CLUB_OF_FELONY.get());
 		output.accept(MSItems.CUESTICK.get());
 		
+		output.accept(MSItems.BO_STAFF.get());
+		output.accept(MSItems.BAMBOO_BEATSTICK.get());
+		output.accept(MSItems.TELESCOPIC_BEATDOWN_BRUISER.get());
+		output.accept(MSItems.ION_DESTABILIZER.get());
+		
 		output.accept(MSItems.WIZARD_STAFF.get());
+		output.accept(MSItems.BARBERS_MAGIC_TOUCH.get());
 		output.accept(MSItems.WATER_STAFF.get());
 		output.accept(MSItems.FIRE_STAFF.get());
 		output.accept(MSItems.WHITE_KINGS_SCEPTER.get());
@@ -837,6 +875,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.UPPER_CRUST_CRUST_CANE.get());
 		output.accept(MSItems.IRON_CANE.get());
 		output.accept(MSItems.KISSY_CUTIE_HEART_HITTER.get());
+		output.accept(MSItems.MUTANT_CUTIE_CELL_PUTTER.get());
 		output.accept(MSItems.ZEPHYR_CANE.get());
 		output.accept(MSItems.SPEAR_CANE.get());
 		output.accept(MSItems.PARADISES_PORTABELLO.get());
@@ -880,6 +919,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.POINTY_STICK.get());
 		output.accept(MSItems.KNITTING_NEEDLE.get());
 		
+		output.accept(MSItems.WAND.get());
 		output.accept(MSItems.NEEDLE_WAND.get());
 		output.accept(MSItems.ARTIFUCKER.get());
 		output.accept(MSItems.POINTER_WAND.get());

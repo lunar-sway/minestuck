@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 127,
+    "minestuck:uranium": 1
+  },
+  "ingredient": {
+    "item": "minestuck:chainsaw_katana"
+  }
+}

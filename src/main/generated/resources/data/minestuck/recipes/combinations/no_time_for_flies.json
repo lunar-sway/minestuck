@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:clockkeeper"
+  },
+  "input2": {
+    "item": "minestuck:crimson_leap"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:no_time_for_flies"
+  }
+}

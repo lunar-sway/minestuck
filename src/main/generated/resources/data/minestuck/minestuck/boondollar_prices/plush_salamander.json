@@ -1,0 +1,12 @@
+{
+  "ingredient": {
+    "item": "minestuck:plush_salamander"
+  },
+  "range": {
+    "type": "minecraft:uniform",
+    "value": {
+      "max_inclusive": 100,
+      "min_inclusive": 40
+    }
+  }
+}
