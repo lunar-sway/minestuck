@@ -6,7 +6,7 @@
   "input2": {
     "item": "minestuck:sledge_hammer"
   },
-  "mode": "and",
+  "mode": "or",
   "output": {
     "item": "minestuck:boombox_beater"
   }

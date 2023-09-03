@@ -504,8 +504,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.BO_STAFF.get()).grist(BUILD, 15).grist(IODINE, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.BAMBOO_BEATSTICK.get()).grist(BUILD, 65).grist(AMBER, 22).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TELESCOPIC_BEATDOWN_BRUISER.get()).grist(BUILD, 90).grist(CAULK, 22).grist(RUST, 5).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.WIZARD_STAFF.get()).grist(CHALK, 12).grist(GARNET, 10).grist(DIAMOND, 1).grist(GOLD, 1).build(recipeSaver);
-		GristCostRecipeBuilder.of(MSItems.BARBERS_MAGIC_TOUCH.get()).grist(BUILD, 70).grist(SHALE, 35).grist(GARNET, 21).grist(GOLD, 3).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.BARBERS_MAGIC_TOUCH.get()).grist(BUILD, 135).grist(SHALE, 68).grist(GARNET, 41).grist(GOLD, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ION_DESTABILIZER.get()).grist(BUILD, 2572).grist(AMBER, 857).grist(RUBY, 650).grist(URANIUM, 85).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.WAND.get()).grist(BUILD, 20).build(recipeSaver);

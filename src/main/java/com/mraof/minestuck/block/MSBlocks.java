@@ -163,9 +163,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_CAST_IRON = REGISTER.register("chiseled_cast_iron", () -> new Block(copy(CAST_IRON.get())));
 	public static final RegistryObject<Block> STEEL_BEAM = REGISTER.register("steel_beam", () -> new MSDirectionalBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.0F, 9.0F)));
 	
-	public static final RegistryObject<Block> CINDERED_LOG = REGISTER.register("cindered_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(1.0F, 3.0F)));
-	public static final RegistryObject<Block> CINDERED_WOOD = REGISTER.register("cindered_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BROWN).strength(1.0F, 3.0F)));
-	public static final RegistryObject<Block> SULFUR = REGISTER.register("sulfur", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5F, 1.0F)));
+	public static final RegistryObject<Block> NATIVE_SULFUR = REGISTER.register("native_sulfur", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).strength(0.5F, 1.0F)));
 	
 	public static final RegistryObject<Block> MYCELIUM_STONE = REGISTER.register("mycelium_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_MAGENTA).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	public static final RegistryObject<Block> MYCELIUM_COBBLESTONE = REGISTER.register("mycelium_cobblestone", () -> new Block(copy(MYCELIUM_STONE.get())));

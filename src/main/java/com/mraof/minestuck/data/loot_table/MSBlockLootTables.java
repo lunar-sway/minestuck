@@ -217,7 +217,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());
 		dropSelf(SPIKES.get());
-		dropSelf(SULFUR.get());
+		dropSelf(NATIVE_SULFUR.get());
 		
 		dropSelf(GLOWING_LOG.get());
 		dropSelf(FROST_LOG.get());
@@ -226,7 +226,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(VINE_LOG.get());
 		dropSelf(FLOWERY_VINE_LOG.get());
 		dropSelf(DEAD_LOG.get());
-		dropSelf(CINDERED_LOG.get());
 		dropSelf(PETRIFIED_LOG.get());
 		dropSelf(GLOWING_WOOD.get());
 		dropSelf(SHADEWOOD_LOG.get());
@@ -255,7 +254,6 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(END_PLANKS.get());
 		dropSelf(DEAD_PLANKS.get());
 		dropSelf(TREATED_PLANKS.get());
-		dropSelf(CINDERED_WOOD.get());
 		add(FROST_LEAVES.get(), this::frostLeavesDrop);
 		add(RAINBOW_LEAVES.get(), this::rainbowLeavesDrop);
 		add(SHADEWOOD_LEAVES.get(), this::shadewoodLeavesDrop);

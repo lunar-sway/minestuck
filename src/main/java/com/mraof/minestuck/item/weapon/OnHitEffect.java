@@ -10,6 +10,7 @@ import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.util.MSDamageSources;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -230,6 +231,13 @@ public interface OnHitEffect
 		}
 	})));
 	
+	OnHitEffect BOSS_BUSTER = (stack, target, attacker) -> {
+		if(attacker instanceof ServerPlayer player && target.getType().is(MSTags.EntityTypes.BOSS_MOB))
+		{
+			target.hurt(target.damageSources().playerAttack(player), target.getMaxHealth() / 20);
+		}
+	};
+	
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setSecondsOnFire(duration);
@@ -337,6 +345,7 @@ public interface OnHitEffect
 	
 	/**
 	 * A function that causes a sweep effect (code based off of {@link #SWEEP}) and applies an array of effects on the target.
+	 *
 	 * @param effects A varargs value, essentially an optional array of hit effects to be applied.
 	 */
 	static OnHitEffect sweepMultiEffect(OnHitEffect... effects)
@@ -376,19 +385,14 @@ public interface OnHitEffect
 		};
 	}
 	
-	static OnHitEffect bossBuster(int divideAmount, Supplier<? extends EntityType<?>> targetEntity)
-	{
-		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player && target.getType() == targetEntity.get()) {
-				target.hurt(DamageSource.playerAttack(player), target.getMaxHealth() / divideAmount);
-			}
-		};
-	}
-	
 	static OnHitEffect spawnParticles(SimpleParticleType particle, int amount, double xMovement, double yMovement, double zMovement, double speed)
 	{
 		return (stack, target, attacker) -> {
-			target.level.getServer().getLevel(target.level.dimension()).sendParticles(particle, target.getX(), target.getY(), target.getZ(), amount, xMovement, yMovement, zMovement, speed);
+			Level level = target.level();
+			if(!level.isClientSide)
+			{
+				((ServerLevel) level).sendParticles(particle, target.getX(), target.getY(), target.getZ(), amount, xMovement, yMovement, zMovement, speed);
+			}
 		};
 	}
 	

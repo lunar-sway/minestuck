@@ -4,7 +4,7 @@
     "item": "minestuck:democratic_demolitioner"
   },
   "input2": {
-    "item": "minestuck:house_key"
+    "item": "minestuck:key_to_the_machine"
   },
   "mode": "or",
   "output": {

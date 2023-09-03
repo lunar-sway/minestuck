@@ -11,13 +11,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Two new computer Themes: Joy and SBURB 95
 - Various new weapons including 10 keys, 6 batons, 1 wand, 2 clubs, 3 swords, 1 chainsaw, and 6 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
 - New effects: Boss Buster and an effect used to spawn particles on hit
-- 3 new blocks to be used in decorating Heat lands
+- Native sulfur block for use in Heat lands
+- Particle Accelerator item
+- Boss Mob entity tag
 
 ### Changed
 
 - New textures and slightly shorter models for transportalizers
 - Old Computer now starts with SBURB 95 Theme
 - Updated textures of bookshelves and ladders
+- Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
+- New texture for wizard staff
 
 ### Fixed
 
@@ -25,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Scarab Oasis, rose_bushes_
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Scarab Oasis, rose_bushes_, Dweblenod
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 

@@ -431,6 +431,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.LOCKSOFTENER.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.CLOTHES_IRON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BISEKEYAL.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.BI_DYE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.KEY_TO_THE_MACHINE.get()).input(MSItems.KEYBLADE.get()).or().input(Items.REPEATER).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.KEY_TO_THE_CITY.get()).input(MSItems.DEMOCRATIC_DEMOLITIONER.get()).or().input(MSItems.KEY_TO_THE_MACHINE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.INNER_HEART.get()).input(MSItems.GAMEGRL_MAGAZINE.get()).and().input(MSItems.KEYBLADE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DRAGON_KEY.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.SCALEMATE_APPLESCAB.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TRUE_BLUE.get()).input(MSItems.KEYBLADE.get()).and().input(MSItems.EIGHTBALL.get()).build(consumer);
@@ -441,8 +442,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.CLOCKKEEPER.get()).input(MSItems.REGIKEY.get()).and().input(Items.CLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.HOME_BY_MIDNIGHT.get()).input(MSItems.CLOCKKEEPER.get()).or().input(MSItems.ESTROGEN_EMPOWERED_EVERYTHING_ERADICATOR.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LATCHMELTER.get()).input(MSItems.BLAZING_GLORY.get()).and().input(MSItems.HOUSE_KEY.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.KEY_TO_THE_CITY.get()).input(MSItems.DEMOCRATIC_DEMOLITIONER.get()).or().input(MSItems.HOUSE_KEY.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.CRIMSON_LEAP.get()).input(MSItems.FROG.get()).or().input(MSItems.KEYBLADE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CRIMSON_LEAP.get()).input(MSItems.FROG.get()).and().input(MSItems.KEYBLADE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NO_TIME_FOR_FLIES.get()).input(MSItems.CLOCKKEEPER.get()).and().input(MSItems.CRIMSON_LEAP.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.NATURES_HEART.get()).input(MSItems.CROP_CHOP.get()).or().input(MSItems.KEYBLADE.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.LOCH_PICK.get()).input(MSItems.CRYPTID_PHOTO.get()).or().input(MSItems.DRAGON_KEY.get()).build(consumer);
@@ -458,7 +458,6 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.HYMN_FOR_HORRORTERRORS.get()).input(MSItems.THORN_OF_OGLOGOTH.get()).and().input(MSItems.CELESTIAL_FULCRUM.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.BO_STAFF.get()).input(Items.STICK).and().input(Items.IRON_INGOT).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.WIZARD_STAFF.get()).input(MSItems.MINI_WIZARD_STATUE.get()).and().input(MSItems.BO_STAFF.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BAMBOO_BEATSTICK.get()).input(MSItems.BO_STAFF.get()).and().input(Items.BAMBOO).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BARBERS_MAGIC_TOUCH.get()).input(MSItems.BARBASOL.get()).and().input(MSItems.WIZARD_STAFF.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_BEATDOWN_BRUISER.get()).input(MSItems.BO_STAFF.get()).or().input(Items.SPYGLASS).build(consumer);
@@ -557,7 +556,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.POGO_HAMMER.get()).input(MSItems.SLEDGE_HAMMER.get()).and().input(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.WRINKLEFUCKER.get()).input(MSItems.POGO_HAMMER.get()).or().input(MSItems.CLOTHES_IRON.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DEMOCRATIC_DEMOLITIONER.get()).input(MSItems.MAILBOX.get()).or().input(MSItems.FOOD_CAN.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.BOOMBOX_BEATER.get()).input(MSItems.CASSETTE_PLAYER.get()).and().input(MSItems.SLEDGE_HAMMER.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.BOOMBOX_BEATER.get()).input(MSItems.CASSETTE_PLAYER.get()).or().input(MSItems.SLEDGE_HAMMER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.REGI_HAMMER.get()).input(MSItems.CLAW_HAMMER.get()).and().input(MSBlocks.CHESSBOARD.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.FEAR_NO_ANVIL.get()).input(MSItems.BLACKSMITH_HAMMER.get()).or().input(Items.CLOCK).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TELESCOPIC_SASSACRUSHER.get()).input(MSItems.SLEDGE_HAMMER.get()).and().input(MSItems.SASSACRE_TEXT.get()).build(consumer);
@@ -962,10 +961,10 @@ public final class MinestuckCombinationsProvider
 				CombinationRecipeBuilder.of(MSItems.PRISMARINE_BOOTS.get()).namedInput(metalBoots[i]).or().namedInput(prismarine).build(consumer);
 			}
 		
-		CombinationRecipeBuilder.of(MSItems.IRON_LASS_GLASSES.get()).namedInput(Items.IRON_HELMET).and().input(MSItems.ENERGY_CORE.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE.get()).namedInput(Items.IRON_CHESTPLATE).and().input(MSItems.ENERGY_CORE.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SKIRT.get()).namedInput(Items.IRON_LEGGINGS).and().input(MSItems.ENERGY_CORE.get()).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SHOES.get()).namedInput(Items.IRON_BOOTS).and().input(MSItems.ENERGY_CORE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_GLASSES.get()).namedInput(Items.IRON_HELMET).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_CHESTPLATE.get()).namedInput(Items.IRON_CHESTPLATE).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SKIRT.get()).namedInput(Items.IRON_LEGGINGS).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.IRON_LASS_SHOES.get()).namedInput(Items.IRON_BOOTS).and().input(MSItems.PARTICLE_ACCELERATOR.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PROSPIT_CIRCLET.get()).namedInput(Items.GOLDEN_HELMET).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PROSPIT_SHIRT.get()).namedInput(Items.LEATHER_CHESTPLATE).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PROSPIT_PANTS.get()).namedInput(Items.LEATHER_LEGGINGS).and().input(MSBlocks.WHITE_CROWN_STAINED_GLASS.get()).build(consumer);

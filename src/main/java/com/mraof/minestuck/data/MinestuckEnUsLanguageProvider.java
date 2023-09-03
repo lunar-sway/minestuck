@@ -215,7 +215,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_SANDSTONE_COLUMN, "Chiseled Sandstone Column");
 		addBlock(MSBlocks.RED_SANDSTONE_COLUMN, "Red Sandstone Column");
 		addBlock(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN, "Chiseled Red Sandstone Column");
-		addBlock(MSBlocks.SULFUR, "Native Sulfur");
+		addBlock(MSBlocks.NATIVE_SULFUR, "Native Sulfur");
 		addBlock(MSBlocks.UNCARVED_WOOD, "Uncarved Wood");
 		addBlockTooltip(MSBlocks.UNCARVED_WOOD, "Woodgrain terrain");
 		addBlock(MSBlocks.CHIPBOARD, "Chipboard");
@@ -228,7 +228,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");
 		addBlock(MSBlocks.SPIKES, "Spikes");
-		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
 		addBlock(MSBlocks.GLOWING_LOG, "Glowing Log");
 		addBlock(MSBlocks.FROST_LOG, "Frost Log");
 		addBlock(MSBlocks.RAINBOW_LOG, "Rainbow Log");
@@ -250,7 +249,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STRIPPED_SHADEWOOD, "Stripped Shadewood");
 		addBlock(MSBlocks.STRIPPED_SCARRED_SHADEWOOD, "Stripped Scarred Shadewood");
 		addBlock(MSBlocks.STRIPPED_ROTTED_SHADEWOOD, "Stripped Rotted Shadewood");
-		addBlock(MSBlocks.CINDERED_WOOD, "Cindered Wood");
 		addBlock(MSBlocks.FROST_WOOD, "Frost Wood");
 		addBlock(MSBlocks.RAINBOW_WOOD, "Rainbow Wood");
 		addBlock(MSBlocks.END_WOOD, "End Wood");
@@ -750,7 +748,6 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.HYMN_FOR_HORRORTERRORS, "Hymn for Horrorterrors");
 		addItemTooltip(MSItems.HYMN_FOR_HORRORTERRORS, "Where we're going, we don't need ears to hear.");
 		addItem(MSItems.BO_STAFF, "Bo Staff");
-		addItem(MSItems.WIZARD_STAFF, "Wizard Staff");
 		addItem(MSItems.BAMBOO_BEATSTICK, "Bamboo Beatstick");
 		addItem(MSItems.TELESCOPIC_BEATDOWN_BRUISER, "Telescopic Beatdown Bruiser");
 		addItem(MSItems.BARBERS_MAGIC_TOUCH, "Barber's Magic Touch");
@@ -837,8 +834,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.THISTLEBLOWER, "Thistleblower");
 		addItem(MSItems.THISTLEBLOWER_LIPSTICK, "Rosy Lipstick");
 		addItem(MSItems.HAND_CRANKED_VAMPIRE_ERASER, "Hand-Cranked Vampire Eraser");
-		addItem(MSItems.SPLINTERSTICK, "Splinterstick");
-		addItemTooltip(MSItems.SPLINTERSTICK, "Beauty is pain.");
+		addItem(MSItems.HAND_CRANKED_VAMPIRE_ERASER_LIPSTICK, "Splinterstick");
+		addItemTooltip(MSItems.HAND_CRANKED_VAMPIRE_ERASER_LIPSTICK, "Beauty is pain.");
 		addItem(MSItems.EMERALD_IMMOLATOR, "Emerald Immolator");
 		addItem(MSItems.EMERALD_IMMOLATOR_LIPSTICK, "Lipodemic Lipstick");
 		addItem(MSItems.FROSTTOOTH, "Frosttooth");
@@ -2436,6 +2433,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addSubtitles("electric_autoharp_stroke", "Chord plays on electric autoharp");
 		addSubtitles("magic_cast", "Spell cast");
 		addSubtitles("magic_hit", "Spell hits something");
+		addSubtitles("baton_orchestra", "An orchestra plays briefly");
 		addSubtitles("lotus_flower_loot_spawn", "Items pop into existence");
 		addSubtitles("lotus_flower_open", "Flower unfurls");
 		addSubtitles("lotus_flower_restore", "Flower regrows");
