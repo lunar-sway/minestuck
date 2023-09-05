@@ -1,5 +1,6 @@
 package com.mraof.minestuck.item;
 
+import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -31,6 +32,8 @@ public class MSFoods
     public static final FoodProperties UNKNOWABLE_EGG = (new FoodProperties.Builder()).nutrition(3).saturationMod(0.3F).build();
     public static final FoodProperties BREADCRUMBS = (new FoodProperties.Builder()).nutrition(1).saturationMod(0.1F).fast().build();
     public static final FoodProperties SALAD = new FoodProperties.Builder().nutrition(1).saturationMod(0.6F).build();
+    public static final FoodProperties SOPOR_SLIME_PIE = (new FoodProperties.Builder()).nutrition(3).saturationMod(0.9F).fast().effect(() -> new MobEffectInstance(MSEffects.SOPOR_SICKNESS.get(), 200, 1), 1.0F).build();
+    
     //Candies
     public static final FoodProperties CANDY_CORN = (new FoodProperties.Builder()).nutrition(2).saturationMod(0.3F).build();
     public static final FoodProperties TUIX_BAR = (new FoodProperties.Builder()).nutrition(2).saturationMod(0.6F).build();

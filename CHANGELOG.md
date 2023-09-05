@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
+
+### Contributors for this release
+
+= DORO
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added

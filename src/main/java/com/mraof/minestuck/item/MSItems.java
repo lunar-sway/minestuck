@@ -478,6 +478,7 @@ public class MSItems
 	public static final RegistryObject<Item> BUG_MAC = REGISTER.register("bug_mac", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.BUG_MAC)));
 	public static final RegistryObject<Item> ONION = REGISTER.register("onion", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.ONION)));
 	public static final RegistryObject<Item> SALAD = REGISTER.register("salad", () -> new BowlFoodItem(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SALAD).stacksTo(1)));
+	public static final RegistryObject<Item> SOPOR_SLIME_PIE = REGISTER.register("sopor_slime_pie", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.SOPOR_SLIME_PIE).stacksTo(3)));
 	public static final RegistryObject<Item> DESERT_FRUIT = REGISTER.register("desert_fruit", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.DESERT_FRUIT)));
 	public static final RegistryObject<Item> ROCK_COOKIE = REGISTER.register("rock_cookie", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS))); //Not actually food, but let's pretend it is
 	public static final RegistryObject<Item> WOODEN_CARROT = REGISTER.register("wooden_carrot", () -> new Item(new Item.Properties().tab(MSItemGroup.LANDS).food(MSFoods.WOODEN_CARROT)));
