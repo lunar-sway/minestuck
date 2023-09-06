@@ -1,13 +1,11 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,7 +24,7 @@ public class SoporSicknessEffect extends MobEffect
 	{
 		if (target.level.isClientSide())
 		{
-			if(target.getHealth() > 1.0F)
+			if(target.getHealth() > 5.0F)
 			{
 				target.hurt(DamageSource.MAGIC, 0.05F);
 			}
@@ -40,11 +38,7 @@ public class SoporSicknessEffect extends MobEffect
 		if (event.getResult() != Event.Result.DEFAULT) return event.getResult() == Event.Result.ALLOW;
 		
 		MobEffectCategory mobEffect = effectInstance.getEffect().getCategory();
-		if (mobEffect == MobEffectCategory.HARMFUL || mobEffect == MobEffectCategory.BENEFICIAL)
-		{
-			return false;
-		}
-		return true;
+		return mobEffect != MobEffectCategory.HARMFUL && mobEffect != MobEffectCategory.BENEFICIAL;
 	}
 	
 	@SubscribeEvent
