@@ -56,7 +56,7 @@ public class ProgramData
 		item = item.copy();
 		item.setCount(1);
 		for(int id : disks.keySet())
-			if(disks.get(id).sameItem(item))
+			if(ItemStack.isSameItem(disks.get(id), item))
 				return id;
 		return -2;
 	}

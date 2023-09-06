@@ -1,8 +1,8 @@
 package com.mraof.minestuck.block;
 
+import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.item.block.StoneTabletItem;
-import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -13,14 +13,13 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 
@@ -48,11 +47,11 @@ public class StoneTabletBlock extends CustomShapeBlock implements EntityBlock //
 	
 	@Override
 	@SuppressWarnings("deprecation")
-	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+	public List<ItemStack> getDrops(BlockState state, LootParams.Builder builder)
 	{
 		if(builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ItemStackBlockEntity itemBE)
 		{
-			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, (context, consumer) -> consumer.accept(itemBE.getStack()));
+			builder = builder.withDynamicDrop(ItemStackBlockEntity.ITEM_DYNAMIC, consumer -> consumer.accept(itemBE.getStack()));
 		}
 		
 		return super.getDrops(state, builder);

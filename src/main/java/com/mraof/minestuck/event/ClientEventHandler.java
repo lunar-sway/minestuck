@@ -90,7 +90,7 @@ public class ClientEventHandler
 		if(event.getCamera().getEntity().isSpectator())
 			return;
 		
-		LevelReader level = event.getCamera().getEntity().level;
+		LevelReader level = event.getCamera().getEntity().level();
 		BlockPos blockPos = event.getCamera().getBlockPosition();
 		Vec3 pos = event.getCamera().getPosition();
 		FluidState fluid = level.getFluidState(blockPos);
@@ -116,7 +116,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void addFogColor(ViewportEvent.ComputeFogColor event)
 	{
-		LevelReader level = event.getCamera().getEntity().level;
+		LevelReader level = event.getCamera().getEntity().level();
 		BlockPos blockPos = event.getCamera().getBlockPosition();
 		Vec3 pos = event.getCamera().getPosition();
 		FluidState fluid = level.getFluidState(blockPos);

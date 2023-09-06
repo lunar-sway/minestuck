@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.blockentity.GateBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +10,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 {
@@ -32,7 +32,7 @@ public class GateRenderer implements BlockEntityRenderer<GateBlockEntity>
 		
 		poseStack.pushPose();
 		poseStack.translate(0.5F, 0.0F, 0.5F);
-		poseStack.mulPose(Vector3f.YP.rotation(tick / 75));
+		poseStack.mulPose(Axis.YP.rotation(tick / 75));
 		PoseStack.Pose pose = poseStack.last();
 		Matrix4f matrix4f = pose.pose();
 		Matrix3f matrix3f = pose.normal();

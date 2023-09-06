@@ -2,7 +2,6 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,14 +25,14 @@ public class RazorBladeItem extends Item
 		{
 			if(!player.isCreative())
 			{
-				ItemEntity razor = new ItemEntity(attacker.level, attacker.getX(), attacker.getY(), attacker.getZ(), stack.copy());
-				if(!attacker.level.isClientSide)
+				ItemEntity razor = new ItemEntity(attacker.level(), attacker.getX(), attacker.getY(), attacker.getZ(), stack.copy());
+				if(!attacker.level().isClientSide)
 				{
 					razor.getItem().setCount(1);
 					razor.setPickUpDelay(40);
-					attacker.level.addFreshEntity(razor);
+					attacker.level().addFreshEntity(razor);
 					stack.shrink(1);
-					attacker.sendSystemMessage(Component.translatable("While you handle the razor blade, you accidentally cut yourself and drop it."));
+					attacker.sendSystemMessage(Component.literal("While you handle the razor blade, you accidentally cut yourself and drop it.")); //TODO translation key
 				}
 				attacker.setHealth(attacker.getHealth() - 1);
 				return true;
@@ -49,16 +48,16 @@ public class RazorBladeItem extends Item
 		{
 			if(!player.isCreative())
 			{
-				ItemEntity razor = new ItemEntity(entityLiving.level, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), stack.copy());
-				if(!entityLiving.level.isClientSide)
+				ItemEntity razor = new ItemEntity(entityLiving.level(), entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), stack.copy());
+				if(!level.isClientSide)
 				{
 					razor.getItem().setCount(1);
 					razor.setPickUpDelay(40);
-					entityLiving.level.addFreshEntity(razor);
+					level.addFreshEntity(razor);
 					stack.shrink(1);
-					entityLiving.sendSystemMessage(Component.translatable("While you handle the razor blade, you accidentally cut yourself and drop it."));
+					entityLiving.sendSystemMessage(Component.literal("While you handle the razor blade, you accidentally cut yourself and drop it."));	//TODO translation key
 				}
-				entityLiving.hurt(DamageSource.GENERIC, 1);
+				entityLiving.hurt(level.damageSources().generic(), 1);
 			}
 		}
 		return super.mineBlock(stack, level, state, pos, entityLiving);

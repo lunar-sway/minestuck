@@ -96,5 +96,6 @@
         "min": 1.0
       }
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/consort_food"
 }

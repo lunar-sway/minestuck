@@ -4,9 +4,10 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.HorseClockBlockEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class HorseClockModel extends AnimatedGeoModel<HorseClockBlockEntity> {
+public class HorseClockModel extends GeoModel<HorseClockBlockEntity>
+{
     @Override
     public ResourceLocation getModelResource(HorseClockBlockEntity object) {
         return new ResourceLocation(Minestuck.MOD_ID, "geo/blockentity/horseclock.geo.json");

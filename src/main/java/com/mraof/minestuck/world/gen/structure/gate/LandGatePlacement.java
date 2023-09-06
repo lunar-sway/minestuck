@@ -2,17 +2,16 @@ package com.mraof.minestuck.world.gen.structure.gate;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.gen.LandStructureState;
 import com.mraof.minestuck.world.gen.structure.MSStructures;
 import com.mraof.minestuck.world.gen.structure.MSStructurePlacements;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.chunk.ChunkGeneratorStructureState;
 import net.minecraft.world.level.chunk.ChunkStatus;
-import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
@@ -47,11 +46,11 @@ public final class LandGatePlacement extends StructurePlacement
 	}
 	
 	@Override
-	public boolean isPlacementChunk(ChunkGenerator generator, RandomState state, long seed, int chunkX, int chunkZ)
+	public boolean isPlacementChunk(ChunkGeneratorStructureState structureState, int chunkX, int chunkZ)
 	{
-		if(generator instanceof LandChunkGenerator landGenerator)
+		if(structureState instanceof LandStructureState landState)
 		{
-			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(state);
+			ChunkPos chunkPos = landState.getOrFindLandGatePosition();
 			return chunkPos.x == chunkX && chunkPos.z == chunkZ;
 		} else
 			return false;
@@ -59,16 +58,16 @@ public final class LandGatePlacement extends StructurePlacement
 	
 	public static BlockPos findLandGatePos(ServerLevel level)
 	{
-		if(level.getChunkSource().getGenerator() instanceof LandChunkGenerator landGenerator)
+		if(level.getChunkSource().getGeneratorState() instanceof LandStructureState landStructureState)
 		{
 			// (Last checked mc 1.18) RegistryObject's refers to objects in regular / builtin registries,
 			// but some registries also have separate dynamic registries that are world-specific
 			// We need a configured structure from the dynamic registry and not the builtin registry for getStartForFeature() to work
-			Structure landGate = level.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY)
+			Structure landGate = level.registryAccess().registryOrThrow(Registries.STRUCTURE)
 					.get(MSStructures.LAND_GATE);
 			Objects.requireNonNull(landGate, "Unable to find land gate structure instance");
 			
-			ChunkPos chunkPos = landGenerator.getOrFindLandGatePosition(level.getChunkSource().randomState());
+			ChunkPos chunkPos = landStructureState.getOrFindLandGatePosition();
 			StructureStart start = level.getChunk(chunkPos.x, chunkPos.z, ChunkStatus.STRUCTURE_STARTS).getStartForStructure(landGate);
 			
 			if(start != null)

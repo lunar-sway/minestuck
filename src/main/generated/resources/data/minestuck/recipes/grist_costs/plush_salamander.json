@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:shale": 6
+  },
+  "ingredient": {
+    "item": "minestuck:plush_salamander"
+  }
+}

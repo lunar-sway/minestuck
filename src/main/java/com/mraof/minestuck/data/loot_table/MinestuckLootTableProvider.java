@@ -1,44 +1,20 @@
 package com.mraof.minestuck.data.loot_table;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.ValidationContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.Set;
 
-public class MinestuckLootTableProvider extends LootTableProvider
+public final class MinestuckLootTableProvider
 {
-	public MinestuckLootTableProvider(DataGenerator generator)
+	public static LootTableProvider create(PackOutput output)
 	{
-		super(generator);
-	}
-	
-	@Override
-	protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
-	{
-		return ImmutableList.of(Pair.of(MSChestLootTables::new, LootContextParamSets.CHEST), Pair.of(MSBlockLootTables::new, LootContextParamSets.BLOCK), Pair.of(MSGiftLootTables::new, LootContextParamSets.GIFT), Pair.of(MSMiscLootTables::new, LootContextParamSets.EMPTY));
-	}
-	
-	
-	@Override
-	protected void validate(Map<ResourceLocation, LootTable> lootTableMap, ValidationContext results)
-	{
-	
-	}
-	
-	@Override
-	public String getName()
-	{
-		return "Minestuck Loot Tables";
+		return new LootTableProvider(output, Set.of(), List.of(
+				new LootTableProvider.SubProviderEntry(MSChestLootTables::new, LootContextParamSets.CHEST),
+				new LootTableProvider.SubProviderEntry(MSBlockLootTables::new, LootContextParamSets.BLOCK),
+				new LootTableProvider.SubProviderEntry(MSGiftLootTables::new, LootContextParamSets.GIFT),
+				new LootTableProvider.SubProviderEntry(MSMiscLootTables::new, LootContextParamSets.EMPTY)));
 	}
 }

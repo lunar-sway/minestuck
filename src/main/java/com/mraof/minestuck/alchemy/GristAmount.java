@@ -30,7 +30,7 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 		if(gristAmount.amount >= 0)
 			return DataResult.success(gristAmount);
 		else
-			return DataResult.error("Negative amount %s for grist type %s".formatted(gristAmount.amount, gristAmount.type));
+			return DataResult.error(() -> "Negative amount %s for grist type %s".formatted(gristAmount.amount, gristAmount.type));
 	}
 	
 	public static final String GRIST_AMOUNT = "grist_amount";

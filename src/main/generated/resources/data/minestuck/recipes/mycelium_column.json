@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "minestuck:mycelium_bricks"
@@ -13,5 +14,6 @@
   "result": {
     "count": 3,
     "item": "minestuck:mycelium_column"
-  }
+  },
+  "show_notification": true
 }

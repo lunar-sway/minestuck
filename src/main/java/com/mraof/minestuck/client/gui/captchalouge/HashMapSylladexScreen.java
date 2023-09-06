@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui.captchalouge;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.CaptchaDeckPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -36,14 +36,14 @@ public class HashMapSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float f)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float f)
 	{
-		guiButton.x = (width - GUI_WIDTH)/2 + 15;
-		guiButton.y = (height - GUI_HEIGHT)/2 + 175;
+		guiButton.setX((width - GUI_WIDTH)/2 + 15);
+		guiButton.setY((height - GUI_HEIGHT)/2 + 175);
 		boolean active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH ? modus.ejectByChat : MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.ON;
 		guiButton.setMessage(Component.translatable(active ? EJECT_BY_CHAT_ON : EJECT_BY_CHAT_OFF));
 		guiButton.active = MinestuckConfig.SERVER.hashmapChatModusSetting.get() == MinestuckConfig.AvailableOptions.BOTH;
-		super.render(poseStack, mouseX, mouseY, f);
+		super.render(guiGraphics, mouseX, mouseY, f);
 	}
 	
 	@Override
@@ -86,9 +86,9 @@ public class HashMapSylladexScreen extends SylladexScreen
 	}
 	
 	@Override
-	public void drawGuiMap(PoseStack poseStack, int mouseX, int mouseY)
+	public void drawGuiMap(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		super.drawGuiMap(poseStack, mouseX, mouseY);
+		super.drawGuiMap(guiGraphics, mouseX, mouseY);
 		int y = mapHeight/2 - CARD_HEIGHT/2 - 3 - font.lineHeight;
 		int start = Math.max(5, (mapWidth - (cards.size()*CARD_WIDTH + (cards.size() - 1)*5))/2);
 		
@@ -98,7 +98,7 @@ public class HashMapSylladexScreen extends SylladexScreen
 			int width = font.width(s);
 			int x = start + i*(CARD_WIDTH + 5) + CARD_WIDTH/2 - mapX - width/2;
 			if(x + width > 0 && x < mapWidth)
-				font.draw(poseStack, s, x, y, 0x000000);
+				guiGraphics.drawString(font, s, x, y, 0x000000, false);
 		}
 	}
 	

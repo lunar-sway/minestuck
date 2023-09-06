@@ -89,7 +89,7 @@ public class ClientProxy
 		EntityRenderers.register(MSEntityTypes.GRIST.get(), GristRenderer::new);
 		EntityRenderers.register(MSEntityTypes.VITALITY_GEL.get(), VitalityGelRenderer::new);
 		EntityRenderers.register(MSEntityTypes.PLAYER_DECOY.get(), DecoyRenderer::new);
-		EntityRenderers.register(MSEntityTypes.METAL_BOAT.get(), context -> new MetalBoatRenderer(context, false));
+		EntityRenderers.register(MSEntityTypes.METAL_BOAT.get(), context -> new MetalBoatRenderer(context));
 		EntityRenderers.register(MSEntityTypes.BARBASOL_BOMB.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.CONSUMABLE_PROJECTILE.get(), ThrownItemRenderer::new);
 		EntityRenderers.register(MSEntityTypes.RETURNING_PROJECTILE.get(), ThrownItemRenderer::new);
@@ -118,6 +118,7 @@ public class ClientProxy
 		ItemProperties.register(MSItems.FROG.get(), new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
 		ItemProperties.register(MSItems.STONE_TABLET.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 	}
 	
 	@SubscribeEvent
@@ -147,8 +148,8 @@ public class ClientProxy
 	@SubscribeEvent
 	public static void registerFactories(RegisterParticleProvidersEvent event)
 	{
-		event.register(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
-		event.register(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
+		event.registerSpriteSet(MSParticleType.TRANSPORTALIZER.get(), TransportalizerParticle.Provider::new);
+		event.registerSpriteSet(MSParticleType.PLASMA.get(), PlasmaParticle.Provider::new);
 	}
 	
 	/**

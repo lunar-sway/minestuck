@@ -4,30 +4,36 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.util.ExtraForgeTags;
 import com.mraof.minestuck.util.MSTags;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.block.MSBlocks.*;
 import static com.mraof.minestuck.util.MSTags.Blocks.*;
 import static net.minecraft.tags.BlockTags.*;
 
-public class MinestuckBlockTagsProvider extends BlockTagsProvider
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 {
-	public MinestuckBlockTagsProvider(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper)
+	public MinestuckBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(generator, Minestuck.MOD_ID, existingFileHelper);
+		super(output, lookupProvider, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider provider)
 	{
 		tag(DIRT).add(BLUE_DIRT.get());
 		tag(PLANKS).add(GLOWING_PLANKS.get(), SHADEWOOD_PLANKS.get(), FROST_PLANKS.get(), RAINBOW_PLANKS.get(), END_PLANKS.get(), DEAD_PLANKS.get(), TREATED_PLANKS.get()).addTag(ASPECT_PLANKS);
@@ -232,6 +238,7 @@ public class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
 		tag(PETRIFIED_FLORA_PLACEABLE).addTags(Tags.Blocks.STONE, Tags.Blocks.COBBLESTONE, Tags.Blocks.GRAVEL);
+		tag(EDITMODE_BREAK_BLACKLIST).addTags(BlockTags.PORTALS);
 	}
 	
 	private void needsWoodPickaxe(Block... blocks)

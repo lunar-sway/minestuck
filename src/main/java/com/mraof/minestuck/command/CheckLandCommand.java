@@ -23,8 +23,7 @@ public class CheckLandCommand
 	{
 		LandTypePair.Named landTypes = LandTypePair.getNamed(source.getLevel()).orElseThrow(FAIL_EXCEPTION::create);
 		
-		Component toSend = Component.translatable(CHECK, landTypes.asComponent());
-		source.sendSuccess(toSend, false);
+		source.sendSuccess(() -> Component.translatable(CHECK, landTypes.asComponent()), false);
 		return 1;
 	}
 }

@@ -84,7 +84,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 				return false;
 			
 			ItemStack currentOutput = itemHandler.getStackInSlot(2);
-			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.tagMatches(currentOutput, output));
+			return (currentOutput.isEmpty() || currentOutput.getCount() < 16 && ItemStack.isSameItemSameTags(currentOutput, output));
 		} else
 		{
 			return false;

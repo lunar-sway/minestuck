@@ -65,7 +65,7 @@ public class SummonerBlock extends Block implements EntityBlock
 						player.displayClientMessage(Component.translatable(SUMMON_TYPE_CHANGE, ForgeRegistries.ENTITY_TYPES.getKey(eggItem.getType(stackIn.getTag()))), true);
 					}
 					
-					level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);
+					level.playSound(player, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
 				}
 			} else if(level.isClientSide)
 			{

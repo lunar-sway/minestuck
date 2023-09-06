@@ -48,7 +48,7 @@ public class RemoteObserverBlockEntity extends BlockEntity
 		IS_ELYTRA_FLYING((entity, observer) -> entity instanceof LivingEntity && ((LivingEntity) entity).isFallFlying()),
 		IS_ENTITY_UNDER_WATER((entity, observer) -> entity.isUnderWater()),
 		IS_ENTITY_WET((entity, observer) -> entity.isInWaterRainOrBubble()),
-		IS_ENTITY_ON_GROUND((entity, observer) -> entity.isOnGround()),
+		IS_ENTITY_ON_GROUND((entity, observer) -> entity.onGround()),
 		IS_SPRINTING((entity, observer) -> entity.isSprinting()); //TODO IS_BOSS_PRESENT
 		
 		private final BiPredicate<Entity, RemoteObserverBlockEntity> typeConditions;

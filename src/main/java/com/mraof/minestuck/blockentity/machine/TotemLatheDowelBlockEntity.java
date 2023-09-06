@@ -1,6 +1,5 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mojang.math.Vector3f;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -11,16 +10,14 @@ import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import org.joml.Vector3f;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.keyframe.event.ParticleKeyframeEvent;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -30,9 +27,11 @@ import java.awt.*;
  * {@link TotemLatheBlockEntity} handles the storage of the punched cards and logic involved in making the totem from the uncarved dowel.
  * The Totem Lathe is a core Editmode deployable
  */
-public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements IAnimatable
+public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements GeoBlockEntity
 {
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private static final RawAnimation CARVE_ANIMATION = RawAnimation.begin().then("carvetotem", Animation.LoopType.PLAY_ONCE);
+	
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	
 	public TotemLatheDowelBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -62,20 +61,20 @@ public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements 
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return factory;
+		return cache;
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		AnimationController<TotemLatheDowelBlockEntity> controller = new AnimationController<>(this, "carveAnimation", 0, this::carveAnimation);
-		controller.registerParticleListener(this::particleEventListener);
-		data.addAnimationController(controller);
+		controller.setParticleKeyframeHandler(this::particleEventListener);
+		controllers.add(controller);
 	}
 	
-	private <T extends IAnimatable> void particleEventListener(ParticleKeyFrameEvent<T> event)
+	private <T extends GeoAnimatable> void particleEventListener(ParticleKeyframeEvent<T> event)
 	{
 		if(level == null || getTotemLatheEntity() == null) {
 			return;
@@ -92,15 +91,15 @@ public class TotemLatheDowelBlockEntity extends ItemStackBlockEntity implements 
 				pos.x(), pos.y(), pos.z(), 1, 1, 1);
 	}
 	
-	private <E extends BlockEntity & IAnimatable> PlayState carveAnimation(AnimationEvent<E> event)
+	private <E extends BlockEntity & GeoAnimatable> PlayState carveAnimation(AnimationState<E> event)
 	{
 		TotemLatheBlockEntity totemLathe = getTotemLatheEntity();
 		if(totemLathe != null && totemLathe.isProcessing())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("carvetotem", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			event.getController().setAnimation(CARVE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
-		event.getController().markNeedsReload();
+		event.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 }

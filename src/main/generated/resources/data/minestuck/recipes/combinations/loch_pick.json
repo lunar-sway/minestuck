@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:cryptid_photo"
+  },
+  "input2": {
+    "item": "minestuck:dragon_key"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:loch_pick"
+  }
+}

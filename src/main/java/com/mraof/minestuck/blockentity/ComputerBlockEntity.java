@@ -318,9 +318,9 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public static void forNetworkIfPresent(ServerPlayer player, BlockPos pos, Consumer<ComputerBlockEntity> consumer)
 	{
-		if(player.level.isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
+		if(player.level().isAreaLoaded(pos, 0))    //TODO also check distance to the computer pos (together with a continual check clientside)
 		{
-			if(player.level.getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
+			if(player.level().getBlockEntity(pos) instanceof ComputerBlockEntity computer && !computer.isBroken())
 			{
 				MinecraftServer mcServer = Objects.requireNonNull(player.getServer());
 				ServerOpListEntry opsEntry = mcServer.getPlayerList().getOps().get(player.getGameProfile());

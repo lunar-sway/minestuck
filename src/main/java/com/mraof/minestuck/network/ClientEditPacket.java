@@ -85,7 +85,7 @@ public class ClientEditPacket implements PlayToServerPacket
 			
 			if(targetPlayer != null && (!MinestuckConfig.SERVER.privateComputers.get() || user.appliesTo(player) || opsEntry != null && opsEntry.getLevel() >= 2))
 			{
-				SburbConnection c = SkaianetHandler.get(player.level).getActiveConnection(target);
+				SburbConnection c = SkaianetHandler.get(player.level()).getActiveConnection(target);
 				if(c == null || c.getServerIdentifier() != user || !(c.isMain() || SburbHandler.giveItems(player.server, target)))
 					return;
 				
@@ -93,7 +93,7 @@ public class ClientEditPacket implements PlayToServerPacket
 				{
 					if(!c.hasGivenItem(entry))
 					{
-						ItemStack item = entry.getItemStack(c, player.level);
+						ItemStack item = entry.getItemStack(c, player.level());
 						if(!targetPlayer.getInventory().contains(item) && targetPlayer.getInventory().add(item))
 							c.setHasGivenItem(entry);
 					}

@@ -46,9 +46,9 @@ public class EntryCommand
 	{
 		if (src.getEntity() == null || !player.equals(src.getPlayerOrException()))
 		{
-			src.sendSuccess(Component.translatable(OTHER_PLAYER_ENTERING, player.getDisplayName().getString()), false);
+			src.sendSuccess(() -> Component.translatable(OTHER_PLAYER_ENTERING, player.getDisplayName().getString()), false);
 		} else {
-			src.sendSuccess(Component.translatable(ENTERING), false);
+			src.sendSuccess(() -> Component.translatable(ENTERING), false);
 		}
 		EntryProcess.enter(player);
 		return 1;
@@ -58,9 +58,9 @@ public class EntryCommand
 	{
 		if (src.getEntity() == null || !player.equals(src.getPlayerOrException()))
 		{
-			src.sendSuccess(Component.translatable(OTHER_PLAYER_ENTERING, player.getDisplayName().getString()), false);
+			src.sendSuccess(() -> Component.translatable(OTHER_PLAYER_ENTERING, player.getDisplayName().getString()), false);
 		} else {
-			src.sendSuccess(Component.translatable(ENTERING), false);
+			src.sendSuccess(() -> Component.translatable(ENTERING), false);
 		}
 		EntryProcess.enter(player, pos);
 		return 1;

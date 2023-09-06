@@ -27,7 +27,7 @@ public class ParcelPyxisFeature extends Feature<NoneFeatureConfiguration>
 		Rotation rotation = Rotation.getRandom(rand);
 		BlockState state = MSBlocks.PARCEL_PYXIS.get().defaultBlockState().rotate(level, pos, rotation);
 		
-		if(state.canSurvive(level, pos) && !level.getBlockState(pos).getMaterial().isLiquid())
+		if(state.canSurvive(level, pos) && !level.getBlockState(pos).liquid())
 		{
 			int randInt = 10 + rand.nextInt(5);
 			setBlock(level, pos.above(1), state);

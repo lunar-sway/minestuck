@@ -3,7 +3,6 @@ package com.mraof.minestuck.client.renderer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
@@ -31,6 +30,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix4f;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class MachineOutlineRenderer
@@ -62,7 +62,7 @@ public class MachineOutlineRenderer
 			BlockPos pos = rayTraceResult.getBlockPos();
 			BlockPlaceContext context = new BlockPlaceContext(new UseOnContext(player, hand, rayTraceResult));
 
-			BlockState block = player.level.getBlockState(pos);
+			BlockState block = player.level().getBlockState(pos);
 			boolean flag = block.canBeReplaced(context);
 					//(player.world, player, stack, pos, rayTraceResult.getFace(), (float) rayTraceResult.getPos().getZ() - pos.getX(), (float) rayTraceResult.getPos().getY() - pos.getY(), (float) rayTraceResult.getPos().getZ() - pos.getZ()));
 			
@@ -83,7 +83,6 @@ public class MachineOutlineRenderer
 
 			RenderSystem.defaultBlendFunc();
 			RenderSystem.lineWidth(2.0F);
-			RenderSystem.disableTexture();
 			RenderSystem.depthMask(false);	//GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 			
 			pos = item.getPlacementPos(pos, placedFacing, hitX, hitZ);
@@ -104,7 +103,6 @@ public class MachineOutlineRenderer
 			drawPhernaliaPlacementOutline(poseStack, ivertexbuilder, Shapes.create(boundingBox), 0, 0, 0, placeable ? 0 : 1, placeable ? 1 : 0, 0, 0.5F);
 			
 			RenderSystem.depthMask(true);
-			RenderSystem.enableTexture();
 			RenderSystem.disableBlend();
 			return true;
 		}

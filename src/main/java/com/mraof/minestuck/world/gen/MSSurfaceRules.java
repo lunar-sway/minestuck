@@ -3,7 +3,8 @@ package com.mraof.minestuck.world.gen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.core.Registry;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.SurfaceRules;
@@ -12,9 +13,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public final class MSSurfaceRules extends SurfaceRules	//This extension is here only for access to the protected interface SurfaceRule
 {
-	public static final DeferredRegister<Codec<? extends SurfaceRules.RuleSource>> REGISTER = DeferredRegister.create(Registry.RULE_REGISTRY, Minestuck.MOD_ID);
+	public static final DeferredRegister<Codec<? extends SurfaceRules.RuleSource>> REGISTER = DeferredRegister.create(Registries.MATERIAL_RULE, Minestuck.MOD_ID);
 	
 	static {
 		REGISTER.register("checkered", CheckeredRuleSource.CODEC::codec);

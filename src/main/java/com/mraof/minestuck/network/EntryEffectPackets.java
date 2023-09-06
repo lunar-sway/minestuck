@@ -2,7 +2,7 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.client.EntryEffect;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
@@ -21,7 +21,7 @@ public final class EntryEffectPackets
 		
 		public static Effect decode(FriendlyByteBuf buffer)
 		{
-			ResourceKey<Level> level = ResourceKey.create(Registry.DIMENSION_REGISTRY, buffer.readResourceLocation());
+			ResourceKey<Level> level = ResourceKey.create(Registries.DIMENSION, buffer.readResourceLocation());
 			BlockPos pos = buffer.readBlockPos();
 			int range = buffer.readInt();
 			return new Effect(level, pos, range);

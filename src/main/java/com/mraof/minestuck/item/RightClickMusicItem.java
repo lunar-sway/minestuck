@@ -32,7 +32,7 @@ public class RightClickMusicItem extends Item
 		{
 		}*/
 		
-		playerIn.level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), sound, playerIn.getSoundSource(), 0.75F, 1F);
+		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), sound, playerIn.getSoundSource(), 0.75F, 1F);
 		return InteractionResultHolder.success(playerIn.getItemInHand(handIn));
 	}
 }

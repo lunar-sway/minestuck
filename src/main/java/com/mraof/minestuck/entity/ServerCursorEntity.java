@@ -3,26 +3,24 @@ package com.mraof.minestuck.entity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerCursorPacket;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.world.entity.*;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.*;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -30,10 +28,10 @@ import java.util.Collections;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEntityAdditionalSpawnData
+public class ServerCursorEntity extends LivingEntity implements GeoEntity, IEntityAdditionalSpawnData
 {
 	
-	private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	
 	//These are only used server-side to make sure cursors are removed properly.
 	private int despawnTimer = 0;
@@ -43,7 +41,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	
 	// Specifies the current animation phase
 	@Nonnull
-	private Animation animation = Animation.CLICK;
+	private AnimationType animationType = AnimationType.CLICK;
 	
 	protected ServerCursorEntity(EntityType<? extends ServerCursorEntity> type, Level level)
 	{
@@ -56,40 +54,40 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		setBoundingBox(new AABB(0, 0, 0, 0, 0, 0));
 	}
 	
-	private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
 	{
-		if(!waitForFinish(event))
-			event.getController().setAnimation(new AnimationBuilder().addAnimation(animation.animationName, animation.looping ? ILoopType.EDefaultLoopTypes.LOOP : ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+		if(!waitForFinish(state))
+			state.getController().setAnimation(animationType.animation);
 		
 		return PlayState.CONTINUE;
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
+		controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
 	}
 	
 	@Override
-	public AnimationFactory getFactory()
+	public AnimatableInstanceCache getAnimatableInstanceCache()
 	{
-		return this.factory;
+		return this.cache;
 	}
 	
 	@Override
 	public void writeSpawnData(FriendlyByteBuf buffer)
 	{
-		buffer.writeInt(animation.ordinal());
+		buffer.writeInt(animationType.ordinal());
 	}
 	
 	@Override
 	public void readSpawnData(FriendlyByteBuf additionalData)
 	{
-		animation = Animation.values()[additionalData.readInt()];
+		animationType = AnimationType.values()[additionalData.readInt()];
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}
@@ -99,9 +97,9 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	{
 		super.aiStep();
 		
-		if(!level.isClientSide)
+		if(!level().isClientSide)
 		{
-			if(!animation.looping || removalFlag)
+			if(!animationType.looping || removalFlag)
 				despawnTimer += 1;
 			
 			if(!removalFlag)
@@ -110,7 +108,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 					this.remove(RemovalReason.DISCARDED); //After cursorDespawnTime ticks of the cursor not receiving updates, the cursor will be automatically removed.
 			} else
 			{
-				if(despawnTimer >= animation.length + CURSOR_REMOVAL_PADDING + 1)
+				if(despawnTimer >= animationType.length + CURSOR_REMOVAL_PADDING + 1)
 					this.remove(RemovalReason.DISCARDED); //cursorRemovalPadding ticks after the animation is done (+1 tick so the client can receive the animation), remove the cursor.
 			}
 		}
@@ -140,7 +138,7 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 	@Override
 	protected MovementEmission getMovementEmission()
 	{
-		return Entity.MovementEmission.NONE;
+		return MovementEmission.NONE;
 	}
 	
 	@Override
@@ -166,11 +164,11 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 		return HumanoidArm.RIGHT;
 	}
 	
-	public void setAnimation(Animation animation)
+	public void setAnimation(AnimationType animation)
 	{
-		if(!level.isClientSide)
+		if(!level().isClientSide)
 		{
-			this.animation = animation;
+			this.animationType = animation;
 			if(!removalFlag)
 				this.despawnTimer = 0;
 			ServerCursorPacket packet = ServerCursorPacket.createPacket(this, animation); //this packet allows information to be exchanged between server and client where one side cant access the other easily or reliably
@@ -179,17 +177,17 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 			setAnimationFromPacket(animation);
 	}
 	
-	public void setAnimationFromPacket(ServerCursorEntity.Animation animation)
+	public void setAnimationFromPacket(AnimationType animation)
 	{
-		if(level.isClientSide) //allows client-side effects tied to server-side events
+		if(level().isClientSide) //allows client-side effects tied to server-side events
 		{
-			this.animation = animation;
+			this.animationType = animation;
 		}
 	}
 	
-	public void queueRemoval(Animation removalAnimation)
+	public void queueRemoval(AnimationType removalAnimation)
 	{
-		if(!level.isClientSide)
+		if(!level().isClientSide)
 		{
 			setAnimation(removalAnimation);
 			this.removalFlag = true;
@@ -197,31 +195,31 @@ public class ServerCursorEntity extends LivingEntity implements IAnimatable, IEn
 			throw new IllegalStateException("queueRemoval() was accessed from the client-side! It should only be accessed remotely.");
 	}
 	
-	private boolean waitForFinish(AnimationEvent event)
+	private boolean waitForFinish(AnimationState<?> event)
 	{
 		if(event.getController().getCurrentAnimation() == null)
 			return false;
 		
-		if(event.getController().getCurrentAnimation().loop == ILoopType.EDefaultLoopTypes.PLAY_ONCE && !removalFlag)
-			return event.getController().getAnimationState() == AnimationState.Running;
+		if(event.getController().getCurrentAnimation().loopType() == Animation.LoopType.PLAY_ONCE && !removalFlag)
+			return event.getController().getAnimationState() == AnimationController.State.RUNNING;
 		else
 			return false; //Do not wait if animation is looping or if the cursor is going to be removed, so that the removal animation can be played.
 	}
 	
-	public enum Animation //animationName set in assets/minestuck/animations/server_cursor.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
+	public enum AnimationType //animationName set in assets/minestuck/animations/server_cursor.animation.json. Animated blocks/entities also need a section in assets/minestuck/geo
 	{
 		IDLE("animation.ServerCursorModel.idle", true, 40), //2 sec idle animation * 20 ticks/sec = 40
 		CLICK("animation.ServerCursorModel.click", false, 4), //0.2 sec click animation * 20 ticks/sec = 4
 		REJECTED("animation.ServerCursorModel.rejected", false, 4), //0.2 sec reject animation * 20 ticks/sec = 4
 		LOADING("animation.ServerCursorModel.loading", true, 20); //1 sec loading animation * 20 ticks/sec = 20
 		
-		private final String animationName;
+		private final RawAnimation animation;
 		private final boolean looping;
 		private final int length;
 		
-		Animation(String animationName, boolean looping, int length)
+		AnimationType(String animationName, boolean looping, int length)
 		{
-			this.animationName = animationName;
+			this.animation = RawAnimation.begin().then(animationName, looping ? Animation.LoopType.LOOP : Animation.LoopType.PLAY_ONCE);
 			this.looping = looping;
 			this.length = length;
 		}

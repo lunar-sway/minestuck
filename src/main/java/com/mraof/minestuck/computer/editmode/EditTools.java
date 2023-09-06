@@ -96,7 +96,7 @@ public class EditTools implements IEditTools
 	{
 		setToolMode(toolMode);
 		if(toolMode == ToolMode.REVISE)
-			setEditPos1(player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
+			setEditPos1(player.level().getBlockState(blockHit.getBlockPos()).canBeReplaced() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal()));
 		else
 			setEditPos1(blockHit.getBlockPos());
 		setEditTrace(blockHit.getLocation(), blockHit.getDirection());

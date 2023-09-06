@@ -8,8 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -62,13 +62,13 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 		
 		if(result.getType() == HitResult.Type.ENTITY)
 		{
-			if(!level.isClientSide)
+			if(!level().isClientSide)
 			{
 				Entity entity = ((EntityHitResult) result).getEntity();
 				if(entity instanceof UnderlingEntity)
-					entity.hurt(DamageSource.thrown(this, getOwner()), damage * 1.5F);
+					entity.hurt(this.damageSources().thrown(this, getOwner()), damage * 1.5F);
 				else if(entity != getOwner())
-					entity.hurt(DamageSource.thrown(this, getOwner()), damage);
+					entity.hurt(this.damageSources().thrown(this, getOwner()), damage);
 				else
 				{
 					resetThrower();
@@ -87,11 +87,11 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 			Direction blockFace = blockResult.getDirection();
 			BlockPos blockPos = blockResult.getBlockPos();
 			
-			if(Block.canSupportCenter(level, blockPos, blockFace))
+			if(Block.canSupportCenter(level(), blockPos, blockFace))
 			{
-				if(!level.isClientSide)
+				if(!level().isClientSide)
 				{
-					this.level.playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
+					this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MSSoundEvents.ITEM_PROJECTILE_BOUNCE.get(), SoundSource.NEUTRAL, 0.6F, 2.0F);
 					++bounce;
 				}
 				
@@ -103,7 +103,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 					this.setDeltaMovement(velocityX, velocityY, -velocityZ);
 			}
 			
-			if(Block.canSupportCenter(level, blockPos, blockFace) && blockResult.isInside())
+			if(Block.canSupportCenter(level(), blockPos, blockFace) && blockResult.isInside())
 			{
 				++inBlockTicks;
 			}
@@ -163,7 +163,7 @@ public class BouncingProjectileEntity extends ThrowableItemProjectile
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

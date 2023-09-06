@@ -44,5 +44,6 @@
     [
       "visit_village"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

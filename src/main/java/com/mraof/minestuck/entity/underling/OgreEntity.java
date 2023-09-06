@@ -19,11 +19,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -31,14 +31,20 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class OgreEntity extends UnderlingEntity
 {
-	public static final PhasedMobAnimation RIGHT_PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.RIGHT_PUNCH, 22, true, true), 7, 10, 13);
-	public static final PhasedMobAnimation LEFT_PUNCH_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.LEFT_PUNCH, 22, true, true), 7, 10, 13);
-	public static final PhasedMobAnimation SLAM_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19);
+	public static final PhasedMobAnimation RIGHT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.RIGHT_PUNCH, 22, true, true), 7, 10, 13);
+	public static final PhasedMobAnimation LEFT_PUNCH_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.LEFT_PUNCH, 22, true, true), 7, 10, 13);
+	public static final PhasedMobAnimation SLAM_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.SLAM, 30, true, true), 12, 15, 19);
+	public static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	public static final RawAnimation WALKARMS_ANIMATION = RawAnimation.begin().thenLoop("walkarms");
+	public static final RawAnimation RIGHT_PUNCH_ANIMATION = RawAnimation.begin().then("right_punch", Animation.LoopType.PLAY_ONCE);
+	public static final RawAnimation LEFT_PUNCH_ANIMATION = RawAnimation.begin().then("left_punch", Animation.LoopType.PLAY_ONCE);
+	public static final RawAnimation SMASH_ANIMATION = RawAnimation.begin().then("smash", Animation.LoopType.PLAY_ONCE);
+	public static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("die", Animation.LoopType.PLAY_ONCE);
 	
 	public OgreEntity(EntityType<? extends OgreEntity> type, Level level)
 	{
 		super(type, level, 3);
-		this.maxUpStep = 1.0F;
+		this.setMaxUpStep(1.0F);
 	}
 	
 	public static AttributeSupplier.Builder ogreAttributes()
@@ -53,9 +59,9 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.registerGoals();
 		//no overlap in attack goal ranges
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, RIGHT_PUNCH_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 35.0F, 55.0F));
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, LEFT_PUNCH_ANIMATION, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, -35.0F, 55.0F));
-		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_ANIMATION, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15, 160));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, RIGHT_PUNCH_PROPERTIES, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, 35.0F, 55.0F));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, LEFT_PUNCH_PROPERTIES, 0, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 40, -35.0F, 55.0F));
+		this.goalSelector.addGoal(3, new GroundSlamGoal<>(this, SLAM_PROPERTIES, AnimatedAttackWhenInRangeGoal.STANDARD_MELEE_RANGE, 15, 160));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -103,7 +109,7 @@ public class OgreEntity extends UnderlingEntity
 	{
 		super.die(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.level.isClientSide)
+		if(this.dead && !this.level().isClientSide)
 		{
 			computePlayerProgress((int) (15 + 2.2 * getGristType().getPower())); //most ogres stop giving xp at rung 18
 			firstKillBonus(entity, EcheladderBonusType.OGRE);
@@ -118,61 +124,61 @@ public class OgreEntity extends UnderlingEntity
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 0.5, OgreEntity::attackAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 0.3, OgreEntity::walkArmsAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.3, OgreEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 0.5, OgreEntity::attackAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.85, OgreEntity::deathAnimation));
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<OgreEntity> event)
+	private static PlayState walkAnimation(AnimationState<OgreEntity> state)
 	{
-		if(event.isMoving())
+		if(state.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState walkArmsAnimation(AnimationEvent<OgreEntity> event)
+	private static PlayState walkArmsAnimation(AnimationState<OgreEntity> state)
 	{
-		if(event.isMoving() && !event.getAnimatable().isActive())
+		if(state.isMoving() && !state.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walkarms", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALKARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState attackAnimation(AnimationEvent<OgreEntity> event)
+	private static PlayState attackAnimation(AnimationState<OgreEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		
 		if(action == MobAnimation.Action.RIGHT_PUNCH)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("right_punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(RIGHT_PUNCH_ANIMATION);
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.LEFT_PUNCH)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("left_punch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(LEFT_PUNCH_ANIMATION);
 			return PlayState.CONTINUE;
 		} else if(action == MobAnimation.Action.SLAM)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("smash", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(SMASH_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<OgreEntity> event)
+	private static PlayState deathAnimation(AnimationState<OgreEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;

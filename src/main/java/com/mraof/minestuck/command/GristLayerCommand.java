@@ -26,11 +26,10 @@ public class GristLayerCommand
 	{
 		ServerPlayer player = source.getPlayerOrException();
 		
-		Optional<GristLayerInfo> optionalInfo = GristLayerInfo.get((ServerLevel) player.level);
+		Optional<GristLayerInfo> optionalInfo = GristLayerInfo.get((ServerLevel) player.level());
 		if(optionalInfo.isPresent())
 		{
-			Component layerInfo = optionalInfo.get().getGristLayerInfo(player.blockPosition().getX(), player.blockPosition().getZ());
-			source.sendSuccess(layerInfo, false);
+			source.sendSuccess(() -> optionalInfo.get().getGristLayerInfo(player.blockPosition().getX(), player.blockPosition().getZ()), false);
 			return 1;
 		} else
 		{

@@ -3,9 +3,9 @@ package com.mraof.minestuck.client.model.blockentity;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.machine.AlchemiterBlockEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class AlchemiterModel extends AnimatedGeoModel<AlchemiterBlockEntity>
+public class AlchemiterModel extends GeoModel<AlchemiterBlockEntity>
 {
 	@Override
 	public ResourceLocation getModelResource(AlchemiterBlockEntity object)

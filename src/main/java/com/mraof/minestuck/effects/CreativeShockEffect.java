@@ -95,7 +95,7 @@ public class CreativeShockEffect extends MobEffect
 				CreativeShockEffect.stopElytraFlying(event.player, LIMIT_MOBILITY_ITEMS);
 			} else
 			{
-				if(!event.player.level.isClientSide)
+				if(!event.player.level().isClientSide)
 				{
 					event.player.getAbilities().mayBuild = ((ServerPlayer) event.player).gameMode.getGameModeForPlayer().isBlockPlacingRestricted();
 				}
@@ -127,7 +127,7 @@ public class CreativeShockEffect extends MobEffect
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onExplosionCreativeShock(ExplosionEvent.Start event)
 	{
-		LivingEntity sourceEntity = event.getExplosion().getSourceMob();
+		LivingEntity sourceEntity = event.getExplosion().getIndirectSourceEntity();
 		if(sourceEntity instanceof Player player)
 		{
 			if(CreativeShockEffect.doesCreativeShockLimit(player, LIMIT_BLOCK_PLACEMENT_AND_BREAKING))

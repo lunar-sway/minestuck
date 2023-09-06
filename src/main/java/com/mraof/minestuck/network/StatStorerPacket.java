@@ -39,10 +39,10 @@ public class StatStorerPacket implements PlayToServerPacket
 	@Override
 	public void execute(ServerPlayer player)
 	{
-		if(player.level.isAreaLoaded(beBlockPos, 0)
+		if(player.level().isAreaLoaded(beBlockPos, 0)
 				&& Math.sqrt(player.distanceToSqr(beBlockPos.getX() + 0.5, beBlockPos.getY() + 0.5, beBlockPos.getZ() + 0.5)) <= 8)
 		{
-			BlockEntity te = player.level.getBlockEntity(beBlockPos);
+			BlockEntity te = player.level().getBlockEntity(beBlockPos);
 			
 			if(te instanceof StatStorerBlockEntity statStorer)
 			{

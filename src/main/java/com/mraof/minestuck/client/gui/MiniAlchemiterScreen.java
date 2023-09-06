@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -11,7 +10,7 @@ import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -41,18 +40,18 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
 		Objects.requireNonNull(minecraft);
-		super.renderLabels(poseStack, mouseX, mouseY);
+		super.renderLabels(guiGraphics, mouseX, mouseY);
 		
 		if (menu.getSlot(0).hasItem())
 		{
@@ -66,27 +65,24 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, menu.getWildcardType(), false, minecraft.level)).orElse(null);
 			boolean useWildcard = recipe.map(GristCostRecipe::canPickWildcard).orElse(false);
 			
-			GuiUtil.drawGristBoard(poseStack, set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);
+			GuiUtil.drawGristBoard(guiGraphics, set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);
 
 			Component tooltip = GuiUtil.getGristboardTooltip(set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, mouseX - this.leftPos, mouseY - this.topPos, 9, 45, font);
 			if(tooltip != null)
-				this.renderTooltip(poseStack, tooltip, mouseX - this.leftPos, mouseY - this.topPos);
+				guiGraphics.renderTooltip(font, tooltip, mouseX - this.leftPos, mouseY - this.topPos);
 
 		}
 	}
 
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTicks, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		
-		RenderSystem.setShaderTexture(0, BACKGROUND_TEXTURE);
-		this.blit(poseStack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(BACKGROUND_TEXTURE, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight);
 		
-		RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
 		int width = getScaledValue(menu.getProgress(), MiniAlchemiterBlockEntity.MAX_PROGRESS, PROGRESS_BAR_WIDTH);
-		blit(poseStack, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y,
+		guiGraphics.blit(PROGRESS_BAR_TEXTURE, this.leftPos + PROGRESS_BAR_X, this.topPos + PROGRESS_BAR_Y,
 				0, 0, width, PROGRESS_BAR_HEIGHT, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 	

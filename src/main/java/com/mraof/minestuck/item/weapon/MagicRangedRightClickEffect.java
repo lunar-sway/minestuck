@@ -14,7 +14,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -120,7 +119,7 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	
 	private boolean checkCollisionInPath(Level level, ServerPlayer player, Vec3 vecPos)
 	{
-		BlockPos blockPos = new BlockPos(vecPos);
+		BlockPos blockPos = BlockPos.containing(vecPos);
 		
 		if(!level.getBlockState(blockPos).isPathfindable(level, blockPos, PathComputationType.LAND))
 		{
@@ -129,11 +128,11 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 		
 		AABB axisAlignedBB = new AABB(blockPos);
 		// gets entities in a bounding box around each vector position in the for loop
-		LivingEntity closestTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
+		LivingEntity closestTarget = player.level().getNearestEntity(LivingEntity.class, visiblePredicate, player, vecPos.x, vecPos.y, vecPos.z, axisAlignedBB);
 		if(closestTarget != null)
 		{
 			float talliedDamage = calculateDamage(player, closestTarget, damage);
-			closestTarget.hurt(DamageSource.playerAttack(player).setMagic(), talliedDamage);
+			closestTarget.hurt(level.damageSources().indirectMagic(player, player), talliedDamage);
 			
 			if(effect != null && player.getRandom().nextFloat() < .25F)
 				closestTarget.addEffect(effect.get());
@@ -175,8 +174,8 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 		@Override
 		protected void targetEffect(ServerPlayer player)
 		{
-			BlockPos playerEyePos = new BlockPos(player.getX(), player.getEyeY(), player.getZ());
-			LivingEntity closestVisibleTarget = player.level.getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AABB(playerEyePos).inflate(11));
+			BlockPos playerEyePos = BlockPos.containing(player.getX(), player.getEyeY(), player.getZ());
+			LivingEntity closestVisibleTarget = player.level().getNearestEntity(LivingEntity.class, visiblePredicate, player, player.getX(), player.getEyeY(), player.getZ(), new AABB(playerEyePos).inflate(11));
 			if(closestVisibleTarget != null)
 				player.lookAt(EntityAnchorArgument.Anchor.EYES, closestVisibleTarget, EntityAnchorArgument.Anchor.EYES);
 		}

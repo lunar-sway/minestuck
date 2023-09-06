@@ -223,7 +223,7 @@ public class ConsortDialogue
 		
 		//Misc
 		addMessage("denizen_mention").reqLand();
-		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level.getLevelData().getXSpawn(), consort.level.getLevelData().getYSpawn(), consort.level.getLevelData().getZSpawn())) < 65536).reqLand();
+		addMessage("floating_island").consortReq(consort -> consort.distanceToSqr(new Vec3(consort.level().getLevelData().getXSpawn(), consort.level().getLevelData().getYSpawn(), consort.level().getLevelData().getZSpawn())) < 65536).reqLand();
 		addMessage("ring_fishing").consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA);
 		addMessage("frog_walk").consort(EnumConsort.TURTLE);
 		addMessage("delicious_hair").consort(EnumConsort.IGUANA);
@@ -281,10 +281,10 @@ public class ConsortDialogue
 		addMessage("useless_pogo");
 		addMessage("await_hero", "land_name", "consort_types", "player_title_land").reqLand();
 		addMessage(new ConditionedMessage("skaia", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level.dimension()),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
 						new SingleMessage("at_skaia.1", "consort_sound_2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.SALAMANDER, EnumConsort.IGUANA, EnumConsort.NAKAGATOR).reqLand();
 		addMessage(new ConditionedMessage("skaia_turtle", (ConsortEntity consort, ServerPlayer player) -> !consort.visitedSkaia, new SingleMessage("watch_skaia"),
-				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level.dimension()),
+				new ConditionedMessage((ConsortEntity consort, ServerPlayer player) -> MSDimensions.isSkaia(consort.level().dimension()),
 						new SingleMessage("at_skaia.2"), new SingleMessage("visited_skaia")))).consort(EnumConsort.TURTLE).reqLand();
 		
 		addMessage(new SingleMessage("zazzerpan")).consort(EnumConsort.TURTLE);
@@ -467,7 +467,7 @@ public class ConsortDialogue
 			list.add(message);
 		}
 		
-		return WeightedRandom.getRandomItem(consort.level.random, list).orElseThrow();
+		return WeightedRandom.getRandomItem(consort.level().random, list).orElseThrow();
 	}
 	
 	public static DialogueWrapper getMessageFromString(String name)

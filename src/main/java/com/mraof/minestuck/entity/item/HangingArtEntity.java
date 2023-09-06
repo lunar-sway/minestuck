@@ -6,7 +6,9 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
@@ -117,7 +119,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	@Override
 	public void dropItem(Entity brokenEntity)
 	{
-		if(this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
+		if(this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS))
 		{
 			this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
 			
@@ -145,7 +147,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	public void lerpTo(double x, double y, double z, float yaw, float pitch, int posRotationIncrements,
 					   boolean teleport)
 	{
-		BlockPos blockpos = this.pos.offset(x - this.getX(), y - this.getY(), z - this.getZ());
+		BlockPos blockpos = this.pos.offset(Mth.floor(x - this.getX()), Mth.floor(y - this.getY()), Mth.floor(z - this.getZ()));
 		this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
 	}
 	
@@ -183,7 +185,7 @@ public abstract class HangingArtEntity<T extends HangingArtEntity.IArt> extends 
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

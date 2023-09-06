@@ -1,16 +1,14 @@
 package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristType;
 import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.alchemy.MutableGristSet;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,22 +33,22 @@ public class GuiUtil
 	
 	public static final int GRIST_BOARD_WIDTH = 158, GRIST_BOARD_HEIGHT = 24;
 	
-	public static void drawGristBoard(PoseStack poseStack, GristSet grist, GristboardMode mode, int boardX, int boardY, Font font)
+	public static void drawGristBoard(GuiGraphics guiGraphics, GristSet grist, GristboardMode mode, int boardX, int boardY, Font font)
 	{
-		drawGristBoard(poseStack, grist, mode, boardX, boardY, font, 1.0F);
+		drawGristBoard(guiGraphics, grist, mode, boardX, boardY, font, 1.0F);
 	}
 	
-	public static void drawGristBoard(PoseStack poseStack, GristSet grist, GristboardMode mode, int boardX, int boardY, Font font, float scale)
+	public static void drawGristBoard(GuiGraphics guiGraphics, GristSet grist, GristboardMode mode, int boardX, int boardY, Font font, float scale)
 	{
 		if(grist == null)
 		{
-			font.draw(poseStack, I18n.get(NOT_ALCHEMIZABLE), boardX, boardY, 0xFF0000);
+			guiGraphics.drawString(font, I18n.get(NOT_ALCHEMIZABLE), boardX, boardY, 0xFF0000, false);
 			return;
 		}
 		
 		if(grist.isEmpty())
 		{
-			font.draw(poseStack, I18n.get(FREE), boardX, boardY, 0x00FF00);
+			guiGraphics.drawString(font, I18n.get(FREE), boardX, boardY, 0x00FF00, false);
 			return;
 		}
 		
@@ -72,9 +70,9 @@ public class GuiUtil
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)
-					font.draw(poseStack, needStr + " Any Type", boardX + GRIST_BOARD_WIDTH / 2F * col, boardY + GRIST_BOARD_HEIGHT / 3F * row, color);
+					guiGraphics.drawString(font, needStr + " Any Type", boardX + GRIST_BOARD_WIDTH / 2F * col, boardY + GRIST_BOARD_HEIGHT / 3F * row, color, false);
 				else
-					font.draw(poseStack, needStr + " " + type.getDisplayName() + " (" + haveStr + ")", boardX + GRIST_BOARD_WIDTH / 2F * col, boardY + GRIST_BOARD_HEIGHT / 3F * row, color);
+					guiGraphics.drawString(font, needStr + " " + type.getDisplayName() + " (" + haveStr + ")", boardX + GRIST_BOARD_WIDTH / 2F * col, boardY + GRIST_BOARD_HEIGHT / 3F * row, color, false);
 				//ensure that one line is rendered on the large alchemiter
 				if(mode == GristboardMode.LARGE_ALCHEMITER || mode == GristboardMode.LARGE_ALCHEMITER_SELECT)
 					place += 2;
@@ -107,17 +105,15 @@ public class GuiUtil
 					row++;
 					index = row * GRIST_BOARD_WIDTH;
 				}
-				font.draw(poseStack, needStr, boardX + needOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color);
-				font.draw(poseStack, haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color);
+				guiGraphics.drawString(font, needStr, boardX + needOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color, false);
+				guiGraphics.drawString(font, haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color, false);
 				
 				
 				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.getDummyIcon() : type.getIcon();
 				if(icon != null)
 				{
 					RenderSystem.setShaderColor(1, 1, 1, 1);
-					RenderSystem.setShader(GameRenderer::getPositionTexShader);
-					RenderSystem.setShaderTexture(0, icon);
-					GuiComponent.blit(poseStack, boardX + needStrWidth + needOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, iconSize, iconSize, iconSize, iconSize);
+					guiGraphics.blit(icon, boardX + needStrWidth + needOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, 0, 0, iconSize, iconSize, iconSize, iconSize);
 				}
 				
 				//ensure the large alchemiter gui has one grist type to a line

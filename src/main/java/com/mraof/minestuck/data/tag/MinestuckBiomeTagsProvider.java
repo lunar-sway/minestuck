@@ -2,24 +2,29 @@ package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.MSBiomes;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
+
 import static com.mraof.minestuck.util.MSTags.Biomes.*;
 
+@ParametersAreNonnullByDefault
 public class MinestuckBiomeTagsProvider extends BiomeTagsProvider
 {
-	public MinestuckBiomeTagsProvider(DataGenerator pGenerator, @Nullable ExistingFileHelper existingFileHelper)
+	public MinestuckBiomeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(pGenerator, Minestuck.MOD_ID, existingFileHelper);
+		super(output, lookupProvider, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void addTags()
+	protected void addTags(HolderLookup.Provider provider)
 	{
 		this.tag(HAS_FROG_TEMPLE).addTag(BiomeTags.IS_OVERWORLD);
 		

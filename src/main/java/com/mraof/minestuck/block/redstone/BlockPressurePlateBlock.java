@@ -54,7 +54,7 @@ public class BlockPressurePlateBlock extends Block
 		{
 			AABB checkBB = new AABB(pos);
 			List<Player> list = level.getEntitiesOfClass(Player.class, checkBB.move(0, 0.5, 0));
-			boolean entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.isOnGround() && !playerEntity.isCrouching());
+			boolean entityStandingOnBlock = list.stream().anyMatch(playerEntity -> playerEntity.onGround() && !playerEntity.isCrouching());
 			
 			if(!entityStandingOnBlock && !isAboveBlockFullyTouching(level, pos.above()) && state.getValue(POWERED))
 			{

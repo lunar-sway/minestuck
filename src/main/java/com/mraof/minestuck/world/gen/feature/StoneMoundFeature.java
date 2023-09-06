@@ -46,7 +46,7 @@ public class StoneMoundFeature extends Feature<BlockStateConfiguration>
 		double maxJ = width + rand.nextInt(10);
 		double maxK = width + rand.nextInt(10);
 		
-		if(!level.getBlockState(pos.below(15)).getMaterial().isSolid())
+		if(!level.getBlockState(pos.below(15)).isSolid())
 			return false;
 		
 		for(int i = 0; i < height; i++)

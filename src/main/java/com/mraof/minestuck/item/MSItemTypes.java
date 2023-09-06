@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Tier;
@@ -13,10 +13,11 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class MSItemTypes
@@ -42,20 +43,28 @@ public class MSItemTypes
 	public static final Tier ZILLY_TIER = new ModItemTier(5, 5120, 12.0F, 5.0F, 30, () -> Ingredient.EMPTY);
 	public static final Tier WELSH_TIER = new ModItemTier(5, 5120, 15.0F, 5.0F, 25, () -> Ingredient.of(MSItems.CUEBALL.get()));
 	
-	public static final ArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20, new int[]{3, 7, 6, 2}, 15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
-	public static final ArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50, new int[]{4, 7, 8, 3}, 15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
-	public static final ArmorMaterial CLOTH_ARMOR = new ModArmorMaterial("minestuck:cloth", -1, new int[]{0, 0, 0, 0}, 5, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
+	public static final ArmorMaterial PRISMARINE_ARMOR = new ModArmorMaterial("minestuck:prismarine", 20,
+			Map.of(ArmorItem.Type.BOOTS, 3, ArmorItem.Type.LEGGINGS, 6, ArmorItem.Type.CHESTPLATE, 7, ArmorItem.Type.HELMET, 2),
+			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.of(Items.PRISMARINE_SHARD));
+	public static final ArmorMaterial IRON_LASS_ARMOR = new ModArmorMaterial("minestuck:iron_lass", 50,
+			Map.of(ArmorItem.Type.BOOTS, 4, ArmorItem.Type.LEGGINGS, 7, ArmorItem.Type.CHESTPLATE, 8, ArmorItem.Type.HELMET, 3),
+			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
+	public static final ArmorMaterial CLOTH_ARMOR = new ModArmorMaterial("minestuck:cloth", -1,
+			Map.of(ArmorItem.Type.BOOTS, 0, ArmorItem.Type.LEGGINGS, 0, ArmorItem.Type.CHESTPLATE, 0, ArmorItem.Type.HELMET, 0),
+			5, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
-	public static final ArmorMaterial DREAM_PAJAMAS = new ModArmorMaterial("minestuck:dream_pajamas", 10, new int[]{1, 2, 3, 1}, 0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
+	public static final ArmorMaterial DREAM_PAJAMAS = new ModArmorMaterial("minestuck:dream_pajamas", 10,
+			Map.of(ArmorItem.Type.BOOTS, 1, ArmorItem.Type.LEGGINGS, 2, ArmorItem.Type.CHESTPLATE, 3, ArmorItem.Type.HELMET, 1),
+			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	//Base Tools
-	public static final MSToolType SICKLE_TOOL = new MSToolType(Material.WEB, Material.LEAVES, Material.PLANT, Material.REPLACEABLE_PLANT).addAction(ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType CLAWS_TOOL = new MSToolType(Material.REPLACEABLE_PLANT, Material.PLANT, Material.WEB).addAction(ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType PICKAXE_TOOL = new MSToolType(Material.METAL, Material.HEAVY_METAL, Material.STONE).addMining(BlockTags.MINEABLE_WITH_PICKAXE, ToolActions.PICKAXE_DIG).addEnchantments(EnchantmentCategory.DIGGER);
+	public static final MSToolType SICKLE_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType CLAWS_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType PICKAXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_PICKAXE, ToolActions.PICKAXE_DIG).addEnchantments(EnchantmentCategory.DIGGER);
 	public static final MSToolType HAMMER_TOOL = new MSToolType(PICKAXE_TOOL).addEnchantments(EnchantmentCategory.WEAPON);
-	public static final MSToolType AXE_TOOL = new MSToolType(Material.WOOD, Material.PLANT, Material.REPLACEABLE_PLANT).addMining(BlockTags.MINEABLE_WITH_AXE, ToolActions.AXE_DIG).addEnchantments(EnchantmentCategory.DIGGER, EnchantmentCategory.WEAPON);
-	public static final MSToolType SHOVEL_TOOL = new MSToolType(Material.TOP_SNOW, Material.SNOW, Material.CLAY, Material.GRASS, Material.DIRT, Material.SAND).addMining(BlockTags.MINEABLE_WITH_SHOVEL, ToolActions.SHOVEL_DIG).addEnchantments(EnchantmentCategory.DIGGER);
-	public static final MSToolType SWORD_TOOL = new MSToolType(Material.WEB).addAction(ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
+	public static final MSToolType AXE_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_AXE, ToolActions.AXE_DIG).addEnchantments(EnchantmentCategory.DIGGER, EnchantmentCategory.WEAPON);
+	public static final MSToolType SHOVEL_TOOL = new MSToolType().addMining(BlockTags.MINEABLE_WITH_SHOVEL, ToolActions.SHOVEL_DIG).addEnchantments(EnchantmentCategory.DIGGER);
+	public static final MSToolType SWORD_TOOL = new MSToolType().addMining(BlockTags.SWORD_EFFICIENT, ToolActions.SWORD_DIG).addEnchantments(EnchantmentCategory.WEAPON);
 	public static final MSToolType MISC_TOOL = new MSToolType().addEnchantments(EnchantmentCategory.WEAPON);
 	
 	//Combo Tools
@@ -66,7 +75,7 @@ public class MSItemTypes
 	public static final MSToolType MULTI_TOOL = new MSToolType(PICKAXE_TOOL, AXE_TOOL, SHOVEL_TOOL);
 	
 	//Unimplemented
-	public static final MSToolType GAUNTLET_TOOL = new MSToolType(Material.GLASS, Material.ICE, Material.ICE_SOLID).addEnchantments(EnchantmentCategory.WEAPON).addEnchantments(Enchantments.SILK_TOUCH);
+	public static final MSToolType GAUNTLET_TOOL = new MSToolType(/*TODO Material.GLASS, Material.ICE, Material.ICE_SOLID*/).addEnchantments(EnchantmentCategory.WEAPON).addEnchantments(Enchantments.SILK_TOUCH);
     
     private static class ModItemTier implements Tier
 	{
@@ -126,22 +135,22 @@ public class MSItemTypes
 	
 	private static class ModArmorMaterial implements ArmorMaterial
 	{
-		private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
+		private static final Map<ArmorItem.Type, Integer> DURABILITY_MOD_BY_TYPE = new EnumMap<>(Map.of(ArmorItem.Type.BOOTS, 13, ArmorItem.Type.LEGGINGS, 15, ArmorItem.Type.CHESTPLATE, 16, ArmorItem.Type.HELMET, 11));
 		
 		private final String name;
 		private final int maxDamageFactor;
-		private final int[] damageReductionAmountArray;
+		private final Map<ArmorItem.Type, Integer> damageReductionByType;
 		private final int enchantability;
 		private final SoundEvent soundEvent;
 		private final float toughness;
 		private final float knockbackResistance;
 		private final LazyLoadedValue<Ingredient> repairMaterial;
 		
-		public ModArmorMaterial(String name, int maxDamageFactor, int[] damageReductionAmountArray, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
+		public ModArmorMaterial(String name, int maxDamageFactor, Map<ArmorItem.Type, Integer> damageReductionByType, int enchantability, SoundEvent soundEvent, float toughness, float knockbackResistance, Supplier<Ingredient> repairMaterial)
 		{
 			this.name = name;
 			this.maxDamageFactor = maxDamageFactor;
-			this.damageReductionAmountArray = damageReductionAmountArray;
+			this.damageReductionByType = new EnumMap<>(damageReductionByType);
 			this.enchantability = enchantability;
 			this.soundEvent = soundEvent;
 			this.toughness = toughness;
@@ -156,15 +165,15 @@ public class MSItemTypes
 		}
 		
 		@Override
-		public int getDurabilityForSlot(EquipmentSlot slotIn)
+		public int getDurabilityForType(ArmorItem.Type type)
 		{
-			return MAX_DAMAGE_ARRAY[slotIn.getIndex()] * this.maxDamageFactor;
+			return DURABILITY_MOD_BY_TYPE.get(type) * this.maxDamageFactor;
 		}
 		
 		@Override
-		public int getDefenseForSlot(EquipmentSlot slotIn)
+		public int getDefenseForType(ArmorItem.Type type)
 		{
-			return this.damageReductionAmountArray[slotIn.getIndex()];
+			return this.damageReductionByType.get(type);
 		}
 		
 		@Override

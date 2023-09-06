@@ -3,7 +3,6 @@ package com.mraof.minestuck.inventory.captchalogue;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -25,9 +24,9 @@ public class HashMapModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public HashMapModus(ModusType<? extends HashMapModus> type, PlayerSavedData savedData, LogicalSide side)
+	public HashMapModus(ModusType<? extends HashMapModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override
@@ -98,7 +97,7 @@ public class HashMapModus extends Modus
 		if(!list.get(index).isEmpty())
 		{
 			ItemStack otherItem = list.get(index);
-			if(otherItem.getItem() == item.getItem() && ItemStack.tagMatches(otherItem, item)
+			if(ItemStack.isSameItemSameTags(otherItem, item)
 					&& otherItem.getCount() + item.getCount() <= otherItem.getMaxStackSize())
 			{
 				otherItem.grow(item.getCount());

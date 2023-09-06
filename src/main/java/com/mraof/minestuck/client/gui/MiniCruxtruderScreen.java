@@ -1,11 +1,10 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.inventory.MiniCruxtruderMenu;
 import com.mraof.minestuck.blockentity.machine.MiniCruxtruderBlockEntity;
+import com.mraof.minestuck.inventory.MiniCruxtruderMenu;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,28 +28,25 @@ public class MiniCruxtruderScreen extends AbstractContainerScreen<MiniCruxtruder
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderTooltip(poseStack, mouseX, mouseY);
+		this.renderBackground(guiGraphics);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderTooltip(guiGraphics, mouseX, mouseY);
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float partialTick, int mouseX, int mouseY)
+	protected void renderBg(GuiGraphics guiGraphics, float partialTick, int mouseX, int mouseY)
 	{
 		int x = (width - imageWidth) / 2;
 		int y = (height - imageHeight) / 2;
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		//draw background
-		RenderSystem.setShaderTexture(0, BACKGROUND);
-		this.blit(poseStack, x, y, 0, 0, imageWidth, imageHeight);
+		guiGraphics.blit(BACKGROUND, x, y, 0, 0, imageWidth, imageHeight);
 		
 		//draw progress bar
-		RenderSystem.setShaderTexture(0, PROGRESS_BAR);
 		int height = MachineScreen.getScaledValue(menu.getProgress(), MiniCruxtruderBlockEntity.MAX_PROGRESS, PROGRESS_BAR_HEIGHT);
-		blit(poseStack, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height, 0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
+		guiGraphics.blit(PROGRESS_BAR, x + PROGRESS_BAR_X, y + PROGRESS_BAR_Y + PROGRESS_BAR_HEIGHT - height, 0, PROGRESS_BAR_HEIGHT - height, PROGRESS_BAR_WIDTH, height, PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
 	}
 }

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item.block;
 
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.InteractionHand;
@@ -39,21 +40,20 @@ public class SendificatorBlockItem extends BlockItem
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entityIn, int itemSlot, boolean isSelected)
 	{
-		if(entityIn instanceof Player)
+		if(entityIn instanceof Player playerIn)
 		{
-			Player playerIn = (Player) entityIn;
 			ItemStack recoverItem = playerIn.getItemBySlot(EquipmentSlot.HEAD);
-			if(recoverItem.sameItem(new ItemStack(MSBlocks.SENDIFICATOR.get())) && !playerIn.isCreative())
+			if(recoverItem.is(MSItems.SENDIFICATOR.get()) && !playerIn.isCreative())
 			{
 				ItemStack headItem = new ItemStack(Items.PLAYER_HEAD, 1);
 				NbtUtils.writeGameProfile(headItem.getOrCreateTagElement("SkullOwner"), playerIn.getGameProfile());
-				ItemEntity headItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), headItem);
-				playerIn.level.addFreshEntity(headItemEntity);
+				ItemEntity headItemEntity = new ItemEntity(level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), headItem);
+				level.addFreshEntity(headItemEntity);
 				
-				ItemEntity recoverItemEntity = new ItemEntity(playerIn.level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), recoverItem);
-				playerIn.level.addFreshEntity(recoverItemEntity);
+				ItemEntity recoverItemEntity = new ItemEntity(level, playerIn.getX(), playerIn.getY(), playerIn.getZ(), recoverItem);
+				level.addFreshEntity(recoverItemEntity);
 				playerIn.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.AIR));
-				playerIn.hurt(MSDamageSources.DECAPITATION, Float.MAX_VALUE);
+				playerIn.hurt(MSDamageSources.decapitation(level.registryAccess()), Float.MAX_VALUE);
 			}
 		}
 		super.inventoryTick(stack, level, entityIn, itemSlot, isSelected);

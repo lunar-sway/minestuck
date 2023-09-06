@@ -5,9 +5,8 @@ import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.EnumClass;
 import com.mraof.minestuck.skaianet.MergeResult;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -26,9 +25,9 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 {
 	private final String modid;
 	
-	public MinestuckLanguageProvider(DataGenerator gen, String modid, String locale)
+	public MinestuckLanguageProvider(PackOutput output, String modid, String locale)
 	{
-		super(gen, modid, locale);
+		super(output, modid, locale);
 		this.modid = modid;
 	}
 	
@@ -165,12 +164,40 @@ public abstract class MinestuckLanguageProvider extends LanguageProvider
 	{
 		add(result.translationKey(), value);
 	}
-	protected void addDamageMessage(DamageSource key, String value)
+	protected void addBaseDeathMessage(String key, String value)
 	{
-		add("death.attack." + key.getMsgId(), value);
+		add("death.attack." + key, value);
 	}
-	protected void addDamageMessageWithKiller(DamageSource key, String value)
+	protected void addKillCreditDeathMessage(String key, String value)
 	{
-		add("death.attack." + key.getMsgId() + ".player", value);
+		add("death.attack." + key + ".player", value);
+	}
+	protected void addDeathMessageWithItem(String key, String value)
+	{
+		add("death.attack." + key + ".item", value);
+	}
+	/**
+	 * Use this for damage types which will only exist in damage sources without an entity source.
+	 * @param base Death message with an argument for the entity that died.
+	 * @param killCredit Death message with the first argument for the entity that died,
+	 *                      and the second argument for the kill credit entity.
+	 */
+	protected void addSimpleDeathMessage(String key, String base, String killCredit)
+	{
+		addBaseDeathMessage(key, base);
+		addKillCreditDeathMessage(key, killCredit);
+	}
+	/**
+	 * Use this for damage types which will only exist in damage sources with an entity source.
+	 * @param base Death message with the first argument for the entity that died,
+	 *                and the second argument for the entity that caused the damage.
+	 * @param withItem Death message with the first argument for the entity that died,
+	 *                    the second argument for the entity that caused the damage,
+	 *                    and third being the custom name of the item held by the damage-causing entity.
+	 */
+	protected void addEntitySourceDeathMessage(String key, String base, String withItem)
+	{
+		addBaseDeathMessage(key, base);
+		addDeathMessageWithItem(key, withItem);
 	}
 }

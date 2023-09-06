@@ -58,7 +58,7 @@ public class ConsortMerchantInventory implements Container
 	
 	public void handlePurchase(ServerPlayer player, boolean all, int index)
 	{
-		if (!player.level.isClientSide && index >= 0 && index < inv.size())
+		if (!player.level().isClientSide && index >= 0 && index < inv.size())
 		{
 			ItemStack stack = inv.get(index);
 			if (stack.isEmpty())

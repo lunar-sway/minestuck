@@ -3,7 +3,6 @@ package com.mraof.minestuck.item;
 import com.mraof.minestuck.entity.FrogEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
@@ -13,7 +12,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -22,32 +20,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class FrogItem extends Item
 {
 	public FrogItem(Properties properties)
 	{
 		super(properties);
-	}
-	
-	@Override
-	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-	{
-		if(this.allowedIn(tab))
-		{
-			items.add(new ItemStack(this));
-			for (int i = 1; i <= FrogEntity.maxTypes(); ++i)
-			{
-				if(i != 3 && i != 4)
-				{
-					ItemStack item = new ItemStack(this);
-					item.getOrCreateTag().putInt("Type", i);
-					items.add(item);
-				}
-			}
-		}
 	}
 	
 	@Override
@@ -165,7 +147,7 @@ public class FrogItem extends Item
 			frog.moveTo(x, y, z, Mth.wrapDegrees(level.random.nextFloat() * 360.0F), 0.0F);
 			frog.yHeadRot = frog.getYRot();
 			frog.yBodyRot = frog.getYRot();
-			frog.finalizeSpawn(level, level.getCurrentDifficultyAt(new BlockPos(x,y,z)), null, null, null);
+			frog.finalizeSpawn(level, level.getCurrentDifficultyAt(BlockPos.containing(x,y,z)), null, null, null);
 
 			frog.playAmbientSound();
 

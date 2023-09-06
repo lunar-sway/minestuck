@@ -1,11 +1,10 @@
 package com.mraof.minestuck.item.weapon;
 
 import com.mraof.minestuck.player.EnumAspect;
-import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.player.Title;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -22,17 +21,17 @@ public interface InventoryTickEffect
 	
 	InventoryTickEffect BREATH_SLOW_FALLING = passiveAspectEffect(EnumAspect.BREATH, () -> new MobEffectInstance(MobEffects.SLOW_FALLING, 2, 2));
 	
-	InventoryTickEffect DROP_WHEN_IN_WATER = (stack, worldIn, entityIn, itemSlot, isSelected) -> {
+	InventoryTickEffect DROP_WHEN_IN_WATER = (stack, level, entityIn, itemSlot, isSelected) -> {
 		if(isSelected && entityIn.isInWater() && entityIn instanceof LivingEntity living)
 		{
 			stack.hurtAndBreak(70, living, entity -> entity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
-			ItemEntity weapon = new ItemEntity(entityIn.level, entityIn.getX(), entityIn.getY(), entityIn.getZ(), stack.copy());
+			ItemEntity weapon = new ItemEntity(entityIn.level(), entityIn.getX(), entityIn.getY(), entityIn.getZ(), stack.copy());
 			weapon.getItem().setCount(1);
 			weapon.setPickUpDelay(40);
-			entityIn.level.addFreshEntity(weapon);
+			entityIn.level().addFreshEntity(weapon);
 			stack.shrink(1);
 			
-			entityIn.hurt(DamageSource.LIGHTNING_BOLT, 5);
+			entityIn.hurt(level.damageSources().lightningBolt(), 5);
 		}
 	};
 	

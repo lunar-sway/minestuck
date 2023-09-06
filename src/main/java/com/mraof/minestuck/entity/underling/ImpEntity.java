@@ -21,19 +21,26 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class ImpEntity extends UnderlingEntity implements IAnimatable
+public class ImpEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation CLAW_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
+	public static final PhasedMobAnimation CLAW_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.CLAW, 8, true, false), 2, 4, 5);
+	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.idle");
+	private static final RawAnimation RUN_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.run");
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.walk");
+	private static final RawAnimation RUNARMS_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.runarms");
+	private static final RawAnimation WALKARMS_ANIMATION = RawAnimation.begin().thenLoop("animation.minestuck.imp.walkarms");
+	private static final RawAnimation DIE_ANIMATION = RawAnimation.begin().then("animation.minestuck.imp.die", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation SCRATCH_ANIMATION = RawAnimation.begin().then("animation.minestuck.imp.scratch", Animation.LoopType.PLAY_ONCE);
 	
 	public ImpEntity(EntityType<? extends ImpEntity> type, Level level)
 	{
@@ -51,7 +58,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.registerGoals();
 		
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_ANIMATION));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, CLAW_PROPERTIES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -96,7 +103,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.die(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.level.isClientSide)
+		if(this.dead && !this.level().isClientSide)
 		{
 			computePlayerProgress((int) (5 + 2 * getGristType().getPower())); //most imps stop giving xp at rung 8
 			firstKillBonus(entity, EcheladderBonusType.IMP);
@@ -122,79 +129,79 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2, ImpEntity::attackAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, ImpEntity::idleAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkArmsAnimation", 1, ImpEntity::walkArmsAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 0.5, ImpEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 0.7, ImpEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 2, ImpEntity::attackAnimation));
 	}
 	
-	private static PlayState idleAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState idleAnimation(AnimationState<ImpEntity> state)
 	{
-		if(!event.isMoving() && !event.getAnimatable().isAggressive())
+		if(!state.isMoving() && !state.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.idle", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(IDLE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState walkAnimation(AnimationState<ImpEntity> state)
 	{
-		if(!event.isMoving())
+		if(!state.isMoving())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(event.getAnimatable().isAggressive())
+		if(state.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.run", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(RUN_ANIMATION);
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 	}
 	
-	private static PlayState walkArmsAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState walkArmsAnimation(AnimationState<ImpEntity> state)
 	{
-		if(!event.isMoving() || event.getAnimatable().isActive())
+		if(!state.isMoving() || state.getAnimatable().isActive())
 		{
 			return PlayState.STOP;
 		}
 		
-		if(event.getAnimatable().isAggressive())
+		if(state.getAnimatable().isAggressive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.runarms", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(RUNARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		} else
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.walkarms", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALKARMS_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState deathAnimation(AnimationState<ImpEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.die", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DIE_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState attackAnimation(AnimationEvent<ImpEntity> event)
+	private static PlayState attackAnimation(AnimationState<ImpEntity> state)
 	{
-		if(event.getAnimatable().isActive())
+		if(state.getAnimatable().isActive())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.minestuck.imp.scratch", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(SCRATCH_ANIMATION);
 			return PlayState.CONTINUE;
 		}
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 }

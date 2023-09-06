@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -24,5 +25,6 @@
   ],
   "result": {
     "item": "minestuck:redstone_clock"
-  }
+  },
+  "show_notification": true
 }

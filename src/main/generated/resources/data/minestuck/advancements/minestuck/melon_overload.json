@@ -26,5 +26,6 @@
     [
       "melon_overload"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

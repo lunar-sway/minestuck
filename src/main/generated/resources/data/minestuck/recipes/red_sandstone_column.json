@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "minecraft:red_sandstone"
@@ -13,5 +14,6 @@
   "result": {
     "count": 3,
     "item": "minestuck:red_sandstone_column"
-  }
+  },
+  "show_notification": true
 }

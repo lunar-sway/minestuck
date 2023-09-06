@@ -13,6 +13,7 @@ import com.mraof.minestuck.util.ColorHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -140,7 +141,7 @@ public final class ClientPlayerData
 	
 	public static void handleDataPacket(ModusDataPacket packet)
 	{
-		modus = CaptchaDeckHandler.readFromNBT(packet.getNBT(), null);
+		modus = CaptchaDeckHandler.readFromNBT(packet.nbt(), LogicalSide.CLIENT);
 		if(modus != null)
 			MSScreenFactories.updateSylladexScreen();
 		else LOGGER.debug("Player lost their modus after update packet");

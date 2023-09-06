@@ -215,6 +215,23 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
+                "max": 6.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "minestuck:native_sulfur",
+          "quality": -1,
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
                 "max": 3.0,
                 "min": 1.0
               },
@@ -229,5 +246,6 @@
       "name": "misc",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:chests/medium_basic/terrain/minestuck/heat"
 }

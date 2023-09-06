@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minecraft:red_wool"
+  },
+  "input2": {
+    "item": "minestuck:nakagator_statue"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:plush_nakagator"
+  }
+}

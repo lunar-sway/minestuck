@@ -73,7 +73,7 @@ public class SkaiaPortalBlockEntity extends BlockEntity //implements ITeleporter
 			}
 			entity = Teleport.teleportEntity(entity, server.getLevel(destination.dimension()), worldPosition.getX() + 0.5, worldPosition.getY(), worldPosition.getZ() + 0.5);
 			if(entity != null)
-				placeDestPlatform(entity.level);
+				placeDestPlatform(entity.level());
 		}
 		if(entity != null)
 				entity.setPortalCooldown();

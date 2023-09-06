@@ -2,7 +2,6 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.player.PlayerSavedData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
@@ -10,9 +9,9 @@ import net.minecraftforge.fml.LogicalSide;
 public class QueueStackModus extends StackModus
 {
 	
-	public QueueStackModus(ModusType<? extends QueueStackModus> type, PlayerSavedData savedData, LogicalSide side)
+	public QueueStackModus(ModusType<? extends QueueStackModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override

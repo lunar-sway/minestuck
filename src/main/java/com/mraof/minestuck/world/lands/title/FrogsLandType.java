@@ -13,7 +13,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluids;
 
 public class FrogsLandType extends TitleLandType
 {
@@ -61,7 +61,7 @@ public class FrogsLandType extends TitleLandType
 	{
 		StructureBlockRegistry registry = new StructureBlockRegistry();
 		otherType.registerBlocks(registry);
-		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
+		return !registry.getBlockState("ocean").getFluidState().is(Fluids.LAVA);
 	}
 	
 	@Override

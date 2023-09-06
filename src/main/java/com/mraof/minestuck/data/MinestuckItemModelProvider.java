@@ -1,9 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -14,30 +13,38 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MinestuckItemModelProvider extends ItemModelProvider
 {
-	public MinestuckItemModelProvider(DataGenerator generator, ExistingFileHelper existingFileHelper)
+	public MinestuckItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)
 	{
-		super(generator, Minestuck.MOD_ID, existingFileHelper);
+		super(output, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	@Override
 	protected void registerModels()
 	{
 		
+		//Clubs
+		handheldItem(MSItems.M_ACE_OF_CLUBS);
+		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
+		handheldItem(MSItems.HOME_GROWN_MACE);
+		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
-
+		
 		//Staffs
 		handheldItemTextureName(MSItems.WIZARD_STAFF, "wizard_staff");
 		handheldItemTextureName(MSItems.WATER_STAFF, "water_staff");
 		handheldItemTextureName(MSItems.FIRE_STAFF, "fire_staff");
-
-		//Clubs
-		handheldItem(MSItems.M_ACE_OF_CLUBS);
-		handheldItem(MSItems.HOME_GROWN_MACE);
-		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
 		
-		//Blocks
-		blockItem(MSBlocks.UNCARVED_WOOD);
-		
+		simpleItem(MSItems.SCALEMATE_APPLESCAB);
+		simpleItem(MSItems.SCALEMATE_BERRYBREATH);
+		simpleItem(MSItems.SCALEMATE_CINNAMONWHIFF);
+		simpleItem(MSItems.SCALEMATE_HONEYTONGUE);
+		simpleItem(MSItems.SCALEMATE_LEMONSNOUT);
+		simpleItem(MSItems.SCALEMATE_PINESNORT);
+		simpleItem(MSItems.SCALEMATE_PUCEFOOT);
+		simpleItem(MSItems.SCALEMATE_PUMPKINSNUFFLE);
+		simpleItem(MSItems.SCALEMATE_PYRALSPITE);
+		simpleItem(MSItems.SCALEMATE_WITNESS);
+		simpleItem(MSItems.PLUSH_MUTATED_CAT);
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<Item> item)

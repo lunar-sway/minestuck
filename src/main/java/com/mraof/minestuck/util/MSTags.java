@@ -4,7 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
@@ -62,6 +62,7 @@ public class MSTags
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");
 		public static final TagKey<Block> PETRIFIED_FLORA_PLACEABLE = tag("petrified_flora_placeable");
+		public static final TagKey<Block> EDITMODE_BREAK_BLACKLIST = tag("editmode_break_blacklist");
 		
 		private static TagKey<Block> tag(String name)
 		{
@@ -137,10 +138,11 @@ public class MSTags
 		public static final TagKey<EntityType<?>> ROOKS = tag("carapacians/rook");
 		public static final TagKey<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
 		public static final TagKey<EntityType<?>> REMOTE_OBSERVER_BLACKLIST = tag("remote_observer_blacklist");
+		public static final TagKey<EntityType<?>> BOSS_MOB = tag("boss_mob");
 		
 		private static TagKey<EntityType<?>> tag(String name)
 		{
-			return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
@@ -165,7 +167,7 @@ public class MSTags
 		
 		private static TagKey<Biome> tag(String name)
 		{
-			return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.BIOME, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	
@@ -175,7 +177,7 @@ public class MSTags
 		
 		private static TagKey<Structure> tag(String name)
 		{
-			return TagKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+			return TagKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	

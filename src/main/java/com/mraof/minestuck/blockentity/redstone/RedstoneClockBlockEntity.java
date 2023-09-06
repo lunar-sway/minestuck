@@ -49,7 +49,7 @@ public class RedstoneClockBlockEntity extends BlockEntity
 			level.setBlock(getBlockPos(), getBlockState().setValue(RedstoneClockBlock.POWERED, true), Block.UPDATE_ALL);
 			level.scheduleTick(new BlockPos(getBlockPos()), level.getBlockState(getBlockPos()).getBlock(), 10); //set to half a second
 			if(!level.getBlockState(getBlockPos().above()).is(BlockTags.OCCLUDES_VIBRATION_SIGNALS) && !level.getBlockState(getBlockPos().below()).is(BlockTags.OCCLUDES_VIBRATION_SIGNALS)) //will not make a sound if a sound dampening block is above or below it
-				level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.05F, 1.2F);
+				level.playSound(null, getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.05F, 1.2F);
 		}
 	}
 	

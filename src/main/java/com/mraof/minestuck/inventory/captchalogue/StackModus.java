@@ -1,9 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,9 +22,9 @@ public class StackModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public StackModus(ModusType<? extends StackModus> type, PlayerSavedData savedData, LogicalSide side)
+	public StackModus(ModusType<? extends StackModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override
@@ -40,7 +39,7 @@ public class StackModus extends Modus
 					list.add(stack);
 		}
 		
-		if(player.level.isClientSide)
+		if(player.level().isClientSide)
 		{
 			items = NonNullList.create();
 			changed = prev != null;
@@ -84,7 +83,7 @@ public class StackModus extends Modus
 			return false;
 		
 		ItemStack firstItem = list.size() > 0 ? list.getFirst() : ItemStack.EMPTY;
-		if(firstItem.getItem() == item.getItem() && ItemStack.tagMatches(firstItem, item)
+		if(ItemStack.isSameItemSameTags(firstItem, item)
 				&& firstItem.getCount() + item.getCount() <= firstItem.getMaxStackSize())
 			firstItem.grow(item.getCount());
 		else if(list.size() < size)

@@ -33,5 +33,6 @@
     [
       "raw_cruxite"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

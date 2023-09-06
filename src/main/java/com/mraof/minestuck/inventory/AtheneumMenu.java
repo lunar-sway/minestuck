@@ -106,8 +106,8 @@ public class AtheneumMenu extends AbstractContainerMenu
 		//if each stack is not empty, put it in the item list.
 		for(DeployEntry atheneumItem : atheneumItems)
 		{
-			if(!atheneumItem.getItemStack(c, player.level).isEmpty())
-				itemList.add(atheneumItem.getItemStack(c, player.level));
+			if(!atheneumItem.getItemStack(c, player.level()).isEmpty())
+				itemList.add(atheneumItem.getItemStack(c, player.level()));
 		}
 		
 		
@@ -148,7 +148,7 @@ public class AtheneumMenu extends AbstractContainerMenu
 	
 	public void receiveUpdatePacket(AtheneumPacket.Update packet)
 	{
-		if(!player.level.isClientSide)
+		if(!player.level().isClientSide)
 			throw new IllegalStateException("Should not receive update packet here for server-side menu");
 		for(int i = 0; i < packet.getInventory().size(); i++)
 		{

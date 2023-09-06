@@ -38,7 +38,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 /**
  * <p>
@@ -174,7 +173,7 @@ public class MusicPlayerWeapon extends WeaponItem
 				}
 			}
 			
-			if(player.level.getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
+			if(player.level().getGameTime() % 50 == 0 && musicPlayingCap.getCassetteType() != EnumCassetteType.NONE)
 			{
 				EnumCassetteType.EffectContainer effectContainer = musicPlayingCap.getCassetteType().getEffectContainer();
 				if(!effectContainer.onHit()) //Apply the cassette buff every 50 ticks, if there is any
@@ -189,7 +188,7 @@ public class MusicPlayerWeapon extends WeaponItem
 		IMusicPlaying musicPlaying = getMusicPlaying(attacker);
 		if(musicPlaying.getCassetteType() != EnumCassetteType.NONE && musicPlaying.getCurrentMusicPlayer() == stack)
 		{
-			RandomSource r = attacker.level.getRandom();
+			RandomSource r = attacker.level().getRandom();
 			
 			double attackerLuckValue;
 			double targetLuckValue;

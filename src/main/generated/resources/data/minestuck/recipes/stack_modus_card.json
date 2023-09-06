@@ -1,5 +1,6 @@
 {
   "type": "minestuck:non_mirrored",
+  "category": "misc",
   "key": {
     "C": {
       "item": "minestuck:cruxite_block"
@@ -16,5 +17,6 @@
   ],
   "result": {
     "item": "minestuck:stack_modus_card"
-  }
+  },
+  "show_notification": true
 }

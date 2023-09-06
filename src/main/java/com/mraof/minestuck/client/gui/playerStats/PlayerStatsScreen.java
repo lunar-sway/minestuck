@@ -2,7 +2,6 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
@@ -10,12 +9,12 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
-import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
@@ -161,11 +160,9 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 		return false;
 	}
 	
-	protected void drawTabs(PoseStack poseStack)
+	protected void drawTabs(GuiGraphics guiGraphics)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1,1,1, 1);
-		RenderSystem.setShaderTexture(0, icons);
 		
 		if(mode)
 		{
@@ -173,7 +170,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != normalTab && (!type.reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
 				{
 					int i = type.ordinal();
-					blit(poseStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					guiGraphics.blit(icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		} else
 		{
@@ -181,30 +178,28 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				if(type != editmodeTab)
 				{
 					int i = type.ordinal();
-					blit(poseStack, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
+					guiGraphics.blit(icons, xOffset + i*(tabWidth + 2), yOffset - tabHeight + tabOverlap, i==0? 0:tabWidth, 0, tabWidth, tabHeight);
 				}
 		}
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(poseStack, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
+			guiGraphics.blit(icons, xOffset + guiWidth - tabWidth, yOffset -tabHeight + tabOverlap, 2*tabWidth, 0, tabWidth, tabHeight);
 	}
 	
-	protected void drawActiveTabAndOther(PoseStack poseStack, int xcor, int ycor)
+	protected void drawActiveTabAndOther(GuiGraphics guiGraphics, int xcor, int ycor)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1,1,1, 1);
-		RenderSystem.setShaderTexture(0, icons);
 		
 		int index = (mode? normalTab:editmodeTab).ordinal();
-		blit(poseStack, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
+		guiGraphics.blit(icons, xOffset + index*(tabWidth+2), yOffset - tabHeight + tabOverlap,
 				index == 0? 0:tabWidth, tabHeight, tabWidth, tabHeight);
 		
 		for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
 			if(!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems())
-				blit(poseStack, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
+				guiGraphics.blit(icons, xOffset + (tabWidth - 16)/2 + (tabWidth+2)*i, yOffset - tabHeight + tabOverlap + 8, i*16, tabHeight*2 + (mode? 0:16), 16, 16);
 		
 		if(ClientPlayerData.hasDataCheckerAccess())
-			blit(poseStack, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
+			guiGraphics.blit(icons, xOffset + guiWidth + (tabWidth - 16)/2 - tabWidth, yOffset - tabHeight + tabOverlap + 8, 5*16, tabHeight*2, 16, 16);
 		
 		if(ycor < yOffset && ycor > yOffset - tabHeight + 4)
 			for(int i = 0; i < (mode? NormalGuiType.values():EditmodeGuiType.values()).length; i++)
@@ -212,7 +207,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 					break;
 				else if(xcor < xOffset + i*(tabWidth + 2) + tabWidth
 						&& (!mode || !NormalGuiType.values()[i].reqMedium() || SkaiaClient.enteredMedium(SkaiaClient.playerId) || mc.gameMode.hasInfiniteItems()))
-					renderTooltip(poseStack, Component.translatable(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
+					guiGraphics.renderTooltip(font, Component.translatable(mode? NormalGuiType.values()[i].name:EditmodeGuiType.values()[i].name),
 							xcor, ycor);
 	}
 	

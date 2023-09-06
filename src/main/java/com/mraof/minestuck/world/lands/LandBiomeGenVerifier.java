@@ -6,7 +6,6 @@ import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -37,7 +36,13 @@ public class LandBiomeGenVerifier
 					throw new IllegalArgumentException("Missing land biome types!");
 			}
 			@Override
-			public void addCarver(GenerationStep.Carving step, Holder<? extends ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
+			public void addCarver(GenerationStep.Carving step, ResourceKey<ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
+			{
+				if(types.length == 0)
+					throw new IllegalArgumentException("Missing land biome types!");
+			}
+			@Override
+			public void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types)
 			{
 				if(types.length == 0)
 					throw new IllegalArgumentException("Missing land biome types!");

@@ -3,9 +3,7 @@ package com.mraof.minestuck.world.gen.feature;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.DiskConfiguration;
@@ -63,7 +61,7 @@ public class MSDiskFeature extends Feature<DiskConfiguration>
 	
 	private boolean tryPlaceBlock(WorldGenLevel level, RandomSource random, BlockPos pos, DiskConfiguration config)
 	{
-		if(!shouldCheckBlockAbove || !level.getBlockState(pos.above(1)).getMaterial().isSolid())	//TODO condition can now be built into the block predicate, I think
+		if(!shouldCheckBlockAbove || !level.getBlockState(pos.above(1)).isSolid())	//TODO condition can now be built into the block predicate, I think
 		{
 			if(config.target().test(level, pos))
 			{

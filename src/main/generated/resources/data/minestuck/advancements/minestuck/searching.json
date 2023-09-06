@@ -33,5 +33,6 @@
     [
       "possess_scanner"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

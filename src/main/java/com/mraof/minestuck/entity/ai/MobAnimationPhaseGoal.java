@@ -1,12 +1,12 @@
 package com.mraof.minestuck.entity.ai;
 
-import com.mojang.math.Vector3d;
 import com.mraof.minestuck.entity.AnimatedPathfinderMob;
 import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.entity.animation.PhasedMobAnimation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import org.joml.Vector3d;
 
 import java.util.EnumSet;
 import java.util.Objects;

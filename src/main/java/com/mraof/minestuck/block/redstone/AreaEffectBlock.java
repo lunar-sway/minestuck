@@ -103,7 +103,7 @@ public class AreaEffectBlock extends HorizontalDirectionalBlock implements Entit
 			be.setEffect(firstEffect.getEffect(), firstEffect.getAmplifier());
 			
 			player.displayClientMessage(Component.translatable(getDescriptionId() + "." + EFFECT_CHANGE_MESSAGE, ForgeRegistries.MOB_EFFECTS.getKey(firstEffect.getEffect()), firstEffect.getAmplifier()), true); //getDescriptionId was getTranslationKey
-			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, 1F);
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, 1F);
 		}
 	}
 	

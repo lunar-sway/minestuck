@@ -1,11 +1,11 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.GameNarrator;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.PageButton;
@@ -143,33 +143,36 @@ public class ReadableSburbCodeScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		this.setFocused(null);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		int pageModulo = currentPage % 3;
+		ResourceLocation pageTexture;
 		if(currentPage == 0) //specifically if its the first page
-			RenderSystem.setShaderTexture(0, BOOK_TEXTURES_01A);
-		else if(pageModulo == 0)
-			RenderSystem.setShaderTexture(0, BOOK_TEXTURES_01B);
-		else if(pageModulo == 1)
-			RenderSystem.setShaderTexture(0, BOOK_TEXTURES_02);
-		else if(pageModulo == 2)
-			RenderSystem.setShaderTexture(0, BOOK_TEXTURES_03);
+			pageTexture = BOOK_TEXTURES_01A;
+		else
+		{
+			switch(currentPage % 3)
+			{
+				case 0 -> pageTexture = BOOK_TEXTURES_01B;
+				case 1 -> pageTexture = BOOK_TEXTURES_02;
+				default -> pageTexture = BOOK_TEXTURES_03;
+			}
+		}
 		
 		
 		int topX = (this.width - GUI_WIDTH) / 2;
 		int topY = 2;
-		this.blit(poseStack, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.blit(pageTexture, topX, topY, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
 		if(textList != null)
 		{
 			//pushPose function, followed by the scale function and ending with the popPose function, allow the scale changes to only be applied to the text
-			poseStack.pushPose();
+			guiGraphics.pose().pushPose();
 			float subtractScale = 0.4F;
 			float scale = (1 / subtractScale);
-			poseStack.scale(subtractScale, subtractScale, subtractScale);
+			guiGraphics.pose().scale(subtractScale, subtractScale, subtractScale);
 			
 			MutableInt lineY = new MutableInt();
 			
@@ -181,16 +184,16 @@ public class ReadableSburbCodeScreen extends Screen
 					if(stillValidLine(lineY.intValue()))
 					{
 						Component line = Component.literal(text.substring(start, end)).setStyle(style);
-						font.draw(poseStack, line, ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300); //hex is green
+						guiGraphics.drawString(font, line.getVisualOrderText(), ((this.width - GUI_WIDTH) / 2F + TEXT_OFFSET_X) * scale, (lineY.intValue() + TEXT_OFFSET_Y) * scale, 0x00A300, false); //hex is green
 						lineY.add(CUSTOM_LINE_HEIGHT);
 					}
 				});
 			}
 			
-			poseStack.popPose();
+			guiGraphics.pose().popPose();
 		}
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	/**
@@ -219,7 +222,8 @@ public class ReadableSburbCodeScreen extends Screen
 	{
 		if(this.minecraft != null)
 		{
-			this.addRenderableWidget(new Button(this.width / 2 - 100, 196, 200, 20, Component.translatable("gui.done"), button -> this.minecraft.setScreen(null)));
+			this.addRenderableWidget(Button.builder(Component.translatable("gui.done"), button -> this.minecraft.setScreen(null))
+					.pos(this.width / 2 - 100, 196).size(200, 20).build());
 		}
 	}
 	

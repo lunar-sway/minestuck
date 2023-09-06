@@ -1,13 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -45,27 +43,25 @@ public class GristCacheScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 
-		drawTabs(poseStack);
+		drawTabs(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1,1,1, 1);
-		RenderSystem.setShaderTexture(0, guiGristcache);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-
+		RenderSystem.setShaderColor(1, 1, 1, 1);
+		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		
 		String cacheMessage;
 		if(ClientEditHandler.isActive() || ClientPlayerData.getTitle() == null)
 			cacheMessage = getTitle().getString();
 		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
-		mc.font.draw(poseStack, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 
-		drawActiveTabAndOther(poseStack, mouseX, mouseY);
+		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
-		this.drawGrist(poseStack, xOffset, yOffset, mouseX, mouseY, page);
+		this.drawGrist(guiGraphics, xOffset, yOffset, mouseX, mouseY, page);
 	}
 	
 	private void prevPage()

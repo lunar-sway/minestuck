@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.renderer.blockentity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.blockentity.ReturnNodeBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,6 +11,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEntity>
 {
@@ -33,7 +33,7 @@ public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEn
 		float tick = blockEntityIn.getLevel().getGameTime() + partialTicks;
 		
 		poseStack.pushPose();
-		poseStack.mulPose(Vector3f.YP.rotation(tick / 75));
+		poseStack.mulPose(Axis.YP.rotation(tick / 75));
 		PoseStack.Pose pose = poseStack.last();
 		Matrix4f matrix4f = pose.pose();
 		Matrix3f matrix3f = pose.normal();
@@ -50,7 +50,7 @@ public class ReturnNodeRenderer implements BlockEntityRenderer<ReturnNodeBlockEn
 		poseStack.popPose();
 		
 		poseStack.pushPose();
-		poseStack.mulPose(Vector3f.YP.rotation(-(tick / 75) / 1.5F));
+		poseStack.mulPose(Axis.YP.rotation(-(tick / 75) / 1.5F));
 		PoseStack.Pose pose2 = poseStack.last();
 		Matrix4f matrix4f2 = pose2.pose();
 		Matrix3f matrix3f2 = pose2.normal();

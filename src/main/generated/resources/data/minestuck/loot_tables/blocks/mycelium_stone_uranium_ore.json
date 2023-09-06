@@ -45,5 +45,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:blocks/mycelium_stone_uranium_ore"
 }

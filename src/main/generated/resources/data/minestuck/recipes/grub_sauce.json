@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "b": {
       "tag": "minestuck:bugs"
@@ -16,5 +17,6 @@
   "result": {
     "count": 3,
     "item": "minestuck:grub_sauce"
-  }
+  },
+  "show_notification": true
 }

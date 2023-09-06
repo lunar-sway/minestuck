@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
@@ -90,7 +91,7 @@ public class LeaflessTreeFeature extends Feature<BlockStateConfiguration>
 		for(int i = 0; i < length; i++)
 		{
 			float f = i/(float) (length);
-			BlockPos pos = pos0.offset(xDiff*f, yDiff*f, zDiff*f);
+			BlockPos pos = pos0.offset(Mth.floor(xDiff*f), Mth.floor(yDiff*f), Mth.floor(zDiff*f));
 			if(TreeFeature.validTreePos(level, pos) || level.isStateAtPosition(pos, oldState -> oldState.is(BlockTags.LOGS)))
 				setBlock(level, pos, state);
 			else return;

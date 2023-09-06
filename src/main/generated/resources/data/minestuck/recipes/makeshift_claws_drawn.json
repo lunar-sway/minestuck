@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "P": {
       "tag": "minecraft:planks"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "minestuck:makeshift_claws_drawn"
-  }
+  },
+  "show_notification": true
 }

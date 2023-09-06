@@ -791,6 +791,12 @@
         {
           "type": "minecraft:item",
           "name": "minestuck:gutter_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minestuck:plush_mutated_cat",
+          "quality": 1,
+          "weight": 2
         }
       ],
       "name": "rare",
@@ -870,5 +876,6 @@
       "name": "boondollars",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:chests/medium_basic"
 }

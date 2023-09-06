@@ -128,7 +128,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onCrit(CriticalHitEvent event)
 	{
-		if(!event.getEntity().level.isClientSide)
+		if(!event.getEntity().level().isClientSide)
 			cachedCrit = event.getResult() == Event.Result.ALLOW || event.getResult() == Event.Result.DEFAULT && event.isVanillaCritical();
 	}
 	
@@ -188,7 +188,7 @@ public class ServerEventHandler
 				
 				if(activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() >= .75)
 				{
-					injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.4F);
+					injuredPlayer.level().playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.4F);
 					injuredPlayer.setHealth(injuredPlayer.getHealth() + 3);
 					injuredPlayer.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 450, 0));
 					if(isDoom)
@@ -209,11 +209,11 @@ public class ServerEventHandler
 				if((isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .2) || (!isDoom && activateThreshold >= 1.0F && injuredPlayer.getRandom().nextFloat() <= .05))
 				{
 					AABB axisalignedbb = injuredPlayer.getBoundingBox().inflate(4.0D, 2.0D, 4.0D);
-					List<LivingEntity> list = injuredPlayer.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
+					List<LivingEntity> list = injuredPlayer.level().getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 					list.remove(injuredPlayer);
 					if(!list.isEmpty())
 					{
-						injuredPlayer.level.playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundSource.PLAYERS, 0.5F, 1.6F);
+						injuredPlayer.level().playSound(null, injuredPlayer.getX(), injuredPlayer.getY(), injuredPlayer.getZ(), SoundEvents.WITHER_HURT, SoundSource.PLAYERS, 0.5F, 1.6F);
 						if(isDoom)
 							handItem.hurtAndBreak(2, injuredPlayer, playerEntity -> playerEntity.broadcastBreakEvent(InteractionHand.MAIN_HAND));
 						else
@@ -252,7 +252,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(!event.player.level.isClientSide)
+		if(!event.player.level().isClientSide)
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			if(data.getTitle() != null)
@@ -286,8 +286,8 @@ public class ServerEventHandler
 	{
 		ItemEntity e = event.getEntity();
 		if(e.getItem().getCount() == 1 && (e.getItem().getItem() == Items.BREAD)) {
-			ItemEntity stalebread = new ItemEntity(e.level, e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
-			e.level.addFreshEntity(stalebread);
+			ItemEntity stalebread = new ItemEntity(e.level(), e.getX(), e.getY(), e.getZ(), new ItemStack(MSItems.STALE_BAGUETTE.get()));
+			e.level().addFreshEntity(stalebread);
 		}
 	}
 }

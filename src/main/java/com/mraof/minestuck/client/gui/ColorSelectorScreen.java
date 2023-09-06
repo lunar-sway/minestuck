@@ -1,16 +1,15 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.ColorHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -148,54 +147,48 @@ public class ColorSelectorScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		renderBackground(poseStack);
+		renderBackground(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
-		blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage = I18n.get(SELECT_COLOR);
-		font.draw(poseStack, cacheMessage, (width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040);
+		guiGraphics.drawString(font, cacheMessage, (width / 2F) - font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);
 		
 		if(tab==Tab.RGB)
 		{
 			// hide the color box outlines by putting this other box on top
-			RenderSystem.setShader(GameRenderer::getPositionTexShader);
 			RenderSystem.setShaderColor(1, 1, 1, 1);
-			RenderSystem.setShaderTexture(0, guiBackground);
-			blit(poseStack, xOffset+20, yOffset+31, 0, guiHeight, 138, 98);
+			guiGraphics.blit(guiBackground, xOffset+20, yOffset+31, 0, guiHeight, 138, 98);
 			
 			// spirograph color preview
 			RenderSystem.setShaderColor((float)redSlider.getValue()/255F, (float)greenSlider.getValue()/255, (float)blueSlider.getValue()/255, 0.5F);
-			blit(poseStack, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
+			guiGraphics.blit(guiBackground, xOffset+106, yOffset+57, 47, 47, guiWidth, 20, 64, 64, 256, 256);
 		} else
 		{
 			for(ColorSelector canonColor : canonColors)
 			{
-				canonColor.draw(poseStack);
+				canonColor.draw(guiGraphics);
 				
 				if(selectedIndex == canonColor.id)
-					drawSelectionBox(poseStack, canonColor);
+					drawSelectionBox(guiGraphics, canonColor);
 			}
 		}
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		
 		if(tab==Tab.Canon)
 			for(ColorSelector canonColor : canonColors)
 				if(canonColor.pointWithin(mouseX, mouseY))
-					renderTooltip(poseStack, canonColor.getName(), mouseX, mouseY);
+					guiGraphics.renderTooltip(font, canonColor.getName(), mouseX, mouseY);
 	}
 	
-	private void drawSelectionBox(PoseStack poseStack, ColorSelector canonColor)
+	private void drawSelectionBox(GuiGraphics guiGraphics, ColorSelector canonColor)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
-		blit(poseStack, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
+		guiGraphics.blit(guiBackground, xOffset + canonColor.x - 2, yOffset + canonColor.y - 2, guiWidth, 0, ColorSelector.WIDTH + 4, ColorSelector.HEIGHT + 4);
 	}
 	
 	@Override
@@ -309,9 +302,9 @@ public class ColorSelectorScreen extends Screen
 		public static final int WIDTH = 32, HEIGHT = 16;
 		public Component getName() { return ColorHandler.getName(id); }
 		public int getColor() { return ColorHandler.getColor(id); }
-		public void draw(PoseStack poseStack)
+		public void draw(GuiGraphics guiGraphics)
 		{
-			fill(poseStack, xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT, ColorHandler.getColor(id)|0xFF000000);
+			guiGraphics.fill(xOffset+x, yOffset+y, xOffset+x+WIDTH, yOffset+y+HEIGHT, ColorHandler.getColor(id)|0xFF000000);
 		}
 		public boolean pointWithin(double mouseX, double mouseY)
 		{

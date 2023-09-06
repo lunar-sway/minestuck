@@ -114,7 +114,7 @@ public class ColorHandler
 	
 	public static int getColorForPlayer(ServerPlayer player)
 	{
-		return getColorForPlayer(IdentifierHandler.encode(player), player.level);
+		return getColorForPlayer(IdentifierHandler.encode(player), player.level());
 	}
 	
 	public static int getColorForPlayer(PlayerIdentifier identifier, Level level)

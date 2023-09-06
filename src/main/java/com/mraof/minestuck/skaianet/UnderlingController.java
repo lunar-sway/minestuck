@@ -26,7 +26,7 @@ public final class UnderlingController
 {
 	public static GristType getUnderlingType(UnderlingEntity entity)
 	{
-		return GristLayerInfo.get((ServerLevel) entity.level)
+		return GristLayerInfo.get((ServerLevel) entity.level())
 				.map(info -> info.randomTypeFor(entity))
 				.orElseGet(() -> GristHelper.getPrimaryGrist(entity.getRandom()));
 	}

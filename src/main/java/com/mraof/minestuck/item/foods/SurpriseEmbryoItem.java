@@ -21,7 +21,7 @@ public class SurpriseEmbryoItem extends Item
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity player)
 	{
-		if(player instanceof Player && !player.level.isClientSide)
+		if(player instanceof Player && !player.level().isClientSide)
 		{
 			ItemStack[] items = new ItemStack[]{new ItemStack(Items.MELON_SLICE), new ItemStack(Items.STICK), new ItemStack(Items.EGG),
 					new ItemStack(Blocks.DIRT), new ItemStack(Blocks.PUMPKIN), new ItemStack(Blocks.COBBLESTONE)};

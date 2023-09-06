@@ -26,8 +26,10 @@ import net.minecraft.world.level.levelgen.structure.StructurePieceAccessor;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
 public class ImpDungeonPieces
 {
 	public static class EntryCorridor extends ImpDungeonPiece
@@ -709,12 +711,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 2), this.getWorldY(1), this.getWorldZ(1, 2));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(6, 2), this.getWorldY(1), this.getWorldZ(6, 2));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(3, 5), this.getWorldY(1), this.getWorldZ(3, 5));
@@ -911,12 +913,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 4), this.getWorldY(1), this.getWorldZ(1, 4));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 5), this.getWorldY(1), this.getWorldZ(1, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			
 			int z = chestPos ? 4 : 5;
@@ -1135,12 +1137,12 @@ public class ImpDungeonPieces
 			if(spawner1)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(1, 3), this.getWorldY(1), this.getWorldZ(1, 3));
-				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner1 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			if(spawner2)
 			{
 				BlockPos spawnerPos = new BlockPos(this.getWorldX(8, 5), this.getWorldY(1), this.getWorldZ(8, 5));
-				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners());
+				spawner2 = !StructureBlockUtil.placeSpawner(spawnerPos, level, structureBoundingBoxIn, getTypeForSpawners(), randomIn);
 			}
 			
 			BlockPos chestPos = new BlockPos(this.getWorldX(4, 4), this.getWorldY(1), this.getWorldZ(4, 4));

@@ -5,10 +5,7 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristTypes;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.block.machine.MachineBlock;
 import com.mraof.minestuck.network.EditmodeDragPacket;
@@ -16,6 +13,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -30,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -42,6 +39,7 @@ import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Matrix4f;
 
 /** Class for handling the click-and-drag editmode tools (Revise and Recycle) on the client-side.
  * (Based on code from the Minestuck Universe addon, with Cibernet's permission.)
@@ -96,7 +94,7 @@ public class ClientEditToolDrag
 	 */
 	private static boolean tryBeginDrag(IEditTools.ToolMode targetTool, IEditTools cap, Player player)
 	{
-		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.level(), player);
 		if (blockHit.getType() == BlockHitResult.Type.BLOCK)
 		{
 			cap.beginDragTools(targetTool, blockHit, player);
@@ -230,12 +228,12 @@ public class ClientEditToolDrag
 	 */
 	public static boolean canEditRecycle(Player player)
 	{
-		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
-		BlockState block = player.getLevel().getBlockState(blockHit.getBlockPos());
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.level(), player);
+		BlockState block = player.level().getBlockState(blockHit.getBlockPos());
 		
 		return (ClientEditHandler.isActive()
 				&& !Minecraft.getInstance().isPaused()
-				&& !(block.getDestroySpeed(player.getLevel(), blockHit.getBlockPos()) < 0 || block.getMaterial() == Material.PORTAL)
+				&& !(block.getDestroySpeed(player.level(), blockHit.getBlockPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 				&& !isMultiblock(player));
 	}
 	
@@ -254,15 +252,15 @@ public class ClientEditToolDrag
 				for(int z = Math.min(positionStart.getZ(), positionEnd.getZ()); z <= Math.max(positionStart.getZ(), positionEnd.getZ()); z++)
 				{
 					BlockPos pos = new BlockPos(x, y, z);
-					if(!fill && !player.getLevel().getBlockState(pos).isAir()
+					if(!fill && !player.level().getBlockState(pos).isAir()
 							&& (ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).canAfford(ServerEditHandler.blockBreakCost())
-							|| ClientDeployList.getEntry(player.getLevel().getBlockState(pos).getCloneItemStack(null, player.getLevel(), pos, player)) != null))
+							|| ClientDeployList.getEntry(player.level().getBlockState(pos).getCloneItemStack(null, player.level(), pos, player)) != null))
 					{
 						anyBlockEdited = true;
 						
-						player.level.addDestroyBlockEffect(pos, player.getLevel().getBlockState(pos));
+						player.level().addDestroyBlockEffect(pos, player.level().getBlockState(pos));
 					}
-					else if(fill && player.getLevel().getBlockState(pos).getMaterial().isReplaceable() && ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).canAfford(ClientEditHandler.itemCost(stack, player.getLevel())))
+					else if(fill && player.level().getBlockState(pos).canBeReplaced() && ClientPlayerData.getGristCache(ClientPlayerData.CacheSource.EDITMODE).canAfford(ClientEditHandler.itemCost(stack, player.level())))
 					{
 						anyBlockEdited = true;
 					}
@@ -272,7 +270,7 @@ public class ClientEditToolDrag
 		
 		//Play edit sound locally, if a block is able to be placed/broken.
 		if(anyBlockEdited)
-			player.getLevel().playSound(player, positionEnd, fill ? MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get() : MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, fill ? 1.0f : 0.85f);
+			player.level().playSound(player, positionEnd, fill ? MSSoundEvents.EVENT_EDIT_TOOL_REVISE.get() : MSSoundEvents.EVENT_EDIT_TOOL_RECYCLE.get(), SoundSource.AMBIENT, 1.0f, fill ? 1.0f : 0.85f);
 	}
 	
 	/**
@@ -287,7 +285,7 @@ public class ClientEditToolDrag
 	 */
 	private static BlockPos getSelectionEndPoint(Player player, double reachDistance, boolean shouldBlockOffset)
 	{
-		BlockHitResult blockHit = getPlayerPOVHitResult(player.getLevel(), player);
+		BlockHitResult blockHit = getPlayerPOVHitResult(player.level(), player);
 
 		//if not looking directly at a block, use the position where the player is looking at with the initial distance of editPos1 from the camera
 		if (blockHit.getType() == BlockHitResult.Type.MISS)
@@ -295,12 +293,12 @@ public class ClientEditToolDrag
 			Vec3 eyePosition = player.getEyePosition();
 			Vec3 lookDirection = player.getLookAngle();
 			Vec3 selectionPosition = eyePosition.add(lookDirection.x * reachDistance, lookDirection.y * reachDistance, lookDirection.z * reachDistance);
-			return new BlockPos(selectionPosition.x, selectionPosition.y, selectionPosition.z);
+			return BlockPos.containing(selectionPosition.x, selectionPosition.y, selectionPosition.z);
 		}
 		else
 		{
 			if(shouldBlockOffset)
-				return player.level.getBlockState(blockHit.getBlockPos()).getMaterial().isReplaceable() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
+				return player.level().getBlockState(blockHit.getBlockPos()).canBeReplaced() ? blockHit.getBlockPos() : blockHit.getBlockPos().offset(blockHit.getDirection().getNormal());
 			else
 				return blockHit.getBlockPos();
 		}
@@ -325,9 +323,9 @@ public class ClientEditToolDrag
 	 */
 	private static boolean isMultiblock(Player player)
 	{
-			BlockPos blockLookingAt = getPlayerPOVHitResult(player.getLevel(), player).getBlockPos();
-			
-			return (player.getLevel().getBlockState(blockLookingAt) != null && (player.getLevel().getBlockState(blockLookingAt).getBlock() instanceof EditmodeDestroyable));
+		BlockPos blockLookingAt = getPlayerPOVHitResult(player.level(), player).getBlockPos();
+		
+		return player.level().getBlockState(blockLookingAt).getBlock() instanceof EditmodeDestroyable;
 	}
 	
 	/**
@@ -350,7 +348,7 @@ public class ClientEditToolDrag
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = player.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		double reachDistance = player.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
 	}
@@ -391,7 +389,6 @@ public class ClientEditToolDrag
 					//set blend func to default, set the width of the line, disable textures because we are using lines, and disable the depth mask because it doesn't matter with lines, and is slower if enabled.
 					RenderSystem.defaultBlendFunc();
 					RenderSystem.lineWidth(2.0F);
-					RenderSystem.disableTexture();
 					RenderSystem.depthMask(false);    //GL stuff was copied from the standard mouseover bounding box drawing, which is likely why the alpha isn't working
 					
 					//Create new MultiBufferSource because RenderLevelStageEvent doesn't come with one.
@@ -403,7 +400,6 @@ public class ClientEditToolDrag
 					renderTypeBuffer.endBatch();
 					
 					RenderSystem.depthMask(true);
-					RenderSystem.enableTexture();
 					RenderSystem.disableBlend();
 				}
 			}

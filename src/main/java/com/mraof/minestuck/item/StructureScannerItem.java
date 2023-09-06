@@ -32,7 +32,7 @@ public class StructureScannerItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level levelIn, Player playerIn, InteractionHand handIn)
 	{
-		levelIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK, SoundSource.AMBIENT, 0.8F, 1.3F);
+		levelIn.playSound(playerIn, playerIn.getX(), playerIn.getY(), playerIn.getZ(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		
 		ItemStack item = playerIn.getItemInHand(handIn);
 		boolean foundItem = false;
@@ -43,7 +43,7 @@ public class StructureScannerItem extends Item
 			
 			for(ItemStack invItem : playerIn.getInventory().items)
 			{
-				if(ItemStack.isSame(invItem, fuelStack))
+				if(ItemStack.isSameItem(invItem, fuelStack))
 				{
 					foundItem = true;
 					if(!levelIn.isClientSide && levelIn.getRandom().nextFloat() >= 0.95F)

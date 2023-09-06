@@ -2,10 +2,7 @@ package com.mraof.minestuck.advancements;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.EntityPredicate;
-import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -30,7 +27,7 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		return new Instance(predicate, id);
 	}
@@ -44,24 +41,24 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.Instance>
 	{
 		public static Instance sburbConnection()
 		{
-			return new Instance(EntityPredicate.Composite.ANY, SBURB_CONNECTION_ID);
+			return new Instance(ContextAwarePredicate.ANY, SBURB_CONNECTION_ID);
 		}
 		
 		public static Instance cruxiteArtifact()
 		{
-			return new Instance(EntityPredicate.Composite.ANY, CRUXITE_ARTIFACT_ID);
+			return new Instance(ContextAwarePredicate.ANY, CRUXITE_ARTIFACT_ID);
 		}
 		
 		public static Instance returnNode()
 		{
-			return new Instance(EntityPredicate.Composite.ANY, RETURN_NODE_ID);
+			return new Instance(ContextAwarePredicate.ANY, RETURN_NODE_ID);
 		}
 		
 		public static Instance melonOverload()
 		{
-			return new Instance(EntityPredicate.Composite.ANY, MELON_OVERLOAD_ID);
+			return new Instance(ContextAwarePredicate.ANY, MELON_OVERLOAD_ID);
 		}
-		public Instance(EntityPredicate.Composite predicate, ResourceLocation id)
+		public Instance(ContextAwarePredicate predicate, ResourceLocation id)
 		{
 			super(id, predicate);
 		}

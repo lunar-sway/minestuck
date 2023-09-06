@@ -49,7 +49,7 @@ public class SuspicionEffect extends MobEffect
 	}
 	
 	/**
-	 * Used to enable the pushing effect on flying entities, as an alternative for the {@link LivingEntity#isOnGround()} check.
+	 * Used to enable the pushing effect on flying entities, as an alternative for the {@link LivingEntity#onGround()} check.
 	 */
 	private static boolean isFlying(Entity entity)
 	{
@@ -120,12 +120,12 @@ public class SuspicionEffect extends MobEffect
 			pLivingEntity.ejectPassengers();
 		
 		//The entity won't be pushed if not a flying entity and off the ground
-		if(!(pLivingEntity.isOnGround() || isFlying(pLivingEntity)))
+		if(!(pLivingEntity.onGround() || isFlying(pLivingEntity)))
 			return;
 		
 		double range = RANGE_SCALE * Math.pow(pAmplifier, 0.6);
 		
-		for(LivingEntity otherEntity : pLivingEntity.level.getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
+		for(LivingEntity otherEntity : pLivingEntity.level().getEntitiesOfClass(LivingEntity.class, pLivingEntity.getBoundingBox().inflate(range, 1, range)))
 		{
 			if(otherEntity != pLivingEntity && otherEntity.hasEffect(this))
 			{

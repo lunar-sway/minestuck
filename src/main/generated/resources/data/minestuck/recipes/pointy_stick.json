@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "s": {
       "tag": "forge:rods/wooden"
@@ -12,5 +13,6 @@
   ],
   "result": {
     "item": "minestuck:pointy_stick"
-  }
+  },
+  "show_notification": true
 }

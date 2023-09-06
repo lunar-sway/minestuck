@@ -1,23 +1,22 @@
 package com.mraof.minestuck.client.model.entity;
 
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.model.provider.data.EntityModelData;
-
-import javax.annotation.Nullable;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 /**
  * Base class for all entity models which implements head movement based on the look direction
  */
-public abstract class RotatingHeadAnimatedModel<T extends IAnimatable> extends AnimatedGeoModel<T> {
+public abstract class RotatingHeadAnimatedModel<T extends GeoAnimatable> extends GeoModel<T> {
 	@Override
-	public void setCustomAnimations(T entity, int uniqueID, @Nullable AnimationEvent predicate) {
-		super.setCustomAnimations(entity, uniqueID, predicate);
-		IBone head = this.getAnimationProcessor().getBone("head");
-		EntityModelData extraData = (EntityModelData) predicate.getExtraDataOfType(EntityModelData.class).get(0);
-		head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-		head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+	public void setCustomAnimations(T animatable, long instanceId, AnimationState<T> animationState)
+	{
+		CoreGeoBone head = this.getAnimationProcessor().getBone("head");
+		EntityModelData extraData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+		head.setRotX(extraData.headPitch() * ((float) Math.PI / 180F));
+		head.setRotY(extraData.netHeadYaw() * ((float) Math.PI / 180F));
 	}
 }

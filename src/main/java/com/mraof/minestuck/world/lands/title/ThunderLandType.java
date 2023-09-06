@@ -6,7 +6,6 @@ import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
@@ -54,7 +53,7 @@ public class ThunderLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return properties.biomes.getPrecipitation() == Biome.Precipitation.RAIN;
+		return properties.biomes.hasPrecipitation() && properties.biomes.getTemperature() > 0;
 	}
 	
 	@Override

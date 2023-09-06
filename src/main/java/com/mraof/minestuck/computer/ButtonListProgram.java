@@ -1,15 +1,14 @@
 package com.mraof.minestuck.computer;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
@@ -126,13 +125,13 @@ public abstract class ButtonListProgram extends ComputerProgram
 	}
 	
 	@Override
-	public final void paintGui(PoseStack poseStack, ComputerScreen gui, ComputerBlockEntity be)
+	public final void paintGui(GuiGraphics guiGraphics, ComputerScreen gui, ComputerBlockEntity be)
 	{
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-			font.draw(poseStack, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor());
+			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor(), false);
 		else
-			font.draw(poseStack, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor());
+			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, be.getTheme().getTextColor(), false);
 	}
 	
 	/**
@@ -174,22 +173,18 @@ public abstract class ButtonListProgram extends ComputerProgram
 		}
 		
 		@Override
-		public void renderButton(PoseStack poseStack, int mouseX, int mouseY, float partialTick)
+		public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick)
 		{
 			if(active)
 			{
-				RenderSystem.setShader(GameRenderer::getPositionTexShader);
 				RenderSystem.setShaderColor(1, 1, 1, 1);
-				RenderSystem.setShaderTexture(0, gui.be.getTheme().getTexture());
-				blit(poseStack, x, y, 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
+				guiGraphics.blit(gui.be.getTheme().getTexture(), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
 			} else
 			{
 				// use default minecraft button rendering to draw inactive buttons
-				super.renderButton(poseStack, mouseX, mouseY, partialTick);
-				RenderSystem.setShader(GameRenderer::getPositionTexShader);
+				super.renderWidget(guiGraphics, mouseX, mouseY, partialTick);
 				RenderSystem.setShaderColor(1, 1, 1, 1);
-				RenderSystem.setShaderTexture(0, ComputerScreen.guiMain);
-				blit(poseStack, x, y, reverse?0:20, ComputerScreen.ySize, 20, 20);
+				guiGraphics.blit(ComputerScreen.guiMain, getX(), getY(), reverse?0:20, ComputerScreen.ySize, 20, 20);
 			}
 		}
 	}

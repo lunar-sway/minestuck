@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
 import com.mraof.minestuck.alchemy.GristSet;
@@ -10,9 +9,9 @@ import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.AlchemiterPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -65,21 +64,19 @@ public class AlchemiterScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		int xOffset = (width - guiWidth) / 2;
 		int yOffset = (height - guiHeight) / 2;
 		
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiBackground);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(guiBackground, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		font.draw(poseStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 16777215);
-		font.draw(poseStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 16777215);
-		font.draw(poseStack, Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2F + 57, (height - guiHeight) / 2F + 46, 16777215);
+		guiGraphics.drawString(font, Integer.toString(((int) (itemQuantity / Math.pow(10, 2)) % 10)), (width - guiWidth) / 2F + 15, (height - guiHeight) / 2F + 46, 0xFFFFFF, false);
+		guiGraphics.drawString(font, Integer.toString(((int) (itemQuantity / Math.pow(10, 1)) % 10)), (width - guiWidth) / 2F + 36, (height - guiHeight) / 2F + 46, 0xFFFFFF, false);
+		guiGraphics.drawString(font, Integer.toString(((int) (itemQuantity / Math.pow(10, 0)) % 10)), (width - guiWidth) / 2F + 57, (height - guiHeight) / 2F + 46, 0xFFFFFF, false);
 		
 		//Render grist requirements
 		
@@ -87,12 +84,12 @@ public class AlchemiterScreen extends Screen
 		//Calculate the grist set
 		GristSet set = alchemiter.getGristCost(itemQuantity);
 		//draw the grist board	//TODO Handle select mode correctly
-		GuiUtil.drawGristBoard(poseStack, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
+		GuiUtil.drawGristBoard(guiGraphics, set, AlchemyHelper.getDecodedItem(alchemiter.getDowel()).getItem() == MSItems.CAPTCHA_CARD.get() ? GuiUtil.GristboardMode.LARGE_ALCHEMITER_SELECT : GuiUtil.GristboardMode.LARGE_ALCHEMITER, (width - guiWidth) / 2 + 88, (height - guiHeight) / 2 + 13, font);
 		//draw the grist
 		Component tooltip = GuiUtil.getGristboardTooltip(set, GuiUtil.GristboardMode.LARGE_ALCHEMITER, mouseX, mouseY, 9, 45, font);
 		if(tooltip != null)
-			this.renderTooltip(poseStack, tooltip, mouseX, mouseY);
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+			guiGraphics.renderTooltip(font, tooltip, mouseX, mouseY);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	@Override

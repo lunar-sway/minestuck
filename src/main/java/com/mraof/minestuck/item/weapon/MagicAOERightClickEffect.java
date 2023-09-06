@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
@@ -85,7 +84,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 	private void magicAttack(ServerPlayer player)
 	{
 		BlockPos playerPos = player.blockPosition();
-		Level level = player.level;
+		Level level = player.level();
 		
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), MSSoundEvents.ITEM_MAGIC_CAST.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
@@ -102,7 +101,7 @@ public class MagicAOERightClickEffect implements ItemRightClickEffect
 				continue;
 			
 			float talliedDamage = calculateDamage(player, target, damage);
-			target.hurt(DamageSource.playerAttack(player).setMagic(), talliedDamage);
+			target.hurt(level.damageSources().indirectMagic(player, player), talliedDamage);
 			
 			this.targetEffect.accept(target);
 		}

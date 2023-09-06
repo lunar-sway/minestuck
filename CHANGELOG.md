@@ -8,12 +8,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Two new computer Themes: Joy and SBURB 95
+- Various new weapons including 10 keys, 6 batons, 1 wand, 2 clubs, 3 swords, 1 chainsaw, and 6 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
+- New effects: Boss Buster and an effect used to spawn particles on hit
+- Native sulfur block for use in Heat lands
+- Particle Accelerator item
+- Boss Mob entity tag
+- Consort plushes
+- Mutini plush
 - Sopor Stupor Effect
 - Sopor Slime Pie food item
 
+### Changed
+
+- New textures and slightly shorter models for transportalizers
+- Old Computer now starts with SBURB 95 Theme
+- Updated textures of bookshelves and ladders
+- Retextured green stone blocks
+- Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
+- New texture for wizard staff
+
+### Fixed
+
+- Slightly adjusted damage of Home By Midnight to give more value to alchemizing it over its ingredients
+
 ### Contributors for this release
 
-= DORO
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod, DORO
+
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added

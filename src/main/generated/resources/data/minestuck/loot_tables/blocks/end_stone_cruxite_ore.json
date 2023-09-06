@@ -54,5 +54,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:blocks/end_stone_cruxite_ore"
 }

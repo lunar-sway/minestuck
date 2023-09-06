@@ -3,29 +3,32 @@ package com.mraof.minestuck.data.recipe;
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
 public class NonMirroredRecipeBuilder extends ShapedRecipeBuilder
 {
-	public NonMirroredRecipeBuilder(ItemLike result, int size)
+	public NonMirroredRecipeBuilder(RecipeCategory category, ItemLike result, int size)
 	{
-		super(result, size);
+		super(category, result, size);
 	}
 	
-	public static NonMirroredRecipeBuilder nonMirroredRecipe(ItemLike result)
+	public static NonMirroredRecipeBuilder nonMirroredRecipe(RecipeCategory category, ItemLike result)
 	{
-		return nonMirroredRecipe(result, 1);
+		return nonMirroredRecipe(category, result, 1);
 	}
 	
-	public static NonMirroredRecipeBuilder nonMirroredRecipe(ItemLike result, int size)
+	public static NonMirroredRecipeBuilder nonMirroredRecipe(RecipeCategory category, ItemLike result, int size)
 	{
-		return new NonMirroredRecipeBuilder(result, size);
+		return new NonMirroredRecipeBuilder(category, result, size);
 	}
 	
 	@Override

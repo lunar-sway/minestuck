@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "redstone",
   "key": {
     "c": {
       "item": "minecraft:comparator"
@@ -21,5 +22,6 @@
   ],
   "result": {
     "item": "minestuck:remote_comparator"
-  }
+  },
+  "show_notification": true
 }

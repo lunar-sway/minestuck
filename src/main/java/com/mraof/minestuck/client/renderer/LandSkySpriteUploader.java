@@ -15,8 +15,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Objects;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class LandSkySpriteUploader extends TextureAtlasHolder
@@ -40,33 +38,7 @@ public class LandSkySpriteUploader extends TextureAtlasHolder
 	
 	public LandSkySpriteUploader(TextureManager textureManagerIn)
 	{
-		super(textureManagerIn, new ResourceLocation(Minestuck.MOD_ID, "textures/atlas/land_sky.png"), "environment");
-	}
-	
-	@Override
-	protected Stream<ResourceLocation> getResourcesToLoad()
-	{
-		return Stream.concat(extras(), addVariantIndex(Stream.concat(planetLocations(), overlayLocations())));
-	}
-	
-	private Stream<ResourceLocation> planetLocations()
-	{
-		return LandTypes.TERRAIN_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "planets/planet_"+name.getPath()));
-	}
-	
-	private Stream<ResourceLocation> overlayLocations()
-	{
-		return LandTypes.TITLE_REGISTRY.get().getKeys().stream().map(name -> new ResourceLocation(name.getNamespace(), "overlays/overlay_"+name.getPath()));
-	}
-	
-	private Stream<ResourceLocation> extras()
-	{
-		return Stream.of(SKAIA);
-	}
-	
-	private Stream<ResourceLocation> addVariantIndex(Stream<ResourceLocation> stream)
-	{
-		return stream.flatMap(name -> IntStream.range(0, VARIANT_COUNT).mapToObj(value -> new ResourceLocation(name.getNamespace(), name.getPath()+"_"+value)));
+		super(textureManagerIn, new ResourceLocation(Minestuck.MOD_ID, "textures/atlas/land_sky.png"), new ResourceLocation(Minestuck.MOD_ID, "land_sky"));
 	}
 	
 	public TextureAtlasSprite getSkaiaSprite()

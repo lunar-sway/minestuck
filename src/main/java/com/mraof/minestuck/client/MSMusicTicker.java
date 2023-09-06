@@ -36,7 +36,7 @@ public class MSMusicTicker    //TODO Introduce types (something similar to vanil
 	{
 		Minecraft mc = Minecraft.getInstance();
 		if(mc.level != null && ClientDimensionData.isLand(mc.level.dimension())
-				&& event.getSound().getLocation().equals(mc.getSituationalMusic().getEvent().getLocation()))
+				&& event.getSound().getLocation().equals(mc.getSituationalMusic().getEvent().value().getLocation()))
 			event.setSound(null);
 	}
 	

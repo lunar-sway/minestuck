@@ -21,8 +21,8 @@
   },
   {
     "interpreter_type": "minestuck:smithing",
-    "source": "smithing",
-    "source_type": "recipe_type"
+    "source": "minecraft:smithing_transform",
+    "source_type": "recipe_serializer"
   },
   {
     "interpreter": {

@@ -9,7 +9,6 @@ import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
 import com.mraof.minestuck.world.lands.LandProperties;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.phys.Vec3;
@@ -43,7 +42,7 @@ public class SilenceLandType extends TitleLandType
 	@Override
 	public void setProperties(LandProperties properties)
 	{
-		if(properties.biomes.getPrecipitation() == Biome.Precipitation.RAIN)
+		if(properties.biomes.hasPrecipitation() && properties.biomes.getTemperature() > 0)
 			properties.forceRain = LandProperties.ForceType.OFF;
 		properties.skylightBase = Math.min(1/2F, properties.skylightBase);
 		properties.mergeFogColor(new Vec3(0, 0, 0.1), 0.5F);
@@ -60,7 +59,7 @@ public class SilenceLandType extends TitleLandType
 	{
 		LandProperties properties = LandProperties.createPartial(otherType);
 		
-		return properties.forceRain != LandProperties.ForceType.ON || properties.biomes.getPrecipitation() != Biome.Precipitation.RAIN;
+		return properties.forceRain != LandProperties.ForceType.ON || !properties.biomes.hasPrecipitation() || properties.biomes.getTemperature() <= 0;
 	}
 	
 	@Override

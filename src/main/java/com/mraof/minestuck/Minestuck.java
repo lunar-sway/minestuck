@@ -18,6 +18,7 @@ import com.mraof.minestuck.entry.TransportalizerBlockProcess;
 import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.inventory.MSMenuTypes;
 import com.mraof.minestuck.inventory.captchalogue.ModusTypes;
+import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
 import com.mraof.minestuck.item.loot.MSLootTables;
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 import static com.mraof.minestuck.Minestuck.MOD_ID;
 
@@ -96,6 +97,8 @@ public class Minestuck
 		MSWorldGenTypes.REGISTER.register(eventBus);
 		
 		MSArgumentTypes.REGISTER.register(eventBus);
+		
+		MSCreativeTabs.REGISTER.register(eventBus);
 	}
 	
 	/**

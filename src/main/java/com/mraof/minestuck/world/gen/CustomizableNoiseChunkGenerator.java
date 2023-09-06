@@ -2,7 +2,6 @@ package com.mraof.minestuck.world.gen;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSource;
@@ -10,8 +9,6 @@ import net.minecraft.world.level.biome.FeatureSorter;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
@@ -24,15 +21,11 @@ import java.util.function.Supplier;
  */
 public abstract class CustomizableNoiseChunkGenerator extends NoiseBasedChunkGenerator
 {
-	protected final Registry<NormalNoise.NoiseParameters> noises;	//Handy for implementing the codec
-	
-	public CustomizableNoiseChunkGenerator(Registry<StructureSet> structureSets, Registry<NormalNoise.NoiseParameters> noises, BiomeSource biomeSource, Function<Holder<Biome>, BiomeGenerationSettings> settingsGetter, Holder<NoiseGeneratorSettings> settingsHolder)
+	public CustomizableNoiseChunkGenerator(BiomeSource biomeSource, Function<Holder<Biome>, BiomeGenerationSettings> settingsGetter, Holder<NoiseGeneratorSettings> settingsHolder)
 	{
-		super(structureSets, noises, biomeSource, settingsHolder);
+		super(biomeSource, settingsHolder);
 		
 		setWorldgenSettingsGetter(settingsGetter);
-		
-		this.noises = noises;
 	}
 	
 	/**

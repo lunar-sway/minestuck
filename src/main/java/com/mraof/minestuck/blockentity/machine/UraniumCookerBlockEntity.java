@@ -114,7 +114,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		//Let the recipe return the recipe actually used (for fallbacks), to clear out all that are not present, and then get the first
 		Optional<? extends AbstractCookingRecipe> cookingRecipe = stream.flatMap(recipe -> recipe.getCookingRecipe(recipeInventory, level).stream()).findFirst();
 		
-		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory)).orElse(ItemStack.EMPTY);
+		return cookingRecipe.map(abstractCookingRecipe -> abstractCookingRecipe.assemble(recipeInventory, level.registryAccess())).orElse(ItemStack.EMPTY);
 	}
 	
 	private void processContents()
@@ -153,7 +153,7 @@ public class UraniumCookerBlockEntity extends MachineProcessBlockEntity implemen
 		{
 			ItemStack out = itemHandler.getStackInSlot(2);
 			
-			return out.isEmpty() || out.getMaxStackSize() >= output.getCount() + out.getCount() && out.sameItem(output);
+			return out.isEmpty() || out.getMaxStackSize() >= output.getCount() + out.getCount() && ItemStack.isSameItem(out, output);
 		}
 		return false;
 	}

@@ -15,7 +15,6 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 public class PlatformGeneratorBlockEntity extends BlockEntity
 {
@@ -97,8 +96,7 @@ public class PlatformGeneratorBlockEntity extends BlockEntity
 	
 	private static boolean isReplaceable(BlockState state)
 	{
-		Material material = state.getMaterial();
-		return state.isAir() || state.is(BlockTags.FIRE) || material.isLiquid() || material.isReplaceable();
+		return state.isAir() || state.is(BlockTags.FIRE) || state.liquid() || state.canBeReplaced();
 	}
 	
 	private boolean shouldReplaceExistingPlatformBlock(BlockPos pos, int loopIteration)

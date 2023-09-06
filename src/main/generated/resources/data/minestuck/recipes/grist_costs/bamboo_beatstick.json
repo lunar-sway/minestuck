@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 22,
+    "minestuck:build": 65
+  },
+  "ingredient": {
+    "item": "minestuck:bamboo_beatstick"
+  }
+}

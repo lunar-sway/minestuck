@@ -43,7 +43,7 @@ public class SendGristCommand
 			if(GristCache.get(player).tryTake(grist, GristHelper.EnumSource.SENDGRIST))
 			{
 				GristCache.get(target).addWithGutter(grist, GristHelper.EnumSource.SENDGRIST);
-				source.sendSuccess(Component.translatable(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
+				source.sendSuccess(() -> Component.translatable(SUCCESS, target.getDisplayName(), grist.asTextComponent()), true);
 				target.sendSystemMessage(Component.translatable(RECEIVE, player.getDisplayName(), grist.asTextComponent()));
 				return 1;
 			} else throw CANT_AFFORD_EXCEPTION.create(grist);

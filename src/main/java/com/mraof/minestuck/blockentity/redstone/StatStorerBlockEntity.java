@@ -301,7 +301,7 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityHeal(LivingHealEvent event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.HEALTH_RECOVERED, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -314,20 +314,20 @@ public class StatStorerBlockEntity extends BlockEntity
 	public static void onEntityStruck(EntityStruckByLightningEvent event)
 	{
 		if(event.getLightning().tickCount == 1)
-			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().blockPosition(), event.getEntity().level);
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.LIGHTNING_STRUCK_ENTITY, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityBred(BabyEntitySpawnEvent event)
 	{
 		if(!event.isCanceled())
-			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level);
+			attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.ENTITIES_BRED, event.getParentA().blockPosition(), event.getParentA().level());
 	}
 	
 	@SubscribeEvent
 	public static void onExplosion(ExplosionEvent.Detonate event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, new BlockPos(event.getExplosion().getPosition()), event.getLevel());
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.EXPLOSIONS, BlockPos.containing(event.getExplosion().getPosition()), event.getLevel());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
@@ -339,19 +339,19 @@ public class StatStorerBlockEntity extends BlockEntity
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onGristDrop(GristDropsEvent event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.GRIST_DROPS, event.getUnderling().blockPosition(), event.getUnderling().level);
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.GRIST_DROPS, event.getUnderling().blockPosition(), event.getUnderling().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDamage(LivingHurtEvent event)
 	{
-		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(event.getAmount(), StatStorerBlockEntity.ActiveType.DAMAGE, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = false)
 	public static void onEntityDeath(LivingDeathEvent event)
 	{
-		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level);
+		attemptStatUpdate(1, StatStorerBlockEntity.ActiveType.DEATHS, event.getEntity().blockPosition(), event.getEntity().level());
 	}
 	
 	@Override

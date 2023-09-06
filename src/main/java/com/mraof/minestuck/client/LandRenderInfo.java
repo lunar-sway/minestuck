@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Matrix4f;
 import com.mraof.minestuck.client.renderer.LandSkyRenderer;
 import com.mraof.minestuck.world.lands.LandProperties;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -10,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;

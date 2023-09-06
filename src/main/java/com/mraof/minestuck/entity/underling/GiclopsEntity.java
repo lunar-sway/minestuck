@@ -22,25 +22,28 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
-
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class GiclopsEntity extends UnderlingEntity implements IAnimatable
+public class GiclopsEntity extends UnderlingEntity implements GeoEntity
 {
-	public static final PhasedMobAnimation KICK_ANIMATION = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
+	public static final PhasedMobAnimation KICK_PROPERTIES = new PhasedMobAnimation(new MobAnimation(MobAnimation.Action.KICK, 40, true, true), 18, 20, 22);
+	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+	private static final RawAnimation WALK_ANIMATION = RawAnimation.begin().thenLoop("walk");
+	private static final RawAnimation KICK_ANIMATION = RawAnimation.begin().then("kick", Animation.LoopType.PLAY_ONCE);
+	private static final RawAnimation DEATH_ANIMATION = RawAnimation.begin().then("death", Animation.LoopType.PLAY_ONCE);
 	
 	public GiclopsEntity(EntityType<? extends GiclopsEntity> type, Level level)
 	{
 		super(type, level, 7);
-		this.maxUpStep = 2;
+		this.setMaxUpStep(2);
 	}
 	
 	public static AttributeSupplier.Builder giclopsAttributes()
@@ -54,7 +57,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	protected void registerGoals()
 	{
 		super.registerGoals();
-		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, KICK_ANIMATION));
+		this.goalSelector.addGoal(2, new AnimatedAttackWhenInRangeGoal<>(this, KICK_PROPERTIES));
 		this.goalSelector.addGoal(3, new MoveToTargetGoal(this, 1F, false));
 	}
 	
@@ -101,7 +104,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	public void baseTick()
 	{
 		super.baseTick();
-		if(!level.isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
+		if(!level().isClientSide && MinestuckConfig.SERVER.disableGiclops.get())
 			this.discard();
 	}
 	
@@ -110,7 +113,7 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	{
 		super.die(cause);
 		Entity entity = cause.getEntity();
-		if(this.dead && !this.level.isClientSide)
+		if(this.dead && !this.level().isClientSide)
 		{
 			computePlayerProgress((int) (200 + 3 * getGristType().getPower())); //still give xp up to top rung
 			firstKillBonus(entity, EcheladderBonusType.GICLOPS);
@@ -167,54 +170,54 @@ public class GiclopsEntity extends UnderlingEntity implements IAnimatable
 	}
 	
 	@Override
-	public void registerControllers(AnimationData data)
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, GiclopsEntity::idleAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, GiclopsEntity::walkAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, GiclopsEntity::attackAnimation));
-		data.addAnimationController(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, GiclopsEntity::deathAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "idleAnimation", 1, GiclopsEntity::idleAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "walkAnimation", 1, GiclopsEntity::walkAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "attackAnimation", 1, GiclopsEntity::attackAnimation));
+		controllers.add(AnimationControllerUtil.createAnimation(this, "deathAnimation", 1, GiclopsEntity::deathAnimation));
 	}
 	
-	private static PlayState idleAnimation(AnimationEvent<GiclopsEntity> event)
+	private static PlayState idleAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(event.isMoving() || event.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
+		if(state.isMoving() || state.getAnimatable().getCurrentAction() != MobAnimation.Action.IDLE)
 		{
 			return PlayState.STOP;
 		}
 		
-		event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", ILoopType.EDefaultLoopTypes.LOOP));
+		state.getController().setAnimation(IDLE_ANIMATION);
 		return PlayState.CONTINUE;
 	}
 	
-	private static PlayState walkAnimation(AnimationEvent<GiclopsEntity> event)
+	private static PlayState walkAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(event.isMoving())
+		if(state.isMoving())
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", ILoopType.EDefaultLoopTypes.LOOP));
+			state.getController().setAnimation(WALK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;
 	}
 	
-	private static PlayState attackAnimation(AnimationEvent<GiclopsEntity> event)
+	private static PlayState attackAnimation(AnimationState<GiclopsEntity> state)
 	{
-		MobAnimation.Action action = event.getAnimatable().getCurrentAction();
+		MobAnimation.Action action = state.getAnimatable().getCurrentAction();
 		
 		if(action == MobAnimation.Action.KICK)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("kick", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(KICK_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		
-		event.getController().markNeedsReload();
+		state.getController().forceAnimationReset();
 		return PlayState.STOP;
 	}
 	
-	private static PlayState deathAnimation(AnimationEvent<GiclopsEntity> event)
+	private static PlayState deathAnimation(AnimationState<GiclopsEntity> state)
 	{
-		if(event.getAnimatable().dead)
+		if(state.getAnimatable().dead)
 		{
-			event.getController().setAnimation(new AnimationBuilder().addAnimation("death", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+			state.getController().setAnimation(DEATH_ANIMATION);
 			return PlayState.CONTINUE;
 		}
 		return PlayState.STOP;

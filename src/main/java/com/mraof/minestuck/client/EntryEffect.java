@@ -1,6 +1,5 @@
 package com.mraof.minestuck.client;
 
-import com.mojang.math.Vector3f;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.entry.EntryBlockIterator;
 import com.mraof.minestuck.network.EntryEffectPackets;
@@ -16,6 +15,7 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
 
@@ -53,10 +53,10 @@ public final class EntryEffect
 			return;
 		
 		Player player = Minecraft.getInstance().player;
-		if(player == null || location == null || player.level.dimension() != location.level())
+		if(player == null || location == null || player.level().dimension() != location.level())
 			return;
 		
-		Level level = player.level;
+		Level level = player.level();
 		RandomSource rand = level.random;
 		
 		for(BlockPos pos : EntryBlockIterator.get(location.center.getX(), location.center.getY(), location.center.getZ(), location.range))

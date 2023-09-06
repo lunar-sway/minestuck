@@ -31,5 +31,7 @@ public interface LandBiomeGenBuilder
 	
 	void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types);
 	
-	void addCarver(GenerationStep.Carving step, Holder<? extends ConfiguredWorldCarver<?>> carver, LandBiomeType... types);
+	void addCarver(GenerationStep.Carving step, ResourceKey<ConfiguredWorldCarver<?>> carver, LandBiomeType... types);
+	
+	void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types);
 }

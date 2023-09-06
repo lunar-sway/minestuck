@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import com.mraof.minestuck.world.gen.structure.MSStructureTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
@@ -52,6 +51,7 @@ public class CastleStructure extends Structure
 			CastlePiece structurePiece = pendingPieces.remove(k);
 			structurePiece.addChildren(startPiece, builder, random);
 		}
+		/*TODO this is not performant at all
 		BoundingBox boundingBox = builder.getBoundingBox();
 		
 		int minY = Integer.MAX_VALUE;
@@ -61,7 +61,7 @@ public class CastleStructure extends Structure
 				int posHeight = context.chunkGenerator().getBaseHeight(xPos, zPos, Heightmap.Types.OCEAN_FLOOR_WG, context.heightAccessor(), context.randomState());
 				minY = Math.min(minY, posHeight);
 			}
-		
+		*/int minY = 64;
 		builder.offsetPiecesVertically(minY);
 	}
 }

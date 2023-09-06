@@ -3,11 +3,11 @@ package com.mraof.minestuck.client.model;
 import com.mraof.minestuck.entity.ServerCursorEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.processor.IBone;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
 
-public class ServerCursorModel extends AnimatedGeoModel<ServerCursorEntity>
+public class ServerCursorModel extends GeoModel<ServerCursorEntity>
 {
 	@Override
 	public ResourceLocation getAnimationResource(ServerCursorEntity entity) {
@@ -25,12 +25,11 @@ public class ServerCursorModel extends AnimatedGeoModel<ServerCursorEntity>
 	}
 	
 	@Override
-	public void setCustomAnimations(ServerCursorEntity entity, int uniqueID, AnimationEvent customPredicate)
+	public void setCustomAnimations(ServerCursorEntity animatable, long instanceId, AnimationState<ServerCursorEntity> animationState)
 	{
-		super.setCustomAnimations(entity, uniqueID, customPredicate);
-		IBone cursor = this.getAnimationProcessor().getBone("head");
+		CoreGeoBone cursor = this.getAnimationProcessor().getBone("head");
 		
-		if(!entity.level.isClientSide || !Minecraft.getInstance().isPaused())
-		cursor.setRotationZ(cursor.getRotationZ() + entity.getXRot() * ((float) Math.PI / 180F));
+		if(!animatable.level().isClientSide || !Minecraft.getInstance().isPaused())
+			cursor.setRotZ(cursor.getRotZ() + animatable.getXRot() * ((float) Math.PI / 180F));
 	}
 }

@@ -26,6 +26,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,7 +34,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class CaptchaDeckHandler
+public final class CaptchaDeckHandler
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -43,7 +44,7 @@ public class CaptchaDeckHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerDrops(LivingDropsEvent event)
 	{
-		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
+		if(event.getEntity() instanceof ServerPlayer player && !event.getEntity().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
 		{
 			dropSylladex(player);
 		}
@@ -55,10 +56,10 @@ public class CaptchaDeckHandler
 		return type != null ? type.createClientSide() : null;
 	}
 	
-	public static Modus createServerModus(ResourceLocation name, PlayerSavedData savedData)
+	public static Modus createServerModus(ResourceLocation name)
 	{
 		ModusType<?> type = ModusTypes.REGISTRY.get().getValue(name);
-		return type != null ? type.createServerSide(savedData) : null;
+		return type != null ? type.createServerSide() : null;
 	}
 	
 	public static void launchItem(ServerPlayer player, ItemStack item)
@@ -76,10 +77,10 @@ public class CaptchaDeckHandler
 	
 	public static void launchAnyItem(Player player, ItemStack item)
 	{
-		ItemEntity entity = new ItemEntity(player.level, player.getX(), player.getY()+1, player.getZ(), item);
-		entity.setDeltaMovement(player.level.random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level.random.nextDouble() - 0.5);
+		ItemEntity entity = new ItemEntity(player.level(), player.getX(), player.getY()+1, player.getZ(), item);
+		entity.setDeltaMovement(player.level().random.nextDouble() - 0.5, entity.getDeltaMovement().y, player.level().random.nextDouble() - 0.5);
 		entity.setDefaultPickUpDelay();
-		player.level.addFreshEntity(entity);
+		player.level().addFreshEntity(entity);
 	}
 	
 	public static void useItem(ServerPlayer player)
@@ -106,7 +107,7 @@ public class CaptchaDeckHandler
 	
 	private static ItemStack changeModus(ServerPlayer player, ItemStack modusItem, @Nullable Modus oldModus, ModusType<?> newType)
 	{
-		final Modus newModus = newType.createServerSide(PlayerSavedData.get(player.server));
+		final Modus newModus = newType.createServerSide();
 		
 		if(oldModus == null)
 		{
@@ -129,8 +130,7 @@ public class CaptchaDeckHandler
 			}
 		}
 		
-		setModus(player, newModus);
-		MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(newModus)), player);
+		PlayerSavedData.getData(player).setModus(newModus);
 		
 		MSCriteriaTriggers.CHANGE_MODUS.trigger(player, newModus);
 		
@@ -321,14 +321,16 @@ public class CaptchaDeckHandler
 		if(MinestuckConfig.SERVER.sylladexDropMode.get() == MinestuckConfig.DropMode.ALL)
 		{
 			player.drop(modus.getModusItem(), true, false);
-			setModus(player, null);
-		} else modus.initModus(null, player, null, size);
-		
-		ModusDataPacket packet = ModusDataPacket.create(writeToNBT(getModus(player)));
-		MSPacketHandler.sendToPlayer(packet, player);
+			PlayerSavedData.getData(player).setModus(null);
+		} else
+		{
+			modus.initModus(null, player, null, size);
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
+		}
 	}
 	
-	public static CompoundTag writeToNBT(Modus modus)
+	@Nullable
+	public static CompoundTag writeToNBT(@Nullable Modus modus)
 	{
 		if(modus == null)
 			return null;
@@ -342,19 +344,18 @@ public class CaptchaDeckHandler
 		} else return null;
 	}
 	
-	public static Modus readFromNBT(CompoundTag nbt, PlayerSavedData savedData)
+	public static Modus readFromNBT(CompoundTag nbt, LogicalSide side)
 	{
-		boolean clientSide = savedData == null;
 		if(nbt == null)
 			return null;
 		Modus modus;
 		ResourceLocation name = new ResourceLocation(nbt.getString("type"));
 		
-		if(clientSide && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
+		if(side.isClient() && ClientPlayerData.getModus() != null && name.equals(ModusTypes.REGISTRY.get().getKey(ClientPlayerData.getModus().getType())))
 			modus = ClientPlayerData.getModus();
 		else
 		{
-			modus = clientSide ? createClientModus(name) : createServerModus(name, savedData);
+			modus = side.isClient() ? createClientModus(name) : createServerModus(name);
 			if(modus == null)
 			{
 				LOGGER.warn("Failed to load modus from nbt with the name \"{}\"", name.toString());
@@ -375,14 +376,9 @@ public class CaptchaDeckHandler
 		return PlayerSavedData.getData(player).getModus();
 	}
 	
-	public static void setModus(ServerPlayer player, Modus modus)
-	{
-		PlayerSavedData.getData(player).setModus(modus);
-	}
-	
 	private static boolean canMergeItemStacks(ItemStack stack1, ItemStack stack2)
 	{
-		return stack1.getItem() == stack2.getItem() && ItemStack.tagMatches(stack1, stack2)
+		return ItemStack.isSameItemSameTags(stack1, stack2)
 				&& stack1.isStackable() && stack1.getCount() + stack2.getCount() < stack1.getMaxStackSize();
 	}
 	

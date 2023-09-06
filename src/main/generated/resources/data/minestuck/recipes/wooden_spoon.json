@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "b": {
       "item": "minecraft:bowl"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "minestuck:wooden_spoon"
-  }
+  },
+  "show_notification": true
 }

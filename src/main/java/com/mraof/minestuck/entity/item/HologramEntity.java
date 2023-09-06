@@ -2,9 +2,9 @@ package com.mraof.minestuck.entity.item;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.entity.MSEntityTypes;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkHooks;
 
 public class HologramEntity extends Entity
@@ -37,24 +36,6 @@ public class HologramEntity extends Entity
 	public HologramEntity(EntityType<? extends HologramEntity> type, Level level)
 	{
 		this(type, level, new ItemStack(MSBlocks.GENERIC_OBJECT.get()));
-	}
-	
-	public void onUpdate()
-	{
-		this.xo = this.getX();
-		this.yo = this.getY();
-		this.zo = this.getZ();
-		++this.innerRotation;
-		
-		if(!this.level.isClientSide)
-		{
-			BlockPos blockpos = blockPosition();
-			
-			if(this.level.dimension() == Level.END && this.level.getBlockState(blockpos).getBlock() != Blocks.FIRE)
-			{
-				this.level.setBlockAndUpdate(blockpos, Blocks.FIRE.defaultBlockState());
-			}
-		}
 	}
 	
 	@Override
@@ -96,7 +77,7 @@ public class HologramEntity extends Entity
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

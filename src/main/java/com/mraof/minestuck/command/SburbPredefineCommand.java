@@ -86,7 +86,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTitle(title, source));
-			source.sendSuccess(Component.translatable(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
+			source.sendSuccess(() -> Component.translatable(SET_TITLE, player.getDisplayName(), title.asTextComponent()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -99,7 +99,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTerrainLand(landType, source));
-			source.sendSuccess(Component.translatable(SET_TERRAIN_LAND, player.getDisplayName()), true);
+			source.sendSuccess(() -> Component.translatable(SET_TERRAIN_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -112,7 +112,7 @@ public class SburbPredefineCommand
 		try
 		{
 			SburbHandler.handlePredefineData(player, data -> data.predefineTitleLand(landType, source));
-			source.sendSuccess(Component.translatable(SET_TITLE_LAND, player.getDisplayName()), true);
+			source.sendSuccess(() -> Component.translatable(SET_TITLE_LAND, player.getDisplayName()), true);
 			return 1;
 		} catch(SkaianetException e)
 		{
@@ -126,7 +126,7 @@ public class SburbPredefineCommand
 		setTitle(silentSource, player, title);
 		setTitleLand(silentSource, player, titleLand);
 		setTerrainLand(silentSource, player, terrainLand);
-		source.sendSuccess(Component.translatable(DEFINE, player.getDisplayName()), true);
+		source.sendSuccess(() -> Component.translatable(DEFINE, player.getDisplayName()), true);
 		return 1;
 	}
 }

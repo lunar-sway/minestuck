@@ -68,7 +68,7 @@ public interface ItemRightClickEffect
 			world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.PLAYERS, 1.0F, 0.8F);
 			
 			AABB axisalignedbb = player.getBoundingBox().inflate(32.0D, 32.0D, 32.0D);
-			List<LivingEntity> list = player.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
+			List<LivingEntity> list = player.level().getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 			list.remove(player);
 			if(!list.isEmpty() && !world.isClientSide)
 			{
@@ -112,7 +112,7 @@ public interface ItemRightClickEffect
 				}
 				
 				AABB axisalignedbb = player.getBoundingBox().inflate(2 * mod, mod, 2 * mod);
-				List<LivingEntity> list = player.level.getEntitiesOfClass(LivingEntity.class, axisalignedbb);
+				List<LivingEntity> list = player.level().getEntitiesOfClass(LivingEntity.class, axisalignedbb);
 				for(LivingEntity livingentity : list)
 				{
 					if(livingentity.getRemainingFireTicks() > 0)
@@ -182,7 +182,7 @@ public interface ItemRightClickEffect
 		float yComponent = Mth.sin(-xRot * ((float) Math.PI / 180F));
 		float xComponent = f3 * f4;
 		float zComponent = f2 * f4;
-		double reachDistance = playerEntity.getAttribute(ForgeMod.REACH_DISTANCE.get()).getValue();
+		double reachDistance = playerEntity.getAttribute(ForgeMod.BLOCK_REACH.get()).getValue();
 		Vec3 endVec = eyeVec.add((double) xComponent * reachDistance, (double) yComponent * reachDistance, (double) zComponent * reachDistance);
 		return level.clip(new ClipContext(eyeVec, endVec, ClipContext.Block.OUTLINE, ClipContext.Fluid.SOURCE_ONLY, playerEntity));
 	}

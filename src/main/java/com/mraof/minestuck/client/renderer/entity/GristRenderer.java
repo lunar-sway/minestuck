@@ -2,9 +2,7 @@ package com.mraof.minestuck.client.renderer.entity;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import com.mraof.minestuck.entity.item.GristEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +10,8 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 public class GristRenderer extends EntityRenderer<GristEntity>
 {
@@ -30,7 +30,7 @@ public class GristRenderer extends EntityRenderer<GristEntity>
 		poseStack.translate(0.0F, 0.0F + grist.getSizeByValue() / 2, 0.0F);
 		poseStack.scale(grist.getSizeByValue(), grist.getSizeByValue(), grist.getSizeByValue());
 		poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-		poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
 		
 		poseStack.translate(
 				(Math.random() - 0.5) * Math.max(0, (grist.getShakeFactor() - 0.5) * SHAKE_INTENSITY),

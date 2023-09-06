@@ -2,14 +2,15 @@ package com.mraof.minestuck.data.loot_table;
 
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.loot.LandTableLootEntry;
+import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
 import com.mraof.minestuck.item.loot.functions.SetSburbCodeFragments;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.lands.LandTypes;
 import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import com.mraof.minestuck.world.lands.title.TitleLandType;
-import com.mraof.minestuck.item.loot.LandTableLootEntry;
-import com.mraof.minestuck.item.loot.MSLootTables;
-import com.mraof.minestuck.item.loot.functions.SetBoondollarCount;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -24,18 +25,16 @@ import net.minecraftforge.common.Tags;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @SuppressWarnings("WeakerAccess")
-public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>
+public class MSChestLootTables implements LootTableSubProvider
 {
 	//Pools in basic medium chest
 	public static final String WEAPONS_POOL = "weapons", SUPPLIES_POOL = "supplies", MISC_POOL = "misc", RARE_POOL = "rare";
 	
-	
 	@Override
-	public void accept(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
+	public void generate(BiConsumer<ResourceLocation, LootTable.Builder> lootProcessor)
 	{
 		lootProcessor.accept(MSLootTables.BLANK_DISK_DUNGEON_LOOT_INJECT, LootTable.lootTable()
 				.withPool(LootPool.lootPool().name("minestuck").setRolls(UniformGenerator.between(0, 1))
@@ -161,7 +160,8 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(MSItems.ACE_OF_HEARTS.get()).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.ACE_OF_SPADES.get()).setWeight(2).setQuality(0))
 						.add(LootItem.lootTableItem(MSItems.ENERGY_CORE.get()).setWeight(10).setQuality(0))
-						.add(LootItem.lootTableItem(MSItems.GUTTER_BALL.get()).setWeight(1).setQuality(0)))
+						.add(LootItem.lootTableItem(MSItems.GUTTER_BALL.get()).setWeight(1).setQuality(0))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_MUTATED_CAT.get()).setWeight(2).setQuality(1)))
 				.withPool(LootPool.lootPool().name("boondollars").setRolls(ConstantValue.exactly(1))
 						.add(LootItem.lootTableItem(MSItems.SORROW_GUSHERS.get()).setWeight(7).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 7))))
 						.add(LootItem.lootTableItem(MSItems.BOONDOLLARS.get()).setWeight(10).setQuality(-1).apply(SetBoondollarCount.builder(UniformGenerator.between(5, 50))))
@@ -254,6 +254,7 @@ public class MSChestLootTables implements Consumer<BiConsumer<ResourceLocation, 
 						.add(LootItem.lootTableItem(Items.NETHERRACK).setWeight(15).setQuality(-2).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 16))))
 						.add(LootItem.lootTableItem(Items.OBSIDIAN).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))
 						.add(LootItem.lootTableItem(MSBlocks.CAST_IRON.get()).setWeight(5).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 8))))
+						.add(LootItem.lootTableItem(MSBlocks.NATIVE_SULFUR.get()).setWeight(4).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 6))))
 						.add(LootItem.lootTableItem(MSBlocks.CHISELED_CAST_IRON.get()).setWeight(3).setQuality(-1).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))))));
 		
 		lootProcessor.accept(locationForTerrain(LandTypes.ROCK, MSLootTables.BASIC_MEDIUM_CHEST), LootTable.lootTable()

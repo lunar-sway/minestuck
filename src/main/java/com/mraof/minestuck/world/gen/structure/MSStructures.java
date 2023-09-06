@@ -2,7 +2,7 @@ package com.mraof.minestuck.world.gen.structure;
 
 import com.mraof.minestuck.Minestuck;
 import net.minecraft.FieldsAreNonnullByDefault;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -24,6 +24,6 @@ public final class MSStructures
 	
 	private static ResourceKey<Structure> key(String name)
 	{
-		return ResourceKey.create(Registry.STRUCTURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.STRUCTURE, new ResourceLocation(Minestuck.MOD_ID, name));
 	}
 }

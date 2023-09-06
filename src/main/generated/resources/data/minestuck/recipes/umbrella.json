@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "s": {
       "tag": "forge:rods/wooden"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "minestuck:umbrella"
-  }
+  },
+  "show_notification": true
 }

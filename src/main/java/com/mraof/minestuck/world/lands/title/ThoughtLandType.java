@@ -13,7 +13,7 @@ import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
 
 public class ThoughtLandType extends TitleLandType
@@ -62,7 +62,7 @@ public class ThoughtLandType extends TitleLandType
 	{
 		StructureBlockRegistry registry = new StructureBlockRegistry();
 		otherType.registerBlocks(registry);
-		return registry.getBlockState("ocean").getMaterial() != Material.LAVA;
+		return !registry.getBlockState("ocean").getFluidState().is(Fluids.LAVA);
 	}
 	
 	@Override

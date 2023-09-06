@@ -32,7 +32,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -96,7 +95,7 @@ public class MSLootEvents
 		{
 			ItemStack[] mediumBookTypes = new ItemStack[]{new ItemStack(MSItems.NONBINARY_CODE.get()), new ItemStack(MSItems.BINARY_CODE.get()), new ItemStack(MSItems.TILLDEATH_HANDBOOK.get()), new ItemStack(MSItems.TABLESTUCK_MANUAL.get()), new ItemStack(MSItems.WISEGUY.get()), new ItemStack(MSItems.SASSACRE_TEXT.get()), new ItemStack(MSItems.FLARP_MANUAL.get())};
 			ItemStack[] overworldBookTypes = new ItemStack[]{new ItemStack(MSItems.COMPLETED_SBURB_CODE.get())};
-			trades.get(2).add((villager, random) -> new MerchantOffer(MSDimensions.isInMedium(villager.getServer(), villager.level.dimension()) ? mediumBookTypes[random.nextInt(mediumBookTypes.length)] : overworldBookTypes[random.nextInt(overworldBookTypes.length)], new ItemStack(Items.EMERALD, 3), 4, 2, 0.05F));
+			trades.get(2).add((villager, random) -> new MerchantOffer(MSDimensions.isInMedium(villager.getServer(), villager.level().dimension()) ? mediumBookTypes[random.nextInt(mediumBookTypes.length)] : overworldBookTypes[random.nextInt(overworldBookTypes.length)], new ItemStack(Items.EMERALD, 3), 4, 2, 0.05F));
 		}
 	}
 	
@@ -106,7 +105,7 @@ public class MSLootEvents
 	 */
 	public static MerchantOffer createFrogTempleMapTrade(Entity villagerEntity)
 	{
-		Level level = villagerEntity.level;
+		Level level = villagerEntity.level();
 		if(level instanceof ServerLevel serverLevel)
 		{
 			BlockPos templePos = serverLevel.findNearestMapStructure(MSTags.Structures.SCANNER_LOCATED, villagerEntity.blockPosition(), 100, true);

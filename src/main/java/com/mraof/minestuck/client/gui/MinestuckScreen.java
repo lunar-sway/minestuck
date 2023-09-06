@@ -8,7 +8,7 @@ import com.mraof.minestuck.alchemy.GristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -36,7 +36,7 @@ public abstract class MinestuckScreen extends Screen
 		super(titleIn);
 	}
 	
-	public void drawGrist(PoseStack poseStack, int xOffset, int yOffset, int xcor, int ycor, int page)
+	public void drawGrist(GuiGraphics guiGraphics, int xOffset, int yOffset, int xcor, int ycor, int page)
 	{
 		if(minecraft == null)
 			return;
@@ -63,7 +63,7 @@ public abstract class MinestuckScreen extends Screen
 			
 			if (this.isPointInRegion(gristXOffset + gristIconX, gristYOffset + gristIconY, 16, 16, xcor, ycor))
 			{
-				this.fillGradient(poseStack, gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
+				guiGraphics.fillGradient(gristXOffset + gristIconX, gristYOffset + gristIconY, gristXOffset + gristIconX + 16, gristYOffset + gristIconY + 17, 0x80ffffff, 0x80ffffff);
 				tooltipType = type;
 				showName = true;
 			}
@@ -75,24 +75,19 @@ public abstract class MinestuckScreen extends Screen
 			}
 			//draws grist icons and current/maximum text
 			this.drawIcon(gristXOffset + gristIconX, gristYOffset + gristIconY, type.getIcon());//grist icon
-			minecraft.font.draw(poseStack, amount, gristXOffset + gristCountX - 2, gristYOffset + gristCountY + 10, 0x19b3ef);//renders the text
+			guiGraphics.drawString(font, amount, gristXOffset + gristCountX - 2, gristYOffset + gristCountY + 10, 0x19b3ef, false);//renders the text
 			//renders bars
 			double gristFraction = Math.min(1, (double) clientGrist.getGrist(type) / cacheLimit);
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
-			GuiComponent.fill(poseStack, gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
+			guiGraphics.fill(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 9), 0xff19B3EF); //0xE64C10
+			guiGraphics.fill(gristXOffset + gristCountX - 1, gristYOffset + gristCountY - 1, (int) (gristXOffset + gristCountX + (34.0 * gristFraction)), gristYOffset + (gristCountY + 2), 0xff7ED8E5); //0xE64C10
 			offset++;
 		}
 		if (tooltipType != null)
 		{
 			if (showName)
-			{
-				renderTooltip(poseStack, tooltipType.getNameWithSuffix(), xcor, ycor);
-
-			}
+				guiGraphics.renderTooltip(font, tooltipType.getNameWithSuffix(), xcor, ycor);
 			else
-			{
-				renderTooltip(poseStack, Component.literal(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
-			}
+				guiGraphics.renderTooltip(font, Component.literal(String.valueOf(clientGrist.getGrist(tooltipType))), xcor, ycor);
 		}
 	}
 	private void drawCovers(int x, int y, ResourceLocation barCovers)//this can go fuck itself

@@ -3,7 +3,6 @@ package com.mraof.minestuck.block;
 import com.mraof.minestuck.util.CustomVoxelShape;
 import com.mraof.minestuck.util.MSDamageSources;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -28,7 +27,7 @@ public class SpikeBlock extends CustomShapeBlock
 	@Override
 	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entityIn, float fallDistance)
 	{
-		entityIn.causeFallDamage(fallDistance, 3, DamageSource.FALL);
+		entityIn.causeFallDamage(fallDistance, 3, level.damageSources().fall());
 	}
 	
 	/**
@@ -48,7 +47,7 @@ public class SpikeBlock extends CustomShapeBlock
 				entityIn.makeStuckInBlock(state, new Vec3(0.3F, 0.9, 0.3F));
 				if(distanceX >= 0.003 || distanceZ >= 0.003)
 				{
-					entityIn.hurt(MSDamageSources.SPIKE, 1.0F);
+					entityIn.hurt(MSDamageSources.spike(level.registryAccess()), 1.0F);
 				}
 			}
 		}

@@ -23,7 +23,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 	@Override
 	public List<Item> getOutputItems(Recipe<?> recipe)
 	{
-		ItemStack stack = recipe.getResultItem();
+		ItemStack stack = recipe.getResultItem(null);
 		return stack.isEmpty() ? Collections.emptyList() : Collections.singletonList(stack.getItem());
 	}
 	
@@ -42,7 +42,7 @@ public class DefaultInterpreter implements RecipeInterpreter
 			else totalCost.add(ingredientCost);
 		}
 		
-		totalCost.scale(1F/recipe.getResultItem().getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
+		totalCost.scale(1F/recipe.getResultItem(null).getCount(), false);	//Do not round down because it's better to have something cost a little to much than it possibly costing nothing
 		
 		return totalCost;
 	}

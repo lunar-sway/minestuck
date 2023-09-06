@@ -19,7 +19,7 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		MinMaxBounds.Ints count = MinMaxBounds.Ints.fromJson(json.get("count"));
 		return new Instance(predicate, count);
@@ -33,7 +33,7 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final MinMaxBounds.Ints count;
-		public Instance(EntityPredicate.Composite predicate, MinMaxBounds.Ints count)
+		public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints count)
 		{
 			super(ID, predicate);
 			this.count = Objects.requireNonNull(count);
@@ -41,7 +41,7 @@ public class TreeModusRootTrigger extends SimpleCriterionTrigger<TreeModusRootTr
 		
 		public static Instance count(MinMaxBounds.Ints count)
 		{
-			return new Instance(EntityPredicate.Composite.ANY, count);
+			return new Instance(ContextAwarePredicate.ANY, count);
 		}
 		
 		public boolean test(int count)

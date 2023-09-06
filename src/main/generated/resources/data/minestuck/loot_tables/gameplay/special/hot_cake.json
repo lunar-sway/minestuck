@@ -45,5 +45,6 @@
       "name": "hot_cake",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/special/hot_cake"
 }

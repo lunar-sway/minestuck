@@ -176,6 +176,6 @@ public class ImpDungeonEntryPiece extends StructurePiece
 		{
 			this.placeBlock(level, block, x, y, z, boundingBox);
 			y--;
-		} while(this.boundingBox.minY() + y >= 0 && !this.getBlock(level, x, y, z, boundingBox).getMaterial().isSolid());
+		} while(this.boundingBox.minY() + y >= 0 && !this.getBlock(level, x, y, z, boundingBox).isSolid());
 	}
 }

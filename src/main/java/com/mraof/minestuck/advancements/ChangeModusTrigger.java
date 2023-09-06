@@ -21,7 +21,7 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		ModusType<?> modusType = json.has("modus") ? ModusTypes.REGISTRY.get().getValue(new ResourceLocation(GsonHelper.getAsString(json, "modus"))) : null;
 		return new Instance(predicate, modusType);
@@ -35,7 +35,7 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 	public static class Instance extends AbstractCriterionTriggerInstance
 	{
 		private final ModusType<?> modusType;
-		public Instance(EntityPredicate.Composite predicate, ModusType<?> modusType)
+		public Instance(ContextAwarePredicate predicate, ModusType<?> modusType)
 		{
 			super(ID, predicate);
 			this.modusType = modusType;
@@ -43,12 +43,12 @@ public class ChangeModusTrigger extends SimpleCriterionTrigger<ChangeModusTrigge
 		
 		public static Instance any()
 		{
-			return new Instance(EntityPredicate.Composite.ANY, null);
+			return new Instance(ContextAwarePredicate.ANY, null);
 		}
 		
 		public static Instance to(ModusType<?> type)
 		{
-			return new Instance(EntityPredicate.Composite.ANY, type);
+			return new Instance(ContextAwarePredicate.ANY, type);
 		}
 		
 		public boolean test(ModusType<?> modusType)

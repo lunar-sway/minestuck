@@ -32,7 +32,7 @@ public final class CommandActionHandler
 		{
 			if(forceConnection(skaianet, client, server))
 			{
-				source.sendSuccess(Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
+				source.sendSuccess(() -> Component.translatable(SburbConnectionCommand.SUCCESS, client.getUsername(), server.getUsername()), true);
 				return 1;
 			} else
 			{
@@ -127,7 +127,7 @@ public final class CommandActionHandler
 			if(serverConnection.isActive())
 				skaianet.closeConnection(clientConnection);
 			serverConnection.removeServerPlayer();
-			source.sendSuccess(Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
+			source.sendSuccess(() -> Component.literal(identifier.getUsername()+"'s old client player "+serverConnection.getClientIdentifier().getUsername()+" is now without a server player.").withStyle(ChatFormatting.YELLOW), true);
 		}
 		
 		try

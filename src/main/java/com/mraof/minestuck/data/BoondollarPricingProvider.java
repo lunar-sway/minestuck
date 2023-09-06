@@ -3,9 +3,10 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.BoondollarPriceManager;
 import com.mraof.minestuck.util.BoondollarPricing;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -13,29 +14,26 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mraof.minestuck.item.MSItems.*;
 import static net.minecraft.world.item.Items.*;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class BoondollarPricingProvider implements DataProvider
 {
-	private static final Logger LOGGER = LogManager.getLogger();
-	
 	private final Map<ResourceLocation, BoondollarPricing> pricings = new HashMap<>();
-	private final DataGenerator dataGenerator;
+	private final PackOutput output;
 	private final String modid;
 	
-	public BoondollarPricingProvider(DataGenerator dataGenerator, String modid)
+	public BoondollarPricingProvider(PackOutput output, String modid)
 	{
-		this.dataGenerator = dataGenerator;
+		this.output = output;
 		this.modid = modid;
 	}
 	
@@ -107,6 +105,10 @@ public class BoondollarPricingProvider implements DataProvider
 		add(MUSIC_DISC_DANCE_STAB_DANCE.get(), 1000);
 		add(MUSIC_DISC_RETRO_BATTLE.get(), 1000);
 		add(CRUMPLY_HAT.get(), 80, 100);
+		add(PLUSH_IGUANA.get(), 40, 100);
+		add(PLUSH_NAKAGATOR.get(), 40, 100);
+		add(PLUSH_SALAMANDER.get(), 40, 100);
+		add(PLUSH_TURTLE.get(), 40, 100);
 		add(BATTERY.get(), 10, 100);
 		add(GRIMOIRE.get(), 666);
 		add(ACE_OF_SPADES.get(), 3000, 5000);
@@ -257,23 +259,19 @@ public class BoondollarPricingProvider implements DataProvider
 	}
 	
 	@Override
-	public void run(CachedOutput cache)
+	public CompletableFuture<?> run(CachedOutput cache)
 	{
 		registerPricings();
 		
-		Path outputPath = dataGenerator.getOutputFolder();
+		Path outputPath = output.getOutputFolder();
+		List<CompletableFuture<?>> futures = new ArrayList<>(pricings.size());
 		
 		for(Map.Entry<ResourceLocation, BoondollarPricing> entry : pricings.entrySet())
 		{
 			Path pricingPath = getPath(outputPath, entry.getKey());
-			try
-			{
-				DataProvider.saveStable(cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath);
-			} catch(IOException e)
-			{
-				LOGGER.error("Couldn't save boondollar pricing {}", pricingPath, e);
-			}
+			futures.add(DataProvider.saveStable(cache, BoondollarPriceManager.parsePrice(entry.getValue()), pricingPath));
 		}
+		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
 	
 	private static Path getPath(Path outputPath, ResourceLocation id)

@@ -1,14 +1,13 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.blockentity.redstone.RemoteObserverBlockEntity;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.RemoteObserverPacket;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -91,18 +90,16 @@ public class RemoteObserverScreen extends Screen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
-		this.renderBackground(poseStack);
+		this.renderBackground(guiGraphics);
 		int yOffset = (this.height / 2) - (GUI_HEIGHT / 2);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, GUI_BACKGROUND);
-		this.blit(poseStack, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
-		font.draw(poseStack, Integer.toString(observingRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 55, 0x404040);
+		guiGraphics.blit(GUI_BACKGROUND, (this.width / 2) - (GUI_WIDTH / 2), yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
+		guiGraphics.drawString(font, Integer.toString(observingRange), (width / 2) - 5, (height - GUI_HEIGHT) / 2 + 55, 0x404040, false);
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 	}
 	
 	private void finish()

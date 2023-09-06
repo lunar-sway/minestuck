@@ -2,6 +2,8 @@ package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -13,7 +15,8 @@ import java.util.function.Supplier;
 
 public class GristTypes
 {
-	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(new ResourceLocation(Minestuck.MOD_ID, "grist"), Minestuck.MOD_ID);
+	public static final ResourceKey<Registry<GristType>> GRIST_KEY = ResourceKey.createRegistryKey(new ResourceLocation(Minestuck.MOD_ID, "grist"));
+	public static final DeferredRegister<GristType> GRIST_TYPES = DeferredRegister.create(GRIST_KEY, Minestuck.MOD_ID);
 	
 	private static final Supplier<IForgeRegistry<GristType>> REGISTRY = GRIST_TYPES.makeRegistry(() -> new RegistryBuilder<GristType>().set(DummyFactory.INSTANCE).hasTags());
 	
@@ -49,12 +52,12 @@ public class GristTypes
 		return getRegistry().getValues();
 	}
 	
-	private static class DummyFactory implements IForgeRegistry.DummyFactory<GristType>
+	private static class DummyFactory implements IForgeRegistry.MissingFactory<GristType>
 	{
 		private static final DummyFactory INSTANCE = new DummyFactory();
 		
 		@Override
-		public GristType createDummy(ResourceLocation key)
+		public GristType createMissing(ResourceLocation key, boolean isNetwork)
 		{
 			return new GristType.DummyType();
 		}

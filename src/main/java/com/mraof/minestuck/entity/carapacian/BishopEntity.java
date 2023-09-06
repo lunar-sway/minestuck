@@ -1,6 +1,7 @@
 package com.mraof.minestuck.entity.carapacian;
 
 import com.mraof.minestuck.entity.ai.attack.AttackByDistanceGoal;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -63,14 +64,14 @@ public class BishopEntity extends CarapacianEntity implements RangedAttackMob, E
 		double distanceY = target.getBoundingBox().minY + (double) (target.getBbHeight() / 2.0F) - (this.getY() + (double) (this.getBbHeight() / 2.0F));
 		double distanceZ = target.getZ() - this.getZ();
 		
-		LargeFireball fireball = new LargeFireball(this.level, this, distanceX, distanceY, distanceZ, 1);
+		LargeFireball fireball = new LargeFireball(this.level(), this, distanceX, distanceY, distanceZ, 1);
 		double d8 = this.getBbHeight();
 		Vec3 vec3 = this.getViewVector(1.0F);
 		double x = (this.getBoundingBox().minX + this.getBoundingBox().maxX) / 2.0F + vec3.x * d8;
 		double y = this.getY() + (double) (this.getBbHeight() / 2.0F);
 		double z = (this.getBoundingBox().minZ + this.getBoundingBox().maxZ) / 2.0F + vec3.z * d8;
 		fireball.setPos(x, y, z);
-		this.level.addFreshEntity(fireball);
+		this.level().addFreshEntity(fireball);
 	}
 	
 	public int getAttackStrength(Entity par1Entity)
@@ -103,13 +104,13 @@ public class BishopEntity extends CarapacianEntity implements RangedAttackMob, E
 		int damage = this.getAttackStrength(par1Entity);
 		int knockback = 6;
 		par1Entity.push(-Mth.sin(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F, 0.1D, (double) (Mth.cos(this.getYRot() * (float) Math.PI / 180.0F) * (float) knockback * 0.5F));
-		return par1Entity.hurt(DamageSource.mobAttack(this), damage);
+		return par1Entity.hurt(this.damageSources().mobAttack(this), damage);
 	}
 	
 	@Override
 	public boolean hurt(DamageSource par1DamageSource, float par2)
 	{
-		if(par1DamageSource.isFire())
+		if(par1DamageSource.is(DamageTypeTags.IS_FIRE))
 		{
 			burnTime += par2;
 			if(burnTime <= 3)

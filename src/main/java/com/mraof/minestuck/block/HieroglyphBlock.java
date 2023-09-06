@@ -29,7 +29,7 @@ public class HieroglyphBlock extends Block
 		ItemStack handStack = player.getItemInHand(handIn);
 		ItemStack bookStack = new ItemStack(Items.WRITABLE_BOOK);
 		
-		if(ItemStack.isSame(handStack, bookStack))
+		if(ItemStack.isSameItem(handStack, bookStack))
 		{
 			if(!level.isClientSide)
 			{

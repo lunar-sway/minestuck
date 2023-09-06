@@ -2,12 +2,10 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.player.Echeladder;
 import com.mraof.minestuck.player.ClientPlayerData;
-import net.minecraft.client.renderer.GameRenderer;
-import com.mraof.minestuck.alchemy.GristHelper;
+import com.mraof.minestuck.player.Echeladder;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.MobEffectTextureManager;
 import net.minecraft.client.resources.language.I18n;
@@ -76,7 +74,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	@Override
-	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
 	{
 		updateScrollAndAnimation(mouseX, mouseY);
 		
@@ -114,23 +112,21 @@ public class EcheladderScreen extends PlayerStatsScreen
 			}
 		}
 		
-		super.render(poseStack, mouseX, mouseY, partialTicks);
-		this.renderBackground(poseStack);
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		this.renderBackground(guiGraphics);
 		
 		
-		drawTabs(poseStack);
+		drawTabs(guiGraphics);
 		
-		drawLadder(poseStack, currentRung, showLastRung);
+		drawLadder(guiGraphics, currentRung, showLastRung);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiEcheladder);
 		
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
-
-		this.blit(poseStack, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
+		guiGraphics.blit(guiEcheladder, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
-		List<Component> tooltip = drawEffectIconsAndText(poseStack, currentRung, mouseX, mouseY);
+		guiGraphics.blit(guiEcheladder, xOffset + 80, yOffset + 42 + (int) (130*(1 - scrollIndex/(float) MAX_SCROLL)), 0, 243, 7, 13);
+		
+		List<Component> tooltip = drawEffectIconsAndText(guiGraphics, currentRung, mouseX, mouseY);
 		
 		if(fromRung < currentRung)
 		{
@@ -141,26 +137,24 @@ public class EcheladderScreen extends PlayerStatsScreen
 			for(; rung <= currentRung; rung++)
 			{
 				int index = rung - 1 - Math.max(fromRung, currentRung - 4);
-				List<Component> newTooltip = drawGainedRungBonuses(poseStack, rung, index, rand, mouseX, mouseY);
+				List<Component> newTooltip = drawGainedRungBonuses(guiGraphics, rung, index, rand, mouseX, mouseY);
 				if(newTooltip != null)
 					tooltip = newTooltip;
 			}
 		}
 		
-		drawActiveTabAndOther(poseStack, mouseX, mouseY);
+		drawActiveTabAndOther(guiGraphics, mouseX, mouseY);
 		
 		if(tooltip != null)
-			renderComponentTooltip(poseStack, tooltip, mouseX, mouseY);
+			guiGraphics.renderComponentTooltip(font, tooltip, mouseX, mouseY);
 	}
 	
-	private void drawLadder(PoseStack poseStack, int currentRung, boolean showLastRung)
+	private void drawLadder(GuiGraphics guiGraphics, int currentRung, boolean showLastRung)
 	{
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, guiEcheladder);
 		int scroll = scrollIndex % 14;
 		for(int i = 0; i < rows; i++)
-			blit(poseStack, xOffset + 90, yOffset + 175 + scroll - i*14, 7, 242, 146, 14);
+			guiGraphics.blit(guiEcheladder, xOffset + 90, yOffset + 175 + scroll - i*14, 7, 242, 146, 14);
 		
 		Random rand = new Random(452619373);
 		for(int i = 0; i < scrollIndex/14; i++)
@@ -178,7 +172,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 				textColor = rand.nextInt(0xFFFFFF);
 				if(textColors.length > rung)
 					textColor = textColors[rung];
-				fill(poseStack, xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
+				guiGraphics.fill(xOffset + 90, y, xOffset + 236, y + 12, backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF));
 			} else if(rung == currentRung + 1 && animationCycle == 0)
 			{
 				int bg = ~rand.nextInt(0xFFFFFF);
@@ -186,55 +180,51 @@ public class EcheladderScreen extends PlayerStatsScreen
 					bg = backgrounds[rung];
 				else if(textColors.length > rung)
 					bg = ~textColors[rung];
-				fill(poseStack, xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
+				guiGraphics.fill(xOffset + 90, y + 10, xOffset + 90 + (int)(146* ClientPlayerData.getRungProgress()), y + 12, bg);
 			} else rand.nextInt(0xFFFFFF);
 			
 			String s = I18n.exists("echeladder.rung."+rung) ? I18n.get("echeladder.rung."+rung) : "Rung "+(rung+1);
-			mc.font.draw(poseStack, s, xOffset+ladderXOffset - mc.font.width(s) / 2, y + 2, textColor);
+			guiGraphics.drawString(font, s, xOffset+ladderXOffset - mc.font.width(s) / 2, y + 2, textColor, false);
 		}
 	}
 	
 	@Nullable
-	private List<Component> drawEffectIconsAndText(PoseStack poseStack, int currentRung, int mouseX, int mouseY)
+	private List<Component> drawEffectIconsAndText(GuiGraphics guiGraphics, int currentRung, int mouseX, int mouseY)
 	{
 		boolean gristLimit = true;
 		MobEffectTextureManager sprites = this.minecraft.getMobEffectTextures();
 		TextureAtlasSprite strengthSprite = sprites.get(MobEffects.DAMAGE_BOOST);
 		TextureAtlasSprite healthSprite = sprites.get(MobEffects.HEALTH_BOOST);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, strengthSprite.atlas().location());
-		blit(poseStack, xOffset + 5, yOffset + 30, getBlitOffset(), 18, 18, strengthSprite);
-		RenderSystem.setShaderTexture(0, healthSprite.atlas().location());
-		blit(poseStack, xOffset + 5, yOffset + 84, getBlitOffset(), 18, 18, healthSprite);
-		RenderSystem.setShaderTexture(0, PlayerStatsScreen.icons);
-		this.blit(poseStack, xOffset + 6, yOffset + 139, 48, 64, 16, 16);
-		this.blit(poseStack, xOffset + 5, yOffset + 7, 238, 16, 18, 18);
+		guiGraphics.blit(xOffset + 5, yOffset + 30, 0, 18, 18, strengthSprite);
+		guiGraphics.blit(xOffset + 5, yOffset + 84, 0, 18, 18, healthSprite);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 6, yOffset + 139, 48, 64, 16, 16);
+		guiGraphics.blit(PlayerStatsScreen.icons, xOffset + 5, yOffset + 7, 238, 16, 18, 18);
 		
 		String msg = title.getString();
-		mc.font.draw(poseStack, msg, xOffset + 168 - mc.font.width(msg)/2F, yOffset + 12, 0x404040);
+		guiGraphics.drawString(font, msg, xOffset + 168 - mc.font.width(msg)/2F, yOffset + 12, 0x404040, false);
 		
 		int attack = (int) Math.round(100*(1 + Echeladder.attackBonus(currentRung)));
-		mc.font.draw(poseStack, I18n.get(ATTACK), xOffset + 24, yOffset + 30, 0x404040);
-		mc.font.draw(poseStack, attack+"%", xOffset + 26, yOffset + 39, 0x0094FF);
+		guiGraphics.drawString(font, I18n.get(ATTACK), xOffset + 24, yOffset + 30, 0x404040, false);
+		guiGraphics.drawString(font, attack+"%", xOffset + 26, yOffset + 39, 0x0094FF, false);
 		
 		double health = mc.player.getMaxHealth()/2;	//10 + Echeladder.healthBoost(currentRung)/2.0;
-		mc.font.draw(poseStack, I18n.get(HEALTH), xOffset + 24, yOffset + 84, 0x404040);
-		mc.font.draw(poseStack, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF);
+		guiGraphics.drawString(font, I18n.get(HEALTH), xOffset + 24, yOffset + 84, 0x404040, false);
+		guiGraphics.drawString(font, String.valueOf(health), xOffset + 26, yOffset + 93, 0x0094FF, false);
 		
-		mc.font.draw(poseStack, "=", xOffset + 25, yOffset + 12, 0x404040);	//Should this be black, or the same blue as the numbers?
-		mc.font.draw(poseStack, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF);
+		guiGraphics.drawString(font, "=", xOffset + 25, yOffset + 12, 0x404040, false);	//Should this be black, or the same blue as the numbers?
+		guiGraphics.drawString(font, String.valueOf(ClientPlayerData.getBoondollars()), xOffset + 27 + mc.font.width("="), yOffset + 12, 0x0094FF, false);
 		//mc.fontRenderer.drawString("Rep: " + ClientPlayerData.getConsortReputation(), xOffset + 75 + mc.fontRenderer.getCharWidth('='), yOffset + 12, 0x0094FF);
 		
-		/**
+		/*
 		 * here we are rendering the grist cache limit.
 		 * we show the current limit by calling the rungGrist array in grist helper.
 		 * this is seen on string.valueOf(GristHelper...
 		 */
-		mc.font.draw(poseStack, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040);
-		mc.font.draw(poseStack, String.valueOf(Echeladder.getGristCapacity(currentRung)), xOffset + 26,
-				yOffset + 147, 0x0094FF);
+		guiGraphics.drawString(font, I18n.get(CACHE), xOffset + 24, yOffset + 138, 0x404040, false);
+		guiGraphics.drawString(font, String.valueOf(Echeladder.getGristCapacity(currentRung)),
+				xOffset + 26, yOffset + 147, 0x0094FF, false);
 		
 		if(mouseY >= yOffset + 39 && mouseY < yOffset + 39 + mc.font.lineHeight && mouseX >= xOffset + 26 && mouseX < xOffset + 26 + mc.font.width(attack+"%"))
 			return ImmutableList.of(Component.translatable(DAMAGE_UNDERLING),
@@ -246,7 +236,7 @@ public class EcheladderScreen extends PlayerStatsScreen
 	}
 	
 	@Nullable
-	private List<Component> drawGainedRungBonuses(PoseStack poseStack, int rung, int index, Random rand, int mouseX, int mouseY)
+	private List<Component> drawGainedRungBonuses(GuiGraphics guiGraphics, int rung, int index, Random rand, int mouseX, int mouseY)
 	{
 		int textColor = rand.nextInt(0xFFFFFF);
 		if(textColors.length > rung)
@@ -254,16 +244,16 @@ public class EcheladderScreen extends PlayerStatsScreen
 		int bg = backgrounds.length > rung ? backgrounds[rung] : (textColor^0xFFFFFFFF);
 		
 		String str = "+"+(Math.round(100*Echeladder.attackBonus(rung)) - Math.round(100*Echeladder.attackBonus(rung - 1)))+"%!";
-		fill(poseStack, xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
+		guiGraphics.fill(xOffset + 5 + 32*(index%2), yOffset + 50 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 62 + 15*(index/2), bg);
 		int strX = xOffset + 20 + 32*(index%2) - mc.font.width(str)/2, strY = yOffset + 52 + 15*(index/2);
-		mc.font.draw(poseStack, str, strX, strY, textColor);
+		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		double d = (Echeladder.healthBoost(rung) - Echeladder.healthBoost(rung - 1))/2D;
 		str = "+"+(d == 0 ? d : d+"!");
-		fill(poseStack, xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
+		guiGraphics.fill(xOffset + 5 + 32*(index%2), yOffset + 104 + 15*(index/2), xOffset + 35 + 32*(index%2), yOffset + 116 + 15*(index/2), bg);
 		strX = xOffset + 20 + 32*(index%2) - mc.font.width(str)/2;
 		strY = yOffset + 106 + 15*(index/2);
-		mc.font.draw(poseStack, str, strX, strY, textColor);
+		guiGraphics.drawString(font, str, strX, strY, textColor, false);
 		
 		if(mouseY >= strY && mouseY < strY + mc.font.lineHeight && mouseX >= strX && mouseX < strX + mc.font.width(str))
 		{

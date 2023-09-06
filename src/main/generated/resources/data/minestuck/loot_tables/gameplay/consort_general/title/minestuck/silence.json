@@ -13,5 +13,6 @@
       "name": "block",
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "minestuck:gameplay/consort_general/title/minestuck/silence"
 }

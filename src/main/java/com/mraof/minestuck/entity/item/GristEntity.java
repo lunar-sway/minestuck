@@ -6,7 +6,9 @@ import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.player.*;
+import com.mraof.minestuck.player.GristCache;
+import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
 import net.minecraft.core.BlockPos;
@@ -14,21 +16,19 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nullable;
-
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -177,7 +177,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(entityIn instanceof ServerPlayer player)
 		{
-			Session playerSession = SessionHandler.get(level).getPlayerSession(IdentifierHandler.encode(entityIn));
+			Session playerSession = SessionHandler.get(level()).getPlayerSession(IdentifierHandler.encode(entityIn));
 			
 			long cacheCapacity = GristCache.get(player).getRemainingCapacity(gristType);
 			
@@ -199,7 +199,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		
 		long canPickUp = getPlayerCacheRoom(closestPlayer);
 		
-		if(this.level.isClientSide && shakeTimer > 0)
+		if(this.level().isClientSide && shakeTimer > 0)
 		{
 			shakeTimer--;
 		}
@@ -209,7 +209,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		this.zo = this.getZ();
 		this.setDeltaMovement(this.getDeltaMovement().add(0, -0.03D, 0));
 		
-		if(this.level.getBlockState(new BlockPos(Mth.floor(this.getX()), Mth.floor(this.getY()), Mth.floor(this.getZ()))).getMaterial() == Material.LAVA)
+		if(this.isInLava())
 		{
 			this.setDeltaMovement(0.2D, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
 			this.playSound(SoundEvents.GENERIC_BURN, 0.4F, 2.0F + this.random.nextFloat() * 0.4F);
@@ -223,7 +223,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		{
 			if(this.closestPlayer == null || canPickUp < gristValue || this.closestPlayer.distanceToSqr(this) > d0 * d0)
 			{
-				this.closestPlayer = this.level.getNearestPlayer(
+				this.closestPlayer = this.level().getNearestPlayer(
 						this.getX(), this.getY(), this.getZ(),
 						d0,
 						new PlayerCanPickUpGristSelector());
@@ -250,15 +250,15 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		this.move(MoverType.SELF, this.getDeltaMovement());
 		float f = 0.98F;
 		
-		if(this.onGround)
+		if(this.onGround())
 		{
-			BlockPos pos = new BlockPos(this.getX(), this.getBoundingBox().minY - 1, this.getZ());
-			f = this.level.getBlockState(pos).getFriction(level, pos, this) * 0.98F;
+			BlockPos pos = BlockPos.containing(this.getX(), this.getBoundingBox().minY - 1, this.getZ());
+			f = this.level().getBlockState(pos).getFriction(level(), pos, this) * 0.98F;
 		}
 		
 		this.setDeltaMovement(this.getDeltaMovement().multiply(f, 0.98D, f));
 		
-		if(this.onGround)
+		if(this.onGround())
 		{
 			this.setDeltaMovement(this.getDeltaMovement().multiply(1, -0.9D, 1));
 		}
@@ -315,7 +315,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level.isClientSide || player instanceof FakePlayer)
+		if(this.level().isClientSide || player instanceof FakePlayer)
 			return;
 		
 		if(ServerEditHandler.getData(player) != null)
@@ -334,12 +334,12 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public void consumeGrist(PlayerIdentifier identifier, boolean sound)
 	{
-		if(this.level.isClientSide)
+		if(this.level().isClientSide)
 			throw new IllegalStateException("Grist entities shouldn't be consumed client-side.");
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		
-		GristCache.get(level, identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
+		GristCache.get(level(), identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
@@ -385,7 +385,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

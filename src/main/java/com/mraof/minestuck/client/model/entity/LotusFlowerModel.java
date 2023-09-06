@@ -2,9 +2,9 @@ package com.mraof.minestuck.client.model.entity; // Made with Blockbench 3.8.4 b
 
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class LotusFlowerModel extends AnimatedGeoModel<LotusFlowerEntity>
+public class LotusFlowerModel extends GeoModel<LotusFlowerEntity>
 {
 	@Override
 	public ResourceLocation getAnimationResource(LotusFlowerEntity entity) {

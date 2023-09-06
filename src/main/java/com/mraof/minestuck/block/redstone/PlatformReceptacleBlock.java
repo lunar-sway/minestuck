@@ -22,11 +22,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 /**
  * Becomes powered if any neighboring pos has a platform block that can be assumed to intersect the receptacle's position, stops further platform blocks from being generated past it should ABSORBING be set to true.
  * The ABSORBING property can be cycled by right clicking if not limited by Creative Shock
  */
+@ParametersAreNonnullByDefault
 public class PlatformReceptacleBlock extends Block
 {
 	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -45,7 +47,7 @@ public class PlatformReceptacleBlock extends Block
 		if(!CreativeShockEffect.doesCreativeShockLimit(player, CreativeShockEffect.LIMIT_MACHINE_INTERACTIONS))
 		{
 			level.setBlock(pos, state.cycle(ABSORBING), Block.UPDATE_ALL);
-			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundSource.BLOCKS, 0.5F, state.getValue(ABSORBING) ? 1.5F : 0.5F);
+			level.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 0.5F, state.getValue(ABSORBING) ? 1.5F : 0.5F);
 			
 			return InteractionResult.SUCCESS;
 		}

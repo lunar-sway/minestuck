@@ -50,11 +50,11 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 				if(!state.getValue(OPEN))
 				{
 					ItemStack itemStack = cassettePlayer.getCassette();
-					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, Item.getId(itemStack.getItem()));
+					level.levelEvent(LevelEvent.SOUND_PLAY_JUKEBOX_SONG, pos, Item.getId(itemStack.getItem()));
 					player.awardStat(Stats.PLAY_RECORD);
 				} else if(state.getValue(OPEN))
 				{
-					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, 0);
+					level.levelEvent(LevelEvent.SOUND_STOP_JUKEBOX_SONG, pos, 0);
 				}
 			}
 			return InteractionResult.SUCCESS;
@@ -92,7 +92,7 @@ public class CassettePlayerBlock extends CustomShapeBlock implements EntityBlock
 				ItemStack itemstack = cassettePlayer.getCassette();
 				if(!itemstack.isEmpty())
 				{
-					level.levelEvent(LevelEvent.SOUND_PLAY_RECORDING, pos, 0);
+					level.levelEvent(LevelEvent.SOUND_STOP_JUKEBOX_SONG, pos, 0);
 					cassettePlayer.clearContent();
 					float f = 0.7F;
 					double xOffset = f * level.random.nextFloat() + 0.15;

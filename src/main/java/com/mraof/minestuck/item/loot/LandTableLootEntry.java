@@ -5,12 +5,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import com.mraof.minestuck.world.lands.LandTypes;
+import com.mraof.minestuck.world.lands.terrain.TerrainLandType;
+import com.mraof.minestuck.world.lands.title.TitleLandType;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.*;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntry;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
@@ -19,10 +20,14 @@ import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class LandTableLootEntry extends LootPoolEntryContainer
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -49,10 +54,8 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 		LandTypePair aspects = LandTypePair.getTypes(context.getLevel()).orElse(null);
 		if(canRun(context) && aspects != null)
 		{
-			ResourceLocation terrainTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/"
-					+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(aspects.getTerrain())).toString().replace(':', '/'));
-			ResourceLocation titleTableName = new ResourceLocation(table.getNamespace(), table.getPath() + "/title/"
-					+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(aspects.getTitle())).toString().replace(':', '/'));
+			ResourceLocation terrainTableName = getTerrainTableName(aspects.getTerrain());
+			ResourceLocation titleTableName = getTitleTableName(aspects.getTitle());
 			
 			expandFrom(terrainTableName, context, lootGenCollector);
 			expandFrom(titleTableName, context, lootGenCollector);
@@ -63,56 +66,78 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 		return false;
 	}
 	
+	private ResourceLocation getTerrainTableName(TerrainLandType terrainType)
+	{
+		return new ResourceLocation(table.getNamespace(), table.getPath() + "/terrain/"
+				+ Objects.requireNonNull(LandTypes.TERRAIN_REGISTRY.get().getKey(terrainType)).toString().replace(':', '/'));
+	}
+	
+	private ResourceLocation getTitleTableName(TitleLandType titleType)
+	{
+		return new ResourceLocation(table.getNamespace(), table.getPath() + "/title/"
+				+ Objects.requireNonNull(LandTypes.TITLE_REGISTRY.get().getKey(titleType)).toString().replace(':', '/'));
+	}
+	
 	private void expandFrom(ResourceLocation tableName, LootContext context, Consumer<LootPoolEntry> lootGenCollector)
 	{
-		LootTable lootTable = context.getLootTable(tableName);
-		//noinspection ConstantConditions
-		if(lootTable == null)
+		LootTable lootTable = context.getResolver().getLootTable(tableName);
+		LootPool pool = lootTable.getPool(poolName);
+		if(pool == null)
 		{
-			LOGGER.warn("Could not find loot table {}", tableName);
+			LOGGER.warn("Could not find pool by name {} in loot table {}", poolName, tableName);
 			return;
 		}
-		if(context.addVisitedTable(lootTable))
+		
+		LootPoolEntryContainer[] entries = accessWithReflection(pool);
+		if(entries != null)
 		{
-			LootPool pool = lootTable.getPool(poolName);
-			//noinspection ConstantConditions
-			if(pool != null)
-			{
-				LootPoolEntryContainer[] entries = accessWithReflection(pool);
-				if(entries != null)
-				{
-					for(LootPoolEntryContainer entry : entries)
-						entry.expand(context, lootGenCollector);
-				} else
-				{
-					lootGenCollector.accept(new LootPoolEntry()
-					{
-						@Override
-						public int getWeight(float v)
-						{
-							return 30;
-						}
-						
-						@Override
-						public void createItemStack(Consumer<ItemStack> consumer, LootContext lootContext)
-						{
-							pool.addRandomItems(consumer, lootContext);
-						}
-					});
-				}
-			} else
-			{
-				LOGGER.warn("Could not find pool by name {} in loot table {}", poolName, tableName);
-			}
-			context.removeVisitedTable(lootTable);
+			for(LootPoolEntryContainer entry : entries)
+				entry.expand(context, lootGenCollector);
 		} else
 		{
-			LOGGER.warn("Detected infinite loop in loot tables");
+			lootGenCollector.accept(new LootPoolEntry()
+			{
+				@Override
+				public int getWeight(float v)
+				{
+					return 30;
+				}
+				
+				@Override
+				public void createItemStack(Consumer<ItemStack> consumer, LootContext lootContext)
+				{
+					pool.addRandomItems(consumer, lootContext);
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void validate(ValidationContext context)
+	{
+		super.validate(context);
+		for(TerrainLandType type : LandTypes.TERRAIN_REGISTRY.get())
+			validateRecursiveTable(context, getTerrainTableName(type));
+		for(TitleLandType type : LandTypes.TITLE_REGISTRY.get())
+			validateRecursiveTable(context, getTitleTableName(type));
+	}
+	
+	private void validateRecursiveTable(ValidationContext context, ResourceLocation tableName)
+	{
+		LootDataId<LootTable> tableId = new LootDataId<>(LootDataType.TABLE, tableName);
+		if (context.hasVisitedElement(tableId))
+			context.reportProblem("Table %s is recursively called".formatted(tableName));
+		else {
+			super.validate(context);
+			context.resolver().getElementOptional(tableId).ifPresentOrElse(
+					table -> table.validate(context.enterElement("->{%s}".formatted(tableName), tableId)),
+					() -> {});
 		}
 	}
 	
 	private static final Field lootEntries = getLootEntryField();
 	
+	@Nullable
 	private static Field getLootEntryField()
 	{
 		try
@@ -125,6 +150,7 @@ public class LandTableLootEntry extends LootPoolEntryContainer
 		}
 	}
 	
+	@Nullable
 	private LootPoolEntryContainer[] accessWithReflection(LootPool pool)
 	{
 		if(lootEntries == null)

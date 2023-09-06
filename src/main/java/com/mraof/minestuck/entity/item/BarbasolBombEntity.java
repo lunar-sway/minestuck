@@ -3,11 +3,11 @@ package com.mraof.minestuck.entity.item;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
@@ -49,16 +49,16 @@ public class BarbasolBombEntity extends ThrowableItemProjectile
 	@Override
 	protected void onHit(HitResult result)
 	{
-		if(!this.level.isClientSide)
+		if(!this.level().isClientSide)
 		{
-			level.explode(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, 3F,
-					shouldDestroy ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
+			level().explode(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, 3F,
+					shouldDestroy ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
 		}
 		this.discard();
 	}
 	
 	@Override
-	public Packet<?> getAddEntityPacket()
+	public Packet<ClientGamePacketListener> getAddEntityPacket()
 	{
 		return NetworkHooks.getEntitySpawningPacket(this);
 	}

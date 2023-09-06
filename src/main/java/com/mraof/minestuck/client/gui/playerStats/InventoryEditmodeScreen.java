@@ -1,12 +1,11 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,14 +31,12 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	}
 	
 	@Override
-	protected void renderBg(PoseStack poseStack, float par1, int xcor, int ycor)
+	protected void renderBg(GuiGraphics guiGraphics, float par1, int xcor, int ycor)
 	{
-		drawTabs(poseStack);
+		drawTabs(guiGraphics);
 		
-		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, GUI_BACKGROUND);
-		this.blit(poseStack, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		LocalDate localdate = LocalDate.now();
 		int d = localdate.getDayOfMonth();
@@ -49,17 +46,17 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
 		
-		this.blit(poseStack, xOffset+ LEFT_ARROW_X, yOffset+ ARROW_Y, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
-		this.blit(poseStack, xOffset+ RIGHT_ARROW_X, yOffset+ ARROW_Y, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset+ LEFT_ARROW_X, yOffset+ ARROW_Y, guiWidth + (b2?36:0), (less?0:18) + (b1?36:0), 18, 18);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset+ RIGHT_ARROW_X, yOffset+ ARROW_Y, guiWidth+18 + (b2?36:0), (more?0:18) + (b1?36:0), 18, 18);
 		
-		drawActiveTabAndIcons(poseStack);
+		drawActiveTabAndIcons(guiGraphics);
 		
 	}
 	
 	@Override
-	protected void renderLabels(PoseStack poseStack, int mouseX, int mouseY)
+	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY)
 	{
-		this.font.draw(poseStack, this.title, this.titleLabelX, this.titleLabelY, 0x404040);
+		guiGraphics.drawString(font, this.title, this.titleLabelX, this.titleLabelY, 0x404040, false);
 	}
 	
 	@Override

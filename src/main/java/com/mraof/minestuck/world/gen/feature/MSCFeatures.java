@@ -1,7 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
@@ -102,6 +102,6 @@ public final class MSCFeatures
 	
 	private static ResourceKey<ConfiguredFeature<?, ?>> key(String name)
 	{
-		return ResourceKey.create(Registry.CONFIGURED_FEATURE_REGISTRY, new ResourceLocation(Minestuck.MOD_ID, name));
+		return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(Minestuck.MOD_ID, name));
 	}
 }

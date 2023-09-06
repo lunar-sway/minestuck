@@ -20,7 +20,7 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 	}
 	
 	@Override
-	protected Instance createInstance(JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context)
+	protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context)
 	{
 		
 		ItemPredicate input = ItemPredicate.fromJson(json.get("input"));
@@ -40,7 +40,7 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 		private final ItemPredicate target;
 		private final ItemPredicate output;
 		
-		public Instance(EntityPredicate.Composite predicate, ItemPredicate input, ItemPredicate target, ItemPredicate output)
+		public Instance(ContextAwarePredicate predicate, ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
 			super(ID, predicate);
 			this.input = Objects.requireNonNull(input);
@@ -55,7 +55,7 @@ public class PunchDesignixTrigger extends SimpleCriterionTrigger<PunchDesignixTr
 		
 		public static Instance create(ItemPredicate input, ItemPredicate target, ItemPredicate output)
 		{
-			return new Instance(EntityPredicate.Composite.ANY, input, target, output);
+			return new Instance(ContextAwarePredicate.ANY, input, target, output);
 		}
 		
 		public boolean test(ItemStack input, ItemStack target, ItemStack output)
