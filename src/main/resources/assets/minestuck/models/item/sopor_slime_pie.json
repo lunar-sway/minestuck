@@ -1,6 +1,6 @@
 {
-  "parent": "item/handheld",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minestuck:item/sopor_slimePie"
+    "layer0": "minestuck:item/sopor_slime_pie"
   }
 }

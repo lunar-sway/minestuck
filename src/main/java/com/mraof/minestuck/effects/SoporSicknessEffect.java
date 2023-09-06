@@ -25,7 +25,7 @@ public class SoporSicknessEffect extends MobEffect
 		{
 			if(target.getHealth() > 5.0F)
 			{
-				target.hurt(target.damageSources().generic(), 0.05F);
+				target.hurt(target.damageSources().generic(), 0.5F);
 			}
 		}
 		super.applyEffectTick(target, effectLevel);
