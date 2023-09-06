@@ -1,7 +1,6 @@
 package com.mraof.minestuck.effects;
 
 import com.mraof.minestuck.Minestuck;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,11 +21,11 @@ public class SoporSicknessEffect extends MobEffect
 	@Override
 	public void applyEffectTick(LivingEntity target, int effectLevel)
 	{
-		if (target.level.isClientSide())
+		if (target.level().isClientSide())
 		{
 			if(target.getHealth() > 5.0F)
 			{
-				target.hurt(DamageSource.MAGIC, 0.05F);
+				target.hurt(target.damageSources().generic(), 0.05F);
 			}
 		}
 		super.applyEffectTick(target, effectLevel);
