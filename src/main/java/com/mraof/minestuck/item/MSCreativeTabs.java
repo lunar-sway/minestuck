@@ -702,6 +702,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.INNER_HEART.get());
 		output.accept(MSItems.CRIMSON_LEAP.get());
 		output.accept(MSItems.LOCH_PICK.get());
+		output.accept(MSItems.KEY_TO_THE_MACHINE.get());
 		output.accept(MSItems.DRAGON_KEY.get());
 		output.accept(MSItems.TRUE_BLUE.get());
 		output.accept(MSItems.BLUE_BEAMS.get());
@@ -860,6 +861,7 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.WIZARD_STAFF.get());
 		output.accept(MSItems.BARBERS_MAGIC_TOUCH.get());
+		output.accept(MSItems.WIZARD_STAFF.get());
 		output.accept(MSItems.WATER_STAFF.get());
 		output.accept(MSItems.FIRE_STAFF.get());
 		output.accept(MSItems.WHITE_KINGS_SCEPTER.get());

@@ -1,4 +1,4 @@
-package com.mraof.minestuck.item;
+package com.mraof.minestuck.item.armor;
 
 import com.mraof.minestuck.client.model.armor.ArmorModels;
 import net.minecraft.client.model.HumanoidModel;
