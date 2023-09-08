@@ -13,8 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SoporSicknessEffect extends MobEffect
 {
-	public static int DAMAGE_TIMER = 0;
-	
 	protected SoporSicknessEffect()
 	{
 		super(MobEffectCategory.NEUTRAL, 0x47453d);
