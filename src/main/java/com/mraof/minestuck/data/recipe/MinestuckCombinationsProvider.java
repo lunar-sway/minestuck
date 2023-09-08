@@ -871,7 +871,6 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.GOLDEN_GRASSHOPPER.get()).input(MSItems.GRASSHOPPER.get()).or().input(Items.GOLD_INGOT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET.get()).input(Items.STICK).or().namedInput(Items.COBWEB).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BUG_NET.get()).input(Items.STRING).and().namedInput(Items.BUCKET).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.SOPOR_SLIME_PIE.get()).input(MSItems.BATTERY.get()).or().namedInput(MSItems.HORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSBlocks.MIRROR.get()).input(Items.PAINTING).or().input(Items.WATER_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PARTICLE_ACCELERATOR.get()).input(Items.REPEATER).or().input(MSItems.ENERGY_CORE.get()).build(consumer);
 		
@@ -1042,6 +1041,8 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.ENERGY_CORE.get()).input(MSItems.RAW_CRUXITE.get()).and().input(MSItems.RAW_URANIUM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.IRRADIATED_STEAK.get()).input(MSItems.RAW_URANIUM.get()).or().input(Items.COOKED_BEEF).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.QUANTUM_SABRE.get()).input(MSItems.URANIUM_POWERED_STICK.get()).and().input(MSItems.ENERGY_CORE.get()).build(consumer);
+		
+		CombinationRecipeBuilder.of(MSItems.SOPOR_SLIME_PIE.get()).input(MSItems.BATTERY.get()).or().input(MSItems.HORN.get()).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.APPLE_JUICE.get()).input(Items.GLASS_BOTTLE).and().input(Items.APPLE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.TAB.get()).input(Items.POTION).or().input(Items.SUGAR).build(consumer);

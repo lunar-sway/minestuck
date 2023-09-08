@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SoporSicknessEffect extends MobEffect
 {
+	public static int DAMAGE_TIMER = 0;
+	
 	protected SoporSicknessEffect()
 	{
 		super(MobEffectCategory.NEUTRAL, 0x47453d);
@@ -21,37 +23,42 @@ public class SoporSicknessEffect extends MobEffect
 	@Override
 	public void applyEffectTick(LivingEntity target, int effectLevel)
 	{
-		if (target.level().isClientSide())
-		{
-			if(target.getHealth() > 5.0F)
-			{
-				target.hurt(target.damageSources().generic(), 0.5F);
-			}
-		}
 		super.applyEffectTick(target, effectLevel);
+		
+		damageTarget(target);
 	}
 	
-	public static boolean canAcquireAffect(MobEffectInstance effectInstance, LivingEntity target)
+	public static void damageTarget(LivingEntity target)
+	{
+		if (target.getHealth() > 5.0F)
+		{
+			target.hurt(target.damageSources().generic(), 0.5F);
+		}
+	}
+	
+	public static boolean isntApplicableEffect(MobEffectInstance effectInstance, LivingEntity target)
 	{
 		MobEffectEvent.Applicable event = new MobEffectEvent.Applicable(target, effectInstance);
-		if (event.getResult() != Event.Result.DEFAULT) return event.getResult() == Event.Result.ALLOW;
 		
-		MobEffectCategory mobEffect = effectInstance.getEffect().getCategory();
-		return mobEffect != MobEffectCategory.HARMFUL && mobEffect != MobEffectCategory.BENEFICIAL;
+		return event.getResult() == Event.Result.DEFAULT;
 	}
 	
 	@SubscribeEvent
 	public static void effectApplicabilityEvent(MobEffectEvent.Applicable event)
 	{
-		if(event.getEntity().hasEffect(MSEffects.SOPOR_SICKNESS.get()))
+		LivingEntity entity = event.getEntity();
+		MobEffectInstance effect = event.getEffectInstance();
+		MobEffect sopor_sickness = MSEffects.SOPOR_SICKNESS.get();
+		
+		if(entity.hasEffect(sopor_sickness) && isntApplicableEffect(effect, entity))
 		{
-			SoporSicknessEffect.canAcquireAffect(event.getEffectInstance(), event.getEntity());
+			event.setResult(Event.Result.DENY);
 		}
 	}
 	
 	@Override
-	public boolean isDurationEffectTick(int pDuration, int pAmplifier)
+	public boolean isDurationEffectTick(int duration, int amplifier)
 	{
-		return true;
+		return (duration % 40) == 0;
 	}
 }
