@@ -128,12 +128,12 @@ public final class GristType implements Comparable<GristType>
 		return TagKey.create(GristTypes.REGISTRY_KEY, this.getIdOrThrow().withPrefix("secondary/"));
 	}
 	
-	public int getColor()
+	public int getUnderlingColor()
 	{
 		return underlingData != null ? underlingData.color : 0xFFFFFF;
 	}
 	
-	public static class Properties
+	public static final class Properties
 	{
 		private final float rarity, value;
 		private Supplier<ItemStack> candyItem = () -> ItemStack.EMPTY;
@@ -165,6 +165,12 @@ public final class GristType implements Comparable<GristType>
 			return this.underlingType(1 / this.rarity, color);
 		}
 		
+		/**
+		 * Call this if an underling should be able to use this grist type.
+		 * Does not make underlings with the grist type spawn naturally. See {@link GristTypeSpawnCategory} for that.
+		 * @param power a modifier that affects the attack damage and health of underlings with this type.
+		 * @param color a color representing this grist type used by the underling renderer.
+		 */
 		public Properties underlingType(float power, int color)
 		{
 			this.underlingData = new UnderlingData(color, power);

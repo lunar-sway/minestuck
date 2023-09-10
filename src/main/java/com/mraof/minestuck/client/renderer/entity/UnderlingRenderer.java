@@ -47,7 +47,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public Color getRenderColor(T animatable, float partialTick, int packedLight)
 	{
-		return Color.ofOpaque(animatable.getGristType().getColor());
+		return Color.ofOpaque(animatable.getGristType().getUnderlingColor());
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		private float getContrastModifier(T entity)
 		{
 			int threshold = 170;
-			int color = entity.getGristType().getColor();
+			int color = entity.getGristType().getUnderlingColor();
 			int avg = (FastColor.ABGR32.red(color) + FastColor.ABGR32.green(color) + FastColor.ABGR32.blue(color)) / 3;
 			//TODO replace with a light/dark texture to make it look better
 			return avg > threshold ? 0.3f : 1.0f;
