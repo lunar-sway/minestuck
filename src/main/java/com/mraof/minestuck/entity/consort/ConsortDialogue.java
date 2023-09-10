@@ -152,6 +152,7 @@ public class ConsortDialogue
 		addMessage("getting_hot").condition(terrainLand(HEAT));
 		addMessage("step_into_fire").condition(terrainLand(HEAT));
 		addMessage("lava_crickets").condition(terrainLand(HEAT));
+		addMessage("tummy_tunnel").condition(terrainLand(HEAT));
 		
 		//Wood
 		addMessage("wood_treatments").condition(terrainLand(WOOD));

@@ -2414,6 +2414,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("tower_general_shop", "I got the goods; they're all recently raided from a nearby tower!");
 		addDialogue("general_shop", "We have generic goods for generic people!");
 		addDialogue("got_the_goods", "You want the goods? We got the goods.");
+		addDialogue("tummy_tunnel", "Man this shop is packed tighter then my tummy tunnel when I gotta make brown on the john after eating one too many of them incandescent pies what be popping around.");
 		addDialogue("rising_shop", "We have top tier goods for a top tier god!");
 		addDialogue("boring_shop", "Looking for something that won't catch your eye? You've come to the right place!");
 		
