@@ -2152,10 +2152,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
 		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
 		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
+		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of lightbugs, Sometimes I wonder...");
 		//Heat
 		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
 		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
 		addDialogue("step_into_fire", "You'd better watch where you're going. Wouldn't want you to step right into some fire.");
+		addDialogue("the_water_is_lava", "You know the water is fucking lava? Who thought it would be a good idea to make water out of lava? How do we even stay hydrated in this place dude?");
 		//Wood
 		addDialogue("wood_treatments", "We figured out how to treat the wood to make it less flammable. I hope we didn't miss a spot.");
 		addDialogue("splinters.1", "Be careful not to walk barefoot here, you could get a splinter!");
@@ -2314,6 +2316,13 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("hats", "I like crumpled hats, they're comfy and easy to wear!");
 		addDialogue("wwizard", "Secret wizards? Th-there are no secret wizards! Wh-what're you speaking of, o-outlandish traveller?");
 		addDialogue("stock_market", "I bought a bunch of stocks on the market... Now I'm broke...");
+		addDialogue("consort_scoliosis", "I'm not actually a child, I simply have an incredibly advanced case of consort scoliosisis that has gone untreated for years.");
+		addDialogue("oh_to_be_ugly", "Inspite of the fact that I'm training to become an evil wizard, I'm simply not ugly enough to fit the bill. Any good wizardling knows that one must be as ugly as their desires to truly obtain power.");
+		addDialogue("no_to_podcasting", "My buddy wanted to do some podcasting... I'm no longer friends with him I'm not gonna lie");
+		addDialogue("bats", "I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?");
+		addDialogue("so_what", "Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.");
+		addDialogue("trolly_problem", "The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan");
+		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one quesiton. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
 		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
 		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
 		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
