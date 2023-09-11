@@ -2152,7 +2152,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("mushroom_pizza.off.reply", "I leave them off!");
 		addDialogue("mushroom_pizza.off.consort_reply", "You are a despicable person.");
 		addDialogue("fire_hazard", "Our land is a fire waiting to happen! Hopefully there isn't any lightning!");
-		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of lightbugs, Sometimes I wonder...");
+		addDialogue("that_boy_needs_therapy", "Sometimes I wonder whether a purely mushroom diet is the cause of my dwindling mental capacity. In those moments, I think 'Ooh! mushroom!'... speaking of mushrooms, Sometimes I wonder...");
 		//Heat
 		addDialogue("getting_hot", "Is it getting hot in here or is it just me?");
 		addDialogue("lava_crickets", "Have you ever had a lava-roasted cricket? The lava really brings out the cricket juices.");
