@@ -64,7 +64,7 @@ public final class WildcardGristCost implements GristCostRecipe
 	@Override
 	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
-		return wildcardType != null ? GristCostRecipe.scaleToCountAndDurability(new GristAmount(wildcardType, wildcardCost), input, shouldRoundDown) : null;
+		return wildcardType != null ? GristCostRecipe.scaleToCountAndDurability(wildcardType.amount(wildcardCost), input, shouldRoundDown) : null;
 	}
 	
 	@Override

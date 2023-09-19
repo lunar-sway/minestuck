@@ -19,7 +19,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	{
 		List<GristAmount> list = new ArrayList<>();
 		for(GristType gristType : GristTypes.values())
-			list.add(new GristAmount(gristType, 1));
+			list.add(gristType.amount(1));
 		return list;
 	}
 	

@@ -424,7 +424,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	static GristSet blockBreakCost()
 	{
-		return GristSet.of(GristTypes.BUILD, 1);
+		return GristTypes.BUILD.get().amount(1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)

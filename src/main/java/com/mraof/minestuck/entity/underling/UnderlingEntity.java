@@ -217,7 +217,7 @@ public abstract class UnderlingEntity extends AttackingAnimatedEntity implements
 					if(candy > 0)
 						this.level().addFreshEntity(new ItemEntity(level(), randX(), this.getY(), randZ(), candyItem));
 					if(gristAmount > 0)
-						this.level().addFreshEntity(new GristEntity(level(), randX(), this.getY(), randZ(), new GristAmount(amount.type(), gristAmount)));
+						this.level().addFreshEntity(new GristEntity(level(), randX(), this.getY(), randZ(), amount.type().amount(gristAmount)));
 				}
 			}
 			

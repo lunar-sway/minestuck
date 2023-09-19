@@ -102,7 +102,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
 						gusherCount - 1 ? countLeft : Math.min(countLeft,
 						(long) level.random.nextDouble() * countLeft + 1);
-				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
+				GristAmount spawnedAmount = amount.type().amount(spawnedCount);
 				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
 				postProcessor.accept(entity);
 				level.addFreshEntity(entity);
@@ -344,7 +344,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		
-		GristCache.get(level(), identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
+		GristCache.get(level(), identifier).addWithGutter(this.getAmount(), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
@@ -361,7 +361,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public GristAmount getAmount()
 	{
-		return new GristAmount(gristType, gristValue);
+		return gristType.amount(gristValue);
 	}
 	
 	@Override

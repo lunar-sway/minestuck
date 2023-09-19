@@ -44,6 +44,11 @@ public final class GristType implements Comparable<GristType>
 		textureOverrideId = properties.textureOverrideId;
 	}
 	
+	public GristAmount amount(long amount)
+	{
+		return new GristAmount(this, amount);
+	}
+	
 	@Nullable
 	public ResourceLocation getId()
 	{

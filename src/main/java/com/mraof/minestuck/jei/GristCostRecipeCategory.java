@@ -90,7 +90,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
 			GuiUtil.drawGristBoard(guiGraphics, gristSetRecipe.gristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
 		else if(recipe instanceof JeiGristCost.Wildcard wildcardRecipe)
-			GuiUtil.drawGristBoard(guiGraphics, GristSet.of(GristTypes.BUILD, wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
+			GuiUtil.drawGristBoard(guiGraphics, GristTypes.BUILD.get().amount(wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
 	}
 	
 	
@@ -101,7 +101,7 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
 			text = GuiUtil.getGristboardTooltip(gristSetRecipe.gristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		else if(recipe instanceof JeiGristCost.Wildcard wildcardRecipe)
-			text = GuiUtil.getGristboardTooltip(GristSet.of(GristTypes.BUILD, wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
+			text = GuiUtil.getGristboardTooltip(GristTypes.BUILD.get().amount(wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		
 		if(text != null)
 			return Collections.singletonList(text);

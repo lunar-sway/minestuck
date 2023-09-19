@@ -5,14 +5,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 /**
  * An interface for anything that might contain grist.
  * There are several different implementations of this interface with different properties.
  * <p>
  * If you want to limit yourself to a set that doesn't change after creation, check out {@link ImmutableGristSet}.
- * You can create an immutable grist set using {@link GristSet#of(GristType, long)} and its overrides,
+ * You can create an immutable grist set using {@link GristSet#of(GristAmount...)},
  * or you can create an instance of {@link DefaultImmutableGristSet} directly.
  * You can convert any grist set into an immutable grist set using {@link GristSet#asImmutable()}.
  * <p>
@@ -92,29 +91,17 @@ public interface GristSet
 	
 	ImmutableGristSet EMPTY = Collections::emptyMap;
 	
-	static ImmutableGristSet of(GristType type, long amount)
+	static ImmutableGristSet of(GristAmount... amounts)
 	{
-		return new GristAmount(type, amount);
-	}
-	
-	static ImmutableGristSet of(Supplier<GristType> type, long amount)
-	{
-		return new GristAmount(type, amount);
-	}
-	
-	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2)
-	{
-		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2));
-	}
-	
-	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2, Supplier<GristType> type3, long amount3)
-	{
-		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2).put(type3.get(), amount3));
-	}
-	
-	static ImmutableGristSet of(Supplier<GristType> type1, long amount1, Supplier<GristType> type2, long amount2, Supplier<GristType> type3, long amount3, Supplier<GristType> type4, long amount4)
-	{
-		return new DefaultImmutableGristSet(ImmutableMap.<GristType, Long>builder().put(type1.get(), amount1).put(type2.get(), amount2).put(type3.get(), amount3).put(type4.get(), amount4));
+		if(amounts.length == 0)
+			return GristSet.EMPTY;
+		if(amounts.length == 1)
+			return amounts[0];
+		
+		var builder = ImmutableMap.<GristType, Long>builder();
+		for(GristAmount amount : amounts)
+			builder.put(amount.type(), amount.amount());
+		return new DefaultImmutableGristSet(builder);
 	}
 	
 	static void write(GristSet gristSet, FriendlyByteBuf buffer)

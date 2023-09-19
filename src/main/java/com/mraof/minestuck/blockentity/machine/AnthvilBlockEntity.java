@@ -158,7 +158,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public static GristAmount getUsedGrist(GristSet fullSet)
 	{
 		GristType pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).map(GristAmount::type).orElse(GristTypes.BUILD.get());
-		return new GristAmount(pickedGrist, 1);
+		return pickedGrist.amount(1);
 	}
 	
 	private static double getModifiedGristValue(GristAmount grist)

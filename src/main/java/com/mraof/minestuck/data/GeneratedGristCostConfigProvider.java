@@ -48,8 +48,8 @@ public class GeneratedGristCostConfigProvider implements DataProvider
 		serializer(MSRecipeTypes.NON_MIRRORED.get());
 		type(RecipeType.STONECUTTING);
 		serializer(RecipeSerializer.SMITHING_TRANSFORM, SmithingInterpreter.INSTANCE);
-		type(RecipeType.SMELTING, new CookingCostInterpreter(GristSet.of(GristTypes.TAR, 1)));
-		type(MSRecipeTypes.IRRADIATING_TYPE.get(), new CookingCostInterpreter(GristSet.of(GristTypes.URANIUM, 1)));
+		type(RecipeType.SMELTING, new CookingCostInterpreter(GristTypes.TAR.get().amount(1)));
+		type(MSRecipeTypes.IRRADIATING_TYPE.get(), new CookingCostInterpreter(GristTypes.URANIUM.get().amount(1)));
 	}
 	
 	@Override

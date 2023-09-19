@@ -60,7 +60,7 @@ public final class EditmodeDragPacket
 			return false;
 		else if(!MinestuckConfig.SERVER.gristRefund.get() && entry == null)
 		{
-			GristSet cost = GristSet.of(GristTypes.BUILD, 1);
+			GristSet cost = GristTypes.BUILD.get().amount(1);
 			if(!data.getGristCache().canAfford(cost))
 			{
 				missingGristTracker.accept(cost);
