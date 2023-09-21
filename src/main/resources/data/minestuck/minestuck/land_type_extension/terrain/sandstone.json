@@ -1,0 +1,7 @@
+[
+    {
+        "step": "surface_structures",
+        "feature": "minecraft:large_basalt_columns",
+        "biome_types": [ "rough" ]
+    }
+]

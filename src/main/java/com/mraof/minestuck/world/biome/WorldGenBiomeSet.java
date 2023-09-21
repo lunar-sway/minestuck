@@ -8,6 +8,7 @@ import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -21,8 +22,8 @@ import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -117,6 +118,8 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		
 		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
+		
+		LandTypeExtensions.addFeatureExtensions(builder, landTypes);
 	}
 	
 	private static class GenerationBuilder implements LandBiomeGenBuilder
@@ -132,21 +135,19 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		}
 		
 		@Override
-		public void addFeature(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... types)
+		public void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 		{
+			if(modifier != null)
+				feature = modifier.map(feature);
+			
 			for(LandBiomeType type : types)
-				settings.get(type).addFeature(step, Holder.direct(feature));
+				this.settings.get(type).addFeature(step, feature);
 		}
 		
 		@Override
 		public void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 		{
-			Holder<PlacedFeature> featureHolder = features.getOrThrow(feature);
-			if(modifier != null)
-				featureHolder = modifier.map(featureHolder);
-			
-			for(LandBiomeType type : types)
-				settings.get(type).addFeature(step, featureHolder);
+			this.addFeature(step, features.getOrThrow(feature), modifier, types);
 		}
 		
 		@Override

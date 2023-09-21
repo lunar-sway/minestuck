@@ -12,17 +12,17 @@ import javax.annotation.Nullable;
 
 public interface LandBiomeGenBuilder
 {
-	void addFeature(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... types);
+	default void addFeature(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... types)
+	{
+		this.addFeature(step, Holder.direct(feature), types);
+	}
 	
 	default void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, LandBiomeType... types)
 	{
 		addFeature(step, feature, null, types);
 	}
 	
-	default void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
-	{
-		addFeature(step, feature.unwrapKey().orElseThrow(), modifier, types);
-	}
+	void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types);
 	
 	default void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, LandBiomeType... types)
 	{
