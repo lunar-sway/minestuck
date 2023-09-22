@@ -26,6 +26,12 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
+/**
+ * Generic class for scanners which locates the nearest structure of a certain type in the player's current dimension.
+ * Takes an optional fuel item, which will be consumed every tick until the device deactivates.
+ * Toggles on or off with right-click, or when fuel runs out.
+ */
+
 public class StructureScannerItem extends Item
 {
 	private final TagKey<Structure> structure;
@@ -37,20 +43,6 @@ public class StructureScannerItem extends Item
 		super(properties);
 		this.structure = structure;
 		this.fuelItem = fuelItem;
-		
-		ItemProperties.register(this, new ResourceLocation("angle"),
-				new CompassItemPropertyFunction((level, stack, entity) -> {
-					if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
-					{
-						return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));
-					} else
-					{
-						return null;
-					}
-				}));
-		
-		ItemProperties.register(this, new ResourceLocation(Minestuck.MOD_ID, "powered"),
-				((pStack, pLevel, pEntity, pSeed) -> pStack.hasTag() && pStack.getTag().getBoolean("Powered") ? 1 : 0));
 	}
 	
 	@Override
@@ -58,9 +50,8 @@ public class StructureScannerItem extends Item
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
-		if(pPlayer.isCreative() | stack.getDamageValue() != stack.getMaxDamage() | checkFuelItem(pPlayer, pLevel))
+		if(pPlayer.isCreative() || stack.getDamageValue() != stack.getMaxDamage() || checkFuelNeeded(pPlayer, pLevel))
 		{
-			
 			stack.getOrCreateTag().putBoolean("Powered", !stack.getTag().getBoolean("Powered"));
 			pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		}
@@ -68,11 +59,10 @@ public class StructureScannerItem extends Item
 		
 	}
 	
-	public static boolean isCharged(ItemStack stack)
-	{
-		return stack.getDamageValue() < stack.getMaxDamage();
-	}
-	
+	/**
+	 * Check if the item is powered, and if it's out of battery, recharge it.
+	 * Set the location to the nearest structure, check that a structure exists, then reduce charge if fuelled.
+	 */
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
 	{
@@ -80,53 +70,104 @@ public class StructureScannerItem extends Item
 		
 		if(pStack.hasTag() && pStack.getTag().getBoolean("Powered") && pLevel instanceof ServerLevel sLevel)
 		{
-			if(!isCharged(pStack))
-			{
-				pStack.setDamageValue(0);
-			}
+			resetCharge(pStack);
 			
-			BlockPos pos = sLevel.findNearestMapStructure(structure, pEntity.blockPosition(), 100, false);
+			BlockPos pos = setLocation(pEntity, sLevel);
 			
-			if(pos == null)
-			{
-				pStack.getTag().remove("TargetLocation");
-			} else
-			{
-				pStack.getTag().put("TargetLocation", NbtUtils.writeBlockPos(pos));
-			}
+			checkLocation(pStack, pos);
 			
-			if(pEntity.tickCount % 20 == 0)
-			{
-				pStack.hurt(1, pLevel.random, pEntity instanceof ServerPlayer ? (ServerPlayer) pEntity : null);
-				
-				if(!isCharged(pStack))
-				{
-					pStack.getTag().putBoolean("Powered", false);
-				}
-			}
+			reduceCharge(pStack, pEntity, pLevel);
 		}
 	}
 	
-	public boolean checkFuelItem(Player pPlayer, Level pLevel)
+	public static boolean isCharged(ItemStack stack)
+	{
+		return stack.getDamageValue() < stack.getMaxDamage();
+	}
+	
+	public void resetCharge(ItemStack pStack)
+	{
+		if(!isCharged(pStack))
+		{
+			pStack.setDamageValue(0);
+		}
+	}
+	
+	public BlockPos setLocation(Entity pEntity, ServerLevel sLevel)
+	{
+		return sLevel.findNearestMapStructure(structure, pEntity.blockPosition(), 100, false);
+	}
+	
+	public void checkLocation(ItemStack pStack, BlockPos pos)
+	{
+		if(pos == null)
+		{
+			pStack.getTag().remove("TargetLocation");
+		} else
+		{
+			pStack.getTag().put("TargetLocation", NbtUtils.writeBlockPos(pos));
+		}
+	}
+	
+	/**
+	 * Check that the fuel item is set; if not, don't reduce charge.
+	 * Scanner charge is represented by durability and damage. Damage is dealt every 20 ticks.
+	 * If it runs out of charge, power it off.
+	 *
+	 * @param pStack current item
+	 * @param pEntity player entity
+	 * @param pLevel player's current level
+	 * @return Boolean check for if deactivated, used to reactivate if players still has fuel.
+	 */
+	public boolean reduceCharge(ItemStack pStack, Entity pEntity, Level pLevel)
+	{
+		if(fuelItem != null && pEntity.tickCount % 20 == 0)
+		{
+			pStack.hurt(1, pLevel.random, pEntity instanceof ServerPlayer ? (ServerPlayer) pEntity : null);
+			
+			if(!isCharged(pStack))
+			{
+				pStack.getTag().putBoolean("Powered", false);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkFuelNeeded(Player pPlayer, Level pLevel)
 	{
 		if(fuelItem != null)
 		{
-			ItemStack fuelStack = new ItemStack(fuelItem.get());
+			ItemStack invItem = hasFuel(pPlayer);
 			
-			for(ItemStack invItem : pPlayer.getInventory().items)
+			if (invItem != null)
 			{
-				if(ItemStack.isSameItem(invItem, fuelStack))
-				{
-					if(!pLevel.isClientSide)
-					{
-						invItem.shrink(1);
-					}
-					pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
-					return true;
-				}
+				useFuelItem(invItem, pPlayer, pLevel);
+				return true;
 			}
-			return false;
 		}
-		return true;
+		return false;
+	}
+	
+	public ItemStack hasFuel(Player pPlayer){
+		ItemStack fuelStack = new ItemStack(fuelItem.get());
+		
+		for (ItemStack invItem : pPlayer.getInventory().items)
+		{
+			if (ItemStack.isSameItem(invItem, fuelStack))
+			{
+				return invItem;
+			}
+		}
+		return null;
+	}
+	
+	public void useFuelItem(ItemStack invItem, Player pPlayer, Level pLevel)
+	{
+		if(!pLevel.isClientSide)
+		{
+			invItem.shrink(1);
+		}
+		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
 	}
 }
