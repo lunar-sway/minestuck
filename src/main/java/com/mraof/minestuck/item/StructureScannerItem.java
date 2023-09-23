@@ -2,12 +2,15 @@ package com.mraof.minestuck.item;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.ClientProxy;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -50,10 +53,13 @@ public class StructureScannerItem extends Item
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
-		if(pPlayer.isCreative() || stack.getDamageValue() != stack.getMaxDamage() || checkFuelNeeded(pPlayer, pLevel))
+		if(pPlayer.isCreative() || stack.getDamageValue() != stack.getMaxDamage() && checkFuelNeeded(pPlayer, pLevel))
 		{
-			stack.getOrCreateTag().putBoolean("Powered", !stack.getTag().getBoolean("Powered"));
+			stack.getOrCreateTag().putBoolean("Powered", true);
 			pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+			
+			MutableComponent message = Component.translatable("message.temple_scanner.on");
+			pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 		}
 		return InteractionResultHolder.success(stack);
 		
@@ -128,6 +134,10 @@ public class StructureScannerItem extends Item
 			if(!isCharged(pStack))
 			{
 				pStack.getTag().putBoolean("Powered", false);
+				
+				MutableComponent message = Component.translatable("message.temple_scanner.off");
+				pEntity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+				
 				return true;
 			}
 		}
