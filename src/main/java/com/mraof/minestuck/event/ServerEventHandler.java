@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -142,20 +143,23 @@ public class ServerEventHandler
 	{
 		if(event.getSource().getEntity() != null)
 		{
-			if (event.getSource().getEntity() instanceof ServerPlayer)
+			Entity attacker = event.getSource().getEntity();
+			Entity injured = event.getEntity();
+			
+			if(injured != null)
 			{
-				ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
-				if (event.getEntity() instanceof UnderlingEntity)
-				{    //Increase damage to underling
-					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
+				boolean attackerIsRealPlayer = attacker instanceof Player && !(attacker instanceof FakePlayer);
+				
+				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
+				{
+					//Increase damage to underling
+					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
-				}
-			}
-			else if (event.getEntity() instanceof ServerPlayer && event.getSource().getEntity() instanceof UnderlingEntity)
-			{    //Decrease damage to player
-				ServerPlayer player = (ServerPlayer) event.getEntity();
+				} else if (injured instanceof ServerPlayer player && attacker instanceof UnderlingEntity)
+				{    //Decrease damage to player
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
+				}
 			}
 		}
 	}
