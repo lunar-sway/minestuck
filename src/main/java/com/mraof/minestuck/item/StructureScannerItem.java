@@ -1,17 +1,10 @@
 package com.mraof.minestuck.item;
 
-import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.client.ClientProxy;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
-import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -55,8 +48,7 @@ public class StructureScannerItem extends Item
 		
 		if(checkFuelNeeded(pPlayer, pLevel) || pPlayer.isCreative())
 		{
-			if (stack.getDamageValue() == stack.getMaxDamage())
-			{
+			if (stack.getDamageValue() > 0){
 				resetCharge(stack);
 			}
 			stack.getOrCreateTag().putBoolean("Powered", true);
@@ -83,7 +75,10 @@ public class StructureScannerItem extends Item
 		
 		if(pStack.hasTag() && pStack.getTag().getBoolean("Powered") && pLevel instanceof ServerLevel sLevel)
 		{
-			resetCharge(pStack);
+			if (!isCharged(pStack))
+			{
+				resetCharge(pStack);
+			}
 			
 			BlockPos pos = setLocation(pEntity, sLevel);
 			
@@ -100,10 +95,7 @@ public class StructureScannerItem extends Item
 	
 	public void resetCharge(ItemStack pStack)
 	{
-		if(!isCharged(pStack))
-		{
-			pStack.setDamageValue(0);
-		}
+		pStack.setDamageValue(0);
 	}
 	
 	public BlockPos setLocation(Entity pEntity, ServerLevel sLevel)
