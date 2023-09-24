@@ -149,15 +149,17 @@ public class ServerEventHandler
 			if(injured != null)
 			{
 				boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
+				boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
 				
 				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 				{
 					//Increase damage to underling
 					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
-				} else if (injured instanceof ServerPlayer player && !(injured instanceof FakePlayer) && attacker instanceof UnderlingEntity)
-				{    //Decrease damage to player
-					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
+				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+				{
+					//Decrease damage to player
+					double modifier = PlayerSavedData.getData((ServerPlayer) injured).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
 			}
