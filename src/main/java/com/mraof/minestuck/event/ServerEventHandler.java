@@ -155,7 +155,7 @@ public class ServerEventHandler
 					//Increase damage to underling
 					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
-				} else if (injured instanceof ServerPlayer player && attacker instanceof UnderlingEntity)
+				} else if (injured instanceof ServerPlayer player && !(injured instanceof FakePlayer) && attacker instanceof UnderlingEntity)
 				{    //Decrease damage to player
 					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
