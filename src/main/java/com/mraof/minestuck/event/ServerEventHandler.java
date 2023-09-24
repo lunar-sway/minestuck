@@ -148,7 +148,7 @@ public class ServerEventHandler
 			
 			if(injured != null)
 			{
-				boolean attackerIsRealPlayer = attacker instanceof Player && !(attacker instanceof FakePlayer);
+				boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
 				
 				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
 				{
