@@ -13,8 +13,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.Objects;
-
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus=Mod.EventBusSubscriber.Bus.FORGE)
 public class MSDimensions
 {
@@ -24,8 +22,10 @@ public class MSDimensions
 	
 	public static boolean isLandDimension(MinecraftServer server, ResourceKey<Level> levelKey)
 	{
-		Objects.requireNonNull(server);
-		return LandTypePair.getNamed(server, levelKey).isPresent();
+		if(server != null)
+			return LandTypePair.getNamed(server, levelKey).isPresent();
+		else
+			return false;
 	}
 	
 	public static boolean isSkaia(ResourceKey<Level> dimension)
