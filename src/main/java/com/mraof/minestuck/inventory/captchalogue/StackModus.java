@@ -1,9 +1,8 @@
 package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,9 +22,9 @@ public class StackModus extends Modus
 	protected boolean changed;
 	protected NonNullList<ItemStack> items;
 	
-	public StackModus(ModusType<? extends StackModus> type, PlayerSavedData savedData, LogicalSide side)
+	public StackModus(ModusType<? extends StackModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override

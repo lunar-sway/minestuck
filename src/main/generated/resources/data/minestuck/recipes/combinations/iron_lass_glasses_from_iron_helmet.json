@@ -4,7 +4,7 @@
     "item": "minecraft:iron_helmet"
   },
   "input2": {
-    "item": "minestuck:energy_core"
+    "item": "minestuck:particle_accelerator"
   },
   "mode": "and",
   "output": {

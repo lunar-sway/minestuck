@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 75
+  },
+  "ingredient": {
+    "item": "minestuck:conductors_baton"
+  }
+}

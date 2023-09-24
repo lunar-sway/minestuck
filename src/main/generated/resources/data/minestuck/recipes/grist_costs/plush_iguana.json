@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:uranium": 6
+  },
+  "ingredient": {
+    "item": "minestuck:plush_iguana"
+  }
+}

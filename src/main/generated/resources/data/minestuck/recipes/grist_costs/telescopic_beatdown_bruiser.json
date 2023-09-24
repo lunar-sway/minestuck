@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 90,
+    "minestuck:caulk": 22,
+    "minestuck:rust": 5
+  },
+  "ingredient": {
+    "item": "minestuck:telescopic_beatdown_bruiser"
+  }
+}

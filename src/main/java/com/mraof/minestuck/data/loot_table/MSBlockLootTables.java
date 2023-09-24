@@ -217,6 +217,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(BRIGHT_DENSE_CLOUD.get());
 		dropSelf(SUGAR_CUBE.get());
 		dropSelf(SPIKES.get());
+		dropSelf(NATIVE_SULFUR.get());
 		
 		dropSelf(GLOWING_LOG.get());
 		dropSelf(FROST_LOG.get());
