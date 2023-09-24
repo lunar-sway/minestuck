@@ -53,13 +53,20 @@ public class StructureScannerItem extends Item
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
-		if(pPlayer.isCreative() || stack.getDamageValue() != stack.getMaxDamage() && checkFuelNeeded(pPlayer, pLevel))
+		if(checkFuelNeeded(pPlayer, pLevel) || pPlayer.isCreative())
 		{
+			if (stack.getDamageValue() == stack.getMaxDamage())
+			{
+				resetCharge(stack);
+			}
 			stack.getOrCreateTag().putBoolean("Powered", true);
 			pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 			
-			MutableComponent message = Component.translatable("message.temple_scanner.on");
-			pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+			if (!pLevel.isClientSide)
+			{
+				MutableComponent message = Component.translatable("message.temple_scanner.on");
+				pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+			}
 		}
 		return InteractionResultHolder.success(stack);
 		
@@ -125,7 +132,7 @@ public class StructureScannerItem extends Item
 	 * @param pLevel player's current level
 	 * @return Boolean check for if deactivated, used to reactivate if players still has fuel.
 	 */
-	public boolean reduceCharge(ItemStack pStack, Entity pEntity, Level pLevel)
+	public void reduceCharge(ItemStack pStack, Entity pEntity, Level pLevel)
 	{
 		if(fuelItem != null && pEntity.tickCount % 20 == 0)
 		{
@@ -135,13 +142,12 @@ public class StructureScannerItem extends Item
 			{
 				pStack.getTag().putBoolean("Powered", false);
 				
-				MutableComponent message = Component.translatable("message.temple_scanner.off");
-				pEntity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-				
-				return true;
+				if (!pLevel.isClientSide()){
+					MutableComponent message = Component.translatable("message.temple_scanner.off");
+					pEntity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+				}
 			}
 		}
-		return false;
 	}
 	
 	public boolean checkFuelNeeded(Player pPlayer, Level pLevel)
