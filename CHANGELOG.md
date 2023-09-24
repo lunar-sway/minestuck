@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Fake players no longer crash the game when injuring underlings
+- Fix a crash from fake players injuring underlings
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
