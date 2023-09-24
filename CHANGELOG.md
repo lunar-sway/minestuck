@@ -19,20 +19,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Temple Scanner now displays direction on the item
-
-### Contributors for this release
-
-- Vivian Zane, Dweblenod, kirderf1
-
-### Changed
-
 - New textures and slightly shorter models for transportalizers
 - Old Computer now starts with SBURB 95 Theme
 - Updated textures of bookshelves and ladders
 - Retextured green stone blocks
 - Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
 - New texture for wizard staff
+- Temple Scanner now displays direction on the item
 
 ### Fixed
 
