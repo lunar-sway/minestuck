@@ -20,6 +20,7 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
+import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
@@ -122,7 +123,7 @@ public class ClientProxy
 		ItemProperties.register(MSItems.STONE_TABLET.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> {if(stack.hasTag() && stack.getTag().contains("TargetLocation")) {return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));} else {return null;}}));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.setAngleTag(level, stack)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), ((pStack, pLevel, pEntity, pSeed) -> pStack.hasTag() && pStack.getTag().getBoolean("Powered") ? 1 : 0));
 	}
 	

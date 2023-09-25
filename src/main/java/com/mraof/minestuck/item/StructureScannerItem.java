@@ -2,6 +2,7 @@ package com.mraof.minestuck.item;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -41,12 +42,17 @@ public class StructureScannerItem extends Item
 		this.fuelItem = fuelItem;
 	}
 	
+	public static GlobalPos setAngleTag(Level level, ItemStack stack)
+	{
+		if(stack.hasTag() && stack.getTag().contains("TargetLocation")) {return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));} else {return null;}
+	}
+	
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
-		if(checkFuelNeeded(pPlayer, pLevel) || pPlayer.isCreative())
+		if(getFuel(pPlayer, pLevel) || pPlayer.isCreative())
 		{
 			if (stack.getDamageValue() > 0){
 				resetCharge(stack);
@@ -59,9 +65,9 @@ public class StructureScannerItem extends Item
 				MutableComponent message = Component.translatable("message.temple_scanner.on");
 				pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 			}
+			return InteractionResultHolder.success(stack);
 		}
-		return InteractionResultHolder.success(stack);
-		
+		return InteractionResultHolder.fail(stack);
 	}
 	
 	/**
@@ -80,9 +86,9 @@ public class StructureScannerItem extends Item
 				resetCharge(pStack);
 			}
 			
-			BlockPos pos = setLocation(pEntity, sLevel);
+			BlockPos pos = getLocation(pEntity, sLevel);
 			
-			checkLocation(pStack, pos);
+			setLocation(pStack, pos);
 			
 			reduceCharge(pStack, pEntity, pLevel);
 		}
@@ -98,12 +104,12 @@ public class StructureScannerItem extends Item
 		pStack.setDamageValue(0);
 	}
 	
-	public BlockPos setLocation(Entity pEntity, ServerLevel sLevel)
+	public BlockPos getLocation(Entity pEntity, ServerLevel sLevel)
 	{
 		return sLevel.findNearestMapStructure(structure, pEntity.blockPosition(), 100, false);
 	}
 	
-	public void checkLocation(ItemStack pStack, BlockPos pos)
+	public void setLocation(ItemStack pStack, BlockPos pos)
 	{
 		if(pos == null)
 		{
@@ -115,9 +121,9 @@ public class StructureScannerItem extends Item
 	}
 	
 	/**
-	 * Check that the fuel item is set; if not, don't reduce charge.
-	 * Scanner charge is represented by durability and damage. Damage is dealt every 20 ticks.
-	 * If it runs out of charge, power it off.
+	 * Does nothing if this scanner type has no fuel item that it uses.
+	 * Scanner charge is represented by durability and damage.
+	 * Damage is dealt every 20 ticks, powers off when out of charge.
 	 *
 	 * @param pStack current item
 	 * @param pEntity player entity
@@ -142,22 +148,23 @@ public class StructureScannerItem extends Item
 		}
 	}
 	
-	public boolean checkFuelNeeded(Player pPlayer, Level pLevel)
+	public boolean getFuel(Player pPlayer, Level pLevel)
 	{
 		if(fuelItem != null)
 		{
-			ItemStack invItem = hasFuel(pPlayer);
+			ItemStack invItem = findFuel(pPlayer);
 			
 			if (invItem != null)
 			{
-				useFuelItem(invItem, pPlayer, pLevel);
+				useFuel(invItem, pPlayer, pLevel);
 				return true;
 			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
-	public ItemStack hasFuel(Player pPlayer){
+	public ItemStack findFuel(Player pPlayer){
 		ItemStack fuelStack = new ItemStack(fuelItem.get());
 		
 		for (ItemStack invItem : pPlayer.getInventory().items)
@@ -170,7 +177,7 @@ public class StructureScannerItem extends Item
 		return null;
 	}
 	
-	public void useFuelItem(ItemStack invItem, Player pPlayer, Level pLevel)
+	public void useFuel(ItemStack invItem, Player pPlayer, Level pLevel)
 	{
 		if(!pLevel.isClientSide)
 		{
