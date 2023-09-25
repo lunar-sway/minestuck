@@ -741,6 +741,13 @@
       "minecraft:item/shield/block5"
     ]
   },
+  "item.baton.orchestra": {
+	  "category": "ambient",
+	  "subtitle": "subtitles.minestuck.baton_orchestra",
+	  "sounds": [
+		"minestuck:item/baton_orchestra"
+	]
+  },
   "event.echeladder.increase": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.upcheladder",

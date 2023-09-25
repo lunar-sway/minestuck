@@ -38,6 +38,7 @@ public class MinestuckEntityTypeTagsProvider extends EntityTypeTagsProvider
 		tag(ROOKS).add(DERSITE_ROOK.get(), PROSPITIAN_ROOK.get());
 		tag(MAGNET_RECEPTIVE).add(GRIST.get(), VITALITY_GEL.get(), EntityType.ITEM, EntityType.EXPERIENCE_ORB);
 		tag(REMOTE_OBSERVER_BLACKLIST).add(EntityType.COMMAND_BLOCK_MINECART, EntityType.SPAWNER_MINECART, PLAYER_DECOY.get());
+		tag(BOSS_MOB).add(EntityType.ENDER_DRAGON, EntityType.WITHER, EntityType.RAVAGER, EntityType.ELDER_GUARDIAN, EntityType.WARDEN, GICLOPS.get());
 	}
 	
 	@Override

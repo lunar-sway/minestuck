@@ -2,9 +2,8 @@ package com.mraof.minestuck.inventory.captchalogue;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,9 +22,9 @@ public class TreeModus extends Modus
 	public int size;
 	public boolean autoBalance = true;
 	
-	public TreeModus(ModusType<? extends TreeModus> type, PlayerSavedData savedData, LogicalSide side)
+	public TreeModus(ModusType<? extends TreeModus> type, LogicalSide side)
 	{
-		super(type, savedData, side);
+		super(type, side);
 	}
 	
 	@Override

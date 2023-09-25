@@ -1,0 +1,11 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 10000,
+    "minestuck:build": 24500,
+    "minestuck:gold": 1
+  },
+  "ingredient": {
+    "item": "minestuck:yaldabaoths_keyton"
+  }
+}

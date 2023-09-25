@@ -13,11 +13,13 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,7 +59,7 @@ public final class PlayerData
 	@Nonnull
 	final PlayerIdentifier identifier;
 	
-	private final PlayerSavedData savedData;
+	private final MinecraftServer mcServer;
 	private final Echeladder echeladder;
 	private int color = ColorHandler.DEFAULT_COLOR;
 	
@@ -74,34 +76,34 @@ public final class PlayerData
 	
 	private boolean hasLoggedIn;
 	
-	PlayerData(PlayerSavedData savedData, @Nonnull PlayerIdentifier player)
+	PlayerData(MinecraftServer mcServer, @Nonnull PlayerIdentifier player)
 	{
-		this.savedData = savedData;
+		this.mcServer = mcServer;
 		this.identifier = player;
-		echeladder = new Echeladder(savedData, player);
-		gristCache = new GristCache(this, savedData.mcServer);
+		echeladder = new Echeladder(mcServer, player);
+		gristCache = new GristCache(this, mcServer);
 		hasLoggedIn = false;
 	}
 	
-	PlayerData(PlayerSavedData savedData, CompoundTag nbt)
+	PlayerData(MinecraftServer mcServer, CompoundTag nbt)
 	{
-		this.savedData = savedData;
+		this.mcServer = mcServer;
 		this.identifier = IdentifierHandler.load(nbt, "player");
 		
-		echeladder = new Echeladder(savedData, identifier);
+		echeladder = new Echeladder(mcServer, identifier);
 		echeladder.loadEcheladder(nbt);
 		if (nbt.contains("color"))
 			this.color = nbt.getInt("color");
 		
 		if (nbt.contains("modus"))
 		{
-			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), savedData);
+			this.modus = CaptchaDeckHandler.readFromNBT(nbt.getCompound("modus"), LogicalSide.SERVER);
 			givenModus = true;
 		}
 		else givenModus = nbt.getBoolean("given_modus");
 		boondollars = nbt.getLong("boondollars");
 		
-		gristCache = new GristCache(this, savedData.mcServer);
+		gristCache = new GristCache(this, mcServer);
 		gristCache.read(nbt);
 		
 		ListTag list = nbt.getList("consort_reputation", Tag.TAG_COMPOUND);
@@ -149,11 +151,6 @@ public final class PlayerData
 		return nbt;
 	}
 	
-	void markDirty()
-	{
-		savedData.setDirty();
-	}
-	
 	public Echeladder getEcheladder()
 	{
 		return echeladder;
@@ -166,10 +163,9 @@ public final class PlayerData
 	
 	public void trySetColor(int color)
 	{
-		if(SburbHandler.canSelectColor(identifier, savedData.mcServer) && this.color != color)
+		if(SburbHandler.canSelectColor(identifier, mcServer) && this.color != color)
 		{
 			this.color = color;
-			markDirty();
 			
 			sendColor(getPlayer(), false);
 		}
@@ -180,14 +176,16 @@ public final class PlayerData
 		return modus;
 	}
 	
-	public void setModus(Modus modus)
+	public void setModus(@Nullable Modus modus)
 	{
 		if(this.modus != modus)
 		{
 			this.modus = modus;
 			if(modus != null)
 				setGivenModus();
-			markDirty();
+			ServerPlayer player = this.getPlayer();
+			if(player != null)
+				MSPacketHandler.sendToPlayer(ModusDataPacket.create(modus), player);
 		}
 	}
 	
@@ -198,11 +196,7 @@ public final class PlayerData
 	
 	private void setGivenModus()
 	{
-		if(!givenModus)
-		{
-			givenModus = true;
-			markDirty();
-		}
+		givenModus = true;
 	}
 	public double getGutterMultipler()
 	{
@@ -213,7 +207,6 @@ public final class PlayerData
 		if(amount < 0)
 			throw new IllegalArgumentException("Multiplier amount may not be negative.");
 		gutterMultiplier += amount;
-		markDirty();
 	}
 	
 	
@@ -229,7 +222,6 @@ public final class PlayerData
 		else if(amount > 0)
 		{
 			boondollars += amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -244,7 +236,6 @@ public final class PlayerData
 				throw new IllegalStateException("Can't go to negative boondollars");
 			
 			boondollars -= amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -267,7 +258,6 @@ public final class PlayerData
 		else if(amount != boondollars)
 		{
 			boondollars = amount;
-			markDirty();
 			sendBoondollars(getPlayer());
 		}
 	}
@@ -285,7 +275,6 @@ public final class PlayerData
 		if(newRep != oldRep)
 		{
 			consortReputation.put(dim.location(), newRep);
-			markDirty();
 			sendConsortReputation(getPlayer());
 		}
 	}
@@ -305,7 +294,6 @@ public final class PlayerData
 		if(title == null)
 		{
 			title = Objects.requireNonNull(newTitle);
-			markDirty();
 			sendTitle(getPlayer());
 		} else throw new IllegalStateException("Can't set title for player "+ identifier.getUsername()+" because they already have one");
 	}
@@ -317,11 +305,7 @@ public final class PlayerData
 	
 	public void effectToggle(boolean toggle)
 	{
-		if(effectToggle != toggle)
-		{
-			effectToggle = toggle;
-			markDirty();
-		}
+		effectToggle = toggle;
 	}
 	
 	private void tryGiveStartingModus(ServerPlayer player)
@@ -338,7 +322,7 @@ public final class PlayerData
 			return;
 		}
 		
-		Modus modus = type.createServerSide(savedData);
+		Modus modus = type.createServerSide();
 		if(modus != null)
 		{
 			modus.initModus(null, player, null, MinestuckConfig.SERVER.initialModusSize.get());
@@ -350,14 +334,11 @@ public final class PlayerData
 	{
 		getEcheladder().updateEcheladderBonuses(player);
 		
+		if(getModus() != null)
+			MSPacketHandler.sendToPlayer(ModusDataPacket.create(getModus()), player);
+		
 		if(getModus() == null && !hasGivenModus())
 			tryGiveStartingModus(player);
-		
-		if(getModus() != null)
-		{
-			Modus modus = getModus();
-			MSPacketHandler.sendToPlayer(ModusDataPacket.create(CaptchaDeckHandler.writeToNBT(modus)), player);
-		}
 		
 		echeladder.sendInitialPacket(player);
 		sendColor(player, !hasLoggedIn);
@@ -409,6 +390,6 @@ public final class PlayerData
 	@Nullable
 	ServerPlayer getPlayer()
 	{
-		return identifier.getPlayer(savedData.mcServer);
+		return identifier.getPlayer(mcServer);
 	}
 }

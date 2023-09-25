@@ -13,6 +13,7 @@ import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSSoundEvents;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -232,7 +233,7 @@ public class ClientEditToolDrag
 		
 		return (ClientEditHandler.isActive()
 				&& !Minecraft.getInstance().isPaused()
-				&& !(block.getDestroySpeed(player.level(), blockHit.getBlockPos()) < 0 /*TODO || block.getMaterial() == Material.PORTAL*/)
+				&& !(block.getDestroySpeed(player.level(), blockHit.getBlockPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 				&& !isMultiblock(player));
 	}
 	

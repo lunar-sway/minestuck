@@ -9,10 +9,13 @@ import com.mraof.minestuck.item.loot.MSLootTables;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
+import com.mraof.minestuck.util.MSDamageSources;
+import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,6 +47,7 @@ import java.util.function.Supplier;
 
 import static com.mraof.minestuck.player.EnumAspect.*;
 
+@SuppressWarnings("resource")
 public interface OnHitEffect
 {
 	void onHit(ItemStack stack, LivingEntity target, LivingEntity attacker);
@@ -227,6 +231,13 @@ public interface OnHitEffect
 		}
 	})));
 	
+	OnHitEffect BOSS_BUSTER = (stack, target, attacker) -> {
+		if(attacker instanceof ServerPlayer player && target.getType().is(MSTags.EntityTypes.BOSS_MOB))
+		{
+			target.hurt(target.damageSources().playerAttack(player), target.getMaxHealth() / 20);
+		}
+	};
+	
 	static OnHitEffect setOnFire(int duration)
 	{
 		return (itemStack, target, attacker) -> target.setSecondsOnFire(duration);
@@ -235,12 +246,10 @@ public interface OnHitEffect
 	static OnHitEffect armorBypassingDamageMod(float additionalDamage, EnumAspect aspect)
 	{
 		return (stack, target, attacker) -> {
-			DamageSource source;
 			float damage = additionalDamage * 3.3F;
 			
 			if(attacker instanceof ServerPlayer serverPlayer)
 			{
-				source = target.damageSources().playerAttack(serverPlayer);
 				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
 				
 				if(target instanceof UnderlingEntity)
@@ -256,13 +265,9 @@ public interface OnHitEffect
 					if(title == null || title.getHeroAspect() != aspect)
 						damage = damage / 1.2F;
 				}
-			} else
-			{
-				source = attacker.damageSources().mobAttack(attacker);
 			}
 			
-			//source = source.bypassArmor(); TODO should we make our own damage type for this?
-			target.hurt(source, damage);
+			target.hurt(MSDamageSources.armorPierce(attacker.level().registryAccess(), attacker), damage);
 		};
 	}
 	
@@ -340,6 +345,7 @@ public interface OnHitEffect
 	
 	/**
 	 * A function that causes a sweep effect (code based off of {@link #SWEEP}) and applies an array of effects on the target.
+	 *
 	 * @param effects A varargs value, essentially an optional array of hit effects to be applied.
 	 */
 	static OnHitEffect sweepMultiEffect(OnHitEffect... effects)
@@ -376,6 +382,17 @@ public interface OnHitEffect
 			}
 			playerAttacker.level().playSound(null, playerAttacker.getX(), playerAttacker.getY(), playerAttacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, playerAttacker.getSoundSource(), 1.0F, 1.0F);
 			playerAttacker.sweepAttack();
+		};
+	}
+	
+	static OnHitEffect spawnParticles(SimpleParticleType particle, int amount, double xMovement, double yMovement, double zMovement, double speed)
+	{
+		return (stack, target, attacker) -> {
+			Level level = target.level();
+			if(!level.isClientSide)
+			{
+				((ServerLevel) level).sendParticles(particle, target.getX(), target.getY(), target.getZ(), amount, xMovement, yMovement, zMovement, speed);
+			}
 		};
 	}
 	
