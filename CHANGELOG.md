@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix a crash from fake players injuring underlings
+- Fix a crash caused by librarian villagers in the overworld
+
+### Contributors for this release
+
+- kirderf1, Dweblenod
+
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added
