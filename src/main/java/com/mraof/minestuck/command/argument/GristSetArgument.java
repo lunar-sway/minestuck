@@ -8,9 +8,10 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.api.alchemy.DefaultMutableGristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.NonNegativeGristSet;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
@@ -51,7 +52,7 @@ public class GristSetArgument implements ArgumentType<MutableGristSet>
 	@Override
 	public MutableGristSet parse(StringReader reader) throws CommandSyntaxException
 	{
-		MutableGristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : new MutableGristSet();
+		MutableGristSet set = mode == Mode.NON_NEGATIVE ? new NonNegativeGristSet() : MutableGristSet.newDefault();
 		do
 		{
 			int start1 = reader.getCursor();
@@ -84,7 +85,7 @@ public class GristSetArgument implements ArgumentType<MutableGristSet>
 	
 	public static MutableGristSet getGristArgument(CommandContext<CommandSourceStack> context, String id)
 	{
-		return context.getArgument(id, MutableGristSet.class);
+		return context.getArgument(id, DefaultMutableGristSet.class);
 	}
 	
 	public static NonNegativeGristSet getNonNegativeGristArgument(CommandContext<CommandSourceStack> context, String id)

@@ -2,10 +2,9 @@ package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -66,7 +65,7 @@ public class GuiUtil
 				int row = place % 3;
 				int col = place / 3;
 				
-				int color = getGristColor(mode, cache.canAfford(new MutableGristSet(amount)));
+				int color = getGristColor(mode, cache.canAfford(amount));
 				
 				String needStr = addSuffix(need), haveStr = addSuffix(have);
 				if(mode == GristboardMode.JEI_WILDCARD)
@@ -109,7 +108,7 @@ public class GuiUtil
 				guiGraphics.drawString(font, haveStr, boardX + needStrWidth + needOffset + iconSize + haveOffset + index % GRIST_BOARD_WIDTH, boardY + 8 * row, color, false);
 				
 				
-				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.getDummyIcon() : type.getIcon();
+				ResourceLocation icon = mode == GristboardMode.JEI_WILDCARD ? GristType.DUMMY_ICON_LOCATION : type.getIcon();
 				if(icon != null)
 				{
 					RenderSystem.setShaderColor(1, 1, 1, 1);

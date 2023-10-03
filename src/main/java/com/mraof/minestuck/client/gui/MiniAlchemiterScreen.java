@@ -3,8 +3,8 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.machine.MiniAlchemiterBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
@@ -62,7 +62,7 @@ public class MiniAlchemiterScreen extends MachineScreen<MiniAlchemiterMenu>
 			else stack = AlchemyHelper.getDecodedItem(menu.getSlot(0).getItem());
 			
 			Optional<GristCostRecipe> recipe = GristCostRecipe.findRecipeForItem(stack, minecraft.level);
-			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, menu.getWildcardType(), false, minecraft.level)).orElse(null);
+			GristSet set = recipe.map(recipe1 -> recipe1.getGristCost(stack, menu.getWildcardType(), false)).orElse(null);
 			boolean useWildcard = recipe.map(GristCostRecipe::canPickWildcard).orElse(false);
 			
 			GuiUtil.drawGristBoard(guiGraphics, set, useWildcard ? GuiUtil.GristboardMode.ALCHEMITER_SELECT : GuiUtil.GristboardMode.ALCHEMITER, 9, 45, font);

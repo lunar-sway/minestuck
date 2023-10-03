@@ -1,10 +1,10 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
@@ -35,7 +35,7 @@ import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
-import com.mraof.minestuck.jei.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.network.EffectTogglePacket;
 import com.mraof.minestuck.player.*;
 import com.mraof.minestuck.skaianet.*;
@@ -1590,7 +1590,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addGristType(GristTypes.ARTIFACT, "Artifact");
 		addGristType(GristTypes.ZILLIUM, "Zillium");
 		add(GristType.FORMAT, "%s Grist");
-		add(GristSet.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
+		add(GristCache.MISSING_MESSAGE, "You do not have enough grist for that. You need: %s");
 		add(GristSet.GRIST_COMMA, "%s, %s");
 		add(GristAmount.GRIST_AMOUNT, "%s %s");
 		

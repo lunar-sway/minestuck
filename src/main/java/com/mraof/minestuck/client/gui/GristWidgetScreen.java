@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.blockentity.machine.GristWidgetBlockEntity;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.inventory.GristWidgetMenu;

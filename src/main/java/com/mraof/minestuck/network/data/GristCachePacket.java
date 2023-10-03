@@ -1,7 +1,7 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;

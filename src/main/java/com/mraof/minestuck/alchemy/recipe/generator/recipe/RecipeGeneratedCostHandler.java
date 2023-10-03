@@ -5,13 +5,14 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
 import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
-import com.mraof.minestuck.alchemy.recipe.generator.GristCostResult;
-import com.mraof.minestuck.alchemy.recipe.generator.LookupTracker;
-import com.mraof.minestuck.jei.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratorCallback;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
+import com.mraof.minestuck.api.alchemy.recipe.generator.LookupTracker;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -247,9 +248,15 @@ public class RecipeGeneratedCostHandler extends SimplePreparableReloadListener<L
 	}
 	
 	@Override
-	public GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context)
+	public GristCostResult generate(Item item, GeneratorCallback callback)
 	{
-		return process.generateCost(item, lastCost, context);
+		return process.generateCost(item, callback);
+	}
+	
+	@Override
+	public void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GeneratorCallback callback)
+	{
+		this.process.onCostFromOtherRecipe(item, lastCost, callback);
 	}
 	
 	@Override

@@ -2,8 +2,8 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.ImmutableGristSet;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.gui.toasts.GristToast;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;

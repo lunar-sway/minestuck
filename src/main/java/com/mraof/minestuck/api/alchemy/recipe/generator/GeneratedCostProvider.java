@@ -1,5 +1,6 @@
-package com.mraof.minestuck.alchemy.recipe.generator;
+package com.mraof.minestuck.api.alchemy.recipe.generator;
 
+import com.mraof.minestuck.alchemy.recipe.generator.GenerationContext;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
@@ -12,12 +13,11 @@ public interface GeneratedCostProvider
 {
 	/**
 	 * @param item the item to provide a grist cost for.
-	 * @param lastCost the result from the previous provider for this item.
-	 * @param context context for the cost generation, providing the recursive call for getting a grist cost for another item, and is used to determine whether to cache the result.
+	 * @param callback context for the cost generation, providing the recursive call for getting a grist cost for another item, and is used to determine whether to cache the result.
 	 * @return The grist cost result from this function. Null result means that no result was found, while a non-null result of a null grist cost means that the item explicitly is unalchemizable.
 	 */
 	@Nullable
-	GristCostResult generate(Item item, @Nullable GristCostResult lastCost, GenerationContext context);
+	GristCostResult generate(Item item, GeneratorCallback callback);
 	
 	/**
 	 * Called once when grist cost generation is done.
@@ -26,5 +26,8 @@ public interface GeneratedCostProvider
 	{}
 	
 	default void reportPreliminaryLookups(LookupTracker tracker)
+	{}
+	
+	default void onCostFromOtherRecipe(Item item, GristCostResult lastCost, GeneratorCallback callback)
 	{}
 }

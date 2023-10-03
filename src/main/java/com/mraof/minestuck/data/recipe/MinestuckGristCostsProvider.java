@@ -1,8 +1,12 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.ContainerGristCostBuilder;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipeBuilder;
+import com.mraof.minestuck.api.alchemy.recipe.SourceGristCostBuilder;
+import com.mraof.minestuck.api.alchemy.recipe.WildcardGristCostBuilder;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.ExtraForgeTags;
@@ -17,7 +21,7 @@ import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
-import static com.mraof.minestuck.alchemy.GristTypes.*;
+import static com.mraof.minestuck.api.alchemy.GristTypes.*;
 
 public final class MinestuckGristCostsProvider
 {
@@ -763,7 +767,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.TUIX_BAR.get()).grist(BUILD, 5).grist(IODINE, 1).build(recipeSaver);
 		for(GristType type : GristTypes.values())
 		{
-			if(GristTypes.getRegistry().getKey(type).getNamespace().equals(Minestuck.MOD_ID))
+			if(type.getIdOrThrow().getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);
 		}
 		GristCostRecipeBuilder.of(MSItems.APPLE_JUICE.get()).grist(AMBER, 4).grist(SULFUR, 1).build(recipeSaver);

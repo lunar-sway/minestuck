@@ -2,8 +2,10 @@ package com.mraof.minestuck.alchemy.recipe.generator;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GristCostResult;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.world.item.Item;
@@ -105,7 +107,10 @@ public final class GristCostGenerator
 		{
 			try
 			{
-				cost = provider.generate(item, cost, context);
+				if(cost == null)
+					cost = provider.generate(item, context);
+				else
+					provider.onCostFromOtherRecipe(item, cost, context);
 			} catch(Exception e)
 			{
 				LOGGER.error("Got exception from generated cost provider {} while generating for item {}:", provider, item, e);
@@ -115,7 +120,7 @@ public final class GristCostGenerator
 		if(providers.isEmpty() && MinestuckConfig.COMMON.logIngredientItemsWithoutCosts.get())
 			LOGGER.info("Item {} was looked up, but it did not have any grist costs or recipes.", ForgeRegistries.ITEMS.getKey(item));
 		
-		return cost != null ? cost.getCost() : null;
+		return cost != null ? cost.cost() : null;
 	}
 	
 	private static class GeneratorProcess

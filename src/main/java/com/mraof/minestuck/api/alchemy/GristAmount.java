@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy;
+package com.mraof.minestuck.api.alchemy;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -47,15 +47,21 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	}
 	
 	@Override
-	public double getValue()
+	public boolean isEmpty()
 	{
-		return type.getValue() * amount;
+		return amount == 0;
 	}
 	
 	@Override
-	public List<GristAmount> asAmounts()
+	public boolean hasType(GristType type)
 	{
-		return Collections.singletonList(this);
+		return this.type == type;
+	}
+	
+	@Override
+	public double getValue()
+	{
+		return type.getValue() * amount;
 	}
 	
 	@Override
@@ -65,9 +71,15 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 	}
 	
 	@Override
-	public boolean isEmpty()
+	public List<GristAmount> asAmounts()
 	{
-		return amount == 0;
+		return Collections.singletonList(this);
+	}
+	
+	@Override
+	public Component asTextComponent()
+	{
+		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 	
 	public void write(FriendlyByteBuf buffer)
@@ -81,11 +93,5 @@ public record GristAmount(GristType type, long amount) implements ImmutableGrist
 		GristType type = buffer.readRegistryIdSafe(GristType.class);
 		long amount = buffer.readLong();
 		return new GristAmount(type, amount);
-	}
-	
-	@Override
-	public Component asTextComponent()
-	{
-		return Component.translatable(GRIST_AMOUNT, amount(), type().getDisplayName());
 	}
 }

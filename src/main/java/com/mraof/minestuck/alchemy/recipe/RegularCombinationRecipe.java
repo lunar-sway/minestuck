@@ -2,8 +2,12 @@ package com.mraof.minestuck.alchemy.recipe;
 
 import com.google.gson.JsonObject;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.jei.JeiCombination;
+import com.mraof.minestuck.api.alchemy.recipe.combination.JeiCombination;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -15,23 +19,22 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
 import java.util.List;
 
-public class CombinationRecipe extends AbstractCombinationRecipe
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public final class RegularCombinationRecipe implements CombinationRecipe
 {
-	public static ItemStack findResult(ItemCombiner combiner, Level level) {
-		return level.getRecipeManager().getRecipeFor(MSRecipeTypes.COMBINATION_TYPE.get(), combiner, level)
-				.map(recipe -> recipe.assemble(combiner, level.registryAccess())).orElse(ItemStack.EMPTY);
-	}
-	
+	private final ResourceLocation id;
 	private final Ingredient input1, input2;
 	private final CombinationMode mode;
 	private final ItemStack output;
 	
-	public CombinationRecipe(ResourceLocation id, Ingredient input1, Ingredient input2, CombinationMode mode, ItemStack output)
+	public RegularCombinationRecipe(ResourceLocation id, Ingredient input1, Ingredient input2, CombinationMode mode, ItemStack output)
 	{
-		super(id);
+		this.id = id;
 		this.input1 = input1;
 		this.input2 = input2;
 		this.mode = mode;
@@ -39,14 +42,20 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 	}
 	
 	@Override
-	public boolean matches(ItemCombiner inv, Level level)
+	public ResourceLocation getId()
+	{
+		return id;
+	}
+	
+	@Override
+	public boolean matches(CombinerContainer inv, Level level)
 	{
 		ItemStack item1 = AlchemyHelper.getDecodedItem(inv.getItem(0)), item2 = AlchemyHelper.getDecodedItem(inv.getItem(1));
 		return inv.getMode() == this.mode && (input1.test(item1) && input2.test(item2) || input2.test(item1) && input1.test(item2));
 	}
 	
 	@Override
-	public ItemStack assemble(ItemCombiner inv, RegistryAccess registryAccess)
+	public ItemStack assemble(CombinerContainer inv, RegistryAccess registryAccess)
 	{
 		return output;
 	}
@@ -75,33 +84,33 @@ public class CombinationRecipe extends AbstractCombinationRecipe
 		return MSRecipeTypes.COMBINATION.get();
 	}
 	
-	public static class Serializer implements RecipeSerializer<CombinationRecipe>
+	public static class Serializer implements RecipeSerializer<RegularCombinationRecipe>
 	{
 		@Override
-		public CombinationRecipe fromJson(ResourceLocation recipeId, JsonObject json)
+		public RegularCombinationRecipe fromJson(ResourceLocation recipeId, JsonObject json)
 		{
 			Ingredient input1 = Ingredient.fromJson(json.get("input1"));
 			Ingredient input2 = Ingredient.fromJson(json.get("input2"));
 			CombinationMode mode = CombinationMode.fromString(GsonHelper.getAsString(json, "mode"));
 			ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "output"));
 			
-			return new CombinationRecipe(recipeId, input1, input2, mode, output);
+			return new RegularCombinationRecipe(recipeId, input1, input2, mode, output);
 		}
 		
 		@Nullable
 		@Override
-		public CombinationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
+		public RegularCombinationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
 		{
 			Ingredient input1 = Ingredient.fromNetwork(buffer);
 			Ingredient input2 = Ingredient.fromNetwork(buffer);
 			CombinationMode mode = CombinationMode.fromBoolean(buffer.readBoolean());
 			ItemStack output = buffer.readItem();
 			
-			return new CombinationRecipe(recipeId, input1, input2, mode, output);
+			return new RegularCombinationRecipe(recipeId, input1, input2, mode, output);
 		}
 		
 		@Override
-		public void toNetwork(FriendlyByteBuf buffer, CombinationRecipe recipe)
+		public void toNetwork(FriendlyByteBuf buffer, RegularCombinationRecipe recipe)
 		{
 			recipe.input1.toNetwork(buffer);
 			recipe.input2.toNetwork(buffer);

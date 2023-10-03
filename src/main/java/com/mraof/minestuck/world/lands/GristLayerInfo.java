@@ -1,8 +1,9 @@
 package com.mraof.minestuck.world.lands;
 
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
@@ -83,9 +84,9 @@ public class GristLayerInfo
 	
 	private GristLayerInfo(long seed, GristType baseType)
 	{
-		commonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.COMMON, 0, seed, 10, null);
-		anyGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.ANY, 1, seed, 8, baseType);
-		uncommonGristLayer = GristTypeLayer.createLayer(GristType.SpawnCategory.UNCOMMON, 2, seed, 7, baseType);
+		commonGristLayer = GristTypeLayer.createLayer(GristTypeSpawnCategory.COMMON, 0, seed, 10, null);
+		anyGristLayer = GristTypeLayer.createLayer(GristTypeSpawnCategory.ANY, 1, seed, 8, baseType);
+		uncommonGristLayer = GristTypeLayer.createLayer(GristTypeSpawnCategory.UNCOMMON, 2, seed, 7, baseType);
 	}
 	
 	public GristType randomTypeFor(LivingEntity entity)

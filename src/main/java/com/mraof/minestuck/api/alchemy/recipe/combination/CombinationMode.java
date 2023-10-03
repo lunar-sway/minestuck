@@ -1,20 +1,15 @@
-package com.mraof.minestuck.alchemy.recipe;
+package com.mraof.minestuck.api.alchemy.recipe.combination;
+
+import java.util.Locale;
 
 public enum CombinationMode
 {
-	AND("and"),
-	OR("or");
-	
-	final String name;
-	
-	CombinationMode(String name)
-	{
-		this.name = name;
-	}
+	AND,
+	OR;
 	
 	public String asString()
 	{
-		return name;
+		return this.name().toLowerCase(Locale.ROOT);
 	}
 	
 	public boolean asBoolean()
