@@ -1,7 +1,6 @@
 package com.mraof.minestuck.world.biome;
 
 
-import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.levelgen.placement.*;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
@@ -35,9 +33,9 @@ import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
  * Biomes in this set are not present in the biome registry,
  * and should thus not be used in a situation where they need to be serialized.
  */
-public final class WorldGenBiomeSet implements LandBiomeAccess
+public final class WorldGenBiomeSet
 {
-	private final Holder<Biome> normalBiome, oceanBiome, roughBiome;
+	private final BiomeProperties normalBiome, oceanBiome, roughBiome;
 	public final RegistryBackedBiomeSet baseBiomes;
 	
 	@SuppressWarnings("ConstantConditions")
@@ -52,42 +50,36 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		GenerationBuilder generationBuilder = new GenerationBuilder(features, carvers);
 		addBiomeGeneration(generationBuilder, blocks, landTypes);
 		
-		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).build());
-		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).build());
-		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).build());
+		normalBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.NORMAL);
+		roughBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.ROUGH);
+		oceanBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.OCEAN);
 	}
 	
-	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)
+	public BiomeProperties propertiesFor(Holder<Biome> biome)
 	{
-		return fromType(baseBiomes.getTypeFromBiome(biome));
+		return switch(baseBiomes.getTypeFromBiome(biome))
+		{
+			case NORMAL -> normalBiome;
+			case ROUGH -> roughBiome;
+			case OCEAN -> oceanBiome;
+		};
 	}
 	
-	@Override
-	public List<Holder<Biome>> getAll()
+	public BiomeGenerationSettings customGenerationFor(Holder<Biome> baseBiome)
 	{
-		return ImmutableList.of(normalBiome, roughBiome, oceanBiome);
+		return propertiesFor(baseBiome).generationSettings();
 	}
 	
-	@Override
-	public Holder<Biome> fromType(LandBiomeType type)
+	public MobSpawnSettings customMobSpawnsFor(Holder<Biome> baseBiome)
 	{
-		return switch(type)
-				{
-					case NORMAL -> normalBiome;
-					case ROUGH -> roughBiome;
-					case OCEAN -> oceanBiome;
-				};
+		return propertiesFor(baseBiome).mobSettings();
 	}
 	
-	private static Biome.BiomeBuilder createBiomeBase(RegistryBackedBiomeSet baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
+	private static BiomeProperties createBiomeProperties(GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
 	{
-		Biome base = baseBiomes.fromType(type).value();
-		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().hasPrecipitation(base.hasPrecipitation())
-				.temperature(base.getBaseTemperature()).downfall(0.5F).specialEffects(base.getSpecialEffects());
-		
-		MobSpawnSettings spawnInfo = createMobSpawnInfo(landTypes, type);
-		
-		return builder.generationSettings(generationBuilder.settings.get(type).build()).mobSpawnSettings(spawnInfo);
+		BiomeGenerationSettings generationSettings = generationBuilder.settings.get(type).build();
+		MobSpawnSettings spawnSettings = createMobSpawnInfo(landTypes, type);
+		return new BiomeProperties(generationSettings, spawnSettings);
 	}
 	
 	private static MobSpawnSettings createMobSpawnInfo(LandTypePair landTypes, LandBiomeType type)
@@ -165,4 +157,7 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 				settings.get(type).addCarver(step, holder);
 		}
 	}
+	
+	public record BiomeProperties(BiomeGenerationSettings generationSettings, MobSpawnSettings mobSettings)
+	{}
 }

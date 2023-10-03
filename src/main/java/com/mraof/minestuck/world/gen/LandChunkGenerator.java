@@ -67,7 +67,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	
 	private LandChunkGenerator(HolderGetter<NormalNoise.NoiseParameters> noises, HolderGetter<DensityFunction> densityFunctions, LandTypePair.Named namedTypes, WorldGenBiomeSet biomes, LandGenSettings genSettings)
 	{
-		super(new LandBiomeSource(biomes.baseBiomes, genSettings), biome -> biomes.getBiomeFromBase(biome).get().getGenerationSettings(),
+		super(new LandBiomeSource(biomes.baseBiomes, genSettings), biomes::customGenerationFor,
 				genSettings.createDimensionSettings(noises, densityFunctions));
 		
 		this.biomeSet = biomes;
@@ -100,7 +100,7 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 	{
 		if(category == MSEntityTypes.UNDERLING)
 			return UnderlingController.getUnderlingList(pos);
-		else return biomeSet.getBiomeFromBase(biome).value().getMobSettings().getMobs(category);
+		else return biomeSet.customMobSpawnsFor(biome).getMobs(category);
 	}
 	
 	@Nullable
