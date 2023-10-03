@@ -2,6 +2,7 @@ package com.mraof.minestuck.world;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import commoble.infiniverse.api.InfiniverseAPI;
 import net.minecraft.core.Holder;
@@ -12,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
@@ -32,8 +32,9 @@ public class DynamicDimensions
 			LandTypePair.Named named = landTypes.createNamedRandomly(random.fork());
 			
 			RegistryAccess registryAccess = server.registryAccess();
-			ChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION),
+			LandChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION),
 					named, registryAccess.lookupOrThrow(Registries.BIOME), registryAccess.lookupOrThrow(Registries.PLACED_FEATURE), registryAccess.lookupOrThrow(Registries.CONFIGURED_CARVER));
+			chunkGenerator.init(LandTypeExtensions.get());
 			Holder<DimensionType> dimensionType = registryAccess.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(LAND_TYPE);
 			return new LevelStem(dimensionType, chunkGenerator);
 		});

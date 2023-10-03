@@ -33,14 +33,14 @@ import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
  * Biomes in this set are not present in the biome registry,
  * and should thus not be used in a situation where they need to be serialized.
  */
-public final class WorldGenBiomeSet
+public final class LandCustomBiomeSettings
 {
 	private final BiomeProperties normalBiome, oceanBiome, roughBiome;
 	public final RegistryBackedBiomeSet baseBiomes;
 	
 	@SuppressWarnings("ConstantConditions")
-	public WorldGenBiomeSet(RegistryBackedBiomeSet biomes, LandGenSettings settings,
-							HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
+	public LandCustomBiomeSettings(RegistryBackedBiomeSet biomes, LandGenSettings settings, LandTypeExtensions extensions,
+								   HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
@@ -48,7 +48,7 @@ public final class WorldGenBiomeSet
 		baseBiomes = biomes;
 		
 		GenerationBuilder generationBuilder = new GenerationBuilder(features, carvers);
-		addBiomeGeneration(generationBuilder, blocks, landTypes);
+		addBiomeGeneration(generationBuilder, blocks, landTypes, extensions);
 		
 		normalBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.NORMAL);
 		roughBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.ROUGH);
@@ -65,7 +65,7 @@ public final class WorldGenBiomeSet
 		};
 	}
 	
-	public BiomeGenerationSettings customGenerationFor(Holder<Biome> baseBiome)
+	public BiomeGenerationSettings generationFor(Holder<Biome> baseBiome)
 	{
 		return propertiesFor(baseBiome).generationSettings();
 	}
@@ -94,7 +94,7 @@ public final class WorldGenBiomeSet
 		return builder.build();
 	}
 	
-	private static void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandTypePair landTypes)
+	private static void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandTypePair landTypes, LandTypeExtensions extensions)
 	{
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
@@ -111,7 +111,7 @@ public final class WorldGenBiomeSet
 		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
 		
-		LandTypeExtensions.addFeatureExtensions(builder, landTypes);
+		extensions.addFeatureExtensions(builder, landTypes);
 	}
 	
 	private static class GenerationBuilder implements LandBiomeGenBuilder

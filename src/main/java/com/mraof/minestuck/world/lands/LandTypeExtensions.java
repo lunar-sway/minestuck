@@ -10,9 +10,12 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.world.biome.LandBiomeType;
+import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -20,9 +23,11 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -32,10 +37,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -46,14 +48,26 @@ public final class LandTypeExtensions
 	public static final FileToIdConverter TERRAIN_EXTENSIONS_LOCATION = FileToIdConverter.json("minestuck/land_type_extension/terrain");
 	public static final FileToIdConverter TITLE_EXTENSIONS_LOCATION = FileToIdConverter.json("minestuck/land_type_extension/title");
 	
-	private static Map<ILandType, List<FeatureExtension>> extensionsMap;
+	private final Map<ILandType, List<FeatureExtension>> extensionsMap;
 	
-	public static void addFeatureExtensions(LandBiomeGenBuilder builder, LandTypePair landTypes)
+	public LandTypeExtensions(Map<ILandType, List<FeatureExtension>> extensionsMap)
 	{
-		extensionsMap.getOrDefault(landTypes.getTerrain(), Collections.emptyList())
+		this.extensionsMap = extensionsMap;
+	}
+	
+	public void addFeatureExtensions(LandBiomeGenBuilder builder, LandTypePair landTypes)
+	{
+		this.extensionsMap.getOrDefault(landTypes.getTerrain(), Collections.emptyList())
 				.forEach(extension -> extension.addTo(builder));
-		extensionsMap.getOrDefault(landTypes.getTitle(), Collections.emptyList())
+		this.extensionsMap.getOrDefault(landTypes.getTitle(), Collections.emptyList())
 				.forEach(extension -> extension.addTo(builder));
+	}
+	
+	private static LandTypeExtensions instance;
+	
+	public static LandTypeExtensions get()
+	{
+		return Objects.requireNonNull(instance, "Tried to get an instance of LandTypeExtensions too early.");
 	}
 	
 	@SubscribeEvent
@@ -62,13 +76,21 @@ public final class LandTypeExtensions
 		event.addListener(new Loader(event.getRegistryAccess()));
 	}
 	
+	@SubscribeEvent
+	public static void onServerStopped(ServerStoppedEvent event)
+	{
+		instance = null;
+	}
+	
 	private static final class Loader extends SimplePreparableReloadListener<Map<ILandType, List<LandTypeExtensions.FeatureExtension>>>
 	{
 		private final DynamicOps<JsonElement> ops;
+		private final Registry<LevelStem> levelStems;
 		
 		private Loader(RegistryAccess registryAccess)
 		{
 			this.ops = RegistryOps.create(JsonOps.INSTANCE, registryAccess);
+			this.levelStems = registryAccess.registryOrThrow(Registries.LEVEL_STEM);
 		}
 		
 		@Override
@@ -120,7 +142,13 @@ public final class LandTypeExtensions
 		@Override
 		protected void apply(Map<ILandType, List<FeatureExtension>> extensionsMap, ResourceManager resourceManager, ProfilerFiller profiler)
 		{
-			LandTypeExtensions.extensionsMap = extensionsMap;
+			LandTypeExtensions extensions = new LandTypeExtensions(extensionsMap);
+			for(LevelStem levelStem : this.levelStems)
+			{
+				if(levelStem.generator() instanceof LandChunkGenerator generator)
+					generator.init(extensions);
+			}
+			LandTypeExtensions.instance = extensions;
 		}
 	}
 	
