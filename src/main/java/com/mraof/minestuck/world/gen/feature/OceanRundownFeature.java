@@ -1,6 +1,7 @@
 package com.mraof.minestuck.world.gen.feature;
 
 import com.mojang.serialization.Codec;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -32,22 +33,20 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 		BlockPos pos = context.origin();
 		ChunkGenerator generator = context.chunkGenerator();
 		RandomSource rand = context.random();
-		/*TODO replace use of biome source. Perhaps just check if the surface block is a fluid?
 		BlockPos pos2, pos3;
-		if(generator.getBiomeSource().getBiomesWithin(pos.getX(), level.getSeaLevel(), pos.getZ(), 3, context.climateSampler())
-				.stream().anyMatch(biome -> Biome.getBiomeCategory(biome) == Biome.BiomeCategory.OCEAN))
-		{
+		if(!level.getFluidState(pos).isEmpty())
 			return false;
-		}
+		
 		//Look for ocean and pick pos2 and pos3
 		List<BlockPos> oceanPos = new ArrayList<>();
 		for(int posX = 0; posX < 16; posX++)
 		{
 			for(int posZ = 0; posZ < 16; posZ++)
 			{
-				Holder<Biome> biome = generator.getBiomeSource().getNoiseBiome(pos.getX() + posX - 8 >> 2, pos.getY(), pos.getZ() + posZ - 8 >> 2, generator.climateSampler());
-				if(Biome.getBiomeCategory(biome) == Biome.BiomeCategory.OCEAN)
-					oceanPos.add(pos.offset(posX - 8, 0, posZ - 8));
+				BlockPos candidatePos = pos.offset(posX - 8, 0, posZ - 8);
+				Holder<Biome> biome = level.getBiome(candidatePos);
+				if(biome.is(MSTags.Biomes.LAND_OCEAN))
+					oceanPos.add(candidatePos);
 			}
 		}
 		if(oceanPos.size() < 10)
@@ -99,7 +98,7 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 			for(int posZ = z1; posZ <= z2; posZ++)
 			{
 				BlockPos groundPos = level.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, new BlockPos(posX, 0, posZ));
-				if(!level.getBlockState(groundPos).getMaterial().isLiquid())
+				if(level.getFluidState(groundPos).isEmpty())
 				{
 					BlockPos fluidPos = groundPos.below();
 					setBlock(level, fluidPos, fluid);
@@ -109,7 +108,6 @@ public class OceanRundownFeature extends Feature<NoneFeatureConfiguration>
 		}
 		
 		return true;
-		*/return false;
 	}
 	
 	private static int lineposZ(BlockPos p1, BlockPos p2, int x)
