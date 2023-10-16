@@ -9,7 +9,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -32,7 +31,7 @@ public class IrradiatingFallbackRecipeBuilder
 		recipeSaver.accept(new Result(id, fallbackType));
 	}
 	
-	public static class Result implements FinishedRecipe
+	public static class Result implements AdvancementFreeRecipe
 	{
 		private final ResourceLocation id;
 		private final RecipeType<? extends AbstractCookingRecipe> fallbackType;
@@ -60,20 +59,6 @@ public class IrradiatingFallbackRecipeBuilder
 		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.IRRADIATING_FALLBACK.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return null;
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return new ResourceLocation("");
 		}
 	}
 }

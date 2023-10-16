@@ -1,4 +1,4 @@
-package com.mraof.minestuck.alchemy.recipe.generator;
+package com.mraof.minestuck.api.alchemy.recipe.generator;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

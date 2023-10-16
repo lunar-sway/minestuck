@@ -47,7 +47,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public Color getRenderColor(T animatable, float partialTick, int packedLight)
 	{
-		return Color.ofOpaque(animatable.getGristType().getColor());
+		return Color.ofOpaque(animatable.getGristType().getUnderlingColor());
 	}
 	
 	/**
@@ -58,10 +58,10 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	@Override
 	public ResourceLocation getTextureLocation(T entity)
 	{
-		String textureName = entity.getGristType().getEffectiveName().getPath();
-		ResourceLocation resource = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + UnderlingModel.getName(entity) + "_" + textureName + ".png");
+		String underlingName = UnderlingModel.getName(entity);
+		ResourceLocation resource = entity.getGristType().getTextureId().withPath(gristName -> "textures/entity/underlings/%s_%s.png".formatted(underlingName, gristName));
 		
-		// the texture manager will cache the computed textures so theyre effectively computed once (at least in theory)
+		// the texture manager will cache the computed textures so they're effectively computed once (at least in theory)
 		SimpleTexture nullTexture = new SimpleTexture(resource);
 		if(Minecraft.getInstance().textureManager.getTexture(resource, nullTexture) == nullTexture)
 		{
@@ -110,7 +110,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 	
 	private ResourceLocation getGristTexture(T entity)
 	{
-		String textureName = entity.getGristType().getEffectiveName().getPath();
+		String textureName = entity.getGristType().getTextureId().getPath();
 		var textureLocation = new ResourceLocation(Minestuck.MOD_ID, "textures/entity/underlings/" + textureName + ".png");
 		if (Minecraft.getInstance().getResourceManager().getResource(textureLocation).isEmpty()) {
 			return this.model.getTextureResource(entity);
@@ -144,7 +144,7 @@ public class UnderlingRenderer<T extends UnderlingEntity> extends GeoEntityRende
 		private float getContrastModifier(T entity)
 		{
 			int threshold = 170;
-			int color = entity.getGristType().getColor();
+			int color = entity.getGristType().getUnderlingColor();
 			int avg = (FastColor.ABGR32.red(color) + FastColor.ABGR32.green(color) + FastColor.ABGR32.blue(color)) / 3;
 			//TODO replace with a light/dark texture to make it look better
 			return avg > threshold ? 0.3f : 1.0f;

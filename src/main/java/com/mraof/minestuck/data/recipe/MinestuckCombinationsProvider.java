@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data.recipe;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipeBuilder;
 import com.mraof.minestuck.block.BlockCollections;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;

@@ -28,11 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Restored the ocean rundown worldgen feature used in heat lands
 - Slightly adjusted damage of Home By Midnight to give more value to alchemizing it over its ingredients
 
 ### Contributors for this release
 
-- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod, kirderf1
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 

@@ -1,7 +1,9 @@
-package com.mraof.minestuck.data.recipe;
+package com.mraof.minestuck.api.alchemy.recipe;
 
 import com.google.gson.JsonObject;
+import com.mraof.minestuck.data.recipe.AdvancementFreeRecipe;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -12,20 +14,28 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class WildcardGristCostBuilder
+/**
+ * Used to datagen a grist cost which accepts an amount of any grist type chosen by the player.
+ */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+@SuppressWarnings("unused")
+public final class WildcardGristCostBuilder
 {
+	@Nullable
 	private final ResourceLocation defaultName;
 	private final Ingredient ingredient;
 	private long cost = 0;
+	@Nullable
 	private Integer priority = null;
 	
 	public static WildcardGristCostBuilder of(TagKey<Item> tag)
 	{
-		ResourceLocation tagId = tag.location();
-		return new WildcardGristCostBuilder(new ResourceLocation(tagId.getNamespace(), tagId.getPath()+"_tag"), Ingredient.of(tag));
+		return new WildcardGristCostBuilder(tag.location().withSuffix("_tag"), Ingredient.of(tag));
 	}
 	
 	public static WildcardGristCostBuilder of(ItemLike item)
@@ -35,15 +45,10 @@ public class WildcardGristCostBuilder
 	
 	public static WildcardGristCostBuilder of(Ingredient ingredient)
 	{
-		return new WildcardGristCostBuilder(ingredient);
+		return new WildcardGristCostBuilder(null, ingredient);
 	}
 	
-	protected WildcardGristCostBuilder(Ingredient ingredient)
-	{
-		this(null, ingredient);
-	}
-	
-	protected WildcardGristCostBuilder(ResourceLocation defaultName, Ingredient ingredient)
+	private WildcardGristCostBuilder(@Nullable ResourceLocation defaultName, Ingredient ingredient)
 	{
 		this.defaultName = defaultName;
 		this.ingredient = ingredient;
@@ -77,24 +82,11 @@ public class WildcardGristCostBuilder
 	{
 		if(this.cost == 0)
 			throw new IllegalStateException("Must set the wildcard cost before building!");
-		recipeSaver.accept(new Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath()), ingredient, cost, priority));
+		recipeSaver.accept(new Result(id.withPrefix("grist_costs/"), ingredient, cost, priority));
 	}
 	
-	public static class Result implements FinishedRecipe
+	private record Result(ResourceLocation id, Ingredient ingredient, long cost, @Nullable Integer priority) implements AdvancementFreeRecipe
 	{
-		public final ResourceLocation id;
-		public final Ingredient ingredient;
-		public final long cost;
-		public final Integer priority;
-		
-		public Result(ResourceLocation id, Ingredient ingredient, long cost, Integer priority)
-		{
-			this.id = id;
-			this.ingredient = ingredient;
-			this.cost = cost;
-			this.priority = priority;
-		}
-		
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
@@ -114,20 +106,6 @@ public class WildcardGristCostBuilder
 		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.WILDCARD_GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return null;
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return new ResourceLocation("");
 		}
 	}
 }
