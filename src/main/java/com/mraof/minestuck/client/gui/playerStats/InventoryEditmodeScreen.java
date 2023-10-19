@@ -1,6 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
@@ -12,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -21,7 +21,10 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 {
 	public static final String TITLE = "minestuck.deploy_list";
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
+	public static final ResourceLocation SETTINGS_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	private static final int LEFT_ARROW_X = 7, RIGHT_ARROW_X = 151, ARROW_Y = 23;
+	private static final int SETTINGS_X = 76, SETTINGS_Y = 54;
+	private static final int ARROW_SIZE = 18, SETTINGS_SIZE = 16; //same width and height
 	
 	public boolean more, less;
 	
@@ -48,13 +51,13 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 				|| m == Month.OCTOBER && d == 25 || m == Month.NOVEMBER && d == 11
 				|| m == Month.NOVEMBER && d == 27);
 		
-		guiGraphics.blit(GUI_BACKGROUND, xOffset + LEFT_ARROW_X, yOffset + ARROW_Y, guiWidth + (b2 ? 36 : 0), (less ? 0 : 18) + (b1 ? 36 : 0), 18, 18);
-		guiGraphics.blit(GUI_BACKGROUND, xOffset + RIGHT_ARROW_X, yOffset + ARROW_Y, guiWidth + 18 + (b2 ? 36 : 0), (more ? 0 : 18) + (b1 ? 36 : 0), 18, 18);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset + LEFT_ARROW_X, yOffset + ARROW_Y, guiWidth + (b2 ? 36 : 0), (less ? 0 : ARROW_SIZE) + (b1 ? 36 : 0), ARROW_SIZE, ARROW_SIZE);
+		guiGraphics.blit(GUI_BACKGROUND, xOffset + RIGHT_ARROW_X, yOffset + ARROW_Y, guiWidth + 18 + (b2 ? 36 : 0), (more ? 0 : ARROW_SIZE) + (b1 ? 36 : 0), ARROW_SIZE, ARROW_SIZE);
 		
 		drawActiveTabAndIcons(guiGraphics);
 		
 		//TODO add more options (potentially work with icons)
-		addRenderableWidget(new ExtendedButton(xOffset + LEFT_ARROW_X + 31, yOffset + ARROW_Y + 31, 100, 16, Component.literal("TELEPORT CLOSEST"), button -> teleport()));
+		guiGraphics.blit(SETTINGS_ICON, xOffset + SETTINGS_X, yOffset + SETTINGS_Y, SETTINGS_SIZE, SETTINGS_SIZE, 0, 0, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE);
 	}
 	
 	private void teleport()
@@ -72,14 +75,26 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		if(ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + 18)
+		boolean clickedInSettingsIconYRange = ycor >= yOffset + SETTINGS_Y && ycor < yOffset + SETTINGS_Y + SETTINGS_SIZE;
+		boolean clickedInSettingsIconXRange = xcor >= xOffset + SETTINGS_X && xcor < xOffset + SETTINGS_X + SETTINGS_SIZE;
+		
+		if(clickedInSettingsIconYRange && clickedInSettingsIconXRange)
+		{
+			teleport();
+		}
+		
+		boolean clickedInArrowIconYRange = ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + ARROW_SIZE;
+		if(clickedInArrowIconYRange)
 		{
 			EditmodeInventoryPacket packet = null;
-			if(less && xcor >= xOffset + LEFT_ARROW_X && xcor < xOffset + LEFT_ARROW_X + 18)
+			
+			boolean clickedInLeftArrowXRange = less && xcor >= xOffset + LEFT_ARROW_X && xcor < xOffset + LEFT_ARROW_X + ARROW_SIZE;
+			boolean clickedInRightArrowXRange = more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + ARROW_SIZE;
+			if(clickedInLeftArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(false);
-			} else if(more && xcor >= xOffset + RIGHT_ARROW_X && xcor < xOffset + RIGHT_ARROW_X + 18)
+			} else if(clickedInRightArrowXRange)
 			{
 				minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				packet = EditmodeInventoryPacket.scroll(true);

@@ -2,7 +2,6 @@ package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
-import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -29,19 +28,19 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 	{
 		EditData editData = MSExtraData.get(player.serverLevel()).findEditData(data -> data.getEditor() == player);
 		
-		if(editData != null)
+		if(editData == null)
+			return;
+		
+		EditmodeLocations locations = editData.getConnection().getClientEditmodeLocations();
+		
+		if(locations == null)
+			return;
+		
+		BlockPos teleportPos = locations.getClosestPosInDimension(player);
+		
+		if(teleportPos != null)
 		{
-			EditmodeLocations locations = editData.getConnection().getClientEditmodeLocations();
-			
-			if(locations != null)
-			{
-				BlockPos teleportPos = locations.getClosestPosInDimension(player);
-				
-				if(teleportPos != null)
-				{
-					player.teleportTo(teleportPos.getX() + 0.5D, teleportPos.getY() + 1.0D, teleportPos.getZ() + 0.5D);
-				}
-			}
+			player.teleportTo(teleportPos.getX() + 0.5D, teleportPos.getY() + 1.0D, teleportPos.getZ() + 0.5D);
 		}
 	}
 }
