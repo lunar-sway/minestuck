@@ -1,8 +1,8 @@
 package com.mraof.minestuck.jei;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.subtypes.UidContext;
@@ -19,7 +19,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	{
 		List<GristAmount> list = new ArrayList<>();
 		for(GristType gristType : GristTypes.values())
-			list.add(new GristAmount(gristType, 1));
+			list.add(gristType.amount(1));
 		return list;
 	}
 	
@@ -50,7 +50,7 @@ public class GristIngredientHelper implements IIngredientHelper<GristAmount>
 	@Override
 	public ResourceLocation getResourceLocation(GristAmount ingredient)
 	{
-		return GristTypes.getRegistry().getKey(ingredient.type());
+		return ingredient.type().getIdOrThrow();
 	}
 	
 	@Override

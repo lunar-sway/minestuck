@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amber": 977,
+    "minestuck:build": 3908,
+    "minestuck:marble": 782,
+    "minestuck:rust": 586
+  },
+  "ingredient": {
+    "item": "minestuck:boombox_beater"
+  }
+}

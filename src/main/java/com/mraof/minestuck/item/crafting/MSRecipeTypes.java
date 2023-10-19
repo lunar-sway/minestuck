@@ -5,6 +5,8 @@ import com.mraof.minestuck.alchemy.recipe.*;
 import com.mraof.minestuck.alchemy.recipe.generator.ContainerGristCost;
 import com.mraof.minestuck.alchemy.recipe.generator.SourceGristCost;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.RecipeGeneratedGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -19,7 +21,7 @@ public class MSRecipeTypes
 	
 	public static final RegistryObject<RecipeType<IrradiatingRecipe>> IRRADIATING_TYPE = recipeType("irradiating");
 	public static final RegistryObject<RecipeType<GristCostRecipe>> GRIST_COST_TYPE = recipeType("grist_cost");
-	public static final RegistryObject<RecipeType<AbstractCombinationRecipe>> COMBINATION_TYPE = recipeType("combination");
+	public static final RegistryObject<RecipeType<CombinationRecipe>> COMBINATION_TYPE = recipeType("combination");
 	
 	private static <T extends Recipe<?>> RegistryObject<RecipeType<T>> recipeType(String name)
 	{
@@ -47,5 +49,5 @@ public class MSRecipeTypes
 	public static final RegistryObject<RecipeSerializer<RecipeGeneratedGristCost>> RECIPE_GRIST_COST = SERIALIZER_REGISTER.register("recipe_grist_cost", RecipeGeneratedGristCost.Serializer::new);
 	public static final RegistryObject<RecipeSerializer<SourceGristCost>> SOURCE_GRIST_COST = SERIALIZER_REGISTER.register("source_grist_cost", SourceGristCost.Serializer::new);
 	
-	public static final RegistryObject<RecipeSerializer<CombinationRecipe>> COMBINATION = SERIALIZER_REGISTER.register("combination", CombinationRecipe.Serializer::new);
+	public static final RegistryObject<RecipeSerializer<RegularCombinationRecipe>> COMBINATION = SERIALIZER_REGISTER.register("combination", RegularCombinationRecipe.Serializer::new);
 }

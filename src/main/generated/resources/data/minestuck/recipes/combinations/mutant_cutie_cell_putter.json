@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:kissy_cutie_heart_hitter"
+  },
+  "input2": {
+    "item": "minestuck:plush_mutated_cat"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:mutant_cutie_cell_putter"
+  }
+}

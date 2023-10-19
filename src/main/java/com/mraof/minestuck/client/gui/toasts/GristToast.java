@@ -1,10 +1,10 @@
 package com.mraof.minestuck.client.gui.toasts;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import com.mraof.minestuck.alchemy.GristAmount;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.GristToastPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -14,9 +14,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -44,11 +42,8 @@ public class GristToast implements Toast
 	
 	private static final long DISPLAY_TIME = 5000L;
 	
-	// At the time of writing (mc1.19.2), vanilla does not properly support toast sizes smaller than the usual toast size7
-	private static final float SCALE_X = 1;//0.6F;
-	private static final float SCALE_Y = 1;//0.6F;
 	
-	private final GristType type;
+	private final GristType gristType;
 	private long difference;
 	private long cacheLimit;
 	private long gristCache;
@@ -61,17 +56,13 @@ public class GristToast implements Toast
 	
 	public GristToast (GristType pType, long pDifference, GristHelper.EnumSource pSource, boolean pIncrease, long pCacheLimit, long pGristCache)
 	{
-		this.type = pType;
+		this.gristType = pType;
 		this.difference = pDifference;
 		this.source = pSource;
 		this.increase = pIncrease;
 		this.cacheLimit = pCacheLimit;
 		this.gristCache = pGristCache;
 	}
-	
-	public int width() { return Mth.floor(160.0F * SCALE_X); }
-	
-	public int height() { return Mth.floor(32.0F * SCALE_Y); }
 	
 	/**
 	 *
@@ -93,13 +84,6 @@ public class GristToast implements Toast
 		
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		//Scales the width and height of the toast's background.
-		PoseStack posestack = RenderSystem.getModelViewStack();
-		posestack.pushPose();
-		//Scales the width and height of the toast's background.
-		posestack.scale(SCALE_X, SCALE_Y, 1.0F);
-		RenderSystem.applyModelViewMatrix();
-		
 		//draws the background.
 		guiGraphics.blit(TEXTURE, 0, 0, 0, 0, 160, 32);
 		
@@ -112,13 +96,13 @@ public class GristToast implements Toast
 			case CONSOLE -> guiGraphics.blit(TEXTURE, 133, 7, 216, 20, 20, 20);
 		}
 		
+		PoseStack posestack = guiGraphics.pose();
 		posestack.pushPose();
 		posestack.scale(4f/3f, 4f/3f, 1.0f);
-		RenderSystem.applyModelViewMatrix();
-		this.drawIcon(5, 4, type.getIcon()); //draws the grist icon.
+		
+		guiGraphics.blit(this.gristType.getIcon(), 5, 4, 0, 0, 0, 16, 16, 16, 16);
 		
 		posestack.popPose();
-		RenderSystem.applyModelViewMatrix();
 		
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		
@@ -143,8 +127,6 @@ public class GristToast implements Toast
 		
 		if(this.animationTimer > 0)
 			this.animationTimer =- 1;
-		
-		posestack.popPose();
 		
 		return pTimeSinceLastVisible - this.lastChanged >= DISPLAY_TIME ? Toast.Visibility.HIDE : Toast.Visibility.SHOW;
 		
@@ -175,29 +157,6 @@ public class GristToast implements Toast
 				guiGraphics.drawString(font, cacheText, 31.0F + (GRIST_VIAL_INSIDE_WIDTH - font.width(cacheText))/2F, 24.0F, textColor, false);
 			}
 		}
-		
-	}
-	
-	//modified version of drawIcon() from MinestuckScreen.java
-	private void drawIcon(int x, int y, ResourceLocation icon)
-	{
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderTexture(0, icon);
-		
-		float scale = (float) 1 / 16;
-		
-		int iconX = 16;
-		int iconY = 16;
-		int iconU = 0;
-		int iconV = 0;
-		
-		BufferBuilder render = Tesselator.getInstance().getBuilder();
-		render.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		render.vertex(x, y + iconY, 0D).uv((iconU) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y + iconY, 0D).uv((iconU + iconX) * scale, (iconV + iconY) * scale).endVertex();
-		render.vertex(x + iconX, y, 0D).uv((iconU + iconX) * scale, (iconV) * scale).endVertex();
-		render.vertex(x, y, 0D).uv((iconU) * scale, (iconV) * scale).endVertex();
-		Tesselator.getInstance().end();
 	}
 	
 	/**
@@ -255,6 +214,6 @@ public class GristToast implements Toast
 	@Override
 	public Token getToken()
 	{
-		return new Token(this.type, this.source, this.increase);
+		return new Token(this.gristType, this.source, this.increase);
 	}
 }

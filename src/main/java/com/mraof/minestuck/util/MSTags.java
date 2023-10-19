@@ -138,6 +138,7 @@ public class MSTags
 		public static final TagKey<EntityType<?>> ROOKS = tag("carapacians/rook");
 		public static final TagKey<EntityType<?>> MAGNET_RECEPTIVE = tag("magnet_receptive");
 		public static final TagKey<EntityType<?>> REMOTE_OBSERVER_BLACKLIST = tag("remote_observer_blacklist");
+		public static final TagKey<EntityType<?>> BOSS_MOB = tag("boss_mob");
 		
 		private static TagKey<EntityType<?>> tag(String name)
 		{

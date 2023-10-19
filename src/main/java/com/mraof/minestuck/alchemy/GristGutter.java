@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -121,7 +122,7 @@ public class GristGutter
 	
 	public MutableGristSet takeFraction(double fraction)
 	{
-		MutableGristSet takenGrist = new MutableGristSet();
+		MutableGristSet takenGrist = MutableGristSet.newDefault();
 		double extraGrist = 0;
 		
 		for(GristAmount gristAmount : this.gristSet.asAmounts())
@@ -171,8 +172,8 @@ public class GristGutter
 		long spliceAmount = (long) (data.getEcheladder().getGristCapacity() * getDistributionRateModifier());
 		
 		NonNegativeGristSet capacity = data.getGristCache().getCapacitySet();
-		MutableGristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
-		MutableGristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
+		GristSet gristToTransfer = this.takeWithinCapacity(spliceAmount, capacity, rand);
+		GristSet remainder = data.getGristCache().addWithinCapacity(gristToTransfer, null);
 		if(!remainder.isEmpty())
 			throw new IllegalStateException("Took more grist than could be given to the player. Got back grist: " + remainder);
 	}
@@ -185,7 +186,7 @@ public class GristGutter
 	private MutableGristSet takeWithinCapacity(long amount, NonNegativeGristSet capacity, RandomSource rand)
 	{
 		long remaining = amount;
-		MutableGristSet takenGrist = new MutableGristSet();
+		MutableGristSet takenGrist = MutableGristSet.newDefault();
 		List<GristAmount> amounts = new ArrayList<>(capacity.asAmounts());
 		Collections.shuffle(amounts, new Random(rand.nextLong()));
 		

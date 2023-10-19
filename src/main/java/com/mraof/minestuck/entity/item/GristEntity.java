@@ -2,6 +2,10 @@ package com.mraof.minestuck.entity.item;
 
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.network.GristRejectAnimationPacket;
@@ -11,6 +15,7 @@ import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.Session;
 import com.mraof.minestuck.skaianet.SessionHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -97,7 +102,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 				long spawnedCount = countLeft <= amount.amount() / 10 || i ==
 						gusherCount - 1 ? countLeft : Math.min(countLeft,
 						(long) level.random.nextDouble() * countLeft + 1);
-				GristAmount spawnedAmount = new GristAmount(amount.type(), spawnedCount);
+				GristAmount spawnedAmount = amount.type().amount(spawnedCount);
 				GristEntity entity = new GristEntity(level, x, y, z, spawnedAmount, delay);
 				postProcessor.accept(entity);
 				level.addFreshEntity(entity);
@@ -295,7 +300,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		compound.putShort("Health", (short) this.gristHealth);
 		compound.putShort("Age", (short) this.gristAge);
 		compound.putLong("Value", (short) this.gristValue);
-		compound.putString("Type", String.valueOf(GristTypes.getRegistry().getKey(gristType)));
+		MSNBTUtil.writeGristType(compound, "Type", gristType);
 	}
 	
 	@Override
@@ -306,7 +311,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(compound.contains("Value", Tag.TAG_ANY_NUMERIC))
 			this.gristValue = compound.getLong("Value");
 		if(compound.contains("Type", Tag.TAG_STRING))
-			this.gristType = GristType.read(compound, "Type");
+			this.gristType = MSNBTUtil.readGristType(compound, "Type");
 	}
 	
 	/**
@@ -339,7 +344,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 		if(sound)
 			this.playSound(SoundEvents.ITEM_PICKUP, 0.1F, 0.5F * ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.8F));
 		
-		GristCache.get(level(), identifier).addWithGutter(new GristAmount(gristType, gristValue), GristHelper.EnumSource.CLIENT);
+		GristCache.get(level(), identifier).addWithGutter(this.getAmount(), GristHelper.EnumSource.CLIENT);
 		this.discard();
 	}
 	
@@ -356,7 +361,7 @@ public class GristEntity extends Entity implements IEntityAdditionalSpawnData
 	
 	public GristAmount getAmount()
 	{
-		return new GristAmount(gristType, gristValue);
+		return gristType.amount(gristValue);
 	}
 	
 	@Override
