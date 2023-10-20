@@ -3,16 +3,18 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
-import com.mraof.minestuck.network.EditmodeTeleportPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -28,11 +30,15 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	
 	public boolean more, less;
 	
+	private Player player;
+	
 	public InventoryEditmodeScreen(int windowId, Inventory playerInventory)
 	{
 		super(new EditmodeMenu(windowId, playerInventory), playerInventory, Component.translatable(TITLE));
 		guiWidth = 176;
 		guiHeight = 98;
+		
+		player = playerInventory.player;
 	}
 	
 	@Override
@@ -56,14 +62,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		
 		drawActiveTabAndIcons(guiGraphics);
 		
-		//TODO add more options (potentially work with icons)
 		guiGraphics.blit(SETTINGS_ICON, xOffset + SETTINGS_X, yOffset + SETTINGS_Y, SETTINGS_SIZE, SETTINGS_SIZE, 0, 0, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE);
-	}
-	
-	private void teleport()
-	{
-		EditmodeTeleportPacket packet = new EditmodeTeleportPacket();
-		MSPacketHandler.sendToServer(packet);
 	}
 	
 	@Override
@@ -80,7 +79,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		
 		if(clickedInSettingsIconYRange && clickedInSettingsIconXRange)
 		{
-			teleport();
+			Minecraft.getInstance().setScreen(new EditmodeSettingsScreen(player));
 		}
 		
 		boolean clickedInArrowIconYRange = ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + ARROW_SIZE;
@@ -105,6 +104,7 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 				return true;
 			}
 		}
+		
 		return super.mouseClicked(xcor, ycor, mouseButton);
 	}
 }
