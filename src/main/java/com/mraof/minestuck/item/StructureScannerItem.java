@@ -1,6 +1,7 @@
 package com.mraof.minestuck.item;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.NbtUtils;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
 /**
@@ -28,7 +30,8 @@ import java.util.function.Supplier;
  * Takes an optional fuel item, which will be consumed every tick until the device deactivates.
  * Toggles on or off with right-click, or when fuel runs out.
  */
-
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class StructureScannerItem extends Item
 {
 	private final TagKey<Structure> structure;
@@ -52,22 +55,28 @@ public class StructureScannerItem extends Item
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
-		if(getFuel(pPlayer, pLevel) || pPlayer.isCreative())
+		if(fuelItem != null && !pPlayer.isCreative())
 		{
-			if (stack.getDamageValue() > 0){
-				resetCharge(stack);
-			}
-			stack.getOrCreateTag().putBoolean("Powered", true);
-			pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+			ItemStack invItem = findItem(pPlayer, fuelItem.get());
 			
-			if (!pLevel.isClientSide)
-			{
-				MutableComponent message = Component.translatable("message.temple_scanner.on");
-				pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-			}
-			return InteractionResultHolder.success(stack);
+			if(invItem == null)
+				return InteractionResultHolder.fail(stack);
+			
+			useFuel(invItem, pPlayer, pLevel);
 		}
-		return InteractionResultHolder.fail(stack);
+		
+		if (stack.getDamageValue() > 0)
+			resetCharge(stack);
+		
+		stack.getOrCreateTag().putBoolean("Powered", true);
+		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+		
+		if (!pLevel.isClientSide)
+		{
+			MutableComponent message = Component.translatable("message.temple_scanner.on");
+			pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+		}
+		return InteractionResultHolder.success(stack);
 	}
 	
 	/**
@@ -148,31 +157,13 @@ public class StructureScannerItem extends Item
 		}
 	}
 	
-	public boolean getFuel(Player pPlayer, Level pLevel)
+	@Nullable
+	private static ItemStack findItem(Player player, Item item)
 	{
-		if(fuelItem != null)
+		for (ItemStack invItem : player.getInventory().items)
 		{
-			ItemStack invItem = findFuel(pPlayer);
-			
-			if (invItem != null)
-			{
-				useFuel(invItem, pPlayer, pLevel);
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-	
-	public ItemStack findFuel(Player pPlayer){
-		ItemStack fuelStack = new ItemStack(fuelItem.get());
-		
-		for (ItemStack invItem : pPlayer.getInventory().items)
-		{
-			if (ItemStack.isSameItem(invItem, fuelStack))
-			{
+			if (invItem.is(item))
 				return invItem;
-			}
 		}
 		return null;
 	}
