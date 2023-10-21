@@ -1,10 +1,12 @@
 package com.mraof.minestuck.item;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import org.slf4j.Logger;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,6 +37,7 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class StructureScannerItem extends Item
 {
+	private static final Logger LOGGER = LogUtils.getLogger();
 	private final TagKey<Structure> structure;
 	@Nullable
 	private final Supplier<Item> fuelItem;
@@ -46,13 +50,26 @@ public class StructureScannerItem extends Item
 	}
 	
 	@Nullable
-	public static GlobalPos getTargetFromNbt(Level level, ItemStack stack)
+	public static GlobalPos getTargetFromNbt(ItemStack stack)
 	{
 		if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
 		{
-			return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));
+			return GlobalPos.CODEC
+					.parse(NbtOps.INSTANCE, stack.getTag().get("TargetLocation"))
+					.resultOrPartial(LOGGER::error).orElse(null);
 		} else
 			return null;
+	}
+	
+	public void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
+	{
+		CompoundTag tag = stack.getOrCreateTag();
+		if(pos == null)
+			tag.remove("TargetLocation");
+		else
+			tag.put("TargetLocation",
+					GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
+							.getOrThrow(false, LOGGER::error));
 	}
 	
 	@Override
@@ -100,9 +117,9 @@ public class StructureScannerItem extends Item
 				resetCharge(pStack);
 			}
 			
-			BlockPos pos = getLocation(pEntity, sLevel);
+			GlobalPos pos = findStructureTarget(pEntity, sLevel);
 			
-			setLocation(pStack, pos);
+			setTargetToNbt(pStack, pos);
 			
 			reduceCharge(pStack, pEntity, pLevel);
 		}
@@ -119,20 +136,10 @@ public class StructureScannerItem extends Item
 	}
 	
 	@Nullable
-	public BlockPos getLocation(Entity pEntity, ServerLevel sLevel)
+	public GlobalPos findStructureTarget(Entity entity, ServerLevel level)
 	{
-		return sLevel.findNearestMapStructure(structure, pEntity.blockPosition(), 100, false);
-	}
-	
-	public void setLocation(ItemStack pStack, @Nullable BlockPos pos)
-	{
-		if(pos == null)
-		{
-			pStack.getOrCreateTag().remove("TargetLocation");
-		} else
-		{
-			pStack.getOrCreateTag().put("TargetLocation", NbtUtils.writeBlockPos(pos));
-		}
+		BlockPos pos = level.findNearestMapStructure(this.structure, entity.blockPosition(), 100, false);
+		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
 	}
 	
 	/**
