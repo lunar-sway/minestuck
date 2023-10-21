@@ -45,9 +45,14 @@ public class StructureScannerItem extends Item
 		this.fuelItem = fuelItem;
 	}
 	
-	public static GlobalPos setAngleTag(Level level, ItemStack stack)
+	@Nullable
+	public static GlobalPos getTargetFromNbt(Level level, ItemStack stack)
 	{
-		if(stack.hasTag() && stack.getTag().contains("TargetLocation")) {return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));} else {return null;}
+		if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
+		{
+			return GlobalPos.of(level.dimension(), NbtUtils.readBlockPos(stack.getTag().getCompound("TargetLocation")));
+		} else
+			return null;
 	}
 	
 	@Override
@@ -113,19 +118,20 @@ public class StructureScannerItem extends Item
 		pStack.setDamageValue(0);
 	}
 	
+	@Nullable
 	public BlockPos getLocation(Entity pEntity, ServerLevel sLevel)
 	{
 		return sLevel.findNearestMapStructure(structure, pEntity.blockPosition(), 100, false);
 	}
 	
-	public void setLocation(ItemStack pStack, BlockPos pos)
+	public void setLocation(ItemStack pStack, @Nullable BlockPos pos)
 	{
 		if(pos == null)
 		{
-			pStack.getTag().remove("TargetLocation");
+			pStack.getOrCreateTag().remove("TargetLocation");
 		} else
 		{
-			pStack.getTag().put("TargetLocation", NbtUtils.writeBlockPos(pos));
+			pStack.getOrCreateTag().put("TargetLocation", NbtUtils.writeBlockPos(pos));
 		}
 	}
 	
@@ -137,7 +143,6 @@ public class StructureScannerItem extends Item
 	 * @param pStack current item
 	 * @param pEntity player entity
 	 * @param pLevel player's current level
-	 * @return Boolean check for if deactivated, used to reactivate if players still has fuel.
 	 */
 	public void reduceCharge(ItemStack pStack, Entity pEntity, Level pLevel)
 	{
@@ -147,9 +152,10 @@ public class StructureScannerItem extends Item
 			
 			if(!isCharged(pStack))
 			{
-				pStack.getTag().putBoolean("Powered", false);
+				pStack.getOrCreateTag().putBoolean("Powered", false);
 				
-				if (!pLevel.isClientSide()){
+				if(!pLevel.isClientSide())
+				{
 					MutableComponent message = Component.translatable("message.temple_scanner.off");
 					pEntity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 				}

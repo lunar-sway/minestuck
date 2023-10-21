@@ -31,8 +31,6 @@ import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -124,7 +122,7 @@ public class ClientProxy
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
     ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
 		
-		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.setAngleTag(level, stack)));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(level, stack)));
 		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), ((pStack, pLevel, pEntity, pSeed) -> pStack.hasTag() && pStack.getTag().getBoolean("Powered") ? 1 : 0));
 	}
 	
