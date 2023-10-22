@@ -1473,7 +1473,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.3", "You rolled a 4.");
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
-
+		
+		add("message.temple_scanner.on", "Temple scanner: On");
+		add("message.temple_scanner.off", "Temple scanner: Off");
+		
 		add("message.gutter.minor_increase", "Gutter Size Increased");
 		add("message.gutter.increase", "Gutter Size Increased Greatly");
 		
