@@ -438,6 +438,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CHISELED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.CRACKED_BLACK_STONE_BRICKS.get());
 		output.accept(MSItems.BLACK_SAND.get());
+		output.accept(MSItems.IGNEOUS_STONE.get());
+		output.accept(MSItems.PUMICE_STONE.get());
 		output.accept(MSItems.DECREPIT_STONE_BRICKS.get());
 		output.accept(MSItems.FLOWERY_MOSSY_COBBLESTONE.get());
 		output.accept(MSItems.MOSSY_DECREPIT_STONE_BRICKS.get());
@@ -539,8 +541,15 @@ public final class MSCreativeTabs
 		output.accept(MSItems.GLOWING_MUSHROOM_VINES.get());
 		output.accept(MSItems.DESERT_BUSH.get());
 		output.accept(MSItems.BLOOMING_CACTUS.get());
+		output.accept(MSItems.SANDY_GRASS.get());
+		output.accept(MSItems.TALL_SANDY_GRASS.get());
+		output.accept(MSItems.DEAD_FOLIAGE.get());
+		output.accept(MSItems.TALL_DEAD_BUSH.get());
 		output.accept(MSItems.PETRIFIED_GRASS.get());
 		output.accept(MSItems.PETRIFIED_POPPY.get());
+		output.accept(MSItems.IGNEOUS_SPIKE.get());
+		output.accept(MSItems.SINGED_GRASS.get());
+		output.accept(MSItems.SINGED_FOLIAGE.get());
 		output.accept(MSItems.STRAWBERRY.get());
 		output.accept(MSItems.TALL_END_GRASS.get());
 		output.accept(MSItems.GLOWFLOWER.get());
@@ -751,6 +760,7 @@ public final class MSCreativeTabs
 		
 		output.accept(MSItems.MAKESHIFT_CLAWS_DRAWN.get());
 		output.accept(MSItems.CAT_CLAWS_DRAWN.get());
+		output.accept(MSItems.COFFEE_CLAWS_DRAWN.get());
 		output.accept(MSItems.POGO_CLAWS.get());
 		output.accept(MSItems.ATOMIKITTY_KATAR_DRAWN.get());
 		output.accept(MSItems.SKELETONIZER_DRAWN.get());
@@ -852,6 +862,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.HORSE_HITCHER.get());
 		output.accept(MSItems.CLUB_OF_FELONY.get());
 		output.accept(MSItems.CUESTICK.get());
+		output.accept(MSItems.TV_ANTENNA.get());
 		
 		output.accept(MSItems.BO_STAFF.get());
 		output.accept(MSItems.BAMBOO_BEATSTICK.get());

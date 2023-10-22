@@ -175,7 +175,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> CRACKED_MYCELIUM_BRICKS = REGISTER.register("cracked_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> MOSSY_MYCELIUM_BRICKS = REGISTER.register("mossy_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
 	public static final RegistryObject<Block> FLOWERY_MYCELIUM_BRICKS = REGISTER.register("flowery_mycelium_bricks", () -> new Block(copy(MYCELIUM_BRICKS.get())));
-
+	
 	public static final RegistryObject<Block> BLACK_SAND = REGISTER.register("black_sand", () -> new SandBlock(0x181915, Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.SNARE).strength(0.5F).sound(SoundType.SAND)));
 	public static final RegistryObject<Block> BLACK_STONE = REGISTER.register("black_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_BLACK).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.5F, 6.0F)));
 	public static final RegistryObject<Block> BLACK_COBBLESTONE = REGISTER.register("black_cobblestone", () -> new Block(copy(BLACK_STONE.get())));
@@ -184,6 +184,9 @@ public class MSBlocks
 	public static final RegistryObject<Block> BLACK_STONE_COLUMN = REGISTER.register("black_stone_column", () -> new MSDirectionalBlock(copy(BLACK_STONE.get())));
 	public static final RegistryObject<Block> CHISELED_BLACK_STONE_BRICKS = REGISTER.register("chiseled_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
 	public static final RegistryObject<Block> CRACKED_BLACK_STONE_BRICKS = REGISTER.register("cracked_black_stone_bricks", () -> new Block(copy(BLACK_STONE_BRICKS.get())));
+	
+	public static final RegistryObject<Block> IGNEOUS_STONE = REGISTER.register("igneous_stone", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
+	public static final RegistryObject<Block> PUMICE_STONE = REGISTER.register("pumice_stone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(0.5F)));
 	
 	public static final RegistryObject<Block> FLOWERY_MOSSY_COBBLESTONE = REGISTER.register("flowery_mossy_cobblestone", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
 	public static final RegistryObject<Block> FLOWERY_MOSSY_STONE_BRICKS = REGISTER.register("flowery_mossy_stone_bricks", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.5F, 6.0F)));
@@ -398,8 +401,17 @@ public class MSBlocks
 	public static final RegistryObject<Block> GLOWING_MUSHROOM = REGISTER.register("glowing_mushroom", () -> new GlowingMushroomBlock(Block.Properties.of().mapColor(MapColor.DIAMOND).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
 	public static final RegistryObject<Block> DESERT_BUSH = REGISTER.register("desert_bush", () -> new DesertFloraBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
 	public static final RegistryObject<Block> BLOOMING_CACTUS = REGISTER.register("blooming_cactus", () -> new DesertFloraBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> SANDY_GRASS = REGISTER.register("sandy_grass", () -> new DesertFloraBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> TALL_SANDY_GRASS = REGISTER.register("tall_sandy_grass", () -> new TallDesertPlantBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> DEAD_FOLIAGE = REGISTER.register("dead_foliage", () -> new DesertFloraBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> TALL_DEAD_BUSH = REGISTER.register("tall_dead_bush", () -> new TallDesertPlantBlock(Block.Properties.of().mapColor(MapColor.PLANT).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	
 	public static final RegistryObject<Block> PETRIFIED_GRASS = REGISTER.register("petrified_grass", () -> new PetrifiedFloraBlock(Block.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XYZ), PetrifiedFloraBlock.GRASS_SHAPE));
 	public static final RegistryObject<Block> PETRIFIED_POPPY = REGISTER.register("petrified_poppy", () -> new PetrifiedFloraBlock(Block.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().noCollission().strength(0).sound(SoundType.STONE).offsetType(BlockBehaviour.OffsetType.XZ), PetrifiedFloraBlock.FLOWER_SHAPE));
+	
+	public static final RegistryObject<Block> IGNEOUS_SPIKE = REGISTER.register("igneous_spike", () -> new BurnedFoliageBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.BROWN).instrument(NoteBlockInstrument.GUITAR).requiresCorrectToolForDrops().strength(1.5F).sound(SoundType.STONE)));
+	public static final RegistryObject<Block> SINGED_GRASS = REGISTER.register("singed_grass", () -> new BurnedFoliageBlock(BlockBehaviour.Properties.of().mapColor(DyeColor.GRAY).instrument(NoteBlockInstrument.GUITAR).pushReaction(PushReaction.DESTROY).noCollission().strength(0).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)));
+	public static final RegistryObject<Block> SINGED_FOLIAGE = REGISTER.register("singed_foliage", () -> new Block(copy(SINGED_GRASS.get())));
 	
 	public static final RegistryObject<Block> GLOWING_MUSHROOM_VINES = REGISTER.register("glowing_mushroom_vines", () -> new GlowingMushroomVinesBlock(Block.Properties.of().mapColor(MapColor.DIAMOND).pushReaction(PushReaction.DESTROY).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).lightLevel(state -> 11).offsetType(BlockBehaviour.OffsetType.XZ)));
 	

@@ -158,6 +158,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHISELED_BLACK_STONE_BRICKS.get());
 		dropSelf(CRACKED_BLACK_STONE_BRICKS.get());
 		dropSelf(BLACK_SAND.get());
+		dropSelf(IGNEOUS_STONE.get());
+		dropSelf(PUMICE_STONE.get());
 		dropSelf(DECREPIT_STONE_BRICKS.get());
 		dropSelf(FLOWERY_MOSSY_COBBLESTONE.get());
 		dropSelf(MOSSY_DECREPIT_STONE_BRICKS.get());
@@ -354,8 +356,15 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(GLOWING_MUSHROOM.get());
 		add(DESERT_BUSH.get(), this::desertBushDrop);
 		dropSelf(BLOOMING_CACTUS.get());
+		add(SANDY_GRASS.get(), noDrop());
+		add(TALL_SANDY_GRASS.get(), noDrop());
+		add(DEAD_FOLIAGE.get(), noDrop());
+		add(TALL_DEAD_BUSH.get(), noDrop());
 		dropSelf(PETRIFIED_GRASS.get());
 		dropSelf(PETRIFIED_POPPY.get());
+		dropSelf(IGNEOUS_SPIKE.get());
+		add(SINGED_GRASS.get(), noDrop());
+		add(SINGED_FOLIAGE.get(), noDrop());
 		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));

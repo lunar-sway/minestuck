@@ -167,6 +167,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHISELED_BLACK_STONE_BRICKS, "Chiseled Black Stone Bricks");
 		addBlock(MSBlocks.CRACKED_BLACK_STONE_BRICKS, "Cracked Black Stone Bricks");
 		addBlock(MSBlocks.BLACK_SAND, "Black Sand");
+		addBlock(MSBlocks.IGNEOUS_STONE, "Igneous Stone");
+		addBlock(MSBlocks.PUMICE_STONE, "Pumice Stone");
 		addBlock(MSBlocks.DECREPIT_STONE_BRICKS, "Decrepit Stone Bricks");
 		addBlock(MSBlocks.FLOWERY_MOSSY_COBBLESTONE, "Flowery Mossy Cobblestone");
 		addBlock(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, "Mossy Decrepit Stone Bricks");
@@ -371,8 +373,15 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlockStoreTooltip(MSBlocks.GLOWING_MUSHROOM, "This mushroom tastes a bit better than any other around here, according to myself!");
 		addBlock(MSBlocks.DESERT_BUSH, "Desert Bush");
 		addBlock(MSBlocks.BLOOMING_CACTUS, "Blooming Cactus");
+		addBlock(MSBlocks.SANDY_GRASS, "Sandy Grass");
+		addBlock(MSBlocks.TALL_SANDY_GRASS, "Tall Sandy Grass");
+		addBlock(MSBlocks.DEAD_FOLIAGE, "Dead Foliage");
+		addBlock(MSBlocks.TALL_DEAD_BUSH, "Tall Dead Bush");
 		addBlock(MSBlocks.PETRIFIED_GRASS, "Petrified Grass");
 		addBlock(MSBlocks.PETRIFIED_POPPY, "Petrified Poppy");
+		addBlock(MSBlocks.IGNEOUS_SPIKE, "Igneous Spike");
+		addBlock(MSBlocks.SINGED_GRASS, "Singed Grass");
+		addBlock(MSBlocks.SINGED_FOLIAGE, "Singed Foliage");
 		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");
@@ -803,6 +812,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.MAKESHIFT_CLAWS_SHEATHED, "Makeshift Claws");
 		addItem(MSItems.CAT_CLAWS_DRAWN, "Cat Claws");
 		addItem(MSItems.CAT_CLAWS_SHEATHED, "Cat Claws");
+		addItem(MSItems.COFFEE_CLAWS_DRAWN, "Coffee Claws");
+		addItem(MSItems.COFFEE_CLAWS_SHEATHED, "Coffee Claws");
 		addItem(MSItems.POGO_CLAWS, "Pogo Claws");
 		addItemTooltip(MSItems.POGO_CLAWS, "Pounce around and bounce around with these claws!");
 		addItem(MSItems.ATOMIKITTY_KATAR_DRAWN, "Atomikitty Katar");
@@ -963,6 +974,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.ACE_OF_DIAMONDS, "Ace of Diamonds");
 		addItemStore(MSItems.ACE_OF_DIAMONDS, "Star Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_DIAMONDS, "This star-shaped sigil probably has magical astral properties.");
+		addItem(MSItems.TV_ANTENNA, "TV Antenna");
 		addItem(MSItems.ACE_OF_HEARTS, "Ace of Hearts");
 		addItemStore(MSItems.ACE_OF_HEARTS, "Heart Sigil");
 		addItemStoreTooltip(MSItems.ACE_OF_HEARTS, "This thing MUST have magical love powers!");

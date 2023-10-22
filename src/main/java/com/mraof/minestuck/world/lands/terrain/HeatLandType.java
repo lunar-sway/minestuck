@@ -39,8 +39,8 @@ public class HeatLandType extends TerrainLandType
 	@Override
 	public void registerBlocks(StructureBlockRegistry registry)
 	{
-		registry.setBlock("ground", Blocks.NETHERRACK);
-		registry.setBlock("upper", Blocks.NETHERRACK);
+		registry.setBlock("ground", MSBlocks.PUMICE_STONE);
+		registry.setBlock("upper", MSBlocks.IGNEOUS_STONE);
 		registry.setBlock("ocean", Blocks.LAVA);
 		registry.setBlock("structure_primary", MSBlocks.BLACK_STONE_BRICKS);
 		registry.setBlock("structure_primary_decorative", MSBlocks.CHISELED_BLACK_STONE_BRICKS);

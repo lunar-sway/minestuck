@@ -644,6 +644,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.EDISONS_FURY.get()).input(MSItems.ELECTRIC_FORK.get()).or().input(Items.REDSTONE_LAMP).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.CAT_CLAWS_DRAWN.get()).input(MSItems.MAKESHIFT_CLAWS_DRAWN.get()).and().input(Tags.Items.INGOTS_IRON).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.COFFEE_CLAWS_DRAWN.get()).input(MSItems.CAT_CLAWS_DRAWN.get()).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.POGO_CLAWS.get()).input(MSItems.MAKESHIFT_CLAWS_DRAWN.get()).and().input(Items.SLIME_BALL).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.ATOMIKITTY_KATAR_DRAWN.get()).input(MSItems.CAT_CLAWS_DRAWN.get()).and().input(MSItems.RAW_URANIUM.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SKELETONIZER_DRAWN.get()).input(MSItems.CAT_CLAWS_DRAWN.get()).or().input(Items.BONE).build(consumer);
