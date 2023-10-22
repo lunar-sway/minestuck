@@ -61,7 +61,7 @@ public class StructureScannerItem extends Item
 			return null;
 	}
 	
-	public void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
+	public static void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
 	{
 		CompoundTag tag = stack.getOrCreateTag();
 		if(pos == null)
@@ -84,7 +84,7 @@ public class StructureScannerItem extends Item
 			if(invItem == null)
 				return InteractionResultHolder.fail(stack);
 			
-			useFuel(invItem, pPlayer, pLevel);
+			consumeFuelItem(invItem, pPlayer, pLevel);
 		}
 		
 		if (stack.getDamageValue() > 0)
@@ -147,25 +147,25 @@ public class StructureScannerItem extends Item
 	 * Scanner charge is represented by durability and damage.
 	 * Damage is dealt every 20 ticks, powers off when out of charge.
 	 *
-	 * @param pStack current item
-	 * @param pEntity player entity
-	 * @param pLevel player's current level
+	 * @param stack current item
+	 * @param entity player entity
+	 * @param level player's current level
 	 */
-	public void reduceCharge(ItemStack pStack, Entity pEntity, Level pLevel)
+	public void reduceCharge(ItemStack stack, Entity entity, Level level)
 	{
-		if(fuelItem != null && pEntity.tickCount % 20 == 0)
+		if(fuelItem == null || entity.tickCount % 20 != 0)
+			return;
+		
+		stack.hurt(1, level.random, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+		
+		if(!isCharged(stack))
 		{
-			pStack.hurt(1, pLevel.random, pEntity instanceof ServerPlayer ? (ServerPlayer) pEntity : null);
+			stack.getOrCreateTag().putBoolean("Powered", false);
 			
-			if(!isCharged(pStack))
+			if(!level.isClientSide())
 			{
-				pStack.getOrCreateTag().putBoolean("Powered", false);
-				
-				if(!pLevel.isClientSide())
-				{
-					MutableComponent message = Component.translatable("message.temple_scanner.off");
-					pEntity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-				}
+				MutableComponent message = Component.translatable("message.temple_scanner.off");
+				entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 			}
 		}
 	}
@@ -181,12 +181,11 @@ public class StructureScannerItem extends Item
 		return null;
 	}
 	
-	public void useFuel(ItemStack invItem, Player pPlayer, Level pLevel)
+	private static void consumeFuelItem(ItemStack fuelStack, Player player, Level level)
 	{
-		if(!pLevel.isClientSide)
-		{
-			invItem.shrink(1);
-		}
-		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
+		if(!level.isClientSide)
+			fuelStack.shrink(1);
+		
+		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
 	}
 }
