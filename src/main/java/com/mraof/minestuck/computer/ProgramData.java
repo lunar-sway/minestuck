@@ -1,8 +1,11 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -71,8 +74,19 @@ public class ProgramData
 	
 	public static void onClientClosed(ComputerBlockEntity be)
 	{
-		Objects.requireNonNull(be.getLevel());
-		SkaianetHandler.get(be.getLevel()).closeClientConnection(be);	//Can safely be done even if this computer isn't in a connection
+		if(be.getLevel() != null)
+		{
+			Level level = be.getLevel();
+			SkaianetHandler handler = SkaianetHandler.get(level);
+			
+			SburbConnection c = handler.getClientConnection(be);
+			if(c != null)
+			{
+				c.removeClientEditmodeLocations(level.dimension(), be.getBlockPos(), EditmodeLocations.Source.BLOCK);
+			}
+			
+			handler.closeClientConnection(be);	//Can safely be done even if this computer isn't in a connection
+		}
 	}
 	
 	public static void onServerClosed(ComputerBlockEntity be)

@@ -7,7 +7,6 @@ import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.inventory.EditmodeMenu;
 import com.mraof.minestuck.network.EditmodeInventoryPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
@@ -25,8 +24,8 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/gui_inv_editmode.png");
 	public static final ResourceLocation SETTINGS_ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	private static final int LEFT_ARROW_X = 7, RIGHT_ARROW_X = 151, ARROW_Y = 23;
-	private static final int SETTINGS_X = 76, SETTINGS_Y = 54;
-	private static final int ARROW_SIZE = 18, SETTINGS_SIZE = 16; //same width and height
+	private static final int SETTINGS_X = 80, SETTINGS_Y = 54;
+	public static final int ARROW_SIZE = 18, SETTINGS_SIZE = 16; //same width and height
 	
 	public boolean more, less;
 	
@@ -39,6 +38,15 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		guiHeight = 98;
 		
 		player = playerInventory.player;
+	}
+	
+	@Override
+	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks)
+	{
+		super.render(guiGraphics, mouseX, mouseY, partialTicks);
+		
+		if(overtopSettingsIconBounds(mouseX, mouseY, xOffset, yOffset, SETTINGS_X, SETTINGS_Y))
+			guiGraphics.renderTooltip(font, Component.translatable("Editmode settings"), mouseX, mouseY);
 	}
 	
 	@Override
@@ -74,12 +82,11 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 	@Override
 	public boolean mouseClicked(double xcor, double ycor, int mouseButton)
 	{
-		boolean clickedInSettingsIconYRange = ycor >= yOffset + SETTINGS_Y && ycor < yOffset + SETTINGS_Y + SETTINGS_SIZE;
-		boolean clickedInSettingsIconXRange = xcor >= xOffset + SETTINGS_X && xcor < xOffset + SETTINGS_X + SETTINGS_SIZE;
-		
-		if(clickedInSettingsIconYRange && clickedInSettingsIconXRange)
+		if(overtopSettingsIconBounds(xcor, ycor, xOffset, yOffset, SETTINGS_X, SETTINGS_Y))
 		{
-			Minecraft.getInstance().setScreen(new EditmodeSettingsScreen(player));
+			minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+			this.minecraft.setScreen(null);
+			this.minecraft.setScreen(new EditmodeSettingsScreen(player));
 		}
 		
 		boolean clickedInArrowIconYRange = ycor >= yOffset + ARROW_Y && ycor < yOffset + ARROW_Y + ARROW_SIZE;
@@ -106,5 +113,13 @@ public class InventoryEditmodeScreen extends PlayerStatsContainerScreen<Editmode
 		}
 		
 		return super.mouseClicked(xcor, ycor, mouseButton);
+	}
+	
+	public static boolean overtopSettingsIconBounds(double xPos, double yPos, int xOffset, int yOffset, int SETTINGS_X, int SETTINGS_Y)
+	{
+		boolean inYRange = yPos >= yOffset + SETTINGS_Y && yPos < yOffset + SETTINGS_Y + SETTINGS_SIZE;
+		boolean inXRange = xPos >= xOffset + SETTINGS_X && xPos < xOffset + SETTINGS_X + SETTINGS_SIZE;
+		
+		return inYRange && inXRange;
 	}
 }

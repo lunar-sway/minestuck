@@ -151,12 +151,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		{
 			if(!level.isClientSide && blockEntity.installedPrograms.size() < 3)
 			{
-				SburbConnection c = SkaianetHandler.get(level).getClientConnection(blockEntity);
-				if(c != null)
-				{
-					c.removeClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
-				}
-				
 				stackInHand.shrink(1);
 				blockEntity.closeAll();
 				level.setBlock(pos, state.setValue(STATE, State.BROKEN), Block.UPDATE_CLIENTS);
@@ -191,15 +185,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	@SuppressWarnings("deprecation")
 	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if(!level.isClientSide && level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
-		{
-			SburbConnection c = SkaianetHandler.get(level).getClientConnection(computer);
-			if(c != null)
-			{
-				c.removeClientEditmodeLocations(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
-			}
-		}
-		
 		if(!newState.is(state.getBlock()))
 			dropItems(level, pos.getX(), pos.getY(), pos.getZ(), state);
 		super.onRemove(state, level, pos, newState, isMoving);
