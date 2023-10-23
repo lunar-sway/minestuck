@@ -44,11 +44,10 @@ public class LogicGateBlock extends DiodeBlock
 		
 		return logicOperator.operation.test(leftInputSendingPower, rightInputSendingPower);
 	}
-	/*FIXME
-	@Override*/
+	
 	protected int getAlternateSignalAt(LevelReader level, BlockPos pos, Direction side)
 	{
-		return ((Level) level).getSignal(pos.relative(side), side);
+		return level.getSignal(pos.relative(side), side); //replaces protected method in DiodeBlock of the same name
 	}
 	
 	@Override

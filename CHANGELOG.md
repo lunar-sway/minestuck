@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [1.20.1-1.11.1.0] - 2023-10-22
+
 ### Added
 
 - Two new computer Themes: Joy and SBURB 95
@@ -25,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Retextured green stone blocks
 - Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
 - New texture for wizard staff
+- Temple Scanner now displays direction on the item
 
 ### Fixed
 
@@ -34,6 +37,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Contributors for this release
 
 - Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod, kirderf1
+
+## [1.19.2-1.11.0.1] - 2023-10-21
+
+### Fixed
+
+- Fix a crash from fake players injuring underlings
+- Fix a crash caused by librarian villagers in the overworld
+
+### Contributors for this release
+
+- kirderf1, Dweblenod
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
