@@ -159,6 +159,12 @@ public final class MSConfiguredFeatureProvider
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.BLOOMING_CACTUS.get()))))));
 		context.register(DESERT_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.DESERT_BUSH.get()))))));
+		context.register(SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simpleRandomPatchConfiguration(64, PlacementUtils.onlyWhenEmpty(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.SANDY_GRASS.get().defaultBlockState()))))));
+		context.register(TALL_SANDY_GRASS_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_SANDY_GRASS.get().defaultBlockState())))));
+		context.register(TALL_DEAD_BUSH_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
+				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(MSBlocks.TALL_DEAD_BUSH.get().defaultBlockState())))));
 		context.register(MOSS_CARPET_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,
 				FeatureUtils.simpleRandomPatchConfiguration(32, PlacementUtils.filtered(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.MOSS_CARPET.defaultBlockState())), BlockPredicate.matchesBlocks(Direction.DOWN.getNormal(), Blocks.GRASS_BLOCK)))));
 		context.register(AZALEA_PATCH, new ConfiguredFeature<>(Feature.RANDOM_PATCH,

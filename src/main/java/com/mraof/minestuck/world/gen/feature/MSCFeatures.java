@@ -83,6 +83,9 @@ public final class MSCFeatures
 	public static final ResourceKey<ConfiguredFeature<?, ?>> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> BLOOMING_CACTUS_PATCH = key("blooming_cactus_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> DESERT_BUSH_PATCH = key("desert_bush_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> SANDY_GRASS_PATCH = key("sandy_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_SANDY_GRASS_PATCH = key("tall_sandy_grass_patch");
+	public static final ResourceKey<ConfiguredFeature<?, ?>> TALL_DEAD_BUSH_PATCH = key("tall_dead_bush_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> MOSS_CARPET_PATCH = key("moss_carpet_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> AZALEA_PATCH = key("azalea_patch");
 	public static final ResourceKey<ConfiguredFeature<?, ?>> CRIMSON_FUNGUS_PATCH = key("crimson_fungus_patch");

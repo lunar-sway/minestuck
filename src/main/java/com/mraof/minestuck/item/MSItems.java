@@ -1037,6 +1037,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> IGNEOUS_SPIKE = registerBlockItem(MSBlocks.IGNEOUS_SPIKE);
 	public static final RegistryObject<BlockItem> SINGED_GRASS = registerBlockItem(MSBlocks.SINGED_GRASS);
 	public static final RegistryObject<BlockItem> SINGED_FOLIAGE = registerBlockItem(MSBlocks.SINGED_FOLIAGE);
+	public static final RegistryObject<BlockItem> SULFUR_BUBBLE = registerBlockItem(MSBlocks.SULFUR_BUBBLE);
 	public static final RegistryObject<BlockItem> STRAWBERRY = registerBlockItem(MSBlocks.STRAWBERRY, new Item.Properties());
 	public static final RegistryObject<BlockItem> TALL_END_GRASS = registerBlockItem(MSBlocks.TALL_END_GRASS);
 	public static final RegistryObject<BlockItem> GLOWFLOWER = registerBlockItem(MSBlocks.GLOWFLOWER);

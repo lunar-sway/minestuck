@@ -116,6 +116,9 @@ public final class MSPlacedFeatures
 	public static final ResourceKey<PlacedFeature> PETRIFIED_POPPY_PATCH = key("petrified_poppy_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_PETRIFIED_POPPY_PATCH = key("sparse_petrified_poppy_patch");
 	public static final ResourceKey<PlacedFeature> DESERT_BUSH_PATCH = key("desert_bush_patch");
+	public static final ResourceKey<PlacedFeature> SANDY_GRASS_PATCH = key("sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_SANDY_GRASS_PATCH = key("tall_sandy_grass_patch");
+	public static final ResourceKey<PlacedFeature> TALL_DEAD_BUSH_PATCH = key("tall_dead_bush_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_DESERT_BUSH_PATCH = key("sparse_desert_bush_patch");
 	public static final ResourceKey<PlacedFeature> MOSS_CARPET_PATCH = key("moss_carpet_patch");
 	public static final ResourceKey<PlacedFeature> SPARSE_MOSS_CARPET_PATCH = key("sparse_moss_carpet_patch");

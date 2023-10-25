@@ -365,6 +365,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(IGNEOUS_SPIKE.get());
 		add(SINGED_GRASS.get(), noDrop());
 		add(SINGED_FOLIAGE.get(), noDrop());
+		dropSelf(SULFUR_BUBBLE.get());
 		dropSelf(GLOWING_MUSHROOM_VINES.get());
 		dropSelf(STRAWBERRY.get());
 		add(ATTACHED_STRAWBERRY_STEM.get(), (stemBlock) -> createAttachedStemDrops(stemBlock, MSItems.STRAWBERRY_CHUNK.get()));

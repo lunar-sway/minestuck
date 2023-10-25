@@ -222,6 +222,12 @@ public final class MSPlacedFeatureProvider
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
 		context.register(DESERT_BUSH_PATCH, placed(features, MSCFeatures.DESERT_BUSH_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(30), PlacementUtils.HEIGHTMAP)));
+		context.register(SANDY_GRASS_PATCH, placed(features, MSCFeatures.SANDY_GRASS_PATCH,
+				worldGenModifiers(RarityFilter.onAverageOnceEvery(60), PlacementUtils.HEIGHTMAP)));
+		context.register(TALL_SANDY_GRASS_PATCH, placed(features, MSCFeatures.TALL_SANDY_GRASS_PATCH,
+				worldGenModifiers(PlacementUtils.countExtra(4, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_SANDY_GRASS.get()))));
+		context.register(TALL_DEAD_BUSH_PATCH, placed(features, MSCFeatures.TALL_DEAD_BUSH_PATCH,
+				worldGenModifiers(PlacementUtils.countExtra(2, 0.1F, 1), PlacementUtils.HEIGHTMAP, PlacementUtils.filteredByBlockSurvival(MSBlocks.TALL_DEAD_BUSH.get()))));
 		context.register(SPARSE_DESERT_BUSH_PATCH, placed(features, MSCFeatures.DESERT_BUSH_PATCH,
 				worldGenModifiers(RarityFilter.onAverageOnceEvery(120), PlacementUtils.HEIGHTMAP)));
 		context.register(MOSS_CARPET_PATCH, placed(features, MSCFeatures.MOSS_CARPET_PATCH,

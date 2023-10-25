@@ -382,6 +382,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.IGNEOUS_SPIKE, "Igneous Spike");
 		addBlock(MSBlocks.SINGED_GRASS, "Singed Grass");
 		addBlock(MSBlocks.SINGED_FOLIAGE, "Singed Foliage");
+		addBlock(MSBlocks.SULFUR_BUBBLE, "Sulfur Bubble");
 		addBlock(MSBlocks.GLOWING_MUSHROOM_VINES, "Glowing Mushroom Vines");
 		addBlock(MSBlocks.STRAWBERRY, "Strawberry");
 		addBlock(MSBlocks.ATTACHED_STRAWBERRY_STEM, "Strawberry Stem");

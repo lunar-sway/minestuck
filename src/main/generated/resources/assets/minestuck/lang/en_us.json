@@ -527,6 +527,7 @@
   "block.minestuck.stripped_shadewood_log": "Stripped Shadewood Log",
   "block.minestuck.structure_core": "Structure Core",
   "block.minestuck.sugar_cube": "Sugar Cube",
+  "block.minestuck.sulfur_bubble": "Sulfur Bubble",
   "block.minestuck.summoner": "Summoner",
   "block.minestuck.summoner.additional_info": "- Can be permanently disabled\n- Spawn region/entity type/disabled status can be changed in UI\n- UI only accessible in creative mode\n- Right clicking with a mob egg in creative mode sets it to that mob\n- Has a cooldown",
   "block.minestuck.summoner.tooltip": "Summons an entity nearby when powered by redstone and then is disabled.",

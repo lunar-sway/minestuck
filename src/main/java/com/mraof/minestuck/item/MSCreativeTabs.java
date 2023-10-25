@@ -550,6 +550,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.IGNEOUS_SPIKE.get());
 		output.accept(MSItems.SINGED_GRASS.get());
 		output.accept(MSItems.SINGED_FOLIAGE.get());
+		output.accept(MSItems.SULFUR_BUBBLE.get());
 		output.accept(MSItems.STRAWBERRY.get());
 		output.accept(MSItems.TALL_END_GRASS.get());
 		output.accept(MSItems.GLOWFLOWER.get());
