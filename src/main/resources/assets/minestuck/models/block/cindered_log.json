@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"parent": "block/cube_column",
 	"texture_size": [48, 48],
 	"textures": {
 		"2": "minestuck:block/cindered_log",
