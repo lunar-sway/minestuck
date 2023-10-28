@@ -236,6 +236,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(STRIPPED_SHADEWOOD_LOG.get());
 		dropSelf(STRIPPED_SCARRED_SHADEWOOD_LOG.get());
 		dropSelf(STRIPPED_ROTTED_SHADEWOOD_LOG.get());
+		dropSelf(CINDERED_LOG.get());
 		dropSelf(SHADEWOOD.get());
 		dropSelf(SCARRED_SHADEWOOD.get());
 		dropSelf(ROTTED_SHADEWOOD.get());

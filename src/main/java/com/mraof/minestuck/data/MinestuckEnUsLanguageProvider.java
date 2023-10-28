@@ -245,6 +245,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.STRIPPED_SHADEWOOD_LOG, "Stripped Shadewood Log");
 		addBlock(MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG, "Stripped Scarred Shadewood Log");
 		addBlock(MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG, "Stripped Rotted Shadewood Log");
+		addBlock(MSBlocks.CINDERED_LOG, "Cindered Log");
 		addBlock(MSBlocks.SHADEWOOD, "Shadewood");
 		addBlock(MSBlocks.SCARRED_SHADEWOOD, "Scarred Shadewood");
 		addBlock(MSBlocks.ROTTED_SHADEWOOD, "Rotted Shadewood");

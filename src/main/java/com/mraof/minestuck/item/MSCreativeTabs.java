@@ -495,6 +495,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FLOWERY_VINE_LOG.get());
 		output.accept(MSItems.DEAD_LOG.get());
 		output.accept(MSItems.PETRIFIED_LOG.get());
+		output.accept(MSItems.CINDERED_LOG.get());
 		output.accept(MSItems.GLOWING_WOOD.get());
 		output.accept(MSItems.SHADEWOOD.get());
 		output.accept(MSItems.SCARRED_SHADEWOOD.get());

@@ -104,6 +104,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(COARSE_END_STONE.get(), END_GRASS.get());
 		needsWoodPickaxe(CHALK.get(), POLISHED_CHALK.get(), CHALK_BRICKS.get(), CHALK_COLUMN.get(), CHISELED_CHALK_BRICKS.get(), MOSSY_CHALK_BRICKS.get(), FLOWERY_CHALK_BRICKS.get());
 		needsWoodPickaxe(PINK_STONE.get(), POLISHED_PINK_STONE.get(), PINK_STONE_BRICKS.get(), PINK_STONE_COLUMN.get(), CHISELED_PINK_STONE_BRICKS.get(), CRACKED_PINK_STONE_BRICKS.get(), MOSSY_PINK_STONE_BRICKS.get());
+		needsWoodPickaxe(IGNEOUS_STONE.get(), IGNEOUS_SPIKE.get());
 		
 		needsStonePickaxe(BROWN_STONE.get(), POLISHED_BROWN_STONE.get(), BROWN_STONE_BRICKS.get(), CRACKED_BROWN_STONE_BRICKS.get(), BROWN_STONE_COLUMN.get());
 		needsStonePickaxe(GREEN_STONE.get(), POLISHED_GREEN_STONE.get(), GREEN_STONE_BRICKS.get(), GREEN_STONE_COLUMN.get(), CHISELED_GREEN_STONE_BRICKS.get());
@@ -128,6 +129,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(MINEABLE_WITH_AXE).add(FLOWERY_VINE_LOG.get(), FLOWERY_VINE_WOOD.get());
 		tag(MINEABLE_WITH_AXE).add(DEAD_LOG.get(), DEAD_WOOD.get(), DEAD_PLANKS.get());
 		tag(MINEABLE_WITH_AXE).add(PETRIFIED_LOG.get(), PETRIFIED_WOOD.get());
+		tag(MINEABLE_WITH_AXE).add(CINDERED_LOG.get());
 		tag(MINEABLE_WITH_AXE).add(TREATED_PLANKS.get());
 		tag(MINEABLE_WITH_AXE).add(GLOWING_BOOKSHELF.get(), FROST_BOOKSHELF.get(), RAINBOW_BOOKSHELF.get(), END_BOOKSHELF.get(), DEAD_BOOKSHELF.get(), TREATED_BOOKSHELF.get());
 		tag(MINEABLE_WITH_AXE).add(GLOWING_LADDER.get(), FROST_LADDER.get(), RAINBOW_LADDER.get(), END_LADDER.get(), DEAD_LADDER.get(), TREATED_LADDER.get());
