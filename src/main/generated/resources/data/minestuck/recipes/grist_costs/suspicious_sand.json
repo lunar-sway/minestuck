@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {
+    "minestuck:diamond": 10
+  },
+  "ingredient": {
+    "item": "minecraft:suspicious_sand"
+  },
+  "sources": [
+    "minecraft:sand"
+  ]
+}
