@@ -632,8 +632,15 @@ public class MSItems
 	public static final RegistryObject<Item> ICE_SHARD = REGISTER.register("ice_shard", () -> new Item(new Item.Properties()));
 	public static final RegistryObject<Item> HORN = REGISTER.register("horn", () -> new SoundItem(MSSoundEvents.ITEM_HORN_USE, new Item.Properties()));
 	public static final RegistryObject<Item> CAKE_MIX = REGISTER.register("cake_mix", () -> new Item(new Item.Properties()));
-	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().stacksTo(1), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
+
 	
+	
+	//Structure Scanners
+	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().durability(30), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
+	
+	
+	
+	//Scalemates
 	public static final RegistryObject<Item> SCALEMATE_APPLESCAB = REGISTER.register("scalemate_applescab", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_BERRYBREATH = REGISTER.register("scalemate_berrybreath", () -> new ScalemateItem(new Item.Properties()));
 	public static final RegistryObject<Item> SCALEMATE_CINNAMONWHIFF = REGISTER.register("scalemate_cinnamonwhiff", () -> new ScalemateItem(new Item.Properties()));
@@ -1227,3 +1234,4 @@ public class MSItems
 		return REGISTER.register(block.getKey().location().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}
 }
+	
