@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
 
 ### Changed
 
@@ -32,8 +34,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Boss Mob entity tag
 - Consort plushes
 - Mutini plush
-- Sopor Stupor Effect
-- Sopor Slime Pie food item
 
 ### Changed
 
@@ -51,6 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Slightly adjusted damage of Home By Midnight to give more value to alchemizing it over its ingredients
 
 ### Contributors for this release
+
 - Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod, kirderf1
 
 ## [1.19.2-1.11.0.1] - 2023-10-21
