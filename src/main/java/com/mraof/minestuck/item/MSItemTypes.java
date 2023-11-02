@@ -58,7 +58,7 @@ public class MSItemTypes
 			0, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	public static final ArmorMaterial JETPACK = new ModArmorMaterial("minestuck:jetpack", 50,
-			Map.of(ArmorItem.Type.CHESTPLATE, 8),
+			Map.of(ArmorItem.Type.CHESTPLATE, 0),
 			15, SoundEvents.ARMOR_EQUIP_IRON, 0.0F, 0F, () -> Ingredient.EMPTY);
 	
 	//Base Tools

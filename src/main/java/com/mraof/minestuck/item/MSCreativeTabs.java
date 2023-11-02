@@ -190,6 +190,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.HOLOPAD.get());
 		output.accept(MSItems.INTELLIBEAM_LASERSTATION.get());
 		output.accept(MSItems.THRUST_CONTROLLER.get());
+		output.accept(MSItems.JETPACK.get());
 		output.accept(MSItems.CRUXITE_DOWEL.get());
 		output.accept(MSItems.LOTUS_TIME_CAPSULE.get());
 		

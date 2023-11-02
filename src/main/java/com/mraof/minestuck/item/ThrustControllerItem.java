@@ -13,7 +13,6 @@ import net.minecraft.world.level.Level;
 
 public class ThrustControllerItem extends Item
 {
-	
 	public ThrustControllerItem(Properties properties)
 	{
 		super(properties);
@@ -23,11 +22,11 @@ public class ThrustControllerItem extends Item
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
 		ItemStack item = playerIn.getItemInHand(handIn);
-		ItemStack jetpackItem = new ItemStack(playerIn.getItemBySlot(EquipmentSlot.CHEST).getItem());
+		ItemStack jetpackItem = playerIn.getItemBySlot(EquipmentSlot.CHEST);
 		Item thrustController = MSItems.THRUST_CONTROLLER.get();
 		
-		Boolean hasController = playerIn.getItemInHand(InteractionHand.MAIN_HAND).is(thrustController);
-		Boolean hasControllerOffhand =  playerIn.getItemInHand(InteractionHand.OFF_HAND).is(thrustController);
+		boolean hasController = playerIn.getItemInHand(InteractionHand.MAIN_HAND).is(thrustController);
+		boolean hasControllerOffhand =  playerIn.getItemInHand(InteractionHand.OFF_HAND).is(thrustController);
 		
 		if(hasController && hasControllerOffhand && playerIn.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof JetPackItem)
 		{
