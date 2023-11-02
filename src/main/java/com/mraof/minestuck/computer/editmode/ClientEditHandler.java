@@ -2,14 +2,17 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.client.ClientDimensionData;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
+import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -199,7 +202,7 @@ public final class ClientEditHandler
 			{
 				if(cost != null)
 				{
-					event.getEntity().sendSystemMessage(cost.createMissingMessage());
+					event.getEntity().sendSystemMessage(GristCache.createMissingMessage(cost));
 				}
 				event.setCanceled(true);
 			}
@@ -227,7 +230,7 @@ public final class ClientEditHandler
 			}
 			else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
 			{
-				event.getEntity().sendSystemMessage(ServerEditHandler.blockBreakCost().createMissingMessage());
+				event.getEntity().sendSystemMessage(GristCache.createMissingMessage(ServerEditHandler.blockBreakCost()));
 				event.setCanceled(true);
 			}
 		}

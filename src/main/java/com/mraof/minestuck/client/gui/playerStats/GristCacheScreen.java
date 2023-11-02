@@ -1,7 +1,7 @@
 package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;

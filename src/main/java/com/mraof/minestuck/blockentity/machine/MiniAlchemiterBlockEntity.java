@@ -1,7 +1,10 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.event.AlchemyEvent;
@@ -9,6 +12,7 @@ import com.mraof.minestuck.inventory.MiniAlchemiterMenu;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -145,7 +149,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.load(nbt);
 		
-		this.wildcardGrist = GristType.read(nbt, "gristType");
+		this.wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
 		if(IdentifierHandler.hasIdentifier(nbt, "owner"))
 			owner = IdentifierHandler.load(nbt, "owner");
@@ -158,7 +162,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 		
 		this.progressTracker.save(compound);
 		
-		compound.putString("gristType", String.valueOf(GristTypes.getRegistry().getKey(wildcardGrist)));
+		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
 		
 		if(owner != null)
 			owner.saveToNBT(compound, "owner");
@@ -206,7 +210,7 @@ public class MiniAlchemiterBlockEntity extends MachineProcessBlockEntity impleme
 			// Additionally, we need to check if the item in the slot is empty. Otherwise, it will attempt to check the cost for air, which cannot be alchemized anyway.
 			if (cost != null && !input.isEmpty())
 			{
-				MutableGristSet scale_cost;
+				GristSet scale_cost;
 				for (int lvl = 1; lvl <= 17; lvl++)
 				{
 					// We went through fifteen item cost checks and could still afford it. No sense in checking more than this.
