@@ -21,13 +21,6 @@ public class SoporSicknessEffect extends MobEffect
 	@Override
 	public void applyEffectTick(LivingEntity target, int effectLevel)
 	{
-		super.applyEffectTick(target, effectLevel);
-		
-		damageTarget(target);
-	}
-	
-	public static void damageTarget(LivingEntity target)
-	{
 		if (target.getHealth() > 5.0F)
 		{
 			target.hurt(target.damageSources().generic(), 0.5F);
