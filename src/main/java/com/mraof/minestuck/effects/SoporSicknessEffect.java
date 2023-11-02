@@ -34,21 +34,13 @@ public class SoporSicknessEffect extends MobEffect
 		}
 	}
 	
-	public static boolean isntApplicableEffect(MobEffectInstance effectInstance, LivingEntity target)
-	{
-		MobEffectEvent.Applicable event = new MobEffectEvent.Applicable(target, effectInstance);
-		
-		return event.getResult() == Event.Result.DEFAULT;
-	}
-	
 	@SubscribeEvent
 	public static void effectApplicabilityEvent(MobEffectEvent.Applicable event)
 	{
 		LivingEntity entity = event.getEntity();
-		MobEffectInstance effect = event.getEffectInstance();
 		MobEffect sopor_sickness = MSEffects.SOPOR_SICKNESS.get();
 		
-		if(entity.hasEffect(sopor_sickness) && isntApplicableEffect(effect, entity))
+		if(entity.hasEffect(sopor_sickness))
 		{
 			event.setResult(Event.Result.DENY);
 		}
