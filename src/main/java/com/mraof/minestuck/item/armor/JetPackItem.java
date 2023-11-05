@@ -5,12 +5,12 @@ import com.mraof.minestuck.client.renderer.armor.JetpackModelRenderer;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -27,13 +27,14 @@ import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInst
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public class JetPackItem extends ArmorItem implements GeoItem
 {
-	private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-	private static final RawAnimation FLIGHT_ANIMATION = RawAnimation.begin().then("flight", Animation.LoopType.LOOP);
-	private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().then("idle", Animation.LoopType.LOOP);
+	private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+	@Nonnull
+	private final JetPackItem.Animation animationType = JetPackItem.Animation.IDLE;
 
 	public static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -49,7 +50,6 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		
 		if(player.getInventory().getFreeSlot() <= 2)
 		{
-			player.getInventory().add(thrustController);
 			player.getInventory().add(thrustController);
 		}
 		
@@ -74,11 +74,20 @@ public class JetPackItem extends ArmorItem implements GeoItem
 	}
 	
 	@Override
+	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
+	{
+		if(pEntity instanceof Player player && isBoostingTagTrue(pStack))
+		{
+			boost(player);
+		}
+		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+	}
+	
+	@Override
 	public boolean elytraFlightTick(ItemStack stack, LivingEntity entity, int flightTicks)
 	{
 		if (entity instanceof Player player && isBoostingTagTrue(stack))
 		{
-			boost(player);
 			damageGear(player, stack);
 		}
 		
@@ -95,6 +104,7 @@ public class JetPackItem extends ArmorItem implements GeoItem
 				player.getItemBySlot(EquipmentSlot.CHEST).hurtAndBreak(1, player, p -> p.broadcastBreakEvent(EquipmentSlot.CHEST));
 		}
 	}
+	
 	
 	public static void boost(Player player)
 	{
@@ -122,12 +132,6 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		return nbt != null && nbt.contains("is_boosting") && nbt.getBoolean("is_boosting");
 	}
 	
-	public static void setIsBoostingFalse(Player player)
-	{
-		ItemStack jetpackItem = player.getItemBySlot(EquipmentSlot.CHEST);
-		
-		jetpackItem.getOrCreateTag().putBoolean("is_boosting", false);
-	}
 	
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache()
@@ -154,27 +158,29 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		});
 	}
 	
-	private PlayState idleAnim(AnimationState animationState)
+	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
 	{
-		animationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+		state.getController().setAnimation(animationType.animation);
+		
 		return PlayState.CONTINUE;
 	}
 	
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar)
+	public enum Animation
 	{
-		controllerRegistrar.add(new AnimationController<>(this, "idle", 0, this::idleAnim));
-		controllerRegistrar.add(new AnimationController<>(this, "flight", 0, this::flightAnim));
+		IDLE("jetpack.idle"),
+		FLIGHT("jetpack.flight");
+		
+		private final RawAnimation animation;
+		
+		Animation(String animationName)
+		{
+			this.animation = RawAnimation.begin().thenLoop(animationName);
+		}
 	}
 	
-	private <E extends ArmorItem & GeoAnimatable> PlayState flightAnim(AnimationState<E> state)
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
-		if(isBoostingTagTrue(this.getDefaultInstance()))
-		{
-			state.getController().setAnimation(FLIGHT_ANIMATION);
-			return PlayState.CONTINUE;
-		}
-		state.getController().setAnimation(IDLE_ANIMATION);
-		return PlayState.STOP;
+		controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
 	}
 }
