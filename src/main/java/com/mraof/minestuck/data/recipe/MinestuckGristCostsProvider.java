@@ -491,6 +491,7 @@ public final class MinestuckGristCostsProvider
 		GristCostRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).grist(RUST, 73).grist(CAULK, 121).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SHADOWRAZOR.get()).grist(TAR, 115).grist(SULFUR, 115).grist(CHALK, 231).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.PRINCESS_PERIL.get()).grist(CHALK, 113).grist(TAR, 225).grist(SULFUR, 180).grist(SHALE, 113).grist(MARBLE, 180).grist(URANIUM, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.CHEESE_KNIFE.get()).grist(BUILD, 125).grist(IODINE, 12).grist(AMBER, 7).build(recipeSaver);
 		
 		GristCostRecipeBuilder.of(MSItems.KEYBLADE.get()).grist(BUILD, 7).grist(RUST, 10).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.CANDY_KEY.get()).grist(BUILD, 7).grist(CHALK, 1).grist(IODINE, 4).grist(RUBY, 1).build(recipeSaver);

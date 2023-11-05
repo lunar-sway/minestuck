@@ -690,6 +690,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.TOOTHRIPPER.get());
 		output.accept(MSItems.SHADOWRAZOR.get());
 		output.accept(MSItems.PRINCESS_PERIL.get());
+		output.accept(MSItems.CHEESE_KNIFE.get());
 		
 		output.accept(MSItems.HOUSE_KEY.get());
 		output.accept(MSItems.KEYBLADE.get());

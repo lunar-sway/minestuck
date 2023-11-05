@@ -709,6 +709,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.SHADOWRAZOR, "Shadowrazor");
 		addItem(MSItems.PRINCESS_PERIL, "Princess Peril");
 		addItemTooltip(MSItems.PRINCESS_PERIL, "Truly a dagger fit for a princess.");
+		addItem(MSItems.CHEESE_KNIFE, "Cheese Knife");
 		addItem(MSItems.HOUSE_KEY, "House Key");
 		addItemTooltip(MSItems.HOUSE_KEY, "This incredible item has the ability to open any wooden door! Wow.");
 		addItem(MSItems.KEYBLADE, "Keyblade");

@@ -426,6 +426,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.TOOTHRIPPER.get()).input(MSItems.DAGGER.get()).or().namedInput(Items.BONE).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SHADOWRAZOR.get()).input(MSItems.TOOTHRIPPER.get()).and().namedInput(MSItems.SORROW_GUSHERS.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.PRINCESS_PERIL.get()).input(MSItems.SHADOWRAZOR.get()).or().input(MSItems.GAMEGRL_MAGAZINE.get()).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.CHEESE_KNIFE.get()).input(MSItems.DAGGER.get()).and().input(Items.MILK_BUCKET).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.KEYBLADE.get()).input(MSItems.HOUSE_KEY.get()).and().input(Items.IRON_SWORD).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.CANDY_KEY.get()).input(MSItems.KEYBLADE.get()).or().input(MSItems.CANDY_CORN.get()).build(consumer);
