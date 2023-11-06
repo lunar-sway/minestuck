@@ -5,9 +5,8 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.effects.MSEffects;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -56,17 +55,66 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	private void simpleStairsWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
 	{
 		stairsBlock((StairBlock) block.get(), blockTexture(baseBlock.get()));
-		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
+		blockItem(block);
 	}
 	
 	private void simpleSlabWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
 	{
 		slabBlock((SlabBlock) block.get(), blockTexture(baseBlock.get()), blockTexture(baseBlock.get()));
-		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
+		blockItem(block);
 	}
 	
 	private void simpleCrossBlock(RegistryObject<Block> block)
 	{
-		simpleBlock(block.get(), models().cross(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), blockTexture(block.get())).renderType("cutout"));
+		simpleBlock(block.get(), models().cross(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath(), blockTexture(block.get())).renderType("cutout"));
+	}
+	
+	private void trapdoorBlockItem(RegistryObject<Block> block)
+	{
+		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("aberrance:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath() + "_bottom"));
+	}
+	
+	private void cutoutBlockWithItem(RegistryObject<Block> block)
+	{
+		simpleBlockWithItem(block.get(), models().cubeAll(Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath(), blockTexture(block.get())).renderType("cutout"));
+	}
+	
+	public void simpleCutoutDoorBlock(RegistryObject<Block> block)
+	{
+		String id = Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath();
+		doorBlockWithRenderType((DoorBlock) block.get(), modLoc("block/" + id + "_bottom"), modLoc("block/" + id + "_top"), "cutout");
+	}
+	
+	public void simpleButtonBlockWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
+	{
+		buttonBlock((ButtonBlock) block.get(), blockTexture(baseBlock.get()));
+		blockItem(block);
+	}
+	
+	public void simplePressurePlateBlockWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
+	{
+		pressurePlateBlock((PressurePlateBlock) block.get(), blockTexture(baseBlock.get()));
+		blockItem(block);
+	}
+	
+	public void simpleFenceBlock(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
+	{
+		fenceBlock((FenceBlock) block.get(), blockTexture(baseBlock.get()));
+	}
+	
+	public void simpleWallBlock(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
+	{
+		wallBlock((WallBlock) block.get(), blockTexture(baseBlock.get()));
+	}
+	
+	public void simpleFenceGateBlockWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
+	{
+		fenceGateBlock((FenceGateBlock) block.get(), blockTexture(baseBlock.get()));
+		blockItem(block);
+	}
+	
+	public void blockItem(RegistryObject<Block> block)
+	{
+		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
 	}
 }
