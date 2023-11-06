@@ -24,15 +24,15 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		//Clubs
 		handheldItem(MSItems.M_ACE_OF_CLUBS);
-		handheldItemTextureName(MSItems.RUBIKS_MACE, "rubiks_mace");
+		handheldItem(MSItems.RUBIKS_MACE);
 		handheldItem(MSItems.HOME_GROWN_MACE);
 		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
 		
 		//Staffs
-		handheldItemTextureName(MSItems.WIZARD_STAFF, "wizard_staff");
-		handheldItemTextureName(MSItems.WATER_STAFF, "water_staff");
-		handheldItemTextureName(MSItems.FIRE_STAFF, "fire_staff");
+		handheldItem(MSItems.WIZARD_STAFF);
+		handheldItem(MSItems.WATER_STAFF);
+		handheldItem(MSItems.FIRE_STAFF);
 		
 		simpleItem(MSItems.SCALEMATE_APPLESCAB);
 		simpleItem(MSItems.SCALEMATE_BERRYBREATH);
@@ -79,5 +79,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	{
 		return withExistingParent(block.getId().getPath(),
 				new ResourceLocation("minestuck:block/" + block.getId().getPath()));
+	}
+	
+	public ItemModelBuilder itemModelBlockItem(RegistryObject<Block> block)
+	{
+		return withExistingParent(block.getId().getPath(), new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(Minestuck.MOD_ID, "block/" + block.getId().getPath()));
 	}
 }
