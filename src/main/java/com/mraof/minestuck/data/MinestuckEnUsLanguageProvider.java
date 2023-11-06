@@ -224,6 +224,18 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CARVED_PLANKS, "Carved Planks");
 		addBlock(MSBlocks.POLISHED_UNCARVED_WOOD, "Polished Uncarved Wood");
 		addBlock(MSBlocks.CARVED_KNOTTED_WOOD, "Carved Knotted Wood");
+		addBlock(MSBlocks.SWISS_CHEESE, "Swiss Cheese");
+		addBlock(MSBlocks.SWISS_CHEESE_STAIRS, "Swiss Cheese Stairs");
+		addBlock(MSBlocks.SWISS_CHEESE_SLAB, "Swiss Cheese Slab");
+		addBlock(MSBlocks.SMOOTH_SWISS_CHEESE, "Smooth Swiss Cheese");
+		addBlock(MSBlocks.SMOOTH_SWISS_CHEESE_STAIRS, "Smooth Swiss Cheese Stairs");
+		addBlock(MSBlocks.SMOOTH_SWISS_CHEESE_SLAB, "Smooth Swiss Cheese Slab");
+		addBlock(MSBlocks.AMERICAN_CHEESE, "American Cheese");
+		addBlock(MSBlocks.AMERICAN_CHEESE_STAIRS, "American Cheese Stairs");
+		addBlock(MSBlocks.AMERICAN_CHEESE_SLAB, "American Cheese Slab");
+		addBlock(MSBlocks.SMOOTH_AMERICAN_CHEESE, "Smooth American Cheese");
+		addBlock(MSBlocks.SMOOTH_AMERICAN_CHEESE_STAIRS, "Smooth American Cheese Stairs");
+		addBlock(MSBlocks.SMOOTH_AMERICAN_CHEESE_SLAB, "Smooth American Cheese Slab");
 		addBlock(MSBlocks.DENSE_CLOUD, "Dense Cloud");
 		addBlock(MSBlocks.BRIGHT_DENSE_CLOUD, "Bright Dense Cloud");
 		addBlock(MSBlocks.SUGAR_CUBE, "Sugar Cube");

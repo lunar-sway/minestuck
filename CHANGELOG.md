@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
+- American Cheese, Smooth American Cheese, Swiss Cheese and Smooth Swiss Cheese, along with Stairs and Slabs for each
 
 ### Changed
 

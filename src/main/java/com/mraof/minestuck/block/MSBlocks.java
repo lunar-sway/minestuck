@@ -247,6 +247,11 @@ public class MSBlocks
 	public static final RegistryObject<Block> POLISHED_UNCARVED_WOOD = REGISTER.register("polished_carved_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	public static final RegistryObject<Block> CARVED_KNOTTED_WOOD = REGISTER.register("carved_knotted_wood", () -> new Block(Block.Properties.of().mapColor(MapColor.WOOD).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).requiresCorrectToolForDrops().sound(SoundType.WOOD)));
 	
+	public static final RegistryObject<Block> SWISS_CHEESE = REGISTER.register("swiss_cheese", () -> new Block(Block.Properties.of().mapColor(DyeColor.YELLOW).strength(0.5F).sound(SoundType.SLIME_BLOCK).instrument(NoteBlockInstrument.DIDGERIDOO)));
+	public static final RegistryObject<Block> SMOOTH_SWISS_CHEESE = REGISTER.register("smooth_swiss_cheese", () -> new Block(Block.Properties.of().mapColor(DyeColor.YELLOW).strength(0.5F).sound(SoundType.SLIME_BLOCK).instrument(NoteBlockInstrument.DIDGERIDOO)));
+	public static final RegistryObject<Block> AMERICAN_CHEESE = REGISTER.register("american_cheese", () -> new Block(Block.Properties.of().mapColor(DyeColor.YELLOW).strength(0.5F).sound(SoundType.SLIME_BLOCK).instrument(NoteBlockInstrument.DIDGERIDOO)));
+	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE = REGISTER.register("smooth_american_cheese", () -> new Block(Block.Properties.of().mapColor(DyeColor.YELLOW).strength(0.5F).sound(SoundType.SLIME_BLOCK).instrument(NoteBlockInstrument.DIDGERIDOO)));
+	
 	public static final RegistryObject<Block> DENSE_CLOUD = REGISTER.register("dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> BRIGHT_DENSE_CLOUD = REGISTER.register("bright_dense_cloud", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_GRAY).instrument(NoteBlockInstrument.HAT).strength(0.5F).sound(SoundType.SNOW).isRedstoneConductor(MSBlocks::never)));
 	public static final RegistryObject<Block> SUGAR_CUBE = REGISTER.register("sugar_cube", () -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).instrument(NoteBlockInstrument.SNARE).strength(0.4F).sound(SoundType.SAND)));
@@ -453,6 +458,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_PLANKS_STAIRS = REGISTER.register("end_planks_stairs", () -> new StairBlock(() -> MSBlocks.END_PLANKS.get().defaultBlockState(), copy(END_PLANKS.get())));
 	public static final RegistryObject<Block> DEAD_PLANKS_STAIRS = REGISTER.register("dead_planks_stairs", () -> new StairBlock(() -> MSBlocks.DEAD_PLANKS.get().defaultBlockState(), copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<Block> TREATED_PLANKS_STAIRS = REGISTER.register("treated_planks_stairs", () -> new StairBlock(() -> MSBlocks.TREATED_PLANKS.get().defaultBlockState(), copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<Block> SWISS_CHEESE_STAIRS = REGISTER.register("swiss_cheese_stairs", () -> new StairBlock(() -> MSBlocks.SWISS_CHEESE.get().defaultBlockState(), copy(SWISS_CHEESE.get())));
+	public static final RegistryObject<Block> SMOOTH_SWISS_CHEESE_STAIRS = REGISTER.register("smooth_swiss_cheese_stairs", () -> new StairBlock(() -> MSBlocks.SWISS_CHEESE.get().defaultBlockState(), copy(SWISS_CHEESE.get())));
+	public static final RegistryObject<Block> AMERICAN_CHEESE_STAIRS = REGISTER.register("american_cheese_stairs", () -> new StairBlock(() -> MSBlocks.SWISS_CHEESE.get().defaultBlockState(), copy(SWISS_CHEESE.get())));
+	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE_STAIRS = REGISTER.register("smooth_american_cheese_stairs", () -> new StairBlock(() -> MSBlocks.SWISS_CHEESE.get().defaultBlockState(), copy(SWISS_CHEESE.get())));
 	
 	//TODO when walking down steep stairs, players take fall damage that cannot be circumvented by the fallOn function. This includes when there is only an air block underneath them
 	public static final RegistryObject<Block> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = REGISTER.register("steep_green_stone_brick_stairs_base", () -> new CustomShapeBlock(copy(GREEN_STONE.get()), MSBlockShapes.STEEP_STAIRS_BASE));
@@ -485,6 +494,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> END_PLANKS_SLAB = REGISTER.register("end_planks_slab", () -> new SlabBlock(copy(END_PLANKS.get())));
 	public static final RegistryObject<Block> DEAD_PLANKS_SLAB = REGISTER.register("dead_planks_slab", () -> new SlabBlock(copy(DEAD_PLANKS.get())));
 	public static final RegistryObject<Block> TREATED_PLANKS_SLAB = REGISTER.register("treated_planks_slab", () -> new SlabBlock(copy(TREATED_PLANKS.get())));
+	public static final RegistryObject<Block> SWISS_CHEESE_SLAB = REGISTER.register("swiss_cheese_slab", () -> new SlabBlock(copy(SWISS_CHEESE.get())));
+	public static final RegistryObject<Block> SMOOTH_SWISS_CHEESE_SLAB = REGISTER.register("smooth_swiss_cheese_slab", () -> new SlabBlock(copy(SMOOTH_SWISS_CHEESE.get())));
+	public static final RegistryObject<Block> AMERICAN_CHEESE_SLAB = REGISTER.register("american_cheese_slab", () -> new SlabBlock(copy(AMERICAN_CHEESE.get())));
+	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE_SLAB = REGISTER.register("smooth_american_cheese_slab", () -> new SlabBlock(copy(SMOOTH_AMERICAN_CHEESE.get())));
 	
 	
 	public static final RegistryObject<Block> TRAJECTORY_BLOCK = REGISTER.register("trajectory_block", () -> new TrajectoryBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
