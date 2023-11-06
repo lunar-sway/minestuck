@@ -33,9 +33,8 @@ import java.util.function.Consumer;
 public class JetPackItem extends ArmorItem implements GeoItem
 {
 	private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
-	@Nonnull
-	private final JetPackItem.Animation animationType = JetPackItem.Animation.IDLE;
-
+	private int EXPLOSION_BUFFER = 0;
+	
 	public static final Logger LOGGER = LogUtils.getLogger();
 	
 	public JetPackItem(ArmorMaterial mat, ArmorItem.Type slot, Properties props)
@@ -59,13 +58,9 @@ public class JetPackItem extends ArmorItem implements GeoItem
 	@Override
 	public boolean canElytraFly(ItemStack stack, LivingEntity entity)
 	{
-		Item thrustController = MSItems.THRUST_CONTROLLER.get();
 		ItemStack jetpackItemStack = entity.getItemBySlot(EquipmentSlot.CHEST);
 		
-		boolean hasController = entity.getItemInHand(InteractionHand.MAIN_HAND).is(thrustController);
-		boolean hasControllerOffhand =  entity.getItemInHand(InteractionHand.OFF_HAND).is(thrustController);
-		
-		if(hasController && hasControllerOffhand && isBoostingTagTrue(jetpackItemStack))
+		if(isHoldingControllers(entity) && isBoostingTagTrue(jetpackItemStack))
 		{
 			return entity instanceof Player;
 		}
@@ -76,10 +71,23 @@ public class JetPackItem extends ArmorItem implements GeoItem
 	@Override
 	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
 	{
-		if(pEntity instanceof Player player && isBoostingTagTrue(pStack))
+		
+		if(pEntity instanceof Player player && isBoostingTagTrue(pStack) && player.onGround() && EXPLOSION_BUFFER <= 40)
+		{
+			explodeAndStop(player, pLevel);
+			EXPLOSION_BUFFER = 0;
+		}
+		if(pEntity instanceof Player player && isBoostingTagTrue(pStack) && isHoldingControllers((LivingEntity) pEntity))
 		{
 			boost(player);
+			player.startFallFlying();
+			EXPLOSION_BUFFER += 1;
 		}
+		if(!isBoostingTagTrue(pStack))
+		{
+			EXPLOSION_BUFFER = 0;
+		}
+		
 		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
 	}
 	
@@ -105,11 +113,30 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		}
 	}
 	
+	public static void explodeAndStop(Player player, Level level)
+	{
+		ItemStack jetpackItemStack = player.getItemBySlot(EquipmentSlot.CHEST);
+		
+		jetpackItemStack.getOrCreateTag().putBoolean("is_boosting", false);
+		level.explode(player,player.getX() + 0.5D, player.getY() + 0.5D, player.getZ() + 0.5D, 3F, Level.ExplosionInteraction.BLOCK);
+	}
+	
+	public boolean isHoldingControllers( LivingEntity entity)
+	{
+		Item thrustController = MSItems.THRUST_CONTROLLER.get();
+		
+		boolean hasController = entity.getItemInHand(InteractionHand.MAIN_HAND).is(thrustController);
+		boolean hasControllerOffhand =  entity.getItemInHand(InteractionHand.OFF_HAND).is(thrustController);
+		if(hasController && hasControllerOffhand)
+		{
+			return true;
+		}
+		return false;
+	}
 	
 	public static void boost(Player player)
 	{
 		Item chestItem = player.getItemBySlot(EquipmentSlot.CHEST).getItem();
-		
 		if (chestItem instanceof JetPackItem)
 		{
 			player.level().addParticle(MSParticleType.EXHAUST.get(), player.getX(), player.getY() + 0.8, player.getZ() - 0.3, 0, 0, 0);
@@ -130,13 +157,6 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		CompoundTag nbt = stack.getTag();
 		
 		return nbt != null && nbt.contains("is_boosting") && nbt.getBoolean("is_boosting");
-	}
-	
-	
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache()
-	{
-		return cache;
 	}
 	
 	@Override
@@ -160,8 +180,14 @@ public class JetPackItem extends ArmorItem implements GeoItem
 	
 	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
 	{
-		state.getController().setAnimation(animationType.animation);
+		ItemStack jetpack = this.getDefaultInstance();
+		if(this.isBoostingTagTrue(jetpack))
+		{
+			state.getController().setAnimation(RawAnimation.begin().then("jetpack.flight", software.bernie.geckolib.core.animation.Animation.LoopType.LOOP));
+			return PlayState.CONTINUE;
+		}
 		
+		state.getController().setAnimation(RawAnimation.begin().then("jetpack.idle", software.bernie.geckolib.core.animation.Animation.LoopType.LOOP));
 		return PlayState.CONTINUE;
 	}
 	
@@ -182,5 +208,11 @@ public class JetPackItem extends ArmorItem implements GeoItem
 	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
 	{
 		controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+	}
+	
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache()
+	{
+		return cache;
 	}
 }

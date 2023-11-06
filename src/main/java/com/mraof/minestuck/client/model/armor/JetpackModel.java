@@ -11,18 +11,18 @@ public class JetpackModel extends GeoModel<JetPackItem>
 	@Override
 	public ResourceLocation getModelResource(JetPackItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "geo/animated_armor/jetpack.geo.json");
+		return new ResourceLocation("minestuck", "geo/animated_armor/jetpack.geo.json");
 	}
 	
 	@Override
 	public ResourceLocation getTextureResource(JetPackItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/models.armor/rocket_pack.png");
+		return new ResourceLocation("minestuck", "textures/models.armor/jetpack.png");
 	}
 	
 	@Override
 	public ResourceLocation getAnimationResource(JetPackItem animatable)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "animations/armor/jetpack_anims.animation.json");
+		return new ResourceLocation("minestuck", "animations/armor/jetpack_anims.animation.json");
 	}
 }
