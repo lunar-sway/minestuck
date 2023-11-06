@@ -474,9 +474,6 @@ public final class MSCreativeTabs
 		output.accept(MSItems.CARVED_PLANKS.get());
 		output.accept(MSItems.POLISHED_UNCARVED_WOOD.get());
 		output.accept(MSItems.CARVED_KNOTTED_WOOD.get());
-		output.accept(MSItems.CARVED_KNOTTED_WOOD.get());
-		output.accept(MSItems.CARVED_KNOTTED_WOOD.get());
-		output.accept(MSItems.CARVED_KNOTTED_WOOD.get());
 		output.accept(MSItems.DENSE_CLOUD.get());
 		output.accept(MSItems.BRIGHT_DENSE_CLOUD.get());
 		output.accept(MSItems.SUGAR_CUBE.get());

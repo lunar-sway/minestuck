@@ -10,8 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
-- American Cheese, Smooth American Cheese, Swiss Cheese and Smooth Swiss Cheese, along with Stairs and Slabs for each
-
+- 
 ### Changed
 
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
@@ -19,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Vinnelli
+- Dweblenod, Zepsun
 
 ## [1.20.1-1.11.1.0] - 2023-10-22
 
