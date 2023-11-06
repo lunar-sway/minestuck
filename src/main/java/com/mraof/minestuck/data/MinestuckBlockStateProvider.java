@@ -113,6 +113,17 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		blockItem(block);
 	}
 	
+	public void simpleLogBlockWithItem(RegistryObject<Block> block) {
+		logBlock((RotatedPillarBlock) block.get());
+		blockItem(block);
+	}
+	
+	public void simpleAxisBlockWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock1, RegistryObject<Block> baseBlock2)
+	{
+		axisBlock(((RotatedPillarBlock) block.get()), blockTexture(baseBlock1.get()), blockTexture(baseBlock2.get()));
+		blockItem(block);
+	}
+	
 	public void blockItem(RegistryObject<Block> block)
 	{
 		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
