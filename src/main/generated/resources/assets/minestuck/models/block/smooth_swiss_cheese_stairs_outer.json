@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "minestuck:block/smooth_swiss_cheese",
-    "side": "minestuck:block/smooth_swiss_cheese",
-    "top": "minestuck:block/smooth_swiss_cheese"
-  }
-}

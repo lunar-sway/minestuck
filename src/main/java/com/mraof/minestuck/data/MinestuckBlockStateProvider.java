@@ -29,20 +29,7 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	{
 		
 		simpleBlockWithItem(MSBlocks.UNCARVED_WOOD);
-		simpleBlockWithItem(MSBlocks.SWISS_CHEESE);
-		simpleBlockWithItem(MSBlocks.SMOOTH_SWISS_CHEESE);
-		simpleBlockWithItem(MSBlocks.AMERICAN_CHEESE);
-		simpleBlockWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		
-		simpleStairsWithItem(MSBlocks.SWISS_CHEESE_STAIRS, MSBlocks.SWISS_CHEESE);
-		simpleStairsWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_STAIRS, MSBlocks.SMOOTH_SWISS_CHEESE);
-		simpleStairsWithItem(MSBlocks.AMERICAN_CHEESE_STAIRS, MSBlocks.AMERICAN_CHEESE);
-		simpleStairsWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_STAIRS, MSBlocks.SMOOTH_AMERICAN_CHEESE);
-		
-		simpleSlabWithItem(MSBlocks.SWISS_CHEESE_SLAB, MSBlocks.SWISS_CHEESE);
-		simpleSlabWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_SLAB, MSBlocks.SMOOTH_SWISS_CHEESE);
-		simpleSlabWithItem(MSBlocks.AMERICAN_CHEESE_SLAB, MSBlocks.AMERICAN_CHEESE);
-		simpleSlabWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_SLAB, MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		
 		simpleBlockWithItem(MSBlocks.NATIVE_SULFUR);
 	}
