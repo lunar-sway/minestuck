@@ -71,7 +71,7 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	
 	private void trapdoorBlockItem(RegistryObject<Block> block)
 	{
-		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("aberrance:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath() + "_bottom"));
+		simpleBlockItem(block.get(), new ModelFile.UncheckedModelFile("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath() + "_bottom"));
 	}
 	
 	private void cutoutBlockWithItem(RegistryObject<Block> block)
