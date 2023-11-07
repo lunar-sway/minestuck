@@ -38,6 +38,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -238,7 +239,7 @@ public interface OnHitEffect
 			DamageSource source;
 			float damage = additionalDamage * 3.3F;
 			
-			if(attacker instanceof ServerPlayer serverPlayer)
+			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
 				source = DamageSource.playerAttack(serverPlayer);
 				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
@@ -381,7 +382,7 @@ public interface OnHitEffect
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player)
+			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
 			{
 				Title title = PlayerSavedData.getData(player).getTitle();
 				

@@ -100,13 +100,17 @@ public final class PlayerSavedData extends SavedData
 	
 	public PlayerData getData(PlayerIdentifier player)
 	{
-		Objects.requireNonNull(player);
-		if (!dataMap.containsKey(player))
+		if(player != null)
 		{
-			PlayerData data = new PlayerData(this, player);
-			dataMap.put(player, data);
-			setDirty();
+			if (!dataMap.containsKey(player))
+			{
+				PlayerData data = new PlayerData(this, player);
+				dataMap.put(player, data);
+				setDirty();
+			}
+			return dataMap.get(player);
 		}
-		return dataMap.get(player);
+		else
+			return null;
 	}
 }

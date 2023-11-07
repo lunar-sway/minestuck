@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -107,7 +108,7 @@ public class ImpEntity extends UnderlingEntity implements IAnimatable
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
 		//imps will not attack players above rung 15 unless an underling is attacked in their presence
-		if(entity instanceof ServerPlayer)
+		if(entity instanceof ServerPlayer && !(entity instanceof FakePlayer))
 		{
 			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 16;
 		}

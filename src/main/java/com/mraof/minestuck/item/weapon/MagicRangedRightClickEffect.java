@@ -25,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -144,10 +145,14 @@ public class MagicRangedRightClickEffect implements ItemRightClickEffect
 	
 	protected float calculateDamage(ServerPlayer player, LivingEntity target, int damage)
 	{
-		int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
-		
-		//damage increase from rung is higher against underlings
-		return damage + (target instanceof UnderlingEntity ? playerRung / 5F : playerRung / 10F);
+		if(!(player instanceof FakePlayer))
+		{
+			int playerRung = PlayerSavedData.getData(player).getEcheladder().getRung();
+			
+			//damage increase from rung is higher against underlings
+			return damage + (target instanceof UnderlingEntity ? playerRung / 5F : playerRung / 10F);
+		} else
+			return damage;
 	}
 	
 	private static class SbahjMagicEffect extends MagicRangedRightClickEffect
