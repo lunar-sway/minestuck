@@ -18,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod
+- Dweblenod, Zepsun
 
 ## [1.20.1-1.11.1.0] - 2023-10-22
 
