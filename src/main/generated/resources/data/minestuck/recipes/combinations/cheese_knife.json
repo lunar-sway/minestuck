@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:dagger"
+  },
+  "input2": {
+    "item": "minecraft:milk_bucket"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:cheese_knife"
+  }
+}

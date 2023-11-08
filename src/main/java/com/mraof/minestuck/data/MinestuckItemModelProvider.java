@@ -30,6 +30,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
 		
+		//Knives
+		handheldItem(MSItems.CHEESE_KNIFE);
+		
 		//Staffs
 		handheldItem(MSItems.WIZARD_STAFF);
 		handheldItem(MSItems.WATER_STAFF);
