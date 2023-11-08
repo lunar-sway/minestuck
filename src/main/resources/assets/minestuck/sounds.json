@@ -748,6 +748,12 @@
 		"minestuck:item/baton_orchestra"
 	]
   },
+  "item.iron_lass.flight": {
+    "category": "ambient",
+    "sounds": [
+      "minestuck:item/iron_lass_flight"
+    ]
+  },
   "event.echeladder.increase": {
     "category": "ambient",
     "subtitle": "subtitles.minestuck.upcheladder",
