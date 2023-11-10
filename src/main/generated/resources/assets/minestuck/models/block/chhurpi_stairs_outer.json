@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "minestuck:block/chhurpi",
+    "side": "minestuck:block/chhurpi",
+    "top": "minestuck:block/chhurpi"
+  }
+}

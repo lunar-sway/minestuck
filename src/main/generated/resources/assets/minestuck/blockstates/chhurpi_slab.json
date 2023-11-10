@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minestuck:block/chhurpi_slab"
+    },
+    "type=double": {
+      "model": "minestuck:block/chhurpi"
+    },
+    "type=top": {
+      "model": "minestuck:block/chhurpi_slab_top"
+    }
+  }
+}
