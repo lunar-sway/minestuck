@@ -38,18 +38,25 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		simpleBlockWithItem(MSBlocks.FETA_CHEESE);
 		simpleBlockWithItem(MSBlocks.CHHURPI);
+		simpleBlockWithItem(MSBlocks.CHHURPI_BRICKS);
+		simpleBlockWithItem(MSBlocks.CHEESE_PATH);
 		
 		simpleStairsWithItem(MSBlocks.SWISS_CHEESE_STAIRS, MSBlocks.SWISS_CHEESE);
 		simpleStairsWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_STAIRS, MSBlocks.SMOOTH_SWISS_CHEESE);
 		simpleStairsWithItem(MSBlocks.AMERICAN_CHEESE_STAIRS, MSBlocks.AMERICAN_CHEESE);
 		simpleStairsWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_STAIRS, MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		simpleStairsWithItem(MSBlocks.CHHURPI_STAIRS, MSBlocks.CHHURPI);
+		simpleStairsWithItem(MSBlocks.CHHURPI_BRICK_STAIRS, MSBlocks.CHHURPI_BRICKS);
 		
 		simpleSlabWithItem(MSBlocks.SWISS_CHEESE_SLAB, MSBlocks.SWISS_CHEESE);
 		simpleSlabWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_SLAB, MSBlocks.SMOOTH_SWISS_CHEESE);
 		simpleSlabWithItem(MSBlocks.AMERICAN_CHEESE_SLAB, MSBlocks.AMERICAN_CHEESE);
 		simpleSlabWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_SLAB, MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		simpleSlabWithItem(MSBlocks.CHHURPI_SLAB, MSBlocks.CHHURPI);
+		simpleSlabWithItem(MSBlocks.CHHURPI_BRICK_SLAB, MSBlocks.CHHURPI_BRICKS);
+		
+		simpleWallBlock(MSBlocks.CHHURPI_WALL, MSBlocks.CHHURPI);
+		simpleWallBlock(MSBlocks.CHHURPI_BRICK_WALL, MSBlocks.CHHURPI_BRICKS);
 	}
 	
 	private void simpleBlockWithItem(RegistryObject<Block> block)

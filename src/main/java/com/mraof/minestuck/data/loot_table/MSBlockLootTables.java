@@ -224,6 +224,8 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SMOOTH_AMERICAN_CHEESE.get());
 		dropSelf(FETA_CHEESE.get());
 		dropSelf(CHHURPI.get());
+		dropSelf(CHHURPI_BRICKS.get());
+		dropSelf(CHEESE_PATH.get());
 		
 		dropSelf(GLOWING_LOG.get());
 		dropSelf(FROST_LOG.get());
@@ -413,6 +415,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(AMERICAN_CHEESE_STAIRS.get());
 		dropSelf(SMOOTH_AMERICAN_CHEESE_STAIRS.get());
 		dropSelf(CHHURPI_STAIRS.get());
+		dropSelf(CHHURPI_BRICK_STAIRS.get());
 		dropSelf(BLACK_CHESS_BRICK_SLAB.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SLAB.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SLAB.get());
@@ -445,6 +448,9 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(AMERICAN_CHEESE_SLAB.get());
 		dropSelf(SMOOTH_AMERICAN_CHEESE_SLAB.get());
 		dropSelf(CHHURPI_SLAB.get());
+		dropSelf(CHHURPI_BRICK_SLAB.get());
+		dropSelf(CHHURPI_WALL.get());
+		dropSelf(CHHURPI_BRICK_WALL.get());
 		
 		dropSelf(TRAJECTORY_BLOCK.get());
 		dropSelf(STAT_STORER.get());

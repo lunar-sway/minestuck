@@ -1,6 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +47,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.SCALEMATE_PYRALSPITE);
 		simpleItem(MSItems.SCALEMATE_WITNESS);
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
+		
+		//Walls and Fences
+		wallItem(MSBlocks.CHHURPI_WALL, MSBlocks.CHHURPI);
+		wallItem(MSBlocks.CHHURPI_BRICK_WALL, MSBlocks.CHHURPI_BRICKS);
 		
 		
 	}

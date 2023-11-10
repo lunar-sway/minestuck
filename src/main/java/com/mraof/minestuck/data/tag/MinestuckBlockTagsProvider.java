@@ -205,6 +205,13 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(CHHURPI.get());
 		needsWoodPickaxe(CHHURPI_STAIRS.get());
 		needsWoodPickaxe(CHHURPI_SLAB.get());
+		needsWoodPickaxe(CHHURPI_WALL.get());
+		needsWoodPickaxe(CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHHURPI_BRICK_SLAB.get());
+		
+		tag(WALLS).add(CHHURPI_WALL.get()).add(CHHURPI_BRICK_WALL.get());
 		
 		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
 		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());

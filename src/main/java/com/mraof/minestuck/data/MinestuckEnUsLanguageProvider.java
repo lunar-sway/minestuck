@@ -244,6 +244,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CHHURPI, "Chhurpi");
 		addBlock(MSBlocks.CHHURPI_STAIRS, "Chhurpi Stairs");
 		addBlock(MSBlocks.CHHURPI_SLAB, "Chhurpi Slab");
+		addBlock(MSBlocks.CHHURPI_WALL, "Chhurpi Wall");
+		addBlock(MSBlocks.CHHURPI_BRICKS, "Chhurpi Bricks");
+		addBlock(MSBlocks.CHHURPI_BRICK_STAIRS, "Chhurpi Brick Stairs");
+		addBlock(MSBlocks.CHHURPI_BRICK_SLAB, "Chhurpi Brick Slab");
+		addBlock(MSBlocks.CHHURPI_BRICK_WALL, "Chhurpi Brick Wall");
+		addBlock(MSBlocks.CHEESE_PATH, "Cheese Path");
 		addBlock(MSBlocks.GLOWING_LOG, "Glowing Log");
 		addBlock(MSBlocks.FROST_LOG, "Frost Log");
 		addBlock(MSBlocks.RAINBOW_LOG, "Rainbow Log");

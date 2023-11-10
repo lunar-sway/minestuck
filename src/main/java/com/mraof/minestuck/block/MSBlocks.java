@@ -257,6 +257,8 @@ public class MSBlocks
 	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE = REGISTER.register("smooth_american_cheese", () -> new Block(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.DIDGERIDOO).strength(0.5F).sound(SoundType.SLIME_BLOCK)));
 	public static final RegistryObject<Block> FETA_CHEESE = REGISTER.register("feta_cheese", () -> new FallingBlock(Block.Properties.of().mapColor(MapColor.COLOR_YELLOW).instrument(NoteBlockInstrument.DIDGERIDOO).strength(0.5F).sound(SoundType.SLIME_BLOCK)));
 	public static final RegistryObject<Block> CHHURPI = REGISTER.register("chhurpi", () -> new Block(Block.Properties.of().mapColor(MapColor.TERRACOTTA_RED).instrument(NoteBlockInstrument.DIDGERIDOO).strength(1.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+	public static final RegistryObject<Block> CHHURPI_BRICKS = REGISTER.register("chhurpi_bricks", () -> new Block(Block.Properties.copy(CHHURPI.get())));
+	public static final RegistryObject<Block> CHEESE_PATH = REGISTER.register("cheese_path", () -> new Block(Block.Properties.copy(SWISS_CHEESE.get())));
 	
 	//Land Tree Blocks
 	public static final RegistryObject<Block> GLOWING_LOG = REGISTER.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));
@@ -465,6 +467,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> AMERICAN_CHEESE_STAIRS = REGISTER.register("american_cheese_stairs", () -> new StairBlock(() -> MSBlocks.AMERICAN_CHEESE.get().defaultBlockState(), Block.Properties.copy(AMERICAN_CHEESE.get())));
 	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE_STAIRS = REGISTER.register("smooth_american_cheese_stairs", () -> new StairBlock(() -> MSBlocks.SMOOTH_AMERICAN_CHEESE.get().defaultBlockState(), Block.Properties.copy(AMERICAN_CHEESE.get())));
 	public static final RegistryObject<Block> CHHURPI_STAIRS = REGISTER.register("chhurpi_stairs", () -> new StairBlock(() -> MSBlocks.CHHURPI.get().defaultBlockState(), Block.Properties.copy(CHHURPI.get())));
+	public static final RegistryObject<Block> CHHURPI_BRICK_STAIRS = REGISTER.register("chhurpi_brick_stairs", () -> new StairBlock(() -> MSBlocks.CHHURPI_BRICKS.get().defaultBlockState(), Block.Properties.copy(CHHURPI.get())));
 	
 	
 	//TODO when walking down steep stairs, players take fall damage that cannot be circumvented by the fallOn function. This includes when there is only an air block underneath them
@@ -503,7 +506,10 @@ public class MSBlocks
 	public static final RegistryObject<Block> AMERICAN_CHEESE_SLAB = REGISTER.register("american_cheese_slab", () -> new SlabBlock(Block.Properties.copy(AMERICAN_CHEESE.get())));
 	public static final RegistryObject<Block> SMOOTH_AMERICAN_CHEESE_SLAB = REGISTER.register("smooth_american_cheese_slab", () -> new SlabBlock(Block.Properties.copy(AMERICAN_CHEESE.get())));
 	public static final RegistryObject<Block> CHHURPI_SLAB = REGISTER.register("chhurpi_slab", () -> new SlabBlock(Block.Properties.copy(CHHURPI.get())));
+	public static final RegistryObject<Block> CHHURPI_BRICK_SLAB = REGISTER.register("chhurpi_brick_slab", () -> new SlabBlock(Block.Properties.copy(CHHURPI_BRICKS.get())));
 	
+	public static final RegistryObject<Block> CHHURPI_WALL = REGISTER.register("chhurpi_wall", () -> new WallBlock(Block.Properties.copy(CHHURPI_BRICKS.get())));
+	public static final RegistryObject<Block> CHHURPI_BRICK_WALL = REGISTER.register("chhurpi_brick_wall", () -> new WallBlock(Block.Properties.copy(CHHURPI_BRICKS.get())));
 	
 	public static final RegistryObject<Block> TRAJECTORY_BLOCK = REGISTER.register("trajectory_block", () -> new TrajectoryBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));
 	public static final RegistryObject<Block> STAT_STORER = REGISTER.register("stat_storer", () -> new StatStorerBlock(Block.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3).sound(SoundType.METAL)));

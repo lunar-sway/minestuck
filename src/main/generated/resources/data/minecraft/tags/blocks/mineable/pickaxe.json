@@ -252,6 +252,11 @@
     "minestuck:pyxis_lid",
     "minestuck:chhurpi",
     "minestuck:chhurpi_stairs",
-    "minestuck:chhurpi_slab"
+    "minestuck:chhurpi_slab",
+    "minestuck:chhurpi_wall",
+    "minestuck:chhurpi_bricks",
+    "minestuck:chhurpi_brick_wall",
+    "minestuck:chhurpi_brick_stairs",
+    "minestuck:chhurpi_brick_slab"
   ]
 }
