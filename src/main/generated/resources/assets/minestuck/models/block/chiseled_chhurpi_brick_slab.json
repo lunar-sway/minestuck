@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "minestuck:block/chiseled_chhurpi_bricks",
+    "side": "minestuck:block/chiseled_chhurpi_bricks",
+    "top": "minestuck:block/chiseled_chhurpi_bricks"
+  }
+}

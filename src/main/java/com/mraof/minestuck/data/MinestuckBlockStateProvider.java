@@ -42,8 +42,9 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CHISELED_CHHURPI_BRICKS);
 		simpleBlockWithItem(MSBlocks.CRACKED_CHHURPI_BRICKS);
 		simpleBlockWithItem(MSBlocks.GILDED_CHHURPI_BRICKS);
-		simpleBlockWithItem(MSBlocks.CHHURPI_PILLAR);
 		simpleBlockWithItem(MSBlocks.CHEESE_PATH);
+		
+		simpleAxisBlockWithItem(MSBlocks.CHHURPI_PILLAR);
 		
 		simpleStairsWithItem(MSBlocks.SWISS_CHEESE_STAIRS, MSBlocks.SWISS_CHEESE);
 		simpleStairsWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_STAIRS, MSBlocks.SMOOTH_SWISS_CHEESE);
@@ -145,7 +146,7 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	
 	public void simpleAxisBlockWithItem(RegistryObject<Block> block)
 	{
-		axisBlock(((RotatedPillarBlock) block.get()), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
+		axisBlock(((RotatedPillarBlock) block.get()), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath() + "_side"), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath() + "_top"));
 		blockItem(block);
 	}
 	

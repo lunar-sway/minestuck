@@ -262,7 +262,7 @@ public class MSBlocks
 	public static final RegistryObject<Block> CHISELED_CHHURPI_BRICKS = REGISTER.register("chiseled_chhurpi_bricks", () -> new Block(Block.Properties.copy(CHHURPI.get())));
 	public static final RegistryObject<Block> CRACKED_CHHURPI_BRICKS = REGISTER.register("cracked_chhurpi_bricks", () -> new Block(Block.Properties.copy(CHHURPI.get())));
 	public static final RegistryObject<Block> GILDED_CHHURPI_BRICKS = REGISTER.register("gilded_chhurpi_bricks", () -> new Block(Block.Properties.copy(CHHURPI.get())));
-	public static final RegistryObject<Block> CHHURPI_PILLAR = REGISTER.register("chhurpi_pillar", () -> new Block(Block.Properties.copy(CHHURPI.get())));
+	public static final RegistryObject<Block> CHHURPI_PILLAR = REGISTER.register("chhurpi_pillar", () -> new RotatedPillarBlock(Block.Properties.copy(CHHURPI.get())));
 	
 	//Land Tree Blocks
 	public static final RegistryObject<Block> GLOWING_LOG = REGISTER.register("glowing_log", () -> new FlammableLogBlock(Block.Properties.of().mapColor(MapColor.COLOR_LIGHT_BLUE).ignitedByLava().instrument(NoteBlockInstrument.BASS).strength(2.0F).lightLevel(state -> 11).sound(SoundType.WOOD)));

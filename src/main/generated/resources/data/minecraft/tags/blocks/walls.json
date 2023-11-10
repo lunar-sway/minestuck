@@ -1,6 +1,9 @@
 {
   "values": [
     "minestuck:chhurpi_wall",
-    "minestuck:chhurpi_brick_wall"
+    "minestuck:chhurpi_brick_wall",
+    "minestuck:chiseled_chhurpi_brick_wall",
+    "minestuck:cracked_chhurpi_brick_wall",
+    "minestuck:gilded_chhurpi_brick_wall"
   ]
 }

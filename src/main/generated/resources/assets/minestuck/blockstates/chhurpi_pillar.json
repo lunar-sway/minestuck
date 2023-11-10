@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minestuck:block/chhurpi_pillar_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minestuck:block/chhurpi_pillar"
+    },
+    "axis=z": {
+      "model": "minestuck:block/chhurpi_pillar_horizontal",
+      "x": 90
+    }
+  }
+}
