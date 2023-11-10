@@ -39,6 +39,10 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.FETA_CHEESE);
 		simpleBlockWithItem(MSBlocks.CHHURPI);
 		simpleBlockWithItem(MSBlocks.CHHURPI_BRICKS);
+		simpleBlockWithItem(MSBlocks.CHISELED_CHHURPI_BRICKS);
+		simpleBlockWithItem(MSBlocks.CRACKED_CHHURPI_BRICKS);
+		simpleBlockWithItem(MSBlocks.GILDED_CHHURPI_BRICKS);
+		simpleBlockWithItem(MSBlocks.CHHURPI_PILLAR);
 		simpleBlockWithItem(MSBlocks.CHEESE_PATH);
 		
 		simpleStairsWithItem(MSBlocks.SWISS_CHEESE_STAIRS, MSBlocks.SWISS_CHEESE);
@@ -47,6 +51,9 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleStairsWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_STAIRS, MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		simpleStairsWithItem(MSBlocks.CHHURPI_STAIRS, MSBlocks.CHHURPI);
 		simpleStairsWithItem(MSBlocks.CHHURPI_BRICK_STAIRS, MSBlocks.CHHURPI_BRICKS);
+		simpleStairsWithItem(MSBlocks.CHISELED_CHHURPI_BRICK_STAIRS, MSBlocks.CHISELED_CHHURPI_BRICKS);
+		simpleStairsWithItem(MSBlocks.CRACKED_CHHURPI_BRICK_STAIRS, MSBlocks.CRACKED_CHHURPI_BRICKS);
+		simpleStairsWithItem(MSBlocks.GILDED_CHHURPI_BRICK_STAIRS, MSBlocks.GILDED_CHHURPI_BRICKS);
 		
 		simpleSlabWithItem(MSBlocks.SWISS_CHEESE_SLAB, MSBlocks.SWISS_CHEESE);
 		simpleSlabWithItem(MSBlocks.SMOOTH_SWISS_CHEESE_SLAB, MSBlocks.SMOOTH_SWISS_CHEESE);
@@ -54,9 +61,15 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleSlabWithItem(MSBlocks.SMOOTH_AMERICAN_CHEESE_SLAB, MSBlocks.SMOOTH_AMERICAN_CHEESE);
 		simpleSlabWithItem(MSBlocks.CHHURPI_SLAB, MSBlocks.CHHURPI);
 		simpleSlabWithItem(MSBlocks.CHHURPI_BRICK_SLAB, MSBlocks.CHHURPI_BRICKS);
+		simpleSlabWithItem(MSBlocks.CHISELED_CHHURPI_BRICK_SLAB, MSBlocks.CHISELED_CHHURPI_BRICKS);
+		simpleSlabWithItem(MSBlocks.CRACKED_CHHURPI_BRICK_SLAB, MSBlocks.CRACKED_CHHURPI_BRICKS);
+		simpleSlabWithItem(MSBlocks.GILDED_CHHURPI_BRICK_SLAB, MSBlocks.GILDED_CHHURPI_BRICKS);
 		
 		simpleWallBlock(MSBlocks.CHHURPI_WALL, MSBlocks.CHHURPI);
 		simpleWallBlock(MSBlocks.CHHURPI_BRICK_WALL, MSBlocks.CHHURPI_BRICKS);
+		simpleWallBlock(MSBlocks.CHISELED_CHHURPI_BRICK_WALL, MSBlocks.CHISELED_CHHURPI_BRICKS);
+		simpleWallBlock(MSBlocks.CRACKED_CHHURPI_BRICK_WALL, MSBlocks.CRACKED_CHHURPI_BRICKS);
+		simpleWallBlock(MSBlocks.GILDED_CHHURPI_BRICK_WALL, MSBlocks.GILDED_CHHURPI_BRICKS);
 	}
 	
 	private void simpleBlockWithItem(RegistryObject<Block> block)
@@ -130,9 +143,9 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		blockItem(block);
 	}
 	
-	public void simpleAxisBlockWithItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock1, RegistryObject<Block> baseBlock2)
+	public void simpleAxisBlockWithItem(RegistryObject<Block> block)
 	{
-		axisBlock(((RotatedPillarBlock) block.get()), blockTexture(baseBlock1.get()), blockTexture(baseBlock2.get()));
+		axisBlock(((RotatedPillarBlock) block.get()), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()), new ResourceLocation("minestuck:block/" + Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block.get())).getPath()));
 		blockItem(block);
 	}
 	

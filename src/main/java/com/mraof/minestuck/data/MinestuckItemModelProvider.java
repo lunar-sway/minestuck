@@ -51,6 +51,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		//Walls and Fences
 		wallItem(MSBlocks.CHHURPI_WALL, MSBlocks.CHHURPI);
 		wallItem(MSBlocks.CHHURPI_BRICK_WALL, MSBlocks.CHHURPI_BRICKS);
+		wallItem(MSBlocks.CHISELED_CHHURPI_BRICK_WALL, MSBlocks.CHISELED_CHHURPI_BRICKS);
+		wallItem(MSBlocks.CRACKED_CHHURPI_BRICK_WALL, MSBlocks.CRACKED_CHHURPI_BRICKS);
+		wallItem(MSBlocks.GILDED_CHHURPI_BRICK_WALL, MSBlocks.GILDED_CHHURPI_BRICKS);
 		
 		
 	}

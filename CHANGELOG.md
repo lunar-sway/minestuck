@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
-- Cheese Land Blocks, including 8 Blocks, 6 Stairs, and 6 Slabs, and 2 walls.
+- Cheese Land Blocks, including 12 Blocks, 9 Stairs, 9 Slabs, and 5 walls.
 
 ### Changed
 
