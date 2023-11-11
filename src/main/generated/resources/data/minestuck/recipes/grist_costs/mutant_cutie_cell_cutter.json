@@ -1,0 +1,12 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 580,
+    "minestuck:marble": 174,
+    "minestuck:tar": 290,
+    "minestuck:uranium": 30
+  },
+  "ingredient": {
+    "item": "minestuck:mutant_cutie_cell_cutter"
+  }
+}

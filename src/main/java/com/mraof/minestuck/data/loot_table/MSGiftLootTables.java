@@ -81,6 +81,10 @@ public class MSGiftLootTables implements LootTableSubProvider
 						.add(LootItem.lootTableItem(MSItems.ELECTRIC_AUTOHARP.get()).setWeight(1))
 						.add(LootItem.lootTableItem(MSItems.BATTERY.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1,4))))
 						.add(LootItem.lootTableItem(MSItems.GRIMOIRE.get()).setWeight(1).when(ConsortLootCondition.builder(EnumConsort.TURTLE)))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_IGUANA.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).when(ConsortLootCondition.builder(EnumConsort.IGUANA)))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_NAKAGATOR.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).when(ConsortLootCondition.builder(EnumConsort.NAKAGATOR)))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_SALAMANDER.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).when(ConsortLootCondition.builder(EnumConsort.SALAMANDER)))
+						.add(LootItem.lootTableItem(MSItems.PLUSH_TURTLE.get()).setWeight(2).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 3))).when(ConsortLootCondition.builder(EnumConsort.TURTLE)))
 						.add(LootItem.lootTableItem(MSItems.CRUMPLY_HAT.get()).setWeight(8).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 5))).when(ConsortLootCondition.builder(EnumConsort.SALAMANDER))))
 				.withPool(LootPool.lootPool().name(BLOCK_POOL).setRolls(ConstantValue.exactly(2))
 						.add(LandTableLootEntry.builder(MSLootTables.CONSORT_GENERAL_STOCK).setPool(BLOCK_POOL))));

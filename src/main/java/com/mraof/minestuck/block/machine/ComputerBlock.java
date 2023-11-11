@@ -1,10 +1,12 @@
 package com.mraof.minestuck.block.machine;
 
 import com.mraof.minestuck.block.MSBlockShapes;
+import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -103,7 +105,13 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			level.setBlock(pos, newState, Block.UPDATE_CLIENTS);
 			
 			if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computer)
+			{
 				computer.owner = IdentifierHandler.encode(player);
+				
+				if(newState.is(MSBlocks.OLD_COMPUTER.get()))
+					computer.setTheme(Theme.SBURB_95);
+			}
+			
 			newState.use(level, player, handIn, hit);
 		}
 	}

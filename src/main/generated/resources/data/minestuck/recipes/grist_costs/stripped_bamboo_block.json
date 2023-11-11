@@ -1,0 +1,10 @@
+{
+  "type": "minestuck:source_grist_cost",
+  "grist_cost": {},
+  "ingredient": {
+    "item": "minecraft:stripped_bamboo_block"
+  },
+  "sources": [
+    "minecraft:bamboo_block"
+  ]
+}

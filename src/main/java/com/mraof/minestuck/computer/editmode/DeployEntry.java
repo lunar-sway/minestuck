@@ -1,7 +1,8 @@
 package com.mraof.minestuck.computer.editmode;
 
 
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.ImmutableGristSet;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -11,6 +12,7 @@ import net.minecraft.world.level.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.function.BiFunction;
 
 public class DeployEntry
@@ -22,10 +24,10 @@ public class DeployEntry
 	private final int tier;
 	private final DeployList.IAvailabilityCondition condition;
 	private final BiFunction<SburbConnection, Level, ItemStack> item;
-	private final BiFunction<Boolean, SburbConnection, MutableGristSet> grist;
+	private final BiFunction<Boolean, SburbConnection, GristSet> grist;
 	private final DeployList.EntryLists category;
 	
-	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, MutableGristSet> grist, DeployList.EntryLists entryList)
+	DeployEntry(String name, int tier, DeployList.IAvailabilityCondition condition, BiFunction<SburbConnection, Level, ItemStack> item, BiFunction<Boolean, SburbConnection, GristSet> grist, DeployList.EntryLists entryList)
 	{
 		this.name = name;
 		this.tier = tier;
@@ -57,17 +59,18 @@ public class DeployEntry
 		return item.apply(c, level).copy();
 	}
 	
-	public MutableGristSet getPrimaryGristCost(SburbConnection c)
+	public GristSet getPrimaryGristCost(SburbConnection c)
 	{
 		return grist.apply(true, c);
 	}
 	
-	public MutableGristSet getSecondaryGristCost(SburbConnection c)
+	public GristSet getSecondaryGristCost(SburbConnection c)
 	{
 		return grist.apply(false, c);
 	}
 	
-	public MutableGristSet getCurrentCost(SburbConnection c)
+	@Nullable
+	public GristSet getCurrentCost(SburbConnection c)
 	{
 		return c.hasGivenItem(this) ? getSecondaryGristCost(c) : getPrimaryGristCost(c);
 	}
@@ -77,11 +80,11 @@ public class DeployEntry
 		if(isAvailable(c, tier))
 		{
 			ItemStack stack = getItemStack(c, level);
-			MutableGristSet cost = getCurrentCost(c);
+			GristSet cost = getCurrentCost(c);
 			CompoundTag tag = new CompoundTag();
 			stack.save(tag);
 			tag.putInt("i", i);
-			tag.put("cost", MutableGristSet.CODEC.encodeStart(NbtOps.INSTANCE, cost).getOrThrow(false, LOGGER::error));
+			tag.put("cost", ImmutableGristSet.LIST_CODEC.encodeStart(NbtOps.INSTANCE, cost.asImmutable()).getOrThrow(false, LOGGER::error));
 			tag.putInt("cat", category.ordinal());
 			list.add(tag);
 		}

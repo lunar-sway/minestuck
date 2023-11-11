@@ -1,7 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.*;
 import com.mraof.minestuck.player.GristCache;
@@ -157,7 +158,7 @@ public class AnthvilBlockEntity extends MachineProcessBlockEntity implements Men
 	public static GristAmount getUsedGrist(GristSet fullSet)
 	{
 		GristType pickedGrist = fullSet.asAmounts().stream().max(Comparator.comparingDouble(AnthvilBlockEntity::getModifiedGristValue)).map(GristAmount::type).orElse(GristTypes.BUILD.get());
-		return new GristAmount(pickedGrist, 1);
+		return pickedGrist.amount(1);
 	}
 	
 	private static double getModifiedGristValue(GristAmount grist)

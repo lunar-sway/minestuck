@@ -3,7 +3,9 @@ package com.mraof.minestuck.computer.editmode;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -19,6 +21,7 @@ import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSCapabilities;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
@@ -333,7 +336,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getEntity().level(), DeployList.EntryLists.DEPLOY);
 			if(entry != null && !isBlockItem(stack.getItem()))
 			{
-				MutableGristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(data.getGristCache().tryTake(cost, GristHelper.EnumSource.SERVER))
 				{
 					data.connection.setHasGivenItem(entry);
@@ -401,11 +404,11 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			GristCache gristCache = data.getGristCache();
 			if(entry != null)
 			{
-				MutableGristSet cost = entry.getCurrentCost(data.connection);
+				GristSet cost = entry.getCurrentCost(data.connection);
 				if(!gristCache.canAfford(cost))
 				{
 					if(cost != null)
-						event.getEntity().sendSystemMessage(cost.createMissingMessage());
+						event.getEntity().sendSystemMessage(GristCache.createMissingMessage(cost));
 					event.setCanceled(true);
 				}
 			}
@@ -421,7 +424,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 	
 	static GristSet blockBreakCost()
 	{
-		return new GristAmount(GristTypes.BUILD, 1);
+		return GristTypes.BUILD.get().amount(1);
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL)
@@ -440,7 +443,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getEntity());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getLevel());
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*TODO || block.getMaterial() == Material.PORTAL*/
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST)
 				|| (!data.getGristCache().canAfford(blockBreakCost()) && !MinestuckConfig.SERVER.gristRefund.get()
 				|| entry == null || entry.getCategory() == DeployList.EntryLists.ATHENEUM))
 			{
@@ -473,7 +476,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			BlockState block = event.getLevel().getBlockState(event.getPos());
 			ItemStack stack = block.getCloneItemStack(null, event.getLevel(), event.getPos(), event.getPlayer());
 			DeployEntry entry = DeployList.getEntryForItem(stack, data.connection, event.getPlayer().level(), DeployList.EntryLists.ATHENEUM);
-			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 /*TODO || block.getMaterial() == Material.PORTAL*/)
+			if(block.getDestroySpeed(event.getLevel(), event.getPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 			{
 				event.setCanceled(true);
 				return;
@@ -515,7 +518,7 @@ public final class ServerEditHandler	//TODO Consider splitting this class into t
 			DeployEntry entry = DeployList.getEntryForItem(stack, c, player.level());
 			if(entry != null)
 			{
-				MutableGristSet cost = entry.getCurrentCost(c);
+				GristSet cost = entry.getCurrentCost(c);
 				if(entry.getCategory() == DeployList.EntryLists.DEPLOY)
 				{
 					c.setHasGivenItem(entry);

@@ -1,0 +1,9 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 150
+  },
+  "ingredient": {
+    "item": "minestuck:hand_cranked_vampire_eraser"
+  }
+}

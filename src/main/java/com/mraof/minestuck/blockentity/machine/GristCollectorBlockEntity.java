@@ -1,8 +1,8 @@
 package com.mraof.minestuck.blockentity.machine;
 
-import com.mraof.minestuck.alchemy.GristAmount;
-import com.mraof.minestuck.alchemy.MutableGristSet;
-import com.mraof.minestuck.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristAmount;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.MutableGristSet;
 import com.mraof.minestuck.block.machine.GristCollectorBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -26,7 +26,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	private MutableGristSet storedGrist = new MutableGristSet();
+	private MutableGristSet storedGrist = MutableGristSet.newDefault();
 	
 	public GristCollectorBlockEntity(BlockPos pos, BlockState state)
 	{
@@ -49,7 +49,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	 */
 	public void clearStoredGrist()
 	{
-		storedGrist = new MutableGristSet();
+		storedGrist = MutableGristSet.newDefault();
 		this.setChanged();
 	}
 	
@@ -58,7 +58,7 @@ public class GristCollectorBlockEntity extends BlockEntity
 	{
 		super.load(compound);
 		storedGrist = MutableGristSet.CODEC.parse(NbtOps.INSTANCE, compound.get("storedGrist"))
-				.resultOrPartial(LOGGER::error).orElse(new MutableGristSet());
+				.resultOrPartial(LOGGER::error).orElseGet(MutableGristSet::newDefault);
 	}
 	
 	@Override

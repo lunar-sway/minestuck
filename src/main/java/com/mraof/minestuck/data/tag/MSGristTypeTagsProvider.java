@@ -1,9 +1,9 @@
 package com.mraof.minestuck.data.tag;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristType.SpawnCategory;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypeSpawnCategory;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.concurrent.CompletableFuture;
 
-import static com.mraof.minestuck.alchemy.GristTypes.*;
+import static com.mraof.minestuck.api.alchemy.GristTypes.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -23,7 +23,7 @@ public final class MSGristTypeTagsProvider extends IntrinsicHolderTagsProvider<G
 {
 	public MSGristTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper)
 	{
-		super(output, GRIST_KEY, lookupProvider, MSGristTypeTagsProvider::keyForGristType, Minestuck.MOD_ID, existingFileHelper);
+		super(output, REGISTRY_KEY, lookupProvider, MSGristTypeTagsProvider::keyForGristType, Minestuck.MOD_ID, existingFileHelper);
 	}
 	
 	private static ResourceKey<GristType> keyForGristType(GristType gristType)
@@ -34,15 +34,15 @@ public final class MSGristTypeTagsProvider extends IntrinsicHolderTagsProvider<G
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		tag(SpawnCategory.COMMON.getTagKey())
+		tag(GristTypeSpawnCategory.COMMON.getTagKey())
 				.add(AMBER.get(), CAULK.get(), CHALK.get(), IODINE.get(), SHALE.get(), TAR.get())
 				.add(COBALT.get(), MARBLE.get(), MERCURY.get(), QUARTZ.get(), SULFUR.get());
-		tag(SpawnCategory.UNCOMMON.getTagKey())
+		tag(GristTypeSpawnCategory.UNCOMMON.getTagKey())
 				.add(COBALT.get(), MARBLE.get(), MERCURY.get(), QUARTZ.get(), SULFUR.get())
 				.add(AMETHYST.get(), GARNET.get(), RUBY.get(), RUST.get())
 				.add(DIAMOND.get(), GOLD.get(), URANIUM.get());
 		//noinspection unchecked
-		tag(SpawnCategory.ANY.getTagKey()).addTags(SpawnCategory.COMMON.getTagKey(), SpawnCategory.UNCOMMON.getTagKey());
+		tag(GristTypeSpawnCategory.ANY.getTagKey()).addTags(GristTypeSpawnCategory.COMMON.getTagKey(), GristTypeSpawnCategory.UNCOMMON.getTagKey());
 		
 		tag(AMBER.get().getSecondaryTypesTag()).add(RUST.get(), SULFUR.get());
 		tag(CAULK.get().getSecondaryTypesTag()).add(IODINE.get(), CHALK.get());

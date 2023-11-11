@@ -23,6 +23,7 @@ public class MSDamageTypeProvider
 	{
 		context.register(MSDamageSources.SPIKE, new DamageType(SPIKE_MSG, DamageScaling.ALWAYS, 0.1F));
 		context.register(MSDamageSources.DECAPITATION, new DamageType(DECAPITATION_MSG, 0));
+		context.register(MSDamageSources.ARMOR_PIERCE, new DamageType("player", 0.1F));
 	}
 	
 	public static class Tags extends DamageTypeTagsProvider
@@ -39,6 +40,8 @@ public class MSDamageTypeProvider
 			this.tag(DamageTypeTags.BYPASSES_INVULNERABILITY).add(MSDamageSources.DECAPITATION);
 			this.tag(DamageTypeTags.BYPASSES_EFFECTS).add(MSDamageSources.DECAPITATION);
 			this.tag(DamageTypeTags.BYPASSES_RESISTANCE).add(MSDamageSources.DECAPITATION);
+			
+			this.tag(DamageTypeTags.BYPASSES_ARMOR).add(MSDamageSources.ARMOR_PIERCE);
 		}
 	}
 }

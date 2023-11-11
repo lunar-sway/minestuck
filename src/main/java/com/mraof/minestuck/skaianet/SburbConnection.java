@@ -6,12 +6,13 @@ import com.mraof.minestuck.computer.editmode.DeployEntry;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.player.PlayerSavedData;
+import com.mraof.minestuck.util.MSNBTUtil;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -103,7 +104,7 @@ public final class SburbConnection
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		artifactType = nbt.getInt("artifact");
-		baseGrist = GristType.read(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
+		baseGrist = MSNBTUtil.readGristType(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
 	
 	CompoundTag write()
@@ -139,7 +140,7 @@ public final class SburbConnection
 		}
 		
 		nbt.putInt("artifact", artifactType);
-		baseGrist.write(nbt, "base_grist");
+		MSNBTUtil.writeGristType(nbt, "base_grist", baseGrist);
 		return nbt;
 	}
 	

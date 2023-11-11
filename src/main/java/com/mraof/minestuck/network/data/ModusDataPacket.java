@@ -1,27 +1,23 @@
 package com.mraof.minestuck.network.data;
 
+import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
+import com.mraof.minestuck.inventory.captchalogue.Modus;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 
+import javax.annotation.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class ModusDataPacket implements PlayToClientPacket
+public record ModusDataPacket(@Nullable CompoundTag nbt) implements PlayToClientPacket
 {
-	private final CompoundTag nbt;
-	
-	private ModusDataPacket(CompoundTag nbt)
+	public static ModusDataPacket create(@Nullable Modus modus)
 	{
-		this.nbt = nbt;
-	}
-	
-	public static ModusDataPacket create(CompoundTag nbt)
-	{
-		return new ModusDataPacket(nbt);
+		return new ModusDataPacket(CaptchaDeckHandler.writeToNBT(modus));
 	}
 	
 	@Override
@@ -62,10 +58,5 @@ public class ModusDataPacket implements PlayToClientPacket
 	public void execute()
 	{
 		ClientPlayerData.handleDataPacket(this);
-	}
-	
-	public CompoundTag getNBT()
-	{
-		return nbt;
 	}
 }

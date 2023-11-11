@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:pointy_stick"
+  },
+  "input2": {
+    "item": "minestuck:lipstick_chainsaw"
+  },
+  "mode": "or",
+  "output": {
+    "item": "minestuck:hand_cranked_vampire_eraser"
+  }
+}

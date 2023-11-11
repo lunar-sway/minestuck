@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:build": 458,
+    "minestuck:iodine": 114,
+    "minestuck:mercury": 92,
+    "minestuck:ruby": 35,
+    "minestuck:uranium": 1
+  },
+  "ingredient": {
+    "item": "minestuck:rose_protocol"
+  }
+}

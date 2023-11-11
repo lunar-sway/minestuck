@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:grist_cost",
+  "grist_cost": {
+    "minestuck:amethyst": 232,
+    "minestuck:build": 773,
+    "minestuck:chalk": 386,
+    "minestuck:garnet": 116,
+    "minestuck:shale": 386
+  },
+  "ingredient": {
+    "item": "minestuck:hymn_for_horrorterrors"
+  }
+}

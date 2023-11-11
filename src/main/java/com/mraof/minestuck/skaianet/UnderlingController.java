@@ -5,7 +5,7 @@ import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.UnderlingSpawnListEvent;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;

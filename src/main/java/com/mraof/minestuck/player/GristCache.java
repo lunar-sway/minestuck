@@ -1,6 +1,7 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.alchemy.*;
+import com.mraof.minestuck.api.alchemy.*;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.item.GristEntity;
@@ -13,6 +14,7 @@ import com.mraof.minestuck.skaianet.SessionHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -31,6 +33,7 @@ import java.util.Objects;
  */
 public final class GristCache
 {
+	public static final String MISSING_MESSAGE = "grist.missing";
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private final PlayerData data;
@@ -41,7 +44,7 @@ public final class GristCache
 	{
 		this.data = data;
 		this.mcServer = mcServer;
-		this.gristSet = new GristAmount(GristTypes.BUILD, 20);
+		this.gristSet = GristTypes.BUILD.get().amount(20);
 	}
 	
 	public static GristCache get(ServerPlayer player)
@@ -57,6 +60,11 @@ public final class GristCache
 	public static GristCache get(MinecraftServer mcServer, PlayerIdentifier player)
 	{
 		return PlayerSavedData.getData(player, mcServer).getGristCache();
+	}
+	
+	public static Component createMissingMessage(GristSet gristSet)
+	{
+		return Component.translatable(MISSING_MESSAGE, gristSet.asTextComponent());
 	}
 	
 	/**
@@ -121,11 +129,11 @@ public final class GristCache
 	 */
 	public boolean tryTake(GristSet cost, @Nullable GristHelper.EnumSource source)
 	{
-		MutableGristSet change = cost.mutableCopy().scale(-1);
+		GristSet change = cost.mutableCopy().scale(-1);
 		
 		NonNegativeGristSet newCache = new NonNegativeGristSet(this.getGristSet());
 		
-		MutableGristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
+		GristSet excessGrist = addWithinCapacity(newCache, change, data.getEcheladder().getGristCapacity());
 		
 		if(excessGrist.isEmpty())
 		{
@@ -202,7 +210,6 @@ public final class GristCache
 	public void set(NonNegativeGristSet cache)
 	{
 		gristSet = cache.asImmutable();
-		data.markDirty();
 		data.gristCache.sendPacket(data.getPlayer());
 	}
 	
@@ -238,7 +245,7 @@ public final class GristCache
 		if(capacity < 0)
 			throw new IllegalArgumentException("Capacity under 0 not allowed.");
 		
-		MutableGristSet remainder = new MutableGristSet();
+		MutableGristSet remainder = MutableGristSet.newDefault();
 		
 		for(GristAmount amount : source.asAmounts())
 		{

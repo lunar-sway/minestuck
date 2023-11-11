@@ -1,0 +1,14 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "minestuck:item/boombox_beater"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "minestuck:has_cassette": 1
+            },
+            "model": "minestuck:item/boombox_beater_deployed"
+        }
+    ]
+}

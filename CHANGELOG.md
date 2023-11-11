@@ -6,13 +6,63 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
+- Uncarved wood block group now has a stonecutting recipe and grist cost
+- Split /setrung command into /rung set and /rung get, which modify and output a player's echeladder rung respectively.
+
 ### Changed
 
-- Split /setrung command into /rung set and /rung get, which modify and output a player's echeladder rung respectively.
+- Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
+- Fine china axe now uses decorated pot in recipe instead of flower pot
 
 ### Contributors for this release
 
-- Hadean
+- Dweblenod, Zepsun, Hadean
+
+## [1.20.1-1.11.1.0] - 2023-10-22
+
+### Added
+
+- Two new computer Themes: Joy and SBURB 95
+- Various new weapons including 10 keys, 6 batons, 1 wand, 2 clubs, 3 swords, 1 chainsaw, and 6 staffs. Notably includes the key/batonkind Denizen weapon, Yaldabaoth's Key-ton
+- New effects: Boss Buster and an effect used to spawn particles on hit
+- Native sulfur block for use in Heat lands
+- Particle Accelerator item
+- Boss Mob entity tag
+- Consort plushes
+- Mutini plush
+
+### Changed
+
+- New textures and slightly shorter models for transportalizers
+- Old Computer now starts with SBURB 95 Theme
+- Updated textures of bookshelves and ladders
+- Retextured green stone blocks
+- Iron Lass armor is now alchemized with the Particle Accelerator instead of Energy Core
+- New texture for wizard staff
+- Temple Scanner now displays direction on the item
+
+### Fixed
+
+- Restored the ocean rundown worldgen feature used in heat lands
+- Slightly adjusted damage of Home By Midnight to give more value to alchemizing it over its ingredients
+
+### Contributors for this release
+
+- Vinnelli, hadean, Vivian Zane, sipherNil, SurrealDude, Emma "Dilemma", Scarab Oasis, rose_bushes_, Dweblenod, kirderf1
+
+## [1.19.2-1.11.0.1] - 2023-10-21
+
+### Fixed
+
+- Fix a crash from fake players injuring underlings
+- Fix a crash caused by librarian villagers in the overworld
+
+### Contributors for this release
+
+- kirderf1, Dweblenod
 
 ## [1.19.2-1.11.0.0] - 2023-07-22
 

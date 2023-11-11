@@ -1,8 +1,9 @@
 package com.mraof.minestuck.jei;
 
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.GristTypes;
-import com.mraof.minestuck.alchemy.MutableGristSet;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -16,12 +17,14 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +32,8 @@ import java.util.List;
 /**
  * Created by mraof on 2017 January 23 at 2:38 AM.
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 {
 	private final IDrawable background, icon;
@@ -68,24 +73,24 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	public void setRecipe(IRecipeLayoutBuilder builder, JeiGristCost recipe, IFocusGroup focuses)
 	{
 		builder.addSlot(RecipeIngredientRole.CATALYST, 19, 5)
-				.addItemStacks(Arrays.stream(recipe.getIngredient().getItems())
+				.addItemStacks(Arrays.stream(recipe.ingredient().getItems())
 						.map(itemStack -> AlchemyHelper.createEncodedItem(itemStack, new ItemStack(MSBlocks.CRUXITE_DOWEL.get())))
 						.map(itemStack -> ColorHandler.setColor(itemStack, ClientPlayerData.getPlayerColor())).toList());
 		builder.addSlot(RecipeIngredientRole.OUTPUT, 127, 5)
-				.addIngredients(recipe.getIngredient());
+				.addIngredients(recipe.ingredient());
 		
-		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, recipe.getGristSet().asAmounts());
+		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
+			builder.addInvisibleIngredients(RecipeIngredientRole.INPUT).addIngredients(MinestuckJeiPlugin.GRIST, gristSetRecipe.gristSet().asAmounts());
 		//TODO Wildcard grist cost
 	}
 	
 	@Override
 	public void draw(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY)
 	{
-		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			GuiUtil.drawGristBoard(guiGraphics, recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
-		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			GuiUtil.drawGristBoard(guiGraphics, new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
+		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
+			GuiUtil.drawGristBoard(guiGraphics, gristSetRecipe.gristSet(), GuiUtil.GristboardMode.ALCHEMITER, 1, 30, Minecraft.getInstance().font);
+		else if(recipe instanceof JeiGristCost.Wildcard wildcardRecipe)
+			GuiUtil.drawGristBoard(guiGraphics, GristTypes.BUILD.get().amount(wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, 1, 30, Minecraft.getInstance().font);
 	}
 	
 	
@@ -93,10 +98,10 @@ public class GristCostRecipeCategory implements IRecipeCategory<JeiGristCost>
 	public List<Component> getTooltipStrings(JeiGristCost recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY)
 	{
 		Component text = null;
-		if(recipe.getType() == JeiGristCost.Type.GRIST_SET)
-			text = GuiUtil.getGristboardTooltip(recipe.getGristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
-		else if(recipe.getType() == JeiGristCost.Type.WILDCARD)
-			text = GuiUtil.getGristboardTooltip(new MutableGristSet(GristTypes.BUILD, recipe.getWildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
+		if(recipe instanceof JeiGristCost.Set gristSetRecipe)
+			text = GuiUtil.getGristboardTooltip(gristSetRecipe.gristSet(), GuiUtil.GristboardMode.ALCHEMITER, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
+		else if(recipe instanceof JeiGristCost.Wildcard wildcardRecipe)
+			text = GuiUtil.getGristboardTooltip(GristTypes.BUILD.get().amount(wildcardRecipe.wildcardAmount()), GuiUtil.GristboardMode.JEI_WILDCARD, mouseX, mouseY, 1, 30, Minecraft.getInstance().font);
 		
 		if(text != null)
 			return Collections.singletonList(text);

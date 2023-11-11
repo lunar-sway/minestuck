@@ -20,6 +20,7 @@ import com.mraof.minestuck.item.BoondollarsItem;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.block.StoneTabletItem;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
+import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
+import net.minecraft.client.renderer.item.CompassItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
@@ -118,6 +120,10 @@ public class ClientProxy
 		ItemProperties.register(MSItems.FROG.get(), new ResourceLocation(Minestuck.MOD_ID, "type"), (stack, level, holder, seed) -> !stack.hasTag() ? 0 : stack.getTag().getInt("Type"));
 		ItemProperties.register(MSItems.STONE_TABLET.get(), new ResourceLocation(Minestuck.MOD_ID, "carved"), (stack, level, holder, seed) -> StoneTabletItem.hasText(stack) ? 1 : 0);
 		ItemProperties.register(MSItems.MUSIC_SWORD.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		ItemProperties.register(MSItems.BOOMBOX_BEATER.get(), new ResourceLocation(Minestuck.MOD_ID, "has_cassette"), (stack, level, holder, seed) -> MusicPlayerWeapon.hasCassette(stack) ? 1 : 0);
+		
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation("angle"), new CompassItemPropertyFunction((level, stack, entity) -> StructureScannerItem.getTargetFromNbt(stack)));
+		ItemProperties.register(MSItems.TEMPLE_SCANNER.get(), new ResourceLocation(Minestuck.MOD_ID, "powered"), ((pStack, pLevel, pEntity, pSeed) -> pStack.hasTag() && pStack.getTag().getBoolean("Powered") ? 1 : 0));
 	}
 	
 	@SubscribeEvent

@@ -1,10 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.CombinationMode;
-import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
-import com.mraof.minestuck.alchemy.recipe.ItemCombiner;
-import com.mraof.minestuck.alchemy.recipe.ItemCombinerWrapper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniTotemLatheMenu;
@@ -39,7 +38,7 @@ public class MiniTotemLatheBlockEntity extends MachineProcessBlockEntity impleme
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.AND);
+	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.AND);
 	
 	public MiniTotemLatheBlockEntity(BlockPos pos, BlockState state)
 	{

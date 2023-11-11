@@ -1,0 +1,13 @@
+{
+  "type": "minestuck:combination",
+  "input1": {
+    "item": "minestuck:yaldabaoths_keyton"
+  },
+  "input2": {
+    "item": "minestuck:cueball"
+  },
+  "mode": "and",
+  "output": {
+    "item": "minestuck:allweddol"
+  }
+}
