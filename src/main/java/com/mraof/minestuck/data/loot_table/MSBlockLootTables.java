@@ -81,6 +81,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(CHHURPI_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
@@ -91,6 +92,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(CHHURPI_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);
@@ -227,7 +229,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHHURPI_BRICKS.get());
 		dropSelf(CHISELED_CHHURPI_BRICKS.get());
 		dropSelf(CRACKED_CHHURPI_BRICKS.get());
-		dropSelf(GILDED_CHHURPI_BRICKS.get());
+		dropSelf(CHEESY_CHHURPI_BRICKS.get());
 		dropSelf(CHHURPI_PILLAR.get());
 		dropSelf(CHEESE_PATH.get());
 		
@@ -422,7 +424,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHHURPI_BRICK_STAIRS.get());
 		dropSelf(CHISELED_CHHURPI_BRICK_STAIRS.get());
 		dropSelf(CRACKED_CHHURPI_BRICK_STAIRS.get());
-		dropSelf(GILDED_CHHURPI_BRICK_STAIRS.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_STAIRS.get());
 		dropSelf(BLACK_CHESS_BRICK_SLAB.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SLAB.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SLAB.get());
@@ -458,12 +460,12 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(CHHURPI_BRICK_SLAB.get());
 		dropSelf(CHISELED_CHHURPI_BRICK_SLAB.get());
 		dropSelf(CRACKED_CHHURPI_BRICK_SLAB.get());
-		dropSelf(GILDED_CHHURPI_BRICK_SLAB.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_SLAB.get());
 		dropSelf(CHHURPI_WALL.get());
 		dropSelf(CHHURPI_BRICK_WALL.get());
 		dropSelf(CHISELED_CHHURPI_BRICK_WALL.get());
 		dropSelf(CRACKED_CHHURPI_BRICK_WALL.get());
-		dropSelf(GILDED_CHHURPI_BRICK_WALL.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_WALL.get());
 		
 		dropSelf(TRAJECTORY_BLOCK.get());
 		dropSelf(STAT_STORER.get());

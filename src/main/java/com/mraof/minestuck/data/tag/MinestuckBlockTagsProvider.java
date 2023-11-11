@@ -210,8 +210,25 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(CHHURPI_BRICK_WALL.get());
 		needsWoodPickaxe(CHHURPI_BRICK_STAIRS.get());
 		needsWoodPickaxe(CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHHURPI_PILLAR.get());
 		
-		tag(WALLS).add(CHHURPI_WALL.get()).add(CHHURPI_BRICK_WALL.get()).add(CHISELED_CHHURPI_BRICK_WALL.get()).add(CRACKED_CHHURPI_BRICK_WALL.get()).add(GILDED_CHHURPI_BRICK_WALL.get());
+		wall(CHHURPI_WALL.get());
+		wall(CHHURPI_BRICK_WALL.get());
+		wall(CHISELED_CHHURPI_BRICK_WALL.get());
+		wall(CRACKED_CHHURPI_BRICK_WALL.get());
+		wall(CHEESY_CHHURPI_BRICK_WALL.get());
 		
 		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
 		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
@@ -281,6 +298,21 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 			if(!block.defaultBlockState().requiresCorrectToolForDrops())
 				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block));
 		}
+	}
+	
+	private void wall(Block... blocks)
+	{
+		tag(WALLS).add(blocks);
+	}
+	
+	private void fence(Block... blocks)
+	{
+		tag(FENCES).add(blocks);
+	}
+	
+	private void fenceGate(Block... blocks)
+	{
+		tag(FENCE_GATES).add(blocks);
 	}
 	
 	@Override

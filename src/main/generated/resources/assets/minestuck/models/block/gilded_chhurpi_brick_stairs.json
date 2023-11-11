@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "minestuck:block/gilded_chhurpi_bricks",
-    "side": "minestuck:block/gilded_chhurpi_bricks",
-    "top": "minestuck:block/gilded_chhurpi_bricks"
-  }
-}

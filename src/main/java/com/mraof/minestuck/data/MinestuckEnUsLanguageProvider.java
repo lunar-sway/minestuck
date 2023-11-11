@@ -94,6 +94,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.PINK_STONE_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE, "Cruxite Ore");
+		addBlock(MSBlocks.CHHURPI_CRUXITE_ORE, "Cruxite Ore");
 		addBlock(MSBlocks.STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.DEEPSLATE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.COBBLESTONE_URANIUM_ORE, "Uranium Ore");
@@ -104,6 +105,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.SHADE_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.PINK_STONE_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.MYCELIUM_STONE_URANIUM_ORE, "Uranium Ore");
+		addBlock(MSBlocks.CHHURPI_URANIUM_ORE, "Uranium Ore");
 		addBlock(MSBlocks.NETHERRACK_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.SHADE_STONE_COAL_ORE, "Coal Ore");
 		addBlock(MSBlocks.PINK_STONE_COAL_ORE, "Coal Ore");
@@ -257,10 +259,10 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addBlock(MSBlocks.CRACKED_CHHURPI_BRICK_STAIRS, "Cracked Chhurpi Brick Stairs");
 		addBlock(MSBlocks.CRACKED_CHHURPI_BRICK_SLAB, "Cracked Chhurpi Brick Slab");
 		addBlock(MSBlocks.CRACKED_CHHURPI_BRICK_WALL, "Cracked Chhurpi Brick Wall");
-		addBlock(MSBlocks.GILDED_CHHURPI_BRICKS, "Gilded Chhurpi Bricks");
-		addBlock(MSBlocks.GILDED_CHHURPI_BRICK_STAIRS, "Gilded Chhurpi Brick Stairs");
-		addBlock(MSBlocks.GILDED_CHHURPI_BRICK_SLAB, "Gilded Chhurpi Brick Slab");
-		addBlock(MSBlocks.GILDED_CHHURPI_BRICK_WALL, "Gilded Chhurpi Brick Wall");
+		addBlock(MSBlocks.CHEESY_CHHURPI_BRICKS, "Gilded Chhurpi Bricks");
+		addBlock(MSBlocks.CHEESY_CHHURPI_BRICK_STAIRS, "Gilded Chhurpi Brick Stairs");
+		addBlock(MSBlocks.CHEESY_CHHURPI_BRICK_SLAB, "Gilded Chhurpi Brick Slab");
+		addBlock(MSBlocks.CHEESY_CHHURPI_BRICK_WALL, "Gilded Chhurpi Brick Wall");
 		addBlock(MSBlocks.CHHURPI_PILLAR, "Chhurpi Pillar");
 		addBlock(MSBlocks.CHEESE_PATH, "Cheese Path");
 		addBlock(MSBlocks.GLOWING_LOG, "Glowing Log");

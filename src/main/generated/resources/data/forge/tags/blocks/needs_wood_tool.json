@@ -203,6 +203,19 @@
     "minestuck:chhurpi_bricks",
     "minestuck:chhurpi_brick_wall",
     "minestuck:chhurpi_brick_stairs",
-    "minestuck:chhurpi_brick_slab"
+    "minestuck:chhurpi_brick_slab",
+    "minestuck:chiseled_chhurpi_bricks",
+    "minestuck:chiseled_chhurpi_brick_wall",
+    "minestuck:chiseled_chhurpi_brick_stairs",
+    "minestuck:chiseled_chhurpi_brick_slab",
+    "minestuck:cracked_chhurpi_bricks",
+    "minestuck:cracked_chhurpi_brick_wall",
+    "minestuck:cracked_chhurpi_brick_stairs",
+    "minestuck:cracked_chhurpi_brick_slab",
+    "minestuck:cheesy_chhurpi_bricks",
+    "minestuck:cheesy_chhurpi_brick_wall",
+    "minestuck:cheesy_chhurpi_brick_stairs",
+    "minestuck:cheesy_chhurpi_brick_slab",
+    "minestuck:chhurpi_pillar"
   ]
 }

@@ -11,11 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minestuck:gilded_chhurpi_bricks"
+          "name": "minestuck:cheesy_chhurpi_bricks"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "minestuck:blocks/gilded_chhurpi_bricks"
+  "random_sequence": "minestuck:blocks/cheesy_chhurpi_bricks"
 }

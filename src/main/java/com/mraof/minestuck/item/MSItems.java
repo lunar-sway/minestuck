@@ -751,6 +751,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.SHADE_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.PINK_STONE_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_CRUXITE_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_CRUXITE_ORE);
+	public static final RegistryObject<BlockItem> CHHURPI_CRUXITE_ORE = registerBlockItem(MSBlocks.CHHURPI_CRUXITE_ORE);
 	public static final RegistryObject<BlockItem> STONE_URANIUM_ORE = registerBlockItem(MSBlocks.STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> DEEPSLATE_URANIUM_ORE = registerBlockItem(MSBlocks.DEEPSLATE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> NETHERRACK_URANIUM_ORE = registerBlockItem(MSBlocks.NETHERRACK_URANIUM_ORE);
@@ -761,6 +762,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> SHADE_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.SHADE_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.PINK_STONE_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> MYCELIUM_STONE_URANIUM_ORE = registerBlockItem(MSBlocks.MYCELIUM_STONE_URANIUM_ORE);
+	public static final RegistryObject<BlockItem> CHHURPI_URANIUM_ORE = registerBlockItem(MSBlocks.CHHURPI_URANIUM_ORE);
 	public static final RegistryObject<BlockItem> NETHERRACK_COAL_ORE = registerBlockItem(MSBlocks.NETHERRACK_COAL_ORE);
 	public static final RegistryObject<BlockItem> SHADE_STONE_COAL_ORE = registerBlockItem(MSBlocks.SHADE_STONE_COAL_ORE);
 	public static final RegistryObject<BlockItem> PINK_STONE_COAL_ORE = registerBlockItem(MSBlocks.PINK_STONE_COAL_ORE);
@@ -901,7 +903,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHHURPI_BRICKS = registerBlockItem(MSBlocks.CHHURPI_BRICKS);
 	public static final RegistryObject<BlockItem> CHISELED_CHHURPI_BRICKS = registerBlockItem(MSBlocks.CHISELED_CHHURPI_BRICKS);
 	public static final RegistryObject<BlockItem> CRACKED_CHHURPI_BRICKS = registerBlockItem(MSBlocks.CRACKED_CHHURPI_BRICKS);
-	public static final RegistryObject<BlockItem> GILDED_CHHURPI_BRICKS = registerBlockItem(MSBlocks.GILDED_CHHURPI_BRICKS);
+	public static final RegistryObject<BlockItem> CHEESY_CHHURPI_BRICKS = registerBlockItem(MSBlocks.CHEESY_CHHURPI_BRICKS);
 	public static final RegistryObject<BlockItem> CHHURPI_PILLAR = registerBlockItem(MSBlocks.CHHURPI_PILLAR);
 	
 	
@@ -1099,7 +1101,7 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHHURPI_BRICK_STAIRS = registerBlockItem(MSBlocks.CHHURPI_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> CHISELED_CHHURPI_BRICK_STAIRS = registerBlockItem(MSBlocks.CHISELED_CHHURPI_BRICK_STAIRS);
 	public static final RegistryObject<BlockItem> CRACKED_CHHURPI_BRICK_STAIRS = registerBlockItem(MSBlocks.CRACKED_CHHURPI_BRICK_STAIRS);
-	public static final RegistryObject<BlockItem> GILDED_CHHURPI_BRICK_STAIRS = registerBlockItem(MSBlocks.GILDED_CHHURPI_BRICK_STAIRS);
+	public static final RegistryObject<BlockItem> CHEESY_CHHURPI_BRICK_STAIRS = registerBlockItem(MSBlocks.CHEESY_CHHURPI_BRICK_STAIRS);
 	
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_BASE = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE);
 	public static final RegistryObject<BlockItem> STEEP_GREEN_STONE_BRICK_STAIRS_TOP = registerBlockItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP);
@@ -1139,13 +1141,13 @@ public class MSItems
 	public static final RegistryObject<BlockItem> CHHURPI_BRICK_SLAB = registerBlockItem(MSBlocks.CHHURPI_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> CHISELED_CHHURPI_BRICK_SLAB = registerBlockItem(MSBlocks.CHISELED_CHHURPI_BRICK_SLAB);
 	public static final RegistryObject<BlockItem> CRACKED_CHHURPI_BRICK_SLAB = registerBlockItem(MSBlocks.CRACKED_CHHURPI_BRICK_SLAB);
-	public static final RegistryObject<BlockItem> GILDED_CHHURPI_BRICK_SLAB = registerBlockItem(MSBlocks.GILDED_CHHURPI_BRICK_SLAB);
+	public static final RegistryObject<BlockItem> CHEESY_CHHURPI_BRICK_SLAB = registerBlockItem(MSBlocks.CHEESY_CHHURPI_BRICK_SLAB);
 	
 	public static final RegistryObject<BlockItem> CHHURPI_WALL = registerBlockItem(MSBlocks.CHHURPI_WALL);
 	public static final RegistryObject<BlockItem> CHHURPI_BRICK_WALL = registerBlockItem(MSBlocks.CHHURPI_BRICK_WALL);
 	public static final RegistryObject<BlockItem> CHISELED_CHHURPI_BRICK_WALL = registerBlockItem(MSBlocks.CHISELED_CHHURPI_BRICK_WALL);
 	public static final RegistryObject<BlockItem> CRACKED_CHHURPI_BRICK_WALL = registerBlockItem(MSBlocks.CRACKED_CHHURPI_BRICK_WALL);
-	public static final RegistryObject<BlockItem> GILDED_CHHURPI_BRICK_WALL = registerBlockItem(MSBlocks.GILDED_CHHURPI_BRICK_WALL);
+	public static final RegistryObject<BlockItem> CHEESY_CHHURPI_BRICK_WALL = registerBlockItem(MSBlocks.CHEESY_CHHURPI_BRICK_WALL);
 	
 	
 	

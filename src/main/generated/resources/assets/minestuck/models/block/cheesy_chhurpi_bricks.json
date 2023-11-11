@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "minestuck:block/gilded_chhurpi_bricks"
+    "all": "minestuck:block/cheesy_chhurpi_bricks"
   }
 }
