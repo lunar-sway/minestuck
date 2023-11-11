@@ -1,7 +1,6 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -24,18 +23,12 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	{
 		
 		handheldItemTextureName(MSItems.ACE_OF_CLUBS, "ace_clubs");
-		
 
 		//Staffs
 		handheldItemTextureName(MSItems.WIZARD_STAFF, "wizard_staff");
 		handheldItemTextureName(MSItems.WATER_STAFF, "water_staff");
 		handheldItemTextureName(MSItems.FIRE_STAFF, "fire_staff");
 		
-		
-		//Knives
-		handheldItem(MSItems.CHEESE_KNIFE);
-		
-
 		//Clubs
 		handheldItem(MSItems.M_ACE_OF_CLUBS);
 		handheldItem(MSItems.HOME_GROWN_MACE);
