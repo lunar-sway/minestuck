@@ -15,6 +15,6 @@ public class JetpackModelRenderer  extends GeoArmorRenderer<JetPackItem>
 	@Override
 	public ResourceLocation getTextureLocation(JetPackItem animatable)
 	{
-		return new ResourceLocation("minestuck", "textures/models.armor/jetpack.png");
+		return new ResourceLocation("minestuck", "textures/models/armor/jetpack.png");
 	}
 }

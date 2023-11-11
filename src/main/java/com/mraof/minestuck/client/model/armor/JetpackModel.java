@@ -16,7 +16,7 @@ public class JetpackModel extends GeoModel<JetPackItem>
 	@Override
 	public ResourceLocation getTextureResource(JetPackItem animatable)
 	{
-		return new ResourceLocation("minestuck", "textures/models.armor/jetpack.png");
+		return new ResourceLocation("minestuck", "textures/models/armor/jetpack.png");
 	}
 	
 	@Override

@@ -2,16 +2,12 @@ package com.mraof.minestuck.item.armor;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.client.renderer.armor.JetpackModelRenderer;
-import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.network.JetPackPacket;
-import com.mraof.minestuck.network.LotusFlowerPacket;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -26,27 +22,29 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import software.bernie.geckolib.animatable.GeoItem;
-import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 public class JetPackItem extends ArmorItem implements GeoItem
 {
-	private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private static final RawAnimation IDLE = RawAnimation.begin().thenPlay("jetpack.idle");
+	private static final RawAnimation PRIMED = RawAnimation.begin().thenPlay("jetpack.primed");
+	private static final RawAnimation FLIGHT = RawAnimation.begin().thenPlay("jetpack.flight");
 	private int EXPLOSION_BUFFER = 0;
-	@Nonnull
-	private JetPackItem.Animation animationType = JetPackItem.Animation.IDLE;
 	
 	public static final Logger LOGGER = LogUtils.getLogger();
 	
 	public JetPackItem(ArmorMaterial mat, ArmorItem.Type slot, Properties props)
 	{
 		super(mat, slot, props);
+		
+		SingletonGeoAnimatable.registerSyncedAnimatable(this);
 	}
 	
 	@Override
@@ -84,6 +82,9 @@ public class JetPackItem extends ArmorItem implements GeoItem
 			explodeAndStop(player, pLevel);
 			EXPLOSION_BUFFER = 0;
 		}
+		
+		animationStateChange(pStack, pLevel, pEntity);
+		
 		if(pEntity instanceof Player player && isBoostingTagTrue(pStack) && isHoldingControllers((LivingEntity) pEntity))
 		{
 			boost(player);
@@ -159,6 +160,22 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		}
 	}
 	
+	public void animationStateChange(ItemStack pStack, Level pLevel, Entity pEntity)
+	{
+		if(!isHoldingControllers((LivingEntity) pEntity) && pLevel instanceof ServerLevel serverLevel)
+		{
+			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "idle");
+		}
+		if(isHoldingControllers((LivingEntity) pEntity) && pLevel instanceof ServerLevel serverLevel)
+		{
+			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "primed");
+		}
+		if(isHoldingControllers((LivingEntity) pEntity) && isBoostingTagTrue(pStack) && pLevel instanceof ServerLevel serverLevel)
+		{
+			triggerAnim(pEntity, GeoItem.getOrAssignId(pStack, serverLevel), "jetpack_controller", "flight");
+		}
+	}
+	
 	public boolean isBoostingTagTrue(ItemStack stack)
 	{
 		CompoundTag nbt = stack.getTag();
@@ -172,7 +189,6 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		consumer.accept(new IClientItemExtensions()
 		{
 			private JetpackModelRenderer renderer;
-			
 			@Override
 			public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original)
 			{
@@ -185,46 +201,12 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		});
 	}
 	
-	public enum Animation
-	{
-		IDLE("jetpack.idle"),
-		FLIGHT("jetpack.flight");
-		
-		private final RawAnimation animation;
-		
-		Animation(String animationName)
-		{
-			this.animation = RawAnimation.begin().thenLoop(animationName);
-		}
-	}
-	
-	protected void updateAndSendAnimation(JetPackItem.Animation animation)
-	{
-		ItemStack item = this.getDefaultInstance();
-		ServerPlayer player = (ServerPlayer) item.getEntityRepresentation();
-		JetPackPacket packet = JetPackPacket.createPacket(animation);
-		
-		this.animationType = animation;
-		
-		MSPacketHandler.sendToPlayer(packet, player);
-	}
-	
-	public void setAnimationFromPacket(Animation newAnimation)
-	{
-		animationType = newAnimation;
-	}
-	
-	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
-	{
-		state.getController().setAnimation(animationType.animation);
-		
-		return PlayState.CONTINUE;
-	}
-	
 	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
-	{
-		controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
+	public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+		controllers.add(new AnimationController<>(this, "jetpack_controller", state -> PlayState.CONTINUE)
+				.triggerableAnim("idle", IDLE)
+				.triggerableAnim("primed", PRIMED)
+				.triggerableAnim("flight", FLIGHT));
 	}
 	
 	@Override
