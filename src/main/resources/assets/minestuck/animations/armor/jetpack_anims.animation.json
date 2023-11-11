@@ -138,6 +138,58 @@
 							"vector": [0.6, 1.1, 0.7]
 						}
 					}
+				},
+				"L_controller": {
+					"rotation": {
+						"vector": [23.37648, 2.93826, 8.75592]
+					},
+					"position": {
+						"vector": [0, 0, -1.75]
+					}
+				},
+				"R_controller": {
+					"rotation": {
+						"vector": [23.3765, 2.9383, "-8.7559"]
+					},
+					"position": {
+						"vector": [0, 0, -1.75]
+					}
+				}
+			}
+		},
+		"jetpack.primed": {
+			"loop": true,
+			"bones": {
+				"L_controller": {
+					"rotation": {
+						"vector": [23.37648, 2.93826, 8.75592]
+					},
+					"position": {
+						"vector": [0, 0, -1.75]
+					}
+				},
+				"R_controller": {
+					"rotation": {
+						"vector": [23.3765, 2.9383, "-8.7559"]
+					},
+					"position": {
+						"vector": [0, 0, -1.75]
+					}
+				},
+				"R_flames": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
+				},
+				"L_flames": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
+				},
+				"flames": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
 				}
 			}
 		}

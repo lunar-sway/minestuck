@@ -87,6 +87,7 @@ public class MSPacketHandler
 		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
 		registerMessage(EntryEffectPackets.Effect.class, EntryEffectPackets.Effect::decode);
 		registerMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
+		registerMessage(JetPackPacket.class, JetPackPacket::decode);
 	}
 	
 	private static int nextIndex;

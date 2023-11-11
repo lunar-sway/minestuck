@@ -7,7 +7,6 @@ import software.bernie.geckolib.model.GeoModel;
 
 public class JetpackModel extends GeoModel<JetPackItem>
 {
-	
 	@Override
 	public ResourceLocation getModelResource(JetPackItem animatable)
 	{

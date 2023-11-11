@@ -2,11 +2,16 @@ package com.mraof.minestuck.item.armor;
 
 import com.mojang.logging.LogUtils;
 import com.mraof.minestuck.client.renderer.armor.JetpackModelRenderer;
+import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.network.JetPackPacket;
+import com.mraof.minestuck.network.LotusFlowerPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -34,6 +39,8 @@ public class JetPackItem extends ArmorItem implements GeoItem
 {
 	private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
 	private int EXPLOSION_BUFFER = 0;
+	@Nonnull
+	private JetPackItem.Animation animationType = JetPackItem.Animation.IDLE;
 	
 	public static final Logger LOGGER = LogUtils.getLogger();
 	
@@ -121,7 +128,7 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		level.explode(player,player.getX() + 0.5D, player.getY() + 0.5D, player.getZ() + 0.5D, 3F, Level.ExplosionInteraction.BLOCK);
 	}
 	
-	public boolean isHoldingControllers( LivingEntity entity)
+	public boolean isHoldingControllers(LivingEntity entity)
 	{
 		Item thrustController = MSItems.THRUST_CONTROLLER.get();
 		
@@ -178,19 +185,6 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		});
 	}
 	
-	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
-	{
-		ItemStack jetpack = this.getDefaultInstance();
-		if(this.isBoostingTagTrue(jetpack))
-		{
-			state.getController().setAnimation(RawAnimation.begin().then("jetpack.flight", software.bernie.geckolib.core.animation.Animation.LoopType.LOOP));
-			return PlayState.CONTINUE;
-		}
-		
-		state.getController().setAnimation(RawAnimation.begin().then("jetpack.idle", software.bernie.geckolib.core.animation.Animation.LoopType.LOOP));
-		return PlayState.CONTINUE;
-	}
-	
 	public enum Animation
 	{
 		IDLE("jetpack.idle"),
@@ -202,6 +196,29 @@ public class JetPackItem extends ArmorItem implements GeoItem
 		{
 			this.animation = RawAnimation.begin().thenLoop(animationName);
 		}
+	}
+	
+	protected void updateAndSendAnimation(JetPackItem.Animation animation)
+	{
+		ItemStack item = this.getDefaultInstance();
+		ServerPlayer player = (ServerPlayer) item.getEntityRepresentation();
+		JetPackPacket packet = JetPackPacket.createPacket(animation);
+		
+		this.animationType = animation;
+		
+		MSPacketHandler.sendToPlayer(packet, player);
+	}
+	
+	public void setAnimationFromPacket(Animation newAnimation)
+	{
+		animationType = newAnimation;
+	}
+	
+	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> state)
+	{
+		state.getController().setAnimation(animationType.animation);
+		
+		return PlayState.CONTINUE;
 	}
 	
 	@Override
