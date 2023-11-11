@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Split /setrung command into /rung set and /rung get, which modify and output a player's echeladder rung respectively.
 
+### Contributors for this release
+
+- Hadean
+
 ## [1.19.2-1.11.0.0] - 2023-07-22
 
 ### Added
