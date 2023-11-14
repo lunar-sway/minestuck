@@ -350,6 +350,148 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.NOSTRILDAMUS);
 		simpleItem(MSItems.PONYTAIL);
 		
+		//Core Items
+		simpleItem(MSItems.RAW_CRUXITE);
+		simpleItem(MSItems.RAW_URANIUM);
+		simpleItem(MSItems.ENERGY_CORE);
+		
+		simpleItem(MSItems.SBURB_CODE);
+		simpleItem(MSItems.COMPLETED_SBURB_CODE, "sburb_code");
+		simpleItem(MSItems.COMPUTER_PARTS);
+		simpleItem(MSItems.BLANK_DISK);
+		simpleItem(MSItems.CLIENT_DISK);
+		simpleItem(MSItems.SERVER_DISK);
+		
+		simpleItem(MSItems.STACK_MODUS_CARD);
+		simpleItem(MSItems.QUEUE_MODUS_CARD);
+		simpleItem(MSItems.QUEUESTACK_MODUS_CARD);
+		simpleItem(MSItems.TREE_MODUS_CARD);
+		simpleItem(MSItems.HASHMAP_MODUS_CARD);
+		simpleItem(MSItems.SET_MODUS_CARD);
+		
+		//Food
+		simpleItem(MSItems.PHLEGM_GUSHERS);
+		simpleItem(MSItems.SORROW_GUSHERS);
+		simpleItem(MSItems.BUG_ON_A_STICK);
+		simpleItem(MSItems.CHOCOLATE_BEETLE, "chocolate_covered_beetle");
+		simpleItem(MSItems.CONE_OF_FLIES);
+		simpleItem(MSItems.GRASSHOPPER);
+		simpleItem(MSItems.CICADA);
+		simpleItem(MSItems.JAR_OF_BUGS);
+		simpleItem(MSItems.BUG_MAC);
+		simpleItem(MSItems.ONION);
+		simpleItem(MSItems.SALAD);
+		simpleItem(MSItems.DESERT_FRUIT);
+		simpleItem(MSItems.ROCK_COOKIE);
+		simpleItem(MSItems.WOODEN_CARROT);
+		simpleItem(MSItems.FUNGAL_SPORE);
+		simpleItem(MSItems.SPOREO);
+		simpleItem(MSItems.MOREL_MUSHROOM);
+		simpleItem(MSItems.SUSHROOM);
+		simpleItem(MSItems.FRENCH_FRY);
+		simpleItem(MSItems.STRAWBERRY_CHUNK, "strawberry_meat");
+		simpleItem(MSItems.FOOD_CAN);
+		simpleItem(MSItems.CANDY_CORN);
+		simpleItem(MSItems.TUIX_BAR);
+		simpleItem(MSItems.BUILD_GUSHERS);
+		simpleItem(MSItems.AMBER_GUMMY_WORM);
+		simpleItem(MSItems.CAULK_PRETZEL);
+		simpleItem(MSItems.CHALK_CANDY_CIGARETTE);
+		simpleItem(MSItems.IODINE_LICORICE);
+		simpleItem(MSItems.SHALE_PEEP);
+		simpleItem(MSItems.TAR_LICORICE, "tar_black_licorice");
+		simpleItem(MSItems.COBALT_GUM);
+		simpleItem(MSItems.MARBLE_JAWBREAKER);
+		simpleItem(MSItems.MERCURY_SIXLETS);
+		simpleItem(MSItems.QUARTZ_JELLY_BEAN);
+		simpleItem(MSItems.SULFUR_CANDY_APPLE);
+		simpleItem(MSItems.AMETHYST_HARD_CANDY);
+		simpleItem(MSItems.GARNET_TWIX);
+		simpleItem(MSItems.RUBY_LOLLIPOP);
+		simpleItem(MSItems.RUST_GUMMY_EYE);
+		simpleItem(MSItems.DIAMOND_MINT);
+		simpleItem(MSItems.GOLD_CANDY_RIBBON);
+		simpleItem(MSItems.URANIUM_GUMMY_BEAR);
+		simpleItem(MSItems.ARTIFACT_WARHEAD);
+		simpleItem(MSItems.ZILLIUM_SKITTLES);
+		simpleItem(MSItems.APPLE_JUICE);
+		simpleItem(MSItems.TAB);
+		simpleItem(MSItems.ORANGE_FAYGO);
+		simpleItem(MSItems.CANDY_APPLE_FAYGO);
+		simpleItem(MSItems.FAYGO_COLA);
+		simpleItem(MSItems.COTTON_CANDY_FAYGO);
+		simpleItem(MSItems.CREME_SODA_FAYGO);
+		simpleItem(MSItems.GRAPE_FAYGO);
+		simpleItem(MSItems.MOON_MIST_FAYGO);
+		simpleItem(MSItems.PEACH_FAYGO);
+		simpleItem(MSItems.REDPOP_FAYGO);
+		simpleItem(MSItems.GRUB_SAUCE);
+		simpleItem(MSItems.IRRADIATED_STEAK);
+		simpleItem(MSItems.SURPRISE_EMBRYO, "kundler_surprise_embryo");
+		simpleItem(MSItems.UNKNOWABLE_EGG);
+		simpleItem(MSItems.BREADCRUMBS);
+		
+		//Other Land Items
+		simpleItem(MSItems.GOLDEN_GRASSHOPPER);
+		handheldItem(MSItems.BUG_NET, "frog_net");
+		simpleItem(MSItems.CARVING_TOOL);
+		simpleItem(MSItems.CRUMPLY_HAT);
+		simpleItem(MSItems.STONE_EYEBALLS);
+		simpleItem(MSItems.SHOP_POSTER, "shop_poster1");
+		simpleItem(MSItems.GUTTER_THUMB_DRIVE);
+		simpleItem(MSItems.ANCIENT_THUMB_DRIVE);
+		simpleItem(MSItems.GUTTER_BALL);
+		
+		//Buckets
+		simpleItem(MSItems.OIL_BUCKET);
+		simpleItem(MSItems.BLOOD_BUCKET);
+		simpleItem(MSItems.BRAIN_JUICE_BUCKET);
+		simpleItem(MSItems.WATER_COLORS_BUCKET);
+		simpleItem(MSItems.ENDER_BUCKET);
+		simpleItem(MSItems.LIGHT_WATER_BUCKET);
+		simpleItem(MSItems.OBSIDIAN_BUCKET);
+		
+		
+		//Alchemy Items
+		handheldItem(MSItems.DICE);
+		simpleItem(MSItems.PLUTONIUM_CORE);
+		simpleItem(MSItems.GRIMOIRE);
+		simpleItem(MSItems.BATTERY);
+		simpleItem(MSItems.BARBASOL);
+		simpleItem(MSItems.CLOTHES_IRON);
+		simpleItem(MSItems.INK_SQUID_PRO_QUO);
+		simpleItem(MSItems.CUEBALL, "magic_cueball");
+		simpleItem(MSItems.EIGHTBALL);
+		simpleItem(MSItems.FLARP_MANUAL);
+		simpleItem(MSItems.SASSACRE_TEXT);
+		simpleItem(MSItems.WISEGUY);
+		simpleItem(MSItems.TABLESTUCK_MANUAL);
+		simpleItem(MSItems.TILLDEATH_HANDBOOK);
+		simpleItem(MSItems.BINARY_CODE);
+		simpleItem(MSItems.NONBINARY_CODE);
+		simpleItem(MSItems.THRESH_DVD);
+		simpleItem(MSItems.GAMEBRO_MAGAZINE, "game_bro");
+		simpleItem(MSItems.GAMEGRL_MAGAZINE, "game_grl");
+		simpleItem(MSItems.CREW_POSTER);
+		simpleItem(MSItems.SBAHJ_POSTER);
+		simpleItem(MSItems.BI_DYE);
+		handheldItem(MSItems.LIP_BALM);
+		simpleItem(MSItems.ELECTRIC_AUTOHARP);
+		handheldItem(MSItems.CARDBOARD_TUBE);
+		simpleItem(MSItems.CRYPTID_PHOTO);
+		simpleItem(MSItems.PARTICLE_ACCELERATOR);
+		
+		//Other
+		simpleItem(MSItems.CAPTCHAROID_CAMERA);
+		handheldItem(MSItems.LONG_FORGOTTEN_WARHORN);
+		simpleItem(MSItems.BLACK_QUEENS_RING, "queens_ring");
+		simpleItem(MSItems.WHITE_QUEENS_RING, "queens_ring");
+		simpleItem(MSItems.BARBASOL_BOMB);
+		simpleItem(MSItems.RAZOR_BLADE);
+		simpleItem(MSItems.ICE_SHARD);
+		simpleItem(MSItems.HORN);
+		simpleItem(MSItems.CAKE_MIX);
+		
 		//Scalemates
 		simpleItem(MSItems.SCALEMATE_APPLESCAB);
 		simpleItem(MSItems.SCALEMATE_BERRYBREATH);
@@ -364,6 +506,36 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		simpleItem(MSItems.PLUSH_MUTATED_CAT);
 		
+		//Incredibly Useful Items
+		handheldItem(MSItems.URANIUM_POWERED_STICK);
+		simpleItem(MSItems.IRON_BOAT);
+		simpleItem(MSItems.GOLD_BOAT);
+		simpleItem(MSItems.COCOA_WART);
+		simpleItem(MSItems.HORSE_CLOCK);
+		
+		//Music Discs/Cassettes
+		simpleItem(MSItems.MUSIC_DISC_EMISSARY_OF_DANCE, "record_emissary");
+		simpleItem(MSItems.MUSIC_DISC_DANCE_STAB_DANCE, "record_dance_stab");
+		simpleItem(MSItems.MUSIC_DISC_RETRO_BATTLE, "record_retro_battle");
+		
+		simpleItem(MSItems.CASSETTE_13, "cassette/cassette_13");
+		simpleItem(MSItems.CASSETTE_CAT, "cassette/cassette_cat");
+		simpleItem(MSItems.CASSETTE_BLOCKS, "cassette/cassette_blocks");
+		simpleItem(MSItems.CASSETTE_CHIRP, "cassette/cassette_chirp");
+		simpleItem(MSItems.CASSETTE_FAR, "cassette/cassette_far");
+		simpleItem(MSItems.CASSETTE_MALL, "cassette/cassette_mall");
+		simpleItem(MSItems.CASSETTE_MELLOHI, "cassette/cassette_mellohi");
+		simpleItem(MSItems.CASSETTE_DANCE_STAB, "cassette/cassette_dance_stab");
+		simpleItem(MSItems.CASSETTE_RETRO_BATTLE, "cassette/cassette_retro_battle");
+		simpleItem(MSItems.CASSETTE_EMISSARY, "cassette/cassette_emissary");
+		simpleItem(MSItems.CASSETTE_11, "cassette/cassette_11");
+		simpleItem(MSItems.CASSETTE_PIGSTEP, "cassette/cassette_pigstep");
+		simpleItem(MSItems.CASSETTE_STAL, "cassette/cassette_stal");
+		simpleItem(MSItems.CASSETTE_STRAD, "cassette/cassette_strad");
+		simpleItem(MSItems.CASSETTE_WAIT, "cassette/cassette_wait");
+		simpleItem(MSItems.CASSETTE_WARD, "cassette/cassette_ward");
+		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
+		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
 	}
 	
