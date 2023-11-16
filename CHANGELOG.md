@@ -10,15 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
+- `/rung get` command, which output a player's echeladder rung
 
 ### Changed
 
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
 - Fine china axe now uses decorated pot in recipe instead of flower pot
+- Changed `/setrung` command into `/rung set`
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun
+- Dweblenod, Zepsun, Hadean
 
 ## [1.20.1-1.11.1.0] - 2023-10-22
 
