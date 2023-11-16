@@ -24,9 +24,9 @@ public class RungCommand
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher)
 	{
 		dispatcher.register(
-			Commands.literal("rung")
+			Commands.literal("rung").requires(s -> s.hasPermission(Commands.LEVEL_GAMEMASTERS))
 					.then(Commands.literal("get").then(subCommandGet()))
-					.then(Commands.literal("set").requires(s -> s.hasPermission(2)).then(subCommandSet()))
+					.then(Commands.literal("set").then(subCommandSet()))
 		);
 	}
 	
