@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/mycelium_column_top",
+    "side": "minestuck:block/mycelium_column"
+  }
+}

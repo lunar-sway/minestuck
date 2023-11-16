@@ -560,39 +560,14 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		//Skaia
 		simpleItem(MSItems.SKAIA_PORTAL);
 		
-		blockItem(MSItems.BLACK_CHESS_BRICK_TRIM);
-		blockItem(MSItems.DARK_GRAY_CHESS_BRICK_TRIM);
-		blockItem(MSItems.LIGHT_GRAY_CHESS_BRICK_TRIM);
-		blockItem(MSItems.WHITE_CHESS_BRICK_TRIM);
-		blockItem(MSItems.CHECKERED_STAINED_GLASS);
-		blockItem(MSItems.BLACK_CROWN_STAINED_GLASS);
-		blockItem(MSItems.BLACK_PAWN_STAINED_GLASS);
-		blockItem(MSItems.WHITE_CROWN_STAINED_GLASS);
-		blockItem(MSItems.WHITE_PAWN_STAINED_GLASS);
-		
 		//Land Environment
 		blockItem(MSItems.BLUE_DIRT, "blue_dirt0");
-		blockItem(MSItems.COARSE_STONE_COLUMN);
-		blockItem(MSItems.SHADE_COLUMN);
-		blockItem(MSItems.FROST_COLUMN);
-		blockItem(MSItems.CHISELED_FROST_BRICKS);
-		blockItem(MSItems.STEEL_BEAM);
-		blockItem(MSItems.MYCELIUM_COLUMN);
-		blockItem(MSItems.BLACK_STONE_COLUMN);
 		blockItem(MSItems.DECREPIT_STONE_BRICKS, "decrepit_stone_bricks1");
 		blockItem(MSItems.FLOWERY_MOSSY_COBBLESTONE);
 		blockItem(MSItems.MOSSY_DECREPIT_STONE_BRICKS, "mossy_decrepit_stone_bricks1");
 		blockItem(MSItems.FLOWERY_MOSSY_STONE_BRICKS, "flowery_mossy_stone_bricks1");
 		blockItem(MSItems.COARSE_END_STONE);
 		blockItem(MSItems.END_GRASS);
-		blockItem(MSItems.CHALK_COLUMN);
-		blockItem(MSItems.PINK_STONE_COLUMN);
-		blockItem(MSItems.BROWN_STONE_COLUMN);
-		blockItem(MSItems.GREEN_STONE_COLUMN);
-		blockItem(MSItems.GREEN_STONE_BRICK_EMBEDDED_LADDER);
-		blockItem(MSItems.GREEN_STONE_BRICK_TRIM);
-		blockItem(MSItems.SANDSTONE_COLUMN);
-		blockItem(MSItems.RED_SANDSTONE_COLUMN);
 		
 	}
 	
