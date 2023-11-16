@@ -4,6 +4,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -11,6 +12,8 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Objects;
 
 public class MinestuckItemModelProvider extends ItemModelProvider
 {
@@ -537,13 +540,65 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
+		//Sburb Machines
+		simpleItem(MSItems.CRUXTRUDER);
+		blockItem(MSItems.CRUXTRUDER_LID);
+		simpleItem(MSItems.TOTEM_LATHE);
+		simpleItem(MSItems.ALCHEMITER);
+		simpleItem(MSItems.PUNCH_DESIGNIX);
+		
+		blockItem(MSItems.MINI_CRUXTRUDER);
+		blockItem(MSItems.MINI_TOTEM_LATHE);
+		blockItem(MSItems.MINI_ALCHEMITER);
+		blockItem(MSItems.MINI_PUNCH_DESIGNIX);
+		simpleItem(MSItems.HOLOPAD);
+		simpleItem(MSItems.INTELLIBEAM_LASERSTATION);
+		
+		//Misc Core Objects
+		simpleItem(MSItems.LOTUS_TIME_CAPSULE);
+		
+		//Skaia
+		simpleItem(MSItems.SKAIA_PORTAL);
+		
+		blockItem(MSItems.BLACK_CHESS_BRICK_TRIM);
+		blockItem(MSItems.DARK_GRAY_CHESS_BRICK_TRIM);
+		blockItem(MSItems.LIGHT_GRAY_CHESS_BRICK_TRIM);
+		blockItem(MSItems.WHITE_CHESS_BRICK_TRIM);
+		blockItem(MSItems.CHECKERED_STAINED_GLASS);
+		blockItem(MSItems.BLACK_CROWN_STAINED_GLASS);
+		blockItem(MSItems.BLACK_PAWN_STAINED_GLASS);
+		blockItem(MSItems.WHITE_CROWN_STAINED_GLASS);
+		blockItem(MSItems.WHITE_PAWN_STAINED_GLASS);
+		
+		//Land Environment
+		blockItem(MSItems.BLUE_DIRT, "blue_dirt0");
+		blockItem(MSItems.COARSE_STONE_COLUMN);
+		blockItem(MSItems.SHADE_COLUMN);
+		blockItem(MSItems.FROST_COLUMN);
+		blockItem(MSItems.CHISELED_FROST_BRICKS);
+		blockItem(MSItems.STEEL_BEAM);
+		blockItem(MSItems.MYCELIUM_COLUMN);
+		blockItem(MSItems.BLACK_STONE_COLUMN);
+		blockItem(MSItems.DECREPIT_STONE_BRICKS, "decrepit_stone_bricks1");
+		blockItem(MSItems.FLOWERY_MOSSY_COBBLESTONE);
+		blockItem(MSItems.MOSSY_DECREPIT_STONE_BRICKS, "mossy_decrepit_stone_bricks1");
+		blockItem(MSItems.FLOWERY_MOSSY_STONE_BRICKS, "flowery_mossy_stone_bricks1");
+		blockItem(MSItems.COARSE_END_STONE);
+		blockItem(MSItems.END_GRASS);
+		blockItem(MSItems.CHALK_COLUMN);
+		blockItem(MSItems.PINK_STONE_COLUMN);
+		blockItem(MSItems.BROWN_STONE_COLUMN);
+		blockItem(MSItems.GREEN_STONE_COLUMN);
+		blockItem(MSItems.GREEN_STONE_BRICK_EMBEDDED_LADDER);
+		blockItem(MSItems.GREEN_STONE_BRICK_TRIM);
+		blockItem(MSItems.SANDSTONE_COLUMN);
+		blockItem(MSItems.RED_SANDSTONE_COLUMN);
+		
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
 	{
-		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID, "item/" + item.getId().getPath()));
+		return simpleItem(item, item.getId().getPath());
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String textureName)
@@ -565,10 +620,15 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
 	}
 	
-	private ItemModelBuilder blockItem(RegistryObject<Block> block)
+	@Deprecated
+	private ItemModelBuilder blockItem(RegistryObject<? extends BlockItem> item)
 	{
-		return withExistingParent(block.getId().getPath(),
-				new ResourceLocation("minestuck:block/" + block.getId().getPath()));
+		return blockItem(item, getBlockId(item.get()).getPath());
+	}
+	
+	private ItemModelBuilder blockItem(RegistryObject<? extends BlockItem> item, String modelName)
+	{
+		return withExistingParent(item.getId().getPath(), new ResourceLocation(Minestuck.MOD_ID, "block/" + modelName));
 	}
 	
 	public ItemModelBuilder itemModelBlockItem(RegistryObject<Block> block)
@@ -589,5 +649,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
 	{
 		this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/wall_inventory")).texture("wall",  new ResourceLocation(Minestuck.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
+	}
+	
+	private static ResourceLocation getBlockId(BlockItem item) {
+		return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(item.getBlock()), "Item has unregistered block.");
 	}
 }
