@@ -40,7 +40,7 @@ public class RungCommand
 	{
 		int rung = PlayerSavedData.getData(player).getEcheladder().getRung();
 		
-		context.getSource().sendSuccess(() -> Component.translatable(GET_SUCCESS, player.getScoreboardName(), rung), true);
+		context.getSource().sendSuccess(() -> Component.translatable(GET_SUCCESS, player.getScoreboardName(), rung), false);
 		return rung;
 	}
 	
