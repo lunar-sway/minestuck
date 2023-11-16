@@ -22,6 +22,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Dweblenod, Zepsun, Hadean
 
+## [1.19.2-1.11.0.2] - 2023-11-16
+
+### Fixed
+
+- Fixed multiple sources of crashes involving fake players
+
+### Contributors for this release
+
+- Dweblenod
+
 ## [1.20.1-1.11.1.0] - 2023-10-22
 
 ### Added

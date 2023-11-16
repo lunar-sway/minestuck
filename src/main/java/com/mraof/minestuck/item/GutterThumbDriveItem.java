@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -47,7 +48,7 @@ public class GutterThumbDriveItem extends Item
 			itemStack.shrink(1);
 			player.displayClientMessage(Component.translatable(GREATER_INCREASE).withStyle(ChatFormatting.BOLD), true);
 			
-			if(player instanceof ServerPlayer serverPlayer)
+			if(player instanceof ServerPlayer serverPlayer && !(player instanceof FakePlayer))
 			{
 				PlayerSavedData.getData(serverPlayer).addGutterMultiplier(2.0);
 			}
