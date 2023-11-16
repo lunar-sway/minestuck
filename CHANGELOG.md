@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed multiple sources of crashes involving fake players
+
+### Contributors for this release
+
+- Dweblenod
+
 ## [1.19.2-1.11.0.1] - 2023-10-21
 
 ### Fixed
