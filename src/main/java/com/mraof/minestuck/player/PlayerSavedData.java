@@ -1,6 +1,7 @@
 package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -13,6 +14,8 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -22,6 +25,8 @@ import java.util.Objects;
  * This class is for server-side use only.
  * @author kirderf1
  */
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public final class PlayerSavedData extends SavedData
 {
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -82,10 +87,14 @@ public final class PlayerSavedData extends SavedData
 		}
 		return savedData;
 	}
-
+	
+	@Nullable
 	public static PlayerData getData(ServerPlayer player)
 	{
-		return get(player.server).getData(IdentifierHandler.encode(player));
+		PlayerIdentifier identifier = IdentifierHandler.encode(player);
+		if(identifier == null)
+			return null;
+		return get(player.server).getData(identifier);
 	}
 	
 	public static PlayerData getData(PlayerIdentifier player, Level level)
@@ -100,17 +109,13 @@ public final class PlayerSavedData extends SavedData
 	
 	public PlayerData getData(PlayerIdentifier player)
 	{
-		if(player != null)
+		Objects.requireNonNull(player);
+		if(!dataMap.containsKey(player))
 		{
-			if (!dataMap.containsKey(player))
-			{
-				PlayerData data = new PlayerData(this, player);
-				dataMap.put(player, data);
-				setDirty();
-			}
-			return dataMap.get(player);
+			PlayerData data = new PlayerData(this, player);
+			dataMap.put(player, data);
+			setDirty();
 		}
-		else
-			return null;
+		return dataMap.get(player);
 	}
 }
