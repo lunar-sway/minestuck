@@ -22,7 +22,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	@Override
 	protected void registerModels()
 	{
-
+		
 		//Clubs
 		handheldItem(MSItems.M_ACE_OF_CLUBS);
 		handheldItem(MSItems.RUBIKS_MACE);
