@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
+- The Iron Lass armor set has the ability to glide like an elytra and boost with the sneak key
 
 ### Changed
 
