@@ -18,6 +18,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
 
+### Fixed
+
+- Fixed multiple sources of crashes involving fake players
+
 ### Contributors for this release
 
 - Dweblenod, Zepsun, Hadean
