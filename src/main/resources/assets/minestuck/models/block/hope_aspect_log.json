@@ -1,7 +1,0 @@
-{
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "minestuck:block/hope_aspect_log_top",
-        "side": "minestuck:block/hope_aspect_log"
-    }
-}

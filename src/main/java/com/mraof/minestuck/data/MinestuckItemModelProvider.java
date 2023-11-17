@@ -557,8 +557,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		//Misc Core Objects
 		simpleItem(MSItems.LOTUS_TIME_CAPSULE);
 		
-		//Skaia
-		simpleItem(MSItems.SKAIA_PORTAL);
 		
 		//Land Environment
 		blockItem(MSItems.BLUE_DIRT, "blue_dirt0");
