@@ -350,6 +350,121 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.BRIGHT_DENSE_CLOUD);
 		simpleBlockWithItem(MSBlocks.SUGAR_CUBE);
+		
+		//Land Tree Blocks
+		axisWithItem(MSBlocks.GLOWING_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.FROST_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.RAINBOW_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.VINE_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						vanillaTexture("oak_log_top")));
+		axisWithItem(MSBlocks.FLOWERY_VINE_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						vanillaTexture("oak_log_top")));
+		axisWithItem(MSBlocks.DEAD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.PETRIFIED_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.SHADEWOOD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture("shadewood"),
+						texture("shadewood_top")));
+		axisWithItem(MSBlocks.SCARRED_SHADEWOOD_LOG,
+				id -> models().getExistingFile(id));
+		axisWithItem(MSBlocks.ROTTED_SHADEWOOD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture("rotted_shadewood"),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_SHADEWOOD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		axisWithItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD_LOG,
+				id -> models().getExistingFile(id));
+		axisWithItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD_LOG,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id.withSuffix("_top"))));
+		
+		axisWithItem(MSBlocks.GLOWING_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("glowing_log"),
+						texture("glowing_log")));
+		axisWithItem(MSBlocks.SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id)));
+		axisWithItem(MSBlocks.SCARRED_SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id.withSuffix("_rotated")),
+						texture("shadewood")));
+		axisWithItem(MSBlocks.ROTTED_SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id),
+						texture(id)));
+		axisWithItem(MSBlocks.STRIPPED_SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_shadewood_log"),
+						texture("stripped_shadewood_log")));
+		axisWithItem(MSBlocks.STRIPPED_SCARRED_SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture(id.withSuffix("_rotated")),
+						texture("stripped_shadewood_log")));
+		axisWithItem(MSBlocks.STRIPPED_ROTTED_SHADEWOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("stripped_rotted_shadewood_log"),
+						texture("stripped_rotted_shadewood_log")));
+		axisWithItem(MSBlocks.FROST_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("frost_log"),
+						texture("frost_log")));
+		axisWithItem(MSBlocks.RAINBOW_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("rainbow_log"),
+						texture("rainbow_log")));
+		axisWithItem(MSBlocks.END_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("end_log"),
+						texture("end_log")));
+		axisWithItem(MSBlocks.VINE_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("vine_log"),
+						texture("vine_log")));
+		axisWithItem(MSBlocks.FLOWERY_VINE_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("flowery_vine_log"),
+						texture("flowery_vine_log")));
+		axisWithItem(MSBlocks.DEAD_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("dead_log"),
+						texture("dead_log")));
+		axisWithItem(MSBlocks.PETRIFIED_WOOD,
+				id -> models().cubeColumn(id.getPath(),
+						texture("petrified_log"),
+						texture("petrified_log")));
+		
+		simpleBlockWithItem(MSBlocks.GLOWING_PLANKS);
+		simpleBlockWithItem(MSBlocks.FROST_PLANKS);
+		simpleBlockWithItem(MSBlocks.RAINBOW_PLANKS);
+		simpleBlockWithItem(MSBlocks.END_PLANKS);
+		simpleBlockWithItem(MSBlocks.DEAD_PLANKS);
+		simpleBlockWithItem(MSBlocks.TREATED_PLANKS);
+		simpleBlockWithItem(MSBlocks.SHADEWOOD_PLANKS);
 	}
 	
 	private void simpleBlockWithItem(RegistryObject<Block> block)
@@ -420,6 +535,13 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 							.rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360)
 							.build();
 				});
+		simpleBlockItem(block.get(), model);
+	}
+	
+	private void axisWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	{
+		var model = modelProvider.apply(block.getId());
+		axisBlock((RotatedPillarBlock) block.get(), model, model);
 		simpleBlockItem(block.get(), model);
 	}
 	
@@ -513,5 +635,10 @@ public class MinestuckBlockStateProvider extends BlockStateProvider
 	public static ResourceLocation texture(String path)
 	{
 		return new ResourceLocation(Minestuck.MOD_ID, ModelProvider.BLOCK_FOLDER + "/" + path);
+	}
+	
+	public static ResourceLocation vanillaTexture(String path)
+	{
+		return new ResourceLocation(ModelProvider.BLOCK_FOLDER + "/" + path);
 	}
 }
