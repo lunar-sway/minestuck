@@ -93,7 +93,7 @@ public class MSSoundEvents
 	public static final RegistryObject<SoundEvent> ITEM_PROJECTILE_THROW = register("item.projectile.throw"); //identical to trident throw
 	public static final RegistryObject<SoundEvent> ITEM_PROJECTILE_BOUNCE = register("item.projectile.bounce"); //identical to shield block
 	public static final RegistryObject<SoundEvent> ITEM_BATON_ORCHESTRA = register("item.baton.orchestra");
-	public static final RegistryObject<SoundEvent> ITEM_IRON_LASS_FLIGHT = register("item.iron_lass.flight");
+	public static final RegistryObject<SoundEvent> ITEM_JETPACK_FLIGHT = register("item.jetpack.flight");
 	public static final RegistryObject<SoundEvent> EVENT_ECHELADDER_INCREASE = register("event.echeladder.increase");
 	public static final RegistryObject<SoundEvent> EVENT_ELECTRIC_SHOCK = register("event.electric_shock");
 	public static final RegistryObject<SoundEvent> EVENT_LOTUS_FLOWER_LOOT_SPAWN = register("event.lotus_flower.loot_spawn"); //based on boat paddle land and item pop
