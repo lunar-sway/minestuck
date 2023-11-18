@@ -561,10 +561,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		//Land Environment
 		blockItem(MSItems.BLUE_DIRT, "blue_dirt0");
 		blockItem(MSItems.DECREPIT_STONE_BRICKS, "decrepit_stone_bricks1");
-		blockItem(MSItems.FLOWERY_MOSSY_COBBLESTONE);
 		blockItem(MSItems.MOSSY_DECREPIT_STONE_BRICKS, "mossy_decrepit_stone_bricks1");
 		blockItem(MSItems.FLOWERY_MOSSY_STONE_BRICKS, "flowery_mossy_stone_bricks1");
-		blockItem(MSItems.COARSE_END_STONE);
 		blockItem(MSItems.END_GRASS);
 		
 	}

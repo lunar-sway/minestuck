@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/attached_strawberry_stem",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "minestuck:block/attached_strawberry_stem",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "minestuck:block/attached_strawberry_stem",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "minestuck:block/attached_strawberry_stem"
+    }
+  }
+}
