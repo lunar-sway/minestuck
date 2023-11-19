@@ -541,16 +541,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
 		//Sburb Machines
-		simpleItem(MSItems.CRUXTRUDER);
-		blockItem(MSItems.CRUXTRUDER_LID);
-		simpleItem(MSItems.TOTEM_LATHE);
-		simpleItem(MSItems.ALCHEMITER);
-		simpleItem(MSItems.PUNCH_DESIGNIX);
-		
-		blockItem(MSItems.MINI_CRUXTRUDER);
-		blockItem(MSItems.MINI_TOTEM_LATHE);
-		blockItem(MSItems.MINI_ALCHEMITER);
-		blockItem(MSItems.MINI_PUNCH_DESIGNIX);
 		simpleItem(MSItems.HOLOPAD);
 		simpleItem(MSItems.INTELLIBEAM_LASERSTATION);
 		
