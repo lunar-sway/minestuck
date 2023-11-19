@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minestuck:block/block_pressure_plate_extended"
+    },
+    "powered=true": {
+      "model": "minestuck:block/block_pressure_plate_retracted"
+    }
+  }
+}

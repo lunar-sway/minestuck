@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minestuck:block/retractable_spikes_retracted"
+    },
+    "powered=true": {
+      "model": "minestuck:block/retractable_spikes_extended"
+    }
+  }
+}

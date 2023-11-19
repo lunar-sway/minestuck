@@ -2,13 +2,19 @@ package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.block.MSBlocks;
+import com.mraof.minestuck.block.MSProperties;
+import com.mraof.minestuck.block.TrajectoryBlock;
+import com.mraof.minestuck.block.redstone.*;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
@@ -781,6 +787,205 @@ public class MSBlockStateProvider extends BlockStateProvider
 		horizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
 		horizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
 		
+		slabWithItem(MSBlocks.BLACK_CHESS_BRICK_SLAB, MSBlocks.BLACK_CHESS_BRICKS);
+		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICKS);
+		slabWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
+		slabWithItem(MSBlocks.WHITE_CHESS_BRICK_SLAB, MSBlocks.WHITE_CHESS_BRICKS);
+		slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.getId().withSuffix("1"));
+		slabWithItem(MSBlocks.COARSE_STONE_SLAB, MSBlocks.COARSE_STONE);
+		slabWithItem(MSBlocks.COARSE_STONE_BRICK_SLAB, MSBlocks.COARSE_STONE_BRICKS);
+		slabWithItem(MSBlocks.SHADE_SLAB, MSBlocks.SHADE_STONE);
+		slabWithItem(MSBlocks.SHADE_BRICK_SLAB, MSBlocks.SHADE_BRICKS);
+		slabWithItem(MSBlocks.FROST_TILE_SLAB, MSBlocks.FROST_TILE);
+		slabWithItem(MSBlocks.FROST_BRICK_SLAB, MSBlocks.FROST_BRICKS);
+		slabWithItem(MSBlocks.BLACK_STONE_SLAB, MSBlocks.BLACK_STONE);
+		slabWithItem(MSBlocks.BLACK_STONE_BRICK_SLAB, MSBlocks.BLACK_STONE_BRICKS);
+		slabWithItem(MSBlocks.MYCELIUM_SLAB, MSBlocks.MYCELIUM_STONE);
+		slabWithItem(MSBlocks.MYCELIUM_BRICK_SLAB, MSBlocks.MYCELIUM_BRICKS);
+		slabWithItem(MSBlocks.CHALK_SLAB, MSBlocks.CHALK);
+		slabWithItem(MSBlocks.CHALK_BRICK_SLAB, MSBlocks.CHALK_BRICKS);
+		slabWithItem(MSBlocks.PINK_STONE_SLAB, MSBlocks.PINK_STONE);
+		slabWithItem(MSBlocks.PINK_STONE_BRICK_SLAB, MSBlocks.PINK_STONE_BRICKS);
+		slabWithItem(MSBlocks.BROWN_STONE_SLAB, MSBlocks.BROWN_STONE);
+		slabWithItem(MSBlocks.BROWN_STONE_BRICK_SLAB, MSBlocks.BROWN_STONE_BRICKS);
+		slabWithItem(MSBlocks.GREEN_STONE_SLAB, MSBlocks.GREEN_STONE);
+		slabWithItem(MSBlocks.GREEN_STONE_BRICK_SLAB, MSBlocks.GREEN_STONE_BRICKS.getId(),
+				texture("horizontal_green_stone_bricks"), texture("polished_green_stone"));
+		slabWithItem(MSBlocks.RAINBOW_PLANKS_SLAB, MSBlocks.RAINBOW_PLANKS);
+		slabWithItem(MSBlocks.END_PLANKS_SLAB, MSBlocks.END_PLANKS);
+		slabWithItem(MSBlocks.DEAD_PLANKS_SLAB, MSBlocks.DEAD_PLANKS);
+		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
+		
+		directional(MSBlocks.TRAJECTORY_BLOCK, state -> {
+			Direction direction = state.getValue(TrajectoryBlock.FACING);
+			boolean powered = state.getValue(TrajectoryBlock.POWERED);
+			ResourceLocation modelId = MSBlocks.TRAJECTORY_BLOCK.getId();
+			modelId = direction.getAxis() == Direction.Axis.Y ? modelId.withSuffix("_vertical") : modelId.withSuffix("_horizontal");
+			ResourceLocation topTexture = texture(modelId.withSuffix("_top"));
+			modelId = powered ? modelId.withSuffix("_powered") : modelId.withSuffix("_unpowered");
+			topTexture = powered ? topTexture.withSuffix("_powered") : topTexture.withSuffix("_unpowered");
+			
+			if(direction.getAxis() == Direction.Axis.Y)
+				return models().cubeColumn(modelId.getPath(),
+						texture("redstone_machine_block"),
+						topTexture);
+			else
+				return models().getExistingFile(modelId);
+		}, BlockStateProperties.POWER);
+		simpleBlockItem(MSBlocks.TRAJECTORY_BLOCK.get(),
+				models().getExistingFile(MSBlocks.TRAJECTORY_BLOCK.getId().withSuffix("_vertical_unpowered")));
+		{
+			ResourceLocation id = MSBlocks.STAT_STORER.getId();
+			Function<ResourceLocation, ModelFile> modelProvider = modelId -> models().cubeBottomTop(modelId.getPath(),
+					texture("redstone_machine_block"),
+					texture(modelId),
+					texture(modelId));
+			powerVariableWithItem(MSBlocks.STAT_STORER,
+					modelProvider.apply(id.withSuffix("_high_power")),
+					modelProvider.apply(id.withSuffix("_medium_power")),
+					modelProvider.apply(id.withSuffix("_low_power")),
+					modelProvider.apply(id.withSuffix("_unpowered")));
+		}
+		{
+			ResourceLocation id = MSBlocks.REMOTE_OBSERVER.getId();
+			ModelFile powered = cubeAll(id.withSuffix("_powered"));
+			ModelFile unpowered = cubeAll(id.withSuffix("_unpowered"));
+			getVariantBuilder(MSBlocks.REMOTE_OBSERVER.get())
+					.partialState().with(RemoteObserverBlock.POWERED, true).modelForState().modelFile(powered).addModel()
+					.partialState().with(RemoteObserverBlock.POWERED, false).modelForState().modelFile(unpowered).addModel();
+			simpleBlockItem(MSBlocks.REMOTE_OBSERVER.get(), unpowered);
+		}
+		{
+			ResourceLocation id = MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.getId();
+			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get())
+					.forAllStatesExcept(state -> {
+						Direction direction = state.getValue(WirelessRedstoneTransmitterBlock.FACING);
+						boolean powered = state.getValue(WirelessRedstoneTransmitterBlock.POWERED);
+						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
+								.rotationY(((int) direction.toYRot() + 180) % 360)
+								.build();
+					}, BlockStateProperties.POWER);
+			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get(), unpoweredModel);
+		}
+		{
+			ResourceLocation id = MSBlocks.WIRELESS_REDSTONE_RECEIVER.getId();
+			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get())
+					.forAllStatesExcept(state -> {
+						Direction direction = state.getValue(WirelessRedstoneReceiverBlock.FACING);
+						boolean powered = state.getValue(WirelessRedstoneReceiverBlock.POWERED);
+						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
+								.rotationY(((int) direction.toYRot() + 180) % 360)
+								.build();
+					}, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWER);
+			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get(), unpoweredModel);
+		}
+		{
+			ResourceLocation id = MSBlocks.SOLID_SWITCH.getId();
+			ModelFile powered = cubeAll(id.withSuffix("_powered"));
+			ModelFile unpowered = cubeAll(id.withSuffix("_unpowered"));
+			getVariantBuilder(MSBlocks.SOLID_SWITCH.get())
+					.partialState().with(SolidSwitchBlock.POWERED, true).modelForState().modelFile(powered).addModel()
+					.partialState().with(SolidSwitchBlock.POWERED, false).modelForState().modelFile(unpowered).addModel();
+			simpleBlockItem(MSBlocks.SOLID_SWITCH.get(), unpowered);
+		}
+		{
+			ResourceLocation id = MSBlocks.VARIABLE_SOLID_SWITCH.getId();
+			powerVariableWithItem(MSBlocks.VARIABLE_SOLID_SWITCH,
+					cubeAll(id.withSuffix("_high_power")),
+					cubeAll(id.withSuffix("_medium_power")),
+					cubeAll(id.withSuffix("_low_power")),
+					cubeAll(id.withSuffix("_unpowered")));
+		}
+		{
+			ModelFile highPower = cubeAll(id("timed_solid_switch_high_power"));
+			ModelFile mediumPower = cubeAll(id("timed_solid_switch_medium_power"));
+			ModelFile lowPower = cubeAll(id("timed_solid_switch_low_power"));
+			ModelFile unpowered = cubeAll(id("timed_solid_switch_unpowered"));
+			powerVariableWithItem(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
+			powerVariableWithItem(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
+		}
+		{
+			ResourceLocation id = MSBlocks.SUMMONER.getId();
+			ModelFile triggered = cubeAll(id.withSuffix("_triggered"));
+			ModelFile untriggered = cubeAll(id.withSuffix("_untriggered"));
+			getVariantBuilder(MSBlocks.SUMMONER.get())
+					.partialState().with(SummonerBlock.TRIGGERED, true).modelForState()
+					.modelFile(triggered).addModel()
+					.partialState().with(SummonerBlock.TRIGGERED, false).modelForState()
+					.modelFile(untriggered).addModel();
+			simpleBlockItem(MSBlocks.SUMMONER.get(), untriggered);
+		}
+		{
+			ResourceLocation id = MSBlocks.AREA_EFFECT_BLOCK.getId();
+			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			getVariantBuilder(MSBlocks.AREA_EFFECT_BLOCK.get())
+					.forAllStatesExcept(state -> {
+						Direction direction = state.getValue(AreaEffectBlock.FACING);
+						boolean powered = state.getValue(AreaEffectBlock.POWERED);
+						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
+								.rotationY(((int) direction.toYRot() + 180) % 360)
+								.build();
+					}, AreaEffectBlock.ALL_MOBS, AreaEffectBlock.SHUT_DOWN);
+			simpleBlockItem(MSBlocks.AREA_EFFECT_BLOCK.get(), unpoweredModel);
+		}
+		directionalWithItem(MSBlocks.ROTATOR,
+				id -> models().cubeBottomTop(id.getPath(),
+						texture(id.withSuffix("_side")),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top"))));
+		directionalWithItem(MSBlocks.TOGGLER,
+				id -> models().cubeBottomTop(id.getPath(),
+						texture("rotator_side"),
+						texture("rotator_bottom"),
+						texture(id.withSuffix("_top"))));
+		horizontalWithItem(MSBlocks.STRUCTURE_CORE,
+				id -> models().cubeBottomTop(id.getPath(),
+						texture(id.withSuffix("_side")),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.FALL_PAD,
+				id -> models().cubeBottomTop(id.getPath(),
+						texture(id.withSuffix("_side")),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top"))));
+		simpleBlockWithItem(MSBlocks.FRAGILE_STONE);
+		horizontalWithItem(MSBlocks.SPIKES, this::existing);
+		{
+			ResourceLocation id = MSBlocks.RETRACTABLE_SPIKES.getId();
+			ModelFile extended = existing(id.withSuffix("_extended"));
+			ModelFile retracted = models().cubeBottomTop(id.withSuffix("_retracted").getPath(),
+					texture("spikes"),
+					texture("spikes"),
+					texture(id.withSuffix("_top_retracted")));
+			getVariantBuilder(MSBlocks.RETRACTABLE_SPIKES.get())
+					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(extended).addModel()
+					.partialState().with(RetractableSpikesBlock.POWERED, false).modelForState().modelFile(retracted).addModel();
+			simpleBlockItem(MSBlocks.RETRACTABLE_SPIKES.get(), retracted);
+		}
+		{
+			ResourceLocation id = MSBlocks.BLOCK_PRESSURE_PLATE.getId();
+			ResourceLocation retractedId = id.withSuffix("_retracted");
+			ModelFile retracted = models().cubeBottomTop(retractedId.getPath(),
+					texture(id.withSuffix("_side")),
+					texture(id.withSuffix("_bottom")),
+					texture(id.withSuffix("_top")));
+			ModelFile extended = existing(id.withSuffix("_extended"));
+			getVariantBuilder(MSBlocks.BLOCK_PRESSURE_PLATE.get())
+					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(retracted).addModel()
+					.partialState().with(RetractableSpikesBlock.POWERED, false).modelForState().modelFile(extended).addModel();
+			simpleBlockItem(MSBlocks.BLOCK_PRESSURE_PLATE.get(), extended);
+		}
+		simpleBlockWithItem(MSBlocks.PUSHABLE_BLOCK,
+				id -> models().cubeBottomTop(id.getPath(),
+						texture(id.withSuffix("_side")),
+						texture(id.withSuffix("_bottom")),
+						texture(id.withSuffix("_top"))));
+		
 	}
 	
 	private ModelFile existing(ResourceLocation id)
@@ -804,6 +1009,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 				.face(Direction.NORTH).uvs(0, 0, 16, 16).texture('#' + textureKey).end()
 				.face(Direction.SOUTH).uvs(0, 0, 16, 16).texture('#' + textureKey).end()
 				.end();
+	}
+	
+	private ModelFile cubeAll(ResourceLocation id)
+	{
+		return models().cubeAll(id.getPath(), texture(id));
 	}
 	
 	private void simpleBlockWithItem(RegistryObject<Block> block)
@@ -834,28 +1044,35 @@ public class MSBlockStateProvider extends BlockStateProvider
 								.modelFile(model)
 								.rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + angleOffset) % 360)
 								.build(),
-						BlockStateProperties.WATERLOGGED
+						BlockStateProperties.WATERLOGGED, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED
 				);
 	}
 	
 	private void horizontalWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
-		getVariantBuilder(block.get())
-				.forAllStatesExcept(state -> ConfiguredModel.builder()
-								.modelFile(model)
-								.rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
-								.build(),
-						BlockStateProperties.WATERLOGGED
-				);
+		horizontal(block, $ -> model);
 		simpleBlockItem(block.get(), model);
 	}
 	
 	private void directionalWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
-		directionalBlock(block.get(), model);
+		directional(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED);
 		simpleBlockItem(block.get(), model);
+	}
+	
+	private void directional(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	{
+		getVariantBuilder(block.get())
+				.forAllStatesExcept(state -> {
+					Direction dir = state.getValue(BlockStateProperties.FACING);
+					return ConfiguredModel.builder()
+							.modelFile(modelProvider.apply(state))
+							.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
+							.rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot() + 180) % 360)
+							.build();
+				}, ignored);
 	}
 	
 	/**
@@ -920,9 +1137,48 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), stairs);
 	}
 	
-	private ItemModelBuilder flatItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ResourceLocation> textureProvider)
+	private void slabWithItem(RegistryObject<SlabBlock> block, RegistryObject<Block> sourceBlock)
 	{
-		return itemModels().withExistingParent(block.getId().getPath(),
+		slabWithItem(block, sourceBlock.getId());
+	}
+	
+	private void slabWithItem(RegistryObject<SlabBlock> block, ResourceLocation sourceBlock)
+	{
+		ResourceLocation texture = texture(sourceBlock);
+		slabWithItem(block, sourceBlock, texture, texture);
+	}
+	
+	private void slabWithItem(RegistryObject<SlabBlock> block, ResourceLocation sourceBlock, ResourceLocation side, ResourceLocation topBottom)
+	{
+		ModelFile slab = models().slab(block.getId().getPath(), side, topBottom, topBottom);
+		slabBlock(block.get(), slab,
+				models().slabTop(block.getId().getPath() + "_top", side, topBottom, topBottom),
+				models().getExistingFile(sourceBlock));
+		simpleBlockItem(block.get(), slab);
+	}
+	
+	private void powerVariableWithItem(RegistryObject<Block> block, ModelFile highPowerModel, ModelFile mediumPowerModel, ModelFile lowPowerModel, ModelFile unpoweredModel)
+	{
+		getVariantBuilder(block.get())
+				.forAllStates(state -> {
+					int power = state.getValue(BlockStateProperties.POWER);
+					ModelFile model;
+					if(power > 10)
+						model = highPowerModel;
+					else if(power > 5)
+						model = mediumPowerModel;
+					else if(power > 0)
+						model = lowPowerModel;
+					else
+						model = unpoweredModel;
+					return ConfiguredModel.builder().modelFile(model).build();
+				});
+		simpleBlockItem(block.get(), unpoweredModel);
+	}
+	
+	private void flatItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ResourceLocation> textureProvider)
+	{
+		itemModels().withExistingParent(block.getId().getPath(),
 				new ResourceLocation("item/generated")).texture("layer0",
 				textureProvider.apply(block.getId()));
 	}
@@ -950,5 +1206,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 	public static ResourceLocation vanillaTexture(String path)
 	{
 		return new ResourceLocation(ModelProvider.BLOCK_FOLDER + "/" + path);
+	}
+	
+	public static ResourceLocation id(String path)
+	{
+		return new ResourceLocation(Minestuck.MOD_ID, path);
 	}
 }
