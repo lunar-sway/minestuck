@@ -178,7 +178,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingHurtEvent event)
 	{
-		if(event.getEntity() instanceof Player injuredPlayer)
+		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
 			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
@@ -243,9 +243,13 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public static void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
-		if(modus instanceof HashMapModus)
-			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
+		ServerPlayer player = event.getPlayer();
+		if(!(player instanceof FakePlayer))
+		{
+			Modus modus = PlayerSavedData.getData(player).getModus();
+			if(modus instanceof HashMapModus)
+				((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
+		}
 	}
 	
 	@SubscribeEvent
@@ -258,7 +262,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(!event.player.level().isClientSide)
+		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			if(data.getTitle() != null)
