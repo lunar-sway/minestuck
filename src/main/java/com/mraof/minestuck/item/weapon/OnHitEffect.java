@@ -6,6 +6,8 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -337,7 +339,7 @@ public interface OnHitEffect
 	/**
 	 * Flings the target in the direction the attacker was facing, and flings the attacker in the opposite direction of their facing
 	 */
-	static OnHitEffect pogoMutualKnockback(float knockback)
+	static OnHitEffect mutualKnockback(float knockback)
 	{
 		return (itemStack, target, attacker) ->
 		{
@@ -346,12 +348,17 @@ public interface OnHitEffect
 			
 			target.push(targetVec.x, targetVec.y, targetVec.z);
 			
-			//TODO all of the commented out lines below are failed attempts to get the player to budge
-			//attacker.setDeltaMovement(attackerVec.x, attackerVec.y * 0.4D, attackerVec.z);
-			//attacker.push(attackerVec.x, attackerVec.y * 0.4D, attackerVec.z);
-			//attacker.push(targetVec.x, targetVec.y, targetVec.z);
-			//attacker.push(targetVec.x, 10, targetVec.z);
-			//attacker.setDeltaMovement(0, 100, 0);
+			//dismount the attacker
+			if(attacker.getVehicle() != null)
+				attacker.dismountTo(attacker.getX(), attacker.getY(), attacker.getZ());
+			
+			attacker.push(attackerVec.x, attackerVec.y, attackerVec.z);
+			
+			if(attacker instanceof Player player)
+			{
+				ClientMovementPacket packet = ClientMovementPacket.createPacket(player, attackerVec);
+				MSPacketHandler.sendToPlayer(packet, (ServerPlayer) player);
+			}
 		};
 	}
 	
