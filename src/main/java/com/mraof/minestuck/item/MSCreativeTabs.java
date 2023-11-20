@@ -367,6 +367,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADE_STONE_CRUXITE_ORE.get());
 		output.accept(MSItems.PINK_STONE_CRUXITE_ORE.get());
 		output.accept(MSItems.MYCELIUM_STONE_CRUXITE_ORE.get());
+		output.accept(MSItems.CHHURPI_CRUXITE_ORE.get());
 		output.accept(MSItems.STONE_URANIUM_ORE.get());
 		output.accept(MSItems.DEEPSLATE_URANIUM_ORE.get());
 		output.accept(MSItems.NETHERRACK_URANIUM_ORE.get());
@@ -377,6 +378,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.SHADE_STONE_URANIUM_ORE.get());
 		output.accept(MSItems.PINK_STONE_URANIUM_ORE.get());
 		output.accept(MSItems.MYCELIUM_STONE_URANIUM_ORE.get());
+		output.accept(MSItems.CHHURPI_URANIUM_ORE.get());
 		output.accept(MSItems.NETHERRACK_COAL_ORE.get());
 		output.accept(MSItems.SHADE_STONE_COAL_ORE.get());
 		output.accept(MSItems.PINK_STONE_COAL_ORE.get());
@@ -478,6 +480,18 @@ public final class MSCreativeTabs
 		output.accept(MSItems.BRIGHT_DENSE_CLOUD.get());
 		output.accept(MSItems.SUGAR_CUBE.get());
 		output.accept(MSItems.NATIVE_SULFUR.get());
+		output.accept(MSItems.SWISS_CHEESE.get());
+		output.accept(MSItems.SMOOTH_SWISS_CHEESE.get());
+		output.accept(MSItems.AMERICAN_CHEESE.get());
+		output.accept(MSItems.SMOOTH_AMERICAN_CHEESE.get());
+		output.accept(MSItems.CHHURPI.get());
+		output.accept(MSItems.CHHURPI_BRICKS.get());
+		output.accept(MSItems.CHISELED_CHHURPI_BRICKS.get());
+		output.accept(MSItems.CRACKED_CHHURPI_BRICKS.get());
+		output.accept(MSItems.CHEESY_CHHURPI_BRICKS.get());
+		output.accept(MSItems.CHHURPI_PILLAR.get());
+		output.accept(MSItems.FETA_CHEESE.get());
+		output.accept(MSItems.CHEESE_PATH.get());
 		
 		output.accept(MSItems.GLOWING_LOG.get());
 		output.accept(MSItems.SHADEWOOD_LOG.get());
@@ -574,6 +588,15 @@ public final class MSCreativeTabs
 		output.accept(MSItems.END_PLANKS_STAIRS.get());
 		output.accept(MSItems.DEAD_PLANKS_STAIRS.get());
 		output.accept(MSItems.TREATED_PLANKS_STAIRS.get());
+		output.accept(MSItems.SWISS_CHEESE_STAIRS.get());
+		output.accept(MSItems.SMOOTH_SWISS_CHEESE_STAIRS.get());
+		output.accept(MSItems.AMERICAN_CHEESE_STAIRS.get());
+		output.accept(MSItems.SMOOTH_AMERICAN_CHEESE_STAIRS.get());
+		output.accept(MSItems.CHHURPI_STAIRS.get());
+		output.accept(MSItems.CHHURPI_BRICK_STAIRS.get());
+		output.accept(MSItems.CHISELED_CHHURPI_BRICK_STAIRS.get());
+		output.accept(MSItems.CRACKED_CHHURPI_BRICK_STAIRS.get());
+		output.accept(MSItems.CHEESY_CHHURPI_BRICK_STAIRS.get());
 		
 		output.accept(MSItems.COARSE_STONE_SLAB.get());
 		output.accept(MSItems.COARSE_STONE_BRICK_SLAB.get());
@@ -596,6 +619,21 @@ public final class MSCreativeTabs
 		output.accept(MSItems.FROST_BRICK_SLAB.get());
 		output.accept(MSItems.SHADE_SLAB.get());
 		output.accept(MSItems.SHADE_BRICK_SLAB.get());
+		output.accept(MSItems.SWISS_CHEESE_SLAB.get());
+		output.accept(MSItems.SMOOTH_SWISS_CHEESE_SLAB.get());
+		output.accept(MSItems.AMERICAN_CHEESE_SLAB.get());
+		output.accept(MSItems.SMOOTH_AMERICAN_CHEESE_SLAB.get());
+		output.accept(MSItems.CHHURPI_SLAB.get());
+		output.accept(MSItems.CHHURPI_BRICK_SLAB.get());
+		output.accept(MSItems.CHISELED_CHHURPI_BRICK_SLAB.get());
+		output.accept(MSItems.CRACKED_CHHURPI_BRICK_SLAB.get());
+		output.accept(MSItems.CHEESY_CHHURPI_BRICK_SLAB.get());
+		
+		output.accept(MSItems.CHHURPI_WALL.get());
+		output.accept(MSItems.CHHURPI_BRICK_WALL.get());
+		output.accept(MSItems.CHISELED_CHHURPI_BRICK_WALL.get());
+		output.accept(MSItems.CRACKED_CHHURPI_BRICK_WALL.get());
+		output.accept(MSItems.CHEESY_CHHURPI_BRICK_WALL.get());
 		
 		output.accept(MSItems.TRAJECTORY_BLOCK.get());
 		output.accept(MSItems.STAT_STORER.get());

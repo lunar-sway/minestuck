@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/cheesy_chhurpi_bricks",
+    "side": "minestuck:block/cheesy_chhurpi_bricks",
+    "top": "minestuck:block/cheesy_chhurpi_bricks"
+  }
+}

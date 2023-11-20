@@ -81,6 +81,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(PINK_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(MYCELIUM_STONE_CRUXITE_ORE.get(), this::cruxiteOreDrop);
+		add(CHHURPI_CRUXITE_ORE.get(), this::cruxiteOreDrop);
 		add(STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(DEEPSLATE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(COBBLESTONE_URANIUM_ORE.get(), this::uraniumOreDrop);
@@ -91,6 +92,7 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		add(SHADE_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(PINK_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
 		add(MYCELIUM_STONE_URANIUM_ORE.get(), this::uraniumOreDrop);
+		add(CHHURPI_URANIUM_ORE.get(), this::uraniumOreDrop);
 		
 		add(NETHERRACK_COAL_ORE.get(), this::coalOreDrop);
 		add(SHADE_STONE_COAL_ORE.get(), this::coalOreDrop);
@@ -218,6 +220,18 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SUGAR_CUBE.get());
 		dropSelf(SPIKES.get());
 		dropSelf(NATIVE_SULFUR.get());
+		dropSelf(SWISS_CHEESE.get());
+		dropSelf(SMOOTH_SWISS_CHEESE.get());
+		dropSelf(AMERICAN_CHEESE.get());
+		dropSelf(SMOOTH_AMERICAN_CHEESE.get());
+		dropSelf(FETA_CHEESE.get());
+		dropSelf(CHHURPI.get());
+		dropSelf(CHHURPI_BRICKS.get());
+		dropSelf(CHISELED_CHHURPI_BRICKS.get());
+		dropSelf(CRACKED_CHHURPI_BRICKS.get());
+		dropSelf(CHEESY_CHHURPI_BRICKS.get());
+		dropSelf(CHHURPI_PILLAR.get());
+		dropSelf(CHEESE_PATH.get());
 		
 		dropSelf(GLOWING_LOG.get());
 		dropSelf(FROST_LOG.get());
@@ -402,6 +416,15 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(FLOWERY_MOSSY_STONE_BRICK_STAIRS.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_BASE.get());
 		dropSelf(STEEP_GREEN_STONE_BRICK_STAIRS_TOP.get());
+		dropSelf(SWISS_CHEESE_STAIRS.get());
+		dropSelf(SMOOTH_SWISS_CHEESE_STAIRS.get());
+		dropSelf(AMERICAN_CHEESE_STAIRS.get());
+		dropSelf(SMOOTH_AMERICAN_CHEESE_STAIRS.get());
+		dropSelf(CHHURPI_STAIRS.get());
+		dropSelf(CHHURPI_BRICK_STAIRS.get());
+		dropSelf(CHISELED_CHHURPI_BRICK_STAIRS.get());
+		dropSelf(CRACKED_CHHURPI_BRICK_STAIRS.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_STAIRS.get());
 		dropSelf(BLACK_CHESS_BRICK_SLAB.get());
 		dropSelf(DARK_GRAY_CHESS_BRICK_SLAB.get());
 		dropSelf(LIGHT_GRAY_CHESS_BRICK_SLAB.get());
@@ -429,6 +452,20 @@ public final class MSBlockLootTables extends BlockLootSubProvider
 		dropSelf(SHADE_BRICK_SLAB.get());
 		dropSelf(COARSE_STONE_SLAB.get());
 		dropSelf(COARSE_STONE_BRICK_SLAB.get());
+		dropSelf(SWISS_CHEESE_SLAB.get());
+		dropSelf(SMOOTH_SWISS_CHEESE_SLAB.get());
+		dropSelf(AMERICAN_CHEESE_SLAB.get());
+		dropSelf(SMOOTH_AMERICAN_CHEESE_SLAB.get());
+		dropSelf(CHHURPI_SLAB.get());
+		dropSelf(CHHURPI_BRICK_SLAB.get());
+		dropSelf(CHISELED_CHHURPI_BRICK_SLAB.get());
+		dropSelf(CRACKED_CHHURPI_BRICK_SLAB.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_SLAB.get());
+		dropSelf(CHHURPI_WALL.get());
+		dropSelf(CHHURPI_BRICK_WALL.get());
+		dropSelf(CHISELED_CHHURPI_BRICK_WALL.get());
+		dropSelf(CRACKED_CHHURPI_BRICK_WALL.get());
+		dropSelf(CHEESY_CHHURPI_BRICK_WALL.get());
 		
 		dropSelf(TRAJECTORY_BLOCK.get());
 		dropSelf(STAT_STORER.get());

@@ -58,6 +58,7 @@ public class MSTags
 		public static final TagKey<Block> DIAMOND_ORES = tag("ores/diamond");
 		public static final TagKey<Block> CRUXITE_STORAGE_BLOCKS = tag("storage_blocks/cruxite");
 		public static final TagKey<Block> END_SAPLING_DIRT = tag("end_sapling_dirt");
+		public static final TagKey<Block> CHEESE_PLANT_DIRT = tag("cheese_plant_dirt");
 		public static final TagKey<Block> ROTATOR_WHITELISTED = tag("rule_exempt_rotatable");
 		public static final TagKey<Block> PLATFORM_ABSORBING = tag("platform_absorbing");
 		public static final TagKey<Block> PUSHABLE_BLOCK_REPLACEABLE = tag("portable_block_replaceable");

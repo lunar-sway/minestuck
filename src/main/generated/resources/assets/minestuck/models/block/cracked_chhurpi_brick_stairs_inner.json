@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "minestuck:block/cracked_chhurpi_bricks",
+    "side": "minestuck:block/cracked_chhurpi_bricks",
+    "top": "minestuck:block/cracked_chhurpi_bricks"
+  }
+}

@@ -202,6 +202,34 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		needsWoodPickaxe(CASSETTE_PLAYER.get());
 		needsWoodPickaxe(PARCEL_PYXIS.get(), PYXIS_LID.get());
 		
+		needsWoodPickaxe(CHHURPI.get());
+		needsWoodPickaxe(CHHURPI_STAIRS.get());
+		needsWoodPickaxe(CHHURPI_SLAB.get());
+		needsWoodPickaxe(CHHURPI_WALL.get());
+		needsWoodPickaxe(CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHISELED_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CRACKED_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICKS.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_WALL.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_STAIRS.get());
+		needsWoodPickaxe(CHEESY_CHHURPI_BRICK_SLAB.get());
+		needsWoodPickaxe(CHHURPI_PILLAR.get());
+		
+		wall(CHHURPI_WALL.get());
+		wall(CHHURPI_BRICK_WALL.get());
+		wall(CHISELED_CHHURPI_BRICK_WALL.get());
+		wall(CRACKED_CHHURPI_BRICK_WALL.get());
+		wall(CHEESY_CHHURPI_BRICK_WALL.get());
+		
 		tag(ExtraForgeTags.Blocks.URANIUM_ORES).addTag(URANIUM_ORES);
 		tag(ExtraForgeTags.Blocks.URANIUM_STORAGE_BLOCKS).add(URANIUM_BLOCK.get());
 		tag(ExtraForgeTags.Blocks.TERRACOTTA).add(Blocks.TERRACOTTA, Blocks.BLACK_GLAZED_TERRACOTTA, Blocks.BLACK_TERRACOTTA, Blocks.BLUE_GLAZED_TERRACOTTA, Blocks.BLUE_TERRACOTTA, Blocks.BROWN_GLAZED_TERRACOTTA, Blocks.BROWN_TERRACOTTA, Blocks.CYAN_GLAZED_TERRACOTTA, Blocks.CYAN_TERRACOTTA, Blocks.GRAY_GLAZED_TERRACOTTA, Blocks.GRAY_TERRACOTTA, Blocks.GREEN_GLAZED_TERRACOTTA, Blocks.GREEN_TERRACOTTA, Blocks.LIGHT_BLUE_GLAZED_TERRACOTTA, Blocks.LIGHT_BLUE_TERRACOTTA, Blocks.LIGHT_GRAY_GLAZED_TERRACOTTA, Blocks.LIGHT_GRAY_TERRACOTTA, Blocks.LIME_GLAZED_TERRACOTTA, Blocks.LIME_TERRACOTTA, Blocks.MAGENTA_GLAZED_TERRACOTTA, Blocks.MAGENTA_TERRACOTTA, Blocks.ORANGE_GLAZED_TERRACOTTA, Blocks.ORANGE_TERRACOTTA, Blocks.PINK_GLAZED_TERRACOTTA, Blocks.PINK_TERRACOTTA, Blocks.PURPLE_GLAZED_TERRACOTTA, Blocks.PURPLE_TERRACOTTA, Blocks.RED_GLAZED_TERRACOTTA, Blocks.RED_TERRACOTTA, Blocks.WHITE_GLAZED_TERRACOTTA, Blocks.WHITE_TERRACOTTA, Blocks.YELLOW_GLAZED_TERRACOTTA, Blocks.YELLOW_TERRACOTTA);
@@ -234,6 +262,7 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 		tag(MSTags.Blocks.DIAMOND_ORES).add(PINK_STONE_DIAMOND_ORE.get());
 		tag(CRUXITE_STORAGE_BLOCKS).add(CRUXITE_BLOCK.get());
 		tag(END_SAPLING_DIRT).addTag(Tags.Blocks.END_STONES).add(END_GRASS.get());
+		tag(CHEESE_PLANT_DIRT).add(SWISS_CHEESE.get()).add(SMOOTH_SWISS_CHEESE.get()).add(AMERICAN_CHEESE.get()).add(SMOOTH_AMERICAN_CHEESE.get());
 		tag(ROTATOR_WHITELISTED).add(Blocks.REPEATER, Blocks.COMPARATOR, AND_GATE_BLOCK.get(), OR_GATE_BLOCK.get(), XOR_GATE_BLOCK.get(), NAND_GATE_BLOCK.get(), NOR_GATE_BLOCK.get(), XNOR_GATE_BLOCK.get(), AREA_EFFECT_BLOCK.get(), WIRELESS_REDSTONE_TRANSMITTER.get(), REMOTE_COMPARATOR.get(), PLATFORM_GENERATOR.get(), ITEM_MAGNET.get());
 		tag(PLATFORM_ABSORBING).addTag(Tags.Blocks.OBSIDIAN).add(Blocks.BEDROCK, Blocks.NETHER_PORTAL, Blocks.END_PORTAL, Blocks.END_PORTAL_FRAME, Blocks.REINFORCED_DEEPSLATE, PUSHABLE_BLOCK.get()); //excludes Platform Receptacle blocks as they only absorb conditionally
 		tag(PUSHABLE_BLOCK_REPLACEABLE).addTags(SAPLINGS, FLOWERS);
@@ -269,6 +298,21 @@ public final class MinestuckBlockTagsProvider extends BlockTagsProvider
 			if(!block.defaultBlockState().requiresCorrectToolForDrops())
 				throw new IllegalStateException("You forgot to set requiresCorrectToolForDrops for block %s. It is needed to prevent drops when mining without any tool.".formatted(block));
 		}
+	}
+	
+	private void wall(Block... blocks)
+	{
+		tag(WALLS).add(blocks);
+	}
+	
+	private void fence(Block... blocks)
+	{
+		tag(FENCES).add(blocks);
+	}
+	
+	private void fenceGate(Block... blocks)
+	{
+		tag(FENCE_GATES).add(blocks);
 	}
 	
 	@Override

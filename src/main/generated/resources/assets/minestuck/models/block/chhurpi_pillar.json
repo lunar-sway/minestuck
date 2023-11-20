@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/chhurpi_pillar_top",
+    "side": "minestuck:block/chhurpi_pillar_side"
+  }
+}

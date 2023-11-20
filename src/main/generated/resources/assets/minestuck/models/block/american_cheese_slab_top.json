@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "minestuck:block/american_cheese",
+    "side": "minestuck:block/american_cheese",
+    "top": "minestuck:block/american_cheese"
+  }
+}
