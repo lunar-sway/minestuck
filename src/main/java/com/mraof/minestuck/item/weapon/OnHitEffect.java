@@ -334,6 +334,27 @@ public interface OnHitEffect
 		};
 	}
 	
+	/**
+	 * Flings the target in the direction the attacker was facing, and flings the attacker in the opposite direction of their facing
+	 */
+	static OnHitEffect pogoMutualKnockback(float knockback)
+	{
+		return (itemStack, target, attacker) ->
+		{
+			Vec3 targetVec = attacker.getLookAngle().scale(1F + knockback);
+			Vec3 attackerVec = targetVec.reverse();
+			
+			target.push(targetVec.x, targetVec.y, targetVec.z);
+			
+			//TODO all of the commented out lines below are failed attempts to get the player to budge
+			//attacker.setDeltaMovement(attackerVec.x, attackerVec.y * 0.4D, attackerVec.z);
+			//attacker.push(attackerVec.x, attackerVec.y * 0.4D, attackerVec.z);
+			//attacker.push(targetVec.x, targetVec.y, targetVec.z);
+			//attacker.push(targetVec.x, 10, targetVec.z);
+			//attacker.setDeltaMovement(0, 100, 0);
+		};
+	}
+	
 	static OnHitEffect userPotionEffect(Supplier<MobEffectInstance> effect)
 	{
 		return (stack, target, attacker) -> attacker.addEffect(effect.get());

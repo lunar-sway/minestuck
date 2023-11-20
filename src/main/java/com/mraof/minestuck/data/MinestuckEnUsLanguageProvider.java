@@ -853,6 +853,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LANEC, "lanec");
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
+		addItem(MSItems.POGO_LANCE, "Pogo Lance");
 		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
