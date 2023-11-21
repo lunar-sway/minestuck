@@ -354,10 +354,10 @@ public interface OnHitEffect
 			
 			attacker.push(attackerVec.x, attackerVec.y, attackerVec.z);
 			
-			if(attacker instanceof Player player)
+			if(attacker instanceof ServerPlayer player)
 			{
-				ClientMovementPacket packet = ClientMovementPacket.createPacket(player, attackerVec);
-				MSPacketHandler.sendToPlayer(packet, (ServerPlayer) player);
+				ClientMovementPacket packet = ClientMovementPacket.createPacket(attackerVec);
+				MSPacketHandler.sendToPlayer(packet, player);
 			}
 		};
 	}
