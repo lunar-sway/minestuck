@@ -307,7 +307,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CHISELED_GREEN_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.HORIZONTAL_GREEN_STONE_BRICKS);
 		simpleBlockWithItem(MSBlocks.VERTICAL_GREEN_STONE_BRICKS);
-		horizontalWithItem(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER,
+		simpleHorizontalWithItem(MSBlocks.GREEN_STONE_BRICK_EMBEDDED_LADDER,
 				id -> models().getExistingFile(id));
 		trimWithItem(MSBlocks.GREEN_STONE_BRICK_TRIM,
 				id -> models().cubeColumn(
@@ -681,42 +681,42 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture("treated_planks")));
 		
 		//Ladders
-		horizontal(MSBlocks.BLOOD_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.BLOOD_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.BLOOD_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.BREATH_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.BREATH_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.BREATH_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.DOOM_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.DOOM_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.DOOM_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.HEART_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.HEART_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.HEART_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.HOPE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.HOPE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.HOPE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.LIFE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.LIFE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.LIFE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.LIGHT_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.LIGHT_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.LIGHT_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.MIND_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.MIND_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.MIND_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.RAGE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.RAGE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.RAGE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.SPACE_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.SPACE_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.SPACE_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.TIME_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.TIME_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.TIME_ASPECT_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.VOID_ASPECT_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.VOID_ASPECT_LADDER, this::ladder);
 		flatItem(MSItems.VOID_ASPECT_LADDER, MSBlockStateProvider::texture);
 		
-		horizontal(MSBlocks.GLOWING_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.GLOWING_LADDER, this::ladder);
 		flatItem(MSItems.GLOWING_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.FROST_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.FROST_LADDER, this::ladder);
 		flatItem(MSItems.FROST_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.RAINBOW_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.RAINBOW_LADDER, this::ladder);
 		flatItem(MSItems.RAINBOW_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.END_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.END_LADDER, this::ladder);
 		flatItem(MSItems.END_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.DEAD_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.DEAD_LADDER, this::ladder);
 		flatItem(MSItems.DEAD_LADDER, MSBlockStateProvider::texture);
-		horizontal(MSBlocks.TREATED_LADDER, this::ladder);
+		simpleHorizontal(MSBlocks.TREATED_LADDER, this::ladder);
 		flatItem(MSItems.TREATED_LADDER, MSBlockStateProvider::texture);
 		
 		//Land Plant Blocks
@@ -739,7 +739,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
-		horizontal(MSBlocks.ATTACHED_STRAWBERRY_STEM, 270,
+		simpleHorizontal(MSBlocks.ATTACHED_STRAWBERRY_STEM, 270,
 				id -> models().withExistingParent(id.getPath(), "block/attached_melon_stem").renderType("cutout"));
 		
 		flatItem(MSItems.TALL_END_GRASS, id -> texture(id.withSuffix("_top")));
@@ -752,10 +752,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.COAGULATED_BLOOD);
 		unflippedColumnWithItem(MSBlocks.PIPE, this::existing);
 		simpleBlockWithItem(MSBlocks.PIPE_INTERSECTION);
-		horizontalWithItem(MSBlocks.PARCEL_PYXIS, this::existing);
-		horizontalWithItem(MSBlocks.PYXIS_LID,
+		simpleHorizontalWithItem(MSBlocks.PARCEL_PYXIS, this::existing);
+		simpleHorizontalWithItem(MSBlocks.PYXIS_LID,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.NAKAGATOR_STATUE, this::existing);
+		simpleHorizontalWithItem(MSBlocks.NAKAGATOR_STATUE, this::existing);
 		
 		//Structure Land Blocks
 		stairsWithItem(MSBlocks.BLACK_CHESS_BRICK_STAIRS, "black_chess_brick", texture(MSBlocks.BLACK_CHESS_BRICKS));
@@ -788,8 +788,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.DEAD_PLANKS_STAIRS, MSBlocks.DEAD_PLANKS);
 		stairsWithItem(MSBlocks.TREATED_PLANKS_STAIRS, MSBlocks.TREATED_PLANKS);
 		
-		horizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
-		horizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
+		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_BASE, this::existing);
+		simpleHorizontalWithItem(MSBlocks.STEEP_GREEN_STONE_BRICK_STAIRS_TOP, this::existing);
 		
 		slabWithItem(MSBlocks.BLACK_CHESS_BRICK_SLAB, MSBlocks.BLACK_CHESS_BRICKS);
 		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICKS);
@@ -860,27 +860,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		{
 			ModelFile poweredModel = models().getExistingFile(id("wireless_redstone_transmitter_powered"));
 			ModelFile unpoweredModel = models().getExistingFile(id("wireless_redstone_transmitter_unpowered"));
-			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get())
-					.forAllStatesExcept(state -> {
-						Direction direction = state.getValue(WirelessRedstoneTransmitterBlock.FACING);
-						boolean powered = state.getValue(WirelessRedstoneTransmitterBlock.POWERED);
-						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
-								.rotationY(((int) direction.toYRot() + 180) % 360)
-								.build();
-					}, BlockStateProperties.POWER);
+			horizontal(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER,
+					state -> state.getValue(WirelessRedstoneTransmitterBlock.POWERED) ? poweredModel : unpoweredModel,
+					BlockStateProperties.POWER);
 			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get(), unpoweredModel);
 		}
 		{
 			ModelFile poweredModel = models().getExistingFile(id("wireless_redstone_receiver_powered"));
 			ModelFile unpoweredModel = models().getExistingFile(id("wireless_redstone_receiver_unpowered"));
-			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get())
-					.forAllStatesExcept(state -> {
-						Direction direction = state.getValue(WirelessRedstoneReceiverBlock.FACING);
-						boolean powered = state.getValue(WirelessRedstoneReceiverBlock.POWERED);
-						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
-								.rotationY(((int) direction.toYRot() + 180) % 360)
-								.build();
-					}, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWER);
+			horizontal(MSBlocks.WIRELESS_REDSTONE_RECEIVER,
+					state -> state.getValue(WirelessRedstoneReceiverBlock.POWERED) ? poweredModel : unpoweredModel,
+					MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWER);
 			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get(), unpoweredModel);
 		}
 		{
@@ -917,14 +907,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		{
 			ModelFile poweredModel = models().getExistingFile(id("area_effect_block_powered"));
 			ModelFile unpoweredModel = models().getExistingFile(id("area_effect_block_unpowered"));
-			getVariantBuilder(MSBlocks.AREA_EFFECT_BLOCK.get())
-					.forAllStatesExcept(state -> {
-						Direction direction = state.getValue(AreaEffectBlock.FACING);
-						boolean powered = state.getValue(AreaEffectBlock.POWERED);
-						return ConfiguredModel.builder().modelFile(powered ? poweredModel : unpoweredModel)
-								.rotationY(((int) direction.toYRot() + 180) % 360)
-								.build();
-					}, AreaEffectBlock.ALL_MOBS, AreaEffectBlock.SHUT_DOWN);
+			horizontal(MSBlocks.AREA_EFFECT_BLOCK,
+					state -> state.getValue(AreaEffectBlock.POWERED) ? poweredModel : unpoweredModel,
+					AreaEffectBlock.ALL_MOBS, AreaEffectBlock.SHUT_DOWN);
 			simpleBlockItem(MSBlocks.AREA_EFFECT_BLOCK.get(), unpoweredModel);
 		}
 		directionalWithItem(MSBlocks.ROTATOR,
@@ -937,7 +922,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture("rotator_side"),
 						texture("rotator_bottom"),
 						texture("toggler_top")));
-		horizontalWithItem(MSBlocks.STRUCTURE_CORE,
+		simpleHorizontalWithItem(MSBlocks.STRUCTURE_CORE,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
@@ -948,7 +933,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
 		simpleBlockWithItem(MSBlocks.FRAGILE_STONE);
-		horizontalWithItem(MSBlocks.SPIKES, this::existing);
+		simpleHorizontalWithItem(MSBlocks.SPIKES, this::existing);
 		{
 			ModelFile extended = existing(id("retractable_spikes_extended"));
 			ModelFile retracted = models().cubeBottomTop("retractable_spikes_retracted",
@@ -977,17 +962,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
 		
-		horizontalWithItem(MSBlocks.AND_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.AND_GATE_BLOCK,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.OR_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.OR_GATE_BLOCK,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.XOR_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.XOR_GATE_BLOCK,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.NAND_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.NAND_GATE_BLOCK,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.NOR_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.NOR_GATE_BLOCK,
 				id -> models().getExistingFile(id));
-		horizontalWithItem(MSBlocks.XNOR_GATE_BLOCK,
+		simpleHorizontalWithItem(MSBlocks.XNOR_GATE_BLOCK,
 				id -> models().getExistingFile(id));
 		
 		//Core Functional Land Blocks
@@ -1001,54 +986,54 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		//Sburb Machines
 		simpleBlockWithItem(MSBlocks.CRUXTRUDER_LID, this::existing);
-		horizontal(MSBlocks.CRUXTRUDER.CORNER,
+		simpleHorizontal(MSBlocks.CRUXTRUDER.CORNER,
 				id -> existing(id("cruxtruder_base_corner")));
-		horizontal(MSBlocks.CRUXTRUDER.SIDE,
+		simpleHorizontal(MSBlocks.CRUXTRUDER.SIDE,
 				id -> existing(id("cruxtruder_base_side")));
-		horizontal(MSBlocks.CRUXTRUDER.CENTER, this::existing);
-		horizontal(MSBlocks.CRUXTRUDER.TOP_CORNER, this::existing);
-		horizontal(MSBlocks.CRUXTRUDER.TOP_SIDE, this::existing);
-		horizontal(MSBlocks.CRUXTRUDER.TOP_CENTER, this::existing);
-		horizontal(MSBlocks.CRUXTRUDER.TUBE, this::existing);
+		simpleHorizontal(MSBlocks.CRUXTRUDER.CENTER, this::existing);
+		simpleHorizontal(MSBlocks.CRUXTRUDER.TOP_CORNER, this::existing);
+		simpleHorizontal(MSBlocks.CRUXTRUDER.TOP_SIDE, this::existing);
+		simpleHorizontal(MSBlocks.CRUXTRUDER.TOP_CENTER, this::existing);
+		simpleHorizontal(MSBlocks.CRUXTRUDER.TUBE, this::existing);
 		flatItem(MSItems.CRUXTRUDER, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT, this::existing);
-		horizontal(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT, this::existing);
-		horizontal(MSBlocks.TOTEM_LATHE.MIDDLE, this::existing);
-		horizontal(MSBlocks.TOTEM_LATHE.WHEEL, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.MIDDLE, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.WHEEL, this::existing);
 		simpleBlock(MSBlocks.TOTEM_LATHE.DOWEL_ROD.get(), empty("totem_lathe_rod", texture("machine/particle")));
-		horizontal(MSBlocks.TOTEM_LATHE.TOP, this::existing);
-		horizontal(MSBlocks.TOTEM_LATHE.TOP_CORNER, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.TOP, this::existing);
+		simpleHorizontal(MSBlocks.TOTEM_LATHE.TOP_CORNER, this::existing);
 		flatItem(MSItems.TOTEM_LATHE, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.ALCHEMITER.CENTER, this::existing);
-		horizontal(MSBlocks.ALCHEMITER.CORNER, this::existing);
-		horizontal(MSBlocks.ALCHEMITER.LEFT_SIDE, this::existing);
-		horizontal(MSBlocks.ALCHEMITER.RIGHT_SIDE, this::existing);
-		horizontal(MSBlocks.ALCHEMITER.TOTEM_CORNER, this::existing);
+		simpleHorizontal(MSBlocks.ALCHEMITER.CENTER, this::existing);
+		simpleHorizontal(MSBlocks.ALCHEMITER.CORNER, this::existing);
+		simpleHorizontal(MSBlocks.ALCHEMITER.LEFT_SIDE, this::existing);
+		simpleHorizontal(MSBlocks.ALCHEMITER.RIGHT_SIDE, this::existing);
+		simpleHorizontal(MSBlocks.ALCHEMITER.TOTEM_CORNER, this::existing);
 		flatItem(MSItems.ALCHEMITER, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG, this::existing);
-		horizontal(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG, this::existing);
-		horizontal(MSBlocks.PUNCH_DESIGNIX.KEYBOARD, this::existing);
+		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG, this::existing);
+		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG, this::existing);
+		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.KEYBOARD, this::existing);
 		flatItem(MSItems.PUNCH_DESIGNIX, MSBlockStateProvider::itemTexture);
 		
-		horizontalWithItem(MSBlocks.MINI_CRUXTRUDER, this::existing);
-		horizontalWithItem(MSBlocks.MINI_TOTEM_LATHE, 0, this::existing);
-		horizontalWithItem(MSBlocks.MINI_ALCHEMITER, 0, this::existing);
-		horizontalWithItem(MSBlocks.MINI_PUNCH_DESIGNIX, 0, this::existing);
+		simpleHorizontalWithItem(MSBlocks.MINI_CRUXTRUDER, this::existing);
+		simpleHorizontalWithItem(MSBlocks.MINI_TOTEM_LATHE, 0, this::existing);
+		simpleHorizontalWithItem(MSBlocks.MINI_ALCHEMITER, 0, this::existing);
+		simpleHorizontalWithItem(MSBlocks.MINI_PUNCH_DESIGNIX, 0, this::existing);
 		
 		//Misc Machines
-		horizontal(MSBlocks.TRANSPORTALIZER, 0, this::existing);
+		simpleHorizontal(MSBlocks.TRANSPORTALIZER, 0, this::existing);
 		flatItem(MSItems.TRANSPORTALIZER, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.TRANS_PORTALIZER, 0, this::existing);
+		simpleHorizontal(MSBlocks.TRANS_PORTALIZER, 0, this::existing);
 		flatItem(MSItems.TRANS_PORTALIZER, MSBlockStateProvider::itemTexture);
-		horizontalWithItem(MSBlocks.SENDIFICATOR, 0, this::existing);
-		horizontalWithItem(MSBlocks.URANIUM_COOKER, this::existing);
-		horizontalWithItem(MSBlocks.GRIST_COLLECTOR, this::existing);
-		horizontalWithItem(MSBlocks.ANTHVIL, this::existing);
+		simpleHorizontalWithItem(MSBlocks.SENDIFICATOR, 0, this::existing);
+		simpleHorizontalWithItem(MSBlocks.URANIUM_COOKER, this::existing);
+		simpleHorizontalWithItem(MSBlocks.GRIST_COLLECTOR, this::existing);
+		simpleHorizontalWithItem(MSBlocks.ANTHVIL, this::existing);
 		simpleBlockWithItem(MSBlocks.SKAIANET_DENIER,
 				id -> models().cubeColumn(id.getPath(),
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_top"))));
-		horizontalWithItem(MSBlocks.POWER_HUB, this::existing);
+		simpleHorizontalWithItem(MSBlocks.POWER_HUB, this::existing);
 		
 		//Misc Core Objects
 		getVariantBuilder(MSBlocks.CRUXITE_DOWEL.get())
@@ -1058,7 +1043,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				.modelForState().modelFile(models().getExistingFile(id("cruxite_totem"))).addModel();
 		simpleBlock(MSBlocks.EMERGING_CRUXITE_DOWEL.get(),
 				models().getExistingFile(id("cruxtruder_dowel")));
-		horizontal(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER, this::existing);
+		simpleHorizontal(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER, this::existing);
 		
 		//Misc Alchemy Semi-Plants
 		simpleBlock(MSBlocks.GOLD_SEEDS,
@@ -1102,22 +1087,22 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(MSBlocks.STONE_EXPLOSIVE_BUTTON.get(),
 				models().getExistingFile(id("stone_explosive_button_inventory")));
 		
-		horizontal(MSBlocks.BLENDER, this::existing);
+		simpleHorizontal(MSBlocks.BLENDER, this::existing);
 		flatItem(MSItems.BLENDER, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.CHESSBOARD, this::existing);
+		simpleHorizontal(MSBlocks.CHESSBOARD, this::existing);
 		flatItem(MSItems.CHESSBOARD, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.MINI_FROG_STATUE, 0, this::existing);
+		simpleHorizontal(MSBlocks.MINI_FROG_STATUE, 0, this::existing);
 		flatItem(MSItems.MINI_FROG_STATUE, MSBlockStateProvider::itemTexture);
 		flatItem(MSItems.MINI_WIZARD_STATUE, MSBlockStateProvider::itemTexture);
-		horizontal(MSBlocks.MINI_WIZARD_STATUE, this::existing);
-		horizontalWithItem(MSBlocks.MINI_TYPHEUS_STATUE, this::existing);
+		simpleHorizontal(MSBlocks.MINI_WIZARD_STATUE, this::existing);
+		simpleHorizontalWithItem(MSBlocks.MINI_TYPHEUS_STATUE, this::existing);
 		{
 			ModelFile model = empty("horse_clock", vanillaTexture("dark_oak_planks"));
-			horizontal(MSBlocks.HORSE_CLOCK.BOTTOM, $ -> model);
-			horizontal(MSBlocks.HORSE_CLOCK.CENTER, $ -> model);
-			horizontal(MSBlocks.HORSE_CLOCK.TOP, $ -> model);
+			simpleHorizontal(MSBlocks.HORSE_CLOCK.BOTTOM, $ -> model);
+			simpleHorizontal(MSBlocks.HORSE_CLOCK.CENTER, $ -> model);
+			simpleHorizontal(MSBlocks.HORSE_CLOCK.TOP, $ -> model);
 		}
-		horizontal(MSBlocks.MIRROR, this::existing);
+		simpleHorizontal(MSBlocks.MIRROR, this::existing);
 		flatItem(MSItems.MIRROR, MSBlockStateProvider::itemTexture);
 		
 		fluid(MSBlocks.OIL);
@@ -1187,34 +1172,44 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(block.get(), modelProvider.apply(block.getId()));
 	}
 	
-	private void horizontal(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontal(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
-		horizontal(block, 180, modelProvider);
+		simpleHorizontal(block, 180, modelProvider);
 	}
 	
-	private void horizontal(RegistryObject<? extends Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontal(RegistryObject<? extends Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
+		horizontal(block, angleOffset, $ -> model, BlockStateProperties.WATERLOGGED, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED, BlockStateProperties.POWER);
+	}
+	
+	private void horizontal(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	{
+		horizontal(block, 180, modelProvider, ignored);
+	}
+	
+	private void horizontal(RegistryObject<? extends Block> block, int angleOffset, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	{
 		getVariantBuilder(block.get())
 				.forAllStatesExcept(state -> ConfiguredModel.builder()
-								.modelFile(model)
+								.modelFile(modelProvider.apply(state))
 								.rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + angleOffset) % 360)
 								.build(),
-						BlockStateProperties.WATERLOGGED, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED, BlockStateProperties.POWER
+						ignored
 				);
 	}
 	
-	private void horizontalWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontalWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
-		horizontal(block, $ -> model);
+		simpleHorizontal(block, $ -> model);
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void horizontalWithItem(RegistryObject<Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
+	private void simpleHorizontalWithItem(RegistryObject<Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
-		horizontal(block, angleOffset, $ -> model);
+		simpleHorizontal(block, angleOffset, $ -> model);
 		simpleBlockItem(block.get(), model);
 	}
 	
