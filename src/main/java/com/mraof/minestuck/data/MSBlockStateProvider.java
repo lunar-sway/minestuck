@@ -837,32 +837,29 @@ public class MSBlockStateProvider extends BlockStateProvider
 				return models().getExistingFile(modelId);
 		}, BlockStateProperties.POWER);
 		simpleBlockItem(MSBlocks.TRAJECTORY_BLOCK.get(),
-				models().getExistingFile(MSBlocks.TRAJECTORY_BLOCK.getId().withSuffix("_vertical_unpowered")));
+				models().getExistingFile(id("trajectory_block_vertical_unpowered")));
 		{
-			ResourceLocation id = MSBlocks.STAT_STORER.getId();
 			Function<ResourceLocation, ModelFile> modelProvider = modelId -> models().cubeBottomTop(modelId.getPath(),
 					texture("redstone_machine_block"),
 					texture(modelId),
 					texture(modelId));
 			powerVariableWithItem(MSBlocks.STAT_STORER,
-					modelProvider.apply(id.withSuffix("_high_power")),
-					modelProvider.apply(id.withSuffix("_medium_power")),
-					modelProvider.apply(id.withSuffix("_low_power")),
-					modelProvider.apply(id.withSuffix("_unpowered")));
+					modelProvider.apply(id("stat_storer_high_power")),
+					modelProvider.apply(id("stat_storer_medium_power")),
+					modelProvider.apply(id("stat_storer_low_power")),
+					modelProvider.apply(id("stat_storer_unpowered")));
 		}
 		{
-			ResourceLocation id = MSBlocks.REMOTE_OBSERVER.getId();
-			ModelFile powered = cubeAll(id.withSuffix("_powered"));
-			ModelFile unpowered = cubeAll(id.withSuffix("_unpowered"));
+			ModelFile powered = cubeAll(id("remote_observer_powered"));
+			ModelFile unpowered = cubeAll(id("remote_observer_unpowered"));
 			getVariantBuilder(MSBlocks.REMOTE_OBSERVER.get())
 					.partialState().with(RemoteObserverBlock.POWERED, true).modelForState().modelFile(powered).addModel()
 					.partialState().with(RemoteObserverBlock.POWERED, false).modelForState().modelFile(unpowered).addModel();
 			simpleBlockItem(MSBlocks.REMOTE_OBSERVER.get(), unpowered);
 		}
 		{
-			ResourceLocation id = MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.getId();
-			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
-			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			ModelFile poweredModel = models().getExistingFile(id("wireless_redstone_transmitter_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id("wireless_redstone_transmitter_unpowered"));
 			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get())
 					.forAllStatesExcept(state -> {
 						Direction direction = state.getValue(WirelessRedstoneTransmitterBlock.FACING);
@@ -874,9 +871,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_TRANSMITTER.get(), unpoweredModel);
 		}
 		{
-			ResourceLocation id = MSBlocks.WIRELESS_REDSTONE_RECEIVER.getId();
-			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
-			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			ModelFile poweredModel = models().getExistingFile(id("wireless_redstone_receiver_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id("wireless_redstone_receiver_unpowered"));
 			getVariantBuilder(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get())
 					.forAllStatesExcept(state -> {
 						Direction direction = state.getValue(WirelessRedstoneReceiverBlock.FACING);
@@ -888,21 +884,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 			simpleBlockItem(MSBlocks.WIRELESS_REDSTONE_RECEIVER.get(), unpoweredModel);
 		}
 		{
-			ResourceLocation id = MSBlocks.SOLID_SWITCH.getId();
-			ModelFile powered = cubeAll(id.withSuffix("_powered"));
-			ModelFile unpowered = cubeAll(id.withSuffix("_unpowered"));
+			ModelFile powered = cubeAll(id("solid_switch_powered"));
+			ModelFile unpowered = cubeAll(id("solid_switch_unpowered"));
 			getVariantBuilder(MSBlocks.SOLID_SWITCH.get())
 					.partialState().with(SolidSwitchBlock.POWERED, true).modelForState().modelFile(powered).addModel()
 					.partialState().with(SolidSwitchBlock.POWERED, false).modelForState().modelFile(unpowered).addModel();
 			simpleBlockItem(MSBlocks.SOLID_SWITCH.get(), unpowered);
 		}
 		{
-			ResourceLocation id = MSBlocks.VARIABLE_SOLID_SWITCH.getId();
 			powerVariableWithItem(MSBlocks.VARIABLE_SOLID_SWITCH,
-					cubeAll(id.withSuffix("_high_power")),
-					cubeAll(id.withSuffix("_medium_power")),
-					cubeAll(id.withSuffix("_low_power")),
-					cubeAll(id.withSuffix("_unpowered")));
+					cubeAll(id("variable_solid_switch_high_power")),
+					cubeAll(id("variable_solid_switch_medium_power")),
+					cubeAll(id("variable_solid_switch_low_power")),
+					cubeAll(id("variable_solid_switch_unpowered")));
 		}
 		{
 			ModelFile highPower = cubeAll(id("timed_solid_switch_high_power"));
@@ -913,20 +907,16 @@ public class MSBlockStateProvider extends BlockStateProvider
 			powerVariableWithItem(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
 		}
 		{
-			ResourceLocation id = MSBlocks.SUMMONER.getId();
-			ModelFile triggered = cubeAll(id.withSuffix("_triggered"));
-			ModelFile untriggered = cubeAll(id.withSuffix("_untriggered"));
+			ModelFile triggered = cubeAll(id("summoner_triggered"));
+			ModelFile untriggered = cubeAll(id("summoner_untriggered"));
 			getVariantBuilder(MSBlocks.SUMMONER.get())
-					.partialState().with(SummonerBlock.TRIGGERED, true).modelForState()
-					.modelFile(triggered).addModel()
-					.partialState().with(SummonerBlock.TRIGGERED, false).modelForState()
-					.modelFile(untriggered).addModel();
+					.partialState().with(SummonerBlock.TRIGGERED, true).modelForState().modelFile(triggered).addModel()
+					.partialState().with(SummonerBlock.TRIGGERED, false).modelForState().modelFile(untriggered).addModel();
 			simpleBlockItem(MSBlocks.SUMMONER.get(), untriggered);
 		}
 		{
-			ResourceLocation id = MSBlocks.AREA_EFFECT_BLOCK.getId();
-			ModelFile poweredModel = models().getExistingFile(id.withSuffix("_powered"));
-			ModelFile unpoweredModel = models().getExistingFile(id.withSuffix("_unpowered"));
+			ModelFile poweredModel = models().getExistingFile(id("area_effect_block_powered"));
+			ModelFile unpoweredModel = models().getExistingFile(id("area_effect_block_unpowered"));
 			getVariantBuilder(MSBlocks.AREA_EFFECT_BLOCK.get())
 					.forAllStatesExcept(state -> {
 						Direction direction = state.getValue(AreaEffectBlock.FACING);
@@ -946,7 +936,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cubeBottomTop(id.getPath(),
 						texture("rotator_side"),
 						texture("rotator_bottom"),
-						texture(id.withSuffix("_top"))));
+						texture("toggler_top")));
 		horizontalWithItem(MSBlocks.STRUCTURE_CORE,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture(id.withSuffix("_side")),
@@ -960,25 +950,22 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.FRAGILE_STONE);
 		horizontalWithItem(MSBlocks.SPIKES, this::existing);
 		{
-			ResourceLocation id = MSBlocks.RETRACTABLE_SPIKES.getId();
-			ModelFile extended = existing(id.withSuffix("_extended"));
-			ModelFile retracted = models().cubeBottomTop(id.withSuffix("_retracted").getPath(),
+			ModelFile extended = existing(id("retractable_spikes_extended"));
+			ModelFile retracted = models().cubeBottomTop("retractable_spikes_retracted",
 					texture("spikes"),
 					texture("spikes"),
-					texture(id.withSuffix("_top_retracted")));
+					texture("retractable_spikes_top_retracted"));
 			getVariantBuilder(MSBlocks.RETRACTABLE_SPIKES.get())
 					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(extended).addModel()
 					.partialState().with(RetractableSpikesBlock.POWERED, false).modelForState().modelFile(retracted).addModel();
 			simpleBlockItem(MSBlocks.RETRACTABLE_SPIKES.get(), retracted);
 		}
 		{
-			ResourceLocation id = MSBlocks.BLOCK_PRESSURE_PLATE.getId();
-			ResourceLocation retractedId = id.withSuffix("_retracted");
-			ModelFile retracted = models().cubeBottomTop(retractedId.getPath(),
-					texture(id.withSuffix("_side")),
-					texture(id.withSuffix("_bottom")),
-					texture(id.withSuffix("_top")));
-			ModelFile extended = existing(id.withSuffix("_extended"));
+			ModelFile retracted = models().cubeBottomTop("block_pressure_plate_retracted",
+					texture("block_pressure_plate_side"),
+					texture("block_pressure_plate_bottom"),
+					texture("block_pressure_plate_top"));
+			ModelFile extended = existing(id("block_pressure_plate_extended"));
 			getVariantBuilder(MSBlocks.BLOCK_PRESSURE_PLATE.get())
 					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(retracted).addModel()
 					.partialState().with(RetractableSpikesBlock.POWERED, false).modelForState().modelFile(extended).addModel();
@@ -1111,9 +1098,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 			}
 		}
 		simpleBlockItem(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.get(),
-				models().getExistingFile(MSBlocks.WOODEN_EXPLOSIVE_BUTTON.getId().withSuffix("_inventory")));
+				models().getExistingFile(id("wooden_explosive_button_inventory")));
 		simpleBlockItem(MSBlocks.STONE_EXPLOSIVE_BUTTON.get(),
-				models().getExistingFile(MSBlocks.STONE_EXPLOSIVE_BUTTON.getId().withSuffix("_inventory")));
+				models().getExistingFile(id("stone_explosive_button_inventory")));
 		
 		horizontal(MSBlocks.BLENDER, this::existing);
 		flatItem(MSItems.BLENDER, MSBlockStateProvider::itemTexture);
