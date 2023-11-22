@@ -820,24 +820,29 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.DEAD_PLANKS_SLAB, MSBlocks.DEAD_PLANKS);
 		slabWithItem(MSBlocks.TREATED_PLANKS_SLAB, MSBlocks.TREATED_PLANKS);
 		
-		directional(MSBlocks.TRAJECTORY_BLOCK, state -> {
-			Direction direction = state.getValue(TrajectoryBlock.FACING);
-			boolean powered = state.getValue(TrajectoryBlock.POWERED);
-			ResourceLocation modelId = MSBlocks.TRAJECTORY_BLOCK.getId();
-			modelId = direction.getAxis() == Direction.Axis.Y ? modelId.withSuffix("_vertical") : modelId.withSuffix("_horizontal");
-			ResourceLocation topTexture = texture(modelId.withSuffix("_top"));
-			modelId = powered ? modelId.withSuffix("_powered") : modelId.withSuffix("_unpowered");
-			topTexture = powered ? topTexture.withSuffix("_powered") : topTexture.withSuffix("_unpowered");
-			
-			if(direction.getAxis() == Direction.Axis.Y)
-				return models().cubeColumn(modelId.getPath(),
-						texture("redstone_machine_block"),
-						topTexture);
-			else
-				return models().getExistingFile(modelId);
-		}, BlockStateProperties.POWER);
-		simpleBlockItem(MSBlocks.TRAJECTORY_BLOCK.get(),
-				models().getExistingFile(id("trajectory_block_vertical_unpowered")));
+		{
+			ModelFile verticalUnpowered = models()
+					.cubeColumn("trajectory_block_vertical_unpowered",
+					texture("redstone_machine_block"),
+					texture("trajectory_block_vertical_top_unpowered"));
+			ModelFile verticalPowered = models()
+					.cubeColumn("trajectory_block_vertical_powered",
+							texture("redstone_machine_block"),
+							texture("trajectory_block_vertical_top_powered"));
+			ModelFile horizontalUnpowered = models().getExistingFile(id("trajectory_block_horizontal_unpowered"));
+			ModelFile horizontalPowered = models().getExistingFile(id("trajectory_block_horizontal_powered"));
+			directional(MSBlocks.TRAJECTORY_BLOCK, state -> {
+				Direction direction = state.getValue(TrajectoryBlock.FACING);
+				boolean powered = state.getValue(TrajectoryBlock.POWERED);
+				
+				if(direction.getAxis() == Direction.Axis.Y)
+					return powered ? verticalPowered : verticalUnpowered;
+				else
+					return powered ? horizontalPowered : horizontalUnpowered;
+			}, BlockStateProperties.POWER);
+			simpleBlockItem(MSBlocks.TRAJECTORY_BLOCK.get(),
+					models().getExistingFile(id("trajectory_block_vertical_unpowered")));
+		}
 		{
 			Function<ResourceLocation, ModelFile> modelProvider = modelId -> models().cubeBottomTop(modelId.getPath(),
 					texture("redstone_machine_block"),
@@ -1206,6 +1211,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
+	@SuppressWarnings("SameParameterValue")
 	private void simpleHorizontalWithItem(RegistryObject<Block> block, int angleOffset, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
