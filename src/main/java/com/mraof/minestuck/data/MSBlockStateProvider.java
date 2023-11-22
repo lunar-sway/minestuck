@@ -5,6 +5,8 @@ import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.TrajectoryBlock;
+import com.mraof.minestuck.block.machine.HolopadBlock;
+import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.Direction;
@@ -24,6 +26,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.function.IntFunction;
 
 public class MSBlockStateProvider extends BlockStateProvider
 {
@@ -177,6 +180,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.GENERIC_OBJECT);
 		
 		//Land Environment
+		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[] {12, 6, 1, 1},
+				i -> cubeAll(id("blue_dirt" + i)));
 		simpleBlockWithItem(MSBlocks.THOUGHT_DIRT);
 		
 		simpleBlockWithItem(MSBlocks.COARSE_STONE);
@@ -260,7 +265,21 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockWithItem(MSBlocks.CRACKED_BLACK_STONE_BRICKS);
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
+		variantsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, 4,
+				i -> cubeAll(id("flowery_mossy_stone_bricks" + (i + 1))));
+		variantsWithItem(MSBlocks.DECREPIT_STONE_BRICKS, 4,
+				i -> cubeAll(id("decrepit_stone_bricks" + (i + 1))));
+		variantsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, 4,
+				i -> cubeAll(id("mossy_decrepit_stone_bricks" + (i + 1))));
 		simpleBlockWithItem(MSBlocks.COARSE_END_STONE);
+		{
+			ModelFile model = models().cubeBottomTop("end_grass",
+					texture("end_grass_side"),
+					texture("end_stone"),
+					texture("end_grass_top"));
+			getVariantBuilder(MSBlocks.END_GRASS.get()).partialState().setModels(ConfiguredModel.allYRotations(model, 0, false));
+			simpleBlockItem(MSBlocks.END_GRASS.get(), model);
+		}
 		
 		simpleBlockWithItem(MSBlocks.CHALK);
 		simpleBlockWithItem(MSBlocks.POLISHED_CHALK);
@@ -720,9 +739,15 @@ public class MSBlockStateProvider extends BlockStateProvider
 		flatItem(MSItems.TREATED_LADDER, MSBlockStateProvider::texture);
 		
 		//Land Plant Blocks
+		getVariantBuilder(MSBlocks.GLOWING_MUSHROOM.get()).partialState().setModels(weightedVariantModels(new int[] {2, 3, 2, 1, 2, 2, 1, 1},
+				i -> models().cross("glowing_mushroom" + i, texture("glowing_mushroom_" + i)).renderType("cutout")));
+		flatItem(MSItems.GLOWING_MUSHROOM, id -> texture("glowing_mushroom_1"));
 		simpleBlock(MSBlocks.DESERT_BUSH,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.DESERT_BUSH, MSBlockStateProvider::texture);
+		getVariantBuilder(MSBlocks.BLOOMING_CACTUS.get()).partialState().setModels(variantModels(3,
+				i -> models().cross("blooming_cactus" + i, texture("blooming_cactus_" + i)).renderType("cutout")));
+		flatItem(MSItems.BLOOMING_CACTUS, id -> texture("blooming_cactus_2"));
 		simpleBlock(MSBlocks.PETRIFIED_GRASS,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.PETRIFIED_GRASS, MSBlockStateProvider::texture);
@@ -1025,6 +1050,19 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleHorizontalWithItem(MSBlocks.MINI_ALCHEMITER, 0, this::existing);
 		simpleHorizontalWithItem(MSBlocks.MINI_PUNCH_DESIGNIX, 0, this::existing);
 		
+		{
+			ModelFile withoutCard = models().getExistingFile(id("holopad"));
+			ModelFile withCard = models().getExistingFile(id("holopad_has_card"));
+			horizontal(MSBlocks.HOLOPAD, state -> state.getValue(HolopadBlock.HAS_CARD) ? withCard : withoutCard);
+			flatItem(MSItems.HOLOPAD, MSBlockStateProvider::itemTexture);
+		}
+		{
+			ModelFile withoutCard = models().getExistingFile(id("intellibeam_laserstation_cardless"));
+			ModelFile withCard = models().getExistingFile(id("intellibeam_laserstation"));
+			horizontal(MSBlocks.INTELLIBEAM_LASERSTATION, state -> state.getValue(IntellibeamLaserstationBlock.HAS_CARD) ? withCard : withoutCard);
+			flatItem(MSItems.INTELLIBEAM_LASERSTATION, MSBlockStateProvider::itemTexture);
+		}
+		
 		//Misc Machines
 		simpleHorizontal(MSBlocks.TRANSPORTALIZER, 0, this::existing);
 		flatItem(MSItems.TRANSPORTALIZER, MSBlockStateProvider::itemTexture);
@@ -1049,6 +1087,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlock(MSBlocks.EMERGING_CRUXITE_DOWEL.get(),
 				models().getExistingFile(id("cruxtruder_dowel")));
 		simpleHorizontal(MSBlocks.LOTUS_TIME_CAPSULE_BLOCK.CORNER, this::existing);
+		flatItem(MSItems.LOTUS_TIME_CAPSULE, MSBlockStateProvider::itemTexture);
 		
 		//Misc Alchemy Semi-Plants
 		simpleBlock(MSBlocks.GOLD_SEEDS,
@@ -1076,6 +1115,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		cake(MSBlocks.CARROT_CAKE);
 		flatItem(MSItems.CARROT_CAKE, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.LARGE_CAKE);
+		weightedVariantsWithItem(MSBlocks.PINK_FROSTED_TOP_LARGE_CAKE, new int[] {7, 2},
+				i -> models().getExistingFile(id("pink_frosted_top_large_cake" + i)));
 		
 		//Explosives
 		{
@@ -1155,6 +1196,38 @@ public class MSBlockStateProvider extends BlockStateProvider
 	private ModelFile fluidModel(ResourceLocation id)
 	{
 		return empty(id.getPath(), texture(id.withPrefix("still_")));
+	}
+	
+	private ConfiguredModel[] variantModels(int count, IntFunction<ModelFile> modelProvider)
+	{
+		ConfiguredModel[] models = new ConfiguredModel[count];
+		for(int i = 0; i < count; i++)
+			models[i] = ConfiguredModel.builder().modelFile(modelProvider.apply(i)).buildLast();
+		
+		return models;
+	}
+	
+	private ConfiguredModel[] weightedVariantModels(int[] weights, IntFunction<ModelFile> modelProvider)
+	{
+		ConfiguredModel[] models = new ConfiguredModel[weights.length];
+		for(int i = 0; i < weights.length; i++)
+			models[i] = ConfiguredModel.builder().modelFile(modelProvider.apply(i)).weight(weights[i]).buildLast();
+		
+		return models;
+	}
+	
+	private void variantsWithItem(RegistryObject<Block> block, int count, IntFunction<ModelFile> modelProvider)
+	{
+		ConfiguredModel[] models = variantModels(count, modelProvider);
+		getVariantBuilder(block.get()).partialState().setModels(models);
+		simpleBlockItem(block.get(), models[0].model);
+	}
+	
+	private void weightedVariantsWithItem(RegistryObject<Block> block, int[] weights, IntFunction<ModelFile> modelProvider)
+	{
+		ConfiguredModel[] models = weightedVariantModels(weights, modelProvider);
+		getVariantBuilder(block.get()).partialState().setModels(models);
+		simpleBlockItem(block.get(), models[0].model);
 	}
 	
 	private void fluid(RegistryObject<LiquidBlock> block)

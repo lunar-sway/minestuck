@@ -4,16 +4,11 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.Objects;
 
 public class MinestuckItemModelProvider extends ItemModelProvider
 {
@@ -540,21 +535,6 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		simpleItem(MSItems.CASSETTE_OTHERSIDE, "cassette/cassette_otherside");
 		simpleItem(MSItems.CASSETTE_5, "cassette/cassette_5");
 		
-		//Sburb Machines
-		simpleItem(MSItems.HOLOPAD);
-		simpleItem(MSItems.INTELLIBEAM_LASERSTATION);
-		
-		//Misc Core Objects
-		simpleItem(MSItems.LOTUS_TIME_CAPSULE);
-		
-		
-		//Land Environment
-		blockItem(MSItems.BLUE_DIRT, "blue_dirt0");
-		blockItem(MSItems.DECREPIT_STONE_BRICKS, "decrepit_stone_bricks1");
-		blockItem(MSItems.MOSSY_DECREPIT_STONE_BRICKS, "mossy_decrepit_stone_bricks1");
-		blockItem(MSItems.FLOWERY_MOSSY_STONE_BRICKS, "flowery_mossy_stone_bricks1");
-		blockItem(MSItems.END_GRASS);
-		
 	}
 	
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item)
@@ -579,40 +559,5 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation("item/handheld")).texture("layer0",
 				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
-	}
-	
-	@Deprecated
-	private ItemModelBuilder blockItem(RegistryObject<? extends BlockItem> item)
-	{
-		return blockItem(item, getBlockId(item.get()).getPath());
-	}
-	
-	private ItemModelBuilder blockItem(RegistryObject<? extends BlockItem> item, String modelName)
-	{
-		return withExistingParent(item.getId().getPath(), new ResourceLocation(Minestuck.MOD_ID, "block/" + modelName));
-	}
-	
-	public ItemModelBuilder itemModelBlockItem(RegistryObject<Block> block)
-	{
-		return withExistingParent(block.getId().getPath(), new ResourceLocation("item/generated")).texture("layer0", new ResourceLocation(Minestuck.MOD_ID, "block/" + block.getId().getPath()));
-	}
-	
-	public void buttonItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
-	{
-		this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/button_inventory")).texture("texture", new ResourceLocation(Minestuck.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
-	}
-	
-	public void fenceItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
-	{
-		this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/fence_inventory")).texture("texture",  new ResourceLocation(Minestuck.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
-	}
-	
-	public void wallItem(RegistryObject<Block> block, RegistryObject<Block> baseBlock)
-	{
-		this.withExistingParent(ForgeRegistries.BLOCKS.getKey(block.get()).getPath(), mcLoc("block/wall_inventory")).texture("wall",  new ResourceLocation(Minestuck.MOD_ID, "block/" + ForgeRegistries.BLOCKS.getKey(baseBlock.get()).getPath()));
-	}
-	
-	private static ResourceLocation getBlockId(BlockItem item) {
-		return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(item.getBlock()), "Item has unregistered block.");
 	}
 }
