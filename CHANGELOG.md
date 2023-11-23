@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Grist cost added for stripped bamboo block group, suspicious blocks, sniffer egg, pink petals, torchflower, torchflower seed, pitcher plant, pitcher pod, relic music disc
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
+- Pogo lance weapon
 
 ### Changed
 
@@ -24,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean
+- Dweblenod, Zepsun, Hadean, pavizi
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 

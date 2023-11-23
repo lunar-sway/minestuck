@@ -82,6 +82,7 @@ public class MSPacketHandler
 		registerMessage(MusicPlayerPacket.class, MusicPlayerPacket::decode);
 		registerMessage(GristRejectAnimationPacket.class, GristRejectAnimationPacket::decode);
 		registerMessage(StopCreativeShockEffectPacket.class, StopCreativeShockEffectPacket::decode);
+		registerMessage(ClientMovementPacket.class, ClientMovementPacket::decode);
 		registerMessage(GristToastPacket.class, GristToastPacket::decode);
 		registerMessage(AtheneumPacket.Scroll.class, AtheneumPacket.Scroll::decode);
 		registerMessage(AtheneumPacket.Update.class, AtheneumPacket.Update::decode);
