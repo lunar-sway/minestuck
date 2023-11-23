@@ -858,10 +858,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 			ModelFile horizontalUnpowered = models().getExistingFile(id("trajectory_block_horizontal_unpowered"));
 			ModelFile horizontalPowered = models().getExistingFile(id("trajectory_block_horizontal_powered"));
 			directionalUp(MSBlocks.TRAJECTORY_BLOCK, state -> {
-				Direction direction = state.getValue(TrajectoryBlock.FACING);
 				boolean powered = state.getValue(TrajectoryBlock.POWERED);
 				
-				if(direction.getAxis() == Direction.Axis.Y)
+				if(state.getValue(TrajectoryBlock.FACING).getAxis() == Direction.Axis.Y)
 					return powered ? verticalPowered : verticalUnpowered;
 				else
 					return powered ? horizontalPowered : horizontalUnpowered;
@@ -1188,7 +1187,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().crop(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.GOLD_SEEDS, MSBlockStateProvider::itemTexture);
 		simpleBlockWithItem(MSBlocks.WOODEN_CACTUS,
-				id -> models().getExistingFile(id));
+				id -> models().withExistingParent(id.getPath(), "block/cactus")
+						.texture("particle", texture(id.withSuffix("_side")))
+						.texture("bottom", texture(id.withSuffix("_bottom")))
+						.texture("top", texture(id.withSuffix("_top")))
+						.texture("side", texture(id.withSuffix("_side"))));
 		
 		cake(MSBlocks.APPLE_CAKE);
 		flatItem(MSItems.APPLE_CAKE, MSBlockStateProvider::itemTexture);
