@@ -5,8 +5,7 @@ import com.mraof.minestuck.block.CruxiteDowelBlock;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.block.TrajectoryBlock;
-import com.mraof.minestuck.block.machine.HolopadBlock;
-import com.mraof.minestuck.block.machine.IntellibeamLaserstationBlock;
+import com.mraof.minestuck.block.machine.*;
 import com.mraof.minestuck.block.redstone.*;
 import com.mraof.minestuck.item.MSItems;
 import net.minecraft.core.Direction;
@@ -17,10 +16,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.ModelProvider;
+import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -353,7 +349,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_end"))));
-		directionalWithItem(MSBlocks.CHISELED_SANDSTONE_COLUMN,
+		directionalUpWithItem(MSBlocks.CHISELED_SANDSTONE_COLUMN,
 				id -> models().cubeColumn(
 						id.getPath(),
 						texture(id),
@@ -363,7 +359,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 						id.getPath(),
 						texture(id),
 						texture(id.withSuffix("_end"))));
-		directionalWithItem(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN,
+		directionalUpWithItem(MSBlocks.CHISELED_RED_SANDSTONE_COLUMN,
 				id -> models().cubeColumn(
 						id.getPath(),
 						texture(id),
@@ -759,13 +755,18 @@ public class MSBlockStateProvider extends BlockStateProvider
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.GLOWING_MUSHROOM_VINES, MSBlockStateProvider::texture);
 		
-		directionalWithItem(MSBlocks.STRAWBERRY,
+		directionalUpWithItem(MSBlocks.STRAWBERRY,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
 		simpleHorizontal(MSBlocks.ATTACHED_STRAWBERRY_STEM, 270,
 				id -> models().withExistingParent(id.getPath(), "block/attached_melon_stem").renderType("cutout"));
+		getVariantBuilder(MSBlocks.STRAWBERRY_STEM.get()).forAllStates(state -> {
+			int age = state.getValue(StemBlock.AGE);
+			ModelFile model = models().withExistingParent("strawberry_stem_stage" + age, "melon_stem_stage" + age).renderType("cutout");
+			return ConfiguredModel.builder().modelFile(model).build();
+		});
 		
 		flatItem(MSItems.TALL_END_GRASS, id -> texture(id.withSuffix("_top")));
 		simpleBlock(MSBlocks.GLOWFLOWER,
@@ -856,7 +857,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 							texture("trajectory_block_vertical_top_powered"));
 			ModelFile horizontalUnpowered = models().getExistingFile(id("trajectory_block_horizontal_unpowered"));
 			ModelFile horizontalPowered = models().getExistingFile(id("trajectory_block_horizontal_powered"));
-			directional(MSBlocks.TRAJECTORY_BLOCK, state -> {
+			directionalUp(MSBlocks.TRAJECTORY_BLOCK, state -> {
 				Direction direction = state.getValue(TrajectoryBlock.FACING);
 				boolean powered = state.getValue(TrajectoryBlock.POWERED);
 				
@@ -942,16 +943,55 @@ public class MSBlockStateProvider extends BlockStateProvider
 					AreaEffectBlock.ALL_MOBS, AreaEffectBlock.SHUT_DOWN);
 			simpleBlockItem(MSBlocks.AREA_EFFECT_BLOCK.get(), unpoweredModel);
 		}
-		directionalWithItem(MSBlocks.ROTATOR,
+		{
+			ModelFile poweredModel = models().cubeBottomTop("platform_generator_powered",
+					texture("platform_generator_side"),
+					texture("platform_generator_bottom"),
+					texture("platform_generator_top_powered"));
+			ModelFile unpoweredModel = models().cubeBottomTop("platform_generator_unpowered",
+					texture("platform_generator_side"),
+					texture("platform_generator_bottom"),
+					texture("platform_generator_top_unpowered"));
+			directionalUp(MSBlocks.PLATFORM_GENERATOR, state -> state.getValue(PlatformGeneratorBlock.POWERED) ? poweredModel : unpoweredModel,
+					PlatformGeneratorBlock.INVISIBLE_MODE, PlatformGeneratorBlock.POWER);
+			simpleBlockItem(MSBlocks.PLATFORM_GENERATOR.get(), unpoweredModel);
+			simpleBlock(MSBlocks.PLATFORM_BLOCK, id -> cubeAll(id).renderType("translucent"));
+		}
+		{
+			ModelFile unpowered = cubeAll(id("platform_receptacle_unpowered"));
+			ModelFile powered = cubeAll(id("platform_receptacle_powered"));
+			ModelFile absorbing = cubeAll(id("platform_receptacle_powered_absorbing"));
+			getVariantBuilder(MSBlocks.PLATFORM_RECEPTACLE.get()).forAllStates(state -> {
+				if(state.getValue(PlatformReceptacleBlock.POWERED))
+					return ConfiguredModel.builder().modelFile(state.getValue(PlatformReceptacleBlock.ABSORBING) ? absorbing : powered).build();
+				else
+					return ConfiguredModel.builder().modelFile(unpowered).build();
+			});
+		}
+		directionalNorthWithItem(MSBlocks.ITEM_MAGNET, this::existing);
+		{
+			ModelFile powered = existing(id("redstone_clock_powered"));
+			ModelFile unpowered = existing(id("redstone_clock_unpowered"));
+			directionalNorth(MSBlocks.REDSTONE_CLOCK, state -> state.getValue(RedstoneClockBlock.POWERED) ? powered : unpowered);
+			simpleBlockItem(MSBlocks.REDSTONE_CLOCK.get(), unpowered);
+		}
+		directionalUpWithItem(MSBlocks.ROTATOR,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture(id.withSuffix("_side")),
 						texture(id.withSuffix("_bottom")),
 						texture(id.withSuffix("_top"))));
-		directionalWithItem(MSBlocks.TOGGLER,
+		directionalUpWithItem(MSBlocks.TOGGLER,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture("rotator_side"),
 						texture("rotator_bottom"),
 						texture("toggler_top")));
+		{
+			ModelFile powered = existing(id("remote_comparator_powered"));
+			ModelFile unpowered = existing(id("remote_comparator_unpowered"));
+			directionalNorth(MSBlocks.REMOTE_COMPARATOR, state -> state.getValue(RemoteComparatorBlock.POWERED) ? powered : unpowered,
+					RemoteComparatorBlock.CHECK_STATE, RemoteComparatorBlock.DISTANCE_1_16);
+			simpleBlockItem(MSBlocks.REMOTE_COMPARATOR.get(), unpowered);
+		}
 		simpleHorizontalWithItem(MSBlocks.STRUCTURE_CORE,
 				id -> models().cubeBottomTop(id.getPath(),
 						texture(id.withSuffix("_side")),
@@ -1026,6 +1066,17 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleHorizontal(MSBlocks.CRUXTRUDER.TOP_CENTER, this::existing);
 		simpleHorizontal(MSBlocks.CRUXTRUDER.TUBE, this::existing);
 		flatItem(MSItems.CRUXTRUDER, MSBlockStateProvider::itemTexture);
+		{
+			ModelFile noCard = existing(id("totem_lathe_card_slot"));
+			ModelFile oneCard = existing(id("totem_lathe_card_slot_c"));
+			ModelFile twoCards = existing(id("totem_lathe_card_slot_cc"));
+			horizontal(MSBlocks.TOTEM_LATHE.CARD_SLOT, state -> switch(state.getValue(TotemLatheBlock.Slot.COUNT))
+			{
+				case 0 -> noCard;
+				case 1 -> oneCard;
+				default -> twoCards;
+			});
+		}
 		simpleHorizontal(MSBlocks.TOTEM_LATHE.BOTTOM_LEFT, this::existing);
 		simpleHorizontal(MSBlocks.TOTEM_LATHE.BOTTOM_RIGHT, this::existing);
 		simpleHorizontal(MSBlocks.TOTEM_LATHE.MIDDLE, this::existing);
@@ -1039,9 +1090,26 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleHorizontal(MSBlocks.ALCHEMITER.LEFT_SIDE, this::existing);
 		simpleHorizontal(MSBlocks.ALCHEMITER.RIGHT_SIDE, this::existing);
 		simpleHorizontal(MSBlocks.ALCHEMITER.TOTEM_CORNER, this::existing);
+		{
+			ModelFile withoutDowel = existing(id("alchemiter_totem_pad"));
+			ModelFile dowel = existing(id("alchemiter_totem_pad_dowel"));
+			ModelFile carvedDowel = existing(id("alchemiter_totem_pad_totem"));
+			horizontal(MSBlocks.ALCHEMITER.TOTEM_PAD, state -> switch(state.getValue(AlchemiterBlock.Pad.DOWEL))
+			{
+				case NONE -> withoutDowel;
+				case DOWEL -> dowel;
+				case CARVED_DOWEL -> carvedDowel;
+			});
+		}
 		flatItem(MSItems.ALCHEMITER, MSBlockStateProvider::itemTexture);
 		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.LEFT_LEG, this::existing);
 		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.RIGHT_LEG, this::existing);
+		{
+			ModelFile withoutCard = existing(id("punch_designix_slot"));
+			ModelFile withCard = existing(id("punch_designix_slot_card"));
+			horizontal(MSBlocks.PUNCH_DESIGNIX.SLOT,
+					state -> state.getValue(PunchDesignixBlock.Slot.HAS_CARD) ? withCard : withoutCard);
+		}
 		simpleHorizontal(MSBlocks.PUNCH_DESIGNIX.KEYBOARD, this::existing);
 		flatItem(MSItems.PUNCH_DESIGNIX, MSBlockStateProvider::itemTexture);
 		
@@ -1064,11 +1132,37 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		
 		//Misc Machines
+		computerBlockWithExistingModels(MSBlocks.COMPUTER);
+		flatItem(MSItems.COMPUTER, MSBlockStateProvider::itemTexture);
+		computerBlockWithExistingModels(MSBlocks.LAPTOP);
+		simpleBlockItem(MSBlocks.LAPTOP.get(), models().getExistingFile(id("laptop_on")));
+		computerBlockWithExistingModels(MSBlocks.CROCKERTOP);
+		simpleBlockItem(MSBlocks.CROCKERTOP.get(), models().getExistingFile(id("crockertop_on")));
+		computerBlockWithExistingModels(MSBlocks.HUBTOP);
+		simpleBlockItem(MSBlocks.HUBTOP.get(), models().getExistingFile(id("hubtop_on")));
+		computerBlock(MSBlocks.LUNCHTOP,
+				existing(id("lunchtop_off")),
+				existing(id("lunchtop_on")),
+				existing(id("lunchtop_on")),
+				existing(id("lunchtop_bsod")));
+		simpleBlockItem(MSBlocks.LUNCHTOP.get(), models().getExistingFile(id("lunchtop_off")));
+		computerBlock(MSBlocks.OLD_COMPUTER,
+				existing(id("old_computer_off")),
+				existing(id("old_computer_on")),
+				existing(id("old_computer_on")),
+				existing(id("old_computer_bsod")));
+		flatItem(MSItems.OLD_COMPUTER, MSBlockStateProvider::itemTexture);
 		simpleHorizontal(MSBlocks.TRANSPORTALIZER, 0, this::existing);
 		flatItem(MSItems.TRANSPORTALIZER, MSBlockStateProvider::itemTexture);
 		simpleHorizontal(MSBlocks.TRANS_PORTALIZER, 0, this::existing);
 		flatItem(MSItems.TRANS_PORTALIZER, MSBlockStateProvider::itemTexture);
 		simpleHorizontalWithItem(MSBlocks.SENDIFICATOR, 0, this::existing);
+		{
+			ModelFile withoutCard = existing(id("grist_widget"));
+			ModelFile withCard = existing(id("grist_widget_with_card"));
+			horizontal(MSBlocks.GRIST_WIDGET, 0, state -> state.getValue(GristWidgetBlock.HAS_CARD) ? withCard : withoutCard);
+			flatItem(MSItems.GRIST_WIDGET, MSBlockStateProvider::itemTexture);
+		}
 		simpleHorizontalWithItem(MSBlocks.URANIUM_COOKER, this::existing);
 		simpleHorizontalWithItem(MSBlocks.GRIST_COLLECTOR, this::existing);
 		simpleHorizontalWithItem(MSBlocks.ANTHVIL, this::existing);
@@ -1183,7 +1277,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 				.end();
 	}
 	
-	private ModelFile cubeAll(ResourceLocation id)
+	private BlockModelBuilder cubeAll(ResourceLocation id)
 	{
 		return models().cubeAll(id.getPath(), texture(id));
 	}
@@ -1202,7 +1296,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 	{
 		ConfiguredModel[] models = new ConfiguredModel[count];
 		for(int i = 0; i < count; i++)
-			models[i] = ConfiguredModel.builder().modelFile(modelProvider.apply(i)).buildLast();
+			models[i] = new ConfiguredModel(modelProvider.apply(i));
 		
 		return models;
 	}
@@ -1216,6 +1310,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		return models;
 	}
 	
+	@SuppressWarnings("SameParameterValue")
 	private void variantsWithItem(RegistryObject<Block> block, int count, IntFunction<ModelFile> modelProvider)
 	{
 		ConfiguredModel[] models = variantModels(count, modelProvider);
@@ -1292,14 +1387,18 @@ public class MSBlockStateProvider extends BlockStateProvider
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void directionalWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	private void directionalUpWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
 	{
 		var model = modelProvider.apply(block.getId());
-		directional(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED);
+		directionalUp(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED);
 		simpleBlockItem(block.get(), model);
 	}
 	
-	private void directional(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	/**
+	 * Sets up a blockstate definition with rotation based on the facing direction with all six directions.
+	 * Assumes that the model is facing upwards when unrotated.
+	 */
+	private void directionalUp(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
 	{
 		getVariantBuilder(block.get())
 				.forAllStatesExcept(state -> {
@@ -1312,8 +1411,33 @@ public class MSBlockStateProvider extends BlockStateProvider
 				}, ignored);
 	}
 	
+	@SuppressWarnings("SameParameterValue")
+	private void directionalNorthWithItem(RegistryObject<? extends Block> block, Function<ResourceLocation, ModelFile> modelProvider)
+	{
+		var model = modelProvider.apply(block.getId());
+		directionalNorth(block, $ -> model, MSProperties.MACHINE_TOGGLE, BlockStateProperties.POWERED, BlockStateProperties.POWER, BlockStateProperties.WATERLOGGED);
+		simpleBlockItem(block.get(), model);
+	}
+	
 	/**
-	 * While the standard directional block has the down-facing state rotated 180 degrees along the y-axis,
+	 * Sets up a blockstate definition with rotation based on the facing direction with all six directions.
+	 * Assumes that the model is facing northwards when unrotated.
+	 */
+	private void directionalNorth(RegistryObject<? extends Block> block, Function<BlockState, ModelFile> modelProvider, Property<?>... ignored)
+	{
+		getVariantBuilder(block.get())
+				.forAllStatesExcept(state -> {
+					Direction dir = state.getValue(BlockStateProperties.FACING);
+					return ConfiguredModel.builder()
+							.modelFile(modelProvider.apply(state))
+							.rotationX(dir == Direction.DOWN ? 90 : dir == Direction.UP ? 270 : 0)
+							.rotationY(dir == Direction.DOWN ? 180 : dir == Direction.UP ? 0 : ((int) dir.toYRot() + 180) % 360)
+							.build();
+				}, ignored);
+	}
+	
+	/**
+	 * While the standard directional block (with {@link MSBlockStateProvider#directionalUp(RegistryObject, Function, Property[])}) has the down-facing state rotated 180 degrees along the y-axis,
 	 * blocks with this function are instead not rotated in both the up-facing state and the down-facing state.
 	 */
 	private void unflippedColumnWithItem(RegistryObject<Block> block, Function<ResourceLocation, ModelFile> modelProvider)
@@ -1463,6 +1587,26 @@ public class MSBlockStateProvider extends BlockStateProvider
 		getVariantBuilder(block.get()).forAllStates(state -> {
 			int bites = state.getValue(CakeBlock.BITES);
 			return ConfiguredModel.builder().modelFile(cakeModel(id, bites)).build();
+		});
+	}
+	
+	private void computerBlockWithExistingModels(RegistryObject<Block> block)
+	{
+		computerBlock(block,
+				existing(block.getId().withSuffix("_off")),
+				existing(block.getId().withSuffix("_on")),
+				existing(block.getId().withSuffix("_game_loaded")),
+				existing(block.getId().withSuffix("_bsod")));
+	}
+	
+	private void computerBlock(RegistryObject<Block> block, ModelFile off, ModelFile on, ModelFile gameLoaded, ModelFile bsod)
+	{
+		horizontal(block, state -> switch(state.getValue(ComputerBlock.STATE))
+		{
+			case OFF -> off;
+			case ON -> on;
+			case GAME_LOADED -> gameLoaded;
+			case BROKEN -> bsod;
 		});
 	}
 	
