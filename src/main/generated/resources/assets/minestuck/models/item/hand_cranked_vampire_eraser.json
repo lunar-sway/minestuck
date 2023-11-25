@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minestuck:item/hand_cranked_vampire_eraser"
+  }
+}

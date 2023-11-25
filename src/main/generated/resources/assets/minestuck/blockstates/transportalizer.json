@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/transportalizer",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "minestuck:block/transportalizer",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "minestuck:block/transportalizer"
+    },
+    "facing=west": {
+      "model": "minestuck:block/transportalizer",
+      "y": 90
+    }
+  }
+}

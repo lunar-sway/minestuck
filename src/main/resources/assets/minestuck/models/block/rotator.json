@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_bottom_top",
-  "textures": {
-    "bottom": "minestuck:block/rotator_bottom",
-    "top": "minestuck:block/rotator_top",
-    "side": "minestuck:block/rotator_side"
-  }
-}

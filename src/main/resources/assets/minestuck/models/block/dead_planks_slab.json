@@ -1,8 +1,0 @@
-{
-    "parent": "block/slab",
-    "textures": {
-        "bottom": "minestuck:block/dead_planks",
-        "top": "minestuck:block/dead_planks",
-        "side": "minestuck:block/dead_planks"
-    }
-}

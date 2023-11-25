@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/totem_lathe_bottom_left",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/totem_lathe_bottom_left"
+    },
+    "facing=south": {
+      "model": "minestuck:block/totem_lathe_bottom_left",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/totem_lathe_bottom_left",
+      "y": 270
+    }
+  }
+}

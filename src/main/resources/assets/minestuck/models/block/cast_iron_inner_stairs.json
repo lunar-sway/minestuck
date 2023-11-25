@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "minestuck:block/cast_iron",
-        "top": "minestuck:block/cast_iron",
-        "side": "minestuck:block/cast_iron"
-    }
-}

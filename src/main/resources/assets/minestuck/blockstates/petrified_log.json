@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "axis=y": { "model": "minestuck:block/petrified_log" },
-        "axis=z": { "model": "minestuck:block/petrified_log", "x": 90 },
-        "axis=x": { "model": "minestuck:block/petrified_log", "x": 90, "y": 90 }
-    }
-}
