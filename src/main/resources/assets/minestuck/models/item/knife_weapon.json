@@ -1,8 +1,5 @@
 {
   "parent": "item/handheld",
-  "textures": {
-    "layer0": "minestuck:item/starshard_tri_blade"
-  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [0, -90, 44],

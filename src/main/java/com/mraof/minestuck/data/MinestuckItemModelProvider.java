@@ -76,6 +76,21 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.THORN_IN_YOUR_SIDE);
 		handheldItem(MSItems.ROSE_PROTOCOL);
 		
+		//Knives
+		knifeWeapon(MSItems.DAGGER);
+		knifeWeapon(MSItems.DIAMOND_DAGGER);
+		knifeWeapon(MSItems.PIGLINS_PRIDE);
+		knifeWeapon(MSItems.BASILISK_BREATH_DRAGONSLAYER);
+		knifeWeapon(MSItems.HALLOWED_SKEWER);
+		knifeWeapon(MSItems.GENESIS_GODSTABBER);
+		knifeWeapon(MSItems.NIFE);
+		knifeWeapon(MSItems.LIGHT_OF_MY_KNIFE);
+		knifeWeapon(MSItems.THOUSAND_DEGREE_KNIFE);
+		knifeWeapon(MSItems.STARSHARD_TRI_BLADE);
+		knifeWeapon(MSItems.TOOTHRIPPER);
+		knifeWeapon(MSItems.SHADOWRAZOR);
+		knifeWeapon(MSItems.PRINCESS_PERIL);
+		
 		//Keys
 		handheldItem(MSItems.HOUSE_KEY);
 		handheldItem(MSItems.KEYBLADE);
@@ -586,6 +601,13 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	{
 		return withExistingParent(item.getId().getPath(),
 				new ResourceLocation(Minestuck.MOD_ID, "item/claw_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	private ItemModelBuilder knifeWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				new ResourceLocation(Minestuck.MOD_ID, "item/knife_weapon"))
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
