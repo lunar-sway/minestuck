@@ -7,9 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+@SuppressWarnings("UnusedReturnValue")
 public class MinestuckItemModelProvider extends ItemModelProvider
 {
 	public MinestuckItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)
@@ -133,6 +135,25 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		
 		//Dice
 		handheldItem(MSItems.FLUORITE_OCTET);
+		
+		//Claws
+		clawWeapon(MSItems.MAKESHIFT_CLAWS_DRAWN);
+		clawWeapon(MSItems.MAKESHIFT_CLAWS_SHEATHED);
+		clawWeapon(MSItems.CAT_CLAWS_DRAWN);
+		clawWeapon(MSItems.CAT_CLAWS_SHEATHED);
+		clawWeapon(MSItems.POGO_CLAWS);
+		clawWeapon(MSItems.ATOMIKITTY_KATAR_DRAWN);
+		clawWeapon(MSItems.ATOMIKITTY_KATAR_SHEATHED);
+		clawWeapon(MSItems.SKELETONIZER_DRAWN);
+		clawWeapon(MSItems.SKELETONIZER_SHEATHED);
+		clawWeapon(MSItems.SKELETON_DISPLACER_DRAWN);
+		clawWeapon(MSItems.SKELETON_DISPLACER_SHEATHED);
+		clawWeapon(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN);
+		clawWeapon(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED);
+		clawWeapon(MSItems.LION_LACERATORS_DRAWN);
+		clawWeapon(MSItems.LION_LACERATORS_SHEATHED);
+		clawWeapon(MSItems.ACTION_CLAWS_DRAWN);
+		clawWeapon(MSItems.ACTION_CLAWS_SHEATHED);
 		
 		//Chainsaws
 		handheldItem(MSItems.LIPSTICK_CHAINSAW, "chainsaw");
@@ -545,8 +566,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
+				new ResourceLocation("item/generated"))
+				.texture("layer0", texture(textureName));
 	}
 	
 	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item)
@@ -557,7 +578,19 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
+				new ResourceLocation("item/handheld"))
+				.texture("layer0", texture(textureName));
+	}
+	
+	private ItemModelBuilder clawWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				new ResourceLocation(Minestuck.MOD_ID, "item/claw_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	private ResourceLocation texture(String path)
+	{
+		return new ResourceLocation(Minestuck.MOD_ID, ModelProvider.ITEM_FOLDER + "/" + path);
 	}
 }
