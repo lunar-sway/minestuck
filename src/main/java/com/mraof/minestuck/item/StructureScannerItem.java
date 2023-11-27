@@ -50,15 +50,9 @@ public class StructureScannerItem extends Item
 		this.powerCapacity = powerCapacity;
 	}
 	
-	@SuppressWarnings("DataFlowIssue")
 	public static boolean isPowered(ItemStack stack)
 	{
-		return stack.hasTag() && stack.getTag().getBoolean("Powered");
-	}
-	
-	public static void setIsPowered(ItemStack stack, boolean powered)
-	{
-		stack.getOrCreateTag().putBoolean("Powered", powered);
+		return getPower(stack) > 0;
 	}
 	
 	@SuppressWarnings("DataFlowIssue")
@@ -115,7 +109,6 @@ public class StructureScannerItem extends Item
 		}
 		
 		setPower(stack, this.powerCapacity);
-		setIsPowered(stack, true);
 		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		
 		if (!pLevel.isClientSide)
@@ -137,11 +130,7 @@ public class StructureScannerItem extends Item
 		
 		if(isPowered(pStack) && pLevel instanceof ServerLevel sLevel)
 		{
-			if (getPower(pStack) <= 0)
-				setPower(pStack, this.powerCapacity);
-			
 			GlobalPos pos = findStructureTarget(pEntity, sLevel);
-			
 			setTargetToNbt(pStack, pos);
 			
 			reduceCharge(pStack, pEntity, pLevel);
@@ -171,15 +160,10 @@ public class StructureScannerItem extends Item
 		
 		setPower(stack, getPower(stack) - 1);
 		
-		if(getPower(stack) <= 0)
+		if(!isPowered(stack) && !level.isClientSide())
 		{
-			setIsPowered(stack, false);
-			
-			if(!level.isClientSide())
-			{
-				MutableComponent message = Component.translatable("message.temple_scanner.off");
-				entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-			}
+			MutableComponent message = Component.translatable("message.temple_scanner.off");
+			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 		}
 	}
 	
