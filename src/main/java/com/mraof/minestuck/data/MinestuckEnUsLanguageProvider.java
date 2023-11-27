@@ -31,6 +31,7 @@ import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.captchalogue.HashMapModus;
 import com.mraof.minestuck.item.MSCreativeTabs;
 import com.mraof.minestuck.item.MSItems;
+import com.mraof.minestuck.item.StructureScannerItem;
 import com.mraof.minestuck.item.loot.MSLootEvents;
 import com.mraof.minestuck.item.weapon.MusicPlayerWeapon;
 import com.mraof.minestuck.item.weapon.OnHitEffect;
@@ -1474,8 +1475,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add("message.dice.4", "You rolled a 5.");
 		add("message.dice.5", "You rolled a 6.");
 		
-		add("message.temple_scanner.on", "Temple scanner: On");
-		add("message.temple_scanner.off", "Temple scanner: Off");
+		add(StructureScannerItem.ON, "Temple scanner: On");
+		add(StructureScannerItem.OFF, "Temple scanner: Off");
 		
 		add("message.gutter.minor_increase", "Gutter Size Increased");
 		add("message.gutter.increase", "Gutter Size Increased Greatly");

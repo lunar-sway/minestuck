@@ -35,6 +35,9 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class StructureScannerItem extends Item
 {
+	public static final String ON = "message.temple_scanner.on";
+	public static final String OFF = "message.temple_scanner.off";
+	
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final TagKey<Structure> structure;
 	@Nullable
@@ -137,7 +140,7 @@ public class StructureScannerItem extends Item
 		GlobalPos pos = findStructureTarget(player, level);
 		setTargetToNbt(stack, pos);
 		
-		MutableComponent message = Component.translatable("message.temple_scanner.on");
+		MutableComponent message = Component.translatable(ON);
 		player.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 	}
 	
@@ -166,7 +169,7 @@ public class StructureScannerItem extends Item
 		if(!isPowered(stack))
 		{
 			setTargetToNbt(stack, null);
-			MutableComponent message = Component.translatable("message.temple_scanner.off");
+			MutableComponent message = Component.translatable(OFF);
 			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 		}
 	}
