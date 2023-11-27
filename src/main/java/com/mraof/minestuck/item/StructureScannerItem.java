@@ -101,6 +101,9 @@ public class StructureScannerItem extends Item
 	{
 		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
 		
+		if(isPowered(stack))
+			return InteractionResultHolder.fail(stack);
+		
 		if(fuelItem != null && !pPlayer.isCreative())
 		{
 			ItemStack invItem = findItem(pPlayer, fuelItem.get());
@@ -111,9 +114,7 @@ public class StructureScannerItem extends Item
 			consumeFuelItem(invItem, pPlayer, pLevel);
 		}
 		
-		if(getPower(stack) < this.powerCapacity)
-			setPower(stack, this.powerCapacity);
-		
+		setPower(stack, this.powerCapacity);
 		setIsPowered(stack, true);
 		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		
