@@ -38,6 +38,7 @@ public class StructureScannerItem extends Item
 	public static final String ON = "message.temple_scanner.on";
 	public static final String OFF = "message.temple_scanner.off";
 	public static final String MISSING_FUEL = "message.temple_scanner.missing_fuel";
+	public static final String NO_TARGET = "message.temple_scanner.no_target";
 	
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final TagKey<Structure> structure;
@@ -112,10 +113,15 @@ public class StructureScannerItem extends Item
 				return InteractionResultHolder.fail(stack);
 			}
 			
+			if(!tryActivateScanner(serverLevel, player, stack))
+				return InteractionResultHolder.fail(stack);
+			
 			consumeFuelItem(invItem, player, serverLevel);
+		} else {
+			if(!tryActivateScanner(serverLevel, player, stack))
+				return InteractionResultHolder.fail(stack);
 		}
 		
-		activateScanner(serverLevel, player, stack);
 		return InteractionResultHolder.consume(stack);
 	}
 	
@@ -136,16 +142,22 @@ public class StructureScannerItem extends Item
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
 	}
 	
-	private void activateScanner(ServerLevel level, Player player, ItemStack stack)
+	private boolean tryActivateScanner(ServerLevel level, Player player, ItemStack stack)
 	{
-		setPower(stack, this.powerCapacity);
 		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
-		
 		GlobalPos pos = findStructureTarget(player, level);
-		setTargetToNbt(stack, pos);
 		
-		MutableComponent message = Component.translatable(ON);
-		player.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
+		if(pos == null)
+		{
+			player.sendSystemMessage(Component.translatable(NO_TARGET).withStyle(ChatFormatting.RED));
+			return false;
+		}
+		
+		setTargetToNbt(stack, pos);
+		setPower(stack, this.powerCapacity);
+		
+		player.sendSystemMessage(Component.translatable(ON).withStyle(ChatFormatting.DARK_GREEN));
+		return true;
 	}
 	
 	@Nullable

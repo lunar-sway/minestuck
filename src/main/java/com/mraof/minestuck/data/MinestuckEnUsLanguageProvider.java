@@ -1478,6 +1478,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(StructureScannerItem.ON, "Temple scanner: On");
 		add(StructureScannerItem.OFF, "Temple scanner: Off");
 		add(StructureScannerItem.MISSING_FUEL, "You lack fuel for this scanner.");
+		add(StructureScannerItem.NO_TARGET, "The scanner did not find a target to lock on to.");
 		
 		add("message.gutter.minor_increase", "Gutter Size Increased");
 		add("message.gutter.increase", "Gutter Size Increased Greatly");
