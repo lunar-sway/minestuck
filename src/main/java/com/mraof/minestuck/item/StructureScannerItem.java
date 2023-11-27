@@ -112,6 +112,23 @@ public class StructureScannerItem extends Item
 		return InteractionResultHolder.consume(stack);
 	}
 	
+	@Nullable
+	private static ItemStack findItem(Player player, Item item)
+	{
+		for (ItemStack invItem : player.getInventory().items)
+		{
+			if (invItem.is(item))
+				return invItem;
+		}
+		return null;
+	}
+	
+	private static void consumeFuelItem(ItemStack fuelStack, Player player, ServerLevel level)
+	{
+		fuelStack.shrink(1);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
+	}
+	
 	private void activateScanner(ServerLevel level, Player player, ItemStack stack)
 	{
 		setPower(stack, this.powerCapacity);
@@ -124,6 +141,13 @@ public class StructureScannerItem extends Item
 		player.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 	}
 	
+	@Nullable
+	private GlobalPos findStructureTarget(Entity entity, ServerLevel level)
+	{
+		BlockPos pos = level.findNearestMapStructure(this.structure, entity.blockPosition(), 100, false);
+		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
+	}
+	
 	/**
 	 * Check if the item is powered, and if it's out of battery, recharge it.
 	 * Set the location to the nearest structure, check that a structure exists, then reduce charge if fuelled.
@@ -133,13 +157,6 @@ public class StructureScannerItem extends Item
 	{
 		if(!level.isClientSide && isPowered(stack) && entity.tickCount % 20 == 0)
 			powerTick(stack, entity);
-	}
-	
-	@Nullable
-	public GlobalPos findStructureTarget(Entity entity, ServerLevel level)
-	{
-		BlockPos pos = level.findNearestMapStructure(this.structure, entity.blockPosition(), 100, false);
-		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
 	}
 	
 	private static void powerTick(ItemStack stack, Entity entity)
@@ -176,23 +193,5 @@ public class StructureScannerItem extends Item
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
 	{
 		return !ItemStack.isSameItem(oldStack, newStack);
-	}
-	
-	@Nullable
-	private static ItemStack findItem(Player player, Item item)
-	{
-		for (ItemStack invItem : player.getInventory().items)
-		{
-			if (invItem.is(item))
-				return invItem;
-		}
-		return null;
-	}
-	
-	private static void consumeFuelItem(ItemStack fuelStack, Player player, ServerLevel level)
-	{
-		fuelStack.shrink(1);
-		
-		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
 	}
 }
