@@ -44,7 +44,7 @@ public class StructureScannerItem extends Item
 	
 	public StructureScannerItem(Properties properties, TagKey<Structure> structure, @Nullable Supplier<Item> fuelItem, int powerCapacity)
 	{
-		super(properties);
+		super(properties.stacksTo(1));
 		this.structure = structure;
 		this.fuelItem = fuelItem;
 		this.powerCapacity = powerCapacity;
