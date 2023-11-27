@@ -1,0 +1,6 @@
+{
+  "parent": "minestuck:item/lance_weapon",
+  "textures": {
+    "layer0": "minestuck:item/regilance"
+  }
+}
