@@ -180,6 +180,12 @@ public class StructureScannerItem extends Item
 		}
 	}
 	
+	@Override
+	public boolean isBarVisible(ItemStack stack)
+	{
+		return isPowered(stack);
+	}
+	
 	@Nullable
 	private static ItemStack findItem(Player player, Item item)
 	{
