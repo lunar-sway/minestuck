@@ -5,14 +5,14 @@
     },
     "overrides": [
         { "predicate": { "minestuck:powered": 0 }, "model": "minestuck:item/temple_scanner_base" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.0000 }, "model": "minestuck:item/temple_scanner_north" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.0625 }, "model": "minestuck:item/temple_scanner_northeast" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.1875 }, "model": "minestuck:item/temple_scanner_east" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.3125 }, "model": "minestuck:item/temple_scanner_southeast" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.4375 }, "model": "minestuck:item/temple_scanner_south" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.5625 }, "model": "minestuck:item/temple_scanner_southwest" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.6875 }, "model": "minestuck:item/temple_scanner_west" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.8125 }, "model": "minestuck:item/temple_scanner_northwest" },
-        { "predicate": { "minestuck:powered": 1, "angle": 0.9375 }, "model": "minestuck:item/temple_scanner_north" }
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.0000 }, "model": "minestuck:item/temple_scanner_north" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.0625 }, "model": "minestuck:item/temple_scanner_northeast" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.1875 }, "model": "minestuck:item/temple_scanner_east" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.3125 }, "model": "minestuck:item/temple_scanner_southeast" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.4375 }, "model": "minestuck:item/temple_scanner_south" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.5625 }, "model": "minestuck:item/temple_scanner_southwest" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.6875 }, "model": "minestuck:item/temple_scanner_west" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.8125 }, "model": "minestuck:item/temple_scanner_northwest" },
+        { "predicate": { "minestuck:powered": 1, "minestuck:angle": 0.9375 }, "model": "minestuck:item/temple_scanner_north" }
     ]
 }
