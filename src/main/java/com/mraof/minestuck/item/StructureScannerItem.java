@@ -5,7 +5,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -81,42 +80,48 @@ public class StructureScannerItem extends Item
 	
 	public static void setTargetToNbt(ItemStack stack, @Nullable GlobalPos pos)
 	{
-		CompoundTag tag = stack.getOrCreateTag();
 		if(pos == null)
-			tag.remove("TargetLocation");
+			stack.removeTagKey("TargetLocation");
 		else
-			tag.put("TargetLocation",
+			stack.getOrCreateTag().put("TargetLocation",
 					GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, pos)
 							.getOrThrow(false, LOGGER::error));
 	}
 	
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand)
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand)
 	{
-		ItemStack stack = pPlayer.getItemInHand(pUsedHand);
+		ItemStack stack = player.getItemInHand(usedHand);
 		
 		if(isPowered(stack))
 			return InteractionResultHolder.fail(stack);
+		if(!(level instanceof ServerLevel serverLevel))
+			return InteractionResultHolder.success(stack);
 		
-		if(fuelItem != null && !pPlayer.isCreative())
+		if(fuelItem != null && !player.isCreative())
 		{
-			ItemStack invItem = findItem(pPlayer, fuelItem.get());
+			ItemStack invItem = findItem(player, fuelItem.get());
 			
 			if(invItem == null)
 				return InteractionResultHolder.fail(stack);
 			
-			consumeFuelItem(invItem, pPlayer, pLevel);
+			consumeFuelItem(invItem, player, serverLevel);
 		}
 		
+		activateScanner(serverLevel, player, stack);
+		return InteractionResultHolder.consume(stack);
+	}
+	
+	private void activateScanner(ServerLevel level, Player player, ItemStack stack)
+	{
 		setPower(stack, this.powerCapacity);
-		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		
-		if (!pLevel.isClientSide)
-		{
-			MutableComponent message = Component.translatable("message.temple_scanner.on");
-			pPlayer.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
-		}
-		return InteractionResultHolder.success(stack);
+		GlobalPos pos = findStructureTarget(player, level);
+		setTargetToNbt(stack, pos);
+		
+		MutableComponent message = Component.translatable("message.temple_scanner.on");
+		player.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 	}
 	
 	/**
@@ -126,14 +131,8 @@ public class StructureScannerItem extends Item
 	@Override
 	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected)
 	{
-		if(isPowered(stack) && level instanceof ServerLevel serverLevel)
-		{
-			GlobalPos pos = findStructureTarget(entity, serverLevel);
-			setTargetToNbt(stack, pos);
-			
-			if(entity.tickCount % 20 == 0)
-				powerTick(stack, entity);
-		}
+		if(!level.isClientSide && isPowered(stack) && entity.tickCount % 20 == 0)
+			powerTick(stack, entity);
 	}
 	
 	@Nullable
@@ -149,6 +148,7 @@ public class StructureScannerItem extends Item
 		
 		if(!isPowered(stack))
 		{
+			setTargetToNbt(stack, null);
 			MutableComponent message = Component.translatable("message.temple_scanner.off");
 			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
 		}
@@ -189,11 +189,10 @@ public class StructureScannerItem extends Item
 		return null;
 	}
 	
-	private static void consumeFuelItem(ItemStack fuelStack, Player player, Level level)
+	private static void consumeFuelItem(ItemStack fuelStack, Player player, ServerLevel level)
 	{
-		if(!level.isClientSide)
-			fuelStack.shrink(1);
+		fuelStack.shrink(1);
 		
-		level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
+		level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BLAZE_SHOOT, SoundSource.AMBIENT, 0.4F, 2F);
 	}
 }
