@@ -49,6 +49,16 @@ public class StructureScannerItem extends Item
 		this.fuelItem = fuelItem;
 	}
 	
+	public static boolean isPowered(ItemStack stack)
+	{
+		return stack.hasTag() && stack.getTag().getBoolean("Powered");
+	}
+	
+	public static void setIsPowered(ItemStack stack, boolean powered)
+	{
+		stack.getOrCreateTag().putBoolean("Powered", powered);
+	}
+	
 	@Nullable
 	public static GlobalPos getTargetFromNbt(ItemStack stack)
 	{
@@ -90,7 +100,7 @@ public class StructureScannerItem extends Item
 		if (stack.getDamageValue() > 0)
 			resetCharge(stack);
 		
-		stack.getOrCreateTag().putBoolean("Powered", true);
+		setIsPowered(stack, true);
 		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
 		
 		if (!pLevel.isClientSide)
@@ -110,7 +120,7 @@ public class StructureScannerItem extends Item
 	{
 		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
 		
-		if(pStack.hasTag() && pStack.getTag().getBoolean("Powered") && pLevel instanceof ServerLevel sLevel)
+		if(isPowered(pStack) && pLevel instanceof ServerLevel sLevel)
 		{
 			if (!isCharged(pStack))
 			{
@@ -160,7 +170,7 @@ public class StructureScannerItem extends Item
 		
 		if(!isCharged(stack))
 		{
-			stack.getOrCreateTag().putBoolean("Powered", false);
+			setIsPowered(stack, false);
 			
 			if(!level.isClientSide())
 			{
