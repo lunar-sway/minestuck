@@ -2026,6 +2026,7 @@
   "message.horrorterror.waiting": "The moment will come when you embrace the darkness, you will accept it with open arms.",
   "message.horrorterror.will": "Our will is your will.",
   "message.shift_for_more_info": "Press §eSHIFT§r for more info",
+  "message.temple_scanner.missing_fuel": "You lack fuel for this scanner.",
   "message.temple_scanner.off": "Temple scanner: Off",
   "message.temple_scanner.on": "Temple scanner: On",
   "minestuck.alchemiter": "Alchemiter",

@@ -37,6 +37,7 @@ public class StructureScannerItem extends Item
 {
 	public static final String ON = "message.temple_scanner.on";
 	public static final String OFF = "message.temple_scanner.off";
+	public static final String MISSING_FUEL = "message.temple_scanner.missing_fuel";
 	
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private final TagKey<Structure> structure;
@@ -106,7 +107,10 @@ public class StructureScannerItem extends Item
 			ItemStack invItem = findItem(player, fuelItem.get());
 			
 			if(invItem == null)
+			{
+				player.sendSystemMessage(Component.translatable(MISSING_FUEL).withStyle(ChatFormatting.RED));
 				return InteractionResultHolder.fail(stack);
+			}
 			
 			consumeFuelItem(invItem, player, serverLevel);
 		}
