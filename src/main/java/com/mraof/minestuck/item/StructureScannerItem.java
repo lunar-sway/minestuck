@@ -10,7 +10,6 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -41,14 +40,17 @@ public class StructureScannerItem extends Item
 	private final TagKey<Structure> structure;
 	@Nullable
 	private final Supplier<Item> fuelItem;
+	private final int powerCapacity;
 	
-	public StructureScannerItem(Properties properties, TagKey<Structure> structure, @Nullable Supplier<Item> fuelItem)
+	public StructureScannerItem(Properties properties, TagKey<Structure> structure, @Nullable Supplier<Item> fuelItem, int powerCapacity)
 	{
 		super(properties);
 		this.structure = structure;
 		this.fuelItem = fuelItem;
+		this.powerCapacity = powerCapacity;
 	}
 	
+	@SuppressWarnings("DataFlowIssue")
 	public static boolean isPowered(ItemStack stack)
 	{
 		return stack.hasTag() && stack.getTag().getBoolean("Powered");
@@ -59,7 +61,19 @@ public class StructureScannerItem extends Item
 		stack.getOrCreateTag().putBoolean("Powered", powered);
 	}
 	
+	@SuppressWarnings("DataFlowIssue")
+	public static int getPower(ItemStack stack)
+	{
+		return stack.hasTag() ? stack.getTag().getInt("power") : 0;
+	}
+	
+	public static void setPower(ItemStack stack, int power)
+	{
+		stack.getOrCreateTag().putInt("power", power);
+	}
+	
 	@Nullable
+	@SuppressWarnings("DataFlowIssue")
 	public static GlobalPos getTargetFromNbt(ItemStack stack)
 	{
 		if(stack.hasTag() && stack.getTag().contains("TargetLocation"))
@@ -97,8 +111,8 @@ public class StructureScannerItem extends Item
 			consumeFuelItem(invItem, pPlayer, pLevel);
 		}
 		
-		if (stack.getDamageValue() > 0)
-			resetCharge(stack);
+		if(getPower(stack) < this.powerCapacity)
+			setPower(stack, this.powerCapacity);
 		
 		setIsPowered(stack, true);
 		pLevel.playSound(pPlayer, pPlayer.getX(), pPlayer.getY(), pPlayer.getZ(), SoundEvents.UI_BUTTON_CLICK.get(), SoundSource.AMBIENT, 0.8F, 1.3F);
@@ -122,10 +136,8 @@ public class StructureScannerItem extends Item
 		
 		if(isPowered(pStack) && pLevel instanceof ServerLevel sLevel)
 		{
-			if (!isCharged(pStack))
-			{
-				resetCharge(pStack);
-			}
+			if (getPower(pStack) <= 0)
+				setPower(pStack, this.powerCapacity);
 			
 			GlobalPos pos = findStructureTarget(pEntity, sLevel);
 			
@@ -133,16 +145,6 @@ public class StructureScannerItem extends Item
 			
 			reduceCharge(pStack, pEntity, pLevel);
 		}
-	}
-	
-	public static boolean isCharged(ItemStack stack)
-	{
-		return stack.getDamageValue() < stack.getMaxDamage();
-	}
-	
-	public void resetCharge(ItemStack pStack)
-	{
-		pStack.setDamageValue(0);
 	}
 	
 	@Nullable
@@ -166,9 +168,9 @@ public class StructureScannerItem extends Item
 		if(fuelItem == null || entity.tickCount % 20 != 0)
 			return;
 		
-		stack.hurt(1, level.random, entity instanceof ServerPlayer ? (ServerPlayer) entity : null);
+		setPower(stack, getPower(stack) - 1);
 		
-		if(!isCharged(stack))
+		if(getPower(stack) <= 0)
 		{
 			setIsPowered(stack, false);
 			
@@ -184,6 +186,12 @@ public class StructureScannerItem extends Item
 	public boolean isBarVisible(ItemStack stack)
 	{
 		return isPowered(stack);
+	}
+	
+	@Override
+	public int getBarWidth(ItemStack stack)
+	{
+		return Math.round(13 * (float) getPower(stack) / this.powerCapacity);
 	}
 	
 	@Override
