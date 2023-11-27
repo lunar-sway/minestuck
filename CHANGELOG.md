@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
+- Minor changes and polish to the temple scanner
 
 ### Fixed
 
@@ -25,7 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi
+- Dweblenod, Zepsun, Hadean, pavizi, kirderf1
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
