@@ -186,6 +186,12 @@ public class StructureScannerItem extends Item
 		return isPowered(stack);
 	}
 	
+	@Override
+	public int getBarColor(ItemStack stack)
+	{
+		return 0x66BAFF;
+	}
+	
 	@Nullable
 	private static ItemStack findItem(Player player, Item item)
 	{
