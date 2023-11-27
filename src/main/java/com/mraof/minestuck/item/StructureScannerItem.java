@@ -185,6 +185,12 @@ public class StructureScannerItem extends Item
 		return 0x66BAFF;
 	}
 	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
+	{
+		return !ItemStack.isSameItem(oldStack, newStack);
+	}
+	
 	@Nullable
 	private static ItemStack findItem(Player player, Item item)
 	{
