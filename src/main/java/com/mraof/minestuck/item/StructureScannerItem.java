@@ -124,16 +124,15 @@ public class StructureScannerItem extends Item
 	 * Set the location to the nearest structure, check that a structure exists, then reduce charge if fuelled.
 	 */
 	@Override
-	public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected)
+	public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected)
 	{
-		super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-		
-		if(isPowered(pStack) && pLevel instanceof ServerLevel sLevel)
+		if(isPowered(stack) && level instanceof ServerLevel serverLevel)
 		{
-			GlobalPos pos = findStructureTarget(pEntity, sLevel);
-			setTargetToNbt(pStack, pos);
+			GlobalPos pos = findStructureTarget(entity, serverLevel);
+			setTargetToNbt(stack, pos);
 			
-			reduceCharge(pStack, pEntity, pLevel);
+			if(entity.tickCount % 20 == 0)
+				powerTick(stack, entity);
 		}
 	}
 	
@@ -144,23 +143,11 @@ public class StructureScannerItem extends Item
 		return pos == null ? null : GlobalPos.of(level.dimension(), pos);
 	}
 	
-	/**
-	 * Does nothing if this scanner type has no fuel item that it uses.
-	 * Scanner charge is represented by durability and damage.
-	 * Damage is dealt every 20 ticks, powers off when out of charge.
-	 *
-	 * @param stack current item
-	 * @param entity player entity
-	 * @param level player's current level
-	 */
-	public void reduceCharge(ItemStack stack, Entity entity, Level level)
+	private static void powerTick(ItemStack stack, Entity entity)
 	{
-		if(entity.tickCount % 20 != 0)
-			return;
-		
 		setPower(stack, getPower(stack) - 1);
 		
-		if(!isPowered(stack) && !level.isClientSide())
+		if(!isPowered(stack))
 		{
 			MutableComponent message = Component.translatable("message.temple_scanner.off");
 			entity.sendSystemMessage(message.withStyle(ChatFormatting.DARK_GREEN));
