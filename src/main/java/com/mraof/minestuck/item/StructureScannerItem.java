@@ -155,7 +155,7 @@ public class StructureScannerItem extends Item
 	 */
 	public void reduceCharge(ItemStack stack, Entity entity, Level level)
 	{
-		if(fuelItem == null || entity.tickCount % 20 != 0)
+		if(entity.tickCount % 20 != 0)
 			return;
 		
 		setPower(stack, getPower(stack) - 1);
