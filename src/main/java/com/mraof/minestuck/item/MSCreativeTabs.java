@@ -773,6 +773,7 @@ public final class MSCreativeTabs
 		output.accept(MSItems.WOODEN_LANCE.get());
 		output.accept(MSItems.LANEC.get());
 		output.accept(MSItems.JOUSTING_LANCE.get());
+		output.accept(MSItems.POGO_LANCE.get());
 		output.accept(MSItems.LANCELOTS_LOLLY.get());
 		output.accept(MSItems.DRAGON_LANCE.get());
 		output.accept(MSItems.SKY_PIERCER.get());

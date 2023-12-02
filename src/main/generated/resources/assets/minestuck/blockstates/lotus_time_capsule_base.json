@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/lotus_time_capsule_base",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/lotus_time_capsule_base"
+    },
+    "facing=south": {
+      "model": "minestuck:block/lotus_time_capsule_base",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/lotus_time_capsule_base",
+      "y": 270
+    }
+  }
+}

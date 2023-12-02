@@ -9,7 +9,6 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.redstone.AreaEffectBlock;
 import com.mraof.minestuck.block.redstone.SummonerBlock;
 import com.mraof.minestuck.block.redstone.WirelessRedstoneReceiverBlock;
-import com.mraof.minestuck.blockentity.machine.IntellibeamLaserstationBlockEntity;
 import com.mraof.minestuck.blockentity.TransportalizerBlockEntity;
 import com.mraof.minestuck.blockentity.machine.*;
 import com.mraof.minestuck.blockentity.redstone.RedstoneClockBlockEntity;
@@ -854,6 +853,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItem(MSItems.LANEC, "lanec");
 		addItemExtra(MSItems.LANEC, OnHitEffect.SORD_DROP_MESSAGE, "fuck......ahhhahahaaa....");
 		addItem(MSItems.JOUSTING_LANCE, "Jousting Lance");
+		addItem(MSItems.POGO_LANCE, "Pogo Lance");
 		addItem(MSItems.LANCELOTS_LOLLY,"Lancelot's Lolly");
 		addItemTooltip(MSItems.LANCELOTS_LOLLY, "Make your enemies POP with this SICKLE oops I mean LANCE");
 		addItem(MSItems.DRAGON_LANCE, "Dragon Lance");
@@ -1989,7 +1989,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(GristCommand.SUCCESS, "Successfully modified the grist cache for %s.");
 		add(GristCommand.FAILURE, "Failed to modify the grist cache for %s.");
 		add(GristCommand.SET, "Set the grist cache for %s players to %s.");
-		add(SetRungCommand.SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
+		add(RungCommand.SET_SUCCESS, "Successfully changed the echeladder of %s players to rung %d with %d%% progress.");
+		add(RungCommand.GET_SUCCESS, "%s's current echeladder rung is: %d.");
 		add(PorkhollowCommand.SEND, "Successfully sent %s boondollars to %s.");
 		add(PorkhollowCommand.RECEIVE, "Received %s boondollars from %s.");
 		add(PorkhollowCommand.TAKE, "Successfully took out %s boondollars from your porkhollow.");

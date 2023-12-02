@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/or_gate_block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/or_gate_block"
+    },
+    "facing=south": {
+      "model": "minestuck:block/or_gate_block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/or_gate_block",
+      "y": 270
+    }
+  }
+}

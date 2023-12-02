@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minecraft:block/tnt"
+      },
+      {
+        "model": "minecraft:block/tnt",
+        "y": 90
+      },
+      {
+        "model": "minecraft:block/tnt",
+        "y": 180
+      },
+      {
+        "model": "minecraft:block/tnt",
+        "y": 270
+      }
+    ]
+  }
+}

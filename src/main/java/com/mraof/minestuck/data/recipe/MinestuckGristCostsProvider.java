@@ -409,6 +409,7 @@ public final class MinestuckGristCostsProvider
 		
 		GristCostRecipeBuilder.of(MSItems.LANEC.get()).grist(ARTIFACT, -2).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.JOUSTING_LANCE.get()).grist(RUST, 113).grist(QUARTZ, 1).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.POGO_LANCE.get()).grist(BUILD, 98).grist(SHALE, 12).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.LANCELOTS_LOLLY.get()).grist(BUILD, 24).grist(IODINE, 36).grist(COBALT, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.DRAGON_LANCE.get()).grist(GARNET, 62).grist(DIAMOND, 7).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.SKY_PIERCER.get()).grist(AMBER, 596).grist(CAULK, 596).grist(DIAMOND, 239).grist(GOLD, 239).build(recipeSaver);

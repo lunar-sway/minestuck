@@ -63,7 +63,7 @@ public final class MinestuckData
 		
 		gen.addProvider(event.includeServer(), new StartingModusProvider(output, Minestuck.MOD_ID));
 		
-		gen.addProvider(event.includeClient(), new MinestuckBlockStateProvider(output, fileHelper));
+		gen.addProvider(event.includeClient(), new MSBlockStateProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckItemModelProvider(output, fileHelper));
 		gen.addProvider(event.includeClient(), new MinestuckEnUsLanguageProvider(output));
 	}

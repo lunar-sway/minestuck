@@ -15,6 +15,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponItem
 {
@@ -33,7 +34,7 @@ public class ReturningProjectileWeaponItem extends ConsumableProjectileWeaponIte
 		
 		level.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), MSSoundEvents.ITEM_PROJECTILE_THROW.get(), SoundSource.PLAYERS, 1.0F, 1.2F);
 		
-		if(!level.isClientSide)
+		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
 		{
 			boolean noBlockCollision = false;
 			Title title = PlayerSavedData.getData((ServerPlayer) playerIn).getTitle();

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 
 public class PropelEffect implements ItemRightClickEffect
 {
@@ -44,6 +45,9 @@ public class PropelEffect implements ItemRightClickEffect
 	
 	void propelAction(Player player, ItemStack stack, double velocity, InteractionHand hand)
 	{
+		if(player instanceof FakePlayer)
+			return;
+		
 		Title title = null;
 		if(player.level().isClientSide)
 		{
