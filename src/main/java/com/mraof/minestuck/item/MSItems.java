@@ -504,7 +504,6 @@ public class MSItems
 	public static final RegistryObject<Item> PHLEGM_GUSHERS = REGISTER.register("phlegm_gushers", () -> new HealingFoodItem(4F, new Item.Properties().food(MSFoods.PHLEGM_GUSHERS)));
 	public static final RegistryObject<Item> SORROW_GUSHERS = REGISTER.register("sorrow_gushers", () -> new Item(new Item.Properties().food(MSFoods.SORROW_GUSHERS)));
 	
-
 	public static final RegistryObject<Item> BUG_ON_A_STICK = REGISTER.register("bug_on_a_stick", () -> new Item(new Item.Properties().food(MSFoods.BUG_ON_A_STICK)));
 	public static final RegistryObject<Item> CHOCOLATE_BEETLE = REGISTER.register("chocolate_beetle", () -> new Item(new Item.Properties().food(MSFoods.CHOCOLATE_BEETLE)));
 	public static final RegistryObject<Item> CONE_OF_FLIES = REGISTER.register("cone_of_flies", () -> new Item(new Item.Properties().food(MSFoods.CONE_OF_FLIES)));
@@ -525,7 +524,6 @@ public class MSItems
 	public static final RegistryObject<Item> FRENCH_FRY = REGISTER.register("french_fry", () -> new Item(new Item.Properties().food(MSFoods.FRENCH_FRY)));
 	public static final RegistryObject<Item> STRAWBERRY_CHUNK = REGISTER.register("strawberry_chunk", () -> new ItemNameBlockItem(MSBlocks.STRAWBERRY_STEM.get(), new Item.Properties().food(MSFoods.STRAWBERRY_CHUNK)));
 	public static final RegistryObject<Item> FOOD_CAN = REGISTER.register("food_can", () -> new Item(new Item.Properties().stacksTo(16).food(MSFoods.FOOD_CAN)));
-
 	
 	public static final RegistryObject<Item> CANDY_CORN = REGISTER.register("candy_corn", () -> new Item(new Item.Properties().food(MSFoods.CANDY_CORN)));
 	public static final RegistryObject<Item> TUIX_BAR = REGISTER.register("tuix_bar", () -> new Item(new Item.Properties().food(MSFoods.TUIX_BAR)));
