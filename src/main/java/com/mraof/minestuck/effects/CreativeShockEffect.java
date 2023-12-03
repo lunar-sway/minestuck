@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,7 +69,7 @@ public class CreativeShockEffect extends MobEffect
 	@Override
 	public List<ItemStack> getCurativeItems()
 	{
-		return new ArrayList<>(); //prevent milk from curing creative shock
+		return Collections.emptyList(); //prevent milk from curing creative shock
 	}
 	
 	@Override
