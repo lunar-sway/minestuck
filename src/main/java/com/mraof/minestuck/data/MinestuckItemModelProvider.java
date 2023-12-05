@@ -632,6 +632,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				.texture("layer0", texture(textureName));
 	}
 	
+	/**
+	 * Generates a model that in third person places the weapon flat on top of the hand.
+	 */
 	private ItemModelBuilder clawWeapon(RegistryObject<? extends Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
@@ -639,6 +642,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
+	/**
+	 * Generates a model positioned for weapons with the handle in the top right corner of the texture.
+	 */
 	private ItemModelBuilder knifeWeapon(RegistryObject<? extends Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
@@ -646,6 +652,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
+	/**
+	 * Generated a model that is larger than other weapons when in hand.
+	 * This variant moves the weapon forward a little bit, suitable for weapons with a short handle or otherwise should be held closer to the bottom left corner.
+	 */
 	private ItemModelBuilder largeLongWeapon(RegistryObject<? extends Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
@@ -653,6 +663,9 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
+	/**
+	 * Generated a model that is larger than other weapons when in hand.
+	 */
 	private ItemModelBuilder largeWeapon(RegistryObject<? extends Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
