@@ -62,10 +62,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.CALEDSCRATCH);
 		handheldItem(MSItems.CALEDFWLCH);
 		handheldItem(MSItems.ROYAL_DERINGER);
-		lanceWeapon(MSItems.CLAYMORE);
+		largeLongWeapon(MSItems.CLAYMORE);
 		handheldItem(MSItems.CUTLASS_OF_ZILLYWAIR);
 		handheldItem(MSItems.REGISWORD);
-		lanceWeapon(MSItems.CRUEL_FATE_CRUCIBLE);
+		largeLongWeapon(MSItems.CRUEL_FATE_CRUCIBLE);
 		handheldItem(MSItems.SCARLET_RIBBITAR);
 		handheldItem(MSItems.DOGG_MACHETE, "snoop_dogg_machete");
 		handheldItem(MSItems.COBALT_SABRE);
@@ -73,7 +73,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.SHATTER_BEACON);
 		handheldItem(MSItems.SHATTER_BACON);
 		handheldItem(MSItems.PILLOW_TALK);
-		lanceWeapon(MSItems.KRAKENS_EYE);
+		largeLongWeapon(MSItems.KRAKENS_EYE);
 		handheldItem(MSItems.CINNAMON_SWORD);
 		handheldItem(MSItems.UNION_BUSTER);
 		handheldItem(MSItems.CHAINSAW_KATANA);
@@ -153,7 +153,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.HEPHAESTUS_LUMBERJACK);
 		handheldItem(MSItems.FISSION_FOCUSED_FAULT_FELLER);
 		largeWeapon(MSItems.BISECTOR);
-		lanceWeapon(MSItems.FINE_CHINA_AXE);
+		largeLongWeapon(MSItems.FINE_CHINA_AXE);
 		
 		//Dice
 		handheldItem(MSItems.FLUORITE_OCTET);
@@ -200,16 +200,16 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.FROSTTOOTH_LIPSTICK);
 		
 		//Lances
-		lanceWeapon(MSItems.WOODEN_LANCE);
-		lanceWeapon(MSItems.LANEC);
-		lanceWeapon(MSItems.JOUSTING_LANCE);
-		lanceWeapon(MSItems.POGO_LANCE);
-		lanceWeapon(MSItems.LANCELOTS_LOLLY);
-		lanceWeapon(MSItems.DRAGON_LANCE);
-		lanceWeapon(MSItems.SKY_PIERCER);
-		lanceWeapon(MSItems.FIDUSPAWN_LANCE);
-		lanceWeapon(MSItems.REGILANCE);
-		lanceWeapon(MSItems.CIGARETTE_LANCE);
+		largeLongWeapon(MSItems.WOODEN_LANCE);
+		largeLongWeapon(MSItems.LANEC);
+		largeLongWeapon(MSItems.JOUSTING_LANCE);
+		largeLongWeapon(MSItems.POGO_LANCE);
+		largeLongWeapon(MSItems.LANCELOTS_LOLLY);
+		largeLongWeapon(MSItems.DRAGON_LANCE);
+		largeLongWeapon(MSItems.SKY_PIERCER);
+		largeLongWeapon(MSItems.FIDUSPAWN_LANCE);
+		largeLongWeapon(MSItems.REGILANCE);
+		largeLongWeapon(MSItems.CIGARETTE_LANCE);
 		
 		handheldItem(MSItems.LUCERNE_HAMMER);
 		handheldItem(MSItems.LUCERNE_HAMMER_OF_UNDYING);
@@ -646,10 +646,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
-	private ItemModelBuilder lanceWeapon(RegistryObject<? extends Item> item)
+	private ItemModelBuilder largeLongWeapon(RegistryObject<? extends Item> item)
 	{
 		return withExistingParent(item.getId().getPath(),
-				id("item/lance_weapon"))
+				id("item/large_long_weapon"))
 				.texture("layer0", texture(item.getId().getPath()));
 	}
 	
