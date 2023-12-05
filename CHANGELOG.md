@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed multiple sources of crashes involving fake players
+- Creative Shock effect is no longer cured by drinking milk
 
 ### Contributors for this release
 
