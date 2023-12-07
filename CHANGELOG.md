@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
-- new consort dialogue
+- New consort dialogue
 
 ### Changed
 
