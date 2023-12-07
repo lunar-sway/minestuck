@@ -2329,7 +2329,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addDialogue("bats", "I don't like the idea of a bat. Never seen one, and I don't plan on it. It's just like, why the fuck are they built like that!?");
 		addDialogue("so_what", "Uhuh, so what you think you and your little hairy non-reptilian disposition impresses me? It doesn't impress me you just look like a fool. A damned hairy fool.");
 		addDialogue("trolly_problem", "The trolly problem isn't really all that complicated for me all things considered. I mean, I'll probably die of old age before the trolly ever hits me considering my incredibly short and quickly dwindling lifespan");
-		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one quesiton. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
+		addDialogue("a_little_lampshading", "Look I know you aren't a reptile, I just got one question. You ever hear some of these people talk? I swear, they must be putting mercury in the water with how nonsensical conversation can be with these guys.");
 		addDialogue("identity", "I heard that the true name of the %s is %s. Isn't that cool?");
 		addDialogue("college.1", "Please, I need to pay for my children to attend college...");
 		addDialogue("college.2", "Wow, you have so many boondollars! I'll never make that much in my short, amphibious lifetime.");
