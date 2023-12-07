@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "minestuck:item/thorn_in_your_side"
+  }
+}

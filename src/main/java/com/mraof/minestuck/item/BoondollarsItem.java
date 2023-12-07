@@ -12,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -28,7 +29,7 @@ public class BoondollarsItem extends Item
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player playerIn, InteractionHand handIn)
 	{
-		if(!level.isClientSide)
+		if(!level.isClientSide && !(playerIn instanceof FakePlayer))
 		{
 			PlayerSavedData.getData((ServerPlayer) playerIn).addBoondollars(getCount(playerIn.getItemInHand(handIn)));
 		}

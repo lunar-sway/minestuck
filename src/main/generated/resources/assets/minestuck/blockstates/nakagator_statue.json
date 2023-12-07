@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/nakagator_statue",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/nakagator_statue"
+    },
+    "facing=south": {
+      "model": "minestuck:block/nakagator_statue",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/nakagator_statue",
+      "y": 270
+    }
+  }
+}

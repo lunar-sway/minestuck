@@ -1,10 +1,9 @@
 package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.CombinationMode;
-import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
-import com.mraof.minestuck.alchemy.recipe.ItemCombiner;
-import com.mraof.minestuck.alchemy.recipe.ItemCombinerWrapper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.inventory.MiniPunchDesignixMenu;
 import com.mraof.minestuck.item.MSItems;
@@ -37,7 +36,7 @@ public class MiniPunchDesignixBlockEntity extends MachineProcessBlockEntity impl
 	public static final int MAX_PROGRESS = 100;
 	
 	private final ProgressTracker progressTracker = new ProgressTracker(ProgressTracker.RunType.ONCE, MAX_PROGRESS, this::setChanged, this::contentsValid);
-	private final ItemCombiner combinerInventory = new ItemCombinerWrapper(itemHandler, CombinationMode.OR);
+	private final CombinerContainer combinerInventory = new CombinerContainer.ItemHandlerWrapper(itemHandler, CombinationMode.OR);
 	
 	public MiniPunchDesignixBlockEntity(BlockPos pos, BlockState state)
 	{

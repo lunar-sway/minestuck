@@ -23,7 +23,7 @@ public class MSCommands
 		TransportalizerCommand.register(dispatcher);
 		SburbPredefineCommand.register(dispatcher);
 		SburbConnectionCommand.register(dispatcher);
-		SetRungCommand.register(dispatcher);
+		RungCommand.register(dispatcher);
 		ConsortReplyCommand.register(dispatcher);
 		PorkhollowCommand.register(dispatcher);
 		DebugLandsCommand.register(dispatcher);

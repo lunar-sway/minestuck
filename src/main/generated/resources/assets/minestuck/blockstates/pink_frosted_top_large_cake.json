@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minestuck:block/pink_frosted_top_large_cake0",
+        "weight": 7
+      },
+      {
+        "model": "minestuck:block/pink_frosted_top_large_cake1",
+        "weight": 2
+      }
+    ]
+  }
+}

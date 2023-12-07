@@ -1,36 +1,6 @@
 {
-    "parent": "block/block",
+    "parent": "minestuck:block/logic_gate_cube",
     "textures": {
-        "back": "minestuck:block/logic_gate_back",
-        "right_side": "minestuck:block/logic_gate_right_side",
-        "left_side": "minestuck:block/logic_gate_left_side",
-        "top": "minestuck:block/redstone_machine_block",
-        "bottom": "minestuck:block/redstone_machine_block",
-        "front": "minestuck:block/xor_gate",
-        "particle": "minestuck:block/xor_gate"
-    },
-    "elements": [
-        {   "from": [ 0, 0, 0 ],
-            "to": [ 16, 16, 16 ],
-            "faces": {
-                "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "cullface": "down" },
-                "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#top", "cullface": "up" },
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#back", "cullface": "north" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "south" },
-                "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#left_side", "cullface": "west" },
-                "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#right_side", "cullface": "east" }
-            }
-        }
-    ],
-    "display": {
-        "gui": {
-            "rotation": [30, 45, 0],
-            "scale": [0.625, 0.625, 0.625]
-        },
-        "fixed": {
-            "rotation": [0, -180, 0],
-            "translation": [0, 0, 0],
-            "scale": [0.5, 0.5, 0.5]
-        }
+        "front": "minestuck:block/xor_gate"
     }
 }
