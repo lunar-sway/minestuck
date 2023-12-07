@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
+- New consort dialogue
 
 ### Changed
 
@@ -27,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1
+- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
