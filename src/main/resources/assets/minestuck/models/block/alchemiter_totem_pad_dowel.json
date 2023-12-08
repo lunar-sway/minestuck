@@ -1,6 +1,6 @@
 {
     "render_type": "cutout",
-	"credit": "crafted with love by the grease artisan mysterymeat",
+	"credit": "Made with Blockbench by Riotmode",
 	"texture_size": [256, 256],
 	"textures": {
 		"0": "minestuck:block/machine/alchemiter",
