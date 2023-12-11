@@ -1,7 +1,0 @@
-{
-    "parent": "block/cross",
-    "render_type": "cutout",
-    "textures": {
-        "cross": "minestuck:block/doom_aspect_sapling"
-    }
-}

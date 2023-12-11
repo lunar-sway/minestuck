@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "minestuck:block/end_planks",
-        "top": "minestuck:block/end_planks",
-        "side": "minestuck:block/end_planks"
-    }
-}

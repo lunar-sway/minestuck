@@ -10,6 +10,7 @@ import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,7 @@ public class IdentifierHandler
 	private static int nextIdentifierId;
 	private static int fakePlayerIndex = 0;
 	
+	@Nullable
 	public static PlayerIdentifier encode(Player player)
 	{
 		if(player instanceof FakePlayer || player.getGameProfile() == null)

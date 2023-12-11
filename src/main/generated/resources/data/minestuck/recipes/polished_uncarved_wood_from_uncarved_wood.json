@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "minestuck:uncarved_wood"
+  },
+  "result": "minestuck:polished_carved_wood"
+}

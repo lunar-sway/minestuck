@@ -21,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayer;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.Animation;
@@ -114,7 +115,7 @@ public class ImpEntity extends UnderlingEntity implements GeoEntity
 	protected boolean isAppropriateTarget(LivingEntity entity)
 	{
 		//imps will not attack players above rung 15 unless an underling is attacked in their presence
-		if(entity instanceof ServerPlayer)
+		if(entity instanceof ServerPlayer && !(entity instanceof FakePlayer))
 		{
 			return PlayerSavedData.getData((ServerPlayer) entity).getEcheladder().getRung() < 16;
 		}

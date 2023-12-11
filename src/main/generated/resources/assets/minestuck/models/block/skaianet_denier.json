@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minestuck:block/skaianet_denier_top",
+    "side": "minestuck:block/skaianet_denier_side"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/anthvil",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/anthvil"
+    },
+    "facing=south": {
+      "model": "minestuck:block/anthvil",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/anthvil",
+      "y": 270
+    }
+  }
+}

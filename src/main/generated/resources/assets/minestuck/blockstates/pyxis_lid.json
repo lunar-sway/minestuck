@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "minestuck:block/pyxis_lid",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minestuck:block/pyxis_lid"
+    },
+    "facing=south": {
+      "model": "minestuck:block/pyxis_lid",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "minestuck:block/pyxis_lid",
+      "y": 270
+    }
+  }
+}

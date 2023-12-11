@@ -11,6 +11,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.EnderpearlItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -18,6 +19,9 @@ import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is an adapted version of Cibernet's code in Minestuck Universe, credit goes to him!
@@ -60,6 +64,12 @@ public class CreativeShockEffect extends MobEffect
 	{
 		if(CreativeShockEffect.doesCreativeShockLimit(player, survivalAmplifierThreshold))
 			player.stopFallFlying();
+	}
+	
+	@Override
+	public List<ItemStack> getCurativeItems()
+	{
+		return new ArrayList<>(); //prevent milk from curing creative shock
 	}
 	
 	@Override

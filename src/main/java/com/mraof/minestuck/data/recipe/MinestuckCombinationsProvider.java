@@ -27,17 +27,17 @@ public final class MinestuckCombinationsProvider
 	{
 		//Wood
 		final ItemLike[][] woodItems = {
-				{Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG, Blocks.MANGROVE_LOG},
-				{Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS, Blocks.MANGROVE_PLANKS},
-				{Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.BIRCH_SLAB, Blocks.JUNGLE_SLAB, Blocks.ACACIA_SLAB, Blocks.DARK_OAK_SLAB, Blocks.MANGROVE_SLAB},
-				{Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS, Blocks.MANGROVE_STAIRS},
-				{Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING, Blocks.MANGROVE_PROPAGULE},
-				{Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES,Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.MANGROVE_LEAVES},
-				{Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR, Blocks.MANGROVE_DOOR},
-				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE, Blocks.MANGROVE_FENCE},
-				{Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.MANGROVE_FENCE_GATE},
-				{Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR, Blocks.ACACIA_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.MANGROVE_TRAPDOOR}};
-		//0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak, 6: mangrove
+				{Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.BIRCH_LOG, Blocks.JUNGLE_LOG, Blocks.ACACIA_LOG, Blocks.DARK_OAK_LOG, Blocks.MANGROVE_LOG, Blocks.CHERRY_LOG},
+				{Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.BIRCH_PLANKS, Blocks.JUNGLE_PLANKS, Blocks.ACACIA_PLANKS, Blocks.DARK_OAK_PLANKS, Blocks.MANGROVE_PLANKS, Blocks.CHERRY_PLANKS},
+				{Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.BIRCH_SLAB, Blocks.JUNGLE_SLAB, Blocks.ACACIA_SLAB, Blocks.DARK_OAK_SLAB, Blocks.MANGROVE_SLAB, Blocks.CHERRY_SLAB},
+				{Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS, Blocks.MANGROVE_STAIRS, Blocks.CHERRY_STAIRS},
+				{Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING, Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING, Blocks.MANGROVE_PROPAGULE, Blocks.CHERRY_SAPLING},
+				{Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.BIRCH_LEAVES, Blocks.JUNGLE_LEAVES,Blocks.ACACIA_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.MANGROVE_LEAVES, Blocks.CHERRY_LEAVES},
+				{Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.BIRCH_DOOR, Blocks.JUNGLE_DOOR, Blocks.ACACIA_DOOR, Blocks.DARK_OAK_DOOR, Blocks.MANGROVE_DOOR, Blocks.CHERRY_DOOR},
+				{Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE, Blocks.MANGROVE_FENCE, Blocks.CHERRY_FENCE},
+				{Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.MANGROVE_FENCE_GATE, Blocks.CHERRY_FENCE_GATE},
+				{Blocks.OAK_TRAPDOOR, Blocks.SPRUCE_TRAPDOOR, Blocks.BIRCH_TRAPDOOR, Blocks.JUNGLE_TRAPDOOR, Blocks.ACACIA_TRAPDOOR, Blocks.DARK_OAK_TRAPDOOR, Blocks.MANGROVE_TRAPDOOR, Blocks.CHERRY_TRAPDOOR}};
+		//0: oak, 1: spruce, 2: birch, 3: jungle, 4: acacia, 5: dark oak, 6: mangrove, 7: cherry
 		// [0] || [1] -> [2]
 		int[][] woodCombinations = {{0, 1, 5}, {2, 3, 4}};
 		//0: log, 1: planks, 2: slab, 3: stairs, 4: sapling, 5: leaves, 6: door, 7: fence, 8: fence gate, 9: trapdoor
@@ -490,7 +490,7 @@ public final class MinestuckCombinationsProvider
 		CombinationRecipeBuilder.of(MSItems.HEPHAESTUS_LUMBERJACK.get()).input(Items.GOLDEN_AXE).and().input(Items.LAVA_BUCKET).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.RUBY_CROAK.get()).input(MSItems.EMERALD_AXE.get()).and().input(MSItems.FROG.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.BISECTOR.get()).input(MSItems.BI_DYE.get()).and().input(Items.IRON_AXE).build(consumer);
-		CombinationRecipeBuilder.of(MSItems.FINE_CHINA_AXE.get()).input(Items.FLOWER_POT).or().input(Items.DIAMOND_AXE).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.FINE_CHINA_AXE.get()).input(Items.DECORATED_POT).or().input(Items.DIAMOND_AXE).build(consumer);
 		
 		CombinationRecipeBuilder.of(MSItems.SICKLE.get()).input(Items.IRON_HOE).and().input(Items.WHEAT).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.OW_THE_EDGE.get()).input(MSItems.HEMEOREAPER.get()).or().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
@@ -666,6 +666,7 @@ public final class MinestuckCombinationsProvider
 		
 		CombinationRecipeBuilder.of(MSItems.LANEC.get()).input(MSItems.WOODEN_LANCE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.JOUSTING_LANCE.get()).input(MSItems.WOODEN_LANCE.get()).and().input(Tags.Items.INGOTS_IRON).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POGO_LANCE.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(Items.SLIME_BALL).build(consumer);
         CombinationRecipeBuilder.of(MSItems.LANCELOTS_LOLLY.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DRAGON_LANCE.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(MSItems.SCALEMATE_APPLESCAB.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SKY_PIERCER.get()).input(MSItems.DRAGON_LANCE.get()).or().input(MSItems.STAR_RAY.get()).build(consumer);
