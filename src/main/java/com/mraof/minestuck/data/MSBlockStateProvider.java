@@ -736,8 +736,8 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		//Land Plant Blocks
 		getVariantBuilder(MSBlocks.GLOWING_MUSHROOM.get()).partialState().setModels(weightedVariantModels(new int[] {2, 3, 2, 1, 2, 2, 1, 1},
-				i -> models().cross("glowing_mushroom" + i, texture("glowing_mushroom_" + i)).renderType("cutout")));
-		flatItem(MSItems.GLOWING_MUSHROOM, id -> texture("glowing_mushroom_1"));
+				i -> models().cross("glowing_mushroom" + i, texture("glowing_mushroom/" + i)).renderType("cutout")));
+		flatItem(MSItems.GLOWING_MUSHROOM, id -> texture("glowing_mushroom/1"));
 		simpleBlock(MSBlocks.DESERT_BUSH,
 				id -> models().cross(id.getPath(), texture(id)).renderType("cutout"));
 		flatItem(MSItems.DESERT_BUSH, MSBlockStateProvider::texture);
