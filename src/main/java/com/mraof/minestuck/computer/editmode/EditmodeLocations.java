@@ -279,7 +279,7 @@ public class EditmodeLocations
 		//TODO locations appear to be added/removed inappropriately
 		
 		//if locations contains the iterated block pos and the entry is no longer valid, remove it. Else if locations did not contain the iterated pos and its valid, add it
-		if(allLevelPairs.stream().anyMatch(blockPosSourcePair -> blockIterate.equals(blockPosSourcePair.getFirst()) && blockPosSourcePair.getSecond() == Source.BLOCK))
+		if(allLevelPairs.contains(Pair.of(blockIterate, Source.BLOCK)))
 		{
 			if(!isValidBlockSource(connection, editLevel, blockIterate))
 			{
