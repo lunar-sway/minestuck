@@ -39,8 +39,6 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 		
 		EditmodeLocations locations = editData.getConnection().getClientEditmodeLocations();
 		
-		if(locations == null)
-			return;
 		//locations.getLocations().get(player.level().dimension()).stream().findFirst().get().getFirst()
 		//TODO requires the dimensions to be the same, will need to be changed if the player will be allowed to teleport to other dimensions
 		for(Pair<BlockPos, EditmodeLocations.Source> valuePair : locations.getLocations().get(player.level().dimension()).stream().toList())

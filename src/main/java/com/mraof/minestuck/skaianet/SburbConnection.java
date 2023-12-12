@@ -39,6 +39,7 @@ public final class SburbConnection
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
 	
+	@Nonnull
 	private EditmodeLocations clientEditmodeLocations = new EditmodeLocations();
 	
 	private boolean isActive;
@@ -154,11 +155,8 @@ public final class SburbConnection
 		nbt.putInt("artifact", artifactType);
 		MSNBTUtil.writeGristType(nbt, "base_grist", baseGrist);
 		
-		if(clientEditmodeLocations != null)
-		{
-			ListTag locationsTag = EditmodeLocations.write(clientEditmodeLocations.getLocations());
-			nbt.put("editmode_locations", locationsTag);
-		}
+		ListTag locationsTag = EditmodeLocations.write(clientEditmodeLocations.getLocations());
+		nbt.put("editmode_locations", locationsTag);
 		
 		return nbt;
 	}
@@ -396,6 +394,7 @@ public final class SburbConnection
 		baseGrist = type;
 	}
 	
+	@Nonnull
 	public EditmodeLocations getClientEditmodeLocations()
 	{
 		return clientEditmodeLocations;
@@ -403,9 +402,6 @@ public final class SburbConnection
 	
 	public void addClientEditmodeLocation(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
-		if(clientEditmodeLocations == null)
-			clientEditmodeLocations = new EditmodeLocations();
-		
 		clientEditmodeLocations.addEntry(level, pos, source);
 	}
 	
@@ -423,8 +419,7 @@ public final class SburbConnection
 		baseGrist = other.baseGrist;
 		if(other.inventory != null)
 			inventory = other.inventory.copy();
-		if(other.clientEditmodeLocations != null)
-			clientEditmodeLocations = other.clientEditmodeLocations;
+		clientEditmodeLocations = other.clientEditmodeLocations;
 	}
 	
 	/**

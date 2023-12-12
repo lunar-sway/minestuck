@@ -331,16 +331,14 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		//every 10 seconds, revalidate locations
 		if(player.level().getGameTime() % 200 == 0)
 		{
-			if(editmodeLocations != null)
-				c.getClientEditmodeLocations().validateNearbySources(player, c);
+			c.getClientEditmodeLocations().validateNearbySources(player, c);
 			
 			editmodeLocations = c.getClientEditmodeLocations(); //refresh editmodeLocations after validation
 		}
 		
 		int range = MSDimensions.isLandDimension(player.server, player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
-		if(editmodeLocations != null)
-			editmodeLocations.canMoveAtPosition(player, range);
+		editmodeLocations.canMoveAtPosition(player, range);
 		
 		updateInventory(player, c);
 		
