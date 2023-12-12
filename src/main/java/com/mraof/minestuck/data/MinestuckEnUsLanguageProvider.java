@@ -1806,6 +1806,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
+		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
+		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
 		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");

@@ -29,17 +29,24 @@ import java.util.List;
  */
 public class EditmodeSettingsScreen extends MinestuckScreen
 {
-	public static final String TITLE = "minestuck.punch_designix";
+	public static final String TITLE = "minestuck.editmode_settings";
+	public static final String EDITMODE_LOCATIONS = "minestuck.editmode_locations";
 	
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_extra_large.png");
+	private static final ResourceLocation INTERACT_SINGLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_single_mode.png");
+	private static final ResourceLocation INTERACT_MULTIPLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_multiple_mode.png");
+	private static final ResourceLocation NOCLIP_ACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_active.png");
+	private static final ResourceLocation NOCLIP_INACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_inactive.png");
 	
 	private static final int GUI_WIDTH = 224;
 	private static final int GUI_HEIGHT = 176;
 	
-	private static final int SETTINGS_X = 100, SETTINGS_Y = 145;
+	private static final int SETTINGS_X = 106, SETTINGS_Y = 148;
 	private static final int SETTINGS_SIZE = InventoryEditmodeScreen.SETTINGS_SIZE;
+	private static final int INTERACT_ICON_X = 165, INTERACT_ICON_Y = 50;
+	private static final int NOCLIP_ICON_X = 165, NOCLIP_ICON_Y = 90;
+	private static final int TOGGLE_ICON_SIZE = 24;
 	
-	private final Player player;
 	private final List<Pair<BlockPos, EditmodeLocations.Source>> locationEntries = new ArrayList<>();
 	
 	private int page = 0;
@@ -55,7 +62,6 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	{
 		super(Component.translatable(TITLE));
 		
-		this.player = player;
 		EditmodeLocations locations = ClientEditHandler.locations; //approach means it wont update until the screen is reopened
 		
 		establishEntries(player, locations);
@@ -143,9 +149,19 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		
 		graphics.blit(GUI_BACKGROUND, xOffset, yOffset, 0, 0, GUI_WIDTH, GUI_HEIGHT);
 		
+		graphics.drawString(this.font, this.title, xOffset + 10, yOffset + 10, 4210752, false);
+		graphics.drawString(this.font, Component.translatable(EDITMODE_LOCATIONS), xOffset + 55, yOffset + 30, 9013641, false);
+		
 		graphics.blit(InventoryEditmodeScreen.SETTINGS_ICON, xOffset + SETTINGS_X, yOffset + SETTINGS_Y, SETTINGS_SIZE, SETTINGS_SIZE, 0, 0, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE);
 		if(InventoryEditmodeScreen.overtopSettingsIconBounds(mouseX, mouseY, xOffset, yOffset, SETTINGS_X, SETTINGS_Y))
 			graphics.renderTooltip(font, Component.translatable("Return"), mouseX, mouseY);
+		
+		graphics.blit(INTERACT_MULTIPLE_MODE_ICON, xOffset + INTERACT_ICON_X, yOffset + INTERACT_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
+		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, INTERACT_ICON_X, INTERACT_ICON_Y))
+			graphics.renderTooltip(font, Component.translatable("Interaction mode toggle not available yet"), mouseX, mouseY);
+		graphics.blit(NOCLIP_INACTIVE_ICON, xOffset + NOCLIP_ICON_X, yOffset + NOCLIP_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
+		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, NOCLIP_ICON_X, NOCLIP_ICON_Y))
+			graphics.renderTooltip(font, Component.translatable("Noclip toggle not available yet"), mouseX, mouseY);
 		
 		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
@@ -226,5 +242,13 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 			} else
 				break;
 		}
+	}
+	
+	public static boolean overtopToggleableIconBounds(double xPos, double yPos, int xOffset, int yOffset, int ICON_X, int ICON_Y)
+	{
+		boolean inYRange = yPos >= yOffset + ICON_Y && yPos < yOffset + ICON_Y + TOGGLE_ICON_SIZE;
+		boolean inXRange = xPos >= xOffset + ICON_X && xPos < xOffset + ICON_X + TOGGLE_ICON_SIZE;
+		
+		return inYRange && inXRange;
 	}
 }

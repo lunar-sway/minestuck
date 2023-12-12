@@ -2106,6 +2106,8 @@
   "minestuck.echeladder.health": "Health",
   "minestuck.echeladder.protection_underling": "Underling damage decreased to:",
   "minestuck.echeladder.protection_underling.increase": "Underling damage: -%.1f%%",
+  "minestuck.editmode_locations": "Teleport Locus",
+  "minestuck.editmode_settings": "Editmode Settings",
   "minestuck.eject_by_chat.off": "Quick Eject Inactive",
   "minestuck.eject_by_chat.on": "Quick Eject Active",
   "minestuck.empty_sylladex.1": "Are you sure you want to continue?",
