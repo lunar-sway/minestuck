@@ -84,7 +84,7 @@ public final class ClientEditHandler
 		} else if(deployList == null)    //Disable edit mode
 		{
 			player.fallDistance = 0;
-			activated = false;
+			disable();
 		}
 		if(deployList != null)
 		{
@@ -94,6 +94,13 @@ public final class ClientEditHandler
 		{
 			locations = locationsIn;
 		}
+	}
+	
+	private static void disable()
+	{
+		activated = false;
+		client = null;
+		locations = null;
 	}
 	
 	@SubscribeEvent
@@ -275,7 +282,7 @@ public final class ClientEditHandler
 	public static void onWorldUnload(LevelEvent.Unload event)
 	{
 		if(event.getLevel().isClientSide())
-			activated = false;
+			disable();
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
