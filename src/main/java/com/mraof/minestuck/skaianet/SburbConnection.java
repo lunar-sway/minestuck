@@ -8,6 +8,8 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
@@ -403,11 +405,19 @@ public final class SburbConnection
 	public void addClientEditmodeLocation(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		clientEditmodeLocations.addEntry(level, pos, source);
+		
+		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
+		if(editData != null)
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(clientEditmodeLocations), editData.getEditor());
 	}
 	
 	public void removeClientEditmodeLocations(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
 		clientEditmodeLocations.removeEntry(level, pos, source);
+		
+		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
+		if(editData != null)
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(clientEditmodeLocations), editData.getEditor());
 	}
 	
 	void copyFrom(SburbConnection other)

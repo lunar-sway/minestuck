@@ -50,11 +50,6 @@ public class EditmodeLocations
 		}
 	}
 	
-	public EditmodeLocations(ResourceKey<Level> level, BlockPos pos, Source source)
-	{
-		addEntry(level, pos, source);
-	}
-	
 	public EditmodeLocations()
 	{
 	}
