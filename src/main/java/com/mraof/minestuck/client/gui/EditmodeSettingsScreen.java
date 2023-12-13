@@ -64,7 +64,8 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		
 		EditmodeLocations locations = ClientEditHandler.locations; //approach means it wont update until the screen is reopened
 		
-		establishEntries(player, locations);
+		if(locations != null)
+			establishEntries(player, locations);
 	}
 	
 	private void establishEntries(Player player, EditmodeLocations locations)
