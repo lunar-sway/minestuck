@@ -53,6 +53,7 @@ public class MSPacketHandler
 		registerMessage(DataCheckerPacket.class, DataCheckerPacket::decode);
 		registerMessage(ClientEditPacket.class, ClientEditPacket::decode);
 		registerMessage(ServerEditPacket.class, ServerEditPacket::decode);
+		registerMessage(EditmodeLocationsPacket.class, EditmodeLocationsPacket::decode);
 		registerMessage(MiscContainerPacket.class, MiscContainerPacket::decode);
 		registerMessage(EditmodeDragPacket.Fill.class, EditmodeDragPacket.Fill::decode);
 		registerMessage(EditmodeDragPacket.Destroy.class, EditmodeDragPacket.Destroy::decode);

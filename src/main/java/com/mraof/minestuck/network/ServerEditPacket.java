@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network;
 
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 
@@ -11,7 +10,6 @@ import java.io.IOException;
 
 public class ServerEditPacket implements PlayToClientPacket
 {
-	EditmodeLocations locations;
 	String target;
 	CompoundTag deployTags;
 	
@@ -27,12 +25,11 @@ public class ServerEditPacket implements PlayToClientPacket
 		return packet;
 	}
 	
-	public static ServerEditPacket activate(String target, CompoundTag deployTags, EditmodeLocations locations)
+	public static ServerEditPacket activate(String target, CompoundTag deployTags)
 	{
 		ServerEditPacket packet = new ServerEditPacket();
 		packet.target = target;
 		packet.deployTags = deployTags;
-		packet.locations = locations;
 		return packet;
 	}
 	
@@ -47,27 +44,17 @@ public class ServerEditPacket implements PlayToClientPacket
 			buffer.writeBoolean(false);
 		else return;
 		
-		CompoundTag combinedTags = new CompoundTag();
-		
 		if(deployTags != null)
 		{
-			combinedTags.put("deploy_tags", deployTags);
-		}
-		
-		if(locations != null)
-		{
-			ListTag listTag = EditmodeLocations.write(locations.getLocations());
-			combinedTags.put("editmode_locations", listTag);
-		}
-		
-		try
-		{
-			ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-			NbtIo.writeCompressed(combinedTags, bytes);
-			buffer.writeBytes(bytes.toByteArray());
-		} catch(IOException e)
-		{
-			e.printStackTrace();
+			try
+			{
+				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+				NbtIo.writeCompressed(deployTags, bytes);
+				buffer.writeBytes(bytes.toByteArray());
+			} catch(IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -87,17 +74,7 @@ public class ServerEditPacket implements PlayToClientPacket
 				buffer.readBytes(bytes);
 				try
 				{
-					CompoundTag combinedTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
-					
-					if(combinedTags.contains("deploy_tags"))
-					{
-						packet.deployTags = combinedTags.getCompound("deploy_tags");
-					}
-					
-					if(combinedTags.contains("editmode_locations"))
-					{
-						packet.locations = EditmodeLocations.read(combinedTags.getList("editmode_locations", Tag.TAG_COMPOUND));
-					}
+					packet.deployTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
 				} catch(IOException e)
 				{
 					e.printStackTrace();
@@ -111,6 +88,6 @@ public class ServerEditPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.onClientPackage(target, deployTags, locations);
+		ClientEditHandler.onClientPackage(target, deployTags);
 	}
 }

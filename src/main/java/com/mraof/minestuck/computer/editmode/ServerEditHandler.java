@@ -15,6 +15,7 @@ import com.mraof.minestuck.event.SburbEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.ServerEditPacket;
+import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.skaianet.SburbConnection;
@@ -219,8 +220,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			c.getClientEditmodeLocations().validateNearbySources(player, c);
 			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c), c.getClientEditmodeLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(c.getClientEditmodeLocations()), player);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
@@ -272,8 +274,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		{
 			SburbConnection connection = data.connection;
 			
-			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection), connection.getClientEditmodeLocations());
+			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(connection.getClientEditmodeLocations()), editor);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();

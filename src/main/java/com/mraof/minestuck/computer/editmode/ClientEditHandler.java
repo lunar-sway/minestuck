@@ -73,7 +73,7 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, CompoundTag deployList, EditmodeLocations locationsIn)
+	public static void onClientPackage(String target, CompoundTag deployList)
 	{
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
@@ -89,10 +89,6 @@ public final class ClientEditHandler
 		if(deployList != null)
 		{
 			ClientDeployList.load(deployList);
-		}
-		if(locationsIn != null)
-		{
-			locations = locationsIn;
 		}
 	}
 	
