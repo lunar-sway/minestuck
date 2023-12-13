@@ -25,3 +25,15 @@ You can put this in the PR description or in the commit message.
 
 Also, please make sure that you add any player-visible changes to the unreleased section of the [changelog](CHANGELOG.md).
 Also make sure that those who contributed to the pull request are listed as contributors in the unreleased section.
+
+## Merging a Pull request
+
+When a maintainer merges a branch or pull request, the type of merge that should be used depends on the branch being merged.
+
+When merging a release branch or an accumulating feature branch into another branch, a regular merge commit should be made.
+
+Otherwise, as is often the case, a PR should instead be squashed.
+When squashing a PR, it is also a good idea to copy over any asset credits into the commit description.
+This is strictly not necessary, and could be skipped as long as credit is written out clearly in the PR description.
+
+In special cases where a PR consists of a single or a few self-contained commits, it is fine to merge by rebasing instead of squashing.
