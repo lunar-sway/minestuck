@@ -341,7 +341,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		int range = MSDimensions.isLandDimension(player.server, player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		
-		editmodeLocations.canMoveAtPosition(player, range);
+		editmodeLocations.limitMovement(player, range);
 		
 		updateInventory(player, c);
 		

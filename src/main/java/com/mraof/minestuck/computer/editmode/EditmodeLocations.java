@@ -204,7 +204,7 @@ public class EditmodeLocations
 				int range = MSDimensions.isLandDimension(((ServerPlayer) editPlayer).server, editPlayer.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 				
 				//TODO consider adding message indicating what happened
-				if(!canMoveAtPosition(editPlayer, range))
+				if(isOutsideBounds(editPlayer, range))
 				{
 					//teleport player to nearest valid location
 					BlockPos nextClosestLocationPos = getClosestPosInDimension(editPlayer);
@@ -230,36 +230,32 @@ public class EditmodeLocations
 		return false;
 	}
 	
-	/**
-	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces.
-	 * Used both server side and client side
-	 *
-	 * @param editPlayer Player in editmode
-	 * @return Whether the player is standing in a supported region
-	 */
-	public boolean canMoveAtPosition(Player editPlayer, double defaultRange)
+	public boolean isOutsideBounds(Player editPlayer, double defaultRange)
 	{
-		
-		@SuppressWarnings("resource") ResourceKey<Level> dimension = editPlayer.level().dimension();
-		if(!locations.containsKey(dimension))
-			return false;
-		
-		Optional<Pair<BlockPos, Source>> closestSource = findRelativelyClosest(editPlayer, locations.get(dimension), defaultRange);
+		@SuppressWarnings("resource") Collection<Pair<BlockPos, Source>> locations = this.locations.get(editPlayer.level().dimension());
+		return locations.stream().allMatch(pair -> isOutsideBounds(editPlayer, defaultRange, pair));
+	}
+	
+	public void limitMovement(Player editPlayer, double defaultRange)
+	{
+		@SuppressWarnings("resource") Collection<Pair<BlockPos, Source>> locations = this.locations.get(editPlayer.level().dimension());
+		Optional<Pair<BlockPos, Source>> closestSource = findRelativelyClosest(editPlayer, locations, defaultRange);
 		
 		if(closestSource.isEmpty())
-			return false;
+			return;
 		
-		if(relativeDistance(editPlayer, defaultRange, closestSource.get()) > 1)
-		{
+		if(isOutsideBounds(editPlayer, defaultRange, closestSource.get()))
 			limitMovement(editPlayer, closestSource.get(), defaultRange);
-			return false;
-		} else
-			return true;
 	}
 	
 	private static Optional<Pair<BlockPos, Source>> findRelativelyClosest(Player player, Collection<Pair<BlockPos, Source>> locations, double defaultRange)
 	{
 		return locations.stream().min(Comparator.comparingDouble(pair -> relativeDistance(player, defaultRange, pair)));
+	}
+	
+	private static boolean isOutsideBounds(Player player, double defaultRange, Pair<BlockPos, Source> pair)
+	{
+		return relativeDistance(player, defaultRange, pair) > 1;
 	}
 	
 	/**
