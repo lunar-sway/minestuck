@@ -69,16 +69,8 @@ public class EditmodeLocations
 		Pair<BlockPos, Source> locationPairIn = Pair.of(pos.immutable(), source);
 		
 		//TODO consider validating the pos and source
-		if(locations.containsKey(level))
-		{
-			for(Pair<BlockPos, Source> locationPair : locations.get(level))
-			{
-				if(locationPair.getFirst().equals(pos) && locationPair.getSecond().equals(source))
-					return; //prevent duplicates
-			}
-		}
-		
-		locations.put(level, locationPairIn);
+		if(!locations.containsEntry(level, locationPairIn))
+			locations.put(level, locationPairIn);
 	}
 	
 	public void removeEntry(ResourceKey<Level> level, BlockPos pos, Source source)
