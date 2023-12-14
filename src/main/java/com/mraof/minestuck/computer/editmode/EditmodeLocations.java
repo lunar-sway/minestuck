@@ -33,7 +33,7 @@ import java.util.*;
  * Contains a list of block positions in a radius around which an editmode player can move freely.
  * An instance is stored in SburbConnection for the SBURB client of the connection.
  */
-public class EditmodeLocations
+public final class EditmodeLocations
 {
 	//TODO prevent going to non Medium dimensions post Entry, delete maps to the Overworld
 	
@@ -58,13 +58,9 @@ public class EditmodeLocations
 		}
 	}
 	
-	public EditmodeLocations()
+	public List<BlockPos> getSortedPositions(ResourceKey<Level> level)
 	{
-	}
-	
-	public Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> getLocations()
-	{
-		return locations;
+		return locations.get(level).stream().sorted(Comparator.comparing(Pair::getSecond)).map(Pair::getFirst).toList();
 	}
 	
 	public boolean isSource(GlobalPos pos)

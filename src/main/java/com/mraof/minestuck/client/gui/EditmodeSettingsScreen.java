@@ -1,7 +1,6 @@
 package com.mraof.minestuck.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
@@ -14,14 +13,13 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,7 +48,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private static final int ENTRIES_PER_PAGE = 6;
 	
-	private final List<Pair<BlockPos, EditmodeLocations.Source>> locationEntries = new ArrayList<>();
+	private final List<BlockPos> locationEntries;
 	
 	private int page = 0;
 	private Button previousButton;
@@ -61,38 +59,18 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private List<Button> entryButtons = new ArrayList<>();
 	
+	@SuppressWarnings("resource")
 	public EditmodeSettingsScreen(Player player)
 	{
 		super(Component.translatable(TITLE));
 		
-		EditmodeLocations locations = ClientEditHandler.locations; //approach means it wont update until the screen is reopened
+		EditmodeLocations locations = ClientEditHandler.locations;
 		
+		//this approach will cause the list to not update until the screen is reopened
 		if(locations != null)
-			establishEntries(player, locations);
-	}
-	
-	@SuppressWarnings("resource")
-	private void establishEntries(Player player, EditmodeLocations locations)
-	{
-		//only shows locations in the current dimension for now
-		ResourceKey<Level> playerDimension = player.level().dimension();
-		List<Pair<BlockPos, EditmodeLocations.Source>> blockSourceLocationEntries = new ArrayList<>();
-		List<Pair<BlockPos, EditmodeLocations.Source>> entrySourceLocationEntries = new ArrayList<>();
-		locations.getLocations().forEach((entryDimension, posSourcePair) ->
-		{
-			if(playerDimension.equals(entryDimension))
-			{
-				EditmodeLocations.Source entrySource = posSourcePair.getSecond();
-				if(entrySource == EditmodeLocations.Source.BLOCK)
-					blockSourceLocationEntries.add(posSourcePair);
-				else if(entrySource == EditmodeLocations.Source.ENTRY)
-					entrySourceLocationEntries.add(posSourcePair);
-			}
-		});
-		
-		//block sources appear first, followed by entry sources
-		locationEntries.addAll(blockSourceLocationEntries);
-		locationEntries.addAll(entrySourceLocationEntries);
+			locationEntries = locations.getSortedPositions(player.level().dimension());
+		else
+			locationEntries = Collections.emptyList();
 	}
 	
 	@Override
@@ -115,7 +93,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
-			BlockPos entryPos = locationEntries.get(i).getFirst();
+			BlockPos entryPos = locationEntries.get(i);
 			int positionOffset = 20 * (i % ENTRIES_PER_PAGE);
 			
 			Component buttonComponent;
