@@ -28,6 +28,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Contains a list of block positions in a radius around which an editmode player can move freely.
@@ -55,6 +56,9 @@ public final class EditmodeLocations
 			new BlockPos(0, 360, 0),
 			new BlockPos(0, 400, 0));
 	
+	public record Area(BlockPos center, int range)
+	{}
+	
 	public enum Source
 	{
 		BLOCK,
@@ -77,6 +81,12 @@ public final class EditmodeLocations
 	public boolean isSource(GlobalPos pos)
 	{
 		return locations.get(pos.dimension()).stream().anyMatch(pair -> pair.getFirst() == pos.pos());
+	}
+	
+	public Stream<Area> getAreasFor(ResourceKey<Level> level, int defaultRange)
+	{
+		return this.locations.get(level).stream()
+				.map(pair -> new Area(pair.getFirst(), pair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange));
 	}
 	
 	public void addEntry(ResourceKey<Level> level, BlockPos pos, Source source)
@@ -134,6 +144,7 @@ public final class EditmodeLocations
 	/**
 	 * Gets the closest location in the dimension or returns null if there is none. May require validation.
 	 */
+	@SuppressWarnings("resource")
 	public BlockPos getClosestPosInDimension(Player player)
 	{
 		BlockPos playerPos = player.blockPosition();
@@ -244,57 +255,54 @@ public final class EditmodeLocations
 		return false;
 	}
 	
-	public boolean isOutsideBounds(Player editPlayer, double defaultRange)
+	@SuppressWarnings("resource")
+	public boolean isOutsideBounds(Player editPlayer, int defaultRange)
 	{
-		@SuppressWarnings("resource") Collection<Pair<BlockPos, Source>> locations = this.locations.get(editPlayer.level().dimension());
-		return locations.stream().allMatch(pair -> isOutsideBounds(editPlayer, defaultRange, pair));
+		return getAreasFor(editPlayer.level().dimension(), defaultRange)
+				.allMatch(area -> isOutsideBounds(editPlayer, area));
 	}
 	
-	public void limitMovement(Player editPlayer, double defaultRange)
+	@SuppressWarnings("resource")
+	public void limitMovement(Player editPlayer, int defaultRange)
 	{
-		@SuppressWarnings("resource") Collection<Pair<BlockPos, Source>> locations = this.locations.get(editPlayer.level().dimension());
-		Optional<Pair<BlockPos, Source>> closestSource = findRelativelyClosest(editPlayer, locations, defaultRange);
+		Optional<Area> closestSource = findRelativelyClosest(editPlayer, getAreasFor(editPlayer.level().dimension(), defaultRange));
 		
 		if(closestSource.isEmpty())
 			return;
 		
-		if(isOutsideBounds(editPlayer, defaultRange, closestSource.get()))
-			limitMovement(editPlayer, closestSource.get(), defaultRange);
+		if(isOutsideBounds(editPlayer, closestSource.get()))
+			limitMovement(editPlayer, closestSource.get());
 	}
 	
-	private static Optional<Pair<BlockPos, Source>> findRelativelyClosest(Player player, Collection<Pair<BlockPos, Source>> locations, double defaultRange)
+	private static Optional<Area> findRelativelyClosest(Player player, Stream<Area> areas)
 	{
-		return locations.stream().min(Comparator.comparingDouble(pair -> relativeDistance(player, defaultRange, pair)));
+		return areas.min(Comparator.comparingDouble(area -> relativeDistance(player, area)));
 	}
 	
-	private static boolean isOutsideBounds(Player player, double defaultRange, Pair<BlockPos, Source> pair)
+	private static boolean isOutsideBounds(Player player, Area area)
 	{
-		return relativeDistance(player, defaultRange, pair) > 1;
+		return relativeDistance(player, area) > 1;
 	}
 	
 	/**
 	 * Calculates a relative distance between the player and the given source, with values less than 1 being inside range, and values larger than 1 being outside range.
 	 */
-	private static double relativeDistance(Player player, double defaultRange, Pair<BlockPos, Source> pair)
+	private static double relativeDistance(Player player, Area area)
 	{
-		double range = pair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange;
-		
-		Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(pair.getFirst()));
+		Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
 		return Math.max(
 				Math.abs(distance.x()),
 				Math.max(Math.abs(distance.y()),
-						Math.abs(distance.z()))) / range;
+						Math.abs(distance.z()))) / area.range();
 	}
 	
-	private static void limitMovement(Player player, Pair<BlockPos, Source> pair, double defaultRange)
+	private static void limitMovement(Player player, Area area)
 	{
-		double range = pair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange;
-		
 		for(Direction direction : Direction.values())
 		{
 			Vec3 directionNormal = Vec3.atLowerCornerOf(direction.getNormal());
-			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(pair.getFirst()));
-			double distanceOverBorder = distance.dot(directionNormal) - range;
+			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
+			double distanceOverBorder = distance.dot(directionNormal) - area.range();
 			if(distanceOverBorder >= 0)
 				player.addDeltaMovement(directionNormal.scale(-distanceOverBorder));
 //				limitMovementInDirection(player, directionNormal);
