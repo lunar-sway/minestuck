@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Essentially a sub-menu of InventoryEditmodeScreen. Used for selecting an EditmodeLocation to teleport to
+ * Essentially a sub-menu of InventoryEditmodeScreen. Used for selecting an EditmodeLocation to teleport to.
+ * Also has buttons to enable/disable editmode relevant properties including noclip and interaction mode (not currently implemented)
  */
 public class EditmodeSettingsScreen extends MinestuckScreen
 {
@@ -41,11 +42,13 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	private static final int GUI_WIDTH = 224;
 	private static final int GUI_HEIGHT = 176;
 	
-	private static final int SETTINGS_X = 106, SETTINGS_Y = 148;
+	private static final int SETTINGS_X = 169, SETTINGS_Y = 120;
 	private static final int SETTINGS_SIZE = InventoryEditmodeScreen.SETTINGS_SIZE;
-	private static final int INTERACT_ICON_X = 165, INTERACT_ICON_Y = 50;
-	private static final int NOCLIP_ICON_X = 165, NOCLIP_ICON_Y = 90;
+	private static final int INTERACT_ICON_X = 165, INTERACT_ICON_Y = 45;
+	private static final int NOCLIP_ICON_X = 165, NOCLIP_ICON_Y = 85;
 	private static final int TOGGLE_ICON_SIZE = 24;
+	
+	private static final int ENTRIES_PER_PAGE = 6;
 	
 	private final List<Pair<BlockPos, EditmodeLocations.Source>> locationEntries = new ArrayList<>();
 	
@@ -108,7 +111,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		previousButton.active = false;
-		if(locationEntries.size() < 5)
+		if(locationEntries.size() < ENTRIES_PER_PAGE)
 		{
 			nextButton.active = false;
 		}
@@ -116,7 +119,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
 			Pair<BlockPos, EditmodeLocations.Source> entryIterate = locationEntries.get(i);
-			int positionOffset = 20 * (i % 5); //assumes 5 entries per page
+			int positionOffset = 20 * (i % ENTRIES_PER_PAGE);
 			
 			Component buttonComponent;
 			BlockPos entryPos = entryIterate.getFirst();
@@ -229,12 +232,12 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private void renderButtons()
 	{
-		int startElement = page * 5;
+		int startElement = page * ENTRIES_PER_PAGE;
 		
 		entryButtons.forEach(button -> button.visible = false); //makes all buttons invisible
 		entryButtons.forEach(button -> button.active = false); //makes all buttons invisible
 		
-		for(int i = startElement; i < startElement + 5; i++)
+		for(int i = startElement; i < startElement + ENTRIES_PER_PAGE; i++)
 		{
 			if(i < entryButtons.size())
 			{
