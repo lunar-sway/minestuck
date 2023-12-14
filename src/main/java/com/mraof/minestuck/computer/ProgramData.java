@@ -93,7 +93,7 @@ public final class ProgramData
 		@Override
 		public void onDiskInserted(ComputerBlockEntity computer)
 		{
-			if(computer.getLevel() instanceof ServerLevel serverLevel)
+			if(computer.getLevel() instanceof ServerLevel serverLevel && computer.getOwner() != null)
 				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), GlobalPos.of(serverLevel.dimension(), computer.getBlockPos()));
 		}
 		
@@ -107,7 +107,7 @@ public final class ProgramData
 		@Override
 		public void onClosed(ComputerBlockEntity computer)
 		{
-			if(computer.getLevel() instanceof ServerLevel level)
+			if(computer.getLevel() instanceof ServerLevel level && computer.getOwner() != null)
 			{
 				SkaianetHandler.get(level).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
 				
