@@ -201,7 +201,7 @@ public class EditmodeLocations
 	
 	private void checkBlockPosValidation(ServerPlayer editPlayer, PlayerIdentifier owner, Level editLevel, ResourceKey<Level> editDimension, List<Pair<BlockPos, Source>> allLevelPairs, BlockPos blockIterate)
 	{
-		//if locations contains the iterated block pos and the entry is no longer valid, remove it. Else if locations did not contain the iterated pos and its valid, add it
+		//if locations contains the iterated block pos and the entry is no longer valid, remove it.
 		if(allLevelPairs.contains(Pair.of(blockIterate, Source.BLOCK)))
 		{
 			if(!isValidBlockSource(editLevel, owner, blockIterate))
@@ -221,9 +221,6 @@ public class EditmodeLocations
 					}
 				}
 			}
-		} else if(isValidBlockSource(editLevel, owner, blockIterate))
-		{
-			addBlockSource(editPlayer.server, owner, GlobalPos.of(editDimension, blockIterate));
 		}
 	}
 	
