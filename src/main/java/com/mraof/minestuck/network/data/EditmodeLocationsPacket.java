@@ -14,16 +14,13 @@ public record EditmodeLocationsPacket(EditmodeLocations locations) implements Pl
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{
-		CompoundTag tag = new CompoundTag();
-		tag.put("editmode_locations", this.locations.write());
-		
-		buffer.writeNbt(tag);
+		buffer.writeNbt(this.locations.write());
 	}
 	
 	public static EditmodeLocationsPacket decode(FriendlyByteBuf buffer)
 	{
 		CompoundTag tag = Objects.requireNonNull(buffer.readNbt());
-		EditmodeLocations locations = EditmodeLocations.read(tag.getList("editmode_locations", Tag.TAG_COMPOUND));
+		EditmodeLocations locations = EditmodeLocations.read(tag);
 		return new EditmodeLocationsPacket(locations);
 	}
 	

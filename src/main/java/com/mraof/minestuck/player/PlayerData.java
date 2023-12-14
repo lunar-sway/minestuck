@@ -120,7 +120,7 @@ public final class PlayerData
 		
 		title = Title.tryRead(nbt, "title");
 		effectToggle = nbt.getBoolean("effect_toggle");
-		editmodeLocations = EditmodeLocations.read(nbt.getList("editmode_locations", Tag.TAG_COMPOUND));
+		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
 		
 		hasLoggedIn = true;
 	}
