@@ -10,9 +10,8 @@ import com.mraof.minestuck.computer.Theme;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
-import com.mraof.minestuck.skaianet.SburbConnection;
-import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
@@ -37,9 +36,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 import java.util.OptionalInt;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ComputerBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = MSBlockShapes.COMPUTER.createRotatedShapes();
@@ -97,14 +99,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 			
 			if(!level.isClientSide && blockEntity.hasProgram(0))
-			{
-				SburbConnection c = SkaianetHandler.get(level).getClientConnection(blockEntity);
-				//TODO may only be working with the primary computer
-				if(c != null)
-				{
-					EditmodeLocations.addBlockSource(((ServerLevel) level).getServer(), c.getClientIdentifier(), GlobalPos.of(level.dimension(), pos));
-				}
-			}
+				EditmodeLocations.addBlockSource(((ServerLevel) level).getServer(), blockEntity.getOwner(), GlobalPos.of(level.dimension(), pos));
 			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
 				MSScreenFactories.displayComputerScreen(blockEntity);
