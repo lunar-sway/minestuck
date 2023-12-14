@@ -7,6 +7,7 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -87,77 +89,6 @@ public class EditmodeLocations
 		//dont try to remove ENTRY Sources as they are only added once
 		if(source != Source.ENTRY)
 			locations.remove(level, Pair.of(pos, source));
-	}
-	
-	/**
-	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces.
-	 * Used both server side and client side
-	 *
-	 * @param editPlayer Player in editmode
-	 * @return Whether the player is standing in a supported region
-	 */
-	public boolean canMoveAtPosition(Player editPlayer, double defaultRange)
-	{
-		Level editLevel = editPlayer.level();
-		double editPosX = editPlayer.getX();
-		double editPosY = editPlayer.getY();
-		double editPosZ = editPlayer.getZ();
-		
-		if(!locations.containsKey(editLevel.dimension()))
-			return false;
-		
-		List<Pair<BlockPos, Source>> posSourcePairs = locations.get(editLevel.dimension()).stream().toList();
-		boolean xInBounds = false;
-		boolean yInBounds = false;
-		boolean zInBounds = false;
-		boolean allMatch = false;
-		boolean noneMatch = true;
-		
-		for(Pair<BlockPos, Source> posSourcePair : posSourcePairs)
-		{
-			//if the source is ENTRY, then it should be 30 regardless of what the config says due to the static nature of the location additions when Entry occurred
-			double moddedRange = posSourcePair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange;
-			BlockPos iteratePos = posSourcePair.getFirst();
-			
-			int centerX = iteratePos.getX();
-			int centerY = iteratePos.getY();
-			int centerZ = iteratePos.getZ();
-			
-			//if the defaultRange is 1 and the player pos isnt an exact match, dont bother
-			//if(defaultRange == 1 && editPos != iteratePos)
-			//	continue;
-			
-			boolean localXInBounds = isWithinRange(editPosX, centerX, moddedRange);
-			boolean localYInBounds = isWithinRange(editPosY, centerY, moddedRange);
-			boolean localZInBounds = isWithinRange(editPosZ, centerZ, moddedRange);
-			
-			//TODO does not factor in player offset such as in ServerEditHandler
-			if(localXInBounds)
-			{
-				xInBounds = true;
-				noneMatch = false;
-			}
-			
-			if(localYInBounds)
-			{
-				yInBounds = true;
-				noneMatch = false;
-			}
-			
-			if(localZInBounds)
-			{
-				zInBounds = true;
-				noneMatch = false;
-			}
-			
-			if(localXInBounds && localYInBounds && localZInBounds)
-			{
-				allMatch = true;
-				break;
-			}
-		}
-		
-		return handleMovement(editPlayer, xInBounds, yInBounds, zInBounds, allMatch, noneMatch);
 	}
 	
 	/**
@@ -310,45 +241,73 @@ public class EditmodeLocations
 	}
 	
 	/**
-	 * Takes all the flags from canMoveAtPosition() and modifies the players movement/position as needed.
+	 * Takes in a player and looks through each source (such as a computer) providing editmode to see if the player resides within one of the spaces.
+	 * Used both server side and client side
 	 *
-	 * @return Whether the player is out of one or more coordinate bounds
+	 * @param editPlayer Player in editmode
+	 * @return Whether the player is standing in a supported region
 	 */
-	private boolean handleMovement(Player editPlayer, boolean xInBounds, boolean yInBounds, boolean zInBounds, boolean allMatch, boolean noneMatch)
+	public boolean canMoveAtPosition(Player editPlayer, double defaultRange)
 	{
-		//TODO with this approach (potentially the use of "old" pos) the player "sticks" to the edge of the zone
-		//TODO consider adding message indicating the player is at the edge
-		if(allMatch)
+		
+		@SuppressWarnings("resource") ResourceKey<Level> dimension = editPlayer.level().dimension();
+		if(!locations.containsKey(dimension))
+			return false;
+		
+		Optional<Pair<BlockPos, Source>> closestSource = findRelativelyClosest(editPlayer, locations.get(dimension), defaultRange);
+		
+		if(closestSource.isEmpty())
+			return false;
+		
+		if(relativeDistance(editPlayer, defaultRange, closestSource.get()) > 1)
 		{
-			return true;
-		} else if(noneMatch)
-		{
-			if(editPlayer.level().isClientSide)
-				editPlayer.setPos(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
-			else editPlayer.teleportTo(editPlayer.xOld, editPlayer.yOld, editPlayer.zOld);
-			
+			limitMovement(editPlayer, closestSource.get(), defaultRange);
 			return false;
 		} else
+			return true;
+	}
+	
+	private static Optional<Pair<BlockPos, Source>> findRelativelyClosest(Player player, Collection<Pair<BlockPos, Source>> locations, double defaultRange)
+	{
+		return locations.stream().min(Comparator.comparingDouble(pair -> relativeDistance(player, defaultRange, pair)));
+	}
+	
+	/**
+	 * Calculates a relative distance between the player and the given source, with values less than 1 being inside range, and values larger than 1 being outside range.
+	 */
+	private static double relativeDistance(Player player, double defaultRange, Pair<BlockPos, Source> pair)
+	{
+		double range = pair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange;
+		
+		Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(pair.getFirst()));
+		return Math.max(
+				Math.abs(distance.x()),
+				Math.max(Math.abs(distance.y()),
+						Math.abs(distance.z()))) / range;
+	}
+	
+	private static void limitMovement(Player player, Pair<BlockPos, Source> pair, double defaultRange)
+	{
+		double range = pair.getSecond() == Source.ENTRY ? ENTRY_RANGE : defaultRange;
+		
+		for(Direction direction : Direction.values())
 		{
-			if(!xInBounds)
-				editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(0, 1, 1));
-			
-			if(!yInBounds)
-				editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(1, 0, 1));
-			
-			if(!zInBounds)
-				editPlayer.setDeltaMovement(editPlayer.getDeltaMovement().multiply(1, 1, 0));
-			
-			return false;
+			Vec3 directionNormal = Vec3.atLowerCornerOf(direction.getNormal());
+			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(pair.getFirst()));
+			if(distance.dot(directionNormal) >= range)
+				limitMovementInDirection(player, directionNormal);
 		}
 	}
 	
 	/**
-	 * Checks if the players position coordinate value in canMoveAtPosition() is within the bounds of a radius surrounding the center of the location
+	 * If the player has a component of their velocity going in the same direction as the provided vec, remove it.
 	 */
-	private boolean isWithinRange(double playerPos, double locationCenter, double range)
+	private static void limitMovementInDirection(Player player, Vec3 direction)
 	{
-		return playerPos >= locationCenter - range && playerPos <= locationCenter + range;
+		direction = direction.normalize();
+		double dotProduct = direction.dot(player.getDeltaMovement());
+		if(dotProduct > 0)
+			player.addDeltaMovement(direction.scale(-dotProduct));
 	}
 	
 	public void addEntryLocations(ResourceKey<Level> dimension, SburbConnection c)
