@@ -66,7 +66,7 @@ public class EditmodeLocations
 		if(level == null || pos == null)
 			return;
 		
-		Pair<BlockPos, Source> locationPairIn = Pair.of(pos, source);
+		Pair<BlockPos, Source> locationPairIn = Pair.of(pos.immutable(), source);
 		
 		//TODO consider validating the pos and source
 		if(locations.containsKey(level))
@@ -202,8 +202,6 @@ public class EditmodeLocations
 	
 	private void checkBlockPosValidation(Player editPlayer, SburbConnection connection, Level editLevel, ResourceKey<Level> editDimension, List<Pair<BlockPos, Source>> allLevelPairs, BlockPos blockIterate)
 	{
-		//TODO locations appear to be added/removed inappropriately
-		
 		//if locations contains the iterated block pos and the entry is no longer valid, remove it. Else if locations did not contain the iterated pos and its valid, add it
 		if(allLevelPairs.contains(Pair.of(blockIterate, Source.BLOCK)))
 		{
