@@ -44,6 +44,17 @@ public final class EditmodeLocations
 	
 	private final Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations = ArrayListMultimap.create();
 	
+	private static final List<BlockPos> ENTRY_POSITIONS = List.of(
+			new BlockPos(0, 80, 0),
+			new BlockPos(0, 120, 0),
+			new BlockPos(0, 160, 0),
+			new BlockPos(0, 200, 0),
+			new BlockPos(0, 240, 0),
+			new BlockPos(0, 280, 0),
+			new BlockPos(0, 320, 0),
+			new BlockPos(0, 360, 0),
+			new BlockPos(0, 400, 0));
+	
 	public enum Source
 	{
 		BLOCK,
@@ -303,15 +314,8 @@ public final class EditmodeLocations
 	
 	public void addEntryLocations(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> dimension)
 	{
-		addEntry(dimension, new BlockPos(0, 80, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 120, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 160, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 200, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 240, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 280, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 320, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 360, 0), EditmodeLocations.Source.ENTRY);
-		addEntry(dimension, new BlockPos(0, 400, 0), EditmodeLocations.Source.ENTRY);
+		for(BlockPos pos : ENTRY_POSITIONS)
+			addEntry(dimension, pos, EditmodeLocations.Source.ENTRY);
 		
 		sendLocationsToEditor(mcServer, owner, this);
 	}
