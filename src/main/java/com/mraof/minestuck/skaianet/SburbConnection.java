@@ -41,9 +41,6 @@ public final class SburbConnection
 	private ComputerReference clientComputer;
 	private ComputerReference serverComputer;
 	
-	@Nonnull
-	private EditmodeLocations clientEditmodeLocations = new EditmodeLocations();
-	
 	private boolean isActive;
 	private boolean isMain;
 	boolean lockedToSession;
@@ -113,11 +110,6 @@ public final class SburbConnection
 			hasEntered = nbt.contains("has_entered") ? nbt.getBoolean("has_entered") : true;
 		}
 		
-		if(nbt.contains("editmode_locations"))
-		{
-			clientEditmodeLocations = EditmodeLocations.read(nbt.getList("editmode_locations", Tag.TAG_COMPOUND));
-		}
-		
 		artifactType = nbt.getInt("artifact");
 		baseGrist = MSNBTUtil.readGristType(nbt, "base_grist", () -> SburbHandler.generateGristType(new Random()));
 	}
@@ -156,9 +148,6 @@ public final class SburbConnection
 		
 		nbt.putInt("artifact", artifactType);
 		MSNBTUtil.writeGristType(nbt, "base_grist", baseGrist);
-		
-		ListTag locationsTag = EditmodeLocations.write(clientEditmodeLocations.getLocations());
-		nbt.put("editmode_locations", locationsTag);
 		
 		return nbt;
 	}
@@ -399,25 +388,25 @@ public final class SburbConnection
 	@Nonnull
 	public EditmodeLocations getClientEditmodeLocations()
 	{
-		return clientEditmodeLocations;
+		return PlayerSavedData.getData(this.clientIdentifier, skaianet.mcServer).editmodeLocations;
 	}
 	
 	public void addClientEditmodeLocation(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
-		clientEditmodeLocations.addEntry(level, pos, source);
+		getClientEditmodeLocations().addEntry(level, pos, source);
 		
 		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
 		if(editData != null)
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(clientEditmodeLocations), editData.getEditor());
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(getClientEditmodeLocations()), editData.getEditor());
 	}
 	
 	public void removeClientEditmodeLocations(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
 	{
-		clientEditmodeLocations.removeEntry(level, pos, source);
+		getClientEditmodeLocations().removeEntry(level, pos, source);
 		
 		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
 		if(editData != null)
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(clientEditmodeLocations), editData.getEditor());
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(getClientEditmodeLocations()), editData.getEditor());
 	}
 	
 	void copyFrom(SburbConnection other)
@@ -429,7 +418,6 @@ public final class SburbConnection
 		baseGrist = other.baseGrist;
 		if(other.inventory != null)
 			inventory = other.inventory.copy();
-		clientEditmodeLocations = other.clientEditmodeLocations;
 	}
 	
 	/**

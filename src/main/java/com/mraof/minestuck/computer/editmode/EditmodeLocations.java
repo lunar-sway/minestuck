@@ -171,7 +171,7 @@ public class EditmodeLocations
 		if(editLevel.isClientSide)
 			return;
 		
-		//security for pre EditmodeLocations update worlds and for failed SburbConnection copy events
+		//security for pre EditmodeLocations update worlds
 		if(connection.getClientDimension() != null && connection.getClientDimension().equals(editDimension))
 		{
 			//if the client dimension isnt in locations or no location was of source ENTRY
