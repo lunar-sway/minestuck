@@ -71,11 +71,11 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 			establishEntries(player, locations);
 	}
 	
+	@SuppressWarnings("resource")
 	private void establishEntries(Player player, EditmodeLocations locations)
 	{
 		//only shows locations in the current dimension for now
 		ResourceKey<Level> playerDimension = player.level().dimension();
-		List<Pair<BlockPos, EditmodeLocations.Source>> entitySourceLocationEntries = new ArrayList<>();
 		List<Pair<BlockPos, EditmodeLocations.Source>> blockSourceLocationEntries = new ArrayList<>();
 		List<Pair<BlockPos, EditmodeLocations.Source>> entrySourceLocationEntries = new ArrayList<>();
 		locations.getLocations().forEach((entryDimension, posSourcePair) ->
@@ -83,17 +83,14 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 			if(playerDimension.equals(entryDimension))
 			{
 				EditmodeLocations.Source entrySource = posSourcePair.getSecond();
-				if(entrySource == EditmodeLocations.Source.ENTITY)
-					entitySourceLocationEntries.add(posSourcePair);
-				else if(entrySource == EditmodeLocations.Source.BLOCK)
+				if(entrySource == EditmodeLocations.Source.BLOCK)
 					blockSourceLocationEntries.add(posSourcePair);
 				else if(entrySource == EditmodeLocations.Source.ENTRY)
 					entrySourceLocationEntries.add(posSourcePair);
 			}
 		});
 		
-		//entity sources appear first, followed by block sources, then entry sources
-		locationEntries.addAll(entitySourceLocationEntries);
+		//block sources appear first, followed by entry sources
 		locationEntries.addAll(blockSourceLocationEntries);
 		locationEntries.addAll(entrySourceLocationEntries);
 	}
@@ -118,23 +115,16 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
-			Pair<BlockPos, EditmodeLocations.Source> entryIterate = locationEntries.get(i);
+			BlockPos entryPos = locationEntries.get(i).getFirst();
 			int positionOffset = 20 * (i % ENTRIES_PER_PAGE);
 			
 			Component buttonComponent;
-			BlockPos entryPos = entryIterate.getFirst();
 			
-			if(entryIterate.getSecond() == EditmodeLocations.Source.ENTITY)
-			{
-				buttonComponent = Component.literal("Player");
-			} else
-			{
-				int entryX = entryPos.getX();
-				int entryY = entryPos.getY();
-				int entryZ = entryPos.getZ();
-				
-				buttonComponent = Component.literal(entryX + " | " + entryY + " | " + entryZ);
-			}
+			int entryX = entryPos.getX();
+			int entryY = entryPos.getY();
+			int entryZ = entryPos.getZ();
+			
+			buttonComponent = Component.literal(entryX + " | " + entryY + " | " + entryZ);
 			
 			ExtendedButton entryButton = new ExtendedButton(xOffset + 10, yOffset + 45 + positionOffset, 120, 16, buttonComponent, button -> teleport(entryPos));
 			entryButtons.add(entryButton);

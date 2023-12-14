@@ -47,7 +47,6 @@ public class EditmodeLocations
 	public enum Source
 	{
 		BLOCK,
-		ENTITY,
 		ENTRY;
 		
 		public static Source fromInt(int ordinal) //converts int back into enum
