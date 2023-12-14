@@ -68,6 +68,11 @@ public class EditmodeLocations
 		return locations;
 	}
 	
+	public boolean isSource(GlobalPos pos)
+	{
+		return locations.get(pos.dimension()).stream().anyMatch(pair -> pair.getFirst() == pos.pos());
+	}
+	
 	public void addEntry(ResourceKey<Level> level, BlockPos pos, Source source)
 	{
 		if(level == null || pos == null)
@@ -151,8 +156,7 @@ public class EditmodeLocations
 		return pickedPos;
 	}
 	
-	//TODO should this be non-static?
-	public static ListTag write(Multimap<ResourceKey<Level>, Pair<BlockPos, Source>> locations)
+	public ListTag write()
 	{
 		ListTag listTag = new ListTag();
 		

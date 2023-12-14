@@ -15,7 +15,7 @@ public record EditmodeLocationsPacket(EditmodeLocations locations) implements Pl
 	public void encode(FriendlyByteBuf buffer)
 	{
 		CompoundTag tag = new CompoundTag();
-		tag.put("editmode_locations", EditmodeLocations.write(locations.getLocations()));
+		tag.put("editmode_locations", this.locations.write());
 		
 		buffer.writeNbt(tag);
 	}

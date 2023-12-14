@@ -152,7 +152,7 @@ public final class PlayerData
 			title.write(nbt, "title");
 		nbt.putBoolean("effect_toggle", effectToggle);
 		
-		nbt.put("editmode_locations", EditmodeLocations.write(editmodeLocations.getLocations()));
+		nbt.put("editmode_locations", editmodeLocations.write());
 		
 		return nbt;
 	}
