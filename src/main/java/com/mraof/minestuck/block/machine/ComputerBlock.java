@@ -98,9 +98,6 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				return InteractionResult.SUCCESS;
 			//insertion of code handled in ReadableSburbCodeItem onItemUseFirst()
 			
-			if(!level.isClientSide && blockEntity.hasProgram(0))
-				EditmodeLocations.addBlockSource(((ServerLevel) level).getServer(), blockEntity.getOwner(), GlobalPos.of(level.dimension(), pos));
-			
 			if(level.isClientSide && SkaiaClient.requestData(blockEntity))
 				MSScreenFactories.displayComputerScreen(blockEntity);
 			
@@ -166,6 +163,8 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				blockEntity.setChanged();
 				level.sendBlockUpdated(pos, state, state, 3);
+				if(id == 0)
+					EditmodeLocations.addBlockSource(((ServerLevel) level).getServer(), blockEntity.getOwner(), GlobalPos.of(level.dimension(), pos));
 			}
 			return true;
 		}
