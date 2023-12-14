@@ -38,6 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.OptionalInt;
 
 public class ComputerBlock extends MachineBlock implements EntityBlock
 {
@@ -77,7 +78,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(handIn);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem).isEmpty())
 				return InteractionResult.PASS;
 			
 			turnOn(state, level, pos, player, handIn, hit);
@@ -137,7 +138,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return false;
 		
 		ItemStack stackInHand = player.getItemInHand(handIn);
-		int id = ProgramData.getProgramID(stackInHand);
+		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK.get()))
 		{
@@ -160,8 +161,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				level.sendBlockUpdated(pos, state, state, 3);
 			}
 			return true;
-		} else if(id != -2)
+		} else if(optionalId.isPresent())
 		{
+			int id = optionalId.getAsInt();
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
 				stackInHand.shrink(1);

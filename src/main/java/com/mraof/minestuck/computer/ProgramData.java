@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.function.Consumer;
 
 /**
@@ -37,7 +38,7 @@ public class ProgramData
 	 */
 	public static void registerProgram(int id, ItemStack disk, Consumer<ComputerBlockEntity> closeFunction)
 	{
-		if(disks.containsKey(id) || id == -1 || id == -2)
+		if(disks.containsKey(id) || id == -1)
 			throw new IllegalArgumentException("Program id " + id + " is already used!");
 		closeFunctions.put(id, closeFunction);
 		disks.put(id, disk);
@@ -51,19 +52,18 @@ public class ProgramData
 	}
 	
 	/**
-	 * Returns the id of the program. Note that it returns -2 if the item does
-	 * not correspond to any program.
+	 * Returns the id of the program corresponding to the given item.
 	 */
-	public static int getProgramID(ItemStack item)
+	public static OptionalInt getProgramID(ItemStack item)
 	{
 		if(item.isEmpty())
-			return -2;
+			return OptionalInt.empty();
 		item = item.copy();
 		item.setCount(1);
 		for(int id : disks.keySet())
 			if(ItemStack.isSameItem(disks.get(id), item))
-				return id;
-		return -2;
+				return OptionalInt.of(id);
+		return OptionalInt.empty();
 	}
 	
 	@Nonnull
