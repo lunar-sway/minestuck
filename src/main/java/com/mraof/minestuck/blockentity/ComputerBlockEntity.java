@@ -7,7 +7,6 @@ import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
 import com.mraof.minestuck.computer.Theme;
-import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -16,7 +15,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
@@ -24,7 +22,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.ServerOpListEntry;
 import net.minecraft.util.RandomSource;
@@ -167,8 +164,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public void onLoad()
 	{
 		super.onLoad();
-		if(this.level instanceof ServerLevel serverLevel && this.owner != null && this.hasProgram(0))
-			EditmodeLocations.addBlockSource(serverLevel.getServer(), this.owner, GlobalPos.of(serverLevel.dimension(), this.getBlockPos()));
+		for(int id : installedPrograms)
+			ProgramData.getHandler(id).ifPresent(handler -> handler.onLoad(this));
 	}
 	
 	public boolean isBroken()
@@ -190,8 +187,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void closeAll()
 	{
-		for(int id : installedPrograms.stream().filter(i->i!=-1).toList())
-			ProgramData.closeProgram(id, this);
+		for(int id : installedPrograms)
+			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
 	}
 	
 	@Override
