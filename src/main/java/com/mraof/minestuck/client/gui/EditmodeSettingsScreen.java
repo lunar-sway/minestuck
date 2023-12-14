@@ -86,7 +86,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		previousButton.active = false;
-		if(locationEntries.size() < ENTRIES_PER_PAGE)
+		if(locationEntries.size() <= ENTRIES_PER_PAGE)
 		{
 			nextButton.active = false;
 		}
@@ -184,7 +184,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private void nextPage()
 	{
-		int maxPage = locationEntries.size() / 5;
+		int maxPage = (locationEntries.size() - 1) / ENTRIES_PER_PAGE;
 		if(page < maxPage)
 		{
 			page++;
