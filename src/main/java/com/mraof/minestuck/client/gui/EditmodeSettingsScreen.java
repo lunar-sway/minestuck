@@ -148,14 +148,14 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		
 		graphics.blit(InventoryEditmodeScreen.SETTINGS_ICON, xOffset + SETTINGS_X, yOffset + SETTINGS_Y, SETTINGS_SIZE, SETTINGS_SIZE, 0, 0, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE);
 		if(InventoryEditmodeScreen.overtopSettingsIconBounds(mouseX, mouseY, xOffset, yOffset, SETTINGS_X, SETTINGS_Y))
-			graphics.renderTooltip(font, Component.translatable("Return"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.literal("Return"), mouseX, mouseY);
 		
 		graphics.blit(INTERACT_MULTIPLE_MODE_ICON, xOffset + INTERACT_ICON_X, yOffset + INTERACT_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
 		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, INTERACT_ICON_X, INTERACT_ICON_Y))
-			graphics.renderTooltip(font, Component.translatable("Interaction mode toggle not available yet"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.literal("Interaction mode toggle not available yet"), mouseX, mouseY);
 		graphics.blit(NOCLIP_INACTIVE_ICON, xOffset + NOCLIP_ICON_X, yOffset + NOCLIP_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
 		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, NOCLIP_ICON_X, NOCLIP_ICON_Y))
-			graphics.renderTooltip(font, Component.translatable("Noclip toggle not available yet"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.literal("Noclip toggle not available yet"), mouseX, mouseY);
 		
 		super.render(graphics, mouseX, mouseY, partialTicks);
 	}
