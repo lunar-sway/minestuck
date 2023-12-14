@@ -284,8 +284,10 @@ public class EditmodeLocations
 		{
 			Vec3 directionNormal = Vec3.atLowerCornerOf(direction.getNormal());
 			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(pair.getFirst()));
-			if(distance.dot(directionNormal) >= range)
-				limitMovementInDirection(player, directionNormal);
+			double distanceOverBorder = distance.dot(directionNormal) - range;
+			if(distanceOverBorder >= 0)
+				player.addDeltaMovement(directionNormal.scale(-distanceOverBorder));
+//				limitMovementInDirection(player, directionNormal);
 		}
 	}
 	
