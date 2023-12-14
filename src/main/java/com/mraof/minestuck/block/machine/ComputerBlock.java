@@ -15,6 +15,8 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -99,7 +101,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				//TODO may only be working with the primary computer
 				if(c != null)
 				{
-					c.addClientEditmodeLocation(level.dimension(), pos, EditmodeLocations.Source.BLOCK);
+					EditmodeLocations.addBlockSource(((ServerLevel) level).getServer(), c.getClientIdentifier(), GlobalPos.of(level.dimension(), pos));
 				}
 			}
 			

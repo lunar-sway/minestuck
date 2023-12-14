@@ -4,15 +4,22 @@ import com.google.common.collect.*;
 import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
+import com.mraof.minestuck.player.PlayerIdentifier;
+import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
+import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -86,7 +93,7 @@ public class EditmodeLocations
 	/**
 	 * Checks the editmode players surroundings, then both removes now invalid locations and adds new valid locations.
 	 */
-	public void validateNearbySources(Player editPlayer, SburbConnection connection)
+	public void validateNearbySources(ServerPlayer editPlayer, SburbConnection connection)
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
@@ -99,7 +106,7 @@ public class EditmodeLocations
 		{
 			//if the client dimension isnt in locations or no location was of source ENTRY
 			if(!locations.containsKey(editDimension) || locations.get(editDimension).stream().noneMatch(blockPosSourcePair -> blockPosSourcePair.getSecond() == Source.ENTRY))
-				connection.getClientEditmodeLocations().addEntryLocations(editDimension, connection);
+				this.addEntryLocations(editDimension, editPlayer.server, connection.getClientIdentifier());
 		}
 		
 		if(!locations.containsKey(editDimension))
@@ -192,16 +199,16 @@ public class EditmodeLocations
 		return locations;
 	}
 	
-	private void checkBlockPosValidation(Player editPlayer, SburbConnection connection, Level editLevel, ResourceKey<Level> editDimension, List<Pair<BlockPos, Source>> allLevelPairs, BlockPos blockIterate)
+	private void checkBlockPosValidation(ServerPlayer editPlayer, SburbConnection connection, Level editLevel, ResourceKey<Level> editDimension, List<Pair<BlockPos, Source>> allLevelPairs, BlockPos blockIterate)
 	{
 		//if locations contains the iterated block pos and the entry is no longer valid, remove it. Else if locations did not contain the iterated pos and its valid, add it
 		if(allLevelPairs.contains(Pair.of(blockIterate, Source.BLOCK)))
 		{
 			if(!isValidBlockSource(connection, editLevel, blockIterate))
 			{
-				connection.removeClientEditmodeLocations(editDimension, blockIterate, Source.BLOCK);
+				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), GlobalPos.of(editDimension, blockIterate));
 				
-				int range = MSDimensions.isLandDimension(((ServerPlayer) editPlayer).server, editPlayer.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+				int range = MSDimensions.isLandDimension(editPlayer.server, editPlayer.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 				
 				//TODO consider adding message indicating what happened
 				if(isOutsideBounds(editPlayer, range))
@@ -216,7 +223,7 @@ public class EditmodeLocations
 			}
 		} else if(isValidBlockSource(connection, editLevel, blockIterate))
 		{
-			connection.addClientEditmodeLocation(editDimension, blockIterate, Source.BLOCK);
+			addBlockSource(editPlayer.server, connection.getClientIdentifier(), GlobalPos.of(editDimension, blockIterate));
 		}
 	}
 	
@@ -298,16 +305,43 @@ public class EditmodeLocations
 			player.addDeltaMovement(direction.scale(-dotProduct));
 	}
 	
-	public void addEntryLocations(ResourceKey<Level> dimension, SburbConnection c)
+	public void addEntryLocations(ResourceKey<Level> dimension, MinecraftServer mcServer, PlayerIdentifier player)
 	{
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 80, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 120, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 160, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 200, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 240, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 280, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 320, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 360, 0), EditmodeLocations.Source.ENTRY);
-		c.addClientEditmodeLocation(dimension, new BlockPos(0, 400, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 80, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 120, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 160, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 200, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 240, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 280, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 320, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 360, 0), EditmodeLocations.Source.ENTRY);
+		addEntry(dimension, new BlockPos(0, 400, 0), EditmodeLocations.Source.ENTRY);
+		
+		sendLocationsToEditor(mcServer, player, this);
+	}
+	
+	public static void addBlockSource(MinecraftServer mcServer, PlayerIdentifier player, GlobalPos pos)
+	{
+		var locations = PlayerSavedData.getData(player, mcServer).editmodeLocations;
+		locations.addEntry(pos.dimension(), pos.pos(), Source.BLOCK);
+		
+		sendLocationsToEditor(mcServer, player, locations);
+	}
+	
+	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier player, GlobalPos pos)
+	{
+		var locations = PlayerSavedData.getData(player, mcServer).editmodeLocations;
+		locations.removeEntry(pos.dimension(), pos.pos(), Source.BLOCK);
+		
+		sendLocationsToEditor(mcServer, player, locations);
+	}
+	
+	private static void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier player, EditmodeLocations locations)
+	{
+		SkaianetHandler.get(mcServer).getPrimaryConnection(player, true).ifPresent(connection -> {
+			EditData editData = ServerEditHandler.getData(mcServer, connection);
+			if(editData != null)
+				MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(locations), editData.getEditor());
+		});
 	}
 }

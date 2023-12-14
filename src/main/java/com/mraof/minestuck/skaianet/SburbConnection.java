@@ -391,24 +391,6 @@ public final class SburbConnection
 		return PlayerSavedData.getData(this.clientIdentifier, skaianet.mcServer).editmodeLocations;
 	}
 	
-	public void addClientEditmodeLocation(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
-	{
-		getClientEditmodeLocations().addEntry(level, pos, source);
-		
-		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
-		if(editData != null)
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(getClientEditmodeLocations()), editData.getEditor());
-	}
-	
-	public void removeClientEditmodeLocations(ResourceKey<Level> level, BlockPos pos, EditmodeLocations.Source source)
-	{
-		getClientEditmodeLocations().removeEntry(level, pos, source);
-		
-		EditData editData = ServerEditHandler.getData(skaianet.mcServer, this);
-		if(editData != null)
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(getClientEditmodeLocations()), editData.getEditor());
-	}
-	
 	void copyFrom(SburbConnection other)
 	{
 		lockedToSession = other.lockedToSession;

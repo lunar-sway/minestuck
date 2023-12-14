@@ -221,7 +221,7 @@ public final class SburbHandler
 		{
 			MSCriteriaTriggers.CRUXITE_ARTIFACT.trigger(player);
 			
-			c.getClientEditmodeLocations().addEntryLocations(player.level().dimension(), c);
+			c.getClientEditmodeLocations().addEntryLocations(player.level().dimension(), server, c.getClientIdentifier());
 			
 			LandTypePair.Named landTypes = LandTypePair.getNamed(player.serverLevel()).orElseThrow();
 			
