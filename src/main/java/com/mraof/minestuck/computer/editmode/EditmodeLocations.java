@@ -85,25 +85,6 @@ public final class EditmodeLocations
 				entryLocations.map(pos -> new Area(pos, ENTRY_RANGE)));
 	}
 	
-	public void addComputerPos(ResourceKey<Level> level, BlockPos pos)
-	{
-		if(level == null || pos == null)
-			return;
-		
-		//TODO consider validating the pos and source
-		
-		if(!computers.containsEntry(level, pos))
-			computers.put(level, pos.immutable());
-	}
-	
-	public void removeEntry(ResourceKey<Level> level, BlockPos pos)
-	{
-		if(level == null || pos == null)
-			return;
-		
-		computers.remove(level, pos);
-	}
-	
 	/**
 	 * Checks the editmode players surroundings, then both removes now invalid locations and adds new valid locations.
 	 */
@@ -207,7 +188,7 @@ public final class EditmodeLocations
 			int posY = nbt.getInt("y");
 			int posZ = nbt.getInt("z");
 			
-			locations.addComputerPos(dimension, new BlockPos(posX, posY, posZ));
+			locations.computers.put(dimension, new BlockPos(posX, posY, posZ));
 		}
 		
 		return locations;
@@ -322,7 +303,13 @@ public final class EditmodeLocations
 	public static void addBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, GlobalPos pos)
 	{
 		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		locations.addComputerPos(pos.dimension(), pos.pos());
+		ResourceKey<Level> level = pos.dimension();
+		
+		if(locations.computers.containsEntry(level, pos.pos()))
+			return;
+		
+		//TODO consider validating the pos and source
+		locations.computers.put(level, pos.pos().immutable());
 		
 		sendLocationsToEditor(mcServer, owner, locations);
 	}
@@ -330,7 +317,7 @@ public final class EditmodeLocations
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, GlobalPos pos)
 	{
 		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		locations.removeEntry(pos.dimension(), pos.pos());
+		locations.computers.remove(pos.dimension(), pos.pos());
 		
 		sendLocationsToEditor(mcServer, owner, locations);
 	}
