@@ -78,7 +78,7 @@ public final class EditmodeLocations
 		if(!locations.computers.get(level).contains(pos))
 			return false;
 		
-		if(!isValidComputerSourceFor(data.getEditor().level(), pos, owner))
+		if(isComputerSourceInvalidFor(data.getEditor().level(), pos, owner))
 		{
 			removeBlockSource(data.getEditor().server, owner, level, pos);
 			return false;
@@ -113,7 +113,7 @@ public final class EditmodeLocations
 			this.addEntryLocations(editPlayer.server, connection.getClientIdentifier(), connection.getClientDimension());
 		
 		this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(pos -> {
-			if(!isValidComputerSourceFor(editLevel, pos, connection.getClientIdentifier()))
+			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
 			{
 				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
 				
@@ -182,19 +182,17 @@ public final class EditmodeLocations
 		return locations;
 	}
 	
-	private static boolean isValidComputerSourceFor(Level level, BlockPos pos, PlayerIdentifier owner)
+	private static boolean isComputerSourceInvalidFor(Level level, BlockPos pos, PlayerIdentifier owner)
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
-		{
-			return isValidComputerSource(computerBlockEntity) && computerBlockEntity.owner.equals(owner);
-		}
+			return isComputerSourceInvalid(computerBlockEntity) || !computerBlockEntity.owner.equals(owner);
 		
-		return false;
+		return true;
 	}
 	
-	private static boolean isValidComputerSource(ComputerBlockEntity computer)
+	private static boolean isComputerSourceInvalid(ComputerBlockEntity computer)
 	{
-		return !computer.isBroken() && computer.hasProgram(0);
+		return computer.isBroken() || !computer.hasProgram(0);
 	}
 	
 	@SuppressWarnings("resource")
@@ -267,7 +265,7 @@ public final class EditmodeLocations
 		
 		if(locations.computers.containsEntry(level.dimension(), computer.getBlockPos()))
 			return;
-		if(!isValidComputerSource(computer))
+		if(isComputerSourceInvalid(computer))
 			return;
 		
 		locations.computers.put(level.dimension(), computer.getBlockPos());
