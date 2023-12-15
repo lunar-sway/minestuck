@@ -201,7 +201,7 @@ public final class EditmodeLocations
 		{
 			if(!isValidBlockSource(editLevel, owner, blockIterate))
 			{
-				removeBlockSource(editPlayer.server, owner, GlobalPos.of(editDimension, blockIterate));
+				removeBlockSource(editPlayer.server, owner, editDimension, blockIterate);
 				
 				int range = MSDimensions.isLandDimension(editPlayer.server, editPlayer.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 				
@@ -300,24 +300,23 @@ public final class EditmodeLocations
 		sendLocationsToEditor(mcServer, owner, this);
 	}
 	
-	public static void addBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, GlobalPos pos)
+	public static void addBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
 		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		ResourceKey<Level> level = pos.dimension();
 		
-		if(locations.computers.containsEntry(level, pos.pos()))
+		if(locations.computers.containsEntry(level, pos))
 			return;
 		
 		//TODO consider validating the pos and source
-		locations.computers.put(level, pos.pos().immutable());
+		locations.computers.put(level, pos.immutable());
 		
 		sendLocationsToEditor(mcServer, owner, locations);
 	}
 	
-	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, GlobalPos pos)
+	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
 		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		locations.computers.remove(pos.dimension(), pos.pos());
+		locations.computers.remove(level, pos);
 		
 		sendLocationsToEditor(mcServer, owner, locations);
 	}

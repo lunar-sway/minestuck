@@ -4,7 +4,6 @@ import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 
@@ -94,14 +93,14 @@ public final class ProgramData
 		public void onDiskInserted(ComputerBlockEntity computer)
 		{
 			if(computer.getLevel() instanceof ServerLevel serverLevel && computer.getOwner() != null)
-				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), GlobalPos.of(serverLevel.dimension(), computer.getBlockPos()));
+				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), serverLevel.dimension(), computer.getBlockPos());
 		}
 		
 		@Override
 		public void onLoad(ComputerBlockEntity computer)
 		{
 			if(computer.getLevel() instanceof ServerLevel serverLevel && computer.getOwner() != null)
-				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), GlobalPos.of(serverLevel.dimension(), computer.getBlockPos()));
+				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), serverLevel.dimension(), computer.getBlockPos());
 		}
 		
 		@Override
@@ -111,7 +110,7 @@ public final class ProgramData
 			{
 				SkaianetHandler.get(level).closeClientConnection(computer);	//Can safely be done even if this computer isn't in a connection
 				
-				EditmodeLocations.removeBlockSource(level.getServer(), computer.getOwner(), GlobalPos.of(level.dimension(), computer.getBlockPos()));
+				EditmodeLocations.removeBlockSource(level.getServer(), computer.getOwner(), level.dimension(), computer.getBlockPos());
 			}
 		}
 	};
