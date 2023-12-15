@@ -247,19 +247,7 @@ public final class EditmodeLocations
 			double distanceOverBorder = distance.dot(directionNormal) - area.range();
 			if(distanceOverBorder >= 0)
 				player.addDeltaMovement(directionNormal.scale(-distanceOverBorder));
-//				limitMovementInDirection(player, directionNormal);
 		}
-	}
-	
-	/**
-	 * If the player has a component of their velocity going in the same direction as the provided vec, remove it.
-	 */
-	private static void limitMovementInDirection(Player player, Vec3 direction)
-	{
-		direction = direction.normalize();
-		double dotProduct = direction.dot(player.getDeltaMovement());
-		if(dotProduct > 0)
-			player.addDeltaMovement(direction.scale(-dotProduct));
 	}
 	
 	public void addEntryLocations(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> dimension)
