@@ -218,7 +218,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			decoy.level().addFreshEntity(decoy);
 			MSExtraData.get(player.level()).addEditData(data);
 			
-			c.getClientEditmodeLocations().validateNearbySources(player, c);
+			c.getClientEditmodeLocations().validateClosestSourceAndEntry(player, c);
 			
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
@@ -334,7 +334,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		//every 10 seconds, revalidate locations
 		if(player.level().getGameTime() % 200 == 0)
 		{
-			c.getClientEditmodeLocations().validateNearbySources(player, c);
+			c.getClientEditmodeLocations().validateClosestSourceAndEntry(player, c);
 			
 			editmodeLocations = c.getClientEditmodeLocations(); //refresh editmodeLocations after validation
 		}

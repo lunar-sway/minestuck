@@ -140,10 +140,7 @@ public final class EditmodeLocations
 		return true;
 	}
 	
-	/**
-	 * Checks the editmode players surroundings, then both removes now invalid locations and adds new valid locations.
-	 */
-	public void validateNearbySources(ServerPlayer editPlayer, SburbConnection connection)
+	public void validateClosestSourceAndEntry(ServerPlayer editPlayer, SburbConnection connection)
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
@@ -159,15 +156,7 @@ public final class EditmodeLocations
 			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
 			{
 				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
-				
-				//TODO consider adding message indicating what happened
-				if(isOutsideBounds(editPlayer))
-				{
-					//teleport player to nearest valid location
-					this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
-						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
-					});
-				}
+				updatePlayerNearRemovedComputerSource(editPlayer, pos);
 			}
 		});
 	}
@@ -175,7 +164,7 @@ public final class EditmodeLocations
 	public void addEntryLocations(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> dimension)
 	{
 		this.land = dimension;
-		sendLocationsToEditor(mcServer, owner, this);
+		this.sendLocationsToEditor(mcServer, owner);
 	}
 	
 	public static void addBlockSourceIfValid(ComputerBlockEntity computer)
@@ -193,7 +182,7 @@ public final class EditmodeLocations
 			return;
 		
 		locations.computers.put(level.dimension(), computer.getBlockPos());
-		sendLocationsToEditor(level.getServer(), computer.getOwner(), locations);
+		locations.sendLocationsToEditor(level.getServer(), computer.getOwner());
 	}
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
@@ -202,7 +191,7 @@ public final class EditmodeLocations
 		
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)
-			sendLocationsToEditor(mcServer, owner, locations);
+			locations.sendLocationsToEditor(mcServer, owner);
 	}
 	
 	public void limitMovement(Player editPlayer)
@@ -269,12 +258,24 @@ public final class EditmodeLocations
 		return relativeDistance(player, area) > 1;
 	}
 	
-	private static void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner, EditmodeLocations locations)
+	private void updatePlayerNearRemovedComputerSource(Player editPlayer, BlockPos computerPos)
+	{
+		//TODO consider adding message indicating what happened
+		if(isOutsideBounds(editPlayer))
+		{
+			//teleport player to nearest valid location
+			this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
+				editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
+			});
+		}
+	}
+	
+	private void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner)
 	{
 		SkaianetHandler.get(mcServer).getPrimaryConnection(owner, true).ifPresent(connection -> {
 			EditData editData = ServerEditHandler.getData(mcServer, connection);
 			if(editData != null)
-				MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(locations), editData.getEditor());
+				MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(this), editData.getEditor());
 		});
 	}
 	
