@@ -29,9 +29,9 @@
     },
     "textures": {
         "particle": "minestuck:item/totem_lathe",
-        "front": "minestuck:block/totem_lathe_front",
-        "back": "minestuck:block/totem_lathe_back",
-        "other": "minestuck:block/totem_lathe_misc"
+        "front": "minestuck:block/machine/mini_totem_lathe_front",
+        "back": "minestuck:block/machine/mini_totem_lathe_back",
+        "other": "minestuck:block/machine/mini_totem_lathe_misc"
     },
     "elements": [
         {
