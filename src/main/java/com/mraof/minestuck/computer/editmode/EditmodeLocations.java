@@ -112,7 +112,7 @@ public final class EditmodeLocations
 		if(connection.getClientDimension() != null && this.land == null)
 			this.addEntryLocations(editPlayer.server, connection.getClientIdentifier(), connection.getClientDimension());
 		
-		findRelativelyClosest(editPlayer, getAreasFor(editDimension)).map(Area::center).ifPresent(pos -> {
+		this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(pos -> {
 			if(!isValidComputerSourceFor(editLevel, pos, connection.getClientIdentifier()))
 			{
 				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
@@ -236,10 +236,9 @@ public final class EditmodeLocations
 				.allMatch(area -> isOutsideBounds(editPlayer, area));
 	}
 	
-	@SuppressWarnings("resource")
 	public void limitMovement(Player editPlayer)
 	{
-		Optional<Area> closestSource = findRelativelyClosest(editPlayer, getAreasFor(editPlayer.level().dimension()));
+		Optional<Area> closestSource = this.findRelativelyClosestArea(editPlayer);
 		
 		if(closestSource.isEmpty())
 			return;
@@ -248,9 +247,10 @@ public final class EditmodeLocations
 			limitMovement(editPlayer, closestSource.get());
 	}
 	
-	private static Optional<Area> findRelativelyClosest(Player player, Stream<Area> areas)
+	@SuppressWarnings("resource")
+	private Optional<Area> findRelativelyClosestArea(Player player)
 	{
-		return areas.min(Comparator.comparingDouble(area -> relativeDistance(player, area)));
+		return getAreasFor(player.level().dimension()).min(Comparator.comparingDouble(area -> relativeDistance(player, area)));
 	}
 	
 	private static boolean isOutsideBounds(Player player, Area area)
