@@ -10,6 +10,7 @@ A feature branch is not always used, and is instead decided on a case-by-case ba
 
 When you start development on a new feature or bugfix, you should as a rule of thumb create a new branch from the branch that you're targeting (see section on target branch below).
 Once a pull request is done and merged, it is a good idea to delete the branch that got merged.
+If there are any technical issues with the pull request, it is recommended to talk with reviewers before you decide to close or recreate a pull request.
 
 ## Target branch
 
