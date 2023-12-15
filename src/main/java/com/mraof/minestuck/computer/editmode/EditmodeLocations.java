@@ -40,7 +40,6 @@ public final class EditmodeLocations
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final int VALIDATION_RADIUS = 25;
 	public static final int ENTRY_RANGE = 30;
 	
 	private final Multimap<ResourceKey<Level>, BlockPos> computers = ArrayListMultimap.create();
@@ -113,15 +112,23 @@ public final class EditmodeLocations
 		if(connection.getClientDimension() != null && this.land == null)
 			this.addEntryLocations(editPlayer.server, connection.getClientIdentifier(), connection.getClientDimension());
 		
-		if(!computers.containsKey(editDimension))
-			return;
-		
-		Collection<BlockPos> allLevelPairs = computers.get(editDimension);
-		
-		for(BlockPos blockIterate : BlockPos.betweenClosed(editPlayer.blockPosition().offset(VALIDATION_RADIUS, VALIDATION_RADIUS, VALIDATION_RADIUS), editPlayer.blockPosition().offset(-VALIDATION_RADIUS, -VALIDATION_RADIUS, -VALIDATION_RADIUS)))
-		{
-			checkBlockPosValidation(editPlayer, connection.getClientIdentifier(), editLevel, editDimension, allLevelPairs, blockIterate);
-		}
+		findRelativelyClosest(editPlayer, getAreasFor(editDimension)).map(Area::center).ifPresent(pos -> {
+			if(!isValidComputerSourceFor(editLevel, pos, connection.getClientIdentifier()))
+			{
+				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
+				
+				//TODO consider adding message indicating what happened
+				if(isOutsideBounds(editPlayer))
+				{
+					//teleport player to nearest valid location
+					BlockPos nextClosestLocationPos = getClosestPosInDimension(editPlayer);
+					if(nextClosestLocationPos != null)
+					{
+						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
+					}
+				}
+			}
+		});
 	}
 	
 	/**
@@ -205,29 +212,6 @@ public final class EditmodeLocations
 		}
 		
 		return locations;
-	}
-	
-	private void checkBlockPosValidation(ServerPlayer editPlayer, PlayerIdentifier owner, Level editLevel, ResourceKey<Level> editDimension, Collection<BlockPos> allLevelPairs, BlockPos blockIterate)
-	{
-		//if locations contains the iterated block pos and the entry is no longer valid, remove it.
-		if(allLevelPairs.contains(blockIterate))
-		{
-			if(!isValidComputerSourceFor(editLevel, blockIterate, owner))
-			{
-				removeBlockSource(editPlayer.server, owner, editDimension, blockIterate);
-				
-				//TODO consider adding message indicating what happened
-				if(isOutsideBounds(editPlayer))
-				{
-					//teleport player to nearest valid location
-					BlockPos nextClosestLocationPos = getClosestPosInDimension(editPlayer);
-					if(nextClosestLocationPos != null)
-					{
-						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
-					}
-				}
-			}
-		}
 	}
 	
 	private static boolean isValidComputerSourceFor(Level level, BlockPos pos, PlayerIdentifier owner)
