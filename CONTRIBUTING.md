@@ -3,8 +3,8 @@
 
 There is always one maintained branch for releases on the latest supported minecraft version. Anything added to this branch will be included in the next release.
 Occasionally one or more feature branches will be maintained as well. The point of these are to accumulate new features into a larger update, or just to group features that for any other reason should be released together.
-If there is a planned release date for content (such as 4/13), the feature branch upcoming-content is often utilized to accumulate new features. Content from independent or smaller pull requests are merged directly into upcoming-content whereas it may be decided that several related pull requests will be redirected to their own feature branch. Such feature branches are merged into upcoming-content once finalized and then after that upcoming-content is merged into the relevant release branches.
-To reiterate, a feature branch is not always created in this repository for content but is decided on a case-by-case basis. It should be assumed however that a Major Update will have its own feature branch.
+If there is a planned release date for content (such as 4/13), the feature branch `upcoming-content` is often utilized to accumulate new features. Content from independent or smaller pull requests are merged directly into `upcoming-content` whereas related pull requests may get their own feature branch if it becomes relevant. Such feature branches are when ready merged into `upcoming-content` or the release branch once finalized, and `upcoming-content` is merged into the release branch once the update that it is building towards is ready for release.
+A feature branch is not always used, and is instead decided on a case-by-case basis. It should be assumed however that a Major Update will have its own feature branch.
 
 # Pull Requests
 
