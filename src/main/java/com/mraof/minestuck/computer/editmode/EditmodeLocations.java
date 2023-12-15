@@ -154,10 +154,7 @@ public final class EditmodeLocations
 		
 		this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(pos -> {
 			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
-			{
 				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
-				updatePlayerNearRemovedComputerSource(editPlayer, pos);
-			}
 		});
 	}
 	
@@ -191,7 +188,10 @@ public final class EditmodeLocations
 		
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)
+		{
 			locations.sendLocationsToEditor(mcServer, owner);
+			locations.updatePlayerNearRemovedComputerSource(mcServer, owner, level, pos);
+		}
 	}
 	
 	public void limitMovement(Player editPlayer)
@@ -232,7 +232,7 @@ public final class EditmodeLocations
 	
 	private Stream<Area> getAreasFor(@Nonnull ResourceKey<Level> level)
 	{
-		int computerRange = level == this.land ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		int computerRange = this.getComputerRange(level);
 		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
 		
 		return Stream.concat(
@@ -240,10 +240,15 @@ public final class EditmodeLocations
 				entryLocations.map(pos -> new Area(pos, ENTRY_RANGE)));
 	}
 	
-	@SuppressWarnings("resource")
-	private boolean isOutsideBounds(Player editPlayer)
+	private int getComputerRange(@Nonnull ResourceKey<Level> level)
 	{
-		return getAreasFor(editPlayer.level().dimension())
+		return level == this.land ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+	}
+	
+	@SuppressWarnings("resource")
+	private boolean isInsideBounds(Player editPlayer)
+	{
+		return !getAreasFor(editPlayer.level().dimension())
 				.allMatch(area -> isOutsideBounds(editPlayer, area));
 	}
 	
@@ -258,16 +263,29 @@ public final class EditmodeLocations
 		return relativeDistance(player, area) > 1;
 	}
 	
-	private void updatePlayerNearRemovedComputerSource(Player editPlayer, BlockPos computerPos)
+	@SuppressWarnings("resource")
+	private void updatePlayerNearRemovedComputerSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos computerPos)
 	{
+		EditData data = ServerEditHandler.getData(mcServer, owner);
+		if(data == null)
+			return;
+		Player editPlayer = data.getEditor();
+		
+		if(editPlayer.level().dimension() != level || isInsideBounds(editPlayer))
+			return;
+		
+		Optional<Area> newAreaOptional = this.findRelativelyClosestArea(editPlayer);
+		if(newAreaOptional.isEmpty())
+			return;
+		Area newClosestArea = newAreaOptional.get();
+		Area removedArea = new Area(computerPos, this.getComputerRange(editPlayer.level().dimension()));
+		
+		if(relativeDistance(editPlayer, removedArea) > relativeDistance(editPlayer, newClosestArea))
+			return;
+		
 		//TODO consider adding message indicating what happened
-		if(isOutsideBounds(editPlayer))
-		{
-			//teleport player to nearest valid location
-			this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
-				editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
-			});
-		}
+		BlockPos nextClosestLocationPos = newClosestArea.center();
+		editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
 	}
 	
 	private void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner)
