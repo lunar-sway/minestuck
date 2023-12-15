@@ -40,7 +40,7 @@ public final class EditmodeLocations
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
-	public static final int ENTRY_RANGE = 30;
+	private static final int ENTRY_RANGE = 30;
 	
 	private final Multimap<ResourceKey<Level>, BlockPos> computers = ArrayListMultimap.create();
 	@Nullable
@@ -59,75 +59,6 @@ public final class EditmodeLocations
 	
 	public record Area(BlockPos center, int range)
 	{}
-	
-	public List<BlockPos> getSortedPositions(@Nonnull ResourceKey<Level> level)
-	{
-		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
-		
-		return Stream.concat(computers.get(level).stream(), entryLocations).toList();
-	}
-	
-	public static boolean checkIsValidSourcePos(EditData data, ResourceKey<Level> level, BlockPos pos)
-	{
-		PlayerIdentifier owner = data.getConnection().getClientIdentifier();
-		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
-		
-		if(level == locations.land && ENTRY_POSITIONS.contains(pos))
-			return true;
-		
-		if(!locations.computers.get(level).contains(pos))
-			return false;
-		
-		if(isComputerSourceInvalidFor(data.getEditor().level(), pos, owner))
-		{
-			removeBlockSource(data.getEditor().server, owner, level, pos);
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public Stream<Area> getAreasFor(@Nonnull ResourceKey<Level> level)
-	{
-		int computerRange = level == this.land ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
-		
-		return Stream.concat(
-				this.computers.get(level).stream().map(pos -> new Area(pos, computerRange)),
-				entryLocations.map(pos -> new Area(pos, ENTRY_RANGE)));
-	}
-	
-	/**
-	 * Checks the editmode players surroundings, then both removes now invalid locations and adds new valid locations.
-	 */
-	public void validateNearbySources(ServerPlayer editPlayer, SburbConnection connection)
-	{
-		Level editLevel = editPlayer.level();
-		ResourceKey<Level> editDimension = editLevel.dimension();
-		
-		if(editLevel.isClientSide)
-			return;
-		
-		//security for pre EditmodeLocations update worlds
-		if(connection.getClientDimension() != null && this.land == null)
-			this.addEntryLocations(editPlayer.server, connection.getClientIdentifier(), connection.getClientDimension());
-		
-		this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(pos -> {
-			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
-			{
-				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
-				
-				//TODO consider adding message indicating what happened
-				if(isOutsideBounds(editPlayer))
-				{
-					//teleport player to nearest valid location
-					this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
-						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
-					});
-				}
-			}
-		});
-	}
 	
 	public CompoundTag write()
 	{
@@ -182,70 +113,63 @@ public final class EditmodeLocations
 		return locations;
 	}
 	
-	private static boolean isComputerSourceInvalidFor(Level level, BlockPos pos, PlayerIdentifier owner)
+	public List<BlockPos> getSortedPositions(@Nonnull ResourceKey<Level> level)
 	{
-		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
-			return isComputerSourceInvalid(computerBlockEntity) || !computerBlockEntity.owner.equals(owner);
+		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
+		
+		return Stream.concat(computers.get(level).stream(), entryLocations).toList();
+	}
+	
+	public static boolean checkIsValidSourcePos(EditData data, ResourceKey<Level> level, BlockPos pos)
+	{
+		PlayerIdentifier owner = data.getConnection().getClientIdentifier();
+		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
+		
+		if(level == locations.land && ENTRY_POSITIONS.contains(pos))
+			return true;
+		
+		if(!locations.computers.get(level).contains(pos))
+			return false;
+		
+		if(isComputerSourceInvalidFor(data.getEditor().level(), pos, owner))
+		{
+			removeBlockSource(data.getEditor().server, owner, level, pos);
+			return false;
+		}
 		
 		return true;
 	}
 	
-	private static boolean isComputerSourceInvalid(ComputerBlockEntity computer)
+	/**
+	 * Checks the editmode players surroundings, then both removes now invalid locations and adds new valid locations.
+	 */
+	public void validateNearbySources(ServerPlayer editPlayer, SburbConnection connection)
 	{
-		return computer.isBroken() || !computer.hasProgram(0);
-	}
-	
-	@SuppressWarnings("resource")
-	public boolean isOutsideBounds(Player editPlayer)
-	{
-		return getAreasFor(editPlayer.level().dimension())
-				.allMatch(area -> isOutsideBounds(editPlayer, area));
-	}
-	
-	public void limitMovement(Player editPlayer)
-	{
-		Optional<Area> closestSource = this.findRelativelyClosestArea(editPlayer);
+		Level editLevel = editPlayer.level();
+		ResourceKey<Level> editDimension = editLevel.dimension();
 		
-		if(closestSource.isEmpty())
+		if(editLevel.isClientSide)
 			return;
 		
-		if(isOutsideBounds(editPlayer, closestSource.get()))
-			limitMovement(editPlayer, closestSource.get());
-	}
-	
-	@SuppressWarnings("resource")
-	private Optional<Area> findRelativelyClosestArea(Player player)
-	{
-		return getAreasFor(player.level().dimension()).min(Comparator.comparingDouble(area -> relativeDistance(player, area)));
-	}
-	
-	private static boolean isOutsideBounds(Player player, Area area)
-	{
-		return relativeDistance(player, area) > 1;
-	}
-	
-	/**
-	 * Calculates a relative distance between the player and the given source, with values less than 1 being inside range, and values larger than 1 being outside range.
-	 */
-	private static double relativeDistance(Player player, Area area)
-	{
-		Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
-		return Math.max(
-				Math.abs(distance.x()),
-				Math.max(Math.abs(distance.y()),
-						Math.abs(distance.z()))) / area.range();
-	}
-	
-	private static void limitMovement(Player player, Area area)
-	{
-		for(Direction direction : Direction.values())
-		{
-			Vec3 directionNormal = Vec3.atLowerCornerOf(direction.getNormal());
-			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
-			double distanceOverBorder = distance.dot(directionNormal) - area.range();
-			if(distanceOverBorder >= 0)
-				player.addDeltaMovement(directionNormal.scale(-distanceOverBorder));
-		}
+		//security for pre EditmodeLocations update worlds
+		if(connection.getClientDimension() != null && this.land == null)
+			this.addEntryLocations(editPlayer.server, connection.getClientIdentifier(), connection.getClientDimension());
+		
+		this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(pos -> {
+			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
+			{
+				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
+				
+				//TODO consider adding message indicating what happened
+				if(isOutsideBounds(editPlayer))
+				{
+					//teleport player to nearest valid location
+					this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
+						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
+					});
+				}
+			}
+		});
 	}
 	
 	public void addEntryLocations(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> dimension)
@@ -281,6 +205,70 @@ public final class EditmodeLocations
 			sendLocationsToEditor(mcServer, owner, locations);
 	}
 	
+	public void limitMovement(Player editPlayer)
+	{
+		Optional<Area> closestSource = this.findRelativelyClosestArea(editPlayer);
+		
+		if(closestSource.isEmpty())
+			return;
+		
+		if(isOutsideBounds(editPlayer, closestSource.get()))
+			limitMovement(editPlayer, closestSource.get());
+	}
+	
+	private static void limitMovement(Player player, Area area)
+	{
+		for(Direction direction : Direction.values())
+		{
+			Vec3 directionNormal = Vec3.atLowerCornerOf(direction.getNormal());
+			Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
+			double distanceOverBorder = distance.dot(directionNormal) - area.range();
+			if(distanceOverBorder >= 0)
+				player.addDeltaMovement(directionNormal.scale(-distanceOverBorder));
+		}
+	}
+	
+	/**
+	 * Calculates a relative distance between the player and the given source,
+	 * with values less than 1 being inside range, and values larger than 1 being outside range.
+	 */
+	private static double relativeDistance(Player player, Area area)
+	{
+		Vec3 distance = player.position().subtract(Vec3.atLowerCornerOf(area.center()));
+		return Math.max(
+				Math.abs(distance.x()),
+				Math.max(Math.abs(distance.y()),
+						Math.abs(distance.z()))) / area.range();
+	}
+	
+	private Stream<Area> getAreasFor(@Nonnull ResourceKey<Level> level)
+	{
+		int computerRange = level == this.land ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
+		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
+		
+		return Stream.concat(
+				this.computers.get(level).stream().map(pos -> new Area(pos, computerRange)),
+				entryLocations.map(pos -> new Area(pos, ENTRY_RANGE)));
+	}
+	
+	@SuppressWarnings("resource")
+	private boolean isOutsideBounds(Player editPlayer)
+	{
+		return getAreasFor(editPlayer.level().dimension())
+				.allMatch(area -> isOutsideBounds(editPlayer, area));
+	}
+	
+	@SuppressWarnings("resource")
+	private Optional<Area> findRelativelyClosestArea(Player player)
+	{
+		return getAreasFor(player.level().dimension()).min(Comparator.comparingDouble(area -> relativeDistance(player, area)));
+	}
+	
+	private static boolean isOutsideBounds(Player player, Area area)
+	{
+		return relativeDistance(player, area) > 1;
+	}
+	
 	private static void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner, EditmodeLocations locations)
 	{
 		SkaianetHandler.get(mcServer).getPrimaryConnection(owner, true).ifPresent(connection -> {
@@ -288,5 +276,18 @@ public final class EditmodeLocations
 			if(editData != null)
 				MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(locations), editData.getEditor());
 		});
+	}
+	
+	private static boolean isComputerSourceInvalidFor(Level level, BlockPos pos, PlayerIdentifier owner)
+	{
+		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
+			return isComputerSourceInvalid(computerBlockEntity) || !computerBlockEntity.owner.equals(owner);
+		
+		return true;
+	}
+	
+	private static boolean isComputerSourceInvalid(ComputerBlockEntity computer)
+	{
+		return computer.isBroken() || !computer.hasProgram(0);
 	}
 }
