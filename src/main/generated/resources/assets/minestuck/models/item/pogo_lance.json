@@ -1,0 +1,6 @@
+{
+  "parent": "minestuck:item/large_long_weapon",
+  "textures": {
+    "layer0": "minestuck:item/pogo_lance"
+  }
+}

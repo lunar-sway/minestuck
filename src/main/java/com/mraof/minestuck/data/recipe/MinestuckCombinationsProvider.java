@@ -666,6 +666,7 @@ public final class MinestuckCombinationsProvider
 		
 		CombinationRecipeBuilder.of(MSItems.LANEC.get()).input(MSItems.WOODEN_LANCE.get()).and().input(MSItems.SBAHJ_POSTER.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.JOUSTING_LANCE.get()).input(MSItems.WOODEN_LANCE.get()).and().input(Tags.Items.INGOTS_IRON).build(consumer);
+		CombinationRecipeBuilder.of(MSItems.POGO_LANCE.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(Items.SLIME_BALL).build(consumer);
         CombinationRecipeBuilder.of(MSItems.LANCELOTS_LOLLY.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(MSItems.CANDY_CORN.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.DRAGON_LANCE.get()).input(MSItems.JOUSTING_LANCE.get()).and().input(MSItems.SCALEMATE_APPLESCAB.get()).build(consumer);
 		CombinationRecipeBuilder.of(MSItems.SKY_PIERCER.get()).input(MSItems.DRAGON_LANCE.get()).or().input(MSItems.STAR_RAY.get()).build(consumer);

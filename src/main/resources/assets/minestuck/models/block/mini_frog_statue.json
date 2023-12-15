@@ -1,4 +1,5 @@
-{"display": {
+{
+	"display": {
         "gui": {
             "rotation": [ 0, 0, 0 ],
             "translation": [ 0, 0, 0],
@@ -33,15 +34,15 @@
 	"credit": "Made with Blockbench",
 	"render_type": "cutout",
 	"textures": {
-		"0": "minestuck:block/mini_frog_statue",
-		"1": "minestuck:block/mini_frog_statue_back",
-		"2": "minestuck:block/mini_frog_statue_side",
-		"3": "minestuck:block/mini_frog_statue_bottom",
-		"4": "minestuck:block/mini_frog_statue_top_body",
-		"5": "minestuck:block/mini_frog_statue_top_head",
-		"6": "minestuck:block/mini_frog_statue_bottom_head",
+		"0": "minestuck:block/mini_frog_statue/front",
+		"1": "minestuck:block/mini_frog_statue/back",
+		"2": "minestuck:block/mini_frog_statue/side",
+		"3": "minestuck:block/mini_frog_statue/bottom",
+		"4": "minestuck:block/mini_frog_statue/top_body",
+		"5": "minestuck:block/mini_frog_statue/top_head",
+		"6": "minestuck:block/mini_frog_statue/bottom_head",
 		"7": "minestuck:block/coarse_stone",
-		"particle": "minestuck:block/mini_frog_statue"
+		"particle": "minestuck:block/mini_frog_statue/front"
 	},
 	"elements": [
 		{

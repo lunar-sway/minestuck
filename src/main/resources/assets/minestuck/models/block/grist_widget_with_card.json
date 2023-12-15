@@ -1,9 +1,9 @@
 {
 	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
 	"textures": {
-		"0": "minestuck:block/grist_widget",
-		"1": "minestuck:block/card",
-		"particle": "minestuck:block/grist_widget"
+		"0": "minestuck:block/machine/grist_widget",
+		"1": "minestuck:block/machine/card",
+		"particle": "minestuck:block/machine/grist_widget"
 	},
     "elements": [
         {

@@ -238,6 +238,7 @@ public class MSItems
 	public static final RegistryObject<Item> WOODEN_LANCE = REGISTER.register("wooden_lance", () -> new WeaponItem(new WeaponItem.Builder(Tiers.WOOD, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> LANEC = REGISTER.register("lanec", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.SBAHJ_TIER, 3, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SORD_DROP), new Item.Properties()));
 	public static final RegistryObject<Item> JOUSTING_LANCE = REGISTER.register("jousting_lance", () -> new WeaponItem(new WeaponItem.Builder(Tiers.IRON, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
+	public static final RegistryObject<Item> POGO_LANCE = REGISTER.register("pogo_lance", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.POGO_TIER, 4, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.mutualKnockback(0.75F)), new Item.Properties()));
 	public static final RegistryObject<Item> LANCELOTS_LOLLY = REGISTER.register("lancelots_lolly", () -> new WeaponItem(new WeaponItem.Builder(MSItemTypes.CANDY_TIER, 6, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.SET_CANDY_DROP_FLAG), new Item.Properties()));
 	public static final RegistryObject<Item> DRAGON_LANCE = REGISTER.register("dragon_lance", () -> new WeaponItem(new WeaponItem.Builder(Tiers.DIAMOND, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL), new Item.Properties()));
 	public static final RegistryObject<Item> SKY_PIERCER = REGISTER.register("sky_piercer", () -> new WeaponItem(new WeaponItem.Builder(Tiers.NETHERITE, 5, -2.8F).efficiency(2.0F).set(MSItemTypes.MISC_TOOL).add(OnHitEffect.setOnFire(30)), new Item.Properties().fireResistant()));
@@ -634,7 +635,7 @@ public class MSItems
 	
 	
 	//Structure Scanners
-	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().durability(30), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
+	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties(), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM, 30));
 	
 	
 	
@@ -1228,7 +1229,7 @@ public class MSItems
 	 */
 	private static RegistryObject<BlockItem> registerBlockItem(RegistryObject<? extends Block> block, Function<Block, ? extends BlockItem> function)
 	{
-		return REGISTER.register(block.getKey().location().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
+		return REGISTER.register(block.getId().getPath(), () -> function.apply(block.get())); //assumed getKey() will be non-null due to the way DeferredRegistry works
 	}
 }
 	
