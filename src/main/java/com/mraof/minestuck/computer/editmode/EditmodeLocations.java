@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -199,7 +200,7 @@ public final class EditmodeLocations
 		//if locations contains the iterated block pos and the entry is no longer valid, remove it.
 		if(allLevelPairs.contains(blockIterate))
 		{
-			if(!isValidBlockSource(editLevel, owner, blockIterate))
+			if(!isValidComputerSourceFor(editLevel, blockIterate, owner))
 			{
 				removeBlockSource(editPlayer.server, owner, editDimension, blockIterate);
 				
@@ -219,14 +220,19 @@ public final class EditmodeLocations
 		}
 	}
 	
-	private static boolean isValidBlockSource(Level level, PlayerIdentifier owner, BlockPos pos)
+	private static boolean isValidComputerSourceFor(Level level, BlockPos pos, PlayerIdentifier owner)
 	{
 		if(level.getBlockEntity(pos) instanceof ComputerBlockEntity computerBlockEntity)
 		{
-			return !computerBlockEntity.isBroken() && computerBlockEntity.hasProgram(0) && computerBlockEntity.owner.equals(owner);
+			return isValidComputerSource(computerBlockEntity) && computerBlockEntity.owner.equals(owner);
 		}
 		
 		return false;
+	}
+	
+	private static boolean isValidComputerSource(ComputerBlockEntity computer)
+	{
+		return !computer.isBroken() && computer.hasProgram(0);
 	}
 	
 	@SuppressWarnings("resource")
@@ -300,25 +306,31 @@ public final class EditmodeLocations
 		sendLocationsToEditor(mcServer, owner, this);
 	}
 	
-	public static void addBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
+	public static void addBlockSourceIfValid(ComputerBlockEntity computer)
 	{
-		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		
-		if(locations.computers.containsEntry(level, pos))
+		if(!(computer.getLevel() instanceof ServerLevel level))
+			return;
+		if(computer.getOwner() == null)
 			return;
 		
-		//TODO consider validating the pos and source
-		locations.computers.put(level, pos.immutable());
+		var locations = PlayerSavedData.getData(computer.getOwner(), level).editmodeLocations;
 		
-		sendLocationsToEditor(mcServer, owner, locations);
+		if(locations.computers.containsEntry(level.dimension(), computer.getBlockPos()))
+			return;
+		if(!isValidComputerSource(computer))
+			return;
+		
+		locations.computers.put(level.dimension(), computer.getBlockPos());
+		sendLocationsToEditor(level.getServer(), computer.getOwner(), locations);
 	}
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
 	{
 		var locations = PlayerSavedData.getData(owner, mcServer).editmodeLocations;
-		locations.computers.remove(level, pos);
 		
-		sendLocationsToEditor(mcServer, owner, locations);
+		boolean wasRemoved = locations.computers.remove(level, pos);
+		if(wasRemoved)
+			sendLocationsToEditor(mcServer, owner, locations);
 	}
 	
 	private static void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner, EditmodeLocations locations)

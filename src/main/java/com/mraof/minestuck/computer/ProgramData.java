@@ -92,15 +92,13 @@ public final class ProgramData
 		@Override
 		public void onDiskInserted(ComputerBlockEntity computer)
 		{
-			if(computer.getLevel() instanceof ServerLevel serverLevel && computer.getOwner() != null)
-				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), serverLevel.dimension(), computer.getBlockPos());
+			EditmodeLocations.addBlockSourceIfValid(computer);
 		}
 		
 		@Override
 		public void onLoad(ComputerBlockEntity computer)
 		{
-			if(computer.getLevel() instanceof ServerLevel serverLevel && computer.getOwner() != null)
-				EditmodeLocations.addBlockSource(serverLevel.getServer(), computer.getOwner(), serverLevel.dimension(), computer.getBlockPos());
+			EditmodeLocations.addBlockSourceIfValid(computer);
 		}
 		
 		@Override
