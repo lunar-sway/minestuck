@@ -13,7 +13,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
@@ -71,10 +70,24 @@ public final class EditmodeLocations
 		return Stream.concat(computers.get(level).stream(), entryLocations).toList();
 	}
 	
-	public boolean isSource(GlobalPos pos)
+	public static boolean checkIsValidSourcePos(EditData data, ResourceKey<Level> level, BlockPos pos)
 	{
-		return computers.get(pos.dimension()).contains(pos.pos())
-				|| pos.dimension() == this.land && ENTRY_POSITIONS.contains(pos.pos());
+		PlayerIdentifier owner = data.getConnection().getClientIdentifier();
+		EditmodeLocations locations = PlayerSavedData.getData(owner, data.getEditor().server).editmodeLocations;
+		
+		if(level == locations.land && ENTRY_POSITIONS.contains(pos))
+			return true;
+		
+		if(!locations.computers.get(level).contains(pos))
+			return false;
+		
+		if(!isValidComputerSourceFor(data.getEditor().level(), pos, owner))
+		{
+			removeBlockSource(data.getEditor().server, owner, level, pos);
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public Stream<Area> getAreasFor(@Nullable ResourceKey<Level> level, int defaultRange)

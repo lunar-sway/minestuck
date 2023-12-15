@@ -1,11 +1,9 @@
 package com.mraof.minestuck.network;
 
-import com.mojang.datafixers.util.Pair;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -30,6 +28,7 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 		return new EditmodeTeleportPacket(pos);
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public void execute(ServerPlayer player)
 	{
@@ -38,10 +37,8 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 		if(editData == null)
 			return;
 		
-		EditmodeLocations locations = editData.getConnection().getClientEditmodeLocations();
-		
 		//TODO requires the dimensions to be the same, will need to be changed if the player will be allowed to teleport to other dimensions
-		if(locations.isSource(GlobalPos.of(player.level().dimension(), this.pos)))
+		if(EditmodeLocations.checkIsValidSourcePos(editData, player.level().dimension(), this.pos))
 			player.teleportTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
 	}
 }
