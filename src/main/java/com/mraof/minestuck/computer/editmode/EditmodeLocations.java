@@ -121,44 +121,12 @@ public final class EditmodeLocations
 				if(isOutsideBounds(editPlayer))
 				{
 					//teleport player to nearest valid location
-					BlockPos nextClosestLocationPos = getClosestPosInDimension(editPlayer);
-					if(nextClosestLocationPos != null)
-					{
+					this.findRelativelyClosestArea(editPlayer).map(Area::center).ifPresent(nextClosestLocationPos -> {
 						editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
-					}
+					});
 				}
 			}
 		});
-	}
-	
-	/**
-	 * Gets the closest location in the dimension or returns null if there is none. May require validation.
-	 */
-	@SuppressWarnings("resource")
-	public BlockPos getClosestPosInDimension(Player player)
-	{
-		BlockPos playerPos = player.blockPosition();
-		ResourceKey<Level> editLevel = player.level().dimension();
-		BlockPos pickedPos = null;
-		double pickedPosDistance = Integer.MAX_VALUE;
-		
-		for(BlockPos iteratedPos : getSortedPositions(editLevel))
-		{
-			if(pickedPos == null)
-				pickedPos = iteratedPos;
-			else
-			{
-				double iteratedPosDistance = Math.sqrt(iteratedPos.distSqr(playerPos));
-				
-				if(iteratedPosDistance < pickedPosDistance)
-				{
-					pickedPos = iteratedPos;
-					pickedPosDistance = iteratedPosDistance;
-				}
-			}
-		}
-		
-		return pickedPos;
 	}
 	
 	public CompoundTag write()
