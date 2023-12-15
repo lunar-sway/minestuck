@@ -10,7 +10,6 @@ import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
-import com.mraof.minestuck.world.MSDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -34,7 +33,6 @@ import java.util.stream.Stream;
 
 /**
  * Contains a list of block positions in a radius around which an editmode player can move freely.
- * An instance is stored in SburbConnection for the SBURB client of the connection.
  */
 public final class EditmodeLocations
 {
@@ -90,12 +88,13 @@ public final class EditmodeLocations
 		return true;
 	}
 	
-	public Stream<Area> getAreasFor(@Nullable ResourceKey<Level> level, int defaultRange)
+	public Stream<Area> getAreasFor(@Nonnull ResourceKey<Level> level)
 	{
+		int computerRange = level == this.land ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
 		Stream<BlockPos> entryLocations = level == this.land ? ENTRY_POSITIONS.stream() : Stream.empty();
 		
 		return Stream.concat(
-				this.computers.get(level).stream().map(pos -> new Area(pos, defaultRange)),
+				this.computers.get(level).stream().map(pos -> new Area(pos, computerRange)),
 				entryLocations.map(pos -> new Area(pos, ENTRY_RANGE)));
 	}
 	
@@ -217,10 +216,8 @@ public final class EditmodeLocations
 			{
 				removeBlockSource(editPlayer.server, owner, editDimension, blockIterate);
 				
-				int range = MSDimensions.isLandDimension(editPlayer.server, editPlayer.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-				
 				//TODO consider adding message indicating what happened
-				if(isOutsideBounds(editPlayer, range))
+				if(isOutsideBounds(editPlayer))
 				{
 					//teleport player to nearest valid location
 					BlockPos nextClosestLocationPos = getClosestPosInDimension(editPlayer);
@@ -249,16 +246,16 @@ public final class EditmodeLocations
 	}
 	
 	@SuppressWarnings("resource")
-	public boolean isOutsideBounds(Player editPlayer, int defaultRange)
+	public boolean isOutsideBounds(Player editPlayer)
 	{
-		return getAreasFor(editPlayer.level().dimension(), defaultRange)
+		return getAreasFor(editPlayer.level().dimension())
 				.allMatch(area -> isOutsideBounds(editPlayer, area));
 	}
 	
 	@SuppressWarnings("resource")
-	public void limitMovement(Player editPlayer, int defaultRange)
+	public void limitMovement(Player editPlayer)
 	{
-		Optional<Area> closestSource = findRelativelyClosest(editPlayer, getAreasFor(editPlayer.level().dimension(), defaultRange));
+		Optional<Area> closestSource = findRelativelyClosest(editPlayer, getAreasFor(editPlayer.level().dimension()));
 		
 		if(closestSource.isEmpty())
 			return;

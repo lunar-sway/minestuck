@@ -2,10 +2,11 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.alchemy.AlchemyHelper;
+import com.mraof.minestuck.alchemy.GristHelper;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.block.machine.EditmodeDestroyable;
 import com.mraof.minestuck.entity.DecoyEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -24,7 +25,6 @@ import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.util.MSCapabilities;
 import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
-import com.mraof.minestuck.world.MSDimensions;
 import com.mraof.minestuck.world.storage.MSExtraData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -339,9 +339,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			editmodeLocations = c.getClientEditmodeLocations(); //refresh editmodeLocations after validation
 		}
 		
-		int range = MSDimensions.isLandDimension(player.server, player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-		
-		editmodeLocations.limitMovement(player, range);
+		editmodeLocations.limitMovement(player);
 		
 		updateInventory(player, c);
 		

@@ -1,12 +1,10 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.client.ClientDimensionData;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
@@ -146,10 +144,8 @@ public final class ClientEditHandler
 		{
 			Player player = event.player;
 			
-			int range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-			
 			if(locations != null)
-				locations.limitMovement(player, range);
+				locations.limitMovement(player);
 		}
 	}
 	
