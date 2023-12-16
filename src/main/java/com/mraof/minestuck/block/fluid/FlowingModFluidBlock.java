@@ -48,7 +48,8 @@ public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
 	{
 		super.animateTick(state, level, blockPos, rand);
 		
-		if (rand.nextInt(96) == 0) {
+		if(rand.nextInt(96) == 0)
+		{
 			FlowingFluid fluid = this.getFluid();
 			
 			if(fluid.getFluidType() instanceof MSFluidType fluidType)

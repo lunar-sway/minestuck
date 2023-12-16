@@ -10,7 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-public final class MSFluids	//TODO Set fluid type properties
+public final class MSFluids
 {
 	public static final DeferredRegister<Fluid> REGISTER = DeferredRegister.create(ForgeRegistries.FLUIDS, Minestuck.MOD_ID);
 	
@@ -24,7 +24,6 @@ public final class MSFluids	//TODO Set fluid type properties
 	public static final RegistryObject<FlowingFluid> LIGHT_WATER = REGISTER.register("light_water", () -> new ForgeFlowingFluid.Source(MSFluids.LIGHT_WATER_PROPERTIES));
 	public static final RegistryObject<FlowingFluid> FLOWING_LIGHT_WATER = REGISTER.register("flowing_light_water", () -> new ForgeFlowingFluid.Flowing(MSFluids.LIGHT_WATER_PROPERTIES));
 	
-	//TODO is a tickrate of 3 likely to impact performance?
 	public static final ForgeFlowingFluid.Properties LIGHT_WATER_PROPERTIES = new ForgeFlowingFluid.Properties(MSFluidTypes.LIGHT_WATER_TYPE, LIGHT_WATER, FLOWING_LIGHT_WATER).bucket(MSItems.LIGHT_WATER_BUCKET).block(MSBlocks.LIGHT_WATER).tickRate(3).explosionResistance(100F);
 	
 	

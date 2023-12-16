@@ -28,6 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
 - Brain juice now forms an infinite source, it also now cannot be drowned in
 - Blood and brain juice now hydrate crops
+- The texture for oil and blood are now more transparent than they were in previous versions
+- Underwater fog appears closer for oil/blood/water colors/light water
 - Minestuck fluids now have improved mod compatibility
 
 ### Fixed
@@ -37,6 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Minestuck fluids now prevent fall damage
 - Minestuck fluids no longer have a breaking sound effect and now have bucket/extinguish sound effects
 - Minestuck fluids now use their translatable name
+- All Minestuck fluids besides ender fluid now have transparency
+- Water colors underwater fog is a rave again
 
 ### Contributors for this release
 
