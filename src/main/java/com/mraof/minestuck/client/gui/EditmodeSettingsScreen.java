@@ -34,8 +34,10 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 	public static final String EDITMODE_LOCATIONS = "minestuck.editmode_locations";
 	
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_extra_large.png");
+	@SuppressWarnings("unused")
 	private static final ResourceLocation INTERACT_SINGLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_single_mode.png");
 	private static final ResourceLocation INTERACT_MULTIPLE_MODE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/interact_multiple_mode.png");
+	@SuppressWarnings("unused")
 	private static final ResourceLocation NOCLIP_ACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_active.png");
 	private static final ResourceLocation NOCLIP_INACTIVE_ICON = new ResourceLocation("minestuck", "textures/gui/editmode/noclip_inactive.png");
 	
