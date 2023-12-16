@@ -86,11 +86,6 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		this.nextButton = new ExtendedButton(xOffset + 35, this.yOffset + 25, 16, 16, Component.literal(">"), button -> nextPage());
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
-		previousButton.active = false;
-		if(locationEntries.size() <= ENTRIES_PER_PAGE)
-		{
-			nextButton.active = false;
-		}
 		
 		entryButtons.clear();
 		for(int i = 0; i < locationEntries.size(); i++)
@@ -111,7 +106,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 			addRenderableWidget(entryButton);
 		}
 		
-		renderButtons();
+		updateButtonStates();
 	}
 	
 	@Override
@@ -162,50 +157,27 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private void prevPage()
 	{
-		if(page > 0)
-		{
-			page--;
-			if(page == 0)
-			{
-				previousButton.active = false;
-			}
-			nextButton.active = true;
-		}
-		
-		renderButtons();
+		page--;
+		updateButtonStates();
 	}
 	
 	private void nextPage()
 	{
-		int maxPage = (locationEntries.size() - 1) / ENTRIES_PER_PAGE;
-		if(page < maxPage)
-		{
-			page++;
-			if(page == maxPage)
-			{
-				nextButton.active = false;
-			}
-			previousButton.active = true;
-		}
-		
-		renderButtons();
+		page++;
+		updateButtonStates();
 	}
 	
-	private void renderButtons()
+	private void updateButtonStates()
 	{
 		int startElement = page * ENTRIES_PER_PAGE;
 		
-		entryButtons.forEach(button -> button.visible = false); //makes all buttons invisible
-		entryButtons.forEach(button -> button.active = false); //makes all buttons invisible
+		previousButton.active = 0 < startElement;
+		nextButton.active = startElement + ENTRIES_PER_PAGE < entryButtons.size();
 		
-		for(int i = startElement; i < startElement + ENTRIES_PER_PAGE; i++)
+		for(int i = 0; i < entryButtons.size(); i++)
 		{
-			if(i < entryButtons.size())
-			{
-				entryButtons.get(i).visible = true; //selectively reenables certain buttons
-				entryButtons.get(i).active = true;
-			} else
-				break;
+			Button button = entryButtons.get(i);
+			button.visible = startElement <= i && i < startElement + ENTRIES_PER_PAGE;
 		}
 	}
 	
