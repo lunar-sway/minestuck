@@ -5,13 +5,12 @@
 
 - FrostyMac: [`rise_up.ogg`](src/main/resources/assets/minestuck/sounds/music/miscellaneous/rise_up.ogg)
 
-- Mai Yishan (Catboss):
-[`dance_stab_dance.ogg`](src/main/resources/assets/minestuck/sounds/records/dance_stab_dance.ogg) and
-[`emissary_of_dance.ogg`](src/main/resources/assets/minestuck/sounds/records/emissary_of_dance.ogg)
-
 - Mixmaw: [`skies.ogg`](src/main/resources/assets/minestuck/sounds/music/lands/skies.ogg)
 
 - SinFrog: [`retro_battle_theme.ogg`](src/main/resources/assets/minestuck/sounds/records/retro_battle_theme.ogg)
+
+- ["Dance-Stab-Dance"](src/main/resources/assets/minestuck/sounds/records/dance_stab_dance.ogg) from [LOFAM2](https://unofficialmspafans.bandcamp.com/track/dance-stab-dance)
+and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emissary_of_dance.ogg) from [LOFAM3](https://unofficialmspafans.bandcamp.com/track/emissary-of-dance) by Mai Yishan (Catboss)
 
 # Sound Effects
 
@@ -23,20 +22,18 @@
 
 - SinFrog: [`upcheladder.ogg`](src/main/resources/assets/minestuck/sounds/random/upcheladder.ogg)
 
-- snottyboy:
-[`frog/ambient_1.ogg`](src/main/resources/assets/minestuck/sounds/mob/frog/ambient_1.ogg),
-[`frog/ambient_2.ogg`](src/main/resources/assets/minestuck/sounds/mob/frog/ambient_2.ogg),
-[`frog/ambient_3.ogg`](src/main/resources/assets/minestuck/sounds/mob/frog/ambient_3.ogg),
-[`frog/death.ogg`](src/main/resources/assets/minestuck/sounds/mob/frog/death.ogg) and
-[`frog/hurt.ogg`](src/main/resources/assets/minestuck/sounds/mob/frog/hurt.ogg)
-sourced from https://soundbible.com/1336-Frog-Croaking.html with edits by Cibernet
-
-- Stickinthemud: [`horn_honk.ogg`](src/main/resources/assets/minestuck/sounds/item/horn_honk.ogg)
-sourced from https://freesound.org/people/Stickinthemud/sounds/27882/
-
 - triageGremlin: [`slam.ogg`](src/main/resources/assets/minestuck/sounds/mob/slam.ogg)
 
 - Vigil
+
+- [Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/) edited by Cibernet
+from [soundbible.com](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
+
+- [Horn honk](src/main/resources/assets/minestuck/sounds/item/horn_honk.ogg) from [freesound.org](https://freesound.org/people/Stickinthemud/sounds/27882/) by Stickinthemud
+
+- [Horse clock chime](src/main/resources/assets/minestuck/sounds/random/horse_clock_chime.ogg) edited by Dweblenod
+from [Pixabay grandfather clock](https://pixabay.com/sound-effects/028122-clock-grandfather-ticks-amp-striking-oncemp3-75316/)
+and [Pixabay horse](https://pixabay.com/sound-effects/horse-123780/)
 
 # Extras
 
