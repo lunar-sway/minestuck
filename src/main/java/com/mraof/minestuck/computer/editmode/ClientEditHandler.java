@@ -5,10 +5,12 @@ import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
+import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
@@ -55,7 +57,7 @@ public final class ClientEditHandler
 	public static String client;
 	static boolean activated;
 	@Nullable
-	public static EditmodeLocations locations;
+	private static EditmodeLocations locations;
 	
 	/**
 	 * Used to tell if the client is in edit mode or not.
@@ -88,6 +90,19 @@ public final class ClientEditHandler
 		{
 			ClientDeployList.load(deployList);
 		}
+	}
+	
+	@Nullable
+	public static EditmodeLocations getLocations()
+	{
+		return locations;
+	}
+	
+	public static void onLocationsPacket(EditmodeLocationsPacket packet)
+	{
+		locations = packet.locations();
+		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
+			screen.recreateTeleportButtons();
 	}
 	
 	private static void disable()

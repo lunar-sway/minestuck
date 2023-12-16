@@ -27,6 +27,6 @@ public record EditmodeLocationsPacket(EditmodeLocations locations) implements Pl
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.locations = this.locations;
+		ClientEditHandler.onLocationsPacket(this);
 	}
 }

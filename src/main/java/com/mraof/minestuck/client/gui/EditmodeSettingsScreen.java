@@ -12,14 +12,15 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
  * Also has buttons to enable/disable editmode relevant properties including noclip and interaction mode (not currently implemented)
  */
 @ParametersAreNonnullByDefault
-public class EditmodeSettingsScreen extends MinestuckScreen
+public final class EditmodeSettingsScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.editmode_settings";
 	public static final String EDITMODE_LOCATIONS = "minestuck.editmode_locations";
@@ -49,7 +50,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	
 	private static final int ENTRIES_PER_PAGE = 6;
 	
-	private final List<BlockPos> locationEntries;
+	private final ResourceKey<Level> level;
 	
 	private int page = 0;
 	private Button previousButton;
@@ -64,14 +65,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	public EditmodeSettingsScreen(Player player)
 	{
 		super(Component.translatable(TITLE));
-		
-		EditmodeLocations locations = ClientEditHandler.locations;
-		
-		//this approach will cause the list to not update until the screen is reopened
-		if(locations != null)
-			locationEntries = locations.getSortedPositions(player.level().dimension());
-		else
-			locationEntries = Collections.emptyList();
+		this.level = player.level().dimension();
 	}
 	
 	@Override
@@ -87,23 +81,30 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		addRenderableWidget(this.nextButton);
 		addRenderableWidget(this.previousButton);
 		
+		recreateTeleportButtons();
+	}
+	
+	public void recreateTeleportButtons()
+	{
+		entryButtons.forEach(this::removeWidget);
 		entryButtons.clear();
+		
+		EditmodeLocations locations = ClientEditHandler.getLocations();
+		if(locations == null)
+			return;
+		
+		List<BlockPos> locationEntries = locations.getSortedPositions(level);
+		
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
 			BlockPos entryPos = locationEntries.get(i);
 			int positionOffset = 20 * (i % ENTRIES_PER_PAGE);
 			
-			Component buttonComponent;
+			Component buttonComponent = Component.literal(entryPos.getX() + " | " + entryPos.getY() + " | " + entryPos.getZ());
 			
-			int entryX = entryPos.getX();
-			int entryY = entryPos.getY();
-			int entryZ = entryPos.getZ();
-			
-			buttonComponent = Component.literal(entryX + " | " + entryY + " | " + entryZ);
-			
-			ExtendedButton entryButton = new ExtendedButton(xOffset + 10, yOffset + 45 + positionOffset, 120, 16, buttonComponent, button -> teleport(entryPos));
-			entryButtons.add(entryButton);
-			addRenderableWidget(entryButton);
+			ExtendedButton entryButton = new ExtendedButton(xOffset + 10, yOffset + 45 + positionOffset, 120, 16, buttonComponent,
+					button -> teleport(entryPos));
+			entryButtons.add(addRenderableWidget(entryButton));
 		}
 		
 		updateButtonStates();
