@@ -1,4 +1,30 @@
 
+# Modeling
+
+- blankMushroom
+
+- Caldw3ll: [`sendificator.json`](src/main/resources/assets/minestuck/models/block/sendificator.json)
+
+- Cibernet
+
+- Dado: [`grist_widget.json`](src/main/resources/assets/minestuck/models/block/grist_widget.json)
+and [`grist_widget_with_card.json`](src/main/resources/assets/minestuck/models/block/grist_widget_with_card.json)
+
+- Dweblenod
+
+- iconmaster
+
+- Ishumire
+
+- kirderf1: [`cruxite_dowel.json`](src/main/resources/assets/minestuck/models/block/cruxite_dowel.json)
+and [`cruxtruder_dowel.json`](src/main/resources/assets/minestuck/models/block/cruxtruder_dowel.json)
+
+- Riotmode
+
+- rose_bushes_: [`anthvil.json`](src/main/resources/assets/minestuck/models/block/anthvil.json)
+
+- sipher nil: [`mini_typheus_statue.json`](src/main/resources/assets/minestuck/models/block/mini_typheus_statue.json)
+
 # Music
 
 - Caldw3ll
