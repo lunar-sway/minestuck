@@ -36,8 +36,6 @@ import java.util.stream.Stream;
  */
 public final class EditmodeLocations
 {
-	//TODO prevent going to non Medium dimensions post Entry, delete maps to the Overworld
-	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final int ENTRY_RANGE = 30;

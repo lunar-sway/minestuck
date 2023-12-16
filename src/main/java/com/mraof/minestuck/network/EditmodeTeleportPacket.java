@@ -37,7 +37,6 @@ public class EditmodeTeleportPacket implements PlayToServerPacket
 		if(editData == null)
 			return;
 		
-		//TODO requires the dimensions to be the same, will need to be changed if the player will be allowed to teleport to other dimensions
 		if(EditmodeLocations.checkIsValidSourcePos(editData, player.level().dimension(), this.pos))
 			player.teleportTo(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
 	}

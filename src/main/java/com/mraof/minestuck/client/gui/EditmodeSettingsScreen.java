@@ -7,7 +7,6 @@ import com.mraof.minestuck.computer.editmode.ClientEditHandler;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.network.EditmodeTeleportPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -18,6 +17,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.gui.widget.ExtendedButton;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.List;
  * Essentially a sub-menu of InventoryEditmodeScreen. Used for selecting an EditmodeLocation to teleport to.
  * Also has buttons to enable/disable editmode relevant properties including noclip and interaction mode (not currently implemented)
  */
+@ParametersAreNonnullByDefault
 public class EditmodeSettingsScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.editmode_settings";
@@ -57,7 +58,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 	private int xOffset;
 	private int yOffset;
 	
-	private List<Button> entryButtons = new ArrayList<>();
+	private final List<Button> entryButtons = new ArrayList<>();
 	
 	@SuppressWarnings("resource")
 	public EditmodeSettingsScreen(Player player)
@@ -91,6 +92,7 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 			nextButton.active = false;
 		}
 		
+		entryButtons.clear();
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
 			BlockPos entryPos = locationEntries.get(i);
@@ -150,15 +152,6 @@ public class EditmodeSettingsScreen extends MinestuckScreen
 		}
 		
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
-	}
-	
-	@Override
-	public void resize(Minecraft pMinecraft, int pWidth, int pHeight)
-	{
-		super.resize(pMinecraft, pWidth, pHeight);
-		
-		//TODO resizing does not work for button rendering
-		renderButtons();
 	}
 	
 	private void teleport(BlockPos pos)
