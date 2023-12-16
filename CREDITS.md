@@ -12,7 +12,7 @@ and [`grist_widget_with_card.json`](src/main/resources/assets/minestuck/models/b
 
 - Dweblenod
 
-- iconmaster
+- [iconmaster](https://github.com/iconmaster5326/)
 
 - Ishumire
 
@@ -55,7 +55,7 @@ and ["Emissary of Dance"](src/main/resources/assets/minestuck/sounds/records/emi
 - [Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/) edited by Cibernet
 from [soundbible.com](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
 
-- [Horn honk](src/main/resources/assets/minestuck/sounds/item/horn_honk.ogg) from [freesound.org](https://freesound.org/people/Stickinthemud/sounds/27882/) by Stickinthemud
+- [Horn honk](src/main/resources/assets/minestuck/sounds/item/horn_honk.ogg) from [freesound.org](https://freesound.org/people/Stickinthemud/sounds/27882/) by [Stickinthemud](https://freesound.org/people/Stickinthemud/)
 
 - [Horse clock chime](src/main/resources/assets/minestuck/sounds/random/horse_clock_chime.ogg) edited by Dweblenod
 from [Pixabay grandfather clock](https://pixabay.com/sound-effects/028122-clock-grandfather-ticks-amp-striking-oncemp3-75316/)
