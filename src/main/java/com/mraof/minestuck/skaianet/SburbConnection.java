@@ -8,15 +8,12 @@ import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.event.ConnectionCreatedEvent;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.skaianet.client.ReducedConnection;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.MSNBTUtil;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -26,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public final class SburbConnection
@@ -45,6 +43,7 @@ public final class SburbConnection
 	private boolean isMain;
 	boolean lockedToSession;
 	private boolean hasEntered = false;    //If the player has entered. Is set to true after entry has finished
+	@Nullable
 	private ResourceKey<Level> clientLandKey;    //The land info for this client player. This is initialized in preparation for entry
 	int artifactType;
 	private GristType baseGrist;
@@ -302,9 +301,16 @@ public final class SburbConnection
 		return null;
 	}
 	
+	@Nullable
+	public ResourceKey<Level> getLandDimensionIfEntered()
+	{
+		return this.hasEntered() ? this.clientLandKey : null;
+	}
+	
 	/**
 	 * @return The land dimension assigned to the client player.
 	 */
+	@Nullable
 	public ResourceKey<Level> getClientDimension()
 	{
 		return this.clientLandKey;

@@ -20,6 +20,7 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -59,6 +60,8 @@ public final class ClientEditHandler
 	static boolean activated;
 	@Nullable
 	private static EditmodeLocations locations;
+	@Nullable
+	private static ResourceKey<Level> clientLand;
 	
 	/**
 	 * Used to tell if the client is in edit mode or not.
@@ -99,9 +102,16 @@ public final class ClientEditHandler
 		return locations;
 	}
 	
+	@Nullable
+	public static ResourceKey<Level> getClientLand()
+	{
+		return clientLand;
+	}
+	
 	public static void onLocationsPacket(EditmodeLocationsPacket packet)
 	{
 		locations = packet.locations();
+		clientLand = packet.land();
 		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
 			screen.recreateTeleportButtons();
 	}
@@ -111,6 +121,7 @@ public final class ClientEditHandler
 		activated = false;
 		client = null;
 		locations = null;
+		clientLand = null;
 	}
 	
 	@SubscribeEvent
@@ -161,7 +172,7 @@ public final class ClientEditHandler
 			Player player = event.player;
 			
 			if(locations != null)
-				locations.limitMovement(player);
+				locations.limitMovement(player, clientLand);
 		}
 	}
 	

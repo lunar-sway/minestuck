@@ -31,6 +31,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -222,7 +223,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(c.getClientEditmodeLocations()), player);
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(c.getLandDimensionIfEntered(), c.getClientEditmodeLocations()), player);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
@@ -233,7 +234,8 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 	{
 		
 		double posX, posY, posZ;
-		ServerLevel level = player.getServer().getLevel(c.hasEntered() ? c.getClientDimension() : c.getClientComputer().getPosForEditmode().dimension());
+		ResourceKey<Level> landDimension = Objects.requireNonNullElse(c.getLandDimensionIfEntered(), c.getClientComputer().getPosForEditmode().dimension());
+		ServerLevel level = player.getServer().getLevel(landDimension);
 		
 		if(lastEditmodePos.containsKey(c))
 		{
@@ -276,7 +278,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(connection.getClientEditmodeLocations()), editor);
+			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(connection.getLandDimensionIfEntered(), connection.getClientEditmodeLocations()), editor);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
@@ -333,13 +335,9 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		//every 10 seconds, revalidate locations
 		if(player.level().getGameTime() % 200 == 0)
-		{
 			c.getClientEditmodeLocations().validateClosestSourceAndEntry(player, c);
-			
-			editmodeLocations = c.getClientEditmodeLocations(); //refresh editmodeLocations after validation
-		}
 		
-		editmodeLocations.limitMovement(player);
+		editmodeLocations.limitMovement(player, c.getLandDimensionIfEntered());
 		
 		updateInventory(player, c);
 		

@@ -95,7 +95,7 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 		if(locations == null)
 			return;
 		
-		List<BlockPos> locationEntries = locations.getSortedPositions(level);
+		List<BlockPos> locationEntries = locations.getSortedPositions(level, ClientEditHandler.getClientLand());
 		
 		for(int i = 0; i < locationEntries.size(); i++)
 		{
