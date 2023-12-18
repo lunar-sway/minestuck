@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.api.alchemy.GristTypes;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -53,7 +53,7 @@ public class GristCacheScreen extends PlayerStatsScreen
 		guiGraphics.blit(guiGristcache, xOffset, yOffset, 0, 0, guiWidth, guiHeight);
 		
 		String cacheMessage;
-		if(ClientEditHandler.isActive() || ClientPlayerData.getTitle() == null)
+		if(ClientEditmodeData.isInEditmode() || ClientPlayerData.getTitle() == null)
 			cacheMessage = getTitle().getString();
 		else cacheMessage = ClientPlayerData.getTitle().asTextComponent().getString();
 		guiGraphics.drawString(font, cacheMessage, (this.width / 2F) - mc.font.width(cacheMessage) / 2F, yOffset + 12, 0x404040, false);

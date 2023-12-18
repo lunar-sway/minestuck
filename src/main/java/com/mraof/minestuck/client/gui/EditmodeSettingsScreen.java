@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.gui.playerStats.InventoryEditmodeScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.network.EditmodeTeleportPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -21,6 +21,7 @@ import net.minecraftforge.client.gui.widget.ExtendedButton;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -91,11 +92,10 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 		entryButtons.forEach(this::removeWidget);
 		entryButtons.clear();
 		
-		EditmodeLocations locations = ClientEditHandler.getLocations();
-		if(locations == null)
-			return;
+		EditmodeLocations locations = ClientEditmodeData.getLocations();
 		
-		List<BlockPos> locationEntries = locations.getSortedPositions(level, ClientEditHandler.getClientLand());
+		List<BlockPos> locationEntries = locations == null ? Collections.emptyList()
+				: locations.getSortedPositions(level, ClientEditmodeData.getClientLand());
 		
 		for(int i = 0; i < locationEntries.size(); i++)
 		{

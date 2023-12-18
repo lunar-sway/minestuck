@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.network.MSPacketHandler;
@@ -44,6 +44,6 @@ public record EditmodeLocationsPacket(@Nullable ResourceKey<Level> land, Editmod
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.onLocationsPacket(this);
+		ClientEditmodeData.onLocationsPacket(this);
 	}
 }

@@ -6,7 +6,7 @@ import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.client.util.GuiUtil;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -44,7 +44,7 @@ public abstract class MinestuckScreen extends Screen
 		//Show the name of the grist instead of the count if displaying a tooltip
 		boolean showName = false;
 		GristType tooltipType = null;
-		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditHandler.isActive() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
+		ClientPlayerData.ClientCache cache = ClientPlayerData.getGristCache(ClientEditmodeData.isInEditmode() ? ClientPlayerData.CacheSource.EDITMODE : ClientPlayerData.CacheSource.PLAYER);
 		GristSet clientGrist = cache.set();
 		long cacheLimit = cache.limit();
 		

@@ -1,7 +1,8 @@
 package com.mraof.minestuck.network;
 
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
-import net.minecraft.nbt.*;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.io.ByteArrayInputStream;
@@ -88,6 +89,6 @@ public class ServerEditPacket implements PlayToClientPacket
 	@Override
 	public void execute()
 	{
-		ClientEditHandler.onClientPackage(target, deployTags);
+		ClientEditmodeData.onPacket(target, deployTags);
 	}
 }

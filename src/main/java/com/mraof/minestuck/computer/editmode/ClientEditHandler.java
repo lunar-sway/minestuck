@@ -5,22 +5,17 @@ import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
 import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -40,14 +35,12 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,21 +48,6 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
-	@Nullable
-	public static String client;
-	static boolean activated;
-	@Nullable
-	private static EditmodeLocations locations;
-	@Nullable
-	private static ResourceKey<Level> clientLand;
-	
-	/**
-	 * Used to tell if the client is in edit mode or not.
-	 */
-	public static boolean isActive()
-	{
-		return activated;
-	}
 	
 	public static void onKeyPressed()
 	{
@@ -77,57 +55,10 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, CompoundTag deployList)
-	{
-		Minecraft mc = Minecraft.getInstance();
-		LocalPlayer player = mc.player;
-		if(target != null)
-		{    //Enable edit mode
-			activated = true;
-			client = target;
-		} else if(deployList == null)    //Disable edit mode
-		{
-			player.fallDistance = 0;
-			disable();
-		}
-		if(deployList != null)
-		{
-			ClientDeployList.load(deployList);
-		}
-	}
-	
-	@Nullable
-	public static EditmodeLocations getLocations()
-	{
-		return locations;
-	}
-	
-	@Nullable
-	public static ResourceKey<Level> getClientLand()
-	{
-		return clientLand;
-	}
-	
-	public static void onLocationsPacket(EditmodeLocationsPacket packet)
-	{
-		locations = packet.locations();
-		clientLand = packet.land();
-		if(Minecraft.getInstance().screen instanceof EditmodeSettingsScreen screen)
-			screen.recreateTeleportButtons();
-	}
-	
-	private static void disable()
-	{
-		activated = false;
-		client = null;
-		locations = null;
-		clientLand = null;
-	}
-	
 	@SubscribeEvent
 	public static void addToolTip(ItemTooltipEvent event)
 	{
-		if(!isActive())
+		if(!ClientEditmodeData.isInEditmode())
 			return;
 		
 		GristSet have = getGristCache().set();
@@ -167,19 +98,20 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event)
 	{
-		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
+		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
 		{
 			Player player = event.player;
 			
+			EditmodeLocations locations = ClientEditmodeData.getLocations();
 			if(locations != null)
-				locations.limitMovement(player, clientLand);
+				locations.limitMovement(player, ClientEditmodeData.getClientLand());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().level().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getPlayer().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			Inventory inventory = event.getPlayer().getInventory();
 			ItemStack stack = event.getEntity().getItem();
@@ -203,14 +135,14 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onItemPickupEvent(EntityItemPickupEvent event)
 	{
-		if(event.getEntity().level().isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
+		if(event.getEntity().level().isClientSide && ClientEditmodeData.isInEditmode() && event.getEntity().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
 			{
@@ -246,7 +178,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
 			{
@@ -270,7 +202,7 @@ public final class ClientEditHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			event.setCanceled(true);
 		}
@@ -279,35 +211,28 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
-	}
-	
-	@SubscribeEvent
-	public static void onWorldUnload(LevelEvent.Unload event)
-	{
-		if(event.getLevel().isClientSide())
-			disable();
 	}
 	
 	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onScreenOpened(ScreenEvent.Opening event)
 	{
-		if(isActive() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
+		if(ClientEditmodeData.isInEditmode() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
 		{
 			event.setCanceled(true);
 			PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
