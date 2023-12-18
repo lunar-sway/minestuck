@@ -186,8 +186,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		
 		editData.recover();    //TODO handle exception from failed recovery
 		
-		ServerEditPacket packet = ServerEditPacket.exit();
-		MSPacketHandler.sendToPlayer(packet, player);
+		MSPacketHandler.sendToPlayer(new ServerEditPacket.Exit(), player);
 		
 		editData.getDecoy().markedForDespawn = true;
 		
@@ -221,8 +220,8 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			c.getClientEditmodeLocations().validateClosestSourceAndEntry(player, c);
 			
-			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c));
-			MSPacketHandler.sendToPlayer(packet, player);
+			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), player);
+			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
 			data.sendGristCacheToEditor();
@@ -276,16 +275,16 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 		{
 			SburbConnection connection = data.connection;
 			
-			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection));
-			MSPacketHandler.sendToPlayer(packet, editor);
+			connection.getClientIdentifier().getUsername();
+			MSPacketHandler.sendToPlayer(new ServerEditPacket.Activate(), editor);
+			data.sendGivenItemsToEditor();
 			EditmodeLocationsPacket.send(data);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
 		} else
 		{
-			ServerEditPacket packet = ServerEditPacket.exit();
-			MSPacketHandler.sendToPlayer(packet, editor);
+			MSPacketHandler.sendToPlayer(new ServerEditPacket.Exit(), editor);
 		}
 	}
 	

@@ -1,94 +1,73 @@
 package com.mraof.minestuck.network;
 
+import com.mraof.minestuck.computer.editmode.ClientDeployList;
 import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.Objects;
 
-public class ServerEditPacket implements PlayToClientPacket
+public final class ServerEditPacket
 {
-	String target;
-	CompoundTag deployTags;
-	
-	public static ServerEditPacket exit()
+	public record Activate() implements PlayToClientPacket
 	{
-		return new ServerEditPacket();
-	}
-	
-	public static ServerEditPacket givenItems(CompoundTag deployTags)
-	{
-		ServerEditPacket packet = new ServerEditPacket();
-		packet.deployTags = deployTags;
-		return packet;
-	}
-	
-	public static ServerEditPacket activate(String target, CompoundTag deployTags)
-	{
-		ServerEditPacket packet = new ServerEditPacket();
-		packet.target = target;
-		packet.deployTags = deployTags;
-		return packet;
-	}
-	
-	@Override
-	public void encode(FriendlyByteBuf buffer)
-	{
-		if(target != null)
-		{
-			buffer.writeBoolean(true);
-			buffer.writeUtf(target, 16);
-		} else if(deployTags != null)
-			buffer.writeBoolean(false);
-		else return;
+		@Override
+		public void encode(FriendlyByteBuf ignored)
+		{}
 		
-		if(deployTags != null)
+		public static Activate decode(FriendlyByteBuf ignored)
 		{
-			try
-			{
-				ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				NbtIo.writeCompressed(deployTags, bytes);
-				buffer.writeBytes(bytes.toByteArray());
-			} catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			return new Activate();
+		}
+		
+		@Override
+		public void execute()
+		{
+			ClientEditmodeData.onActivatePacket();
 		}
 	}
 	
-	public static ServerEditPacket decode(FriendlyByteBuf buffer)
+	public record UpdateDeployList(CompoundTag data) implements PlayToClientPacket
 	{
-		ServerEditPacket packet = new ServerEditPacket();
-		if(buffer.readableBytes() > 0)
+		@Override
+		public void encode(FriendlyByteBuf buffer)
 		{
-			if(buffer.readBoolean())
-			{
-				packet.target = buffer.readUtf(16);
-			}
-			
-			if(buffer.readableBytes() > 0)
-			{
-				byte[] bytes = new byte[buffer.readableBytes()];
-				buffer.readBytes(bytes);
-				try
-				{
-					packet.deployTags = NbtIo.readCompressed(new ByteArrayInputStream(bytes));
-				} catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
+			buffer.writeNbt(this.data);
 		}
 		
-		return packet;
+		public static UpdateDeployList decode(FriendlyByteBuf buffer)
+		{
+			CompoundTag data = Objects.requireNonNull(buffer.readNbt());
+			return new UpdateDeployList(data);
+		}
+		
+		@Override
+		public void execute()
+		{
+			ClientDeployList.load(this);
+		}
 	}
 	
-	@Override
-	public void execute()
+	public record Exit() implements PlayToClientPacket
 	{
-		ClientEditmodeData.onPacket(target, deployTags);
+		@Override
+		public void encode(FriendlyByteBuf ignored)
+		{}
+		
+		public static Exit decode(FriendlyByteBuf ignored)
+		{
+			return new Exit();
+		}
+		
+		@Override
+		public void execute()
+		{
+			Player player = Minecraft.getInstance().player;
+			if(player != null)
+				player.fallDistance = 0;
+			ClientEditmodeData.onExitPacket(this);
+		}
 	}
 }

@@ -2,11 +2,10 @@ package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.client.gui.EditmodeSettingsScreen;
+import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.level.LevelEvent;
@@ -48,22 +47,14 @@ public final class ClientEditmodeData
 		clientLand = null;
 	}
 	
-	public static void onPacket(String target, CompoundTag deployList)
+	public static void onActivatePacket()
 	{
-		if(target != null)
-		{    //Enable edit mode
-			activated = true;
-		} else if(deployList == null)    //Disable edit mode
-		{
-			Player player = Minecraft.getInstance().player;
-			if(player != null)
-				player.fallDistance = 0;
-			disable();
-		}
-		if(deployList != null)
-		{
-			ClientDeployList.load(deployList);
-		}
+		activated = true;
+	}
+	
+	public static void onExitPacket(ServerEditPacket.Exit ignored)
+	{
+		disable();
 	}
 	
 	public static void onLocationsPacket(EditmodeLocationsPacket packet)
