@@ -3,6 +3,7 @@ package com.mraof.minestuck.block.fluid;
 import com.mraof.minestuck.fluid.IMSFog;
 import com.mraof.minestuck.fluid.MSFluidType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -23,12 +24,14 @@ public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
 {
 	protected final Vec3 fogColor;
 	protected final float fogDensity;
+	protected final boolean underwaterParticles;
 	
-	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, Properties properties)
+	public FlowingModFluidBlock(Supplier<? extends FlowingFluid> fluid, Vec3 fogColor, float fogDensity, boolean underwaterParticles, Properties properties)
 	{
 		super(fluid, properties);
 		this.fogColor = fogColor;
 		this.fogDensity = fogDensity;
+		this.underwaterParticles = underwaterParticles;
 	}
 	
 	@Override
@@ -48,6 +51,16 @@ public class FlowingModFluidBlock extends LiquidBlock implements IMSFog
 	{
 		super.animateTick(state, level, blockPos, rand);
 		
+		ambientSounds(state, level, blockPos, rand);
+		
+		if(underwaterParticles && rand.nextInt(20) == 0)
+		{
+			level.addParticle(ParticleTypes.UNDERWATER, blockPos.getX() + rand.nextDouble(), blockPos.getY() + rand.nextDouble(), blockPos.getZ() + rand.nextDouble(), 0.0D, 0.0D, 0.0D);
+		}
+	}
+	
+	private void ambientSounds(BlockState state, Level level, BlockPos blockPos, RandomSource rand)
+	{
 		if(rand.nextInt(96) == 0)
 		{
 			FlowingFluid fluid = this.getFluid();

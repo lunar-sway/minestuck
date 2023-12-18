@@ -13,6 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
 - New consort dialogue
+- Minestuck fluids now have sound effects in situations reminiscent of water
+- Light water now acts as a light source and has underwater fog appear closer
+- All Minestuck fluids besides ender fluid now support boats
+- All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
+- Brain juice now forms an infinite source, it also now cannot be drowned in
+- Blood and brain juice now hydrate crops
+- Minestuck fluids now have custom tick rates
+- Blood/brain juice/light water now have underwater particles
+- Minestuck fluids now have improved mod compatibility
 
 ### Changed
 
@@ -21,16 +30,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
 - Entities now move through and sink in Minestuck fluids at rates specific to the fluid
-- Minestuck fluids now have custom tick rates
-- Minestuck fluids now have sound effects in situations reminiscent of water
-- Light water now acts as a light source and has underwater fog appear closer
-- All Minestuck fluids besides ender fluid now support boats
-- All Minestuck fluids besides oil now extinguish on fire entities, entities touching oil while on fire extends fire duration
-- Brain juice now forms an infinite source, it also now cannot be drowned in
-- Blood and brain juice now hydrate crops
 - The texture for oil and blood are now more transparent than they were in previous versions
 - Underwater fog appears closer for oil/blood/water colors/light water
-- Minestuck fluids now have improved mod compatibility
 
 ### Fixed
 

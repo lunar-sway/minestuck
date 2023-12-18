@@ -17,11 +17,6 @@ public class FlowingWaterColorsBlock extends LiquidBlock implements IMSFog
 {
 	private final float fogDensity;
 	
-	public FlowingWaterColorsBlock(Supplier<FlowingFluid> fluid, Properties properties)
-	{
-		this(fluid, 0, properties);
-	}
-	
 	public FlowingWaterColorsBlock(Supplier<? extends FlowingFluid> fluid, float fogDensity, Properties properties)
 	{
 		super(fluid, properties);
