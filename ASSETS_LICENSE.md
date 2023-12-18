@@ -1,4 +1,8 @@
 
+[Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/)
+are edited from ["Frog Croaking"](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
+which is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
 ["Horn honk"](src/main/resources/assets/minestuck/sounds/item/horn_honk.ogg)
 is cut from ["Bike Horn double toot"](https://freesound.org/people/Stickinthemud/sounds/27882/) by [Stickinthemud](https://freesound.org/people/Stickinthemud/)
 which is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
