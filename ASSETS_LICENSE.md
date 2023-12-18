@@ -7,6 +7,11 @@ which is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/
 is cut from ["Bike Horn double toot"](https://freesound.org/people/Stickinthemud/sounds/27882/) by [Stickinthemud](https://freesound.org/people/Stickinthemud/)
 which is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
 
+Any textures made solely by Riotmode are dedicated to the public domain under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+The ["Land of Copyleft and Freedom"](src/main/resources/assets/minestuck/font/land_of_copyleft_and_freedom.ttf)
+font by Riotmode is dedicated to the public domain under [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
 All files in [`src/main/resources/assets/minestuck/sounds/music/`](src/main/resources/assets/minestuck/sounds/music/) and [`src/main/resources/assets/minestuck/sounds/records/`](src/main/resources/assets/minestuck/sounds/records/) are licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), with the following exceptions:
 
 - ["Dance-Stab-Dance"](src/main/resources/assets/minestuck/sounds/records/dance_stab_dance.ogg)
