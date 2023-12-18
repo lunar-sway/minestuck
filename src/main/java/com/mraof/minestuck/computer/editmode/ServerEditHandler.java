@@ -223,7 +223,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			ServerEditPacket packet = ServerEditPacket.activate(computerTarget.getUsername(), DeployList.getDeployListTag(player.getServer(), c));
 			MSPacketHandler.sendToPlayer(packet, player);
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(c.getLandDimensionIfEntered(), c.getClientEditmodeLocations()), player);
+			EditmodeLocationsPacket.send(data);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();
@@ -278,7 +278,7 @@ public final class ServerEditHandler    //TODO Consider splitting this class int
 			
 			ServerEditPacket packet = ServerEditPacket.activate(connection.getClientIdentifier().getUsername(), DeployList.getDeployListTag(editor.getServer(), connection));
 			MSPacketHandler.sendToPlayer(packet, editor);
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(connection.getLandDimensionIfEntered(), connection.getClientEditmodeLocations()), editor);
+			EditmodeLocationsPacket.send(data);
 			
 			data.sendGristCacheToEditor();
 			data.sendCacheLimitToEditor();

@@ -1,7 +1,9 @@
 package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.EditData;
 import com.mraof.minestuck.computer.editmode.EditmodeLocations;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.PlayToClientPacket;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -15,6 +17,13 @@ import java.util.Optional;
 
 public record EditmodeLocationsPacket(@Nullable ResourceKey<Level> land, EditmodeLocations locations) implements PlayToClientPacket
 {
+	public static void send(EditData data)
+	{
+		MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(data.getConnection().getLandDimensionIfEntered(),
+						data.getConnection().getClientEditmodeLocations()),
+				data.getEditor());
+	}
+	
 	@Override
 	public void encode(FriendlyByteBuf buffer)
 	{

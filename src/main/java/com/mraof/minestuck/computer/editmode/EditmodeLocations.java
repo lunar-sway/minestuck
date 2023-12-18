@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
@@ -149,9 +148,9 @@ public final class EditmodeLocations
 		});
 	}
 	
-	public void addEntryLocations(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> dimension)
+	public static void onEntry(MinecraftServer mcServer, PlayerIdentifier owner)
 	{
-		this.sendLocationsToEditor(mcServer, owner);
+		sendLocationsToEditor(mcServer, owner);
 	}
 	
 	public static void addBlockSourceIfValid(ComputerBlockEntity computer)
@@ -169,7 +168,7 @@ public final class EditmodeLocations
 			return;
 		
 		locations.computers.put(level.dimension(), computer.getBlockPos());
-		locations.sendLocationsToEditor(level.getServer(), computer.getOwner());
+		sendLocationsToEditor(level.getServer(), computer.getOwner());
 	}
 	
 	public static void removeBlockSource(MinecraftServer mcServer, PlayerIdentifier owner, ResourceKey<Level> level, BlockPos pos)
@@ -179,7 +178,7 @@ public final class EditmodeLocations
 		boolean wasRemoved = locations.computers.remove(level, pos);
 		if(wasRemoved)
 		{
-			locations.sendLocationsToEditor(mcServer, owner);
+			sendLocationsToEditor(mcServer, owner);
 			locations.updatePlayerNearRemovedComputerSource(mcServer, owner, level, pos);
 		}
 	}
@@ -279,11 +278,11 @@ public final class EditmodeLocations
 		editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
 	}
 	
-	private void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner)
+	private static void sendLocationsToEditor(MinecraftServer mcServer, PlayerIdentifier owner)
 	{
 		EditData editData = ServerEditHandler.getData(mcServer, owner);
 		if(editData != null)
-			MSPacketHandler.sendToPlayer(new EditmodeLocationsPacket(editData.getConnection().getLandDimensionIfEntered(), this), editData.getEditor());
+			EditmodeLocationsPacket.send(editData);
 	}
 	
 	private static boolean isComputerSourceInvalidFor(Level level, BlockPos pos, PlayerIdentifier owner)
