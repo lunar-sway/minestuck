@@ -1,7 +1,10 @@
 package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.ComputerThemeDataManager;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.Optional;
 
 // TODO make this more data-driven
 public enum Theme
@@ -33,7 +36,8 @@ public enum Theme
 	
 	public int getTextColor()
 	{
-		return this.textColor;
+		Optional<Integer> price = ComputerThemeDataManager.getInstance().findTextColor(texture);
+		return price.orElse(0xBFAA6D);
 	}
 	
 	public ResourceLocation getTexture()
@@ -48,6 +52,8 @@ public enum Theme
 	
 	private static ResourceLocation locationForName(String name)
 	{
-		return new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + name + ".png");
+		Optional<ResourceLocation> price = ComputerThemeDataManager.getInstance().findTexturePath(name);
+		return price.orElse(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/pesterchum.png"));
+		//return new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + name + ".png");
 	}
 }
