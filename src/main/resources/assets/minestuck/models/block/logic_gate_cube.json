@@ -1,0 +1,23 @@
+{
+    "parent": "minestuck:block/cube_up_mirrored",
+    "textures": {
+        "down": "minestuck:block/redstone_machine_block",
+        "up": "minestuck:block/redstone_machine_block",
+        "north": "minestuck:block/logic_gate/back",
+        "south": "#front",
+        "west": "minestuck:block/logic_gate/left_side",
+        "east": "minestuck:block/logic_gate/right_side",
+        "particle": "#front"
+    },
+    "display": {
+        "gui": {
+            "rotation": [30, 45, 0],
+            "scale": [0.625, 0.625, 0.625]
+        },
+        "fixed": {
+            "rotation": [0, -180, 0],
+            "translation": [0, 0, 0],
+            "scale": [0.5, 0.5, 0.5]
+        }
+    }
+}

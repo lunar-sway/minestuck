@@ -147,11 +147,14 @@ public class ConsortDialogue
 				new SingleMessage[]{new SingleMessage("mushroom_pizza.on"), new SingleMessage("mushroom_pizza.off")},
 				new MessageType[]{new SingleMessage("mushroom_pizza.on.consort_reply"), new SingleMessage("mushroom_pizza.off.consort_reply")})).condition(terrainLand(SHADE));
 		addMessage("fire_hazard").condition(terrainLand(SHADE)).condition(titleLand(THUNDER).negate());
+		addMessage("that_boy_needs_therapy").condition(terrainLand(SHADE));
 		
 		//Heat
 		addMessage("getting_hot").condition(terrainLand(HEAT));
 		addMessage("step_into_fire").condition(terrainLand(HEAT));
 		addMessage("lava_crickets").condition(terrainLand(HEAT));
+		addMessage("tummy_tunnel").condition(terrainLand(HEAT));
+		addMessage("the_water_is_lava").condition(terrainLand(HEAT));
 		
 		//Wood
 		addMessage("wood_treatments").condition(terrainLand(WOOD));
@@ -292,6 +295,13 @@ public class ConsortDialogue
 		addMessage(new SingleMessage("disks")).consort(EnumConsort.IGUANA);
 		addMessage(new SingleMessage("whoops")).consort(EnumConsort.IGUANA);
 		addMessage(new SingleMessage("fourth_wall")).consort(EnumConsort.IGUANA);
+		addMessage(new SingleMessage("consort_scoliosis")).consort(EnumConsort.TURTLE);
+		addMessage(new SingleMessage("oh_to_be_ugly")).consort(EnumConsort.NAKAGATOR);
+		addMessage(new SingleMessage("no_to_podcasting")).consort(EnumConsort.IGUANA);
+		addMessage(new SingleMessage("bats")).consort(EnumConsort.TURTLE);
+		addMessage(new SingleMessage("so_what")).consort(EnumConsort.SALAMANDER);
+		addMessage(new SingleMessage("trolly_problem")).consort(EnumConsort.NAKAGATOR);
+		addMessage(new SingleMessage("a_little_lampshading")).consort(EnumConsort.IGUANA);
 		addMessage(new SingleMessage("hats")).consort(EnumConsort.SALAMANDER);
 		addMessage(new SingleMessage("wwizard")).consort(EnumConsort.TURTLE);
 		addMessage(new SingleMessage("stock_market")).consort(EnumConsort.NAKAGATOR);

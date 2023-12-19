@@ -1,0 +1,6 @@
+{
+  "parent": "minestuck:item/claw_weapon",
+  "textures": {
+    "layer0": "minestuck:item/skeleton_displacer_sheathed"
+  }
+}

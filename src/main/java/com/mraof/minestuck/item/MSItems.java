@@ -636,7 +636,7 @@ public class MSItems
 	
 	
 	//Structure Scanners
-	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties().durability(30), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM));
+	public static final RegistryObject<Item> TEMPLE_SCANNER = REGISTER.register("temple_scanner", () -> new StructureScannerItem(new Item.Properties(), MSTags.Structures.SCANNER_LOCATED, MSItems.RAW_URANIUM, 30));
 	
 	
 	

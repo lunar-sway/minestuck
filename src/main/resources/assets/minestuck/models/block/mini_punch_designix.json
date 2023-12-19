@@ -29,9 +29,9 @@
     },
     "textures": {
         "particle": "minestuck:item/punch_designix",
-        "front": "minestuck:block/punch_designix_front",
-        "back": "minestuck:block/punch_designix_back",
-        "other": "minestuck:block/punch_designix_misc"
+        "front": "minestuck:block/machine/mini_punch_designix_front",
+        "back": "minestuck:block/machine/mini_punch_designix_back",
+        "other": "minestuck:block/machine/mini_punch_designix_misc"
     },
     "elements": [
         {

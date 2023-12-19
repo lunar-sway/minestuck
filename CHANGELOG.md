@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Uncarved wood block group now has a stonecutting recipe and grist cost
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
+- New consort dialogue
 - Sopor Stupor Effect
 - Sopor Slime Pie food item
 
@@ -20,14 +21,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bamboo item now costs 1 build grist instead of 2 (bamboo plank blocks now similar in cost to traditional planks)
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
+- Minor changes and polish to the temple scanner
 
 ### Fixed
 
 - Fixed multiple sources of crashes involving fake players
+- Creative Shock effect is no longer cured by drinking milk
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, DORO
+- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
