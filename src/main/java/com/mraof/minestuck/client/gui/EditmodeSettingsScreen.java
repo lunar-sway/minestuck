@@ -33,6 +33,9 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 {
 	public static final String TITLE = "minestuck.editmode_settings";
 	public static final String EDITMODE_LOCATIONS = "minestuck.editmode_locations";
+	public static final String RETURN = "minestuck.editmode_settings.return";
+	public static final String INTERACTION_MODE_UNAVAILABLE = "minestuck.editmode_settings.interaction_mode_unavailable";
+	public static final String NOCLIP_UNAVAILABLE = "minestuck.editmode_settings.noclip_unavailable";
 	
 	private static final ResourceLocation GUI_BACKGROUND = new ResourceLocation("minestuck", "textures/gui/generic_extra_large.png");
 	@SuppressWarnings("unused")
@@ -126,14 +129,14 @@ public final class EditmodeSettingsScreen extends MinestuckScreen
 		
 		graphics.blit(InventoryEditmodeScreen.SETTINGS_ICON, xOffset + SETTINGS_X, yOffset + SETTINGS_Y, SETTINGS_SIZE, SETTINGS_SIZE, 0, 0, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE, SETTINGS_SIZE);
 		if(InventoryEditmodeScreen.overtopSettingsIconBounds(mouseX, mouseY, xOffset, yOffset, SETTINGS_X, SETTINGS_Y))
-			graphics.renderTooltip(font, Component.literal("Return"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.translatable(RETURN), mouseX, mouseY);
 		
 		graphics.blit(INTERACT_MULTIPLE_MODE_ICON, xOffset + INTERACT_ICON_X, yOffset + INTERACT_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
 		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, INTERACT_ICON_X, INTERACT_ICON_Y))
-			graphics.renderTooltip(font, Component.literal("Interaction mode toggle not available yet"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.translatable(INTERACTION_MODE_UNAVAILABLE), mouseX, mouseY);
 		graphics.blit(NOCLIP_INACTIVE_ICON, xOffset + NOCLIP_ICON_X, yOffset + NOCLIP_ICON_Y, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, 0, 0, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE, TOGGLE_ICON_SIZE);
 		if(overtopToggleableIconBounds(mouseX, mouseY, xOffset, yOffset, NOCLIP_ICON_X, NOCLIP_ICON_Y))
-			graphics.renderTooltip(font, Component.literal("Noclip toggle not available yet"), mouseX, mouseY);
+			graphics.renderTooltip(font, Component.translatable(NOCLIP_UNAVAILABLE), mouseX, mouseY);
 		
 		super.render(graphics, mouseX, mouseY, partialTicks);
 	}

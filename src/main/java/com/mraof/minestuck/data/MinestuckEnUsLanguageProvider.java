@@ -1809,6 +1809,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
 		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
 		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
+		add(EditmodeSettingsScreen.RETURN, "Return");
+		add(EditmodeSettingsScreen.INTERACTION_MODE_UNAVAILABLE, "Interaction mode toggle not available yet");
+		add(EditmodeSettingsScreen.NOCLIP_UNAVAILABLE, "Noclip toggle not available yet");
 		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");
