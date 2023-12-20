@@ -1964,16 +1964,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
 		
-		add(Theme.DEFAULT.getName(), "Default");
-		add(Theme.PESTERCHUM.getName(), "Pesterchum");
-		add(Theme.TROLLIAN.getName(), "Trollian");
-		add(Theme.CROCKER.getName(), "Crocker");
-		add(Theme.TYPHEUS.getName(), "Typheus");
-		add(Theme.CETUS.getName(), "Cetus");
-		add(Theme.HEPHAESTUS.getName(), "Hephaestus");
-		add(Theme.ECHIDNA.getName(), "Echidna");
-		add(Theme.JOY.getName(), "Joy");
-		add(Theme.SBURB_95.getName(), "SBURB 95");
+		/*add(ComputerThemes.DEFAULT.getName(), "Default");
+		add(ComputerThemes.PESTERCHUM.getName(), "Pesterchum");
+		add(ComputerThemes.TROLLIAN.getName(), "Trollian");
+		add(ComputerThemes.CROCKER.getName(), "Crocker");
+		add(ComputerThemes.TYPHEUS.getName(), "Typheus");
+		add(ComputerThemes.CETUS.getName(), "Cetus");
+		add(ComputerThemes.HEPHAESTUS.getName(), "Hephaestus");
+		add(ComputerThemes.ECHIDNA.getName(), "Echidna");
+		add(ComputerThemes.JOY.getName(), "Joy");
+		add(ComputerThemes.SBURB_95.getName(), "SBURB 95");*/
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");

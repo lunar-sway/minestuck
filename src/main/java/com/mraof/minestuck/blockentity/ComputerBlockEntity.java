@@ -6,7 +6,7 @@ import com.mraof.minestuck.client.gui.ComputerScreen;
 import com.mraof.minestuck.computer.ComputerReference;
 import com.mraof.minestuck.computer.ISburbComputer;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.Theme;
+import com.mraof.minestuck.computer.ComputerThemes;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.player.PlayerIdentifier;
@@ -67,7 +67,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	public Set<Block> hieroglyphsStored = new HashSet<>();
 	public boolean hasParadoxInfoStored = false; //sburb code component received from the lotus flower
 	public int blankDisksStored;
-	private Theme theme = Theme.DEFAULT;
+	private String theme = "default";
 	
 	@Override
 	public void load(CompoundTag nbt)
@@ -95,7 +95,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		programData = nbt.getCompound("programData");
 		if(nbt.contains("theme"))
-			theme = Theme.values()[nbt.getInt("theme")];
+			theme = nbt.getString("theme");
 		
 		hieroglyphsStored = MSNBTUtil.readBlockSet(nbt, "hieroglyphsStored");
 		if(nbt.contains("hasParadoxInfoStored"))
@@ -132,7 +132,7 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		
 		compound.putInt("blankDisksStored", blankDisksStored);
 		
-		compound.putInt("theme", theme.ordinal());
+		compound.putString("theme", theme);
 	}
 	
 	@Override
@@ -261,13 +261,13 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	}
 	
 	@Override
-	public Theme getTheme()
+	public String getTheme()
 	{
 		return theme;
 	}
 	
 	@Override
-	public void setTheme(Theme theme)
+	public void setTheme(String theme)
 	{
 		this.theme = theme;
 		setChanged();

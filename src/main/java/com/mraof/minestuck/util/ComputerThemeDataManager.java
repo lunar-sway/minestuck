@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -24,9 +25,9 @@ import java.util.Optional;
 public class ComputerThemeDataManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerThemeData.class, new ComputerThemeData.Serializer()).create();
+	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerTheme.class, new ComputerTheme.Serializer()).create();
 	
-	private List<ComputerThemeData> pricings;
+	private List<ComputerTheme> themes;
 	
 	public ComputerThemeDataManager()
 	{
@@ -43,36 +44,45 @@ public class ComputerThemeDataManager extends SimpleJsonResourceReloadListener
 	@Override
 	protected void apply(Map<ResourceLocation, JsonElement> jsonEntries, ResourceManager resourceManager, ProfilerFiller profiler)
 	{
-		ImmutableList.Builder<ComputerThemeData> pricings = ImmutableList.builder();
+		ImmutableList.Builder<ComputerTheme> computerThemes = ImmutableList.builder();
 		for(Map.Entry<ResourceLocation, JsonElement> entry : jsonEntries.entrySet())
 		{
 			try
 			{
-				ComputerThemeData pricing = GSON.fromJson(entry.getValue(), ComputerThemeData.class);
-				pricings.add(pricing);
+				ComputerTheme computerTheme = GSON.fromJson(entry.getValue(), ComputerTheme.class);
+				computerThemes.add(computerTheme);
 			} catch(Exception e)
 			{
 				LOGGER.error("Couldn't parse computer theme {}", entry.getKey(), e);
 			}
 		}
 		
-		this.pricings = pricings.build();
-		LOGGER.info("Loaded {} computer themes", this.pricings.size());
+		this.themes = computerThemes.build();
+		LOGGER.info("Loaded {} computer themes", this.themes.size());
 	}
 	
-	public Optional<ResourceLocation> findTexturePath(String name)
+	public ResourceLocation findTexturePath(String name)
 	{
-		return pricings.stream().filter(pricings -> pricings.appliesTo(pricings.getTexturePath())).findAny().map(ComputerThemeData::getTexturePath);
+		Optional<ResourceLocation> potentialPath = themes.stream().filter(theme ->
+				theme.getThemeName().equals(name)).findAny().map(ComputerTheme::getTexturePath);
+		return potentialPath.orElse(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png"));
 	}
 	
-	public Optional<Integer> findTextColor(ResourceLocation stack)
+	/*public int findTextColor(ResourceLocation textureLocation)
 	{
-		return pricings.stream().filter(pricings -> pricings.appliesTo(stack)).findAny().map(ComputerThemeData::getTextColor);
+		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.appliesTo(textureLocation)).findAny().map(ComputerTheme::getTextColor);
+		return potentialColor.orElse(0xBFAA6D);
+	}*/
+	
+	public int findTextColor(String name)
+	{
+		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.getThemeName().equals(name)).findAny().map(ComputerTheme::getTextColor);
+		return potentialColor.orElse(0xBFAA6D);
 	}
 	
-	public static JsonElement parsePrice(ComputerThemeData pricing)
+	public static JsonElement parseTheme(ComputerTheme theme)
 	{
-		return GSON.toJsonTree(pricing);
+		return GSON.toJsonTree(theme);
 	}
 	
 	@SubscribeEvent

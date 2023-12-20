@@ -1,10 +1,7 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.item.MSItems;
-import com.mraof.minestuck.util.BoondollarPriceManager;
-import com.mraof.minestuck.util.BoondollarPricing;
-import com.mraof.minestuck.util.ComputerThemeData;
+import com.mraof.minestuck.util.ComputerTheme;
 import com.mraof.minestuck.util.ComputerThemeDataManager;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
@@ -12,25 +9,17 @@ import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.ConstantInt;
-import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
-import static com.mraof.minestuck.item.MSItems.*;
-import static net.minecraft.world.item.Items.*;
-
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ComputerThemeDataProvider implements DataProvider
 {
-	private final Map<ResourceLocation, ComputerThemeData> pricings = new HashMap<>();
+	private final Map<ResourceLocation, ComputerTheme> computerThemes = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
@@ -40,7 +29,7 @@ public class ComputerThemeDataProvider implements DataProvider
 		this.modid = modid;
 	}
 	
-	protected void registerPricings()
+	protected void registerThemes()
 	{
 		add("default", 0x404040);
 		add("pesterchum", 0x404040);
@@ -54,34 +43,34 @@ public class ComputerThemeDataProvider implements DataProvider
 		add("sburb_95", 0x282828);
 	}
 	
-	protected void add(String item, int value)
+	protected void add(String themeName, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + item + ".png"), ConstantInt.of(value), item);
+		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + themeName + ".png"), ConstantInt.of(value), themeName);
 	}
 	
-	protected void add(ResourceLocation ingredient, ConstantInt range, String name)
+	protected void add(ResourceLocation textureLocation, ConstantInt range, String name)
 	{
-		add(new ComputerThemeData(ingredient, range), new ResourceLocation(modid, name));
+		add(new ComputerTheme(textureLocation, range, name), new ResourceLocation(modid, name));
 	}
 	
-	protected void add(ComputerThemeData pricing, ResourceLocation name)
+	protected void add(ComputerTheme computerTheme, ResourceLocation name)
 	{
-		pricings.put(name, pricing);
+		computerThemes.put(name, computerTheme);
 	}
 	
 	@Override
 	public CompletableFuture<?> run(CachedOutput cache)
 	{
-		registerPricings();
+		registerThemes();
 		
 		Path outputPath = output.getOutputFolder();
-		List<CompletableFuture<?>> futures = new ArrayList<>(pricings.size());
+		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
-		for(Map.Entry<ResourceLocation, ComputerThemeData> entry : pricings.entrySet())
+		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
 		{
-			Path pricingPath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, ComputerThemeDataManager.parsePrice(entry.getValue()), pricingPath));
+			Path themePath = getPath(outputPath, entry.getKey());
+			futures.add(DataProvider.saveStable(cache, ComputerThemeDataManager.parseTheme(entry.getValue()), themePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

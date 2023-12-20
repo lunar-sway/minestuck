@@ -28,6 +28,6 @@ public interface ISburbComputer
 	
 	ComputerReference createReference();
 	
-	Theme getTheme();
-	void setTheme(Theme theme);
+	String getTheme();
+	void setTheme(String computerThemes);
 }

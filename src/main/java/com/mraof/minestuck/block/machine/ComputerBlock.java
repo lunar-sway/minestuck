@@ -6,7 +6,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.Theme;
+import com.mraof.minestuck.computer.ComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -109,7 +109,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				computer.owner = IdentifierHandler.encode(player);
 				
 				if(newState.is(MSBlocks.OLD_COMPUTER.get()))
-					computer.setTheme(Theme.SBURB_95);
+					computer.setTheme("sburb_95");
 			}
 			
 			newState.use(level, player, handIn, hit);
