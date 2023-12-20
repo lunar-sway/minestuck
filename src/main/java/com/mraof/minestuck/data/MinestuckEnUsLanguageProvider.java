@@ -2237,6 +2237,12 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addThemeName(MSComputerThemes.JOY, "Joy");
 		addThemeName(MSComputerThemes.SBURB_95, "SBURB 95");
 		add(Theme.SCOURGING_HEAT.getName(), "Scourging Heat");
+		add(Theme.LIFDOFF.getName(), "Lifdoff,,");
+		add(Theme.SKAIANET_GREEN.getName(), "Skaianet Green");
+		add(Theme.SKAIANET_WHITE.getName(), "Skaianet White");
+		add(Theme.SKAIANET_BLACK.getName(), "Skaianet Black");
+		add(Theme.ASTRAL_CHARTS.getName(), "Astral Charts");
+		add(Theme.TILLDEATH.getName(), "~ATH");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
