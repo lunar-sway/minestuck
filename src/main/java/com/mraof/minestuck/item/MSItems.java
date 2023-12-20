@@ -13,10 +13,7 @@ import com.mraof.minestuck.fluid.MSFluids;
 import com.mraof.minestuck.item.artifact.CruxiteAppleItem;
 import com.mraof.minestuck.item.artifact.CruxitePotionItem;
 import com.mraof.minestuck.item.block.*;
-import com.mraof.minestuck.item.foods.DrinkableItem;
-import com.mraof.minestuck.item.foods.HealingFoodItem;
-import com.mraof.minestuck.item.foods.SurpriseEmbryoItem;
-import com.mraof.minestuck.item.foods.UnknowableEggItem;
+import com.mraof.minestuck.item.foods.*;
 import com.mraof.minestuck.item.weapon.*;
 import com.mraof.minestuck.item.weapon.projectiles.BouncingProjectileWeaponItem;
 import com.mraof.minestuck.item.weapon.projectiles.ConsumableProjectileWeaponItem;
@@ -513,7 +510,7 @@ public class MSItems
 	public static final RegistryObject<Item> BUG_MAC = REGISTER.register("bug_mac", () -> new Item(new Item.Properties().food(MSFoods.BUG_MAC)));
 	public static final RegistryObject<Item> ONION = REGISTER.register("onion", () -> new Item(new Item.Properties().food(MSFoods.ONION)));
 	public static final RegistryObject<Item> SALAD = REGISTER.register("salad", () -> new BowlFoodItem(new Item.Properties().food(MSFoods.SALAD).stacksTo(1)));
-	public static final RegistryObject<Item> SOPOR_SLIME_PIE = REGISTER.register("sopor_slime_pie", () -> new Item(new Item.Properties().food(MSFoods.SOPOR_SLIME_PIE).stacksTo(3)));
+	public static final RegistryObject<Item> SOPOR_SLIME_PIE = REGISTER.register("sopor_slime_pie", () -> new SoporSlimeItem(new Item.Properties().stacksTo(3).food(MSFoods.SOPOR_SLIME_PIE), 1500));
 	public static final RegistryObject<Item> DESERT_FRUIT = REGISTER.register("desert_fruit", () -> new Item(new Item.Properties().food(MSFoods.DESERT_FRUIT)));
 	public static final RegistryObject<Item> ROCK_COOKIE = REGISTER.register("rock_cookie", () -> new Item(new Item.Properties())); //Not actually food, but let's pretend it is
 	public static final RegistryObject<Item> WOODEN_CARROT = REGISTER.register("wooden_carrot", () -> new Item(new Item.Properties().food(MSFoods.WOODEN_CARROT)));

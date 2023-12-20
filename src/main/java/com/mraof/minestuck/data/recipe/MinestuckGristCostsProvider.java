@@ -781,7 +781,7 @@ public final class MinestuckGristCostsProvider
 			if(type.getIdOrThrow().getNamespace().equals(Minestuck.MOD_ID))
 				GristCostRecipeBuilder.of(type.getCandyItem().getItem()).grist(type, 3).build(recipeSaver);
 		}
-		GristCostRecipeBuilder.of(MSItems.SOPOR_SLIME_PIE.get()).grist(URANIUM, 129).grist(RUST, 20).grist(MERCURY, 90).grist(CHALK, 15).grist(ARTIFACT, 30).build(recipeSaver);
+		GristCostRecipeBuilder.of(MSItems.SOPOR_SLIME_PIE.get()).grist(URANIUM, 8).grist(RUST, 2).grist(MERCURY, 6).grist(CHALK, 5).grist(ARTIFACT, 3).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.APPLE_JUICE.get()).grist(AMBER, 4).grist(SULFUR, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.TAB.get()).grist(COBALT, 1).grist(IODINE, 1).build(recipeSaver);
 		GristCostRecipeBuilder.of(MSItems.ORANGE_FAYGO.get()).grist(COBALT, 1).grist(AMBER, 1).build(recipeSaver);

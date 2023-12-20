@@ -1,11 +1,11 @@
 {
   "type": "minestuck:grist_cost",
   "grist_cost": {
-    "minestuck:artifact": 30,
-    "minestuck:chalk": 15,
-    "minestuck:mercury": 90,
-    "minestuck:rust": 20,
-    "minestuck:uranium": 129
+    "minestuck:artifact": 3,
+    "minestuck:chalk": 5,
+    "minestuck:mercury": 6,
+    "minestuck:rust": 2,
+    "minestuck:uranium": 8
   },
   "ingredient": {
     "item": "minestuck:sopor_slime_pie"

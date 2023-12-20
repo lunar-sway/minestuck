@@ -149,7 +149,7 @@ public class MSTags
 	
 	public static class Effects
 	{
-		public static final TagKey<MobEffect> SOPOR_SICKNESS_WHITELIST = tag("soper_sickness_whitelist");
+		public static final TagKey<MobEffect> SOPOR_SICKNESS_WHITELIST = tag("sopor_sickness_whitelist");
 		
 		private static TagKey<MobEffect> tag(String name)
 		{

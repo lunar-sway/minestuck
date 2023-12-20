@@ -58,6 +58,8 @@ public final class MSCreativeTabs
 		output.accept(MSItems.PHLEGM_GUSHERS.get());
 		output.accept(MSItems.SORROW_GUSHERS.get());
 		
+		output.accept(MSItems.SOPOR_SLIME_PIE.get());
+		
 		output.accept(MSItems.BUG_ON_A_STICK.get());
 		output.accept(MSItems.FOOD_CAN.get());
 		
@@ -969,7 +971,5 @@ public final class MSCreativeTabs
 		output.accept(MSItems.AMPHIBEANIE.get());
 		output.accept(MSItems.NOSTRILDAMUS.get());
 		output.accept(MSItems.PONYTAIL.get());
-		
-		output.accept(MSItems.SOPOR_SLIME_PIE.get());
 	}
 }
