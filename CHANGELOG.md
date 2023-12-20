@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
+- Computer Themes can now be added and rendered via resource pack
+- Default computer Theme for crockertop is now Crocker
 
 ### Fixed
 

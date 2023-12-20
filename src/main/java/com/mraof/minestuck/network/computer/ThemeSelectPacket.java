@@ -1,7 +1,6 @@
 package com.mraof.minestuck.network.computer;
 
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.ComputerThemes;
 import com.mraof.minestuck.network.PlayToServerPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

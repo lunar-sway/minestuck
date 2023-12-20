@@ -1,10 +1,9 @@
-package com.mraof.minestuck.util;
+package com.mraof.minestuck.computer.theme;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
-import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
@@ -22,21 +21,21 @@ import java.util.Optional;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ComputerThemeDataManager extends SimpleJsonResourceReloadListener
+public class ComputerThemeManager extends SimpleJsonResourceReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerTheme.class, new ComputerTheme.Serializer()).create();
 	
 	private List<ComputerTheme> themes;
 	
-	public ComputerThemeDataManager()
+	public ComputerThemeManager()
 	{
 		super(GSON, "minestuck/computer_themes");
 	}
 	
-	private static ComputerThemeDataManager INSTANCE;
+	private static ComputerThemeManager INSTANCE;
 	
-	public static ComputerThemeDataManager getInstance()
+	public static ComputerThemeManager getInstance()
 	{
 		return Objects.requireNonNull(INSTANCE);
 	}
@@ -65,19 +64,13 @@ public class ComputerThemeDataManager extends SimpleJsonResourceReloadListener
 	{
 		Optional<ResourceLocation> potentialPath = themes.stream().filter(theme ->
 				theme.getThemeName().equals(name)).findAny().map(ComputerTheme::getTexturePath);
-		return potentialPath.orElse(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png"));
+		return potentialPath.orElse(ComputerTheme.DEFAULT_TEXTURE_PATH);
 	}
-	
-	/*public int findTextColor(ResourceLocation textureLocation)
-	{
-		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.appliesTo(textureLocation)).findAny().map(ComputerTheme::getTextColor);
-		return potentialColor.orElse(0xBFAA6D);
-	}*/
 	
 	public int findTextColor(String name)
 	{
 		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.getThemeName().equals(name)).findAny().map(ComputerTheme::getTextColor);
-		return potentialColor.orElse(0xBFAA6D);
+		return potentialColor.orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
 	}
 	
 	public static JsonElement parseTheme(ComputerTheme theme)
@@ -88,6 +81,6 @@ public class ComputerThemeDataManager extends SimpleJsonResourceReloadListener
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.addListener(INSTANCE = new ComputerThemeDataManager());
+		event.addListener(INSTANCE = new ComputerThemeManager());
 	}
 }

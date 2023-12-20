@@ -4,7 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.computer.ComputerProgram;
-import com.mraof.minestuck.util.ComputerThemeDataManager;
+import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -73,7 +73,7 @@ public class ComputerScreen extends Screen
 		} else
 		{
 			//desktop background
-			guiGraphics.blit(ComputerThemeDataManager.getInstance().findTexturePath(this.be.getTheme()), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
+			guiGraphics.blit(ComputerThemeManager.getInstance().findTexturePath(this.be.getTheme()), xOffset + 9, yOffset + 38, 0, 0, 158, 120);
 			
 			//program and widgets
 			if(program != null) program.paintGui(guiGraphics, this, be);

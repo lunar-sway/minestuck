@@ -1,8 +1,8 @@
 package com.mraof.minestuck.data;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.util.ComputerTheme;
-import com.mraof.minestuck.util.ComputerThemeDataManager;
+import com.mraof.minestuck.computer.theme.ComputerTheme;
+import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -17,13 +17,13 @@ import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ComputerThemeDataProvider implements DataProvider
+public class ComputerThemeProvider implements DataProvider
 {
 	private final Map<ResourceLocation, ComputerTheme> computerThemes = new HashMap<>();
 	private final PackOutput output;
 	private final String modid;
 	
-	public ComputerThemeDataProvider(PackOutput output, String modid)
+	public ComputerThemeProvider(PackOutput output, String modid)
 	{
 		this.output = output;
 		this.modid = modid;
@@ -31,7 +31,7 @@ public class ComputerThemeDataProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		add("default", 0x404040);
+		add(ComputerTheme.DEFAULT_NAME, ComputerTheme.DEFAULT_TEXT_COLOR);
 		add("pesterchum", 0x404040);
 		add("trollian", 0xFF0000);
 		add("crocker", 0x000000);
@@ -70,7 +70,7 @@ public class ComputerThemeDataProvider implements DataProvider
 		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
 		{
 			Path themePath = getPath(outputPath, entry.getKey());
-			futures.add(DataProvider.saveStable(cache, ComputerThemeDataManager.parseTheme(entry.getValue()), themePath));
+			futures.add(DataProvider.saveStable(cache, ComputerThemeManager.parseTheme(entry.getValue()), themePath));
 		}
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}

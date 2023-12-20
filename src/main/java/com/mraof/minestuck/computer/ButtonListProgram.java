@@ -3,9 +3,9 @@ package com.mraof.minestuck.computer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.ComputerScreen;
+import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ClearMessagePacket;
-import com.mraof.minestuck.util.ComputerThemeDataManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -130,9 +130,9 @@ public abstract class ButtonListProgram extends ComputerProgram
 	{
 		Font font = Minecraft.getInstance().font;
 		if(be.latestmessage.get(be.programSelected) == null || be.latestmessage.get(be.programSelected).isEmpty())
-			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, ComputerThemeDataManager.getInstance().findTextColor(be.getTheme()), false);
+			guiGraphics.drawString(font, message, (gui.width - ComputerScreen.xSize) / 2F + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, ComputerThemeManager.getInstance().findTextColor(be.getTheme()), false);
 		else
-			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, ComputerThemeDataManager.getInstance().findTextColor(be.getTheme()), false);
+			guiGraphics.drawString(font, I18n.get(be.latestmessage.get(be.programSelected)), (gui.width - ComputerScreen.xSize) / 2F  + 15, (gui.height - ComputerScreen.ySize) / 2F + 45, ComputerThemeManager.getInstance().findTextColor(be.getTheme()), false);
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public abstract class ButtonListProgram extends ComputerProgram
 			if(active)
 			{
 				RenderSystem.setShaderColor(1, 1, 1, 1);
-				guiGraphics.blit(ComputerThemeDataManager.getInstance().findTexturePath(gui.be.getTheme()), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
+				guiGraphics.blit(ComputerThemeManager.getInstance().findTexturePath(gui.be.getTheme()), getX(), getY(), 158 + (active ? 0 : 20), reverse ? 0 : 20, 20, 20);
 			} else
 			{
 				// use default minecraft button rendering to draw inactive buttons
