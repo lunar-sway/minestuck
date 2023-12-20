@@ -142,9 +142,6 @@ public final class EditmodeLocations
 		ResourceKey<Level> editDimension = editLevel.dimension();
 		ResourceKey<Level> land = connection.getLandDimensionIfEntered();
 		
-		if(editLevel.isClientSide)
-			return;
-		
 		this.findRelativelyClosestArea(editPlayer, land).map(Area::center).ifPresent(pos -> {
 			if(isComputerSourceInvalidFor(editLevel, pos, connection.getClientIdentifier()))
 				removeBlockSource(editPlayer.server, connection.getClientIdentifier(), editDimension, pos);
