@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -38,6 +39,8 @@ import java.util.stream.Stream;
 public final class EditmodeLocations
 {
 	private static final Logger LOGGER = LogManager.getLogger();
+	
+	public static final String REMOVED_LOCATION_MESSAGE = "minestuck.editmode.removed_location";
 	
 	private static final int ENTRY_RANGE = 30;
 	
@@ -273,7 +276,7 @@ public final class EditmodeLocations
 		if(relativeDistance(editPlayer, removedArea) > relativeDistance(editPlayer, newClosestArea))
 			return;
 		
-		//TODO consider adding message indicating what happened
+		editPlayer.sendSystemMessage(Component.translatable(REMOVED_LOCATION_MESSAGE));
 		BlockPos nextClosestLocationPos = newClosestArea.center();
 		editPlayer.teleportTo(nextClosestLocationPos.getX() + 0.5D, nextClosestLocationPos.getY() + 1.0D, nextClosestLocationPos.getZ() + 0.5D);
 	}

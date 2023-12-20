@@ -2106,6 +2106,7 @@
   "minestuck.echeladder.health": "Health",
   "minestuck.echeladder.protection_underling": "Underling damage decreased to:",
   "minestuck.echeladder.protection_underling.increase": "Underling damage: -%.1f%%",
+  "minestuck.editmode.removed_location": "The location you were in is no longer in range, and you have now been teleported to a valid location.",
   "minestuck.editmode_locations": "Teleport Locus",
   "minestuck.editmode_settings": "Editmode Settings",
   "minestuck.eject_by_chat.off": "Quick Eject Inactive",
