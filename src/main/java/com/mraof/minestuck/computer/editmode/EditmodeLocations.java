@@ -136,7 +136,7 @@ public final class EditmodeLocations
 		return true;
 	}
 	
-	public void validateClosestSourceAndEntry(ServerPlayer editPlayer, SburbConnection connection)
+	public void validateClosestSource(ServerPlayer editPlayer, SburbConnection connection)
 	{
 		Level editLevel = editPlayer.level();
 		ResourceKey<Level> editDimension = editLevel.dimension();
