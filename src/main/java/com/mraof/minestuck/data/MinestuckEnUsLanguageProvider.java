@@ -1848,6 +1848,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(RemoteObserverScreen.TITLE, "Remote Observer");
 		add(RemoteObserverScreen.CURRENT_ENTITY_TYPE_MESSAGE, "Current Entity Type");
 		add(ComputerScreen.TITLE, "Computer");
+		add(ComputerThemeScreen.TITLE, "Computer Themes");
+		add(ComputerThemeScreen.SELECTED_THEME, "Selected theme:");
+		add(ComputerThemeScreen.DONE_MESSAGE, "DONE");
 		add(TransportalizerScreen.TITLE, "Transportalizer");
 		add(TransportalizerScreen.DESTINATION_CODE_MESSAGE, "Transportalizer destination code");
 		add(TransportalizerScreen.DONE_MESSAGE, "DONE");
@@ -1939,7 +1942,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(DiskBurner.BURN_SERVER_DISK, "Burn Server Disk");
 		add(DiskBurner.CHOOSE, "Choose disk type to write");
 		add(SkaianetHandler.STOP_RESUME, "Stopped resuming");
-		add(SettingsApp.THEME, "Theme: %s");
+		add(SettingsApp.THEME, "Choose Theme");
 		add(SettingsApp.TITLE, "Sburb Settings");
 		add(MergeResult.ABLE, "Able to merge");
 		add(MergeResult.LOCKED, "Either session is locked");

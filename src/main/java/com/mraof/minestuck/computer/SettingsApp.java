@@ -2,14 +2,10 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
-import com.mraof.minestuck.computer.theme.ComputerThemeManager;
-import com.mraof.minestuck.network.MSPacketHandler;
-import com.mraof.minestuck.network.computer.ThemeSelectPacket;
-import net.minecraft.client.resources.language.I18n;
+import com.mraof.minestuck.client.gui.ComputerThemeScreen;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SettingsApp extends ButtonListProgram
 {
@@ -24,7 +20,7 @@ public class SettingsApp extends ButtonListProgram
 		var list = new ArrayList<UnlocalizedString>();
 		
 		list.add(new UnlocalizedString(TITLE));
-		list.add(new UnlocalizedString(THEME, I18n.get(be.getTheme())));
+		list.add(new UnlocalizedString(THEME));
 		
 		return list;
 	}
@@ -32,16 +28,16 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
 	{
-		List<String> themes = ComputerThemeManager.getInstance().getThemeNames();
-		themes.add("test");
-		
 		if(be.getLevel() == null)
 			return;
 		
 		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, themes.get(be.getLevel().random.nextInt(themes.size()))));
+			case THEME -> {
+				be.gui.getMinecraft().setScreen(null);
+				be.gui.getMinecraft().setScreen(new ComputerThemeScreen(be));
+			}
 		}
 	}
 	

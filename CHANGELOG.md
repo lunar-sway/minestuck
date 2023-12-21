@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Minor changes and polish to the temple scanner
 - Computer Themes can now be added and rendered via resource pack
 - Default computer Theme for crockertop is now Crocker
+- Computer Theme is now chosen from a list of available Themes in separate GUI
 
 ### Fixed
 
