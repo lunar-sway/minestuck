@@ -1,5 +1,5 @@
 {
   "text_color": 16777215,
   "texture_location": "minestuck:textures/gui/theme/hephaestus.png",
-  "theme_name": "hephaestus"
+  "theme_name": "theme.hephaestus.name"
 }

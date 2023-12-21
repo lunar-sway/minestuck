@@ -22,6 +22,7 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -1964,16 +1965,16 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
 		
-		/*add(ComputerThemes.DEFAULT.getName(), "Default");
-		add(ComputerThemes.PESTERCHUM.getName(), "Pesterchum");
-		add(ComputerThemes.TROLLIAN.getName(), "Trollian");
-		add(ComputerThemes.CROCKER.getName(), "Crocker");
-		add(ComputerThemes.TYPHEUS.getName(), "Typheus");
-		add(ComputerThemes.CETUS.getName(), "Cetus");
-		add(ComputerThemes.HEPHAESTUS.getName(), "Hephaestus");
-		add(ComputerThemes.ECHIDNA.getName(), "Echidna");
-		add(ComputerThemes.JOY.getName(), "Joy");
-		add(ComputerThemes.SBURB_95.getName(), "SBURB 95");*/
+		add(ComputerThemes.DEFAULT.getLangLocation(), "Default");
+		add(ComputerThemes.PESTERCHUM.getLangLocation(), "Pesterchum");
+		add(ComputerThemes.TROLLIAN.getLangLocation(), "Trollian");
+		add(ComputerThemes.CROCKER.getLangLocation(), "Crocker");
+		add(ComputerThemes.TYPHEUS.getLangLocation(), "Typheus");
+		add(ComputerThemes.CETUS.getLangLocation(), "Cetus");
+		add(ComputerThemes.HEPHAESTUS.getLangLocation(), "Hephaestus");
+		add(ComputerThemes.ECHIDNA.getLangLocation(), "Echidna");
+		add(ComputerThemes.JOY.getLangLocation(), "Joy");
+		add(ComputerThemes.SBURB_95.getLangLocation(), "SBURB 95");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");

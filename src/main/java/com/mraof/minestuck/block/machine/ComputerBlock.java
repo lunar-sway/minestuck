@@ -5,7 +5,7 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
-import com.mraof.minestuck.computer.theme.ComputerTheme;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
@@ -46,14 +46,14 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 	
 	public final Map<Direction, VoxelShape> shapeOn, shapeOff;
 	
-	public final String computerTheme;
+	public final ComputerThemes computerTheme;
 	
 	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, Properties properties)
 	{
-		this(shapeOn, shapeOff, ComputerTheme.DEFAULT_NAME, properties);
+		this(shapeOn, shapeOff, ComputerThemes.DEFAULT, properties);
 	}
 	
-	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, String computerTheme, Properties properties)
+	public ComputerBlock(Map<Direction, VoxelShape> shapeOn, Map<Direction, VoxelShape> shapeOff, ComputerThemes computerTheme, Properties properties)
 	{
 		super(properties);
 		registerDefaultState(defaultBlockState().setValue(STATE, State.OFF));
@@ -115,7 +115,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			{
 				computer.owner = IdentifierHandler.encode(player);
 				
-				computer.setTheme(computerTheme);
+				computer.setTheme(computerTheme.getLangLocation());
 			}
 			
 			newState.use(level, player, handIn, hit);

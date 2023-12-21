@@ -4,11 +4,14 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.mraof.minestuck.Minestuck;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -16,14 +19,18 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
-
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ComputerThemeManager extends SimpleJsonResourceReloadListener
+/**
+ * Helps acquire json files in assets/minestuck/minestuck/computer_themes/
+ * ComputerThemes are data driven resource pack files that determine a computers wallpaper and text color.
+ */
+@Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+public class ComputerThemeManager extends SimpleJsonResourceReloadListener implements PreparableReloadListener
 {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerTheme.class, new ComputerTheme.Serializer()).create();
 	
 	public static final String PATH = "minestuck/computer_themes";
+	public static final String PATH_W_SLASH = PATH + "/";
 	
 	private List<ComputerTheme> themes;
 	
@@ -36,7 +43,13 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener
 	
 	public static ComputerThemeManager getInstance()
 	{
-		return Objects.requireNonNull(INSTANCE);
+		return INSTANCE;
+	}
+	
+	@SubscribeEvent
+	public static void initUploader(RegisterClientReloadListenersEvent event)
+	{
+		event.registerReloadListener(INSTANCE = new ComputerThemeManager());
 	}
 	
 	@Override
@@ -82,11 +95,5 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener
 	public static JsonElement parseTheme(ComputerTheme theme)
 	{
 		return GSON.toJsonTree(theme);
-	}
-	
-	@SubscribeEvent
-	public static void onResourceReload(AddReloadListenerEvent event)
-	{
-		event.addListener(INSTANCE = new ComputerThemeManager());
 	}
 }

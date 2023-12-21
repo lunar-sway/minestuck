@@ -12,11 +12,13 @@ import org.slf4j.Logger;
 
 import java.lang.reflect.Type;
 
+/**
+ * This class is used to define json files that will be used to determine what wallpaper and text color appears on in-game computers.
+ */
 public class ComputerTheme
 {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	
-	public static final String DEFAULT_NAME = "default";
 	public static final int DEFAULT_TEXT_COLOR = 0x404040;
 	public static final ResourceLocation DEFAULT_TEXTURE_PATH = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/default.png");
 	

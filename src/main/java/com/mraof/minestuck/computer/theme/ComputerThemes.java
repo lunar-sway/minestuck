@@ -1,8 +1,11 @@
 package com.mraof.minestuck.computer.theme;
 
+/**
+ * Official ComputerTheme instances
+ */
 public enum ComputerThemes
 {
-	/*DEFAULT		(0x404040),
+	DEFAULT		(ComputerTheme.DEFAULT_TEXT_COLOR),
 	PESTERCHUM	(0x404040),
 	TROLLIAN	(0xFF0000),
 	CROCKER		(0x000000),
@@ -11,7 +14,7 @@ public enum ComputerThemes
 	HEPHAESTUS	(0xFFFFFF),
 	ECHIDNA		(0x005DFF),
 	JOY			(0x282828),
-	SBURB_95 	(0x282828);
+	SBURB_95	(0x282828);
 	
 	private final int textColor;
 	
@@ -20,13 +23,24 @@ public enum ComputerThemes
 		this.textColor = textColor;
 	}
 	
-	public ComputerThemes next()
+	public int getTextColor()
 	{
-		return values()[(this.ordinal() + 1) % values().length];
+		return this.textColor;
 	}
 	
-	public String getName()
+	/**
+	 * Used for short handed references
+	 */
+	public String getLowercaseName()
 	{
-		return "theme." + this.name().toLowerCase() + ".name";
-	}*/
+		return this.name().toLowerCase();
+	}
+	
+	/**
+	 * Used for referencing actual theme. The translatable version stored in computers
+	 */
+	public String getLangLocation()
+	{
+		return "theme." + getLowercaseName() + ".name";
+	}
 }

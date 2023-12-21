@@ -1,5 +1,5 @@
 {
   "text_color": 0,
   "texture_location": "minestuck:textures/gui/theme/crocker.png",
-  "theme_name": "crocker"
+  "theme_name": "theme.crocker.name"
 }

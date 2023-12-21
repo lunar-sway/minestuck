@@ -3,6 +3,7 @@ package com.mraof.minestuck.data;
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.computer.theme.ComputerTheme;
 import com.mraof.minestuck.computer.theme.ComputerThemeManager;
+import com.mraof.minestuck.computer.theme.ComputerThemes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
@@ -15,6 +16,10 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Data generating file for ComputerTheme json files. A ComputerTheme is resource pack only,
+ * so they are generated into the assets directory assets/minestuck/minestuck/computer_themes/
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ComputerThemeProvider implements DataProvider
@@ -31,27 +36,21 @@ public class ComputerThemeProvider implements DataProvider
 	
 	protected void registerThemes()
 	{
-		add(ComputerTheme.DEFAULT_NAME, ComputerTheme.DEFAULT_TEXT_COLOR);
-		add("pesterchum", 0x404040);
-		add("trollian", 0xFF0000);
-		add("crocker", 0x000000);
-		add("typheus", 0x6DAFAD);
-		add("cetus", 0x9081EE);
-		add("hephaestus", 0xFFFFFF);
-		add("echidna", 0x005DFF);
-		add("joy", 0x282828);
-		add("sburb_95", 0x282828);
+		for(ComputerThemes theme : ComputerThemes.values())
+		{
+			add(theme, theme.getTextColor());
+		}
 	}
 	
-	protected void add(String themeName, int value)
+	protected void add(ComputerThemes theme, int value)
 	{
 		//Just set the name manually if this throws an exception
-		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + themeName + ".png"), ConstantInt.of(value), themeName);
+		add(new ResourceLocation(Minestuck.MOD_ID, "textures/gui/theme/" + theme.getLowercaseName() + ".png"), ConstantInt.of(value), theme);
 	}
 	
-	protected void add(ResourceLocation textureLocation, ConstantInt range, String name)
+	protected void add(ResourceLocation textureLocation, ConstantInt range, ComputerThemes theme)
 	{
-		add(new ComputerTheme(textureLocation, range, name), new ResourceLocation(modid, name));
+		add(new ComputerTheme(textureLocation, range, theme.getLangLocation()), new ResourceLocation(modid, theme.getLowercaseName()));
 	}
 	
 	protected void add(ComputerTheme computerTheme, ResourceLocation name)
@@ -64,9 +63,7 @@ public class ComputerThemeProvider implements DataProvider
 	{
 		registerThemes();
 		
-		Path outputPath = output.getOutputFolder();
-		//TODO using the commented out code here and in getPath() puts it in the assets folder, but code in ComputerThemeManager/ComputerTheme is unable to account for switch
-		//Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemeManager.PATH);
+		Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemeManager.PATH_W_SLASH);
 		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
 		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
@@ -79,8 +76,7 @@ public class ComputerThemeProvider implements DataProvider
 	
 	private static Path getPath(Path outputPath, ResourceLocation id)
 	{
-		return outputPath.resolve("data/" + id.getNamespace() + "/minestuck/computer_themes/" + id.getPath() + ".json");
-		//return outputPath.resolve("/" + id.getPath() + ".json");
+		return outputPath.resolve(id.getPath() + ".json");
 	}
 	
 	@Override
