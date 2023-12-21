@@ -1,12 +1,12 @@
 {
     "parent": "minestuck:block/cube_up_mirrored",
     "textures": {
-        "down": "minestuck:block/grist_collector_top",
-        "up": "minestuck:block/grist_collector_top",
-        "north": "minestuck:block/grist_collector_front",
-        "south": "minestuck:block/grist_collector_side",
-        "west": "minestuck:block/grist_collector_left_side",
-        "east": "minestuck:block/grist_collector_side",
-        "particle": "minestuck:block/grist_collector_side"
+        "down": "minestuck:block/grist_collector/top",
+        "up": "minestuck:block/grist_collector/top",
+        "north": "minestuck:block/grist_collector/front",
+        "south": "minestuck:block/grist_collector/side",
+        "west": "minestuck:block/grist_collector/left_side",
+        "east": "minestuck:block/grist_collector/side",
+        "particle": "minestuck:block/grist_collector/side"
     }
 }

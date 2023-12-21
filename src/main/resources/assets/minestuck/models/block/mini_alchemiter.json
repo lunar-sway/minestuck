@@ -30,8 +30,8 @@
     },
     "textures": {
         "particle": "minestuck:item/alchemiter",
-        "base": "minestuck:block/alchemiter_base",
-        "other": "minestuck:block/alchemiter_misc"
+        "base": "minestuck:block/machine/mini_alchemiter_base",
+        "other": "minestuck:block/machine/mini_alchemiter_misc"
     },
     "elements": [
         {

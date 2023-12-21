@@ -7,9 +7,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
+@SuppressWarnings("UnusedReturnValue")
 public class MinestuckItemModelProvider extends ItemModelProvider
 {
 	public MinestuckItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper)
@@ -27,6 +29,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.BLACKSMITH_HAMMER);
 		handheldItem(MSItems.POGO_HAMMER);
 		handheldItem(MSItems.WRINKLEFUCKER);
+		largeWeapon(MSItems.TELESCOPIC_SASSACRUSHER);
 		handheldItem(MSItems.DEMOCRATIC_DEMOLITIONER);
 		handheldItem(MSItems.REGI_HAMMER);
 		handheldItem(MSItems.FEAR_NO_ANVIL);
@@ -59,8 +62,10 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.CALEDSCRATCH);
 		handheldItem(MSItems.CALEDFWLCH);
 		handheldItem(MSItems.ROYAL_DERINGER);
+		largeLongWeapon(MSItems.CLAYMORE);
 		handheldItem(MSItems.CUTLASS_OF_ZILLYWAIR);
 		handheldItem(MSItems.REGISWORD);
+		largeLongWeapon(MSItems.CRUEL_FATE_CRUCIBLE);
 		handheldItem(MSItems.SCARLET_RIBBITAR);
 		handheldItem(MSItems.DOGG_MACHETE, "snoop_dogg_machete");
 		handheldItem(MSItems.COBALT_SABRE);
@@ -68,11 +73,27 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.SHATTER_BEACON);
 		handheldItem(MSItems.SHATTER_BACON);
 		handheldItem(MSItems.PILLOW_TALK);
+		largeLongWeapon(MSItems.KRAKENS_EYE);
 		handheldItem(MSItems.CINNAMON_SWORD);
 		handheldItem(MSItems.UNION_BUSTER);
 		handheldItem(MSItems.CHAINSAW_KATANA);
 		handheldItem(MSItems.THORN_IN_YOUR_SIDE);
 		handheldItem(MSItems.ROSE_PROTOCOL);
+		
+		//Knives
+		knifeWeapon(MSItems.DAGGER);
+		knifeWeapon(MSItems.DIAMOND_DAGGER);
+		knifeWeapon(MSItems.PIGLINS_PRIDE);
+		knifeWeapon(MSItems.BASILISK_BREATH_DRAGONSLAYER);
+		knifeWeapon(MSItems.HALLOWED_SKEWER);
+		knifeWeapon(MSItems.GENESIS_GODSTABBER);
+		knifeWeapon(MSItems.NIFE);
+		knifeWeapon(MSItems.LIGHT_OF_MY_KNIFE);
+		knifeWeapon(MSItems.THOUSAND_DEGREE_KNIFE);
+		knifeWeapon(MSItems.STARSHARD_TRI_BLADE);
+		knifeWeapon(MSItems.TOOTHRIPPER);
+		knifeWeapon(MSItems.SHADOWRAZOR);
+		knifeWeapon(MSItems.PRINCESS_PERIL);
 		
 		//Keys
 		handheldItem(MSItems.HOUSE_KEY);
@@ -115,6 +136,7 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.MELONSBANE);
 		handheldItem(MSItems.CROP_CHOP);
 		handheldItem(MSItems.THE_LAST_STRAW);
+		largeWeapon(MSItems.BATTLEAXE);
 		handheldItem(MSItems.CANDY_BATTLEAXE, "candy_axe");
 		handheldItem(MSItems.CHOCO_LOCO_WOODSPLITTER);
 		handheldItem(MSItems.STEEL_EDGE_CANDYCUTTER);
@@ -130,9 +152,30 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.RUBY_CROAK);
 		handheldItem(MSItems.HEPHAESTUS_LUMBERJACK);
 		handheldItem(MSItems.FISSION_FOCUSED_FAULT_FELLER);
+		largeWeapon(MSItems.BISECTOR);
+		largeLongWeapon(MSItems.FINE_CHINA_AXE);
 		
 		//Dice
 		handheldItem(MSItems.FLUORITE_OCTET);
+		
+		//Claws
+		clawWeapon(MSItems.MAKESHIFT_CLAWS_DRAWN);
+		clawWeapon(MSItems.MAKESHIFT_CLAWS_SHEATHED);
+		clawWeapon(MSItems.CAT_CLAWS_DRAWN);
+		clawWeapon(MSItems.CAT_CLAWS_SHEATHED);
+		clawWeapon(MSItems.POGO_CLAWS);
+		clawWeapon(MSItems.ATOMIKITTY_KATAR_DRAWN);
+		clawWeapon(MSItems.ATOMIKITTY_KATAR_SHEATHED);
+		clawWeapon(MSItems.SKELETONIZER_DRAWN);
+		clawWeapon(MSItems.SKELETONIZER_SHEATHED);
+		clawWeapon(MSItems.SKELETON_DISPLACER_DRAWN);
+		clawWeapon(MSItems.SKELETON_DISPLACER_SHEATHED);
+		clawWeapon(MSItems.TEARS_OF_THE_ENDERLICH_DRAWN);
+		clawWeapon(MSItems.TEARS_OF_THE_ENDERLICH_SHEATHED);
+		clawWeapon(MSItems.LION_LACERATORS_DRAWN);
+		clawWeapon(MSItems.LION_LACERATORS_SHEATHED);
+		clawWeapon(MSItems.ACTION_CLAWS_DRAWN);
+		clawWeapon(MSItems.ACTION_CLAWS_SHEATHED);
 		
 		//Chainsaws
 		handheldItem(MSItems.LIPSTICK_CHAINSAW, "chainsaw");
@@ -157,6 +200,17 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.FROSTTOOTH_LIPSTICK);
 		
 		//Lances
+		largeLongWeapon(MSItems.WOODEN_LANCE);
+		largeLongWeapon(MSItems.LANEC);
+		largeLongWeapon(MSItems.JOUSTING_LANCE);
+		largeLongWeapon(MSItems.POGO_LANCE);
+		largeLongWeapon(MSItems.LANCELOTS_LOLLY);
+		largeLongWeapon(MSItems.DRAGON_LANCE);
+		largeLongWeapon(MSItems.SKY_PIERCER);
+		largeLongWeapon(MSItems.FIDUSPAWN_LANCE);
+		largeLongWeapon(MSItems.REGILANCE);
+		largeLongWeapon(MSItems.CIGARETTE_LANCE);
+		
 		handheldItem(MSItems.LUCERNE_HAMMER);
 		handheldItem(MSItems.LUCERNE_HAMMER_OF_UNDYING);
 		
@@ -186,6 +240,19 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.CLAW_SICKLE);
 		handheldItem(MSItems.CLAW_OF_NRUBYIGLITH);
 		handheldItem(MSItems.CANDY_SICKLE);
+		
+		//Scythes
+		largeWeapon(MSItems.SCYTHE);
+		largeWeapon(MSItems.MARASCHINO_CHERRY_SCYTHE);
+		largeWeapon(MSItems.KISSY_CUTIE_HEART_SPLITTER);
+		largeWeapon(MSItems.MUTANT_CUTIE_CELL_CUTTER);
+		largeWeapon(MSItems.PROSPECTING_PICKSCYTHE);
+		largeWeapon(MSItems.EIGHTBALL_SCYTHE);
+		largeWeapon(MSItems.TIME_FLAYER);
+		largeWeapon(MSItems.DESTINY_DECIMATOR);
+		largeWeapon(MSItems.SUNRAY_HARVESTER);
+		largeWeapon(MSItems.GREEN_SUN_RAYREAPER);
+		largeWeapon(MSItems.SKAITHE);
 		
 		handheldItem(MSItems.HELLBRINGERS_HOE_INACTIVE);
 		handheldItem(MSItems.HELLBRINGERS_HOE_ACTIVE);
@@ -247,6 +314,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.BARBERS_BEST_FRIEND);
 		handheldItem(MSItems.UPPER_CRUST_CRUST_CANE);
 		handheldItem(MSItems.IRON_CANE);
+		largeWeapon(MSItems.KISSY_CUTIE_HEART_HITTER);
+		largeWeapon(MSItems.MUTANT_CUTIE_CELL_PUTTER);
 		handheldItem(MSItems.ZEPHYR_CANE);
 		handheldItem(MSItems.SPEAR_CANE);
 		handheldItem(MSItems.PARADISES_PORTABELLO);
@@ -278,6 +347,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 		handheldItem(MSItems.EDISONS_FURY);
 		handheldItem(MSItems.EDISONS_SERENITY);
 		
+		largeWeapon(MSItems.SKAIA_FORK);
+		largeWeapon(MSItems.SKAIAN_CROCKER_ROCKER);
 		handheldItem(MSItems.FORK);
 		handheldItem(MSItems.CANDY_FORK);
 		handheldItem(MSItems.TUNING_FORK);
@@ -545,8 +616,8 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder simpleItem(RegistryObject<? extends Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/generated")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
+				new ResourceLocation("item/generated"))
+				.texture("layer0", texture(textureName));
 	}
 	
 	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item)
@@ -557,7 +628,58 @@ public class MinestuckItemModelProvider extends ItemModelProvider
 	private ItemModelBuilder handheldItem(RegistryObject<? extends Item> item, String textureName)
 	{
 		return withExistingParent(item.getId().getPath(),
-				new ResourceLocation("item/handheld")).texture("layer0",
-				new ResourceLocation(Minestuck.MOD_ID, "item/" + textureName));
+				new ResourceLocation("item/handheld"))
+				.texture("layer0", texture(textureName));
+	}
+	
+	/**
+	 * Generates a model that in third person places the weapon flat on top of the hand.
+	 */
+	private ItemModelBuilder clawWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				id("item/claw_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	/**
+	 * Generates a model positioned for weapons with the handle in the top right corner of the texture.
+	 */
+	private ItemModelBuilder knifeWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				id("item/knife_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	/**
+	 * Generated a model that is larger than other weapons when in hand.
+	 * This variant moves the weapon forward a little bit, suitable for weapons with a short handle or otherwise should be held closer to the bottom left corner.
+	 */
+	private ItemModelBuilder largeLongWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				id("item/large_long_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	/**
+	 * Generated a model that is larger than other weapons when in hand.
+	 */
+	private ItemModelBuilder largeWeapon(RegistryObject<? extends Item> item)
+	{
+		return withExistingParent(item.getId().getPath(),
+				id("item/large_weapon"))
+				.texture("layer0", texture(item.getId().getPath()));
+	}
+	
+	private static ResourceLocation texture(String path)
+	{
+		return id(ModelProvider.ITEM_FOLDER + "/" + path);
+	}
+	
+	private static ResourceLocation id(String path)
+	{
+		return new ResourceLocation(Minestuck.MOD_ID, path);
 	}
 }

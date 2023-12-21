@@ -2,15 +2,15 @@
 	"credit": "Made with Blockbench",
 	"render_type": "cutout",
 	"textures": {
-		"0": "minestuck:block/machine/blender/blender",
-		"1": "minestuck:block/machine/blender/blender_side",
-		"2": "minestuck:block/machine/blender/blender_base_bottom",
-		"3": "minestuck:block/machine/blender/blender_container_bottom",
-		"4": "minestuck:block/machine/blender/blender_lid_bottom",
-		"5": "minestuck:block/machine/blender/blender_base_top",
-		"6": "minestuck:block/machine/blender/blender_lid_top",
+		"0": "minestuck:block/machine/blender/front",
+		"1": "minestuck:block/machine/blender/side",
+		"2": "minestuck:block/machine/blender/base_bottom",
+		"3": "minestuck:block/machine/blender/container_bottom",
+		"4": "minestuck:block/machine/blender/lid_bottom",
+		"5": "minestuck:block/machine/blender/base_top",
+		"6": "minestuck:block/machine/blender/lid_top",
 		"7": "minestuck:block/brain_juice",
-		"particle": "minestuck:block/machine/blender/blender"
+		"particle": "minestuck:block/machine/blender/front"
 	},
 	"elements": [
 		{

@@ -21,24 +21,24 @@ public class HorseClockModel extends GeoModel<HorseClockBlockEntity>
         {
             int dayTime = (int) (level.getDayTime() % 24000);
             if(dayTime < 3000) //beginning of the day
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock0.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/0.png");
             else if(dayTime < 6000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock1.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/1.png");
             else if(dayTime < 9000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock2.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/2.png");
             else if(dayTime < 12000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock3.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/3.png");
             else if(dayTime < 15000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock4.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/4.png");
             else if(dayTime < 18000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock5.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/5.png");
             else if(dayTime < 21000)
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock6.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/6.png");
             else //end of the day
-                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock7.png");
+                return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/7.png");
         }
         
-        return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horseclock0.png");
+        return new ResourceLocation(Minestuck.MOD_ID, "textures/block/horse_clock/0.png");
     }
 
     @Override
