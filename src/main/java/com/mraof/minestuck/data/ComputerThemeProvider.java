@@ -65,6 +65,8 @@ public class ComputerThemeProvider implements DataProvider
 		registerThemes();
 		
 		Path outputPath = output.getOutputFolder();
+		//TODO using the commented out code here and in getPath() puts it in the assets folder, but code in ComputerThemeManager/ComputerTheme is unable to account for switch
+		//Path outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve(ComputerThemeManager.PATH);
 		List<CompletableFuture<?>> futures = new ArrayList<>(computerThemes.size());
 		
 		for(Map.Entry<ResourceLocation, ComputerTheme> entry : computerThemes.entrySet())
@@ -78,6 +80,7 @@ public class ComputerThemeProvider implements DataProvider
 	private static Path getPath(Path outputPath, ResourceLocation id)
 	{
 		return outputPath.resolve("data/" + id.getNamespace() + "/minestuck/computer_themes/" + id.getPath() + ".json");
+		//return outputPath.resolve("/" + id.getPath() + ".json");
 	}
 	
 	@Override

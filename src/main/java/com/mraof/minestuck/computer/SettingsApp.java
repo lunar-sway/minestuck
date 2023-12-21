@@ -44,7 +44,7 @@ public class SettingsApp extends ButtonListProgram
 		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, themes.get(be.getLevel().random.nextInt(3))));
+			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, themes.get(be.getLevel().random.nextInt(4))));
 		}
 	}
 	

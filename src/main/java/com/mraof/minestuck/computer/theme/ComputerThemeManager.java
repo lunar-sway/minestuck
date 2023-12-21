@@ -26,11 +26,13 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(ComputerTheme.class, new ComputerTheme.Serializer()).create();
 	
+	public static final String PATH = "minestuck/computer_themes";
+	
 	private List<ComputerTheme> themes;
 	
 	public ComputerThemeManager()
 	{
-		super(GSON, "minestuck/computer_themes");
+		super(GSON, PATH);
 	}
 	
 	private static ComputerThemeManager INSTANCE;
