@@ -2,6 +2,7 @@ package com.mraof.minestuck.computer;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
+import com.mraof.minestuck.computer.theme.ComputerThemeManager;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.computer.ThemeSelectPacket;
 import net.minecraft.client.resources.language.I18n;
@@ -17,8 +18,6 @@ public class SettingsApp extends ButtonListProgram
 	
 	public static final ResourceLocation ICON = new ResourceLocation(Minestuck.MOD_ID, "textures/gui/desktop_icon/settings.png");
 	
-	private List<String> themes = new ArrayList<>();
-	
 	@Override
 	protected ArrayList<UnlocalizedString> getStringList(ComputerBlockEntity be)
 	{
@@ -33,9 +32,7 @@ public class SettingsApp extends ButtonListProgram
 	@Override
 	protected void onButtonPressed(ComputerBlockEntity be, String buttonName, Object[] data)
 	{
-		themes.add("sburb_95");
-		themes.add("pesterchum");
-		themes.add("crocker");
+		List<String> themes = ComputerThemeManager.getInstance().getThemeNames();
 		themes.add("test");
 		
 		if(be.getLevel() == null)
@@ -44,7 +41,7 @@ public class SettingsApp extends ButtonListProgram
 		//TODO ADD MORE SETTINGS
 		switch(buttonName)
 		{
-			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, themes.get(be.getLevel().random.nextInt(4))));
+			case THEME -> MSPacketHandler.sendToServer(ThemeSelectPacket.create(be, themes.get(be.getLevel().random.nextInt(themes.size()))));
 		}
 	}
 	

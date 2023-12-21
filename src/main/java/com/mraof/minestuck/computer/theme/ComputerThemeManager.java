@@ -14,10 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -73,6 +70,13 @@ public class ComputerThemeManager extends SimpleJsonResourceReloadListener
 	{
 		Optional<Integer> potentialColor = themes.stream().filter(theme -> theme.getThemeName().equals(name)).findAny().map(ComputerTheme::getTextColor);
 		return potentialColor.orElse(ComputerTheme.DEFAULT_TEXT_COLOR);
+	}
+	
+	public List<String> getThemeNames()
+	{
+		List<String> themeNames = new ArrayList<>();
+		themes.forEach(computerTheme -> themeNames.add(computerTheme.getThemeName()));
+		return themeNames;
 	}
 	
 	public static JsonElement parseTheme(ComputerTheme theme)
