@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:item/boondollars_0"
+        "layer0": "minestuck:item/boondollars/0"
     },
     "overrides": [
         {
