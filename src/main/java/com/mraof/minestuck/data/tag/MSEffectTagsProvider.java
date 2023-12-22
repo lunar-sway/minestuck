@@ -9,11 +9,14 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @ParametersAreNonnullByDefault
@@ -34,13 +37,20 @@ public class MSEffectTagsProvider extends IntrinsicHolderTagsProvider<MobEffect>
 	@Override
 	protected void addTags(HolderLookup.Provider provider)
 	{
-		//includes all Vanilla potion effects
+		List<MobEffect> ignoredEffects = new ArrayList<>();
+		ignoredEffects.add(MobEffects.HERO_OF_THE_VILLAGE);
+		ignoredEffects.add(MobEffects.BAD_OMEN);
+		ignoredEffects.add(MobEffects.CONDUIT_POWER);
+		ignoredEffects.add(MobEffects.DOLPHINS_GRACE);
+		ignoredEffects.add(MobEffects.LUCK);
+		ignoredEffects.add(MobEffects.UNLUCK);
+		
+		//includes all Vanilla potion effects except ones in list above
 		ForgeRegistries.MOB_EFFECTS.forEach(mobEffect ->
 		{
-			if(ForgeRegistries.MOB_EFFECTS.getKey(mobEffect).getNamespace().equals("minecraft"))
+			if(ForgeRegistries.MOB_EFFECTS.getKey(mobEffect).getNamespace().equals("minecraft") && !ignoredEffects.contains(mobEffect))
 				this.tag(MSTags.Effects.SOPOR_SICKNESS_WHITELIST).add(mobEffect);
 		});
-		
 	}
 	
 	@Override

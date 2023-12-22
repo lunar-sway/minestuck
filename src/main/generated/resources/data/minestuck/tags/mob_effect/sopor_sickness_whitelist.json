@@ -25,13 +25,7 @@
     "minecraft:saturation",
     "minecraft:glowing",
     "minecraft:levitation",
-    "minecraft:luck",
-    "minecraft:unluck",
     "minecraft:slow_falling",
-    "minecraft:conduit_power",
-    "minecraft:dolphins_grace",
-    "minecraft:bad_omen",
-    "minecraft:hero_of_the_village",
     "minecraft:darkness"
   ]
 }
