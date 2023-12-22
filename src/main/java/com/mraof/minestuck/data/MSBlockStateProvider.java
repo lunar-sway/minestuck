@@ -1016,9 +1016,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			ModelFile retracted = models().cubeBottomTop("block_pressure_plate_retracted",
-					texture("block_pressure_plate_side"),
-					texture("block_pressure_plate_bottom"),
-					texture("block_pressure_plate_top"));
+					texture("block_pressure_plate/side"),
+					texture("block_pressure_plate/bottom"),
+					texture("block_pressure_plate/top"));
 			ModelFile extended = existing(id("block_pressure_plate_extended"));
 			getVariantBuilder(MSBlocks.BLOCK_PRESSURE_PLATE.get())
 					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(retracted).addModel()
