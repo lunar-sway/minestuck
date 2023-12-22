@@ -950,13 +950,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			ModelFile poweredModel = models().cubeBottomTop("platform_generator_powered",
-					texture("platform_generator_side"),
-					texture("platform_generator_bottom"),
-					texture("platform_generator_top_powered"));
+					texture("platform_generator/side"),
+					texture("platform_generator/bottom"),
+					texture("platform_generator/top_powered"));
 			ModelFile unpoweredModel = models().cubeBottomTop("platform_generator_unpowered",
-					texture("platform_generator_side"),
-					texture("platform_generator_bottom"),
-					texture("platform_generator_top_unpowered"));
+					texture("platform_generator/side"),
+					texture("platform_generator/bottom"),
+					texture("platform_generator/top_unpowered"));
 			directionalUp(MSBlocks.PLATFORM_GENERATOR, state -> state.getValue(PlatformGeneratorBlock.POWERED) ? poweredModel : unpoweredModel,
 					PlatformGeneratorBlock.INVISIBLE_MODE, PlatformGeneratorBlock.POWER);
 			simpleBlockItem(MSBlocks.PLATFORM_GENERATOR.get(), unpoweredModel);
