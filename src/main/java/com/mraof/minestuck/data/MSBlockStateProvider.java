@@ -262,11 +262,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		variantsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, 4,
-				i -> cubeAll(id("flowery_mossy_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("flowery_mossy_stone_bricks" + (i + 1),
+						texture(id("flowery_mossy_stone_bricks/" + (i + 1)))));
 		variantsWithItem(MSBlocks.DECREPIT_STONE_BRICKS, 4,
-				i -> cubeAll(id("decrepit_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("decrepit_stone_bricks" + (i + 1),
+						texture(id("decrepit_stone_bricks/" + (i + 1)))));
 		variantsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, 4,
-				i -> cubeAll(id("mossy_decrepit_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("mossy_decrepit_stone_bricks" + (i + 1),
+						texture(id("mossy_decrepit_stone_bricks/" + (i + 1)))));
 		simpleBlockWithItem(MSBlocks.COARSE_END_STONE);
 		{
 			ModelFile model = models().cubeBottomTop("end_grass",
@@ -797,7 +800,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
 		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
 		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, "black_stone_brick", texture(MSBlocks.BLACK_STONE_BRICKS));
-		stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks1"));
+		stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks/1"));
 		stairsWithItem(MSBlocks.MYCELIUM_STAIRS, "mycelium", texture(MSBlocks.MYCELIUM_STONE));
 		stairsWithItem(MSBlocks.MYCELIUM_BRICK_STAIRS, "mycelium_brick", texture(MSBlocks.MYCELIUM_BRICKS));
 		stairsWithItem(MSBlocks.CHALK_STAIRS, MSBlocks.CHALK);
@@ -821,7 +824,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICKS);
 		slabWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
 		slabWithItem(MSBlocks.WHITE_CHESS_BRICK_SLAB, MSBlocks.WHITE_CHESS_BRICKS);
-		slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.getId().withSuffix("1"));
+		{
+			ResourceLocation texture = texture("flowery_mossy_stone_bricks/1");
+			slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, id("flowery_mossy_stone_bricks1"), texture, texture);
+		}
 		slabWithItem(MSBlocks.COARSE_STONE_SLAB, MSBlocks.COARSE_STONE);
 		slabWithItem(MSBlocks.COARSE_STONE_BRICK_SLAB, MSBlocks.COARSE_STONE_BRICKS);
 		slabWithItem(MSBlocks.SHADE_SLAB, MSBlocks.SHADE_STONE);
