@@ -919,16 +919,16 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			powerVariableWithItem(MSBlocks.VARIABLE_SOLID_SWITCH,
-					cubeAll(id("variable_solid_switch_high_power")),
-					cubeAll(id("variable_solid_switch_medium_power")),
-					cubeAll(id("variable_solid_switch_low_power")),
-					cubeAll(id("variable_solid_switch_unpowered")));
+					models().cubeAll("variable_solid_switch_high_power", texture("variable_solid_switch/high_power")),
+					models().cubeAll("variable_solid_switch_medium_power", texture("variable_solid_switch/medium_power")),
+					models().cubeAll("variable_solid_switch_low_power", texture("variable_solid_switch/low_power")),
+					models().cubeAll("variable_solid_switch_unpowered", texture("variable_solid_switch/unpowered")));
 		}
 		{
-			ModelFile highPower = cubeAll(id("timed_solid_switch_high_power"));
-			ModelFile mediumPower = cubeAll(id("timed_solid_switch_medium_power"));
-			ModelFile lowPower = cubeAll(id("timed_solid_switch_low_power"));
-			ModelFile unpowered = cubeAll(id("timed_solid_switch_unpowered"));
+			ModelFile highPower = models().cubeAll("timed_solid_switch_high_power", texture("timed_solid_switch/high_power"));
+			ModelFile mediumPower = models().cubeAll("timed_solid_switch_medium_power", texture("timed_solid_switch/medium_power"));
+			ModelFile lowPower = models().cubeAll("timed_solid_switch_low_power", texture("timed_solid_switch/low_power"));
+			ModelFile unpowered = models().cubeAll("timed_solid_switch_unpowered", texture("timed_solid_switch/unpowered"));
 			powerVariableWithItem(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
 			powerVariableWithItem(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
 		}
