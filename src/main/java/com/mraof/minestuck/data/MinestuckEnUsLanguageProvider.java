@@ -2243,6 +2243,9 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(Theme.SKAIANET_BLACK.getName(), "Skaianet Black");
 		add(Theme.ASTRAL_CHARTS.getName(), "Astral Charts");
 		add(Theme.TILLDEATH.getName(), "~ATH");
+		add(Theme.LOWAS.getName(), "LOWAS");
+		add(Theme.SPIROGRAPH.getName(), "Spirograph");
+		add(Theme.MINESTUCK.getName(), "Minestuck");
 		
 		add(GristLayerInfo.INFO, "Grist types at this position; common: %s, uncommon: %s, any: %s");
 		add(CheckLandCommand.CHECK, "You are currently in %s.");
