@@ -177,7 +177,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		//Land Environment
 		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[] {12, 6, 1, 1},
-				i -> cubeAll(id("blue_dirt" + i)));
+				i -> models().cubeAll("blue_dirt" + i, texture("blue_dirt/" + i)));
 		simpleBlockWithItem(MSBlocks.THOUGHT_DIRT);
 		
 		simpleBlockWithItem(MSBlocks.COARSE_STONE);
