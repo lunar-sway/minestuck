@@ -856,11 +856,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 			ModelFile verticalUnpowered = models()
 					.cubeColumn("trajectory_block_vertical_unpowered",
 					texture("redstone_machine_block"),
-					texture("trajectory_block_vertical_top_unpowered"));
+					texture("trajectory_block/vertical_top_unpowered"));
 			ModelFile verticalPowered = models()
 					.cubeColumn("trajectory_block_vertical_powered",
 							texture("redstone_machine_block"),
-							texture("trajectory_block_vertical_top_powered"));
+							texture("trajectory_block/vertical_top_powered"));
 			ModelFile horizontalUnpowered = models().getExistingFile(id("trajectory_block_horizontal_unpowered"));
 			ModelFile horizontalPowered = models().getExistingFile(id("trajectory_block_horizontal_powered"));
 			directionalUp(MSBlocks.TRAJECTORY_BLOCK, state -> {
