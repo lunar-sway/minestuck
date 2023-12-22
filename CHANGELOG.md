@@ -27,10 +27,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
