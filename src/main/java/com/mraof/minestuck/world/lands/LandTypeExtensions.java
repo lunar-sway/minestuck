@@ -182,7 +182,7 @@ public final class LandTypeExtensions
 		{}
 	}
 	
-	private record FeatureExtension(GenerationStep.Decoration step, Holder<PlacedFeature> feature,
+	public record FeatureExtension(GenerationStep.Decoration step, Holder<PlacedFeature> feature,
 									List<LandBiomeType> biomeTypes) implements Extension
 	{
 		static Codec<FeatureExtension> CODEC = RecordCodecBuilder.create(instance ->
@@ -199,7 +199,7 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	private record CarverExtension(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver,
+	public record CarverExtension(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver,
 								   List<LandBiomeType> biomeTypes) implements Extension
 	{
 		static Codec<CarverExtension> CODEC = RecordCodecBuilder.create(instance ->
@@ -216,7 +216,7 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	private record MobSpawnExtension(MobCategory category, MobSpawnSettings.SpawnerData spawnerData,
+	public record MobSpawnExtension(MobCategory category, MobSpawnSettings.SpawnerData spawnerData,
 									 List<LandBiomeType> biomeTypes) implements Extension
 	{
 		static Codec<MobSpawnExtension> CODEC = RecordCodecBuilder.create(instance ->
@@ -234,9 +234,9 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	private record ParsedExtension(List<FeatureExtension> features, List<CarverExtension> carvers, List<MobSpawnExtension> mobSpawns)
+	public record ParsedExtension(List<FeatureExtension> features, List<CarverExtension> carvers, List<MobSpawnExtension> mobSpawns)
 	{
-		static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
+		public static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
 						PreservingOptionalFieldCodec.forList(FeatureExtension.CODEC.listOf(), "features").forGetter(ParsedExtension::features),
 						PreservingOptionalFieldCodec.forList(CarverExtension.CODEC.listOf(), "carvers").forGetter(ParsedExtension::carvers),
