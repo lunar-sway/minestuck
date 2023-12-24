@@ -44,7 +44,7 @@ public class LandBiomeGenVerifier
 					throw new IllegalArgumentException("Missing land biome types!");
 			}
 			@Override
-			public void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types)
+			public void addCarver(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
 			{
 				if(types.length == 0)
 					throw new IllegalArgumentException("Missing land biome types!");

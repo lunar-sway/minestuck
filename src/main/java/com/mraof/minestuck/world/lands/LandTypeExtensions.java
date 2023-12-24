@@ -25,6 +25,7 @@ import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -55,7 +56,7 @@ public final class LandTypeExtensions
 		this.extensionsMap = extensionsMap;
 	}
 	
-	public void addFeatureExtensions(LandBiomeGenBuilder builder, LandTypePair landTypes)
+	public void addBiomeGenExtensions(LandBiomeGenBuilder builder, LandTypePair landTypes)
 	{
 		this.extensionsMap.getOrDefault(landTypes.getTerrain(), Collections.emptyList())
 				.forEach(extension -> extension.addTo(builder));
@@ -174,16 +175,35 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	private record ParsedExtension(List<FeatureExtension> features)
+	private record CarverExtension(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver,
+								   List<LandBiomeType> biomeTypes) implements Extension
+	{
+		static Codec<CarverExtension> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						GenerationStep.Carving.CODEC.fieldOf("step").forGetter(CarverExtension::step),
+						ConfiguredWorldCarver.CODEC.fieldOf("carver").forGetter(CarverExtension::carver),
+						LandBiomeType.CODEC.listOf().fieldOf("biome_types").forGetter(CarverExtension::biomeTypes)
+				).apply(instance, CarverExtension::new));
+		
+		@Override
+		public void addTo(LandBiomeGenBuilder builder)
+		{
+			builder.addCarver(this.step, this.carver, this.biomeTypes.toArray(new LandBiomeType[0]));
+		}
+	}
+	
+	private record ParsedExtension(List<FeatureExtension> features, List<CarverExtension> carvers)
 	{
 		static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
-						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features)
+						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features),
+						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)
 		{
 			builder.addAll(this.features());
+			builder.addAll(this.carvers());
 		}
 	}
 }

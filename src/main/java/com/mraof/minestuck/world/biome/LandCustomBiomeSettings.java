@@ -111,7 +111,7 @@ public final class LandCustomBiomeSettings
 		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
 		
-		extensions.addFeatureExtensions(builder, landTypes);
+		extensions.addBiomeGenExtensions(builder, landTypes);
 	}
 	
 	private static class GenerationBuilder implements LandBiomeGenBuilder
@@ -150,11 +150,10 @@ public final class LandCustomBiomeSettings
 		}
 		
 		@Override
-		public void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types)
+		public void addCarver(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
 		{
-			Holder<ConfiguredWorldCarver<?>> holder = Holder.direct(carver);
 			for(LandBiomeType type : types)
-				settings.get(type).addCarver(step, holder);
+				settings.get(type).addCarver(step, carver);
 		}
 	}
 	
