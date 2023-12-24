@@ -48,9 +48,9 @@ public final class LandTypeExtensions
 	public static final FileToIdConverter TERRAIN_EXTENSIONS_LOCATION = FileToIdConverter.json("minestuck/land_type_extension/terrain");
 	public static final FileToIdConverter TITLE_EXTENSIONS_LOCATION = FileToIdConverter.json("minestuck/land_type_extension/title");
 	
-	private final Map<ILandType, List<FeatureExtension>> extensionsMap;
+	private final Map<ILandType, List<Extension>> extensionsMap;
 	
-	public LandTypeExtensions(Map<ILandType, List<FeatureExtension>> extensionsMap)
+	private LandTypeExtensions(Map<ILandType, List<Extension>> extensionsMap)
 	{
 		this.extensionsMap = extensionsMap;
 	}
@@ -82,7 +82,7 @@ public final class LandTypeExtensions
 		instance = null;
 	}
 	
-	private static final class Loader extends SimplePreparableReloadListener<Map<ILandType, List<LandTypeExtensions.FeatureExtension>>>
+	private static final class Loader extends SimplePreparableReloadListener<Map<ILandType, List<Extension>>>
 	{
 		private final DynamicOps<JsonElement> ops;
 		private final Registry<LevelStem> levelStems;
@@ -94,9 +94,9 @@ public final class LandTypeExtensions
 		}
 		
 		@Override
-		protected Map<ILandType, List<FeatureExtension>> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
+		protected Map<ILandType, List<Extension>> prepare(ResourceManager resourceManager, ProfilerFiller profiler)
 		{
-			ImmutableMap.Builder<ILandType, List<FeatureExtension>> mapBuilder = ImmutableMap.builder();
+			ImmutableMap.Builder<ILandType, List<Extension>> mapBuilder = ImmutableMap.builder();
 			
 			loadAllExtensionsAt(TERRAIN_EXTENSIONS_LOCATION, LandTypes.TERRAIN_REGISTRY.get(), mapBuilder, resourceManager);
 			loadAllExtensionsAt(TITLE_EXTENSIONS_LOCATION, LandTypes.TITLE_REGISTRY.get(), mapBuilder, resourceManager);
@@ -105,7 +105,7 @@ public final class LandTypeExtensions
 		}
 		
 		private void loadAllExtensionsAt(FileToIdConverter location, IForgeRegistry<? extends ILandType> registry,
-												ImmutableMap.Builder<ILandType, List<FeatureExtension>> mapBuilder, ResourceManager resourceManager)
+										 ImmutableMap.Builder<ILandType, List<Extension>> mapBuilder, ResourceManager resourceManager)
 		{
 			for(Map.Entry<ResourceLocation, List<Resource>> entry : location.listMatchingResourceStacks(resourceManager).entrySet())
 			{
@@ -117,21 +117,21 @@ public final class LandTypeExtensions
 					continue;
 				}
 				
-				ImmutableList.Builder<FeatureExtension> builder = ImmutableList.builder();
+				ImmutableList.Builder<Extension> builder = ImmutableList.builder();
 				
 				for(Resource resource : entry.getValue())
-					loadExtensionsFromResource(resource, id).ifPresent(builder::addAll);
+					loadExtensionsFromResource(resource, id).ifPresent(extensions -> extensions.addAllTo(builder));
 				
 				mapBuilder.put(landType, builder.build());
 			}
 		}
 		
-		private Optional<List<FeatureExtension>> loadExtensionsFromResource(Resource resource, ResourceLocation location)
+		private Optional<ParsedExtension> loadExtensionsFromResource(Resource resource, ResourceLocation location)
 		{
 			try(Reader reader = resource.openAsReader())
 			{
 				JsonElement json = JsonParser.parseReader(reader);
-				return FeatureExtension.LIST_CODEC.parse(this.ops, json)
+				return ParsedExtension.CODEC.parse(this.ops, json)
 						.resultOrPartial(message -> LOGGER.error("Problem parsing land type extension for {} from {}, reason: {}", location, resource.sourcePackId(), message));
 			} catch(IOException ignored)
 			{
@@ -140,7 +140,7 @@ public final class LandTypeExtensions
 		}
 		
 		@Override
-		protected void apply(Map<ILandType, List<FeatureExtension>> extensionsMap, ResourceManager resourceManager, ProfilerFiller profiler)
+		protected void apply(Map<ILandType, List<Extension>> extensionsMap, ResourceManager resourceManager, ProfilerFiller profiler)
 		{
 			LandTypeExtensions extensions = new LandTypeExtensions(extensionsMap);
 			for(LevelStem levelStem : this.levelStems)
@@ -152,19 +152,38 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	public record FeatureExtension(GenerationStep.Decoration step, Holder<PlacedFeature> feature, List<LandBiomeType> biomeTypes)
+	private interface Extension
 	{
-		public static Codec<FeatureExtension> CODEC = RecordCodecBuilder.create(instance ->
+		void addTo(LandBiomeGenBuilder builder);
+	}
+	
+	private record FeatureExtension(GenerationStep.Decoration step, Holder<PlacedFeature> feature,
+									List<LandBiomeType> biomeTypes) implements Extension
+	{
+		static Codec<FeatureExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
 						GenerationStep.Decoration.CODEC.fieldOf("step").forGetter(FeatureExtension::step),
 						PlacedFeature.CODEC.fieldOf("feature").forGetter(FeatureExtension::feature),
 						LandBiomeType.CODEC.listOf().fieldOf("biome_types").forGetter(FeatureExtension::biomeTypes)
 				).apply(instance, FeatureExtension::new));
-		public static Codec<List<FeatureExtension>> LIST_CODEC = CODEC.listOf();
 		
-		private void addTo(LandBiomeGenBuilder builder)
+		@Override
+		public void addTo(LandBiomeGenBuilder builder)
 		{
 			builder.addFeature(this.step, this.feature, this.biomeTypes.toArray(new LandBiomeType[0]));
+		}
+	}
+	
+	private record ParsedExtension(List<FeatureExtension> features)
+	{
+		static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features)
+				).apply(instance, ParsedExtension::new));
+		
+		void addAllTo(ImmutableList.Builder<Extension> builder)
+		{
+			builder.addAll(this.features());
 		}
 	}
 }
