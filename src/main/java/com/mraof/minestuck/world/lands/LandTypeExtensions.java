@@ -43,6 +43,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
+/**
+ * Holds all land type extensions loaded from datapacks,
+ * and is used to apply these extensions to biome property builders based on land types.
+ * An instance can be obtained with {@link LandTypeExtensions#get()}
+ * after the server has started and datapacks have been initially loaded.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
