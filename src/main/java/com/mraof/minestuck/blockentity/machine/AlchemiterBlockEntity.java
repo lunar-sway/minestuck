@@ -2,7 +2,10 @@ package com.mraof.minestuck.blockentity.machine;
 
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.alchemy.*;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.AlchemiterBlock;
@@ -13,6 +16,7 @@ import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.blockentity.IColored;
 import com.mraof.minestuck.util.ColorHandler;
+import com.mraof.minestuck.util.MSNBTUtil;
 import com.mraof.minestuck.util.MSParticleType;
 import com.mraof.minestuck.util.MSSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -176,7 +180,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.load(nbt);
 		
-		wildcardGrist = GristType.read(nbt, "gristType");
+		wildcardGrist = MSNBTUtil.readGristType(nbt, "gristType");
 		
 		/*
 		this.upgraded = compound.getBoolean("upgraded");
@@ -206,7 +210,7 @@ public class AlchemiterBlockEntity extends BlockEntity implements IColored, Gris
 	{
 		super.saveAdditional(compound);
 
-		compound.putString("gristType", GristTypes.getRegistry().getKey(wildcardGrist).toString());
+		MSNBTUtil.writeGristType(compound, "gristType", wildcardGrist);
 		compound.putBoolean("broken", isBroken());
 		
 		if(dowel!= null)

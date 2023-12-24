@@ -2,7 +2,7 @@ package com.mraof.minestuck.client.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mraof.minestuck.alchemy.GristType;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.world.lands.GristLayerInfo;
 import com.mraof.minestuck.world.lands.GristTypeLayer;
 import net.minecraft.client.Camera;

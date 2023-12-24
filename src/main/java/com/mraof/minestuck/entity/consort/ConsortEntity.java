@@ -9,6 +9,7 @@ import com.mraof.minestuck.entity.animation.MobAnimation;
 import com.mraof.minestuck.inventory.ConsortMerchantInventory;
 import com.mraof.minestuck.inventory.ConsortMerchantMenu;
 import com.mraof.minestuck.player.IdentifierHandler;
+import com.mraof.minestuck.player.PlayerData;
 import com.mraof.minestuck.player.PlayerIdentifier;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.util.AnimationControllerUtil;
@@ -140,27 +141,32 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	{
 		if(this.isAlive() && !player.isShiftKeyDown() && eventTimer < 0)
 		{
-			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer && PlayerSavedData.getData(serverPlayer).getConsortReputation(homeDimension) > -1000)
+			if(!level().isClientSide && player instanceof ServerPlayer serverPlayer)
 			{
-				if(message == null)
-				{
-					message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
-					hasHadMessage = true;
-				}
+				PlayerData playerData = PlayerSavedData.getData(serverPlayer);
 				
-				checkMessageData();
-				
-				try
+				if(playerData != null && playerData.getConsortReputation(homeDimension) > -1000)
 				{
-					Component text = message.getMessage(this, serverPlayer);
-					if(text != null)
-						player.sendSystemMessage(text);
-					handleConsortRepFromTalking(serverPlayer);
-					setCurrentAnimation(TALK_PROPERTIES);
-					MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
-				} catch(Exception e)
-				{
-					LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
+					if(message == null)
+					{
+						message = ConsortDialogue.getRandomMessage(this, hasHadMessage);
+						hasHadMessage = true;
+					}
+					
+					checkMessageData();
+					
+					try
+					{
+						Component text = message.getMessage(this, serverPlayer);
+						if(text != null)
+							player.sendSystemMessage(text);
+						handleConsortRepFromTalking(serverPlayer);
+						setCurrentAnimation(TALK_PROPERTIES);
+						MSCriteriaTriggers.CONSORT_TALK.trigger(serverPlayer, message.getString(), this);
+					} catch(Exception e)
+					{
+						LOGGER.error("Got exception when getting dialogue message for consort for player {}.", serverPlayer.getGameProfile().getName(), e);
+					}
 				}
 			}
 			
@@ -352,7 +358,7 @@ public class ConsortEntity extends AnimatedPathfinderMob implements MenuProvider
 	@Override
 	public boolean skipAttackInteraction(Entity entityIn)
 	{
-		if(entityIn instanceof ServerPlayer player)
+		if(!(entityIn instanceof FakePlayer) && entityIn instanceof ServerPlayer player)
 			PlayerSavedData.getData(player).addConsortReputation(-5, homeDimension);
 		return super.skipAttackInteraction(entityIn);
 	}

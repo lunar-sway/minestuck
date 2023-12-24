@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "powered=true": { "model": "minestuck:block/block_pressure_plate_retracted" },
-        "powered=false": { "model": "minestuck:block/block_pressure_plate_extended" }
-    }
-}

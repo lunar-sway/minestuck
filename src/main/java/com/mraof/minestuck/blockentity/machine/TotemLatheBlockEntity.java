@@ -1,14 +1,14 @@
 package com.mraof.minestuck.blockentity.machine;
 
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinerContainer;
 import com.mraof.minestuck.block.EnumDowelType;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.block.machine.TotemLatheBlock;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.alchemy.AlchemyHelper;
-import com.mraof.minestuck.alchemy.recipe.CombinationMode;
-import com.mraof.minestuck.alchemy.recipe.CombinationRecipe;
-import com.mraof.minestuck.alchemy.recipe.CombinerWrapper;
+import com.mraof.minestuck.api.alchemy.recipe.combination.CombinationMode;
 import com.mraof.minestuck.blockentity.ItemStackBlockEntity;
 import com.mraof.minestuck.util.ColorHandler;
 import com.mraof.minestuck.util.MSSoundEvents;
@@ -390,7 +390,7 @@ public class TotemLatheBlockEntity extends BlockEntity
 			if(!card1.isEmpty() && !card2.isEmpty())
 				if(!AlchemyHelper.isPunchedCard(card1) || !AlchemyHelper.isPunchedCard(card2))
 					output = new ItemStack(MSItems.GENERIC_OBJECT.get());
-				else output = CombinationRecipe.findResult(new CombinerWrapper(card1, card2, CombinationMode.AND), level);
+				else output = CombinationRecipe.findResult(new CombinerContainer.Wrapper(card1, card2, CombinationMode.AND), level);
 			else
 			{
 				ItemStack input = card1.isEmpty() ? card2 : card1;

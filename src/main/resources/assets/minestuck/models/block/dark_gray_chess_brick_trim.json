@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "minestuck:block/dark_gray_chess_bricks",
-    "side": "minestuck:block/dark_gray_chess_brick_trim"
-  }
-}

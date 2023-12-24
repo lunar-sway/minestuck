@@ -1,0 +1,31 @@
+{
+  "ambientocclusion": false,
+  "elements": [
+    {
+      "faces": {
+        "north": {
+          "texture": "#texture"
+        },
+        "south": {
+          "texture": "#texture"
+        }
+      },
+      "from": [
+        0,
+        0,
+        15.2
+      ],
+      "shade": false,
+      "to": [
+        16,
+        16,
+        15.2
+      ]
+    }
+  ],
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minestuck:block/blood_aspect_ladder",
+    "texture": "minestuck:block/blood_aspect_ladder"
+  }
+}

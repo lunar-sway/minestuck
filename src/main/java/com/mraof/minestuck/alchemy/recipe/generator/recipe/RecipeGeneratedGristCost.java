@@ -1,20 +1,18 @@
 package com.mraof.minestuck.alchemy.recipe.generator.recipe;
 
 import com.google.gson.JsonObject;
-import com.mraof.minestuck.alchemy.GristType;
-import com.mraof.minestuck.alchemy.GristSet;
-import com.mraof.minestuck.alchemy.recipe.GristCostRecipe;
-import com.mraof.minestuck.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
+import com.mraof.minestuck.api.alchemy.recipe.generator.GeneratedCostProvider;
+import com.mraof.minestuck.api.alchemy.GristSet;
+import com.mraof.minestuck.api.alchemy.GristType;
 import com.mraof.minestuck.item.crafting.MSRecipeTypes;
-import com.mraof.minestuck.jei.JeiGristCost;
+import com.mraof.minestuck.api.alchemy.recipe.JeiGristCost;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 
@@ -26,15 +24,22 @@ import java.util.function.BiConsumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RecipeGeneratedGristCost extends GristCostRecipe
+public final class RecipeGeneratedGristCost implements GristCostRecipe
 {
+	private final ResourceLocation id;
 	@Nullable
 	private RecipeGeneratedCostHandler handler;
 	
 	private RecipeGeneratedGristCost(ResourceLocation id, @Nullable RecipeGeneratedCostHandler handler)
 	{
-		super(id, Ingredient.EMPTY, -999999);	//Do not use Integer.MIN_VALUE as priority due to the risk of causing an underflow/overflow
+		this.id = id;
 		this.handler = handler;
+	}
+	
+	@Override
+	public ResourceLocation getId()
+	{
+		return this.id;
 	}
 	
 	void setHandler(RecipeGeneratedCostHandler handler)
@@ -43,15 +48,21 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	}
 	
 	@Override
-	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown, @Nullable Level level)
+	public GristSet getGristCost(ItemStack input, @Nullable GristType wildcardType, boolean shouldRoundDown)
 	{
-		return scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
+		return GristCostRecipe.scaleToCountAndDurability(getCost(input.getItem()), input, shouldRoundDown);
 	}
 	
 	@Override
 	public boolean matches(Container inv, Level level)
 	{
 		return getCost(inv.getItem(0).getItem()) != null;
+	}
+	
+	@Override
+	public int getPriority()
+	{
+		return -999999;	//Do not use Integer.MIN_VALUE as priority due to the risk of causing an underflow/overflow
 	}
 	
 	@Nullable
@@ -67,12 +78,6 @@ public class RecipeGeneratedGristCost extends GristCostRecipe
 	{
 		if(handler != null)
 			handler.addAsProvider(consumer);
-	}
-	
-	@Override
-	public NonNullList<Ingredient> getIngredients()
-	{
-		return NonNullList.create();
 	}
 	
 	@Override

@@ -6,6 +6,8 @@ import com.mraof.minestuck.entity.underling.UnderlingEntity;
 import com.mraof.minestuck.event.ServerEventHandler;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.loot.MSLootTables;
+import com.mraof.minestuck.network.ClientMovementPacket;
+import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.player.EnumAspect;
 import com.mraof.minestuck.player.PlayerSavedData;
 import com.mraof.minestuck.player.Title;
@@ -41,6 +43,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -248,7 +251,7 @@ public interface OnHitEffect
 		return (stack, target, attacker) -> {
 			float damage = additionalDamage * 3.3F;
 			
-			if(attacker instanceof ServerPlayer serverPlayer)
+			if(attacker instanceof ServerPlayer serverPlayer && !(attacker instanceof FakePlayer))
 			{
 				Title title = PlayerSavedData.getData(serverPlayer).getTitle();
 				
@@ -333,6 +336,32 @@ public interface OnHitEffect
 		};
 	}
 	
+	/**
+	 * Flings the target in the direction the attacker was facing, and flings the attacker in the opposite direction of their facing
+	 */
+	static OnHitEffect mutualKnockback(float knockback)
+	{
+		return (itemStack, target, attacker) ->
+		{
+			Vec3 targetVec = attacker.getLookAngle().scale(1F + knockback);
+			Vec3 attackerVec = targetVec.reverse();
+			
+			target.push(targetVec.x, targetVec.y, targetVec.z);
+			
+			//dismount the attacker
+			if(attacker.getVehicle() != null)
+				attacker.dismountTo(attacker.getX(), attacker.getY(), attacker.getZ());
+			
+			attacker.push(attackerVec.x, attackerVec.y, attackerVec.z);
+			
+			if(attacker instanceof ServerPlayer player)
+			{
+				ClientMovementPacket packet = ClientMovementPacket.createPacket(attackerVec);
+				MSPacketHandler.sendToPlayer(packet, player);
+			}
+		};
+	}
+	
 	static OnHitEffect userPotionEffect(Supplier<MobEffectInstance> effect)
 	{
 		return (stack, target, attacker) -> attacker.addEffect(effect.get());
@@ -399,7 +428,7 @@ public interface OnHitEffect
 	static OnHitEffect requireAspect(EnumAspect aspect, OnHitEffect effect)
 	{
 		return (stack, target, attacker) -> {
-			if(attacker instanceof ServerPlayer player)
+			if(attacker instanceof ServerPlayer player && !(attacker instanceof FakePlayer))
 			{
 				Title title = PlayerSavedData.getData(player).getTitle();
 				

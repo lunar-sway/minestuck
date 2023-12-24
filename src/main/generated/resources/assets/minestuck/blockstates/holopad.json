@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,has_card=false": {
+      "model": "minestuck:block/holopad",
+      "y": 90
+    },
+    "facing=east,has_card=true": {
+      "model": "minestuck:block/holopad_has_card",
+      "y": 90
+    },
+    "facing=north,has_card=false": {
+      "model": "minestuck:block/holopad"
+    },
+    "facing=north,has_card=true": {
+      "model": "minestuck:block/holopad_has_card"
+    },
+    "facing=south,has_card=false": {
+      "model": "minestuck:block/holopad",
+      "y": 180
+    },
+    "facing=south,has_card=true": {
+      "model": "minestuck:block/holopad_has_card",
+      "y": 180
+    },
+    "facing=west,has_card=false": {
+      "model": "minestuck:block/holopad",
+      "y": 270
+    },
+    "facing=west,has_card=true": {
+      "model": "minestuck:block/holopad_has_card",
+      "y": 270
+    }
+  }
+}

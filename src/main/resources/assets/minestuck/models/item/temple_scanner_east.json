@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "minestuck:item/temple_scanner/base",
+        "layer1": "minestuck:item/temple_scanner/east"
+    }
+}

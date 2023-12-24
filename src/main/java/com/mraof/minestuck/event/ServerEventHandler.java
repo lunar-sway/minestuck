@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.*;
@@ -142,20 +143,25 @@ public class ServerEventHandler
 	{
 		if(event.getSource().getEntity() != null)
 		{
-			if (event.getSource().getEntity() instanceof ServerPlayer)
+			Entity attacker = event.getSource().getEntity();
+			Entity injured = event.getEntity();
+			
+			if(injured != null)
 			{
-				ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
-				if (event.getEntity() instanceof UnderlingEntity)
-				{    //Increase damage to underling
-					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingDamageModifier();
+				boolean attackerIsRealPlayer = attacker instanceof ServerPlayer && !(attacker instanceof FakePlayer);
+				boolean injuredIsRealPlayer = injured instanceof ServerPlayer && !(injured instanceof FakePlayer);
+				
+				if(attackerIsRealPlayer && injured instanceof UnderlingEntity)
+				{
+					//Increase damage to underling
+					double modifier = PlayerSavedData.getData((ServerPlayer) attacker).getEcheladder().getUnderlingDamageModifier();
+					event.setAmount((float) (event.getAmount() * modifier));
+				} else if (injuredIsRealPlayer && attacker instanceof UnderlingEntity)
+				{
+					//Decrease damage to player
+					double modifier = PlayerSavedData.getData((ServerPlayer) injured).getEcheladder().getUnderlingProtectionModifier();
 					event.setAmount((float) (event.getAmount() * modifier));
 				}
-			}
-			else if (event.getEntity() instanceof ServerPlayer && event.getSource().getEntity() instanceof UnderlingEntity)
-			{    //Decrease damage to player
-				ServerPlayer player = (ServerPlayer) event.getEntity();
-					double modifier = PlayerSavedData.getData(player).getEcheladder().getUnderlingProtectionModifier();
-					event.setAmount((float) (event.getAmount() * modifier));
 			}
 		}
 	}
@@ -172,7 +178,7 @@ public class ServerEventHandler
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public static void onPlayerInjured(LivingHurtEvent event)
 	{
-		if(event.getEntity() instanceof Player injuredPlayer)
+		if(event.getEntity() instanceof Player injuredPlayer && !(injuredPlayer instanceof FakePlayer))
 		{
 			Title title = PlayerSavedData.getData((ServerPlayer) injuredPlayer).getTitle();
 			boolean isDoom = title != null && title.getHeroAspect() == EnumAspect.DOOM;
@@ -237,9 +243,13 @@ public class ServerEventHandler
 	@SubscribeEvent(priority=EventPriority.LOW, receiveCanceled=false)
 	public static void onServerChat(ServerChatEvent event)
 	{
-		Modus modus = PlayerSavedData.getData(event.getPlayer()).getModus();
-		if(modus instanceof HashMapModus)
-			((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
+		ServerPlayer player = event.getPlayer();
+		if(!(player instanceof FakePlayer))
+		{
+			Modus modus = PlayerSavedData.getData(player).getModus();
+			if(modus instanceof HashMapModus)
+				((HashMapModus) modus).onChatMessage(event.getPlayer(), event.getMessage().getString());
+		}
 	}
 	
 	@SubscribeEvent
@@ -252,7 +262,7 @@ public class ServerEventHandler
 	@SubscribeEvent
 	public static void onPlayerTickEvent(TickEvent.PlayerTickEvent event)
 	{
-		if(!event.player.level().isClientSide)
+		if(!event.player.level().isClientSide && !(event.player instanceof FakePlayer))
 		{
 			PlayerData data = PlayerSavedData.getData((ServerPlayer) event.player);
 			if(data.getTitle() != null)

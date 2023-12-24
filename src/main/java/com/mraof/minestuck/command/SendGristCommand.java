@@ -4,7 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mraof.minestuck.alchemy.GristHelper;
-import com.mraof.minestuck.alchemy.NonNegativeGristSet;
+import com.mraof.minestuck.api.alchemy.NonNegativeGristSet;
 import com.mraof.minestuck.command.argument.GristSetArgument;
 import com.mraof.minestuck.player.GristCache;
 import com.mraof.minestuck.player.IdentifierHandler;

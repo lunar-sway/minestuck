@@ -6,33 +6,25 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class GeneratedGristCostBuilder
+public final class GeneratedGristCostBuilder
 {
 	public static GeneratedGristCostBuilder create()
 	{
 		return new GeneratedGristCostBuilder();
 	}
 	
-	protected GeneratedGristCostBuilder()
+	private GeneratedGristCostBuilder()
 	{}
 	
 	public void build(Consumer<FinishedRecipe> recipeSaver, ResourceLocation id)
 	{
-		recipeSaver.accept(new GeneratedGristCostBuilder.Result(new ResourceLocation(id.getNamespace(), "grist_costs/"+id.getPath())));
+		recipeSaver.accept(new GeneratedGristCostBuilder.Result(id.withPrefix("grist_costs/")));
 	}
 	
-	public static class Result implements FinishedRecipe
+	private record Result(ResourceLocation id) implements AdvancementFreeRecipe
 	{
-		public final ResourceLocation id;
-		
-		public Result(ResourceLocation id)
-		{
-			this.id = id;
-		}
-		
 		@Override
 		public void serializeRecipeData(JsonObject jsonObject)
 		{
@@ -48,20 +40,6 @@ public class GeneratedGristCostBuilder
 		public RecipeSerializer<?> getType()
 		{
 			return MSRecipeTypes.RECIPE_GRIST_COST.get();
-		}
-		
-		@Nullable
-		@Override
-		public JsonObject serializeAdvancement()
-		{
-			return null;
-		}
-		
-		@Nullable
-		@Override
-		public ResourceLocation getAdvancementId()
-		{
-			return new ResourceLocation("");
 		}
 	}
 }

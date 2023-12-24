@@ -1,7 +1,0 @@
-{
-    "variants": {
-        "type=bottom": { "model": "minestuck:block/chalk_slab" },
-        "type=top":    { "model": "minestuck:block/chalk_slab_top" },
-        "type=double": { "model": "minestuck:block/chalk" }
-    }
-}

@@ -1,6 +1,7 @@
 package com.mraof.minestuck.alchemy;
 
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.event.AlchemyEvent;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.item.artifact.CruxiteArtifactItem;

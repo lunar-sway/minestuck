@@ -1,7 +1,7 @@
 package com.mraof.minestuck;
 
 import com.mraof.minestuck.advancements.MSCriteriaTriggers;
-import com.mraof.minestuck.alchemy.GristTypes;
+import com.mraof.minestuck.api.alchemy.GristTypes;
 import com.mraof.minestuck.alchemy.recipe.generator.recipe.InterpreterSerializers;
 import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.blockentity.MSBlockEntityTypes;
@@ -71,7 +71,7 @@ public class Minestuck
 		MSBlockEntityTypes.REGISTER.register(eventBus);
 		MSEntityTypes.REGISTER.register(eventBus);
 		MSMenuTypes.REGISTER.register(eventBus);
-		GristTypes.GRIST_TYPES.register(eventBus);
+		GristTypes.register();
 		MSEffects.REGISTER.register(eventBus);
 		MSParticleType.REGISTER.register(eventBus);
 		MSSoundEvents.REGISTER.register(eventBus);
@@ -120,7 +120,6 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
-		MSEntityTypes.registerPlacements();
 		
 		ConsortDialogue.init();
 		
