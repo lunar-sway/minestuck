@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - New consort dialogue
 - Sopor Stupor Effect
 - Sopor Slime Pie food item
+- Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
 
 ### Changed
 
