@@ -23,6 +23,8 @@ import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimplePreparableReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
@@ -62,6 +64,14 @@ public final class LandTypeExtensions
 				.forEach(extension -> extension.addTo(builder));
 		this.extensionsMap.getOrDefault(landTypes.getTitle(), Collections.emptyList())
 				.forEach(extension -> extension.addTo(builder));
+	}
+	
+	public void addMobSpawnExtensions(MobSpawnSettings.Builder builder, LandBiomeType type, LandTypePair landTypes)
+	{
+		this.extensionsMap.getOrDefault(landTypes.getTerrain(), Collections.emptyList())
+				.forEach(extension -> extension.addTo(builder, type));
+		this.extensionsMap.getOrDefault(landTypes.getTitle(), Collections.emptyList())
+				.forEach(extension -> extension.addTo(builder, type));
 	}
 	
 	private static LandTypeExtensions instance;
@@ -155,7 +165,11 @@ public final class LandTypeExtensions
 	
 	private interface Extension
 	{
-		void addTo(LandBiomeGenBuilder builder);
+		default void addTo(LandBiomeGenBuilder builder)
+		{}
+		
+		default void addTo(MobSpawnSettings.Builder builder, LandBiomeType type)
+		{}
 	}
 	
 	private record FeatureExtension(GenerationStep.Decoration step, Holder<PlacedFeature> feature,
@@ -192,18 +206,38 @@ public final class LandTypeExtensions
 		}
 	}
 	
-	private record ParsedExtension(List<FeatureExtension> features, List<CarverExtension> carvers)
+	private record MobSpawnExtension(MobCategory category, MobSpawnSettings.SpawnerData spawnerData,
+									 List<LandBiomeType> biomeTypes) implements Extension
+	{
+		static Codec<MobSpawnExtension> CODEC = RecordCodecBuilder.create(instance ->
+				instance.group(
+						MobCategory.CODEC.fieldOf("category").forGetter(MobSpawnExtension::category),
+						MobSpawnSettings.SpawnerData.CODEC.fieldOf("spawner_data").forGetter(MobSpawnExtension::spawnerData),
+						LandBiomeType.CODEC.listOf().fieldOf("biome_types").forGetter(MobSpawnExtension::biomeTypes)
+				).apply(instance, MobSpawnExtension::new));
+		
+		@Override
+		public void addTo(MobSpawnSettings.Builder builder, LandBiomeType type)
+		{
+			if(this.biomeTypes.contains(type))
+				builder.addSpawn(this.category, this.spawnerData);
+		}
+	}
+	
+	private record ParsedExtension(List<FeatureExtension> features, List<CarverExtension> carvers, List<MobSpawnExtension> mobSpawns)
 	{
 		static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
 						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features),
-						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers)
+						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
+						MobSpawnExtension.CODEC.listOf().optionalFieldOf("mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)
 		{
 			builder.addAll(this.features());
 			builder.addAll(this.carvers());
+			builder.addAll(this.mobSpawns());
 		}
 	}
 }

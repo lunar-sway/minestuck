@@ -50,9 +50,9 @@ public final class LandCustomBiomeSettings
 		GenerationBuilder generationBuilder = new GenerationBuilder(features, carvers);
 		addBiomeGeneration(generationBuilder, blocks, landTypes, extensions);
 		
-		normalBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.NORMAL);
-		roughBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.ROUGH);
-		oceanBiome = createBiomeProperties(generationBuilder, landTypes, LandBiomeType.OCEAN);
+		normalBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.NORMAL);
+		roughBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.ROUGH);
+		oceanBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.OCEAN);
 	}
 	
 	public BiomeProperties propertiesFor(Holder<Biome> biome)
@@ -75,14 +75,14 @@ public final class LandCustomBiomeSettings
 		return propertiesFor(baseBiome).mobSettings();
 	}
 	
-	private static BiomeProperties createBiomeProperties(GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
+	private static BiomeProperties createBiomeProperties(GenerationBuilder generationBuilder, LandTypeExtensions extensions, LandTypePair landTypes, LandBiomeType type)
 	{
 		BiomeGenerationSettings generationSettings = generationBuilder.settings.get(type).build();
-		MobSpawnSettings spawnSettings = createMobSpawnInfo(landTypes, type);
+		MobSpawnSettings spawnSettings = createMobSpawnInfo(extensions, landTypes, type);
 		return new BiomeProperties(generationSettings, spawnSettings);
 	}
 	
-	private static MobSpawnSettings createMobSpawnInfo(LandTypePair landTypes, LandBiomeType type)
+	private static MobSpawnSettings createMobSpawnInfo(LandTypeExtensions extensions, LandTypePair landTypes, LandBiomeType type)
 	{
 		MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
 		
@@ -90,6 +90,7 @@ public final class LandCustomBiomeSettings
 		
 		landTypes.getTerrain().setSpawnInfo(builder, type);
 		landTypes.getTitle().setSpawnInfo(builder, type);
+		extensions.addMobSpawnExtensions(builder, type, landTypes);
 		
 		return builder.build();
 	}
