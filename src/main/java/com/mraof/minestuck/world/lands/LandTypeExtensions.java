@@ -9,6 +9,7 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mraof.minestuck.Minestuck;
+import com.mraof.minestuck.util.PreservingOptionalFieldCodec;
 import com.mraof.minestuck.world.biome.LandBiomeType;
 import com.mraof.minestuck.world.gen.LandChunkGenerator;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -228,9 +229,9 @@ public final class LandTypeExtensions
 	{
 		static Codec<ParsedExtension> CODEC = RecordCodecBuilder.create(instance ->
 				instance.group(
-						FeatureExtension.CODEC.listOf().optionalFieldOf("features", Collections.emptyList()).forGetter(ParsedExtension::features),
-						CarverExtension.CODEC.listOf().optionalFieldOf("carvers", Collections.emptyList()).forGetter(ParsedExtension::carvers),
-						MobSpawnExtension.CODEC.listOf().optionalFieldOf("mob_spawns", Collections.emptyList()).forGetter(ParsedExtension::mobSpawns)
+						PreservingOptionalFieldCodec.forList(FeatureExtension.CODEC.listOf(), "features").forGetter(ParsedExtension::features),
+						PreservingOptionalFieldCodec.forList(CarverExtension.CODEC.listOf(), "carvers").forGetter(ParsedExtension::carvers),
+						PreservingOptionalFieldCodec.forList(MobSpawnExtension.CODEC.listOf(), "mob_spawns").forGetter(ParsedExtension::mobSpawns)
 				).apply(instance, ParsedExtension::new));
 		
 		void addAllTo(ImmutableList.Builder<Extension> builder)
