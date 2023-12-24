@@ -85,7 +85,10 @@ public final class LandTypeExtensions
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		event.addListener(new Loader(event.getRegistryAccess()));
+		//Extensions need to be reloaded together with worldgen to take effect,
+		// which only happens on server start (checked in mc1.20.1).
+		if(instance == null)
+			event.addListener(new Loader(event.getRegistryAccess()));
 	}
 	
 	@SubscribeEvent
