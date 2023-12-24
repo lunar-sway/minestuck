@@ -1,9 +1,0 @@
-{
-    "features": [
-        {
-            "step": "surface_structures",
-            "feature": "minecraft:delta",
-            "biome_types": [ "normal" ]
-        }
-    ]
-}
