@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 /**
  * A version of {@link com.mojang.serialization.codecs.OptionalFieldCodec} that preserves any partial result or error from the wrapped codec.
+ * Note: In mc1.20.2+, this codec can be replaced by {@code ExtraCodecs.strictOptionalField()}.
  */
 public final class PreservingOptionalFieldCodec<A> extends MapCodec<Optional<A>>
 {
