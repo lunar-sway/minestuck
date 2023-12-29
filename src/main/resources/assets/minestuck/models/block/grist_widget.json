@@ -1,5 +1,5 @@
 {
-	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"credit": "Model made with Blockbench by Dado with edits by Sarah Kirksey",
 	"textures": {
         "0": "minestuck:block/machine/grist_widget",
         "particle": "minestuck:block/machine/grist_widget"
