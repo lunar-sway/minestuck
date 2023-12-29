@@ -34,7 +34,7 @@ public class DynamicDimensions
 			RegistryAccess registryAccess = server.registryAccess();
 			LandChunkGenerator chunkGenerator = LandChunkGenerator.create(registryAccess.lookupOrThrow(Registries.NOISE), registryAccess.lookupOrThrow(Registries.DENSITY_FUNCTION),
 					named, registryAccess.lookupOrThrow(Registries.BIOME), registryAccess.lookupOrThrow(Registries.PLACED_FEATURE), registryAccess.lookupOrThrow(Registries.CONFIGURED_CARVER));
-			chunkGenerator.init(LandTypeExtensions.get());
+			chunkGenerator.tryInit(LandTypeExtensions.get());
 			Holder<DimensionType> dimensionType = registryAccess.lookupOrThrow(Registries.DIMENSION_TYPE).getOrThrow(LAND_TYPE);
 			return new LevelStem(dimensionType, chunkGenerator);
 		});

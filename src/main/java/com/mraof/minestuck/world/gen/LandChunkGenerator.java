@@ -133,9 +133,9 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 		return state.getPlacementsForStructure(structure).stream().anyMatch(placement -> placement.type() == MSStructurePlacements.LAND_GATE.get());
 	}
 	
-	public void init(LandTypeExtensions extensions)
+	public boolean tryInit(LandTypeExtensions extensions)
 	{
-		this.customBiomeSettings.init(extensions);
+		return this.customBiomeSettings.tryInit(extensions);
 	}
 	
 	private static final class LazyBiomeSettings
@@ -154,11 +154,12 @@ public class LandChunkGenerator extends CustomizableNoiseChunkGenerator
 			return Objects.requireNonNull(this.value);
 		}
 		
-		public void init(LandTypeExtensions extensions)
+		public boolean tryInit(LandTypeExtensions extensions)
 		{
 			if(this.value != null)
-				throw new IllegalStateException("Land worldgen settings has already be initialized.");
+				return false;
 			this.value = constructor.apply(extensions);
+			return true;
 		}
 	}
 }

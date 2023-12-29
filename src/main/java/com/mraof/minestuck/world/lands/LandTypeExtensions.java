@@ -91,10 +91,7 @@ public final class LandTypeExtensions
 	@SubscribeEvent
 	public static void onResourceReload(AddReloadListenerEvent event)
 	{
-		//Extensions need to be reloaded together with worldgen to take effect,
-		// which only happens on server start (checked in mc1.20.1).
-		if(instance == null)
-			event.addListener(new Loader(event.getRegistryAccess()));
+		event.addListener(new Loader(event.getRegistryAccess()));
 	}
 	
 	@SubscribeEvent
@@ -164,11 +161,15 @@ public final class LandTypeExtensions
 		protected void apply(Map<ILandType, List<Extension>> extensionsMap, ResourceManager resourceManager, ProfilerFiller profiler)
 		{
 			LandTypeExtensions extensions = new LandTypeExtensions(extensionsMap);
+			boolean allSuccess = true;
 			for(LevelStem levelStem : this.levelStems)
 			{
 				if(levelStem.generator() instanceof LandChunkGenerator generator)
-					generator.init(extensions);
+					allSuccess &= generator.tryInit(extensions);
 			}
+			if(!allSuccess)
+				LOGGER.warn("Land type extensions were reloaded mid-game. Any changes to land type extensions will only apply to new land dimensions. The game need to be restarted for said changes to apply to existing land dimensions.");
+			
 			LandTypeExtensions.instance = extensions;
 		}
 	}
