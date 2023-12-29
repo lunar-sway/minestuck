@@ -1,13 +1,13 @@
 package com.mraof.minestuck.world.biome;
 
 
-import com.google.common.collect.ImmutableList;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import com.mraof.minestuck.world.gen.LandGenSettings;
 import com.mraof.minestuck.world.gen.feature.FeatureModifier;
 import com.mraof.minestuck.world.gen.feature.MSPlacedFeatures;
 import com.mraof.minestuck.world.gen.structure.blocks.StructureBlockRegistry;
 import com.mraof.minestuck.world.lands.LandBiomeGenBuilder;
+import com.mraof.minestuck.world.lands.LandTypeExtensions;
 import com.mraof.minestuck.world.lands.LandTypePair;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
@@ -21,10 +21,9 @@ import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
@@ -34,14 +33,14 @@ import static com.mraof.minestuck.world.gen.feature.OreGeneration.*;
  * Biomes in this set are not present in the biome registry,
  * and should thus not be used in a situation where they need to be serialized.
  */
-public final class WorldGenBiomeSet implements LandBiomeAccess
+public final class LandCustomBiomeSettings
 {
-	private final Holder<Biome> normalBiome, oceanBiome, roughBiome;
+	private final BiomeProperties normalBiome, oceanBiome, roughBiome;
 	public final RegistryBackedBiomeSet baseBiomes;
 	
 	@SuppressWarnings("ConstantConditions")
-	public WorldGenBiomeSet(RegistryBackedBiomeSet biomes, LandGenSettings settings,
-							HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
+	public LandCustomBiomeSettings(RegistryBackedBiomeSet biomes, LandGenSettings settings, LandTypeExtensions extensions,
+								   HolderGetter<PlacedFeature> features, HolderGetter<ConfiguredWorldCarver<?>> carvers)
 	{
 		StructureBlockRegistry blocks = settings.getBlockRegistry();
 		LandTypePair landTypes = settings.getLandTypes();
@@ -49,47 +48,41 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		baseBiomes = biomes;
 		
 		GenerationBuilder generationBuilder = new GenerationBuilder(features, carvers);
-		addBiomeGeneration(generationBuilder, blocks, landTypes);
+		addBiomeGeneration(generationBuilder, blocks, landTypes, extensions);
 		
-		normalBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.NORMAL).build());
-		roughBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.ROUGH).build());
-		oceanBiome = Holder.direct(createBiomeBase(biomes, generationBuilder, landTypes, LandBiomeType.OCEAN).build());
+		normalBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.NORMAL);
+		roughBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.ROUGH);
+		oceanBiome = createBiomeProperties(generationBuilder, extensions, landTypes, LandBiomeType.OCEAN);
 	}
 	
-	public Holder<Biome> getBiomeFromBase(Holder<Biome> biome)
+	public BiomeProperties propertiesFor(Holder<Biome> biome)
 	{
-		return fromType(baseBiomes.getTypeFromBiome(biome));
+		return switch(baseBiomes.getTypeFromBiome(biome))
+		{
+			case NORMAL -> normalBiome;
+			case ROUGH -> roughBiome;
+			case OCEAN -> oceanBiome;
+		};
 	}
 	
-	@Override
-	public List<Holder<Biome>> getAll()
+	public BiomeGenerationSettings generationFor(Holder<Biome> baseBiome)
 	{
-		return ImmutableList.of(normalBiome, roughBiome, oceanBiome);
+		return propertiesFor(baseBiome).generationSettings();
 	}
 	
-	@Override
-	public Holder<Biome> fromType(LandBiomeType type)
+	public MobSpawnSettings customMobSpawnsFor(Holder<Biome> baseBiome)
 	{
-		return switch(type)
-				{
-					case NORMAL -> normalBiome;
-					case ROUGH -> roughBiome;
-					case OCEAN -> oceanBiome;
-				};
+		return propertiesFor(baseBiome).mobSettings();
 	}
 	
-	private static Biome.BiomeBuilder createBiomeBase(RegistryBackedBiomeSet baseBiomes, GenerationBuilder generationBuilder, LandTypePair landTypes, LandBiomeType type)
+	private static BiomeProperties createBiomeProperties(GenerationBuilder generationBuilder, LandTypeExtensions extensions, LandTypePair landTypes, LandBiomeType type)
 	{
-		Biome base = baseBiomes.fromType(type).value();
-		Biome.BiomeBuilder builder = new Biome.BiomeBuilder().hasPrecipitation(base.hasPrecipitation())
-				.temperature(base.getBaseTemperature()).downfall(0.5F).specialEffects(base.getSpecialEffects());
-		
-		MobSpawnSettings spawnInfo = createMobSpawnInfo(landTypes, type);
-		
-		return builder.generationSettings(generationBuilder.settings.get(type).build()).mobSpawnSettings(spawnInfo);
+		BiomeGenerationSettings generationSettings = generationBuilder.settings.get(type).build();
+		MobSpawnSettings spawnSettings = createMobSpawnInfo(extensions, landTypes, type);
+		return new BiomeProperties(generationSettings, spawnSettings);
 	}
 	
-	private static MobSpawnSettings createMobSpawnInfo(LandTypePair landTypes, LandBiomeType type)
+	private static MobSpawnSettings createMobSpawnInfo(LandTypeExtensions extensions, LandTypePair landTypes, LandBiomeType type)
 	{
 		MobSpawnSettings.Builder builder = new MobSpawnSettings.Builder();
 		
@@ -97,11 +90,12 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		
 		landTypes.getTerrain().setSpawnInfo(builder, type);
 		landTypes.getTitle().setSpawnInfo(builder, type);
+		extensions.addMobSpawnExtensions(builder, type, landTypes);
 		
 		return builder.build();
 	}
 	
-	private static void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandTypePair landTypes)
+	private static void addBiomeGeneration(LandBiomeGenBuilder builder, StructureBlockRegistry blocks, LandTypePair landTypes, LandTypeExtensions extensions)
 	{
 		builder.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, MSPlacedFeatures.RETURN_NODE, LandBiomeType.anyExcept(LandBiomeType.OCEAN));
 		
@@ -117,6 +111,8 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		
 		landTypes.getTerrain().addBiomeGeneration(builder, blocks);
 		landTypes.getTitle().addBiomeGeneration(builder, blocks, landTypes.getTerrain().getBiomeSet());
+		
+		extensions.addBiomeGenExtensions(builder, landTypes);
 	}
 	
 	private static class GenerationBuilder implements LandBiomeGenBuilder
@@ -132,21 +128,19 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		}
 		
 		@Override
-		public void addFeature(GenerationStep.Decoration step, PlacedFeature feature, LandBiomeType... types)
+		public void addFeature(GenerationStep.Decoration step, Holder<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 		{
+			if(modifier != null)
+				feature = modifier.map(feature);
+			
 			for(LandBiomeType type : types)
-				settings.get(type).addFeature(step, Holder.direct(feature));
+				this.settings.get(type).addFeature(step, feature);
 		}
 		
 		@Override
 		public void addFeature(GenerationStep.Decoration step, ResourceKey<PlacedFeature> feature, @Nullable FeatureModifier modifier, LandBiomeType... types)
 		{
-			Holder<PlacedFeature> featureHolder = features.getOrThrow(feature);
-			if(modifier != null)
-				featureHolder = modifier.map(featureHolder);
-			
-			for(LandBiomeType type : types)
-				settings.get(type).addFeature(step, featureHolder);
+			this.addFeature(step, features.getOrThrow(feature), modifier, types);
 		}
 		
 		@Override
@@ -157,11 +151,13 @@ public final class WorldGenBiomeSet implements LandBiomeAccess
 		}
 		
 		@Override
-		public void addCarver(GenerationStep.Carving step, ConfiguredWorldCarver<?> carver, LandBiomeType... types)
+		public void addCarver(GenerationStep.Carving step, Holder<ConfiguredWorldCarver<?>> carver, LandBiomeType... types)
 		{
-			Holder<ConfiguredWorldCarver<?>> holder = Holder.direct(carver);
 			for(LandBiomeType type : types)
-				settings.get(type).addCarver(step, holder);
+				settings.get(type).addCarver(step, carver);
 		}
 	}
+	
+	public record BiomeProperties(BiomeGenerationSettings generationSettings, MobSpawnSettings mobSettings)
+	{}
 }
