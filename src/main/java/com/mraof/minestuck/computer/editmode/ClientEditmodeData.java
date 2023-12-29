@@ -6,6 +6,7 @@ import com.mraof.minestuck.network.ServerEditPacket;
 import com.mraof.minestuck.network.data.EditmodeLocationsPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.level.LevelEvent;
@@ -54,6 +55,9 @@ public final class ClientEditmodeData
 	
 	public static void onExitPacket(ServerEditPacket.Exit ignored)
 	{
+		Player player = Minecraft.getInstance().player;
+		if(player != null)
+			player.fallDistance = 0;
 		disable();
 	}
 	

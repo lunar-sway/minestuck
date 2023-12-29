@@ -64,9 +64,6 @@ public final class ServerEditPacket
 		@Override
 		public void execute()
 		{
-			Player player = Minecraft.getInstance().player;
-			if(player != null)
-				player.fallDistance = 0;
 			ClientEditmodeData.onExitPacket(this);
 		}
 	}
