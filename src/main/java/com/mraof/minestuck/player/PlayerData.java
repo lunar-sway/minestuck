@@ -2,6 +2,7 @@ package com.mraof.minestuck.player;
 
 import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.inventory.captchalogue.*;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.data.*;
@@ -73,6 +74,7 @@ public final class PlayerData
 	
 	private Title title;
 	private boolean effectToggle;
+	public final EditmodeLocations editmodeLocations;
 	
 	private boolean hasLoggedIn;
 	
@@ -82,6 +84,7 @@ public final class PlayerData
 		this.identifier = player;
 		echeladder = new Echeladder(mcServer, player);
 		gristCache = new GristCache(this, mcServer);
+		editmodeLocations = new EditmodeLocations();
 		hasLoggedIn = false;
 	}
 	
@@ -117,6 +120,7 @@ public final class PlayerData
 		
 		title = Title.tryRead(nbt, "title");
 		effectToggle = nbt.getBoolean("effect_toggle");
+		editmodeLocations = EditmodeLocations.read(nbt.getCompound("editmode_locations"));
 		
 		hasLoggedIn = true;
 	}
@@ -147,6 +151,8 @@ public final class PlayerData
 		if(title != null)
 			title.write(nbt, "title");
 		nbt.putBoolean("effect_toggle", effectToggle);
+		
+		nbt.put("editmode_locations", editmodeLocations.write());
 		
 		return nbt;
 	}

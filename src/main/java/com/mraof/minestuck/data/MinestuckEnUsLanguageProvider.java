@@ -22,6 +22,7 @@ import com.mraof.minestuck.client.util.MSKeyHandler;
 import com.mraof.minestuck.command.*;
 import com.mraof.minestuck.command.argument.*;
 import com.mraof.minestuck.computer.*;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.effects.MSEffects;
 import com.mraof.minestuck.entity.LotusFlowerEntity;
 import com.mraof.minestuck.entity.MSEntityTypes;
@@ -1809,6 +1810,11 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EcheladderScreen.PROTECTION_UNDERLING, "Underling damage decreased to:");
 		add(EcheladderScreen.PROTECTION_UNDERLING_INCREASE, "Underling damage: -%.1f%%");
 		add(InventoryEditmodeScreen.TITLE, "Deploy List");
+		add(EditmodeSettingsScreen.TITLE, "Editmode Settings");
+		add(EditmodeSettingsScreen.EDITMODE_LOCATIONS, "Teleport Locus");
+		add(EditmodeSettingsScreen.RETURN, "Return");
+		add(EditmodeSettingsScreen.INTERACTION_MODE_UNAVAILABLE, "Interaction mode toggle not available yet");
+		add(EditmodeSettingsScreen.NOCLIP_UNAVAILABLE, "Noclip toggle not available yet");
 		add(AtheneumScreen.TITLE, "Atheneum");
 		add(SylladexScreen.TITLE, "Sylladex");
 		add(SylladexScreen.EMPTY_SYLLADEX_1, "Are you sure you want to continue?");
@@ -1966,6 +1972,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		add(EntryProcess.EXCEPTION, "[Minestuck] Something went wrong during entry. %s");
 		add(EntryCommand.ENTERING, "Preparing to enter The Medium");
 		add(EntryCommand.OTHER_PLAYER_ENTERING, "%s is now entering The Medium");
+		add(EditmodeLocations.REMOVED_LOCATION_MESSAGE, "The location you were in is no longer in range, and you have now been teleported to a valid location.");
 		
 		add(Theme.DEFAULT.getName(), "Default");
 		add(Theme.PESTERCHUM.getName(), "Pesterchum");

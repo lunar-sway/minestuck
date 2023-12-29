@@ -3,7 +3,7 @@ package com.mraof.minestuck.client.gui.playerStats;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,7 +27,7 @@ public abstract class PlayerStatsContainerScreen<T extends AbstractContainerMenu
 	public PlayerStatsContainerScreen(T screenContainer, Inventory inv, Component titleIn)
 	{
 		super(screenContainer, inv, titleIn);
-		this.mode = !ClientEditHandler.isActive();
+		this.mode = !ClientEditmodeData.isInEditmode();
 	}
 	
 	@Override

@@ -59,7 +59,7 @@ public class ClientEditToolDrag
 		
 		Minecraft mc = Minecraft.getInstance();
 		Player player = mc.player;
-		if (player == null || !player.isAlive() || !ClientEditHandler.isActive())
+		if (player == null || !player.isAlive() || !ClientEditmodeData.isInEditmode())
 			return;
 		
 		IEditTools cap = player.getCapability(MSCapabilities.EDIT_TOOLS_CAPABILITY, null).orElseThrow(() -> new IllegalStateException("EditTool Capability is missing on player " + player.getDisplayName().getString() + " on client-side!"));
@@ -180,7 +180,7 @@ public class ClientEditToolDrag
 	 */
 	public static boolean canEditRevise(Player player)
 	{
-		return (ClientEditHandler.isActive()
+		return (ClientEditmodeData.isInEditmode()
 				&& !Minecraft.getInstance().isPaused()
 				&& !player.getMainHandItem().isEmpty()
 				&& player.getMainHandItem().getItem() instanceof BlockItem
@@ -231,7 +231,7 @@ public class ClientEditToolDrag
 		BlockHitResult blockHit = getPlayerPOVHitResult(player.level(), player);
 		BlockState block = player.level().getBlockState(blockHit.getBlockPos());
 		
-		return (ClientEditHandler.isActive()
+		return (ClientEditmodeData.isInEditmode()
 				&& !Minecraft.getInstance().isPaused()
 				&& !(block.getDestroySpeed(player.level(), blockHit.getBlockPos()) < 0 || block.is(MSTags.Blocks.EDITMODE_BREAK_BLACKLIST))
 				&& !isMultiblock(player));
@@ -363,7 +363,7 @@ public class ClientEditToolDrag
 		
 		//make sure the stage is after translucent blocks so that the outlines render over everything.
 		if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS && mc.player != null && mc.getCameraEntity() == mc.player
-				&& mc.player.isAlive() && ClientEditHandler.isActive())
+				&& mc.player.isAlive() && ClientEditmodeData.isInEditmode())
 		{
 			
 			Player player = mc.player;
@@ -375,7 +375,7 @@ public class ClientEditToolDrag
 			double d2 = info.getPosition().y;
 			double d3 = info.getPosition().z;
 			
-			if (isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null)
+			if(isValidDragTool(cap.getToolMode()) && cap.getEditPos1() != null)
 			{
 				BlockPos posA = cap.getEditPos1();
 				BlockPos posB = cap.getEditPos2();
