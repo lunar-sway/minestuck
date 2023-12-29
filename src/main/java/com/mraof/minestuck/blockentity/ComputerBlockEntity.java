@@ -159,6 +159,14 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 		return ClientboundBlockEntityDataPacket.create(this);
 	}
 	
+	@Override
+	public void onLoad()
+	{
+		super.onLoad();
+		for(int id : installedPrograms)
+			ProgramData.getHandler(id).ifPresent(handler -> handler.onLoad(this));
+	}
+	
 	public boolean isBroken()
 	{
 		return getBlockState().getValue(ComputerBlock.STATE) == ComputerBlock.State.BROKEN;
@@ -178,8 +186,8 @@ public class ComputerBlockEntity extends BlockEntity implements ISburbComputer
 	
 	public void closeAll()
 	{
-		for(int id : installedPrograms.stream().filter(i->i!=-1).toList())
-			ProgramData.closeProgram(id, this);
+		for(int id : installedPrograms)
+			ProgramData.getHandler(id).ifPresent(handler -> handler.onClosed(this));
 	}
 	
 	@Override

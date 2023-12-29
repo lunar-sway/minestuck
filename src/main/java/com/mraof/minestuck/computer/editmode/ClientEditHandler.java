@@ -1,12 +1,10 @@
 package com.mraof.minestuck.computer.editmode;
 
 import com.mraof.minestuck.Minestuck;
-import com.mraof.minestuck.MinestuckConfig;
-import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.api.alchemy.GristAmount;
 import com.mraof.minestuck.api.alchemy.GristSet;
 import com.mraof.minestuck.api.alchemy.GristType;
-import com.mraof.minestuck.client.ClientDimensionData;
+import com.mraof.minestuck.api.alchemy.recipe.GristCostRecipe;
 import com.mraof.minestuck.client.gui.playerStats.PlayerStatsScreen;
 import com.mraof.minestuck.client.util.GuiUtil;
 import com.mraof.minestuck.network.ClientEditPacket;
@@ -17,8 +15,6 @@ import com.mraof.minestuck.util.MSTags;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -39,7 +35,6 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,21 +44,10 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("resource")
 @Mod.EventBusSubscriber(modid = Minestuck.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class ClientEditHandler
 {
-	static boolean activated;
-	
-	static int centerX, centerZ;
-	
-	public static String client;
-	
-	/**
-	 * Used to tell if the client is in edit mode or not.
-	 */
-	public static boolean isActive() {
-		return activated;
-	}
 	
 	public static void onKeyPressed()
 	{
@@ -71,31 +55,10 @@ public final class ClientEditHandler
 		MSPacketHandler.sendToServer(packet);
 	}
 	
-	public static void onClientPackage(String target, int posX, int posZ, CompoundTag deployList)
-	{
-		Minecraft mc = Minecraft.getInstance();
-		LocalPlayer player = mc.player;
-		if(target != null) {	//Enable edit mode
-			activated = true;
-			centerX = posX;
-			centerZ = posZ;
-			client = target;
-		}
-		else if(deployList == null)	//Disable edit mode
-		{
-			player.fallDistance = 0;
-			activated = false;
-		}
-		if(deployList != null)
-		{
-			ClientDeployList.load(deployList);
-		}
-	}
-	
 	@SubscribeEvent
 	public static void addToolTip(ItemTooltipEvent event)
 	{
-		if(!isActive())
+		if(!ClientEditmodeData.isInEditmode())
 			return;
 		
 		GristSet have = getGristCache().set();
@@ -126,7 +89,7 @@ public final class ClientEditHandler
 		{
 			GristType grist = amount.type();
 			ChatFormatting color = amount.amount() <= have.getGrist(grist) ? ChatFormatting.GREEN : ChatFormatting.RED;
-			toolTip.add(Component.literal(amount.amount()+" ").append(grist.getDisplayName()).append(" ("+have.getGrist(grist) + ")").withStyle(color));
+			toolTip.add(Component.literal(amount.amount() + " ").append(grist.getDisplayName()).append(" (" + have.getGrist(grist) + ")").withStyle(color));
 		}
 		if(cost.isEmpty())
 			toolTip.add(Component.translatable(GuiUtil.FREE).withStyle(ChatFormatting.GREEN));
@@ -135,20 +98,20 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void tickEnd(TickEvent.PlayerTickEvent event)
 	{
-		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && isActive())
+		if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END && event.player == Minecraft.getInstance().player && ClientEditmodeData.isInEditmode())
 		{
 			Player player = event.player;
 			
-			double range = ClientDimensionData.isLand(player.level().dimension()) ? MinestuckConfig.SERVER.landEditRange.get() : MinestuckConfig.SERVER.overworldEditRange.get();
-			
-			ServerEditHandler.updatePosition(player, range, centerX, centerZ);
+			EditmodeLocations locations = ClientEditmodeData.getLocations();
+			if(locations != null)
+				locations.limitMovement(player, ClientEditmodeData.getClientLand());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onTossEvent(ItemTossEvent event)
 	{
-		if(event.getEntity().level().isClientSide && event.getPlayer().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getPlayer().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			Inventory inventory = event.getPlayer().getInventory();
 			ItemStack stack = event.getEntity().getItem();
@@ -170,15 +133,16 @@ public final class ClientEditHandler
 	}
 	
 	@SubscribeEvent
-	public static void onItemPickupEvent(EntityItemPickupEvent event) {
-		if(event.getEntity().level().isClientSide && isActive() && event.getEntity().equals(Minecraft.getInstance().player))
+	public static void onItemPickupEvent(EntityItemPickupEvent event)
+	{
+		if(event.getEntity().level().isClientSide && ClientEditmodeData.isInEditmode() && event.getEntity().equals(Minecraft.getInstance().player))
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickEvent(PlayerInteractEvent.RightClickBlock event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRevise(event.getEntity()))
 			{
@@ -211,10 +175,10 @@ public final class ClientEditHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onLeftClickEvent(PlayerInteractEvent.LeftClickBlock event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			if(!event.getEntity().canReach(event.getPos(), 0.0) || ClientEditToolDrag.canEditRecycle(event.getEntity()))
 			{
@@ -227,8 +191,7 @@ public final class ClientEditHandler
 			{
 				event.getEntity().sendSystemMessage(Component.literal("You're not allowed to break this block!"));
 				event.setCanceled(true);
-			}
-			else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
+			} else if(!getGristCache().canAfford(ServerEditHandler.blockBreakCost()))
 			{
 				event.getEntity().sendSystemMessage(GristCache.createMissingMessage(ServerEditHandler.blockBreakCost()));
 				event.setCanceled(true);
@@ -236,10 +199,10 @@ public final class ClientEditHandler
 		}
 	}
 	
-	@SubscribeEvent(priority=EventPriority.NORMAL)
+	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void onRightClickAir(PlayerInteractEvent.RightClickItem event)
 	{
-		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getLevel().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 		{
 			event.setCanceled(true);
 		}
@@ -248,39 +211,32 @@ public final class ClientEditHandler
 	@SubscribeEvent
 	public static void onAttackEvent(AttackEntityEvent event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteract event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public static void onInteractEvent(PlayerInteractEvent.EntityInteractSpecific event)
 	{
-		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && isActive())
+		if(event.getEntity().level().isClientSide && event.getEntity().isLocalPlayer() && ClientEditmodeData.isInEditmode())
 			event.setCanceled(true);
 	}
 	
-	@SubscribeEvent
-	public static void onWorldUnload(LevelEvent.Unload event)
-	{
-		if(event.getLevel().isClientSide())
-			activated = false;
-	}
-	
-	@SubscribeEvent(priority=EventPriority.HIGH)
+	@SubscribeEvent(priority = EventPriority.HIGH)
 	public static void onScreenOpened(ScreenEvent.Opening event)
 	{
-		if(isActive() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
+		if(ClientEditmodeData.isInEditmode() && event.getScreen() instanceof EffectRenderingInventoryScreen<?>)
 		{
-				event.setCanceled(true);
-				PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
-				PlayerStatsScreen.openGui(true);
+			event.setCanceled(true);
+			PlayerStatsScreen.editmodeTab = PlayerStatsScreen.EditmodeGuiType.DEPLOY_LIST;
+			PlayerStatsScreen.openGui(true);
 		}
 	}
 	

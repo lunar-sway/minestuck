@@ -5,12 +5,16 @@ import com.mraof.minestuck.block.MSProperties;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
 import com.mraof.minestuck.client.gui.MSScreenFactories;
 import com.mraof.minestuck.computer.ProgramData;
+import com.mraof.minestuck.computer.editmode.EditmodeLocations;
 import com.mraof.minestuck.computer.theme.ComputerThemes;
 import com.mraof.minestuck.item.MSItems;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.client.SkaiaClient;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -31,8 +35,12 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
+import java.util.OptionalInt;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ComputerBlock extends MachineBlock implements EntityBlock
 {
 	public static final Map<Direction, VoxelShape> COMPUTER_SHAPE = MSBlockShapes.COMPUTER.createRotatedShapes();
@@ -79,7 +87,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 		ItemStack heldItem = player.getItemInHand(handIn);
 		if(state.getValue(STATE) == State.OFF)
 		{
-			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem) == -2)
+			if(!heldItem.isEmpty() && ProgramData.getProgramID(heldItem).isEmpty())
 				return InteractionResult.PASS;
 			
 			turnOn(state, level, pos, player, handIn, hit);
@@ -128,7 +136,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 			return false;
 		
 		ItemStack stackInHand = player.getItemInHand(handIn);
-		int id = ProgramData.getProgramID(stackInHand);
+		OptionalInt optionalId = ProgramData.getProgramID(stackInHand);
 		
 		if(stackInHand.is(MSItems.BLANK_DISK.get()))
 		{
@@ -151,8 +159,9 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				level.sendBlockUpdated(pos, state, state, 3);
 			}
 			return true;
-		} else if(id != -2)
+		} else if(optionalId.isPresent())
 		{
+			int id = optionalId.getAsInt();
 			if(!level.isClientSide && !blockEntity.hasProgram(id))
 			{
 				stackInHand.shrink(1);
@@ -160,6 +169,7 @@ public class ComputerBlock extends MachineBlock implements EntityBlock
 				level.setBlock(pos, state.setValue(STATE, State.GAME_LOADED), Block.UPDATE_CLIENTS);
 				blockEntity.setChanged();
 				level.sendBlockUpdated(pos, state, state, 3);
+				ProgramData.getHandler(id).ifPresent(handler -> handler.onDiskInserted(blockEntity));
 			}
 			return true;
 		}

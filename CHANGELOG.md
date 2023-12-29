@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
 - New consort dialogue
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
+- Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
+- New editmode settings screen, which can be used to teleport between different areas where editmode can function
 
 ### Changed
 
@@ -20,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fine china axe now uses decorated pot in recipe instead of flower pot
 - Changed `/setrung` command into `/rung set`
 - Minor changes and polish to the temple scanner
+- The area around which an editmode player can move has been made more flexible, each computer can act as a source to extend reach
 - Computer Themes can now be added and rendered via resource pack
 - Default computer Theme for crockertop is now Crocker
 - Computer Theme is now chosen from a list of available Themes in separate GUI
@@ -28,10 +33,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
