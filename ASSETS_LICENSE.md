@@ -1,4 +1,6 @@
 
+Disclaimer: Some content is based on content directly from Minecraft or Homestuck and may be subject to additional restrictions.
+
 [Frog sound effects](src/main/resources/assets/minestuck/sounds/mob/frog/)
 are edited from ["Frog Croaking"](https://soundbible.com/1336-Frog-Croaking.html) by snottyboy
 which is licensed under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
