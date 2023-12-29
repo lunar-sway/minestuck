@@ -10,6 +10,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -143,6 +144,16 @@ public class MSTags
 		private static TagKey<EntityType<?>> tag(String name)
 		{
 			return TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(Minestuck.MOD_ID, name));
+		}
+	}
+	
+	public static class Effects
+	{
+		public static final TagKey<MobEffect> SOPOR_SICKNESS_WHITELIST = tag("sopor_sickness_whitelist");
+		
+		private static TagKey<MobEffect> tag(String name)
+		{
+			return TagKey.create(Registries.MOB_EFFECT, new ResourceLocation(Minestuck.MOD_ID, name));
 		}
 	}
 	

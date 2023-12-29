@@ -1,6 +1,6 @@
 {
     "parent": "minestuck:block/logic_gate_cube",
     "textures": {
-        "front": "minestuck:block/nand_gate"
+        "front": "minestuck:block/logic_gate/front_nand"
     }
 }

@@ -120,7 +120,6 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
-		MSEntityTypes.registerPlacements();
 		
 		ConsortDialogue.init();
 		

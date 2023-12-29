@@ -13,6 +13,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
 - New consort dialogue
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
+- Land type extensions for datapacks, which can be used to add worldgen features, carvers and mob spawn to lands
 - New editmode settings screen, which can be used to teleport between different areas where editmode can function
 
 ### Changed
@@ -27,10 +30,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO, glubtier
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 
