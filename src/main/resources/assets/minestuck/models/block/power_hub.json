@@ -1,12 +1,12 @@
 {
     "parent": "minestuck:block/cube_up_mirrored",
     "textures": {
-        "down": "minestuck:block/power_hub_bottom",
-        "up": "minestuck:block/power_hub_top",
-        "north": "minestuck:block/power_hub_front",
-        "south": "minestuck:block/power_hub_side",
-        "west": "minestuck:block/power_hub_side",
-        "east": "minestuck:block/power_hub_side",
-        "particle": "minestuck:block/power_hub_side"
+        "down": "minestuck:block/power_hub/bottom",
+        "up": "minestuck:block/power_hub/top",
+        "north": "minestuck:block/power_hub/front",
+        "south": "minestuck:block/power_hub/side",
+        "west": "minestuck:block/power_hub/side",
+        "east": "minestuck:block/power_hub/side",
+        "particle": "minestuck:block/power_hub/side"
     }
 }
