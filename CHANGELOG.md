@@ -13,6 +13,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `/rung get` command, which output a player's echeladder rung
 - Pogo lance weapon
 - New consort dialogue
+- Sopor Stupor Effect
+- Sopor Slime Pie food item
 - Minestuck fluids now have sound effects in situations reminiscent of water
 - Light water now acts as a light source and has underwater fog appear closer
 - All Minestuck fluids besides ender fluid now support boats
@@ -37,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
+- Right-clicking an item outside the atheneum menu no longer crashes the client
 - Minestuck fluids now prevent fall damage
 - Minestuck fluids no longer have a breaking sound effect and now have bucket/extinguish sound effects
 - Minestuck fluids now use their translatable name
@@ -45,7 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Contributors for this release
 
-- Dweblenod, Zepsun, Hadean, pavizi, kirderf1, DORO
+- Dweblenod, Zepsun, hadean, pavizi, kirderf1, DORO, sipherNil, Vinnelli
 
 ## [1.19.2-1.11.0.2] - 2023-11-16
 

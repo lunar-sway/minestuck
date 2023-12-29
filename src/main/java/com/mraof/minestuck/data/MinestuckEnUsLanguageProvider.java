@@ -1184,6 +1184,8 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		addItemStoreTooltip(MSItems.ONION, "This cool vegetable is so good that it will make you cry!");
 		addItem(MSItems.SALAD, "Bowl of Leaves");
 		addItemTooltip(MSItems.SALAD, "It's literally just salad, Gordon Ramsay would not approve.");
+		addItem(MSItems.SOPOR_SLIME_PIE, "Sopor Slime Pie");
+		addItemTooltip(MSItems.SOPOR_SLIME_PIE, "An incandescent sludge made exclusively for a different biology.");
 		addItemStore(MSItems.SALAD, "Handpicked Greens");
 		addItemStoreTooltip(MSItems.SALAD, "A bowl of our fine, handpicked greens. The perfect meal.");
 		addItem(MSItems.DESERT_FRUIT, "Desert Fruit");
@@ -1778,6 +1780,7 @@ public class MinestuckEnUsLanguageProvider extends MinestuckLanguageProvider
 		
 		addEffect(MSEffects.CREATIVE_SHOCK, "Creative Shock");
 		addEffect(MSEffects.SUSPICION, "Suspicion");
+		addEffect(MSEffects.SOPOR_SICKNESS, "Sopor Stupor");
 		
 		addStrife(KindAbstratusList.SWORD, "Bladekind");
 		addStrife(KindAbstratusList.BOW, "Bowkind");
