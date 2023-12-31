@@ -8,7 +8,7 @@ import net.minecraft.client.model.geom.builders.*;
 /**
  * Model made by DORO and edited by Dweblenod.
  */
-public class DreamerPajamasModel
+public final class DreamerPajamasModel
 {
 	public static LayerDefinition createBodyLayer()
 	{
