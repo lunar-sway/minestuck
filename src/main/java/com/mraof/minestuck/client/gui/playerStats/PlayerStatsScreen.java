@@ -6,7 +6,7 @@ import com.mraof.minestuck.Minestuck;
 import com.mraof.minestuck.MinestuckConfig;
 import com.mraof.minestuck.client.gui.MinestuckScreen;
 import com.mraof.minestuck.client.util.MSKeyHandler;
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.network.MSPacketHandler;
 import com.mraof.minestuck.network.MiscContainerPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
@@ -142,7 +142,7 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 	public PlayerStatsScreen(Component titleIn)
 	{
 		super(titleIn);
-		this.mode = !ClientEditHandler.isActive();
+		this.mode = !ClientEditmodeData.isInEditmode();
 	}
 	
 	@Override
@@ -266,17 +266,17 @@ public abstract class PlayerStatsScreen extends MinestuckScreen
 				mc.player.connection.send(new ServerboundContainerClosePacket(mc.player.containerMenu.containerId));
 				mc.player.containerMenu.setCarried(ItemStack.EMPTY);
 			}
-			if(ClientEditHandler.isActive() ? editmodeTab.isContainer : normalTab.isContainer)
+			if(ClientEditmodeData.isInEditmode() ? editmodeTab.isContainer : normalTab.isContainer)
 			{
-				int ordinal = (ClientEditHandler.isActive() ? editmodeTab : normalTab).ordinal();
+				int ordinal = (ClientEditmodeData.isInEditmode() ? editmodeTab : normalTab).ordinal();
 				int windowId = WINDOW_ID_START + ordinal;
-				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditHandler.isActive() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
+				PlayerStatsContainerScreen<?> containerScreen = (PlayerStatsContainerScreen<?>) (ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance(windowId) : normalTab.createGuiInstance(windowId));
 				
 				mc.setScreen(containerScreen);
 				if(mc.screen == containerScreen)
-					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditHandler.isActive()));
+					MSPacketHandler.sendToServer(new MiscContainerPacket(ordinal, ClientEditmodeData.isInEditmode()));
 			}
-			else mc.setScreen(ClientEditHandler.isActive()? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
+			else mc.setScreen(ClientEditmodeData.isInEditmode() ? editmodeTab.createGuiInstance():normalTab.createGuiInstance());
 		}
 		else if(mc.screen instanceof PlayerStatsScreen || mc.screen instanceof PlayerStatsContainerScreen)
 			mc.setScreen(null);

@@ -4,6 +4,7 @@ import com.mraof.minestuck.block.MSBlocks;
 import com.mraof.minestuck.skaianet.SburbConnection;
 import com.mraof.minestuck.skaianet.SburbHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
+import com.mraof.minestuck.util.MSTags;
 import com.mraof.minestuck.util.Teleport;
 import com.mraof.minestuck.world.biome.LandBiomeSetType;
 import com.mraof.minestuck.world.biome.RegistryBackedBiomeSet;
@@ -62,11 +63,9 @@ public class GateHandler
 	private static GlobalPos findPosNearLandGate(ServerLevel level)
 	{
 		BlockPos pos = Type.LAND_GATE.getPosition(level);
-		Optional<RegistryBackedBiomeSet> optional = LandBiomeSetType.getSet(level.getChunkSource().getGenerator());
-		if(pos != null && optional.isPresent())
+		if(pos != null)
 		{
 			RandomSource rand = level.random;
-			RegistryBackedBiomeSet biomes = optional.get();
 			while(true)    //TODO replace with a more friendly version without a chance of freezing the game
 			{
 				int radius = 160 + rand.nextInt(60);
@@ -79,7 +78,7 @@ public class GateHandler
 				
 				BlockPos placement = pos.offset(x, 0, z);
 				
-				if(biomes.NORMAL == level.getBiome(placement))
+				if(level.getBiome(placement).is(MSTags.Biomes.LAND_NORMAL))
 				{
 					//TODO Can and has placed the player into a lava ocean. Fix this (Also for other hazards)
 					int y = level.getChunk(placement).getHeight(Heightmap.Types.MOTION_BLOCKING, placement.getX(), placement.getZ());
