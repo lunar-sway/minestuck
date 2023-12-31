@@ -1,10 +1,10 @@
 {
-	"parent": "block/block",
 	"credit": "Made with Blockbench by Dweblenod",
+	"parent": "block/block",
 	"textures": {
-		"body": "minestuck:block/block_pressure_plate_body_extended",
-		"top": "minestuck:block/block_pressure_plate_top",
-		"particle": "minestuck:block/block_pressure_plate_top"
+		"body": "minestuck:block/block_pressure_plate/body_extended",
+		"top": "minestuck:block/block_pressure_plate/top",
+		"particle": "minestuck:block/block_pressure_plate/top"
 	},
 	"elements": [
 		{

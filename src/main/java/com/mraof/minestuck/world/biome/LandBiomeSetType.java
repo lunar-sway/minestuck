@@ -41,13 +41,6 @@ public final class LandBiomeSetType
 		context.register(OCEAN, LandBiome.createOceanBiome(hasPrecipitation, temperature, downfall));
 	}
 	
-	public static Optional<RegistryBackedBiomeSet> getSet(ChunkGenerator generator)
-	{
-		if(generator instanceof LandChunkGenerator landGen)
-			return Optional.of(landGen.biomeSet.baseBiomes);
-		else return Optional.empty();
-	}
-	
 	public boolean hasPrecipitation()
 	{
 		return hasPrecipitation;

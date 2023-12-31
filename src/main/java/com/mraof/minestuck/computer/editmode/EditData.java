@@ -90,9 +90,7 @@ public class EditData
 	
 	public void sendGivenItemsToEditor()
 	{
-		
-		ServerEditPacket packet = ServerEditPacket.givenItems(DeployList.getDeployListTag(player.server, connection));
-		MSPacketHandler.sendToPlayer(packet, getEditor());
+		MSPacketHandler.sendToPlayer(new ServerEditPacket.UpdateDeployList(DeployList.getDeployListTag(player.server, connection)), getEditor());
 	}
 	
 	public CompoundTag writeRecoveryData()

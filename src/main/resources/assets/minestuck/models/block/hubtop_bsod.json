@@ -1,6 +1,6 @@
 {
-	"parent": "block/thin_block",
 	"credit": "Made with Blockbench by blankMushroom",
+	"parent": "block/thin_block",
 	"texture_size": [32, 32],
 	"textures": {
 		"computer": "minestuck:block/computer/hubtop_bsod",

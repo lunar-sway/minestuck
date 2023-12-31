@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "minestuck:item/boondollars_4"
+        "layer0": "minestuck:item/boondollars/4"
     }
 }
