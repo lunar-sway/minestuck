@@ -1,6 +1,6 @@
 {
+	"credit": "Made with Blockbench by Riotmode",
     "render_type": "cutout",
-	"credit": "Made with Blockbench",
 	"texture_size": [256, 256],
 	"textures": {
 		"0": "minestuck:block/machine/alchemiter",

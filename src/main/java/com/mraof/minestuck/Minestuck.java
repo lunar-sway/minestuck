@@ -120,15 +120,13 @@ public class Minestuck
 	private void mainThreadSetup()
 	{
 		MSCriteriaTriggers.register();
-		MSEntityTypes.registerPlacements();
 		
 		ConsortDialogue.init();
 		
 		KindAbstratusList.registerTypes();
 		DeployList.registerItems();
 		
-		ProgramData.registerProgram(0, new ItemStack(MSItems.CLIENT_DISK.get()), ProgramData::onClientClosed);
-		ProgramData.registerProgram(1, new ItemStack(MSItems.SERVER_DISK.get()), ProgramData::onServerClosed);
+		ProgramData.init();
 		
 		BlockCopier.addStep(new ComputerBlockProcess());
 		BlockCopier.addStep(new TransportalizerBlockProcess());

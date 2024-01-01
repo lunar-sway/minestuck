@@ -1,6 +1,6 @@
 package com.mraof.minestuck.entity.item;
 
-import com.mraof.minestuck.computer.editmode.ClientEditHandler;
+import com.mraof.minestuck.computer.editmode.ClientEditmodeData;
 import com.mraof.minestuck.computer.editmode.ServerEditHandler;
 import com.mraof.minestuck.entity.MSEntityTypes;
 import net.minecraft.core.BlockPos;
@@ -209,7 +209,7 @@ public class VitalityGelEntity extends Entity implements IEntityAdditionalSpawnD
 	@Override
 	public void playerTouch(Player player)
 	{
-		if(this.level().isClientSide ? ClientEditHandler.isActive() : ServerEditHandler.getData(player) != null)
+		if(this.level().isClientSide ? ClientEditmodeData.isInEditmode() : ServerEditHandler.getData(player) != null)
 			return;
 		
 		if(!this.level().isClientSide)

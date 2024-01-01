@@ -177,7 +177,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		//Land Environment
 		weightedVariantsWithItem(MSBlocks.BLUE_DIRT, new int[] {12, 6, 1, 1},
-				i -> cubeAll(id("blue_dirt" + i)));
+				i -> models().cubeAll("blue_dirt" + i, texture("blue_dirt/" + i)));
 		simpleBlockWithItem(MSBlocks.THOUGHT_DIRT);
 		
 		simpleBlockWithItem(MSBlocks.COARSE_STONE);
@@ -262,11 +262,14 @@ public class MSBlockStateProvider extends BlockStateProvider
 		
 		simpleBlockWithItem(MSBlocks.FLOWERY_MOSSY_COBBLESTONE);
 		variantsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICKS, 4,
-				i -> cubeAll(id("flowery_mossy_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("flowery_mossy_stone_bricks" + (i + 1),
+						texture(id("flowery_mossy_stone_bricks/" + (i + 1)))));
 		variantsWithItem(MSBlocks.DECREPIT_STONE_BRICKS, 4,
-				i -> cubeAll(id("decrepit_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("decrepit_stone_bricks" + (i + 1),
+						texture(id("decrepit_stone_bricks/" + (i + 1)))));
 		variantsWithItem(MSBlocks.MOSSY_DECREPIT_STONE_BRICKS, 4,
-				i -> cubeAll(id("mossy_decrepit_stone_bricks" + (i + 1))));
+				i -> models().cubeAll("mossy_decrepit_stone_bricks" + (i + 1),
+						texture(id("mossy_decrepit_stone_bricks/" + (i + 1)))));
 		simpleBlockWithItem(MSBlocks.COARSE_END_STONE);
 		{
 			ModelFile model = models().cubeBottomTop("end_grass",
@@ -797,7 +800,7 @@ public class MSBlockStateProvider extends BlockStateProvider
 		stairsWithItem(MSBlocks.CAST_IRON_STAIRS, MSBlocks.CAST_IRON);
 		stairsWithItem(MSBlocks.BLACK_STONE_STAIRS, MSBlocks.BLACK_STONE);
 		stairsWithItem(MSBlocks.BLACK_STONE_BRICK_STAIRS, "black_stone_brick", texture(MSBlocks.BLACK_STONE_BRICKS));
-		stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks1"));
+		stairsWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_STAIRS, "flowery_mossy_stone_brick", texture("flowery_mossy_stone_bricks/1"));
 		stairsWithItem(MSBlocks.MYCELIUM_STAIRS, "mycelium", texture(MSBlocks.MYCELIUM_STONE));
 		stairsWithItem(MSBlocks.MYCELIUM_BRICK_STAIRS, "mycelium_brick", texture(MSBlocks.MYCELIUM_BRICKS));
 		stairsWithItem(MSBlocks.CHALK_STAIRS, MSBlocks.CHALK);
@@ -821,7 +824,10 @@ public class MSBlockStateProvider extends BlockStateProvider
 		slabWithItem(MSBlocks.DARK_GRAY_CHESS_BRICK_SLAB, MSBlocks.DARK_GRAY_CHESS_BRICKS);
 		slabWithItem(MSBlocks.LIGHT_GRAY_CHESS_BRICK_SLAB, MSBlocks.LIGHT_GRAY_CHESS_BRICKS);
 		slabWithItem(MSBlocks.WHITE_CHESS_BRICK_SLAB, MSBlocks.WHITE_CHESS_BRICKS);
-		slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, MSBlocks.FLOWERY_MOSSY_STONE_BRICKS.getId().withSuffix("1"));
+		{
+			ResourceLocation texture = texture("flowery_mossy_stone_bricks/1");
+			slabWithItem(MSBlocks.FLOWERY_MOSSY_STONE_BRICK_SLAB, id("flowery_mossy_stone_bricks1"), texture, texture);
+		}
 		slabWithItem(MSBlocks.COARSE_STONE_SLAB, MSBlocks.COARSE_STONE);
 		slabWithItem(MSBlocks.COARSE_STONE_BRICK_SLAB, MSBlocks.COARSE_STONE_BRICKS);
 		slabWithItem(MSBlocks.SHADE_SLAB, MSBlocks.SHADE_STONE);
@@ -850,11 +856,11 @@ public class MSBlockStateProvider extends BlockStateProvider
 			ModelFile verticalUnpowered = models()
 					.cubeColumn("trajectory_block_vertical_unpowered",
 					texture("redstone_machine_block"),
-					texture("trajectory_block_vertical_top_unpowered"));
+					texture("trajectory_block/vertical_top_unpowered"));
 			ModelFile verticalPowered = models()
 					.cubeColumn("trajectory_block_vertical_powered",
 							texture("redstone_machine_block"),
-							texture("trajectory_block_vertical_top_powered"));
+							texture("trajectory_block/vertical_top_powered"));
 			ModelFile horizontalUnpowered = models().getExistingFile(id("trajectory_block_horizontal_unpowered"));
 			ModelFile horizontalPowered = models().getExistingFile(id("trajectory_block_horizontal_powered"));
 			directionalUp(MSBlocks.TRAJECTORY_BLOCK, state -> {
@@ -913,16 +919,16 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			powerVariableWithItem(MSBlocks.VARIABLE_SOLID_SWITCH,
-					cubeAll(id("variable_solid_switch_high_power")),
-					cubeAll(id("variable_solid_switch_medium_power")),
-					cubeAll(id("variable_solid_switch_low_power")),
-					cubeAll(id("variable_solid_switch_unpowered")));
+					models().cubeAll("variable_solid_switch_high_power", texture("variable_solid_switch/high_power")),
+					models().cubeAll("variable_solid_switch_medium_power", texture("variable_solid_switch/medium_power")),
+					models().cubeAll("variable_solid_switch_low_power", texture("variable_solid_switch/low_power")),
+					models().cubeAll("variable_solid_switch_unpowered", texture("variable_solid_switch/unpowered")));
 		}
 		{
-			ModelFile highPower = cubeAll(id("timed_solid_switch_high_power"));
-			ModelFile mediumPower = cubeAll(id("timed_solid_switch_medium_power"));
-			ModelFile lowPower = cubeAll(id("timed_solid_switch_low_power"));
-			ModelFile unpowered = cubeAll(id("timed_solid_switch_unpowered"));
+			ModelFile highPower = models().cubeAll("timed_solid_switch_high_power", texture("timed_solid_switch/high_power"));
+			ModelFile mediumPower = models().cubeAll("timed_solid_switch_medium_power", texture("timed_solid_switch/medium_power"));
+			ModelFile lowPower = models().cubeAll("timed_solid_switch_low_power", texture("timed_solid_switch/low_power"));
+			ModelFile unpowered = models().cubeAll("timed_solid_switch_unpowered", texture("timed_solid_switch/unpowered"));
 			powerVariableWithItem(MSBlocks.ONE_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
 			powerVariableWithItem(MSBlocks.TWO_SECOND_INTERVAL_TIMED_SOLID_SWITCH, highPower, mediumPower, lowPower, unpowered);
 		}
@@ -944,13 +950,13 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			ModelFile poweredModel = models().cubeBottomTop("platform_generator_powered",
-					texture("platform_generator_side"),
-					texture("platform_generator_bottom"),
-					texture("platform_generator_top_powered"));
+					texture("platform_generator/side"),
+					texture("platform_generator/bottom"),
+					texture("platform_generator/top_powered"));
 			ModelFile unpoweredModel = models().cubeBottomTop("platform_generator_unpowered",
-					texture("platform_generator_side"),
-					texture("platform_generator_bottom"),
-					texture("platform_generator_top_unpowered"));
+					texture("platform_generator/side"),
+					texture("platform_generator/bottom"),
+					texture("platform_generator/top_unpowered"));
 			directionalUp(MSBlocks.PLATFORM_GENERATOR, state -> state.getValue(PlatformGeneratorBlock.POWERED) ? poweredModel : unpoweredModel,
 					PlatformGeneratorBlock.INVISIBLE_MODE, PlatformGeneratorBlock.POWER);
 			simpleBlockItem(MSBlocks.PLATFORM_GENERATOR.get(), unpoweredModel);
@@ -1016,9 +1022,9 @@ public class MSBlockStateProvider extends BlockStateProvider
 		}
 		{
 			ModelFile retracted = models().cubeBottomTop("block_pressure_plate_retracted",
-					texture("block_pressure_plate_side"),
-					texture("block_pressure_plate_bottom"),
-					texture("block_pressure_plate_top"));
+					texture("block_pressure_plate/side"),
+					texture("block_pressure_plate/bottom"),
+					texture("block_pressure_plate/top"));
 			ModelFile extended = existing(id("block_pressure_plate_extended"));
 			getVariantBuilder(MSBlocks.BLOCK_PRESSURE_PLATE.get())
 					.partialState().with(RetractableSpikesBlock.POWERED, true).modelForState().modelFile(retracted).addModel()

@@ -1,6 +1,6 @@
 {
+	"credit": "Made with Blockbench by Riotmode",
     "render_type": "cutout",
-	"credit": "crafted with love by the grease artisan mysterymeat",
 	"texture_size": [128, 128],
 	"textures": {
 		"0": "minestuck:block/machine/totemlathe",

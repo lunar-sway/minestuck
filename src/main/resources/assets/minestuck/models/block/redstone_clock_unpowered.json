@@ -1,12 +1,12 @@
 {
     "parent": "minestuck:block/cube_up_mirrored",
     "textures": {
-        "down": "minestuck:block/redstone_clock_side",
-        "up": "minestuck:block/redstone_clock_side",
-        "north": "minestuck:block/redstone_clock_unpowered",
-        "south": "minestuck:block/redstone_clock_side",
-        "west": "minestuck:block/redstone_clock_side",
-        "east": "minestuck:block/redstone_clock_side",
-        "particle": "minestuck:block/redstone_clock_side"
+        "down": "minestuck:block/redstone_clock/side",
+        "up": "minestuck:block/redstone_clock/side",
+        "north": "minestuck:block/redstone_clock/unpowered",
+        "south": "minestuck:block/redstone_clock/side",
+        "west": "minestuck:block/redstone_clock/side",
+        "east": "minestuck:block/redstone_clock/side",
+        "particle": "minestuck:block/redstone_clock/side"
     }
 }
