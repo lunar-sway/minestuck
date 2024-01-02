@@ -39,24 +39,17 @@ public final class ContainerGristCost implements GristCostRecipe
 	
 	private final ResourceLocation id;
 	private final Ingredient ingredient;
+	private final ImmutableGristSet addedCost;
 	@Nullable
 	private final Integer priority;
-	private final GeneratedGristCostCache cache;
+	private final GeneratedGristCostCache cache = new GeneratedGristCostCache();
 	
 	public ContainerGristCost(ResourceLocation id, Ingredient ingredient, ImmutableGristSet addedCost, @Nullable Integer priority)
 	{
 		this.id = id;
 		this.ingredient = ingredient;
+		this.addedCost = addedCost;
 		this.priority = priority;
-		this.cache = new GeneratedGristCostCache(callback -> this.generateCost(callback, addedCost));
-	}
-	
-	private ContainerGristCost(ResourceLocation id, Ingredient ingredient, @Nullable Integer priority, GeneratedGristCostCache cache)
-	{
-		this.id = id;
-		this.ingredient = ingredient;
-		this.priority = priority;
-		this.cache = cache;
 	}
 	
 	@Nullable
@@ -111,7 +104,8 @@ public final class ContainerGristCost implements GristCostRecipe
 	@Override
 	public void addCostProvider(BiConsumer<Item, GeneratedCostProvider> consumer)
 	{
-		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient, this.cache);
+		GristCostRecipe.addCostProviderForIngredient(consumer, this.ingredient,
+				this.cache.generatedProvider(callback -> this.generateCost(callback, addedCost)));
 	}
 	
 	@Override
@@ -156,9 +150,10 @@ public final class ContainerGristCost implements GristCostRecipe
 		{
 			Ingredient ingredient = Ingredient.fromNetwork(buffer);
 			int priority = buffer.readInt();
-			GeneratedGristCostCache cache = GeneratedGristCostCache.fromNetwork(buffer);
 			
-			return new ContainerGristCost(recipeId, ingredient, priority, cache);
+			var recipe = new ContainerGristCost(recipeId, ingredient, GristSet.EMPTY, priority);
+			recipe.cache.fromNetwork(buffer);
+			return recipe;
 		}
 	}
 }
