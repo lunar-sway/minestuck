@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SendificatorPacket implements PlayToServerPacket
+public class SendificatorPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos destinationBlockPos;
 	

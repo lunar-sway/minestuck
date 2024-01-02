@@ -1,13 +1,13 @@
 package com.mraof.minestuck.network.data;
 
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.Title;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.Objects;
 
-public class TitleDataPacket implements PlayToClientPacket
+public class TitleDataPacket implements MSPacket.PlayToClient
 {
 	private final Title title;
 	

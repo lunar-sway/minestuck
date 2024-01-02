@@ -93,17 +93,17 @@ public class MSPacketHandler
 		registerToClientMessage(EntryEffectPackets.Clear.class, EntryEffectPackets.Clear::decode);
 	}
 	
-	private static <MSG extends PlayToBothPacket> void registerToBothMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToBoth> void registerToBothMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, decoder, Optional.empty());
 	}
 	
-	private static <MSG extends PlayToClientPacket> void registerToClientMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToClient> void registerToClientMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 	}
 	
-	private static <MSG extends PlayToServerPacket> void registerToServerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
+	private static <MSG extends MSPacket.PlayToServer> void registerToServerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder)
 	{
 		registerMessage(messageType, decoder, Optional.of(NetworkDirection.PLAY_TO_SERVER));
 	}
@@ -111,10 +111,10 @@ public class MSPacketHandler
 	private static int nextIndex;
 	
 	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-	private static <MSG extends StandardPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder,
-																	 Optional<NetworkDirection> networkDirection)
+	private static <MSG extends MSPacket> void registerMessage(Class<MSG> messageType, Function<FriendlyByteBuf, MSG> decoder,
+															   Optional<NetworkDirection> networkDirection)
 	{
-		INSTANCE.registerMessage(nextIndex++, messageType, StandardPacket::encode, decoder, StandardPacket::consume, networkDirection);
+		INSTANCE.registerMessage(nextIndex++, messageType, MSPacket::encode, decoder, MSPacket::consume, networkDirection);
 	}
 	
 	public static <MSG> void sendToPlayer(MSG message, ServerPlayer player)

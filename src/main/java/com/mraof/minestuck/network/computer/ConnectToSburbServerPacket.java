@@ -1,6 +1,6 @@
 package com.mraof.minestuck.network.computer;
 
-import com.mraof.minestuck.network.PlayToServerPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.IdentifierHandler;
 import com.mraof.minestuck.skaianet.SkaianetHandler;
 import com.mraof.minestuck.blockentity.ComputerBlockEntity;
@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class ConnectToSburbServerPacket implements PlayToServerPacket
+public class ConnectToSburbServerPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
 	private final int server;

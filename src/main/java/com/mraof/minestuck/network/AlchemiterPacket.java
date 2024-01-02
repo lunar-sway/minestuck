@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
-public class AlchemiterPacket implements PlayToServerPacket
+public class AlchemiterPacket implements MSPacket.PlayToServer
 {
 	private final BlockPos pos;
 	private final int quantity;

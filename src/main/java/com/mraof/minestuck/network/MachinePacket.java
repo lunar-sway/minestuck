@@ -6,7 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public final class MachinePacket
 {
-	public record SetRunning(boolean shouldRun) implements PlayToServerPacket
+	public record SetRunning(boolean shouldRun) implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)
@@ -30,7 +30,7 @@ public final class MachinePacket
 		}
 	}
 	
-	public record SetLooping(boolean shouldLoop) implements PlayToServerPacket
+	public record SetLooping(boolean shouldLoop) implements MSPacket.PlayToServer
 	{
 		@Override
 		public void encode(FriendlyByteBuf buffer)

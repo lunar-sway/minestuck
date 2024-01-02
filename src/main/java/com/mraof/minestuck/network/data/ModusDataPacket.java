@@ -2,7 +2,7 @@ package com.mraof.minestuck.network.data;
 
 import com.mraof.minestuck.inventory.captchalogue.CaptchaDeckHandler;
 import com.mraof.minestuck.inventory.captchalogue.Modus;
-import com.mraof.minestuck.network.PlayToClientPacket;
+import com.mraof.minestuck.network.MSPacket;
 import com.mraof.minestuck.player.ClientPlayerData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
@@ -13,7 +13,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public record ModusDataPacket(@Nullable CompoundTag nbt) implements PlayToClientPacket
+public record ModusDataPacket(@Nullable CompoundTag nbt) implements MSPacket.PlayToClient
 {
 	public static ModusDataPacket create(@Nullable Modus modus)
 	{
