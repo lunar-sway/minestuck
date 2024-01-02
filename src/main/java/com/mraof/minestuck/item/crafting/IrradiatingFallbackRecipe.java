@@ -44,8 +44,8 @@ public class IrradiatingFallbackRecipe extends IrradiatingRecipe
 	
 	private Stream<AbstractCookingRecipe> getFallbackRecipes(RecipeManager recipeManager)
 	{
-		return recipeManager.getAllRecipesFor(this.fallbackType)
-				.stream()
+		return recipeManager.getRecipes().stream()
+				.filter(recipe -> recipe.getType() == this.fallbackType)
 				.flatMap(recipe -> {
 					if(recipe instanceof AbstractCookingRecipe cookingRecipe)
 						return Stream.of(cookingRecipe);
