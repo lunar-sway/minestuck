@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed multiple sources of crashes involving fake players
 - Creative Shock effect is no longer cured by drinking milk
 - Right-clicking an item outside the atheneum menu no longer crashes the client
+- Suspicion effect now correctly stops the affected mob from summoning zombie reinforcements
 
 ### Contributors for this release
 
